@@ -1,0 +1,87 @@
+Team Name: D-sync
+Game Name: Dragon Attack
+
+Core Pillar: Combat
+Secondary Pillar: Platforming
+
+High Concept:
+<Game Name> is a 2D action platformer set in a medieval fantasy environment.
+
+Summary:
+<Game Name> is a 2D action platformer where the player plays as a dragon 
+attacking castle in order to gain it's treasures. The player fights his way
+through the levels to reach the King. The objective of the game is
+to defeat the King of the castle. 
+
+Mechanics:
+1. Move Left or Right. Jump Up. Crouch Down.
+2. In Land Mode, can Tail Whip, Slash and Block.
+3. In Fly Mode, can shoot Fireball and Flame Breath.
+	>Has Cooldown times. Fly can only hover for a few seconds.
+	>Show two icons to represent Fireball and Flame Breath.
+	>Icons will be greyed out when on cooldown, and the icons gradually un-greys vetically.
+4. Scoring System
+	>Coins
+	>Kills
+
+Gameplay:
+The player has basic fighting skills. They can Slash or Tail Whip. 
+They can Flame Breath and Fireball. The quantity of enemies will 
+increase until a constant point and difficulty will gradually increase as well til it
+hits a difficulty roof.
+	
+	
+	
+	
+Level Design:
+Each stage has mobs and and mini-boss at the end. 
+The Final Boss appears at the end of the stage. 
+Stages: 3
+Sub-Stages: 5
+Mini-Boss Stage: Sub Stage 3
+Final Boss Stage: Last Stage
+
+Final Boss AI: 
+!Health Bars!
+Stage 1: 
+Cerberes
+-Bite
+-Tackle
+-Quick Attack
+-Phase?
+
+Stage 2:
+Merlin
+-Blink
+-Energy
+-Arrow Rain (Stands on a Platform and Shoots)
+-Phase?
+
+Stage 3:
+King Arthur
+-Dash (Speed Up)
+-Call Allies
+-Regeneration
+-Pillar of Light
+-Phase?
+
+Mini Boss AI:
+!Health Bars!
+Stage 1:
+Big Dog (One Head)
+
+Stage 2:
+Wizard
+
+Stage 3:
+Black Knight
+
+
+Camera View:
+-Zoom out camera for boss fights
+-Pre-Animation Zoom
+
+Advanced Features:
+Power-Ups
+Treasure Box
+Horde Mode
