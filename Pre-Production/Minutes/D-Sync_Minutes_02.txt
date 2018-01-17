@@ -1,0 +1,15 @@
+Have a bar for Flight in the UI to show how much flight the payer has. 
+Don't call it Stamina Bar, but something along the lines of Flight Bar(TBA).
+The bar decreases during flight. When it is 0, Flight deactivates. 
+The player can only activate Flight when bar is full. 
+
+Each sub-stage need to collect an X amount of coins and kill Y amount of enemies. 
+When that objective is done, player will stand on a magic circle at the end of stage. 
+
+Scoring
+Total Score = (Coins x X + Treasures x Y + Enemies x Z)
+
+Different variants of soldiers and knights that includes spear-wielding (mid-range), sword users, mace ( break block) 
+For range enemies there is archers, battle mages and cross-bow operators. 
+Archers shoot arrows that is a projectile object that follows the laws of the physic engine
+battle mages projectiles are not affected by gravity and traverse in a straight line. 
