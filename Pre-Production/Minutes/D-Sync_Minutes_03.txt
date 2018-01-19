@@ -1,0 +1,28 @@
+Audio: Take from metadigger
+
+Art: Must draw ourselves NO CHOICE FML
+
+Physics: 
+Use gravity field to create falloff of arrows
+
+Kay Map:
+
+Land:
+A - Move left
+D - Move right
+S - Block
+SPACEBAR - Jump
+RMB - Tail Whip
+LMB - Slash
+
+Flying: 
+W - Fly up
+A - Fly left
+S - Fly down
+D - Fly right
+RMB - Flame Breath
+LMB - Fire Ball
+
+Misc:
+F - Activate flight
+
