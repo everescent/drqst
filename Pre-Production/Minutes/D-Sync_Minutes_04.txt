@@ -1,0 +1,12 @@
+Health system:
+
+Player gets 3 lives at the start of the stage. 
+Food items will add one life. 
+During the tutorial stage, enemies will deal 1/2 life worth of damage. 
+Basic enemies will have one life while stronger mobs have 2. 
+Each bosses will have a unique amount of lives depending on the boss mechanic. 
+
+Boss A.I:
+
+-Merlin: 
+Blink every X time. X will be relative to how many moves he can make in that time. 
