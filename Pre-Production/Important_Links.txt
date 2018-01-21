@@ -1,4 +1,3 @@
-Timeline: https://www.tiki-toki.com/timeline/entry/968145/GAM150-DRQST/
+Timeline: https://time.graphics/line/49618
 Git Hub Repository: https://github.com/everescent/drqst
 SVN: https://svn.sg.digipen.edu/projects/d-sync/trunk
-HELOOOOOOOOI
