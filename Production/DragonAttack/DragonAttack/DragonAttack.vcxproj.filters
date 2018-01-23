@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="GSM">
+      <UniqueIdentifier>{dbdeeee2-cc0e-4d85-9995-918511548eca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Stage_Manager">
+      <UniqueIdentifier>{f9a15247-687e-4dfe-bda9-f4b840582b5f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game_Engine">
+      <UniqueIdentifier>{d8bbb3f9-c976-41eb-a794-861df370a973}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game_Engine\Graphics">
+      <UniqueIdentifier>{e176bdf0-7e18-4a62-96eb-42f81b3d6aaf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game_Engine\Physics">
+      <UniqueIdentifier>{de411064-5122-4c98-8e3e-748230df4ac6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game_Engine\Collision">
+      <UniqueIdentifier>{3dd68db6-1683-4850-bbb0-590c92a1f26c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Input">
+      <UniqueIdentifier>{03819ec4-fc32-48bd-9a7b-73e07770de0b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Stage">
+      <UniqueIdentifier>{80570fdd-e615-452c-b710-941df2f0340e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game_Engine\AI">
+      <UniqueIdentifier>{ff9dd1ce-73e4-4b4b-bf20-a27855b55dce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Dragon">
+      <UniqueIdentifier>{cc552bcf-5f79-4dd7-9ad6-e7bf913f7d93}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

@@ -1,0 +1,3 @@
+﻿  main.cpp
+c:\users\william.yoong\desktop\drqst\production\dragonattack\dragonattack\main.cpp(12): error C2220: warning treated as error - no 'object' file generated
+c:\users\william.yoong\desktop\drqst\production\dragonattack\dragonattack\main.cpp(12): warning C4189: 'hello': local variable is initialized but not referenced
