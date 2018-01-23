@@ -1,4 +1,5 @@
 #include "AEEngine.h"
+#include <iostream>
 
 #define R_WIDTH 1280
 #define R_HEIGHT 720
@@ -12,5 +13,9 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
   UNREFERENCED_PARAMETER(show);
   
   AESysInit(instanceH, show, R_WIDTH, R_HEIGHT, true, 60, NULL);
-  while(AEVK_0)
+  std::cin.get();
+  std::cin.get();
+
+  AESysExit();
+  return 0;
 }
