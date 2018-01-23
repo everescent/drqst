@@ -1,3 +1,4 @@
 ﻿  main.cpp
-  DragonAttack.vcxproj -> G:\Documents\Digipen\Semester 02\GAM150\drqst\Production\DragonAttack\Debug\DragonAttack.exe
-  DragonAttack.vcxproj -> G:\Documents\Digipen\Semester 02\GAM150\drqst\Production\DragonAttack\Debug\DragonAttack.pdb (Full PDB)
+g:\documents\digipen\semester 02\gam150\drqst\production\dragonattack\dragonattack\main.cpp(15): error C2220: warning treated as error - no 'object' file generated
+g:\documents\digipen\semester 02\gam150\drqst\production\dragonattack\dragonattack\main.cpp(15): warning C4127: conditional expression is constant
+g:\documents\digipen\semester 02\gam150\drqst\production\dragonattack\dragonattack\main.cpp(16): error C2059: syntax error: '}'
