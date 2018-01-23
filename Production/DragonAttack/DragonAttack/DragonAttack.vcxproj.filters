@@ -43,6 +43,9 @@
     <Filter Include="Dragon">
       <UniqueIdentifier>{cc552bcf-5f79-4dd7-9ad6-e7bf913f7d93}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game_Engine\Graphics\Camera">
+      <UniqueIdentifier>{b62e694b-6d6a-4e71-a09f-08c60f4cf7b7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
