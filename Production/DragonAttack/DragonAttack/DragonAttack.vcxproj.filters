@@ -51,5 +51,13 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Game_Engine\Graphics\Camera</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Camera.h">
+      <Filter>Game_Engine\Graphics\Camera</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

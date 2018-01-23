@@ -1,5 +1,4 @@
 #include "AEEngine.h"
-#include <iostream>
 
 #define R_WIDTH 1280
 #define R_HEIGHT 720
