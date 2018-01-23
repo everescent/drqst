@@ -1,0 +1,15 @@
+Attack Mechanics (Revised):
+Basic Attack - Fireball
+Charged Attack - Mega Fireball
+Charged attack only becomes available when the bloodlust meter is filled.
+Bloodlust meter gets filled by landing hits. 
+Firebal can only shoot straight, no more aiming with mouse. 
+
+Movement Mechanics (Revised):
+A - Move Left
+D - Move Right
+SPACEBAR - Jump
+ENTER - Fireball
+P - Mega Fireball
+
+Don't show Boss health during fight. 
