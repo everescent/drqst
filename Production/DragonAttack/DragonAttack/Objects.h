@@ -28,6 +28,13 @@ public:
     U = 0.0f;
     V = 0.0f;
   }
+  ~Object()
+  {
+    if (Tex != nullptr)
+      AEGfxTextureUnload(Tex);
+    if (Mesh != nullptr)
+      AEGfxMeshFree(Mesh);
+  }
 private:
   AEGfxVertexList *Mesh;
   AEGfxRenderMode RM;

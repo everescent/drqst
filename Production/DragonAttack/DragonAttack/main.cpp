@@ -17,7 +17,6 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
   AESysSetWindowTitle("My New Demo!");
   AESysReset();
   GSM::GSM_Init();
-  //AEGfxSetBackgroundColor(0.0f, 0.0f, 0.0f);
   AEGfxVertexList *pMesh1;
   pMesh1 = CreatePlatform(4.0f, 2.0f, 0xFFFFFFFF);
   Object Platform1(pMesh1);
@@ -28,10 +27,6 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
     RenderObject(Platform1);
     AESysFrameEnd();
   }
-
-
-
-
   AEGfxMeshFree(pMesh1);
   AESysExit();
   return 0;
