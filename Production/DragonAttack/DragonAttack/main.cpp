@@ -1,5 +1,11 @@
 #include "AEEngine.h"
 #include "Objects.h"
+<<<<<<< .mine
+#include "GameStateManager.h"
+||||||| .r26
+=======
+#include "Input_Handler.h"
+>>>>>>> .r28
 
 #define R_WIDTH 1280
 #define R_HEIGHT 720
@@ -11,24 +17,26 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
   UNREFERENCED_PARAMETER(command_line);
   UNREFERENCED_PARAMETER(show);
 
-  AESysInit(instanceH, show, R_WIDTH, R_HEIGHT, true, 60, NULL);
+  AESysInit(instanceH, show, R_WIDTH, R_HEIGHT, false, 60, NULL);
   AESysSetWindowTitle("My New Demo!");
   AESysReset();
+  GSM::GSM_Init();
   //AEGfxSetBackgroundColor(0.0f, 0.0f, 0.0f);
-  AESysFrameStart();
-
   AEGfxVertexList *pMesh1;
-  pMesh1 = CreateRectangle(100.0f, 50.0f, 0);
-  AEGfxSetRenderMode(AE_GFX_RM_COLOR);
-  // Set position for object 1
-  AEGfxSetPosition(0.0f, 0.0f);
-  // No texture for object 1
-  AEGfxTextureSet(NULL, 0, 0);
-  // Drawing the mesh (list of triangles)
-  AEGfxMeshDraw(pMesh1, AE_GFX_MDM_TRIANGLES);
+  pMesh1 = CreatePlatform(2.0f, 1.0f, 0xFFFFFFFF);
+  Object Platform1(pMesh1);
+  Platform1.SetTex("floor.png", 0.0f, 0.0f);
+  while (GSM::IsGameRunning())
+  {
+    AESysFrameStart();
+    RenderObject(Platform1);
+    AESysFrameEnd();
+  }
 
-  AESysFrameEnd();
+
+
+
+  AEGfxMeshFree(pMesh1);
   AESysExit();
-  system("pause");
   return 0;
 }
