@@ -1,7 +1,12 @@
 #include "Camera.h"
 #include "AEEngine.h"
 
-void SetPlayerCam(int PositionX, int PositionY, int Buffer, int Offset)
+void CamFollow(float PositionX, float PositionY, float Offset)
 {
   AEGfxSetCamPosition(PositionX + Offset, PositionY + Offset);
+}
+
+void CamStatic(float PositionX, float PositionY)
+{
+  AEGfxSetCamPosition(PositionX, PositionY);
 }

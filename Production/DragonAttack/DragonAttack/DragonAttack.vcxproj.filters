@@ -46,6 +46,9 @@
     <Filter Include="Game_Engine\Graphics\Camera">
       <UniqueIdentifier>{b62e694b-6d6a-4e71-a09f-08c60f4cf7b7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game_Engine\Graphics\Objects">
+      <UniqueIdentifier>{1694990d-96fd-4045-8b6a-a2d165e38f3f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -54,10 +57,16 @@
     <ClCompile Include="Camera.cpp">
       <Filter>Game_Engine\Graphics\Camera</Filter>
     </ClCompile>
+    <ClCompile Include="Objects.cpp">
+      <Filter>Game_Engine\Graphics\Objects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h">
       <Filter>Game_Engine\Graphics\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="Objects.h">
+      <Filter>Game_Engine\Graphics\Objects</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
