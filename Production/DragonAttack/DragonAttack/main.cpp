@@ -1,11 +1,7 @@
 #include "AEEngine.h"
 #include "Objects.h"
-<<<<<<< .mine
 #include "GameStateManager.h"
-||||||| .r26
-=======
-#include "Input_Handler.h"
->>>>>>> .r28
+
 
 #define R_WIDTH 1280
 #define R_HEIGHT 720
@@ -26,16 +22,12 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
   pMesh1 = CreatePlatform(2.0f, 1.0f, 0xFFFFFFFF);
   Object Platform1(pMesh1);
   Platform1.SetTex("floor.png", 0.0f, 0.0f);
-  while (GSM::IsGameRunning())
+  while (1)
   {
     AESysFrameStart();
     RenderObject(Platform1);
     AESysFrameEnd();
   }
-
-
-
-
   AEGfxMeshFree(pMesh1);
   AESysExit();
   return 0;
