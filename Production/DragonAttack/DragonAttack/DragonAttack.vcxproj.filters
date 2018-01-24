@@ -34,9 +34,6 @@
     <Filter Include="Input">
       <UniqueIdentifier>{03819ec4-fc32-48bd-9a7b-73e07770de0b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Stage">
-      <UniqueIdentifier>{80570fdd-e615-452c-b710-941df2f0340e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Game_Engine\AI">
       <UniqueIdentifier>{ff9dd1ce-73e4-4b4b-bf20-a27855b55dce}</UniqueIdentifier>
     </Filter>
@@ -48,6 +45,12 @@
     </Filter>
     <Filter Include="Game_Engine\Graphics\Objects">
       <UniqueIdentifier>{1694990d-96fd-4045-8b6a-a2d165e38f3f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game_States">
+      <UniqueIdentifier>{a766146d-0ce9-4df6-9c95-84818cffa906}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game_States\Stage">
+      <UniqueIdentifier>{80570fdd-e615-452c-b710-941df2f0340e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -66,6 +69,9 @@
     <ClCompile Include="GameStateManager.cpp">
       <Filter>GSM</Filter>
     </ClCompile>
+    <ClCompile Include="Main_Menu.cpp">
+      <Filter>Game_States</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h">
@@ -82,6 +88,9 @@
     </ClInclude>
     <ClInclude Include="GameStateManager.h">
       <Filter>GSM</Filter>
+    </ClInclude>
+    <ClInclude Include="Main_Menu.h">
+      <Filter>Game_States</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

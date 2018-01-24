@@ -115,6 +115,11 @@ void Get_User_Input(void)
 		Enqueue(AEVK_RETURN);
 	}
 
+	if (AEInputCheckTriggered(AEVK_P))
+	{
+		Enqueue(AEVK_P);
+	}
+
 	if (AEInputCheckTriggered(AEVK_ESCAPE) || 0 == AESysDoesWindowExist())
 	{
 

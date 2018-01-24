@@ -1,3 +1,4 @@
 Timeline: https://time.graphics/line/49618
 Git Hub Repository: https://github.com/everescent/drqst
 SVN: https://svn.sg.digipen.edu/projects/d-sync/trunk
+What to commit :https://stackoverflow.com/questions/3922660/which-visual-c-file-types-should-be-committed-to-version-control
