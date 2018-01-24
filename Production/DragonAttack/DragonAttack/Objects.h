@@ -38,9 +38,9 @@ private:
   float V;
 };
 
-AEGfxVertexList* CreateSquare(float size, unsigned int color);
+AEGfxVertexList* CreateSquare(float size, unsigned int color, float scaleU = 1.0f, float scaleV = 1.0f);
 
-AEGfxVertexList* CreateRectangle(float width, float height, unsigned int color);
+AEGfxVertexList* CreateRectangle(float width, float height, unsigned int color, float scaleU = 1.0f, float scaleV = 1.0f);
 
 AEGfxVertexList* CreateFloor(float Multiplier = 1.0f, unsigned int color = 0);
 

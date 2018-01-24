@@ -19,15 +19,19 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
   GSM::GSM_Init();
   //AEGfxSetBackgroundColor(0.0f, 0.0f, 0.0f);
   AEGfxVertexList *pMesh1;
-  pMesh1 = CreatePlatform(2.0f, 1.0f, 0xFFFFFFFF);
+  pMesh1 = CreatePlatform(4.0f, 2.0f, 0xFFFFFFFF);
   Object Platform1(pMesh1);
   Platform1.SetTex("floor.png", 0.0f, 0.0f);
-  while (1)
+  while (GSM::IsGameRunning())
   {
     AESysFrameStart();
     RenderObject(Platform1);
     AESysFrameEnd();
   }
+
+
+
+
   AEGfxMeshFree(pMesh1);
   AESysExit();
   return 0;
