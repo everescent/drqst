@@ -60,6 +60,12 @@
     <ClCompile Include="Objects.cpp">
       <Filter>Game_Engine\Graphics\Objects</Filter>
     </ClCompile>
+    <ClCompile Include="Input_Handler.cpp">
+      <Filter>Input</Filter>
+    </ClCompile>
+    <ClCompile Include="GameStateManager.cpp">
+      <Filter>GSM</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h">
@@ -67,6 +73,15 @@
     </ClInclude>
     <ClInclude Include="Objects.h">
       <Filter>Game_Engine\Graphics\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Input_Handler.h">
+      <Filter>Input</Filter>
+    </ClInclude>
+    <ClInclude Include="GameStateList.h">
+      <Filter>GSM</Filter>
+    </ClInclude>
+    <ClInclude Include="GameStateManager.h">
+      <Filter>GSM</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
