@@ -19,12 +19,12 @@ AEGfxVertexList* CreateSquare(float size, float scaleU, float scaleV, unsigned i
 }
 
 //This function creates a custom rectangle
-AEGfxVertexList* CreateRectangle(int width, int height, float ScaleU, float ScaleV, unsigned int color)
+AEGfxVertexList* CreateRectangle(float width, float height, float ScaleU, float ScaleV, unsigned int color)
 {
   AEGfxMeshStart();
   AEGfxTriAdd(
     -width, -height, color, 0.0f, 1.0f,
-    width, -height, color, (width / height) * ScaleU, 1.0f,
+    width, -height, color, (float)((int)width / (int)height) * ScaleU, 1.0f,
     -width, height, color, 0.0f, -1.0f * ScaleV + 1);
   AEGfxTriAdd(
     width, -height, color, 1.0f, 1.0f * ScaleV,

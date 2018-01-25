@@ -64,7 +64,7 @@ private:
 
 AEGfxVertexList* CreateSquare(float size, float scaleU = 1.0f, float scaleV = 1.0f, unsigned int color = 0xFFFFFF);
 
-AEGfxVertexList* CreateRectangle(int width, int height, float ScaleU = 1.0f, float ScaleV = 1.0f, unsigned int color = 0xFFFFFF);
+AEGfxVertexList* CreateRectangle(float width, float height, float ScaleU = 1.0f, float ScaleV = 1.0f, unsigned int color = 0xFFFFFF);
 
 AEGfxVertexList* CreateFloor(float Multiplier = 1.0f, float MultiplierUV = 1.0f, unsigned int color = 0xFFFFFF);
 
