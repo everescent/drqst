@@ -20,9 +20,12 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
   Object Platform1(CreatePlatform(4.0f, 2.0f, 2.0f, 2.0f), "floor.png");
   while (GSM::IsGameRunning())
  {
-    AESysFrameStart();
-    RenderObject(Platform1);
-    AESysFrameEnd();
+	  while (GSM::current == GSM::next)
+	  {
+		  AESysFrameStart();
+		  RenderObject(Platform1);
+		  AESysFrameEnd();
+	  }
   }
   AESysExit();
   return 0;

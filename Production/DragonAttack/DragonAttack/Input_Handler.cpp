@@ -120,8 +120,9 @@ void Get_User_Input(void)
 		Enqueue(AEVK_P);
 	}
 
+	// if esc key or the close button was triggered, stop the game
 	if (AEInputCheckTriggered(AEVK_ESCAPE) || 0 == AESysDoesWindowExist())
 	{
-
+		GSM::current = GS_QUIT;
 	}
 }

@@ -4,6 +4,7 @@
 
 namespace GSM
 {
+	// holds the previous, current and next state
 	extern GAME_STATE previous, current, next;
 
 	void GSM_Init(void);

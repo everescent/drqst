@@ -34,12 +34,6 @@
     <Filter Include="Input">
       <UniqueIdentifier>{03819ec4-fc32-48bd-9a7b-73e07770de0b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game_Engine\AI">
-      <UniqueIdentifier>{ff9dd1ce-73e4-4b4b-bf20-a27855b55dce}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Dragon">
-      <UniqueIdentifier>{cc552bcf-5f79-4dd7-9ad6-e7bf913f7d93}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Game_Engine\Graphics\Camera">
       <UniqueIdentifier>{b62e694b-6d6a-4e71-a09f-08c60f4cf7b7}</UniqueIdentifier>
     </Filter>
@@ -51,6 +45,15 @@
     </Filter>
     <Filter Include="Game_States\Stage">
       <UniqueIdentifier>{80570fdd-e615-452c-b710-941df2f0340e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Characters">
+      <UniqueIdentifier>{7d773d2a-7a0d-405a-aa4c-f5c041d6ed8f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Characters\Dragon">
+      <UniqueIdentifier>{cc552bcf-5f79-4dd7-9ad6-e7bf913f7d93}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Characters\AI">
+      <UniqueIdentifier>{ff9dd1ce-73e4-4b4b-bf20-a27855b55dce}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -91,6 +94,9 @@
     </ClInclude>
     <ClInclude Include="Main_Menu.h">
       <Filter>Game_States</Filter>
+    </ClInclude>
+    <ClInclude Include="Characters.h">
+      <Filter>Characters</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

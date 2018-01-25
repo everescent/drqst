@@ -1,9 +1,12 @@
 #include "GameStateManager.h"
+#include "Input_Handler.h"
 
 namespace GSM
 {
-
+	// defining a pointer to a void funtion that takes in void
 	typedef void(*void_fp_void)(void);
+
+	// defining a pointer to a void funtion that takes in a float
 	typedef void(*void_fp_float)(float deltaTime);
 
 	GAME_STATE previous = GS_MAIN;
@@ -23,6 +26,7 @@ namespace GSM
 
 	GameStateFunctions GSF[GS_QUIT] = { 0 };
 
+	// initializes the array of function pointers for each state
 	void GSM_Init(void)
 	{
 		GSF[GS_MAIN].Init   = Main_Menu::Init;
@@ -39,6 +43,7 @@ namespace GSM
 	{
 		if (current == GS_RESTART)
 		{
+			//current and next state set to the previous state
 			current = next = previous;
 		}
 
@@ -55,6 +60,8 @@ namespace GSM
 
 	void Update_and_Draw(float dt)
 	{
+		Get_User_Input();
+		
 		if (GSF[current].Update != nullptr)
 		{
 			GSF[current].Update(dt);
