@@ -13,6 +13,13 @@ namespace
 {
 	Input_Queue *user_input = nullptr;
 	Input_Queue *input_tail = nullptr;
+
+	const int jump_up   = AEVK_SPACE;
+	const int go_left   = AEVK_A;
+	const int go_right  = AEVK_D;
+	const int fire      = AEVK_RETURN;
+	const int special   = AEVK_P;
+	const int quit_game = AEVK_ESCAPE;
 }
 
 // create a new input
@@ -95,33 +102,35 @@ void Clear_Buffer(void)
 
 void Get_User_Input(void)
 {
-	if (AEInputCheckCurr(AEVK_D))
+	AEInputUpdate();
+	
+	if (AEInputCheckCurr(go_right))
 	{
-		Enqueue(AEVK_D);
+		Enqueue(go_right);
 	}
 
-	if (AEInputCheckCurr(AEVK_A))
+	if (AEInputCheckCurr(go_left))
 	{
-		Enqueue(AEVK_A);
+		Enqueue(go_left);
 	}
 
-	if(AEInputCheckTriggered(AEVK_SPACE))
+	if(AEInputCheckTriggered(jump_up))
 	{
-		Enqueue(AEVK_SPACE);
+		Enqueue(jump_up);
 	}
 
-	if (AEInputCheckTriggered(AEVK_RETURN))
+	if (AEInputCheckTriggered(fire))
 	{
-		Enqueue(AEVK_RETURN);
+		Enqueue(fire);
 	}
 
-	if (AEInputCheckTriggered(AEVK_P))
+	if (AEInputCheckTriggered(special))
 	{
-		Enqueue(AEVK_P);
+		Enqueue(special);
 	}
 
 	// if esc key or the close button was triggered, stop the game
-	if (AEInputCheckTriggered(AEVK_ESCAPE) || 0 == AESysDoesWindowExist())
+	if (AEInputCheckTriggered(quit_game) || 0 == AESysDoesWindowExist())
 	{
 		GSM::current = GS_QUIT;
 	}
