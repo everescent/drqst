@@ -17,17 +17,13 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
   AESysSetWindowTitle("My New Demo!");
   AESysReset();
   GSM::GSM_Init();
-  AEGfxVertexList *pMesh1;
-  pMesh1 = CreatePlatform(4.0f, 2.0f, 0xFFFFFFFF);
-  Object Platform1(pMesh1);
-  Platform1.SetTex("floor.png", 0.0f, 0.0f);
+  Object Platform1(CreatePlatform(4.0f, 2.0f, 2.0f, 2.0f), "floor.png");
   while (GSM::IsGameRunning())
-  {
+ {
     AESysFrameStart();
     RenderObject(Platform1);
     AESysFrameEnd();
   }
-  AEGfxMeshFree(pMesh1);
   AESysExit();
   return 0;
 }

@@ -2,7 +2,8 @@
 #include "Objects.h"
 #include "AEEngine.h"
 
-AEGfxVertexList* CreateSquare(float size, unsigned int color, float scaleU, float scaleV)
+//This function creates a custom square
+AEGfxVertexList* CreateSquare(float size, float scaleU, float scaleV, unsigned int color)
 {
   AEGfxMeshStart();
   AEGfxTriAdd(
@@ -17,51 +18,57 @@ AEGfxVertexList* CreateSquare(float size, unsigned int color, float scaleU, floa
   return AEGfxMeshEnd();
 }
 
-AEGfxVertexList* CreateRectangle(float width, float height, unsigned int color, float scaleU, float scaleV)
+//This function creates a custom rectangle
+AEGfxVertexList* CreateRectangle(int width, int height, float ScaleU, float ScaleV, unsigned int color)
 {
   AEGfxMeshStart();
   AEGfxTriAdd(
-    -width, -height, color, 0.0f, 1.0f * scaleV,
-    width, -height, color, 1.0f * scaleU, 1.0f * scaleU,
-    -width, height, color, 0.0f, 0.0f);
+    -width, -height, color, 0.0f, 1.0f,
+    width, -height, color, (width / height) * ScaleU, 1.0f,
+    -width, height, color, 0.0f, -1.0f * ScaleV + 1);
   AEGfxTriAdd(
-    width, -height, color, 1.0f * scaleU, 1.0f * scaleV,
-    width, height, color, 1.0f * scaleU, 0.0f,
-    -width, height, color, 0.0f, 0.0f);
+    width, -height, color, 1.0f, 1.0f * ScaleV,
+    width, height, color, 1.0f, 0.0f,
+    -width, height, color, -(width / height) * ScaleU + 1, 0.0f);
 
   return AEGfxMeshEnd();
 }
 
-AEGfxVertexList* CreateFloor(float Multiplier, unsigned int color)
+//This function creates a floor
+AEGfxVertexList* CreateFloor(float Multiplier, float MultiplierUV, unsigned int color)
 {
   AEGfxMeshStart();
+  //Transformation matrix is applied to undistort the Texture
   AEGfxTriAdd(
     -FLOOR_WIDTH * Multiplier, -FLOOR_HEIGHT, color, 0.0f, 1.0f,
-    FLOOR_WIDTH * Multiplier, -FLOOR_HEIGHT, color, 1.0f * Multiplier, 1.0f * Multiplier,
+    FLOOR_WIDTH * Multiplier, -FLOOR_HEIGHT, color, (FLOOR_WIDTH / FLOOR_HEIGHT) * MultiplierUV, 1.0f,
     -FLOOR_WIDTH * Multiplier, FLOOR_HEIGHT, color, 0.0f, 0.0f);
   AEGfxTriAdd(
-    FLOOR_WIDTH * Multiplier, -FLOOR_HEIGHT, color, 1.0f * Multiplier, 1.0f,
-    FLOOR_WIDTH * Multiplier, FLOOR_HEIGHT, color, 1.0f * Multiplier, 0.0f,
-    -FLOOR_WIDTH * Multiplier, FLOOR_HEIGHT, color, 0.0f, 0.0f);
+    FLOOR_WIDTH * Multiplier, -FLOOR_HEIGHT, color, 1.0f, 1.0f,
+    FLOOR_WIDTH * Multiplier, FLOOR_HEIGHT, color, 1.0f, 0.0f,
+    -FLOOR_WIDTH * Multiplier, FLOOR_HEIGHT, color, -(FLOOR_WIDTH / FLOOR_HEIGHT) * MultiplierUV + 1, 0.0f);
 
   return AEGfxMeshEnd();
 }
 
-AEGfxVertexList* CreatePlatform(float MultiplierW, float MultiplierH, unsigned int color)
+//This function creates a platform
+AEGfxVertexList* CreatePlatform(float MultiplierW, float MultiplierH, float ScaleU, float ScaleV, unsigned int color)
 {
   AEGfxMeshStart();
+  //Transformation matrix is applied to undistort the Texture
   AEGfxTriAdd(
-    -PLAT_WIDTH * MultiplierW, -PLAT_HEIGHT * MultiplierH, color, 0.0f, 1.0f * MultiplierH,
-    PLAT_WIDTH * MultiplierW, -PLAT_HEIGHT * MultiplierH, color, 1.0f * MultiplierW, 1.0f * MultiplierW,
-    -PLAT_WIDTH * MultiplierW, PLAT_HEIGHT * MultiplierH, color, 0.0f, 0.0f);
+    -PLAT_WIDTH * MultiplierW, -PLAT_HEIGHT * MultiplierH, color, 0.0f, 1.0f,
+    PLAT_WIDTH * MultiplierW, -PLAT_HEIGHT * MultiplierH, color, (PLAT_WIDTH / PLAT_HEIGHT) * ScaleU, 1.0f,
+    -PLAT_WIDTH * MultiplierW, PLAT_HEIGHT * MultiplierH, color, 0.0f, -1.0f * ScaleV + 1);
   AEGfxTriAdd(
-    PLAT_WIDTH * MultiplierW, -PLAT_HEIGHT * MultiplierH, color, 1.0f * MultiplierW, 1.0f * MultiplierH,
-    PLAT_WIDTH * MultiplierW, PLAT_HEIGHT * MultiplierH, color, 1.0f * MultiplierW, 0.0f,
-    -PLAT_WIDTH * MultiplierW, PLAT_HEIGHT * MultiplierH, color, 0.0f, 0.0f);
+    PLAT_WIDTH * MultiplierW, -PLAT_HEIGHT * MultiplierH, color, 1.0f, 1.0f * ScaleV,
+    PLAT_WIDTH * MultiplierW, PLAT_HEIGHT * MultiplierH, color, 1.0f, 0.0f,
+    -PLAT_WIDTH * MultiplierW, PLAT_HEIGHT * MultiplierH, color, -(PLAT_WIDTH / PLAT_HEIGHT) * ScaleU + 1.0f, 0.0f);
 
   return AEGfxMeshEnd();
 }
 
+//This function renders an object
 void RenderObject(const Object &pMesh, float R, float G, float B, float A)
 {
   AEGfxSetRenderMode(pMesh.rm());
@@ -71,16 +78,13 @@ void RenderObject(const Object &pMesh, float R, float G, float B, float A)
   AEGfxMeshDraw(pMesh.mesh(), AE_GFX_MDM_TRIANGLES);
 }
 
-void Object::SetPosition(float posX, float posY)
+void Object::SetPosition(const float &posX, const float &posY)
 {
   X = posX;
   Y = posY;
 }
-void Object::SetTex(const char* TexFile, float posU, float posV)
+void Object::SetTexPos(const float &posU, const float &posV)
 {
-  Tex = AEGfxTextureLoad(TexFile);
-  AE_ASSERT_MESG(Tex, "Failed to load texture");
   U = posU;
   V = posV;
-  RM = AE_GFX_RM_TEXTURE;
 }
