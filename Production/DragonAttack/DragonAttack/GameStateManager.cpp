@@ -1,3 +1,17 @@
+/* Start Header ************************************************************************/
+/*!
+\file       GameStateManager.cpp
+\author     William Yoong
+\par email: william.yoong\@digipen.edu
+\brief
+Manages the game state
+
+Copyright (C) 20xx DigiPen Institute of Technology.
+Reproduction or disclosure of this file or its contents
+without the prior written consent of DigiPen Institute of
+Technology is prohibited.
+*/
+/* End Header **************************************************************************/
 #include "GameStateManager.h"
 #include "Input_Handler.h"
 

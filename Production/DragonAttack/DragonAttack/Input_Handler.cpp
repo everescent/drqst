@@ -1,5 +1,20 @@
+/* Start Header ************************************************************************/
+/*!
+\file       Input_Handler.cpp
+\author     William Yoong
+\par email: william.yoong\@digipen.edu
+\brief
+Input from user handled here.
+
+Copyright (C) 20xx DigiPen Institute of Technology.
+Reproduction or disclosure of this file or its contents
+without the prior written consent of DigiPen Institute of
+Technology is prohibited.
+*/
+/* End Header **************************************************************************/
+
 #include "Input_Handler.h"
-#include "AEEngine.h"
+#include "Camera.h"
 #include <iostream>
 
 struct Input_Queue
@@ -13,13 +28,6 @@ namespace
 {
 	Input_Queue *user_input = nullptr;
 	Input_Queue *input_tail = nullptr;
-
-	const int jump_up   = AEVK_SPACE;
-	const int go_left   = AEVK_A;
-	const int go_right  = AEVK_D;
-	const int fire      = AEVK_RETURN;
-	const int special   = AEVK_P;
-	const int quit_game = AEVK_ESCAPE;
 }
 
 // create a new input
@@ -102,21 +110,52 @@ void Clear_Buffer(void)
 
 void Get_User_Input(void)
 {
+	using namespace Input;
+
 	AEInputUpdate();
+
+	static float x = 0;
 	
 	if (AEInputCheckCurr(go_right))
 	{
-		Enqueue(go_right);
+		//Enqueue(go_right);
+
+		CamFollow(x, 3);
+
+		x += 3;
 	}
 
 	if (AEInputCheckCurr(go_left))
 	{
-		Enqueue(go_left);
+		//Enqueue(go_left);
+
+		CamFollow(x, -3);
+
+		x += -3;
+	}
+
+	if (AEInputCheckCurr(go_up))
+	{
+		//Enqueue(go_left);
+
+		CamFollow(x, -3);
+
+		x += -3;
+	}
+
+	if (AEInputCheckCurr(go_down))
+	{
+		//Enqueue(go_left);
+
+		CamFollow(x, 3);
+
+		x += 3;
 	}
 
 	if(AEInputCheckTriggered(jump_up))
 	{
-		Enqueue(jump_up);
+		//Enqueue(jump_up);
+
 	}
 
 	if (AEInputCheckTriggered(fire))

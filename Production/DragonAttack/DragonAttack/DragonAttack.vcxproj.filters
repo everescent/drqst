@@ -75,6 +75,12 @@
     <ClCompile Include="Main_Menu.cpp">
       <Filter>Game_States</Filter>
     </ClCompile>
+    <ClCompile Include="Grunt.cpp">
+      <Filter>Characters\AI</Filter>
+    </ClCompile>
+    <ClCompile Include="Characters.cpp">
+      <Filter>Characters</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h">
@@ -97,6 +103,9 @@
     </ClInclude>
     <ClInclude Include="Characters.h">
       <Filter>Characters</Filter>
+    </ClInclude>
+    <ClInclude Include="Grunt.h">
+      <Filter>Characters\AI</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
