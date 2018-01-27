@@ -1,3 +1,18 @@
+/* Start Header ************************************************************************/
+/*!
+\file       Objects.h
+\author     Jacob Lim
+\par email: jacob.lim\@digipen.edu
+\brief
+  Object class and mesh creation functions are declared here.
+
+Copyright (C) 20xx DigiPen Institute of Technology.
+Reproduction or disclosure of this file or its contents
+without the prior written consent of DigiPen Institute of
+Technology is prohibited.
+*/
+/* End Header **************************************************************************/
+
 #pragma once
 #include "AEEngine.h"
 
@@ -5,6 +20,8 @@
 #define FLOOR_HEIGHT 100
 #define PLAT_WIDTH 64
 #define PLAT_HEIGHT 20
+#define BG_WIDTH 640
+#define BG_HEIGHT 360
 
 /*************************************************************************
 Description: 
@@ -136,6 +153,20 @@ Return:
   A pointer to a mesh.
 *************************************************************************/
 AEGfxVertexList* CreatePlatform(float MultiplierW = 1.0f, float MultiplierH = 1.0f, float ScaleU = 1.0f, float ScaleV = 1.0f, unsigned int color = 0xFFFFFF);
+
+/*************************************************************************
+Description:
+  Creates a Background(BG) mesh.
+
+Parameters:
+  Multiplier   : This value multiplies the length of the BG.
+  MultiplierUV : This multiplier scales the texture.
+  color        : Mesh color.
+
+Return:
+  A pointer to a mesh.
+*************************************************************************/
+AEGfxVertexList* CreateBG(float Multiplier = 1.0f, float MultiplierUV = 1.0f, unsigned int color = 0xFFFFFF);
 
 /*************************************************************************
 Description:

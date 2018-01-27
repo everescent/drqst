@@ -1,3 +1,18 @@
+/* Start Header ************************************************************************/
+/*!
+\file       Objects.cpp
+\author     Jacob Lim
+\par email: jacob.lim\@digipen.edu
+\brief
+  Object class and mesh creation functions are declared here.
+
+Copyright (C) 20xx DigiPen Institute of Technology.
+Reproduction or disclosure of this file or its contents
+without the prior written consent of DigiPen Institute of
+Technology is prohibited.
+*/
+/* End Header **************************************************************************/
+
 #include <string>
 #include "Objects.h"
 #include "AEEngine.h"
@@ -64,6 +79,23 @@ AEGfxVertexList* CreatePlatform(float MultiplierW, float MultiplierH, float Scal
     PLAT_WIDTH * MultiplierW, -PLAT_HEIGHT * MultiplierH, color, 1.0f, 1.0f * ScaleV,
     PLAT_WIDTH * MultiplierW, PLAT_HEIGHT * MultiplierH, color, 1.0f, 0.0f,
     -PLAT_WIDTH * MultiplierW, PLAT_HEIGHT * MultiplierH, color, -(PLAT_WIDTH / PLAT_HEIGHT) * ScaleU + 1.0f, 0.0f);
+
+  return AEGfxMeshEnd();
+}
+
+//This function creates a background
+AEGfxVertexList* CreateBG(float Multiplier, float MultiplierUV, unsigned int color)
+{
+  AEGfxMeshStart();
+  //Transformation matrix is applied to undistort the Texture
+  AEGfxTriAdd(
+    -BG_WIDTH * Multiplier, -BG_HEIGHT, color, 0.0f, 1.0f,
+    BG_WIDTH * Multiplier, -BG_HEIGHT, color, (BG_WIDTH / BG_HEIGHT) * MultiplierUV, 1.0f,
+    -BG_WIDTH * Multiplier, BG_HEIGHT, color, 0.0f, 0.0f);
+  AEGfxTriAdd(
+    BG_WIDTH * Multiplier, -BG_HEIGHT, color, 1.0f, 1.0f,
+    BG_WIDTH * Multiplier, BG_HEIGHT, color, 1.0f, 0.0f,
+    -BG_WIDTH * Multiplier, BG_HEIGHT, color, -(BG_WIDTH / BG_HEIGHT) * MultiplierUV + 1.0f, 0.0f);
 
   return AEGfxMeshEnd();
 }
