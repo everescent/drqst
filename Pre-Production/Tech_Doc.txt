@@ -1,0 +1,70 @@
+
+Coding Methods: 
+
+  Macros: 
+    -No Macros allowed except for defines
+
+  User-Defined Types (Class/Structs):
+    -All members MUST be initialized in the members initialization list 
+    -multiple constructors are allowed by function overloading BUT please 
+    comment on why/when the user have to use which constructors
+    
+  Function naming conventions: 
+    Action_Object
+    Action: Describe the action and functionality of the function
+    Object: Describe the object that is to be generated or affected by it
+    E.g:
+      Create_Dragon
+      Create_KingA
+      Phase2_KingA
+      Apply_Gravity
+      
+  In-Built types: 
+  
+  Variable naming:
+    member variables are to be named as m_<type><name>
+    e.g:
+      m_Dragon_Health
+    Static members are to be named as stm_<type><name>
+    Reference variables are to be named as r_<type><name>
+    Pointer variables are to be named as p_<type><name>
+  
+  Formatting/Documentation :
+  
+    Standard proper indentation of C++ code
+    
+    Comments to describe function usage to be done in header files
+    
+    Usage of engine functions should be understandable by reading the comments
+    to ensure that it'll be understandable to our lecturers too 
+    
+  
+  File Locations:
+  
+    All engines/files are to have their respective header file folder
+      e.g: Graphics_H, camera.h and object.h in it. 
+      
+    All related header files are to be in the engine header folders
+    
+    
+  
+  
+  Source Control:
+    SVN and GitHub (backup) 
+    
+  
+  Rules: 
+  All files are to be committed only AFTER testing AND commenting.
+  Please include a summary of the files committed and functionality 
+  in the comments/summary while committing via SVN/GitHub
+    This is to facilitate and track progress especially if a particular engine
+    is not fully completed 
+    e.g: 
+    Collision Engine completed using AABB system, currently works with 
+    mob collision and platform collision.
+    Working on MC with projectile collision.
+  
+  
+      
+    
+   
