@@ -16,12 +16,12 @@ Technology is prohibited.
 #pragma once
 #include "AEEngine.h"
 
-#define FLOOR_WIDTH 640
-#define FLOOR_HEIGHT 100
-#define PLAT_WIDTH 64
-#define PLAT_HEIGHT 20
-#define BG_WIDTH 640
-#define BG_HEIGHT 360
+const float FLOOR_WIDTH { 640.0f }; //The width of the floor
+const float FLOOR_HEIGHT{ 100.0f }; //The height of the floor
+const float PLAT_WIDTH  { 64.0f  }; //The width of one platform
+const float PLAT_HEIGHT { 20.0f  }; //The height of one platform
+const float BG_WIDTH    { 640.0f }; //The width of one background
+const float BG_HEIGHT   { 360.0f }; //The height of one background
 
 /*************************************************************************
 Description: 
@@ -38,42 +38,72 @@ public:
   void SetPosition(const float &posX, const float &posY);
   //Set texture position
   void SetTexPos(const float &posU, const float &posV);
-  float posX() const { return X; };
-  float posY() const { return Y; };
-  float posU() const { return U; };
-  float posV() const { return V; };
-  AEGfxVertexList* mesh() const { return Mesh; };
-  AEGfxRenderMode rm() const { return RM; };
-  AEGfxTexture* tex() const { return Tex; };
+  //Set tint RGB
+  void SetRGB(const float &Red, const float &Green, const float &Blue);
+  //Set tint Alpha
+  void SetAlpha(const float &Alpha);
+  //Set transparency value for rendering
+  void SetTransparency(const float &Trans);
+  //Set blend mode for rendering
+  void SetBlendMode(AEGfxBlendMode BlendMode);
+  //Renders the object
+  void RenderObject();
+  float Get_posX() const { return X; };
+  float Get_posY() const { return Y; };
+  float Get_posU() const { return U; };
+  float Get_posV() const { return V; };
+  float Get_Width() const { return Width; };
+  float Get_Height() const { return Height; };
+  AEGfxVertexList* Get_mesh() const { return Mesh; };
+  AEGfxRenderMode Get_rm() const { return RM; };
+  AEGfxTexture* Get_tex() const { return Tex; };
   //Default constructor; Sets everything to zero
   Object()
-  :Mesh{ nullptr }, RM{ AE_GFX_RM_COLOR }, Tex{ nullptr }
+  :Mesh{ nullptr }, RM{ AE_GFX_RM_COLOR }, Tex{ nullptr }, BM{ AE_GFX_BM_NONE }
   {
     X = 0.0f;
     Y = 0.0f;
     U = 0.0f;
     V = 0.0f;
+    R = 1.0f;
+    G = 1.0f;
+    B = 1.0f;
+    A = 1.0f;
+    Transparency = 1.0f;
+    Width = 0.0f;
+    Height = 0.0f;
   }
   //Construct with a mesh, but no texture
-  Object(AEGfxVertexList * mesh)
-  :Mesh{ mesh }, RM{AE_GFX_RM_COLOR}, Tex{nullptr}
+  Object(AEGfxVertexList * mesh, const float &ObjectW, const float &ObjectH)
+  :Mesh{ mesh }, RM{AE_GFX_RM_COLOR}, Tex{nullptr}, BM{ AE_GFX_BM_NONE }
   {
-    AE_ASSERT_MESG(Mesh, "Failed to create mesh");
     X = 0.0f;
     Y = 0.0f;
     U = 0.0f;
     V = 0.0f;
+    R = 1.0f;
+    G = 1.0f;
+    B = 1.0f;
+    A = 1.0f;
+    Transparency = 1.0f;
+    Width = ObjectW;
+    Height = ObjectH;
   }
   //Construct with a mesh and texture
-  Object(AEGfxVertexList * mesh, const char* TexFile)
-  :Mesh{ mesh }, RM{ AE_GFX_RM_TEXTURE }, Tex{ AEGfxTextureLoad(TexFile) }
+  Object(AEGfxVertexList * mesh, const char* TexFile, float ObjectW, const float &ObjectH)
+  :Mesh{ mesh }, RM{ AE_GFX_RM_TEXTURE }, Tex{ AEGfxTextureLoad(TexFile) }, BM{ AE_GFX_BM_NONE }
   {
-    AE_ASSERT_MESG(Tex, "Failed to load texture");
-    AE_ASSERT_MESG(Mesh, "Failed to create mesh");
     X = 0.0f;
     Y = 0.0f;
     U = 0.0f;
     V = 0.0f;
+    R = 1.0f;
+    G = 1.0f;
+    B = 1.0f;
+    A = 1.0f;
+    Transparency = 1.0f;
+    Width = ObjectW;
+    Height = ObjectH;
   }
   //Free all resources
   ~Object()
@@ -84,13 +114,21 @@ public:
       AEGfxMeshFree(Mesh);
   }
 private:
-  AEGfxVertexList *Mesh;
-  AEGfxRenderMode RM;
-  AEGfxTexture *Tex;
-  float X; 
-  float Y;
-  float U;
-  float V;
+  AEGfxVertexList *Mesh; //A pointer to object's mesh
+  AEGfxRenderMode RM;    //Render Mode
+  AEGfxTexture *Tex;     //Texture
+  AEGfxBlendMode BM;     //Blend Mode
+  float X;               //Position X
+  float Y;               //Position Y
+  float U;               //Texture U
+  float V;               //Texture V
+  float R;               //Red tint value
+  float G;               //Green tint value
+  float B;               //Blue tint value
+  float A;               //Alpha tint value
+  float Transparency;    //Transparency value
+  float Width;           //Width of object
+  float Height;          //Height of object
 };
 
 /*************************************************************************
@@ -123,63 +161,3 @@ Return:
   A pointer to a mesh.
 *************************************************************************/
 AEGfxVertexList* CreateRectangle(float width, float height, float ScaleU = 1.0f, float ScaleV = 1.0f, unsigned int color = 0xFFFFFF);
-
-/*************************************************************************
-Description:
-  Creates a floor mesh.
-
-Parameters:
-  Multiplier   : This value multiplies the length of the floor.
-  MultiplierUV : This multiplier scales the texture.
-  color        : Mesh color.
-
-Return:
-  A pointer to a mesh.
-*************************************************************************/
-AEGfxVertexList* CreateFloor(float Multiplier = 1.0f, float MultiplierUV = 1.0f, unsigned int color = 0xFFFFFF);
-
-/*************************************************************************
-Description:
-  Creates a platform mesh.
-
-Parameters:
-  MultiplierW : This value multiplies the width of the platform.
-  MultiplierH : This value multiplies the height of the platform.
-  scaleU      : Texture scale in the U direction.
-  scaleV      : Texture scale in the V direction.
-  color       : Mesh color.
-
-Return:
-  A pointer to a mesh.
-*************************************************************************/
-AEGfxVertexList* CreatePlatform(float MultiplierW = 1.0f, float MultiplierH = 1.0f, float ScaleU = 1.0f, float ScaleV = 1.0f, unsigned int color = 0xFFFFFF);
-
-/*************************************************************************
-Description:
-  Creates a Background(BG) mesh.
-
-Parameters:
-  Multiplier   : This value multiplies the length of the BG.
-  MultiplierUV : This multiplier scales the texture.
-  color        : Mesh color.
-
-Return:
-  A pointer to a mesh.
-*************************************************************************/
-AEGfxVertexList* CreateBG(float Multiplier = 1.0f, float MultiplierUV = 1.0f, unsigned int color = 0xFFFFFF);
-
-/*************************************************************************
-Description:
-  Renders an object.
-
-Parameters:
-  pMesh : The object to be rendered.
-  R     : Amount of red to render.
-  G     : Amount of Green to render.
-  B     : Amount of Blue to render.
-  A     : Alpha transparency.
-
-Return:
-  void
-*************************************************************************/
-void RenderObject(const Object &pMesh, float R = 1.0f, float G = 1.0f, float B = 1.0f, float A = 1.0f);

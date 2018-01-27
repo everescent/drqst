@@ -13,7 +13,6 @@ Technology is prohibited.
 */
 /* End Header **************************************************************************/
 
-#include <string>
 #include "Objects.h"
 #include "AEEngine.h"
 
@@ -49,74 +48,48 @@ AEGfxVertexList* CreateRectangle(float width, float height, float ScaleU, float 
   return AEGfxMeshEnd();
 }
 
-//This function creates a floor
-AEGfxVertexList* CreateFloor(float Multiplier, float MultiplierUV, unsigned int color)
-{
-  AEGfxMeshStart();
-  //Transformation matrix is applied to undistort the Texture
-  AEGfxTriAdd(
-    -FLOOR_WIDTH * Multiplier, -FLOOR_HEIGHT, color, 0.0f, 1.0f,
-    FLOOR_WIDTH * Multiplier, -FLOOR_HEIGHT, color, (FLOOR_WIDTH / FLOOR_HEIGHT) * MultiplierUV, 1.0f,
-    -FLOOR_WIDTH * Multiplier, FLOOR_HEIGHT, color, 0.0f, 0.0f);
-  AEGfxTriAdd(
-    FLOOR_WIDTH * Multiplier, -FLOOR_HEIGHT, color, 1.0f, 1.0f,
-    FLOOR_WIDTH * Multiplier, FLOOR_HEIGHT, color, 1.0f, 0.0f,
-    -FLOOR_WIDTH * Multiplier, FLOOR_HEIGHT, color, -(FLOOR_WIDTH / FLOOR_HEIGHT) * MultiplierUV + 1, 0.0f);
-
-  return AEGfxMeshEnd();
-}
-
-//This function creates a platform
-AEGfxVertexList* CreatePlatform(float MultiplierW, float MultiplierH, float ScaleU, float ScaleV, unsigned int color)
-{
-  AEGfxMeshStart();
-  //Transformation matrix is applied to undistort the Texture
-  AEGfxTriAdd(
-    -PLAT_WIDTH * MultiplierW, -PLAT_HEIGHT * MultiplierH, color, 0.0f, 1.0f,
-    PLAT_WIDTH * MultiplierW, -PLAT_HEIGHT * MultiplierH, color, (PLAT_WIDTH / PLAT_HEIGHT) * ScaleU, 1.0f,
-    -PLAT_WIDTH * MultiplierW, PLAT_HEIGHT * MultiplierH, color, 0.0f, -1.0f * ScaleV + 1);
-  AEGfxTriAdd(
-    PLAT_WIDTH * MultiplierW, -PLAT_HEIGHT * MultiplierH, color, 1.0f, 1.0f * ScaleV,
-    PLAT_WIDTH * MultiplierW, PLAT_HEIGHT * MultiplierH, color, 1.0f, 0.0f,
-    -PLAT_WIDTH * MultiplierW, PLAT_HEIGHT * MultiplierH, color, -(PLAT_WIDTH / PLAT_HEIGHT) * ScaleU + 1.0f, 0.0f);
-
-  return AEGfxMeshEnd();
-}
-
-//This function creates a background
-AEGfxVertexList* CreateBG(float Multiplier, float MultiplierUV, unsigned int color)
-{
-  AEGfxMeshStart();
-  //Transformation matrix is applied to undistort the Texture
-  AEGfxTriAdd(
-    -BG_WIDTH * Multiplier, -BG_HEIGHT, color, 0.0f, 1.0f,
-    BG_WIDTH * Multiplier, -BG_HEIGHT, color, (BG_WIDTH / BG_HEIGHT) * MultiplierUV, 1.0f,
-    -BG_WIDTH * Multiplier, BG_HEIGHT, color, 0.0f, 0.0f);
-  AEGfxTriAdd(
-    BG_WIDTH * Multiplier, -BG_HEIGHT, color, 1.0f, 1.0f,
-    BG_WIDTH * Multiplier, BG_HEIGHT, color, 1.0f, 0.0f,
-    -BG_WIDTH * Multiplier, BG_HEIGHT, color, -(BG_WIDTH / BG_HEIGHT) * MultiplierUV + 1.0f, 0.0f);
-
-  return AEGfxMeshEnd();
-}
-
 //This function renders an object
-void RenderObject(const Object &pMesh, float R, float G, float B, float A)
+void Object::RenderObject()
 {
-  AEGfxSetRenderMode(pMesh.rm());
-  AEGfxSetPosition(pMesh.posX(), pMesh.posY());
-  AEGfxTextureSet(pMesh.tex(), pMesh.posU(), pMesh.posV());
+  AEGfxSetRenderMode(RM);
+  AEGfxSetPosition(X, Y);
+  AEGfxTextureSet(Tex, U, V);
   AEGfxSetTintColor(R, G, B, A);
-  AEGfxMeshDraw(pMesh.mesh(), AE_GFX_MDM_TRIANGLES);
+  AEGfxSetTransparency(Transparency);
+  AEGfxSetBlendMode(BM);
+  AEGfxMeshDraw(Mesh, AE_GFX_MDM_TRIANGLES);
 }
-
+//Set object position
 void Object::SetPosition(const float &posX, const float &posY)
 {
   X = posX;
   Y = posY;
 }
+//Set texture position
 void Object::SetTexPos(const float &posU, const float &posV)
 {
   U = posU;
   V = posV;
+}
+//Set tint RGB
+void Object::SetRGB(const float &Red, const float &Green, const float &Blue)
+{
+  R = Red;
+  G = Green;
+  B = Blue;
+}
+//Set tint Alpha
+void Object::SetAlpha(const float &Alpha)
+{
+  A = Alpha;
+}
+//Set transparency value for rendering
+void Object::SetTransparency(const float &Trans)
+{
+  Transparency = Trans;
+}
+//Set blend mode for rendering
+void Object::SetBlendMode(AEGfxBlendMode BlendMode) 
+{
+  BM = BlendMode;
 }

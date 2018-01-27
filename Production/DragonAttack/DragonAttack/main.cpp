@@ -2,8 +2,8 @@
 #include "Objects.h"
 #include "GameStateManager.h"
 
-#define R_WIDTH 1280
-#define R_HEIGHT 720
+const int R_WIDTH { 1280 }; //Screen width
+const int R_HEIGHT{ 720  }; //Screen height
 
 int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_line, int show)
 {
@@ -16,16 +16,17 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
   AESysSetWindowTitle("My New Demo!");
   AESysReset();
   GSM::GSM_Init();
-  Object Platform1(CreatePlatform(4.0f, 2.0f, 2.0f, 2.0f), "floor.jpg");
+  Object Platform1(CreateRectangle(PLAT_WIDTH * 2, PLAT_HEIGHT), "floor.jpg", PLAT_WIDTH * 2, PLAT_HEIGHT);
+  Platform1.Get_Height();
   while (GSM::IsGameRunning())
  {
-	  while (GSM::current == GSM::next)
-	  {
-		  AESysFrameStart();
-		  RenderObject(Platform1);
-		  GSM::Update_and_Draw(2.0);
-		  AESysFrameEnd();
-	  }
+    while (GSM::current == GSM::next)
+    {
+      AESysFrameStart();
+      Platform1.RenderObject();
+      GSM::Update_and_Draw(2.0);
+      AESysFrameEnd();
+    }
   }
   AESysExit();
   return 0;
