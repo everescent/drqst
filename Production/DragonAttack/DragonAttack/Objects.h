@@ -1,3 +1,18 @@
+/* Start Header ************************************************************************/
+/*!
+\file       Objects.h
+\author     Jacob Lim
+\par email: jacob.lim\@digipen.edu
+\brief
+  Object class and mesh creation functions are declared here.
+
+Copyright (C) 20xx DigiPen Institute of Technology.
+Reproduction or disclosure of this file or its contents
+without the prior written consent of DigiPen Institute of
+Technology is prohibited.
+*/
+/* End Header **************************************************************************/
+
 #pragma once
 #include "AEEngine.h"
 
@@ -5,11 +20,23 @@
 #define FLOOR_HEIGHT 100
 #define PLAT_WIDTH 64
 #define PLAT_HEIGHT 20
+#define BG_WIDTH 640
+#define BG_HEIGHT 360
 
+/*************************************************************************
+Description: 
+  Creates an object.
+Constructors:
+  Object can be constructed with a mesh or with mesh and texture or none
+Deconstructor:
+  Object will free its resources when done
+*************************************************************************/
 class Object {
 
 public:
+  //Set object position
   void SetPosition(const float &posX, const float &posY);
+  //Set texture position
   void SetTexPos(const float &posU, const float &posV);
   float posX() const { return X; };
   float posY() const { return Y; };
@@ -18,6 +45,7 @@ public:
   AEGfxVertexList* mesh() const { return Mesh; };
   AEGfxRenderMode rm() const { return RM; };
   AEGfxTexture* tex() const { return Tex; };
+  //Default constructor; Sets everything to zero
   Object()
   :Mesh{ nullptr }, RM{ AE_GFX_RM_COLOR }, Tex{ nullptr }
   {
@@ -26,6 +54,7 @@ public:
     U = 0.0f;
     V = 0.0f;
   }
+  //Construct with a mesh, but no texture
   Object(AEGfxVertexList * mesh)
   :Mesh{ mesh }, RM{AE_GFX_RM_COLOR}, Tex{nullptr}
   {
@@ -35,6 +64,7 @@ public:
     U = 0.0f;
     V = 0.0f;
   }
+  //Construct with a mesh and texture
   Object(AEGfxVertexList * mesh, const char* TexFile)
   :Mesh{ mesh }, RM{ AE_GFX_RM_TEXTURE }, Tex{ AEGfxTextureLoad(TexFile) }
   {
@@ -45,6 +75,7 @@ public:
     U = 0.0f;
     V = 0.0f;
   }
+  //Free all resources
   ~Object()
   {
     if (Tex != nullptr)
@@ -62,12 +93,93 @@ private:
   float V;
 };
 
+/*************************************************************************
+Description:
+  Creates a square mesh.
+
+Parameters:
+  size   : The size of the square (its width).
+  scaleU : Texture scale in the U direction.
+  scaleV : Texture scale in the V direction.
+  color  : Mesh color.
+
+Return:
+  A pointer to a mesh.
+*************************************************************************/
 AEGfxVertexList* CreateSquare(float size, float scaleU = 1.0f, float scaleV = 1.0f, unsigned int color = 0xFFFFFF);
 
+/*************************************************************************
+Description:
+  Creates a rectangle mesh.
+
+Parameters:
+  width  : Width of the rectangle.
+  height : Height of the rectangle.
+  scaleU : Texture scale in the U direction.
+  scaleV : Texture scale in the V direction.
+  color  : Mesh color.
+
+Return:
+  A pointer to a mesh.
+*************************************************************************/
 AEGfxVertexList* CreateRectangle(float width, float height, float ScaleU = 1.0f, float ScaleV = 1.0f, unsigned int color = 0xFFFFFF);
 
+/*************************************************************************
+Description:
+  Creates a floor mesh.
+
+Parameters:
+  Multiplier   : This value multiplies the length of the floor.
+  MultiplierUV : This multiplier scales the texture.
+  color        : Mesh color.
+
+Return:
+  A pointer to a mesh.
+*************************************************************************/
 AEGfxVertexList* CreateFloor(float Multiplier = 1.0f, float MultiplierUV = 1.0f, unsigned int color = 0xFFFFFF);
 
+/*************************************************************************
+Description:
+  Creates a platform mesh.
+
+Parameters:
+  MultiplierW : This value multiplies the width of the platform.
+  MultiplierH : This value multiplies the height of the platform.
+  scaleU      : Texture scale in the U direction.
+  scaleV      : Texture scale in the V direction.
+  color       : Mesh color.
+
+Return:
+  A pointer to a mesh.
+*************************************************************************/
 AEGfxVertexList* CreatePlatform(float MultiplierW = 1.0f, float MultiplierH = 1.0f, float ScaleU = 1.0f, float ScaleV = 1.0f, unsigned int color = 0xFFFFFF);
 
+/*************************************************************************
+Description:
+  Creates a Background(BG) mesh.
+
+Parameters:
+  Multiplier   : This value multiplies the length of the BG.
+  MultiplierUV : This multiplier scales the texture.
+  color        : Mesh color.
+
+Return:
+  A pointer to a mesh.
+*************************************************************************/
+AEGfxVertexList* CreateBG(float Multiplier = 1.0f, float MultiplierUV = 1.0f, unsigned int color = 0xFFFFFF);
+
+/*************************************************************************
+Description:
+  Renders an object.
+
+Parameters:
+  pMesh : The object to be rendered.
+  R     : Amount of red to render.
+  G     : Amount of Green to render.
+  B     : Amount of Blue to render.
+  A     : Alpha transparency.
+
+Return:
+  void
+*************************************************************************/
 void RenderObject(const Object &pMesh, float R = 1.0f, float G = 1.0f, float B = 1.0f, float A = 1.0f);
