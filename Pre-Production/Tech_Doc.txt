@@ -32,26 +32,22 @@ Coding Methods:
   Formatting/Documentation :
   
     Standard proper indentation of C++ code
-    
+    Maximum column length to be 170
+    Maximum width per function to be 80, to prevent hard-coding 
+    Tab size to be 2, and to be replaced by whitespace
+      This can be done by: Tools > Options > Text Editor > C++ > Tabs 
     Comments to describe function usage to be done in header files
-    
     Usage of engine functions should be understandable by reading the comments
     to ensure that it'll be understandable to our lecturers too 
     
   
   File Locations:
   
-    All engines/files are to have their respective header file folder
-      e.g: Graphics_H, camera.h and object.h in it. 
-      
-    All related header files are to be in the engine header folders
-    
-    
-  
+    All files are to be in folders that contains their respective .cpp and .h 
+    Folders are to be named to describe what the files functionality is
   
   Source Control:
-    SVN and GitHub (backup) 
-    
+    SVN and GitHub (backup)    
   
   Rules: 
   All files are to be committed only AFTER testing AND commenting.
