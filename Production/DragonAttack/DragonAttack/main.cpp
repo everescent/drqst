@@ -18,8 +18,7 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
   GSM::GSM_Init();
   Object Platform1(CreateRectangle(PLAT_WIDTH * 2, PLAT_HEIGHT), "floor.jpg", PLAT_WIDTH * 2, PLAT_HEIGHT);
   Transform Move;
-  Move.SetTranslate(100.0f, 100.0f);
-  Move.SetScale(2.0f, 2.0f);
+  Move.SetTranslate(100.0f, 100.0f).SetScale(2.0f, 2.0f);
   while (GSM::IsGameRunning())
  {
     while (GSM::current == GSM::next)

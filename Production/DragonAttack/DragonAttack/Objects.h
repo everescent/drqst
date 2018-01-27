@@ -35,17 +35,17 @@ class Object {
 
 public:
   //Set texture position
-  void SetTexPos(const float &posU, const float &posV);
+  Object &SetTexPos(const float &posU, const float &posV);
   //Set tint RGB
-  void SetRGB(const float &Red, const float &Green, const float &Blue);
+  Object &SetRGB(const float &Red, const float &Green, const float &Blue);
   //Set tint Alpha
-  void SetAlpha(const float &Alpha);
+  Object &SetAlpha(const float &Alpha);
   //Set transparency value for rendering
-  void SetTransparency(const float &Trans);
+  Object &SetTransparency(const float &Trans);
   //Set blend mode for rendering
-  void SetBlendMode(AEGfxBlendMode BlendMode);
+  Object &SetBlendMode(AEGfxBlendMode BlendMode);
   //Renders the object
-  void RenderObject(AEMtx33 matrix);
+  void RenderObject(AEMtx33 matrix) const;
   float Get_posU() const { return U; }
   float Get_posV() const { return V; }
   float Get_Width() const { return Width; }
@@ -131,11 +131,11 @@ Deconstructor:
 class Transform {
 public:
   //Sets the translation matrix and applies it to the matrix
-  void SetTranslate(float posX, float posY);
+  Transform &SetTranslate(float posX, float posY);
   //Sets the degrees to rotate and applies it to the matrix
-  void SetRotation(const float &Deg);
+  Transform &SetRotation(const float &Deg);
   //Sets the scale matrix and applies it to the matrix
-  void SetScale(float scaleX, float scaleY);
+  Transform &SetScale(float scaleX, float scaleY);
   float GetDeterminant() { return AEMtx33Determinant(&Matrix); }
   float GetDegree() const { return Degree; }
   AEMtx33 GetMatrix() const { return Matrix; }

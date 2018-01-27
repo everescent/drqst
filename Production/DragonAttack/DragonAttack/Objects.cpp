@@ -49,7 +49,7 @@ AEGfxVertexList* CreateRectangle(float width, float height, float ScaleU, float 
 }
 
 //This function renders an object
-void Object::RenderObject(AEMtx33 matrix)
+void Object::RenderObject(AEMtx33 matrix) const
 {
   AEGfxSetRenderMode(RM);
   AEGfxSetTransform(matrix.m);
@@ -61,47 +61,55 @@ void Object::RenderObject(AEMtx33 matrix)
 }
 
 //Set texture position
-void Object::SetTexPos(const float &posU, const float &posV)
+inline Object& Object::SetTexPos(const float &posU, const float &posV)
 {
   U = posU;
   V = posV;
+  return *this;
 }
 //Set tint RGB
-void Object::SetRGB(const float &Red, const float &Green, const float &Blue)
+inline Object& Object::SetRGB(const float &Red, const float &Green, const float &Blue)
 {
   R = Red;
   G = Green;
   B = Blue;
+  return *this;
 }
 //Set tint Alpha
-void Object::SetAlpha(const float &Alpha)
+inline Object& Object::SetAlpha(const float &Alpha)
 {
   A = Alpha;
+  return *this;
 }
 //Set transparency value for rendering
-void Object::SetTransparency(const float &Trans)
+inline Object& Object::SetTransparency(const float &Trans)
 {
   Transparency = Trans;
+  return *this;
 }
 //Set blend mode for rendering
-void Object::SetBlendMode(AEGfxBlendMode BlendMode) 
+inline Object& Object::SetBlendMode(AEGfxBlendMode BlendMode)
 {
   BM = BlendMode;
+  return *this;
 }
 
 //Sets the translation matrix and applies it to the matrix
-void Transform::SetTranslate(float posX, float posY) 
+inline Transform& Transform::SetTranslate(float posX, float posY)
 {
   AEMtx33TransApply(&Matrix, &T_Matrix, posX, posY);
+  return *this;
 }
 //Sets the degrees to rotate and applies it to the matrix
-void Transform::SetRotation(const float &Deg)
+inline Transform& Transform::SetRotation(const float &Deg)
 {
   Degree = Deg;
   AEMtx33RotDeg(&Matrix, Degree);
+  return *this;
 }
 //Sets the scale matrix and applies it to the matrix
-void Transform::SetScale(float scaleX, float scaleY)
+inline Transform& Transform::SetScale(float scaleX, float scaleY)
 {
   AEMtx33ScaleApply(&Matrix, &S_Matrix, scaleX, scaleY);
+  return *this;
 }
