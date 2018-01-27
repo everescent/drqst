@@ -17,13 +17,15 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
   AESysReset();
   GSM::GSM_Init();
   Object Platform1(CreateRectangle(PLAT_WIDTH * 2, PLAT_HEIGHT), "floor.jpg", PLAT_WIDTH * 2, PLAT_HEIGHT);
-  Platform1.Get_Height();
+  Transform Move;
+  Move.SetTranslate(100.0f, 100.0f);
+  Move.SetScale(2.0f, 2.0f);
   while (GSM::IsGameRunning())
  {
     while (GSM::current == GSM::next)
     {
       AESysFrameStart();
-      Platform1.RenderObject();
+      Platform1.RenderObject(Move.GetMatrix());
       GSM::Update_and_Draw(2.0);
       AESysFrameEnd();
     }

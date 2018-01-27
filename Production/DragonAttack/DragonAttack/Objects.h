@@ -34,8 +34,6 @@ Deconstructor:
 class Object {
 
 public:
-  //Set object position
-  void SetPosition(const float &posX, const float &posY);
   //Set texture position
   void SetTexPos(const float &posU, const float &posV);
   //Set tint RGB
@@ -47,22 +45,18 @@ public:
   //Set blend mode for rendering
   void SetBlendMode(AEGfxBlendMode BlendMode);
   //Renders the object
-  void RenderObject();
-  float Get_posX() const { return X; };
-  float Get_posY() const { return Y; };
-  float Get_posU() const { return U; };
-  float Get_posV() const { return V; };
-  float Get_Width() const { return Width; };
-  float Get_Height() const { return Height; };
-  AEGfxVertexList* Get_mesh() const { return Mesh; };
-  AEGfxRenderMode Get_rm() const { return RM; };
-  AEGfxTexture* Get_tex() const { return Tex; };
+  void RenderObject(AEMtx33 matrix);
+  float Get_posU() const { return U; }
+  float Get_posV() const { return V; }
+  float Get_Width() const { return Width; }
+  float Get_Height() const { return Height; }
+  AEGfxVertexList* Get_mesh() const { return Mesh; }
+  AEGfxRenderMode Get_rm() const { return RM; }
+  AEGfxTexture* Get_tex() const { return Tex; }
   //Default constructor; Sets everything to zero
   Object()
   :Mesh{ nullptr }, RM{ AE_GFX_RM_COLOR }, Tex{ nullptr }, BM{ AE_GFX_BM_NONE }
   {
-    X = 0.0f;
-    Y = 0.0f;
     U = 0.0f;
     V = 0.0f;
     R = 1.0f;
@@ -77,8 +71,6 @@ public:
   Object(AEGfxVertexList * mesh, const float &ObjectW, const float &ObjectH)
   :Mesh{ mesh }, RM{AE_GFX_RM_COLOR}, Tex{nullptr}, BM{ AE_GFX_BM_NONE }
   {
-    X = 0.0f;
-    Y = 0.0f;
     U = 0.0f;
     V = 0.0f;
     R = 1.0f;
@@ -93,8 +85,6 @@ public:
   Object(AEGfxVertexList * mesh, const char* TexFile, float ObjectW, const float &ObjectH)
   :Mesh{ mesh }, RM{ AE_GFX_RM_TEXTURE }, Tex{ AEGfxTextureLoad(TexFile) }, BM{ AE_GFX_BM_NONE }
   {
-    X = 0.0f;
-    Y = 0.0f;
     U = 0.0f;
     V = 0.0f;
     R = 1.0f;
@@ -113,13 +103,12 @@ public:
     if (Mesh != nullptr)
       AEGfxMeshFree(Mesh);
   }
+
 private:
   AEGfxVertexList *Mesh; //A pointer to object's mesh
   AEGfxRenderMode RM;    //Render Mode
   AEGfxTexture *Tex;     //Texture
   AEGfxBlendMode BM;     //Blend Mode
-  float X;               //Position X
-  float Y;               //Position Y
   float U;               //Texture U
   float V;               //Texture V
   float R;               //Red tint value
@@ -129,6 +118,51 @@ private:
   float Transparency;    //Transparency value
   float Width;           //Width of object
   float Height;          //Height of object
+};
+
+/*************************************************************************
+Description:
+  Creates a transform class.
+Constructors:
+  Sets all matrices to the Identity Matrix.
+Deconstructor:
+  Sets all matrices to the Identity Matrix.
+*************************************************************************/
+class Transform {
+public:
+  //Sets the translation matrix and applies it to the matrix
+  void SetTranslate(float posX, float posY);
+  //Sets the degrees to rotate and applies it to the matrix
+  void SetRotation(const float &Deg);
+  //Sets the scale matrix and applies it to the matrix
+  void SetScale(float scaleX, float scaleY);
+  float GetDeterminant() { return AEMtx33Determinant(&Matrix); }
+  float GetDegree() const { return Degree; }
+  AEMtx33 GetMatrix() const { return Matrix; }
+  AEMtx33 GetTranslateMatrix() const { return T_Matrix; }
+  AEMtx33 GetScaleMatrix() const { return T_Matrix; }
+  //Sets all matrices to the Identity Matrix
+  Transform()
+  :Matrix{ 0.0f }, T_Matrix{ 0.0f }, S_Matrix{ 0.0f }
+  {
+    AEMtx33Identity(&Matrix);
+    AEMtx33Identity(&T_Matrix);
+    AEMtx33Identity(&S_Matrix);
+    Degree = 0.0f;
+  }
+  //Sets all matrices to the Identity Matrix
+  ~Transform()
+  {
+    AEMtx33Identity(&Matrix);
+    AEMtx33Identity(&T_Matrix);
+    AEMtx33Identity(&S_Matrix);
+    Degree = 0.0f;
+  }
+private:
+  AEMtx33 Matrix;   //Resultant matrix
+  AEMtx33 T_Matrix; //Translation matrix
+  AEMtx33 S_Matrix; //Scale matrix
+  float Degree;     //Rotation in degrees
 };
 
 /*************************************************************************

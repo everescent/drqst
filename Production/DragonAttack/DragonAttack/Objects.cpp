@@ -49,22 +49,17 @@ AEGfxVertexList* CreateRectangle(float width, float height, float ScaleU, float 
 }
 
 //This function renders an object
-void Object::RenderObject()
+void Object::RenderObject(AEMtx33 matrix)
 {
   AEGfxSetRenderMode(RM);
-  AEGfxSetPosition(X, Y);
+  AEGfxSetTransform(matrix.m);
   AEGfxTextureSet(Tex, U, V);
   AEGfxSetTintColor(R, G, B, A);
   AEGfxSetTransparency(Transparency);
   AEGfxSetBlendMode(BM);
   AEGfxMeshDraw(Mesh, AE_GFX_MDM_TRIANGLES);
 }
-//Set object position
-void Object::SetPosition(const float &posX, const float &posY)
-{
-  X = posX;
-  Y = posY;
-}
+
 //Set texture position
 void Object::SetTexPos(const float &posU, const float &posV)
 {
@@ -92,4 +87,21 @@ void Object::SetTransparency(const float &Trans)
 void Object::SetBlendMode(AEGfxBlendMode BlendMode) 
 {
   BM = BlendMode;
+}
+
+//Sets the translation matrix and applies it to the matrix
+void Transform::SetTranslate(float posX, float posY) 
+{
+  AEMtx33TransApply(&Matrix, &T_Matrix, posX, posY);
+}
+//Sets the degrees to rotate and applies it to the matrix
+void Transform::SetRotation(const float &Deg)
+{
+  Degree = Deg;
+  AEMtx33RotDeg(&Matrix, Degree);
+}
+//Sets the scale matrix and applies it to the matrix
+void Transform::SetScale(float scaleX, float scaleY)
+{
+  AEMtx33ScaleApply(&Matrix, &S_Matrix, scaleX, scaleY);
 }
