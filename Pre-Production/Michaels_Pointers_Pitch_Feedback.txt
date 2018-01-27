@@ -1,0 +1,12 @@
+Art style:
+Cartoon-ish to suit the theme
+
+Cerberus can change to Lancelot in women's clothing. 
+
+Merlin and King Arthur are jerks.
+
+Instead, of a bar, try not to have UI.
+Maybe some visual and audio feedback?
+Glow around his body when the charge is full?
+
+For pickups, an orb follows the player to show the power up is in effect.
