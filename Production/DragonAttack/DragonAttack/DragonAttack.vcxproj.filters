@@ -55,6 +55,9 @@
     <Filter Include="Characters\AI">
       <UniqueIdentifier>{ff9dd1ce-73e4-4b4b-bf20-a27855b55dce}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game_Engine\Graphics\Transform">
+      <UniqueIdentifier>{3a089aca-4d95-4ba5-9c51-b6103b1e0a33}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -81,6 +84,9 @@
     <ClCompile Include="Characters.cpp">
       <Filter>Characters</Filter>
     </ClCompile>
+    <ClCompile Include="Transform.cpp">
+      <Filter>Game_Engine\Graphics\Transform</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h">
@@ -106,6 +112,9 @@
     </ClInclude>
     <ClInclude Include="Grunt.h">
       <Filter>Characters\AI</Filter>
+    </ClInclude>
+    <ClInclude Include="Transform.h">
+      <Filter>Game_Engine\Graphics\Transform</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
