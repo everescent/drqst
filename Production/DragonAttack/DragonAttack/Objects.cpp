@@ -4,7 +4,7 @@
 \author     Jacob Lim
 \par email: jacob.lim\@digipen.edu
 \brief
-  Object class and mesh creation functions are declared here.
+  Object class and mesh creation functions are defined here.
 
 Copyright (C) 20xx DigiPen Institute of Technology.
 Reproduction or disclosure of this file or its contents
@@ -61,14 +61,14 @@ void Object::RenderObject(AEMtx33 matrix) const
 }
 
 //Set texture position
-inline Object& Object::SetTexPos(const float &posU, const float &posV)
+Object& Object::SetTexPos(const float &posU, const float &posV)
 {
   U = posU;
   V = posV;
   return *this;
 }
 //Set tint RGB
-inline Object& Object::SetRGB(const float &Red, const float &Green, const float &Blue)
+Object& Object::SetRGB(const float &Red, const float &Green, const float &Blue)
 {
   R = Red;
   G = Green;
@@ -76,40 +76,20 @@ inline Object& Object::SetRGB(const float &Red, const float &Green, const float 
   return *this;
 }
 //Set tint Alpha
-inline Object& Object::SetAlpha(const float &Alpha)
+Object& Object::SetAlpha(const float &Alpha)
 {
   A = Alpha;
   return *this;
 }
 //Set transparency value for rendering
-inline Object& Object::SetTransparency(const float &Trans)
+Object& Object::SetTransparency(const float &Trans)
 {
   Transparency = Trans;
   return *this;
 }
 //Set blend mode for rendering
-inline Object& Object::SetBlendMode(AEGfxBlendMode BlendMode)
+Object& Object::SetBlendMode(AEGfxBlendMode BlendMode)
 {
   BM = BlendMode;
-  return *this;
-}
-
-//Sets the translation matrix and applies it to the matrix
-inline Transform& Transform::SetTranslate(float posX, float posY)
-{
-  AEMtx33TransApply(&Matrix, &T_Matrix, posX, posY);
-  return *this;
-}
-//Sets the degrees to rotate and applies it to the matrix
-inline Transform& Transform::SetRotation(const float &Deg)
-{
-  Degree = Deg;
-  AEMtx33RotDeg(&Matrix, Degree);
-  return *this;
-}
-//Sets the scale matrix and applies it to the matrix
-inline Transform& Transform::SetScale(float scaleX, float scaleY)
-{
-  AEMtx33ScaleApply(&Matrix, &S_Matrix, scaleX, scaleY);
   return *this;
 }

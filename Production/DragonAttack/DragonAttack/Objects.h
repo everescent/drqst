@@ -53,6 +53,7 @@ public:
   AEGfxVertexList* Get_mesh() const { return Mesh; }
   AEGfxRenderMode Get_rm() const { return RM; }
   AEGfxTexture* Get_tex() const { return Tex; }
+  Object &Get_this() { return *this; }
   //Default constructor; Sets everything to zero
   Object()
   :Mesh{ nullptr }, RM{ AE_GFX_RM_COLOR }, Tex{ nullptr }, BM{ AE_GFX_BM_NONE }
@@ -66,6 +67,46 @@ public:
     Transparency = 1.0f;
     Width = 0.0f;
     Height = 0.0f;
+  }
+  //Move constructor
+  Object(Object&& Move_Object)
+  :Mesh{ Move_Object.Mesh }, RM{ Move_Object.RM }, Tex{ Move_Object.Tex }, BM{ Move_Object.BM }
+  {
+    U = Move_Object.U;
+    V = Move_Object.V;
+    R = Move_Object.R;
+    G = Move_Object.G;
+    B = Move_Object.B;
+    A = Move_Object.A;
+    Transparency = Move_Object.Transparency;
+    Width = Move_Object.Width;
+    Height = Move_Object.Height;
+    //Repair Move_Object
+    Move_Object.Mesh = nullptr;
+    Move_Object.Tex = nullptr;
+  }
+  //Move assignment operator
+  Object& Object::operator=(Object&& Move_Object)
+  {
+    if (this != &Move_Object)
+    {
+      Mesh = Move_Object.Mesh;
+      Tex = Move_Object.Tex;
+      RM = Move_Object.RM;
+      BM = Move_Object.BM;
+      U = Move_Object.U;
+      V = Move_Object.V;
+      R = Move_Object.R;
+      G = Move_Object.G;
+      B = Move_Object.B;
+      A = Move_Object.A;
+      Transparency = Move_Object.Transparency;
+      Width = Move_Object.Width;
+      Height = Move_Object.Height;
+      Move_Object.Mesh = nullptr;
+      Move_Object.Tex = nullptr;
+    }
+    return *this;
   }
   //Construct with a mesh, but no texture
   Object(AEGfxVertexList * mesh, const float &ObjectW, const float &ObjectH)
@@ -118,51 +159,6 @@ private:
   float Transparency;    //Transparency value
   float Width;           //Width of object
   float Height;          //Height of object
-};
-
-/*************************************************************************
-Description:
-  Creates a transform class.
-Constructors:
-  Sets all matrices to the Identity Matrix.
-Deconstructor:
-  Sets all matrices to the Identity Matrix.
-*************************************************************************/
-class Transform {
-public:
-  //Sets the translation matrix and applies it to the matrix
-  Transform &SetTranslate(float posX, float posY);
-  //Sets the degrees to rotate and applies it to the matrix
-  Transform &SetRotation(const float &Deg);
-  //Sets the scale matrix and applies it to the matrix
-  Transform &SetScale(float scaleX, float scaleY);
-  float GetDeterminant() { return AEMtx33Determinant(&Matrix); }
-  float GetDegree() const { return Degree; }
-  AEMtx33 GetMatrix() const { return Matrix; }
-  AEMtx33 GetTranslateMatrix() const { return T_Matrix; }
-  AEMtx33 GetScaleMatrix() const { return T_Matrix; }
-  //Sets all matrices to the Identity Matrix
-  Transform()
-  :Matrix{ 0.0f }, T_Matrix{ 0.0f }, S_Matrix{ 0.0f }
-  {
-    AEMtx33Identity(&Matrix);
-    AEMtx33Identity(&T_Matrix);
-    AEMtx33Identity(&S_Matrix);
-    Degree = 0.0f;
-  }
-  //Sets all matrices to the Identity Matrix
-  ~Transform()
-  {
-    AEMtx33Identity(&Matrix);
-    AEMtx33Identity(&T_Matrix);
-    AEMtx33Identity(&S_Matrix);
-    Degree = 0.0f;
-  }
-private:
-  AEMtx33 Matrix;   //Resultant matrix
-  AEMtx33 T_Matrix; //Translation matrix
-  AEMtx33 S_Matrix; //Scale matrix
-  float Degree;     //Rotation in degrees
 };
 
 /*************************************************************************

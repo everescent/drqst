@@ -1,5 +1,6 @@
 #include "AEEngine.h"
 #include "Objects.h"
+#include "Transform.h"
 #include "GameStateManager.h"
 
 const int R_WIDTH { 1280 }; //Screen width
