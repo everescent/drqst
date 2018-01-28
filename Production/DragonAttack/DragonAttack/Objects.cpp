@@ -4,7 +4,7 @@
 \author     Jacob Lim
 \par email: jacob.lim\@digipen.edu
 \brief
-  Object class and mesh creation functions are defined here.
+  Object class member functions are defined here.
 
 Copyright (C) 20xx DigiPen Institute of Technology.
 Reproduction or disclosure of this file or its contents
@@ -14,52 +14,63 @@ Technology is prohibited.
 /* End Header **************************************************************************/
 
 #include "Objects.h"
+#include "Transform.h"
 #include "AEEngine.h"
 
-//This function creates a custom square
-AEGfxVertexList* CreateSquare(float size, float scaleU, float scaleV, unsigned int color)
+//Default constructor; Sets everything to zero
+Object::Object()
+  :Mesh{ nullptr }, RM{ AE_GFX_RM_COLOR }, Tex{ nullptr },
+  U{ 0.0f }, V{ 0.0f }, Width{ 0.0f }, Height{ 0.0f }
+  {}
+//Move constructor
+Object::Object(Object&& Move_Object)
+  : Mesh{ Move_Object.Mesh }, RM{ Move_Object.RM }, Tex{ Move_Object.Tex }, 
+  U{ Move_Object.U }, V{ Move_Object.V }, Width{ Move_Object.Width }, Height{ Move_Object.Height }
 {
-  AEGfxMeshStart();
-  AEGfxTriAdd(
-    -size, -size, color, 0.0f, 1.0f * scaleV,
-    size, -size, color, 1.0f * scaleU, 1.0f * scaleU,
-    -size, size, color, 0.0f, 0.0f);
-  AEGfxTriAdd(
-    size, -size, color, 1.0f * scaleU, 1.0f * scaleV,
-    size, size, color, 1.0f * scaleU, 0.0f,
-    -size, size, color, 0.0f, 0.0f);
-
-  return AEGfxMeshEnd();
+  //Repair Move_Object
+  Move_Object.Mesh = nullptr;
+  Move_Object.Tex = nullptr;
 }
-
-//This function creates a custom rectangle
-AEGfxVertexList* CreateRectangle(float width, float height, float ScaleU, float ScaleV, unsigned int color)
+//Move assignment operator
+Object& Object::Object::operator=(Object&& Move_Object)
 {
-  AEGfxMeshStart();
-  AEGfxTriAdd(
-    -width, -height, color, 0.0f, 1.0f,
-    width, -height, color, (float)((int)width / (int)height) * ScaleU, 1.0f,
-    -width, height, color, 0.0f, -1.0f * ScaleV + 1);
-  AEGfxTriAdd(
-    width, -height, color, 1.0f, 1.0f * ScaleV,
-    width, height, color, 1.0f, 0.0f,
-    -width, height, color, -(width / height) * ScaleU + 1, 0.0f);
-
-  return AEGfxMeshEnd();
+  if (this != &Move_Object)
+  {
+    Mesh = Move_Object.Mesh;
+    Tex = Move_Object.Tex;
+    RM = Move_Object.RM;
+    U = Move_Object.U;
+    V = Move_Object.V;
+    Width = Move_Object.Width;
+    Height = Move_Object.Height;
+    Move_Object.Mesh = nullptr;
+    Move_Object.Tex = nullptr;
+  }
+  return *this;
 }
-
+//Construct with a mesh, but no texture
+Object::Object(AEGfxVertexList * mesh, const float &ObjectW, const float &ObjectH)
+  :Mesh{ mesh }, RM{ AE_GFX_RM_COLOR }, Tex{ nullptr },
+  U{ 0.0f }, V{ 0.0f }, Width{ ObjectW }, Height{ ObjectH }
+  {}
+//Construct with a mesh and texture
+Object::Object(AEGfxVertexList * mesh, const char* TexFile, float ObjectW, const float &ObjectH)
+  :Mesh{ mesh }, RM{ AE_GFX_RM_TEXTURE }, Tex{ AEGfxTextureLoad(TexFile) }, Draw{},
+  U{ 0.0f }, V{ 0.0f }, Width{ ObjectW }, Height{ ObjectH }
+  {}
+//Free all resources
+Object::~Object()
+{
+  if (Tex != nullptr)
+    AEGfxTextureUnload(Tex);
+  if (Mesh != nullptr)
+    AEGfxMeshFree(Mesh);
+}
 //This function renders an object
-void Object::RenderObject(AEMtx33 matrix) const
+void Object::Render_Object(const Transform &matrix) const
 {
-  AEGfxSetRenderMode(RM);
-  AEGfxSetTransform(matrix.m);
-  AEGfxTextureSet(Tex, U, V);
-  AEGfxSetTintColor(R, G, B, A);
-  AEGfxSetTransparency(Transparency);
-  AEGfxSetBlendMode(BM);
-  AEGfxMeshDraw(Mesh, AE_GFX_MDM_TRIANGLES);
+  Draw.Render_Obj(*this, matrix);
 }
-
 //Set texture position
 Object& Object::SetTexPos(const float &posU, const float &posV)
 {
@@ -67,29 +78,18 @@ Object& Object::SetTexPos(const float &posU, const float &posV)
   V = posV;
   return *this;
 }
-//Set tint RGB
+//Set render parameters
 Object& Object::SetRGB(const float &Red, const float &Green, const float &Blue)
 {
-  R = Red;
-  G = Green;
-  B = Blue;
+  Draw.SetRGB(Red, Green, Blue);
   return *this;
 }
-//Set tint Alpha
-Object& Object::SetAlpha(const float &Alpha)
+//Set Alpha, Transparency, Blend Mode
+Object& Object::SetAlphaTransBM(const float &Alpha, const float &Trans,
+                                AEGfxBlendMode BlendMode)
 {
-  A = Alpha;
-  return *this;
-}
-//Set transparency value for rendering
-Object& Object::SetTransparency(const float &Trans)
-{
-  Transparency = Trans;
-  return *this;
-}
-//Set blend mode for rendering
-Object& Object::SetBlendMode(AEGfxBlendMode BlendMode)
-{
-  BM = BlendMode;
+  Draw.SetAlpha(Alpha);
+  Draw.SetTransparency(Trans);
+  Draw.SetBlendMode(BlendMode);
   return *this;
 }

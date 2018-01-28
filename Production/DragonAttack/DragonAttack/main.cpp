@@ -1,6 +1,7 @@
 #include "AEEngine.h"
 #include "Objects.h"
 #include "Transform.h"
+#include "Create_Object.h"
 #include "Camera.h"
 #include "GameStateManager.h"
 
@@ -27,7 +28,7 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
     {
       AESysFrameStart();
       CamFollow(Move, 80.0f, 150.0f);
-      Platform1.RenderObject(Move.GetMatrix());
+      Platform1.Render_Object(Move);
       GSM::Update_and_Draw(2.0);
       AESysFrameEnd();
     }

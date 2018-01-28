@@ -58,6 +58,12 @@
     <Filter Include="Game_Engine\Graphics\Transform">
       <UniqueIdentifier>{3a089aca-4d95-4ba5-9c51-b6103b1e0a33}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game_Engine\Graphics\Render">
+      <UniqueIdentifier>{c63a84e0-f7ff-4305-8d52-52c1b55485b4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game_Engine\Graphics\Create_Object">
+      <UniqueIdentifier>{3467da14-fb08-40bc-9ceb-5116b61252ed}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -87,6 +93,12 @@
     <ClCompile Include="Transform.cpp">
       <Filter>Game_Engine\Graphics\Transform</Filter>
     </ClCompile>
+    <ClCompile Include="Render.cpp">
+      <Filter>Game_Engine\Graphics\Render</Filter>
+    </ClCompile>
+    <ClCompile Include="Create_Object.cpp">
+      <Filter>Game_Engine\Graphics\Create_Object</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h">
@@ -115,6 +127,12 @@
     </ClInclude>
     <ClInclude Include="Transform.h">
       <Filter>Game_Engine\Graphics\Transform</Filter>
+    </ClInclude>
+    <ClInclude Include="Render.h">
+      <Filter>Game_Engine\Graphics\Render</Filter>
+    </ClInclude>
+    <ClInclude Include="Create_Object.h">
+      <Filter>Game_Engine\Graphics\Create_Object</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

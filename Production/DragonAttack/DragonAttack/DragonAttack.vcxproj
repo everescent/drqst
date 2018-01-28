@@ -156,23 +156,27 @@
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Characters.cpp" />
+    <ClCompile Include="Create_Object.cpp" />
     <ClCompile Include="GameStateManager.cpp" />
     <ClCompile Include="Grunt.cpp" />
     <ClCompile Include="Input_Handler.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Main_Menu.cpp" />
     <ClCompile Include="Objects.cpp" />
+    <ClCompile Include="Render.cpp" />
     <ClCompile Include="Transform.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Characters.h" />
+    <ClInclude Include="Create_Object.h" />
     <ClInclude Include="GameStateList.h" />
     <ClInclude Include="GameStateManager.h" />
     <ClInclude Include="Grunt.h" />
     <ClInclude Include="Input_Handler.h" />
     <ClInclude Include="Main_Menu.h" />
     <ClInclude Include="Objects.h" />
+    <ClInclude Include="Render.h" />
     <ClInclude Include="Transform.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
