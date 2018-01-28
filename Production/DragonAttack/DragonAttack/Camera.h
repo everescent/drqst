@@ -14,6 +14,7 @@ Technology is prohibited.
 /* End Header **************************************************************************/
 
 #pragma once
+#include "Transform.h"
 
 /*************************************************************************
 Description:
@@ -29,6 +30,20 @@ Return:
   void
 *************************************************************************/
 void CamFollow(float PositionX = 0.0f, float PositionY = 0.0f, float OffsetX = 0.0f, float OffsetY = 0.0f);
+
+/*************************************************************************
+Description:
+  Make the camera follow an object.
+
+Parameters:
+  PosMatrix : Transform matrix to follow
+  OffsetX   : Camera offset in the X direction.
+  OffsetY   : Camera offset in the Y direction.
+
+Return:
+  void
+*************************************************************************/
+void CamFollow(Transform const &PosMatrix, float OffsetX, float OffsetY);
 
 /*************************************************************************
 Description:

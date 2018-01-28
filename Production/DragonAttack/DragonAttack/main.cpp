@@ -1,6 +1,7 @@
 #include "AEEngine.h"
 #include "Objects.h"
 #include "Transform.h"
+#include "Camera.h"
 #include "GameStateManager.h"
 
 const int R_WIDTH { 1280 }; //Screen width
@@ -19,12 +20,13 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
   GSM::GSM_Init();
   Object Platform1(CreateRectangle(PLAT_WIDTH * 2, PLAT_HEIGHT), "floor.jpg", PLAT_WIDTH * 2, PLAT_HEIGHT);
   Transform Move;
-  Move.SetTranslate(100.0f, 100.0f).SetScale(2.0f, 2.0f);
+  Move.SetTranslate(1000.0f, 1000.0f).SetScale(2.0f, 2.0f);
   while (GSM::IsGameRunning())
  {
     while (GSM::current == GSM::next)
     {
       AESysFrameStart();
+      CamFollow(Move, 80.0f, 150.0f);
       Platform1.RenderObject(Move.GetMatrix());
       GSM::Update_and_Draw(2.0);
       AESysFrameEnd();
