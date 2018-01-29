@@ -19,7 +19,8 @@ Technology is prohibited.
 //Sets the translation matrix and applies it to the matrix
 Transform& Transform::SetTranslate(float posX, float posY)
 {
-  AEMtx33TransApply(&Matrix, &T_Matrix, posX, posY);
+  AEMtx33Trans(&T_Matrix, posX, posY);
+  AEMtx33TransApply(&Matrix, &T_Matrix, 0.0f, 0.0f);
   return *this;
 }
 //Sets the degrees to rotate and applies it to the matrix
@@ -32,6 +33,7 @@ Transform& Transform::SetRotation(const float &Deg)
 //Sets the scale matrix and applies it to the matrix
 Transform& Transform::SetScale(float scaleX, float scaleY)
 {
-  AEMtx33ScaleApply(&Matrix, &S_Matrix, scaleX, scaleY);
+  AEMtx33Scale(&S_Matrix, scaleX, scaleY);
+  AEMtx33ScaleApply(&Matrix, &S_Matrix, 0.0f, 0.0f);
   return *this;
 }

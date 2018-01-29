@@ -20,14 +20,35 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
   AESysReset();
   GSM::GSM_Init();
   Object Platform1(CreateRectangle(PLAT_WIDTH * 2, PLAT_HEIGHT), "floor.jpg", PLAT_WIDTH * 2, PLAT_HEIGHT);
+  Object Floor1(CreateRectangle(FLOOR_WIDTH, FLOOR_HEIGHT), "floor.jpg", FLOOR_WIDTH, FLOOR_HEIGHT);
+  Transform M_Floor;
   Transform Move;
-  Move.SetTranslate(1000.0f, 1000.0f).SetScale(2.0f, 2.0f);
   while (GSM::IsGameRunning())
  {
     while (GSM::current == GSM::next)
     {
+      static float x = 0.0f;
+      static float y = 0.0f;
       AESysFrameStart();
+      if (AEInputCheckCurr(AEVK_LEFT))
+      {
+        x -= 5.0f;
+      }
+      if (AEInputCheckCurr(AEVK_RIGHT))
+      {
+        x += 5.0f;
+      }
+      if (AEInputCheckCurr(AEVK_UP))
+      {
+        y += 5.0f;
+      }
+      if (AEInputCheckCurr(AEVK_DOWN))
+      {
+        y -= 5.0f;
+      }
+      Move.SetTranslate(x, y);
       CamFollow(Move, 80.0f, 150.0f);
+      Floor1.Render_Object(M_Floor);
       Platform1.Render_Object(Move);
       GSM::Update_and_Draw(2.0);
       AESysFrameEnd();
