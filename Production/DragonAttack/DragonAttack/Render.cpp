@@ -14,12 +14,12 @@ Technology is prohibited.
 /* End Header **************************************************************************/
 
 #include "AEEngine.h"
-#include "Objects.h"
+#include "Sprite.h"
 #include "Transform.h"
 #include "Render.h"
 
 //Renders the given object
-void Render::Render_Obj(const Object& Obj, const Transform &matrix) const
+void Render::Render_Obj(const Sprite& Obj, const Transform &matrix) const
 {
   AEGfxSetRenderMode(Obj.Get_rm());
   AEGfxSetTransform(matrix.GetMatrix().m);

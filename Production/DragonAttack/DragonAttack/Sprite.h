@@ -1,6 +1,6 @@
 /* Start Header ************************************************************************/
 /*!
-\file       Objects.h
+\file       Sprite.h
 \author     Jacob Lim
 \par email: jacob.lim\@digipen.edu
 \brief
@@ -33,16 +33,16 @@ Constructors:
 Deconstructor:
   Object will free its resources when done
 ****************************************************************************************/
-class Object {
+class Sprite {
 
 public:
   //Set texture position
-  Object &SetTexPos(const float &posU, const float &posV);
+  Sprite &SetTexPos(const float &posU, const float &posV);
   //Set RGB
-  Object &SetRGB(const float &Red = 1.0f, const float &Green = 1.0f, 
+  Sprite &SetRGB(const float &Red = 1.0f, const float &Green = 1.0f,
                  const float &Blue = 1.0f);
   //Set Alpha, Transparency, Blend Mode
-  Object &SetAlphaTransBM(const float &Alpha, const float &Trans,
+  Sprite &SetAlphaTransBM(const float &Alpha, const float &Trans,
                           AEGfxBlendMode BlendMode);
   //Renders the object
   void Render_Object(const Transform &matrix) const;
@@ -53,20 +53,20 @@ public:
   AEGfxVertexList* Get_mesh() const { return Mesh; }
   AEGfxRenderMode Get_rm() const { return RM; }
   AEGfxTexture* Get_tex() const { return Tex; }
-  Object &Get_this() { return *this; }
+  Sprite &Get_this() { return *this; }
   //Default constructor; Sets everything to zero
-  Object();
+  Sprite();
   //Move constructor
-  Object(Object&& Move_Object);
+  Sprite(Sprite&& Move_Object);
   //Move assignment operator
-  Object& Object::operator=(Object&& Move_Object);
+  Sprite& Sprite::operator=(Sprite&& Move_Object);
   //Construct with a mesh, but no texture
-  Object(AEGfxVertexList * mesh, const float &ObjectW, const float &ObjectH);
+  Sprite(AEGfxVertexList * mesh, const float &ObjectW, const float &ObjectH);
   //Construct with a mesh and texture
-  Object(AEGfxVertexList * mesh, const char* TexFile, 
+  Sprite(AEGfxVertexList * mesh, const char* TexFile,
          float ObjectW, const float &ObjectH);
   //Free all resources
-  ~Object();
+  ~Sprite();
 
 private:
   AEGfxVertexList *Mesh; //A pointer to object's mesh

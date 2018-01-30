@@ -37,9 +37,6 @@
     <Filter Include="Game_Engine\Graphics\Camera">
       <UniqueIdentifier>{b62e694b-6d6a-4e71-a09f-08c60f4cf7b7}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game_Engine\Graphics\Objects">
-      <UniqueIdentifier>{1694990d-96fd-4045-8b6a-a2d165e38f3f}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Game_States">
       <UniqueIdentifier>{a766146d-0ce9-4df6-9c95-84818cffa906}</UniqueIdentifier>
     </Filter>
@@ -64,6 +61,12 @@
     <Filter Include="Game_Engine\Graphics\Create_Object">
       <UniqueIdentifier>{3467da14-fb08-40bc-9ceb-5116b61252ed}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game_Engine\Graphics\Sprite">
+      <UniqueIdentifier>{1694990d-96fd-4045-8b6a-a2d165e38f3f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game_Object">
+      <UniqueIdentifier>{7ed013fb-794f-4e74-a3c4-0e2112c0d4c0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -71,9 +74,6 @@
     </ClCompile>
     <ClCompile Include="Camera.cpp">
       <Filter>Game_Engine\Graphics\Camera</Filter>
-    </ClCompile>
-    <ClCompile Include="Objects.cpp">
-      <Filter>Game_Engine\Graphics\Objects</Filter>
     </ClCompile>
     <ClCompile Include="Input_Handler.cpp">
       <Filter>Input</Filter>
@@ -99,13 +99,16 @@
     <ClCompile Include="Create_Object.cpp">
       <Filter>Game_Engine\Graphics\Create_Object</Filter>
     </ClCompile>
+    <ClCompile Include="Sprite.cpp">
+      <Filter>Game_Engine\Graphics\Sprite</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject.cpp">
+      <Filter>Game_Object</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h">
       <Filter>Game_Engine\Graphics\Camera</Filter>
-    </ClInclude>
-    <ClInclude Include="Objects.h">
-      <Filter>Game_Engine\Graphics\Objects</Filter>
     </ClInclude>
     <ClInclude Include="Input_Handler.h">
       <Filter>Input</Filter>
@@ -133,6 +136,12 @@
     </ClInclude>
     <ClInclude Include="Create_Object.h">
       <Filter>Game_Engine\Graphics\Create_Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Sprite.h">
+      <Filter>Game_Engine\Graphics\Sprite</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject.h">
+      <Filter>Game_Object</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

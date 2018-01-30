@@ -16,7 +16,7 @@ Technology is prohibited.
 #pragma once
 #include "AEEngine.h"
 
-class Object;    //Object foward declaration
+class Sprite;    //Object foward declaration
 class Transform; //Transform foward declaration
 
 class Render {
@@ -32,7 +32,7 @@ public:
   //Set blend mode for rendering
   Render &SetBlendMode(AEGfxBlendMode BlendMode) { BM = BlendMode; return *this; }
   //Renders the object
-  void Render_Obj(const Object &Obj, const Transform &matrix) const;
+  void Render_Obj(const Sprite &Obj, const Transform &matrix) const;
   //Default Constructor sets all to 1
   Render();
   //This Constructor sets all to user specified values

@@ -39,20 +39,11 @@ public:
   AEMtx33 GetScaleMatrix() const { return T_Matrix; }
   //Sets all matrices to the Identity Matrix
   Transform()
-    :Matrix{ 0.0f }, T_Matrix{ 0.0f }, S_Matrix{ 0.0f }
+    :Matrix{ 0.0f }, T_Matrix{ 0.0f }, S_Matrix{ 0.0f }, Degree{ 0.0f }
   {
     AEMtx33Identity(&Matrix);
     AEMtx33Identity(&T_Matrix);
     AEMtx33Identity(&S_Matrix);
-    Degree = 0.0f;
-  }
-  //Sets all matrices to the Identity Matrix
-  ~Transform()
-  {
-    AEMtx33Identity(&Matrix);
-    AEMtx33Identity(&T_Matrix);
-    AEMtx33Identity(&S_Matrix);
-    Degree = 0.0f;
   }
 private:
   AEMtx33 Matrix;   //Resultant matrix
