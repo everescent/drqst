@@ -1,12 +1,25 @@
 #include "AEEngine.h"
-#include "Objects.h"
+#include "Sprite.h"
 #include "Transform.h"
 #include "Create_Object.h"
+#include "GameObject.h"
 #include "Camera.h"
 #include "GameStateManager.h"
+#include <utility>
 
 const int R_WIDTH { 1280 }; //Screen width
 const int R_HEIGHT{ 720  }; //Screen height
+
+class testGO : public GameObject
+{
+public:
+  testGO(Sprite&& tmp)
+    :GameObject{ std::move(tmp) }
+  {}
+  void Update(){/*Something*/}
+  void Pos(){/*Something*/}
+};
+
 
 int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_line, int show)
 {
@@ -19,8 +32,9 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
   AESysSetWindowTitle("My New Demo!");
   AESysReset();
   GSM::GSM_Init();
-  Object Platform1(CreateRectangle(PLAT_WIDTH * 2, PLAT_HEIGHT), "floor.jpg", PLAT_WIDTH * 2, PLAT_HEIGHT);
-  Object Floor1(CreateRectangle(FLOOR_WIDTH, FLOOR_HEIGHT), "floor.jpg", FLOOR_WIDTH, FLOOR_HEIGHT);
+  testGO test(CreatePlatform(2.0f, 1.0f, 1.0f, 1.0f, "floor.jpg"));
+  //Sprite Platform1(CreatePlatform(2.0f, 1.0f, 1.0f, 1.0f, "floor.jpg"));
+  Sprite Floor1(CreateRectangle(FLOOR_WIDTH, FLOOR_HEIGHT), "floor.jpg", FLOOR_WIDTH, FLOOR_HEIGHT);
   Transform M_Floor;
   Transform Move;
   while (GSM::IsGameRunning())
@@ -49,7 +63,8 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
       Move.SetTranslate(x, y);
       CamFollow(Move, 80.0f, 150.0f);
       Floor1.Render_Object(M_Floor);
-      Platform1.Render_Object(Move);
+      test.Render();
+      //Platform1.Render_Object(Move);
       GSM::Update_and_Draw(2.0);
       AESysFrameEnd();
     }
