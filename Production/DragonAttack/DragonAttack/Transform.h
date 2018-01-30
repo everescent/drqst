@@ -16,14 +16,14 @@ Technology is prohibited.
 #pragma once
 #include "AEEngine.h"
 
-/*************************************************************************
+/****************************************************************************************
 Description:
-Creates a transform class.
+  Creates a transform class.
 Constructors:
-Sets all matrices to the Identity Matrix.
+  Sets all matrices to the Identity Matrix.
 Deconstructor:
-Sets all matrices to the Identity Matrix.
-*************************************************************************/
+  None.
+****************************************************************************************/
 class Transform {
 public:
   //Sets the translation matrix and applies it to the matrix

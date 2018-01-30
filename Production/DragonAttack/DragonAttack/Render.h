@@ -19,6 +19,15 @@ Technology is prohibited.
 class Sprite;    //Object foward declaration
 class Transform; //Transform foward declaration
 
+/****************************************************************************************
+Description: 
+  Renders an object.
+Constructors:
+  Default constructor sets all values to 1.
+  Non default constructor sets values by user.
+Deconstructor:
+  None
+****************************************************************************************/
 class Render {
 
 public:

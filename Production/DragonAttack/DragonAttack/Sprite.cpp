@@ -4,7 +4,7 @@
 \author     Jacob Lim
 \par email: jacob.lim\@digipen.edu
 \brief
-  Object class member functions are defined here.
+  Sprite class member functions are defined here.
 
 Copyright (C) 20xx DigiPen Institute of Technology.
 Reproduction or disclosure of this file or its contents
@@ -25,7 +25,8 @@ Sprite::Sprite()
 //Move constructor
 Sprite::Sprite(Sprite&& Move_Object)
   : Mesh{ Move_Object.Mesh }, RM{ Move_Object.RM }, Tex{ Move_Object.Tex }, 
-  U{ Move_Object.U }, V{ Move_Object.V }, Width{ Move_Object.Width }, Height{ Move_Object.Height }
+  U{ Move_Object.U }, V{ Move_Object.V }, 
+  Width{ Move_Object.Width }, Height{ Move_Object.Height }
 {
   //Repair Move_Object
   Move_Object.Mesh = nullptr;
@@ -54,7 +55,8 @@ Sprite::Sprite(AEGfxVertexList * mesh, const float &ObjectW, const float &Object
   U{ 0.0f }, V{ 0.0f }, Width{ ObjectW }, Height{ ObjectH }
   {}
 //Construct with a mesh and texture
-Sprite::Sprite(AEGfxVertexList * mesh, const char* TexFile, float ObjectW, const float &ObjectH)
+Sprite::Sprite(AEGfxVertexList * mesh, const char* TexFile, 
+               float ObjectW, const float &ObjectH)
   :Mesh{ mesh }, RM{ AE_GFX_RM_TEXTURE }, Tex{ AEGfxTextureLoad(TexFile) }, Draw{},
   U{ 0.0f }, V{ 0.0f }, Width{ ObjectW }, Height{ ObjectH }
   {}

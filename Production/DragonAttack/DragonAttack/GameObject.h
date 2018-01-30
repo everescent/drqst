@@ -1,25 +1,54 @@
+/* Start Header ************************************************************************/
+/*!
+\file       GameObject.h
+\author     Jacob Lim
+\par email: jacob.lim\@digipen.edu
+\brief
+  Game Object class declared here.
+
+Copyright (C) 20xx DigiPen Institute of Technology.
+Reproduction or disclosure of this file or its contents
+without the prior written consent of DigiPen Institute of
+Technology is prohibited.
+*/
+/* End Header **************************************************************************/
 
 #pragma once
 #include "AEEngine.h"
 #include "Transform.h"
 #include "Sprite.h"
 
-class Transform;
-class Sprite;
-
+/****************************************************************************************
+Description:
+  Creates a Game Object
+Constructors:
+  Game Object can be constructed with a mesh or with mesh and texture or none
+Deconstructor:
+  None
+****************************************************************************************/
 class GameObject {
 
 public:
-  virtual void Update() = 0;
-  virtual void Pos() = 0;
+  virtual void Update() = 0; //Overwrite with derived class Update
+  virtual void Pos() = 0;    //Overwrite with derived class Pos
+  //Renders the object
   void Render();
-  bool active;
+  //Sets the object to active or inactive
+  void SetActive(bool status);
+  //Returns Active or Inactive status
+  bool IsActive() const { return active; }
+  //Default constructor; Initializes to zero
   GameObject();
+  //Constructs sprite with a mesh, but no texture
   GameObject(AEGfxVertexList *mesh, const float &ObjectW, const float &ObjectH);
+  //Constructs sprite with a mesh and texture
   GameObject(AEGfxVertexList * mesh, const char* TexFile,
              float ObjectW, const float &ObjectH);
+  //Move constructor for sprite
   GameObject(Sprite&& t_Sprite);
+  Transform Transform_; //Transform holds the object's position, scale and rotation
+  Sprite Sprite_;       //Sprite handles mesh, texture and rendering
+
 private:
-  Transform Transform_;
-  Sprite Sprite_;
+  bool active; //Active or Inactive
 };

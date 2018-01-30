@@ -60,8 +60,8 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
       {
         y -= 5.0f;
       }
-      Move.SetTranslate(x, y);
-      CamFollow(Move, 80.0f, 150.0f);
+      test.Transform_.SetTranslate(x, y);
+      CamFollow(test.Transform_, 80.0f, 150.0f);
       Floor1.Render_Object(M_Floor);
       test.Render();
       //Platform1.Render_Object(Move);

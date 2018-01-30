@@ -4,7 +4,7 @@
 \author     Jacob Lim
 \par email: jacob.lim\@digipen.edu
 \brief
-  Object class declared here.
+  Sprite class declared here.
 
 Copyright (C) 20xx DigiPen Institute of Technology.
 Reproduction or disclosure of this file or its contents
