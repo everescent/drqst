@@ -14,39 +14,34 @@ Technology is prohibited.
 /* End Header **************************************************************************/
 #include "Grunt.h"
 #include <iostream>
-/*
+#include <utility>
 
-Grunt::Grunt(AEGfxVertexList * mesh, const char* texFile, float ObjectW,
-			const float ObjectH)
-	: Characters(), Object(mesh, texFile, ObjectW, ObjectH), Transform()
+Grunt::Grunt(Sprite&& t_sprite)
+	: Characters(std::move(t_sprite))
 {
-	float scaleX, scaleY;
+	//float scaleX, scaleY;
 
-	(void)SetScale(scaleX, scaleY);
+	//(void)SetScale(scaleX, scaleY);
 }
 
+//Grunt::Grunt(Sprite&& t_sprite, const int x, const int y)
+//	: Characters(std::move(t_sprite))
+//{
+//	//float scaleX, scaleY;
+//
+//	//(void)SetScale(scaleX, scaleY);
+//	//translate the position of the grunt as well.
+//}
 
-
-Grunt::Grunt(AEGfxVertexList * mesh, const char* texFile, float ObjectW,
-	const float ObjectH,const int x, const int y)
-	: Characters(), Object(mesh, texFile, ObjectW, ObjectH), Transform()
-{
-	float scaleX, scaleY;
-	
-	// set the location of the grunt to be spawn
-	(void)SetScale(scaleX, scaleY);
-}
 
 
 
 Grunt *Create_Grunt()
 {
-	AEGfxVertexList *mesh = CreateSquare(30.0f);
-	const char* tex_Grunt = ".//Textures/download.jpg";
+	//const char* tex_Grunt = "floor.jpg";//.//Textures/download.jpg";
+	//Sprite t_grunt;
 
-	Grunt *grunt = new Grunt(mesh, tex_Grunt);
-
-	grunt->SetDamage(10);
+	Grunt *grunt = new Grunt{ S_CreateSquare(100.0f, 1.0f, 1.0f, "floor.jpg") };
 	
 
 	return  grunt;
@@ -56,4 +51,12 @@ Grunt *Create_Grunt()
 void Delete_Grunt(Grunt *grunt)
 {
 	delete grunt;
-}*/
+}
+
+void Grunt::Update()
+{
+}
+
+void Grunt::Pos()
+{
+}

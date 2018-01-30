@@ -15,8 +15,9 @@ Technology is prohibited.
 
 #pragma once
 #include "Characters.h"
+#include "Sprite.h"
 
-class Grunt : public virtual Characters
+class Grunt : public  Characters
 {
 private: 
 
@@ -27,15 +28,14 @@ public:
 
 	\brief      Constructor for a Grunt Object
 
-	\param      mesh    - size of character?
-				texFile - texture for character 
+	\param      Sprite&& t_sprite
+					- an rvalue of the sprite to be moved
 
 	\retval     void
 	No return.
 	*/
 	/******************************************************************************/
-	Grunt(AEGfxVertexList * mesh, const char* texFile, float ObjectW, 
-		 const float ObjectH);
+	Grunt(Sprite&& t_sprite);
 
 	/******************************************************************************/
 	/*!
@@ -43,17 +43,22 @@ public:
 
 	\brief      Constructor for a Grunt Object
 
-	\param      mesh    - size of character?
-				texFile - texture for character
-				x       - location to spawn the enemy
-				y       - location to spawn the enemy
+	\param      Sprite&& t_sprite
+					- an rvalue of the sprite to be moved
+				x 
+					- location to spawn the enemy
+				y 
+					- location to spawn the enemy
 
 	\retval     void
 	No return.
 	*/
 	/******************************************************************************/
-	Grunt(AEGfxVertexList * mesh, const char* texFile, float ObjectW,
-		const float ObjectH, const int x, const int y);
+	//Grunt(Sprite&& t_sprite, const int x, const int y);
+
+	void Update();
+	void Pos();
+
 };
 
 /******************************************************************************/

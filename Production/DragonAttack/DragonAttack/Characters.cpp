@@ -14,25 +14,15 @@ Technology is prohibited.
 /* End Header **************************************************************************/
 
 #include "Characters.h"
+#include <utility>
 
 
-Characters::Characters()
-	:removed{ false }, hp{ 0 }, moving{ false }, direction{ 0 }
+Characters::Characters(Sprite&& t_sprite)
+	: GameObject{ std::move(t_sprite) }, hp{ 0 }, moving{ false }, direction{ 0 }
 {
 }
 
-boolean Characters::Is_Removed() const
-{
-	return removed;
-}
 
-void Characters::Set_Removed(boolean dead)
-{
-	if (this->Is_Removed()) //checks if its alraedy dead
-		return;
-
-	removed = dead;
-}
 
 boolean Characters::Is_Moving() const
 {
@@ -54,15 +44,11 @@ int Characters::Get_HP() const
 	return hp;
 }
 
-void Characters::Render()
-{
 
-}
-
-void Characters::move()
+void Characters::Pos()
 {
 }
-void Characters::update()
+void Characters::Update()
 {
 }
 boolean Characters::collision()
