@@ -39,12 +39,12 @@ AEGfxVertexList* CreateRectangle(float width, float height, float ScaleU, float 
   AEGfxMeshStart();
   AEGfxTriAdd(
     -width, -height, color, 0.0f, 1.0f,
-    width, -height, color, (float)((int)width / (int)height) * ScaleU, 1.0f,
-    -width, height, color, 0.0f, -1.0f * ScaleV + 1);
+    width, -height, color, (width / height) * ScaleU, 1.0f,
+    -width, height, color, 0.0f, -1.0f * ScaleV + 1.0f);
   AEGfxTriAdd(
     width, -height, color, 1.0f, 1.0f * ScaleV,
     width, height, color, 1.0f, 0.0f,
-    -width, height, color, -(width / height) * ScaleU + 1, 0.0f);
+    -width, height, color, -(width / height) * ScaleU + 1.0f, 0.0f);
 
   return AEGfxMeshEnd();
 }

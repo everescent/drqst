@@ -34,6 +34,6 @@ Transform& Transform::SetRotation(const float &Deg)
 Transform& Transform::SetScale(float scaleX, float scaleY)
 {
   AEMtx33Scale(&S_Matrix, scaleX, scaleY);
-  AEMtx33ScaleApply(&Matrix, &S_Matrix, 0.0f, 0.0f);
+  AEMtx33ScaleApply(&Matrix, &S_Matrix, 1.0f, 1.0f);
   return *this;
 }
