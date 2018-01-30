@@ -32,7 +32,7 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
   AESysSetWindowTitle("My New Demo!");
   AESysReset();
   GSM::GSM_Init();
-  testGO test(CreatePlatform(2.0f, 1.0f, 1.0f, 1.0f, "floor.jpg"));
+  testGO test(S_CreateSquare(100.0f, 1.0f/9.0f, 1.0f / 9.0f, "spritesheet.png"));
   //Sprite Platform1(CreatePlatform(2.0f, 1.0f, 1.0f, 1.0f, "floor.jpg"));
   Sprite Floor1(CreateRectangle(FLOOR_WIDTH, FLOOR_HEIGHT), "floor.jpg", FLOOR_WIDTH, FLOOR_HEIGHT);
   Transform M_Floor;
@@ -43,7 +43,16 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
     {
       static float x = 0.0f;
       static float y = 0.0f;
+      static float animU = 0.0f;
+      static float animV = 0.0f;
       AESysFrameStart();
+      if (animU == 1.0f || animU > 1.0f)
+      {
+        animU = 0.0f;
+        animV += 1.0f / 9.0f;
+      }
+      if (animV == 1.0f || animV > 1.0f)
+        animV = 0.0f;
       if (AEInputCheckCurr(AEVK_LEFT))
       {
         x -= 5.0f;
@@ -60,12 +69,14 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
       {
         y -= 5.0f;
       }
+      test.Sprite_.SetTexPos(animU, animV);
       test.Transform_.SetTranslate(x, y);
       CamFollow(test.Transform_, 80.0f, 150.0f);
       Floor1.Render_Object(M_Floor);
       test.Render();
       //Platform1.Render_Object(Move);
       GSM::Update_and_Draw(2.0);
+      animU += 1.0f / 9.0f;
       AESysFrameEnd();
     }
   }
