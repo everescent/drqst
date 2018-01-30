@@ -17,6 +17,8 @@ Technology is prohibited.
 #include "Camera.h"
 #include <iostream>
 
+/*
+
 struct Input_Queue
 {
 	int value;
@@ -106,7 +108,7 @@ void Clear_Buffer(void)
 	}
 	input_tail = nullptr;
 }
-
+*/
 
 void Get_User_Input(void)
 {
@@ -160,12 +162,12 @@ void Get_User_Input(void)
 
 	if (AEInputCheckTriggered(fire))
 	{
-		Enqueue(fire);
+		//Enqueue(fire);
 	}
 
 	if (AEInputCheckTriggered(special))
 	{
-		Enqueue(special);
+		//Enqueue(special);
 	}
 
 	// if esc key or the close button was triggered, stop the game

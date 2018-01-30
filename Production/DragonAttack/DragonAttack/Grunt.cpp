@@ -14,18 +14,30 @@ Technology is prohibited.
 /* End Header **************************************************************************/
 #include "Grunt.h"
 #include <iostream>
+/*
 
-
-Grunt::Grunt(AEGfxVertexList * mesh, const char* texFile)
-	: Characters(), Object(mesh, texFile) 
+Grunt::Grunt(AEGfxVertexList * mesh, const char* texFile, float ObjectW,
+			const float ObjectH)
+	: Characters(), Object(mesh, texFile, ObjectW, ObjectH), Transform()
 {
+	float scaleX, scaleY;
+
+	(void)SetScale(scaleX, scaleY);
 }
 
-Grunt::Grunt(AEGfxVertexList * mesh, const char* texFile, float x, float y)
-	: Characters(), Object(mesh, texFile)
+
+
+Grunt::Grunt(AEGfxVertexList * mesh, const char* texFile, float ObjectW,
+	const float ObjectH,const int x, const int y)
+	: Characters(), Object(mesh, texFile, ObjectW, ObjectH), Transform()
 {
-	SetPosition(x, y);
+	float scaleX, scaleY;
+	
+	// set the location of the grunt to be spawn
+	(void)SetScale(scaleX, scaleY);
 }
+
+
 
 Grunt *Create_Grunt()
 {
@@ -44,4 +56,4 @@ Grunt *Create_Grunt()
 void Delete_Grunt(Grunt *grunt)
 {
 	delete grunt;
-}
+}*/

@@ -17,41 +17,41 @@ Technology is prohibited.
 
 
 Characters::Characters()
-	:removed{ false }, damage{ 0 }, moving{ false }, direction{ 0 }
+	:removed{ false }, hp{ 0 }, moving{ false }, direction{ 0 }
 {
 }
 
-boolean Characters::IsRemoved() const
+boolean Characters::Is_Removed() const
 {
 	return removed;
 }
 
-void Characters::SetRemoved(boolean dead)
+void Characters::Set_Removed(boolean dead)
 {
-	if (this->IsRemoved()) //checks if its alraedy dead
+	if (this->Is_Removed()) //checks if its alraedy dead
 		return;
 
 	removed = dead;
 }
 
-boolean Characters::IsMoving() const
+boolean Characters::Is_Moving() const
 {
 	return moving;
 }
 
-void Characters::SetMoving(boolean movement)
+void Characters::Set_Moving(boolean movement)
 {
 	moving = movement;
 }
 
-void Characters::SetDamage(int attack)
+void Characters::Set_HP(int hit_points)
 {
-	damage = attack;
+	hp = hit_points;
 }
 
-int Characters::GetDamage() const
+int Characters::Get_HP() const
 {
-	return damage;
+	return hp;
 }
 
 void Characters::Render()

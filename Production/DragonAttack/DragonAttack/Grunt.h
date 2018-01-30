@@ -18,7 +18,7 @@ Technology is prohibited.
 
 class Grunt : public virtual Characters
 {
-
+private: 
 
 public:
 	/******************************************************************************/
@@ -34,7 +34,8 @@ public:
 	No return.
 	*/
 	/******************************************************************************/
-	Grunt(AEGfxVertexList * mesh, const char* texFile);
+	Grunt(AEGfxVertexList * mesh, const char* texFile, float ObjectW, 
+		 const float ObjectH);
 
 	/******************************************************************************/
 	/*!
@@ -51,8 +52,8 @@ public:
 	No return.
 	*/
 	/******************************************************************************/
-	Grunt(AEGfxVertexList * mesh, const char* texFile, float x, float y);
-
+	Grunt(AEGfxVertexList * mesh, const char* texFile, float ObjectW,
+		const float ObjectH, const int x, const int y);
 };
 
 /******************************************************************************/
