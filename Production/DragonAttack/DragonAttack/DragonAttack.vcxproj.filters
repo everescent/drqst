@@ -111,6 +111,9 @@
     <ClCompile Include="King_Arthur.cpp">
       <Filter>Characters\AI\Bosses</Filter>
     </ClCompile>
+    <ClCompile Include="Collision.cpp">
+      <Filter>Game_Engine\Collision</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h">
@@ -154,6 +157,9 @@
     </ClInclude>
     <ClInclude Include="King_Arthur.h">
       <Filter>Characters\AI\Bosses</Filter>
+    </ClInclude>
+    <ClInclude Include="Collision.h">
+      <Filter>Game_Engine\Collision</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
