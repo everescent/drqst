@@ -114,6 +114,9 @@
     <ClCompile Include="Collision.cpp">
       <Filter>Game_Engine\Collision</Filter>
     </ClCompile>
+    <ClCompile Include="Physics.cpp">
+      <Filter>Game_Engine\Physics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h">
@@ -160,6 +163,9 @@
     </ClInclude>
     <ClInclude Include="Collision.h">
       <Filter>Game_Engine\Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="Physics.h">
+      <Filter>Game_Engine\Physics</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
