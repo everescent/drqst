@@ -1,13 +1,14 @@
 #pragma once
+#include <utility>
 
 
 // States for boss actions
-enum BossActionState
+enum Boss_Action_State
 {
-	Idle = 0,
-	Moving,
-	AvoidingObstacle,
-	Attacking
+	IDLE = 0,
+	MOVING,
+	ATTACK,
+	OBSTACLE
 };
 
 
@@ -16,13 +17,14 @@ enum BossActionState
 struct Boss_Attack : public GameObject
 {
 	float cooldown_timer;
+	bool cooldown;
 
-
-	Boss_Attack()
-		:cooldown_timer{0}
+	Boss_Attack(Sprite&& t_attack)
+		:cooldown_timer{0}, GameObject(std::move(t_attack)), cooldown{false}
 	{
 	}
 
-	void Update() {};
+	//void Update() {}; // need to talk to jacob
+	//void Update(float dt) {};  has to check cooldown_timer
 	void Pos() {};
 };

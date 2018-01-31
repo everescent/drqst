@@ -17,12 +17,10 @@ Technology is prohibited.
 #include <utility>
 
 
-Characters::Characters(Sprite&& t_sprite)
-	: GameObject{ std::move(t_sprite) }, hp{ 0 }, moving{ false }, direction{ 0 }
+Characters::Characters(Sprite&& t_sprite, const int HP)
+	: GameObject{ std::move(t_sprite) }, hp{ HP }, moving{ false }, direction{ 0 }
 {
 }
-
-
 
 boolean Characters::Is_Moving() const
 {
@@ -51,7 +49,7 @@ void Characters::Pos()
 void Characters::Update()
 {
 }
-boolean Characters::collision()
+bool Characters::collision()
 {
 	return false;
 }

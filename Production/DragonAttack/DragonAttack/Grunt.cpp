@@ -14,8 +14,14 @@ Technology is prohibited.
 /* End Header **************************************************************************/
 #include "Grunt.h"
 
+namespace // global variables just for THIS file
+{
+	const int grunt_hp = 30;
+}
+
+
 Grunt::Grunt(Sprite&& t_sprite)
-	: Characters(std::move(t_sprite))
+	: Characters(std::move(t_sprite), grunt_hp)
 {
 	//float scaleX, scaleY;
 
@@ -36,10 +42,9 @@ Grunt::Grunt(Sprite&& t_sprite)
 
 Grunt *Create_Grunt()
 {
-	//const char* tex_Grunt = "floor.jpg";//.//Textures/download.jpg";
-	//Sprite t_grunt;
+	const char* tex_Grunt = ".//Textures/download.jpg";
 
-	Grunt *grunt = new Grunt{ S_CreateSquare(100.0f, 1.0f, 1.0f, "floor.jpg") };
+	Grunt *grunt = new Grunt{ S_CreateSquare(100.0f, 1.0f, 1.0f, tex_Grunt) };
 	
 
 	return  grunt;

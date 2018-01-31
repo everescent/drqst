@@ -15,11 +15,19 @@ Technology is prohibited.
 #pragma once
 
 #include "Characters.h"
-#include "Boss_States.h"
 
 class King_Arthur : public Characters
 {
 private:
+	void Idle(float dt);
+
+	void Moving();
+
+	void AvoidingObstacle();
+
+	void Attack();
+
+	bool phase2;
 
 public:
 	/******************************************************************************/
@@ -38,6 +46,7 @@ public:
 	King_Arthur(Sprite&& t_sprite);
 
 	void Update(float dt);
+	void Update() {};
 	void Pos();
 };
 

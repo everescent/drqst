@@ -38,7 +38,7 @@ namespace GSM
 		void_fp_void  Unload;
 	};
 
-	GameStateFunctions GSF[GS_QUIT] = { 0 };
+	GameStateFunctions GSF[GS_RESTART] = { 0 };
 
 	// initializes the array of function pointers for each state
 	void GSM_Init(void)
@@ -49,6 +49,13 @@ namespace GSM
 		GSF[GS_MAIN].Draw   = Main_Menu::Draw;
 		GSF[GS_MAIN].Free   = Main_Menu::Free;
 		GSF[GS_MAIN].Unload = Main_Menu::Unload;
+
+		GSF[GS_QUIT].Init = nullptr;
+		GSF[GS_QUIT].Load = nullptr;
+		GSF[GS_QUIT].Update = nullptr;
+		GSF[GS_QUIT].Draw = nullptr;
+		GSF[GS_QUIT].Free = nullptr;
+		GSF[GS_QUIT].Unload = nullptr;
 
 		GSF[current].Init();
 	}
@@ -75,6 +82,7 @@ namespace GSM
 	void Update_and_Draw(float dt)
 	{
 		Get_User_Input();
+
 		
 		if (GSF[current].Update != nullptr)
 		{

@@ -5,21 +5,26 @@
 #include "GameObject.h"
 #include "Camera.h"
 #include "GameStateManager.h"
+#include "Collision.h"
 #include <utility>
 
-const int R_WIDTH { 1280 }; //Screen width
-const int R_HEIGHT{ 720  }; //Screen height
+//class testCol : public GameObject {
+//public:
+//	void Pos() {/*Do something*/ }
+//	void Update() {/*Do something*/ }
+//	Col_Comp &getCol() { return colli; }
+//	testCol()
+//		:colli{ 0.0f, 0.0f, 10, Circle }, GameObject{ S_CreateSquare(50.0f,1.0f,1.0f,"floor.jpg") }
+//	{}
+//	Col_Comp colli;
+//};
+//static float aX = -300.0f;
+//static float aY = 0.0f;
+//static float bX = 300.0f;
+//static float bY = 0.0f;
 
-class testGO : public GameObject
-{
-public:
-  testGO(Sprite&& tmp)
-    :GameObject{ std::move(tmp) }
-  {}
-  void Update(){/*Something*/}
-  void Pos(){/*Something*/}
-};
-
+//testCol a;
+//testCol* a;
 
 int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_line, int show)
 {
@@ -28,57 +33,33 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
   UNREFERENCED_PARAMETER(command_line);
   UNREFERENCED_PARAMETER(show);
 
+  const int R_WIDTH{ 1280 }; //Screen width
+  const int R_HEIGHT{ 720 }; //Screen height
+  //testCol b;
   AESysInit(instanceH, show, R_WIDTH, R_HEIGHT, true, 60, NULL);
   AESysSetWindowTitle("My New Demo!");
   AESysReset();
   GSM::GSM_Init();
-  testGO test(S_CreateSquare(100.0f, 1.0f/9.0f, 1.0f / 9.0f, "spritesheet.png"));
-  //Sprite Platform1(CreatePlatform(2.0f, 1.0f, 1.0f, 1.0f, "floor.jpg"));
-  Sprite Floor1(CreateRectangle(FLOOR_WIDTH, FLOOR_HEIGHT), "floor.jpg", FLOOR_WIDTH, FLOOR_HEIGHT);
-  Transform M_Floor;
-  Transform Move;
+  //a = new testCol;
+
   while (GSM::IsGameRunning())
  {
-    while (GSM::current == GSM::next)
+	  GSM::Init_and_Load();
+	  while (GSM::current == GSM::next)
     {
-      static float x = 0.0f;
-      static float y = 0.0f;
-      static float animU = 0.0f;
-      static float animV = 0.0f;
-      AESysFrameStart();
-      if (animU == 1.0f || animU > 1.0f)
-      {
-        animU = 0.0f;
-        animV += 1.0f / 9.0f;
-      }
-      if (animV == 1.0f || animV > 1.0f)
-        animV = 0.0f;
-      if (AEInputCheckCurr(AEVK_LEFT))
-      {
-        x -= 5.0f;
-      }
-      if (AEInputCheckCurr(AEVK_RIGHT))
-      {
-        x += 5.0f;
-      }
-      if (AEInputCheckCurr(AEVK_UP))
-      {
-        y += 5.0f;
-      }
-      if (AEInputCheckCurr(AEVK_DOWN))
-      {
-        y -= 5.0f;
-      }
-      test.Sprite_.SetTexPos(animU, animV);
-      test.Transform_.SetTranslate(x, y);
-      CamFollow(test.Transform_, 80.0f, 150.0f);
-      Floor1.Render_Object(M_Floor);
-      test.Render();
-      //Platform1.Render_Object(Move);
+	  AESysFrameStart();
+	  //++aX;
+	  //--bX;
+	  //a.Transform_.SetTranslate(aX, aY);
+	  //b.Transform_.SetTranslate(bX, bY);
+	  //a.Render();
+	  //b.Render();
+	  //if (a.colli.Rect_Rect(a.getCol(), b.getCol()))
+		 // return 0;
       GSM::Update_and_Draw(2.0);
-      animU += 1.0f / 9.0f;
       AESysFrameEnd();
     }
+	GSM::Cleanup();
   }
   AESysExit();
   return 0;

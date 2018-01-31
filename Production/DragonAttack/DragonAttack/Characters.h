@@ -23,12 +23,12 @@ Technology is prohibited.
 class Characters : public GameObject
 {
 	private:
-		int hp;      // damage it should deal
+		int hp;      // hp the character have
 		boolean moving;  // whether its moving or not
 		int direction;   // moving in left or right
 
 	public:
-		Characters(Sprite&& t_sprite); // default constructor
+		Characters(Sprite&& t_sprite, const int HP); // default constructor
 
 		int Get_HP() const;         //get HP of mob
 		void Set_HP(int hp); //set the hp for mob
@@ -36,7 +36,7 @@ class Characters : public GameObject
 		boolean Is_Moving() const;     // is character moving
 		void Set_Moving(boolean moving); // make a character stop/move
 
-		void virtual Pos();          // might not be needed for character class
-		void virtual Update();      // might not be needed for character class
-		boolean collision();
+		void virtual Pos();          //might not be needed for character class
+		void virtual Update();     //  might not be needed for character class
+		bool collision();
 };
