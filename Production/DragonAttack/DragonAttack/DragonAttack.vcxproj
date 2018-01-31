@@ -161,6 +161,7 @@
     <ClCompile Include="GameStateManager.cpp" />
     <ClCompile Include="Grunt.cpp" />
     <ClCompile Include="Input_Handler.cpp" />
+    <ClCompile Include="King_Arthur.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Main_Menu.cpp" />
     <ClCompile Include="Sprite.cpp" />
@@ -168,6 +169,7 @@
     <ClCompile Include="Transform.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Boss_States.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Characters.h" />
     <ClInclude Include="Create_Object.h" />
@@ -176,6 +178,7 @@
     <ClInclude Include="GameStateManager.h" />
     <ClInclude Include="Grunt.h" />
     <ClInclude Include="Input_Handler.h" />
+    <ClInclude Include="King_Arthur.h" />
     <ClInclude Include="Main_Menu.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="Render.h" />

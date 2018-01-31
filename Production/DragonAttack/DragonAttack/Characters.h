@@ -14,6 +14,7 @@ Technology is prohibited.
 /* End Header **************************************************************************/
 
 #pragma once
+#include <utility>
 #include "GameObject.h"
 #include "Transform.h"
 #include "Create_Object.h"
@@ -35,7 +36,7 @@ class Characters : public GameObject
 		boolean Is_Moving() const;     // is character moving
 		void Set_Moving(boolean moving); // make a character stop/move
 
-		void virtual Pos();          
-		void virtual Update();
+		void virtual Pos();          // might not be needed for character class
+		void virtual Update();      // might not be needed for character class
 		boolean collision();
 };

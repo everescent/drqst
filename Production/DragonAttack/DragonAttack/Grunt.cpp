@@ -13,8 +13,6 @@ Technology is prohibited.
 */
 /* End Header **************************************************************************/
 #include "Grunt.h"
-#include <iostream>
-#include <utility>
 
 Grunt::Grunt(Sprite&& t_sprite)
 	: Characters(std::move(t_sprite))
@@ -24,7 +22,7 @@ Grunt::Grunt(Sprite&& t_sprite)
 	//(void)SetScale(scaleX, scaleY);
 }
 
-//Grunt::Grunt(Sprite&& t_sprite, const int x, const int y)
+//Grunt::Grunt(Sprite&& t_sprite, const float x, const float y)
 //	: Characters(std::move(t_sprite))
 //{
 //	//float scaleX, scaleY;
@@ -55,8 +53,10 @@ void Delete_Grunt(Grunt *grunt)
 
 void Grunt::Update()
 {
+	//update the behaviour of the grunt
 }
 
 void Grunt::Pos()
 {
+
 }

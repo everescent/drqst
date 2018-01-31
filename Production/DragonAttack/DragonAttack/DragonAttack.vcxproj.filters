@@ -67,6 +67,9 @@
     <Filter Include="Game_Object">
       <UniqueIdentifier>{7ed013fb-794f-4e74-a3c4-0e2112c0d4c0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Characters\AI\Bosses">
+      <UniqueIdentifier>{be277fad-ce0b-4ace-a03d-c5e4c3b84a17}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -105,6 +108,9 @@
     <ClCompile Include="GameObject.cpp">
       <Filter>Game_Object</Filter>
     </ClCompile>
+    <ClCompile Include="King_Arthur.cpp">
+      <Filter>Characters\AI\Bosses</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h">
@@ -142,6 +148,12 @@
     </ClInclude>
     <ClInclude Include="GameObject.h">
       <Filter>Game_Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Boss_States.h">
+      <Filter>Characters\AI\Bosses</Filter>
+    </ClInclude>
+    <ClInclude Include="King_Arthur.h">
+      <Filter>Characters\AI\Bosses</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

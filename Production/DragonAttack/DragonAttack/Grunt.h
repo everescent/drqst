@@ -15,7 +15,6 @@ Technology is prohibited.
 
 #pragma once
 #include "Characters.h"
-#include "Sprite.h"
 
 class Grunt : public  Characters
 {
@@ -54,7 +53,7 @@ public:
 	No return.
 	*/
 	/******************************************************************************/
-	//Grunt(Sprite&& t_sprite, const int x, const int y);
+	//Grunt(Sprite&& t_sprite, const float x, const float y);
 
 	void Update();
 	void Pos();
