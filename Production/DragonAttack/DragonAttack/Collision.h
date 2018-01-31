@@ -57,6 +57,10 @@ public:
 
 	~Col_Comp() {}; //default dstor
 
+	void Update_Col_Pos(f32 min_x, f32 min_y, f32 max_x, f32 max_y); // update for rectangle objects 
+
+	void Update_Col_Pos(f32 mid_x, f32 mid_y); //update for Circle objects 
+
 	bool Rect_Rect(const Col_Comp &aabb_obj1, const Col_Comp &aabb_obj2);
 
 	bool Circle_Circle(const Col_Comp &aabb_obj1, const Col_Comp &aabb_obj2);

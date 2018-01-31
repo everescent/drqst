@@ -51,3 +51,18 @@ bool Col_Comp::Circle_Circle(const Col_Comp &objA, const Col_Comp &objB)
 	return false;
 
 }
+
+void Col_Comp::Update_Col_Pos(f32 min_x, f32 min_y, f32 max_x, f32 max_y)
+{
+	min.x = min_x;
+	min.y = min_y;
+	max.x = max_x;
+	max.y = max_y;
+
+}
+
+void Col_Comp::Update_Col_Pos(f32 mid_x, f32 mid_y)
+{
+	mid.x = mid_x;
+	mid.y = mid_y;
+}
