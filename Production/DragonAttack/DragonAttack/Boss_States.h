@@ -20,7 +20,7 @@ struct Boss_Attack : public GameObject
 	bool cooldown;
 
 	Boss_Attack(Sprite&& t_attack, Col_Comp &t_col)
-		:cooldown_timer{0}, GameObject(std::move(t_attack), t_col), cooldown{false}
+		:cooldown_timer{0}, GameObject(std::move(t_attack), std::move(t_col)), cooldown{false}
 	{
 	}
 

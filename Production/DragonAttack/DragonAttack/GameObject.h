@@ -37,6 +37,8 @@ public:
   void SetActive(bool status);
   //Returns Active or Inactive status
   bool IsActive() const { return active; }
+  //Sets object position
+  void SetPos(const float &X, const float &Y) { PosX = X; PosY = Y; }
   //Default constructor; Initializes to zero
   GameObject();
   //Constructs sprite with a mesh, but no texture
@@ -45,10 +47,12 @@ public:
   GameObject(AEGfxVertexList * mesh, const char* TexFile,
              float ObjectW, const float &ObjectH);
   //Move constructor for sprite
-  GameObject(Sprite&& t_Sprite, Col_Comp &t_Col);
+  GameObject(Sprite&& t_Sprite, Col_Comp &&t_Col);
   Transform Transform_; //Transform holds the object's position, scale and rotation
   Sprite Sprite_;       //Sprite handles mesh, texture and rendering
   Col_Comp Collision_;  //Collision handles object collision
+  float PosX{ 0.0f };   //Position X
+  float PosY{ 0.0f };   //Position Y
 
 private:
   bool active; //Active or Inactive

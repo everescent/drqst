@@ -28,7 +28,7 @@ class Characters : public GameObject
 		int direction;   // moving in left or right
 
 	public:
-		Characters(Sprite&& t_sprite, const int HP, Col_Comp &t_col); // default constructor
+		Characters(Sprite&& t_sprite, const int HP, Col_Comp &&t_col); // default constructor
 
 		int Get_HP() const;         //get HP of mob
 		void Set_HP(int hp); //set the hp for mob

@@ -41,7 +41,7 @@ namespace {
 
 
 King_Arthur::King_Arthur(Sprite&& t_sprite)
-	: Characters(std::move(t_sprite), HP, t_col), phase2{false}
+	: Characters(std::move(t_sprite), HP, std::move(t_col)), phase2{false}
 {
 	/* const float x, y  // to place the position of king arthur
 	   scale and translate king arthur's position*/

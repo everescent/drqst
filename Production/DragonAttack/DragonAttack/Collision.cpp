@@ -15,7 +15,7 @@ Technology is prohibited.
 
 #include "Collision.h" 
 
-bool Col_Comp::Rect_Rect(const Col_Comp &aabb_obj1, const Col_Comp &aabb_obj2)
+bool Col_Comp::St_Rect_Rect(const Col_Comp &aabb_obj1, const Col_Comp &aabb_obj2)
 {
 	//check if the two objects are Rectangles 
 
@@ -41,7 +41,7 @@ bool Col_Comp::Rect_Rect(const Col_Comp &aabb_obj1, const Col_Comp &aabb_obj2)
 	return true;
 }
 
-bool Col_Comp::Circle_Circle(const Col_Comp &objA, const Col_Comp &objB)
+bool Col_Comp::St_Circle_Circle(const Col_Comp &objA, const Col_Comp &objB)
 {
 	int RadiusSumSq = (objA.radius + objB.radius)*(objA.radius + objB.radius);
 	f32 DistCircleSq = (objA.mid.x - objB.mid.x)*(objA.mid.x - objB.mid.x) + (objA.mid.y - objB.mid.y)*(objA.mid.y - objB.mid.y);
@@ -49,6 +49,99 @@ bool Col_Comp::Circle_Circle(const Col_Comp &objA, const Col_Comp &objB)
 	if (DistCircleSq <= RadiusSumSq) return true; // There's collision
 
 	return false;
+
+}
+
+bool Col_Comp::Dy_Rect_Rect(const Col_Comp &A, const Col_Comp &B, float dt)
+{
+	//hard coded velocity for testing 
+	float Vel_x_A = 1000000.0f;
+	float Vel_x_B = 9324324.0f;
+	float Vel_y_A = 45234325.3f;
+	float Vel_y_B = 4534545.5f;
+	float Vel_x_Res = Vel_x_B - Vel_x_A, Vel_y_Res = Vel_y_B - Vel_y_A; 
+	float t_first = 0, t_first_x = 0 , t_first_y = 0 ;
+	float t_last = dt, t_last_x = 0, t_last_y = 0;
+	
+	if (Vel_x_Res < 0)
+	{
+		//Case 1
+		if (A.min.x > B.max.x) // object B on the left of A 
+		{
+			return false;
+		}
+
+		//Case 4 
+		if (A.max.x < B.min.x) // object B on the right of A 
+		{
+			t_first_x = (A.max.x - B.min.x) / Vel_x_Res;
+			t_last_x = (A.min.x - B.max.x) / Vel_x_Res;
+		}
+
+	}
+
+	if (Vel_x_Res > 0)
+	{
+		//Case 2
+		if (A.min.x > B.max.x) // object B on the left of A 
+		{
+			t_first_x = (A.min.x - B.max.x) / Vel_x_Res;
+			t_last_x = (A.max.x - B.min.x) / Vel_x_Res;
+		}
+		//Case 3
+		if (A.max.x < B.min.x) // object B on the right of A 
+		{
+			return false;
+		}
+	}
+
+	//--------------------------------------Repeat Step for Y 
+
+	if (Vel_y_Res < 0)
+	{
+		//Case 1
+		if (A.min.y > B.max.y) // object B on the left of A 
+		{
+			return false;
+		}
+
+		//Case 4 
+		if (A.max.y < B.min.y) // object B on the right of A 
+		{
+			t_first_y = (A.max.y - B.min.y) / Vel_y_Res;
+			t_last_y = (A.min.y - B.max.y) / Vel_y_Res;
+		}
+
+	}
+
+	if (Vel_y_Res > 0)
+	{
+		//Case 2
+		if (A.min.x > B.max.x) // object B on the left of A 
+		{
+			t_first_y = (A.min.y - B.max.y) / Vel_y_Res;
+			t_last_y = (A.max.y - B.min.y) / Vel_y_Res;
+		}
+		//Case 3
+		if (A.max.x < B.min.x) // object B on the right of A 
+		{
+			return false;
+		}
+	}
+	
+	//---------------check for correct t_first and t_last 
+
+	t_first = t_first_x > t_first_y ? t_first_x : t_first_y;
+
+	t_last = t_last_x < t_last_y ? t_last_x : t_last_y; 
+
+	//Case 5
+	if (t_first > t_last)
+	{
+		return false; 
+	}
+
+	return true; 
 
 }
 
@@ -66,3 +159,6 @@ void Col_Comp::Update_Col_Pos(f32 mid_x, f32 mid_y)
 	mid.x = mid_x;
 	mid.y = mid_y;
 }
+
+
+

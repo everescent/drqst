@@ -23,7 +23,7 @@ namespace // global variables just for THIS file
 
 
 Grunt::Grunt(Sprite&& t_sprite)
-	: Characters(std::move(t_sprite), grunt_hp, t_col)
+	: Characters(std::move(t_sprite), grunt_hp, std::move(t_col))
 {
 	//float scaleX, scaleY;
 

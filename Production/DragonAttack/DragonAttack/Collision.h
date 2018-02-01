@@ -14,6 +14,7 @@ Technology is prohibited.
 /* End Header **************************************************************************/
 #pragma once
 #include "AEEngine.h"
+#include "Transform.h"
 
 enum Shape
 {
@@ -40,7 +41,7 @@ public:
 	}
 
 	Col_Comp(f32 min_x, f32 min_y, f32 max_x, f32 max_y, Shape shape) // constructor for rectangles/squares 
-		: min{ min_x , min_y }, max{ max_x, max_y }, shape{ shape }
+		: min{ min_x , min_y }, max{ max_x, max_y }, shape{ shape } 
 	{
 		if (shape != Rect)
 			shape = NoShape;
@@ -53,7 +54,7 @@ public:
 			shape = NoShape;
 	}
   //Jacob Suggested Edit START//////////////////////////////////////////////////////////////////////////
-  Col_Comp(Col_Comp& t_Col)
+  Col_Comp(Col_Comp&& t_Col)
     :min{ t_Col.min.x, t_Col.min.y }, max{ t_Col.max.x, t_Col.max.y }, mid{ t_Col.mid.x, t_Col.mid.y },
     radius{ t_Col.radius }, shape{ t_Col.shape }, colflag{ t_Col.colflag }
   {
@@ -76,10 +77,11 @@ public:
 
 	void Update_Col_Pos(f32 mid_x, f32 mid_y); //update for Circle objects 
 
-	bool Rect_Rect(const Col_Comp &aabb_obj1, const Col_Comp &aabb_obj2);
+	bool St_Rect_Rect(const Col_Comp &aabb_obj1, const Col_Comp &aabb_obj2); //static collision for Rectangle to Rectangle
 
-	bool Circle_Circle(const Col_Comp &aabb_obj1, const Col_Comp &aabb_obj2);
+	bool St_Circle_Circle(const Col_Comp &aabb_obj1, const Col_Comp &aabb_obj2); //static collision for Circle to Circle
 
+	bool Dy_Rect_Rect(const Col_Comp &aabb_obj1, const Col_Comp &aabb_obj2, float dt);
 
 
 
@@ -95,6 +97,8 @@ private:
 	int radius = 0; //represents the radius of a circle 
 
 	Shape shape = NoShape;
+
+	AEVec2 velocity = { 0, 0 }; //represents the current position of the object 
 
 	CollisionFlag colflag = Not_Collided;
 
