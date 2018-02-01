@@ -12,12 +12,14 @@
 
 namespace
 {
+	Col_Comp t_col{ 1.0, 1.0, Point };
+
 	class testCol : public GameObject {
 	public:
 		void Pos() {/*Do something*/ }
 		void Update() {/*Do something*/ }
 		testCol()
-			:colli{ 0.0f,0.0f, 50, Circle }, GameObject{ S_CreateSquare(50.0f,1.0f,1.0f,"floor.jpg") }
+			:colli{ 0.0f,0.0f, 50, Circle }, GameObject{ S_CreateSquare(50.0f,1.0f,1.0f,"floor.jpg"), t_col }
 		{}
 
 		Col_Comp colli;
@@ -29,6 +31,8 @@ namespace
 
 	testCol *a = nullptr;
 	testCol *b = nullptr;
+
+	
 }
 
 namespace Main_Menu

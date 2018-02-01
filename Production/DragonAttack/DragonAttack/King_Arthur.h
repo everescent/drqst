@@ -25,7 +25,7 @@ private:
 
 	void AvoidingObstacle();
 
-	void Attack();
+	void Attack(float dt);
 
 	bool phase2;
 

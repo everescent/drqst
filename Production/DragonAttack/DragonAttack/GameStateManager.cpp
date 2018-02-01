@@ -50,11 +50,11 @@ namespace GSM
 		GSF[GS_MAIN].Free   = Main_Menu::Free;
 		GSF[GS_MAIN].Unload = Main_Menu::Unload;
 
-		GSF[GS_QUIT].Init = nullptr;
-		GSF[GS_QUIT].Load = nullptr;
+		GSF[GS_QUIT].Init   = nullptr;
+		GSF[GS_QUIT].Load   = nullptr;
 		GSF[GS_QUIT].Update = nullptr;
-		GSF[GS_QUIT].Draw = nullptr;
-		GSF[GS_QUIT].Free = nullptr;
+		GSF[GS_QUIT].Draw   = nullptr;
+		GSF[GS_QUIT].Free   = nullptr;
 		GSF[GS_QUIT].Unload = nullptr;
 
 		GSF[current].Init();

@@ -17,11 +17,13 @@ Technology is prohibited.
 namespace // global variables just for THIS file
 {
 	const int grunt_hp = 30;
+
+	Col_Comp t_col{ 0.0f, 0.0f, 5.0f, 5.0f, Rect };   // set the shape for grunt here
 }
 
 
 Grunt::Grunt(Sprite&& t_sprite)
-	: Characters(std::move(t_sprite), grunt_hp)
+	: Characters(std::move(t_sprite), grunt_hp, t_col)
 {
 	//float scaleX, scaleY;
 

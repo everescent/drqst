@@ -20,13 +20,13 @@ Technology is prohibited.
 //variables to store the different keys being use in the game
 namespace Input
 {
-	const int jump_up = AEVK_SPACE;
-	const int go_left = AEVK_A;
-	const int go_right = AEVK_D;
-	const int go_up = AEVK_W;
-	const int go_down = AEVK_S;
-	const int fire = AEVK_RETURN;
-	const int special = AEVK_P;
+	const int jump_up   = AEVK_SPACE;
+	const int go_left   = AEVK_A;
+	const int go_right  = AEVK_D;
+	const int go_up     = AEVK_W;
+	const int go_down   = AEVK_S;
+	const int fire      = AEVK_RETURN;
+	const int special   = AEVK_P;
 	const int quit_game = AEVK_ESCAPE;
 }
 

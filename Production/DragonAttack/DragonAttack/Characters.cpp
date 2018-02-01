@@ -17,8 +17,9 @@ Technology is prohibited.
 #include <utility>
 
 
-Characters::Characters(Sprite&& t_sprite, const int HP)
-	: GameObject{ std::move(t_sprite) }, hp{ HP }, moving{ false }, direction{ 0 }
+Characters::Characters(Sprite&& t_sprite, const int HP, Col_Comp &t_col)
+	: GameObject{ std::move(t_sprite), t_col }, hp{ HP }, moving{ false }, 
+	  direction{ 0 }
 {
 }
 
@@ -43,9 +44,6 @@ int Characters::Get_HP() const
 }
 
 
-void Characters::Pos()
-{
-}
 void Characters::Update()
 {
 }
