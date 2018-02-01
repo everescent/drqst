@@ -117,6 +117,9 @@
     <ClCompile Include="Physics.cpp">
       <Filter>Game_Engine\Physics</Filter>
     </ClCompile>
+    <ClCompile Include="Dragon.cpp">
+      <Filter>Characters\Dragon</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h">
@@ -166,6 +169,9 @@
     </ClInclude>
     <ClInclude Include="Physics.h">
       <Filter>Game_Engine\Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="Dragon.h">
+      <Filter>Characters\Dragon</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

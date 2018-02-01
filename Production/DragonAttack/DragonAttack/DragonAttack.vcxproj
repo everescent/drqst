@@ -158,6 +158,7 @@
     <ClCompile Include="Characters.cpp" />
     <ClCompile Include="Collision.cpp" />
     <ClCompile Include="Create_Object.cpp" />
+    <ClCompile Include="Dragon.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GameStateManager.cpp" />
     <ClCompile Include="Grunt.cpp" />
@@ -176,6 +177,7 @@
     <ClInclude Include="Characters.h" />
     <ClInclude Include="Collision.h" />
     <ClInclude Include="Create_Object.h" />
+    <ClInclude Include="Dragon.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GameStateList.h" />
     <ClInclude Include="GameStateManager.h" />
