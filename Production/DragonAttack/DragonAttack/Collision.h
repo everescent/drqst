@@ -52,6 +52,21 @@ public:
 		if (shape != Circle)
 			shape = NoShape;
 	}
+  //Jacob Suggested Edit START//////////////////////////////////////////////////////////////////////////
+  Col_Comp(Col_Comp& t_Col)
+    :min{ t_Col.min.x, t_Col.min.y }, max{ t_Col.max.x, t_Col.max.y }, mid{ t_Col.mid.x, t_Col.mid.y },
+    radius{ t_Col.radius }, shape{ t_Col.shape }, colflag{ t_Col.colflag }
+  {
+    //This allows me to construct Col_Comp by doing this:
+    //Col_Comp test{Col_Comp{1.0f,1.0f,10,Circle}};
+    //OR
+    //Col_Comp test{Col_Comp{0.0f,0.0f,5.0f5.0f,Rectangle}};
+    //Both will achieve the combined effect of all three constructors
+    //This ALSO means that the classes inheriting your class or using it won't have
+    //to dedicate 3 different types of constructors to cater to your 3 constructors
+    //ON TOP of the constructers that they may need
+  }
+  //Jacob Suggested Edit END////////////////////////////////////////////////////////////////////////////
 
 	Col_Comp() {} // call default constructor if no parameters given. 
 

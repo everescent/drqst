@@ -16,6 +16,7 @@ Technology is prohibited.
 #pragma once
 #include "AEEngine.h"
 #include "Transform.h"
+#include "Collision.h"
 #include "Sprite.h"
 
 /****************************************************************************************
@@ -30,7 +31,6 @@ class GameObject {
 
 public:
   virtual void Update() = 0; //Overwrite with derived class Update
-  virtual void Pos() = 0;    //Overwrite with derived class Pos
   //Renders the object
   void Render();
   //Sets the object to active or inactive
@@ -45,9 +45,10 @@ public:
   GameObject(AEGfxVertexList * mesh, const char* TexFile,
              float ObjectW, const float &ObjectH);
   //Move constructor for sprite
-  GameObject(Sprite&& t_Sprite);
+  GameObject(Sprite&& t_Sprite, Col_Comp &t_Col);
   Transform Transform_; //Transform holds the object's position, scale and rotation
   Sprite Sprite_;       //Sprite handles mesh, texture and rendering
+  Col_Comp Collision_;  //Collision handles object collision
 
 private:
   bool active; //Active or Inactive
