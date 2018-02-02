@@ -20,7 +20,8 @@ Technology is prohibited.
 //Renders the object
 void GameObject::Render()
 {
-  Sprite_.Render_Object(Transform_);
+  if(active)
+    Sprite_.Render_Object(Transform_);
 }
 
 //Sets the object to active or inactive
