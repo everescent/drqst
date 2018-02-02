@@ -20,20 +20,18 @@ Technology is prohibited.
 Transform& Transform::SetTranslate(float posX, float posY)
 {
   AEMtx33Trans(&T_Matrix, posX, posY);
-  AEMtx33TransApply(&Matrix, &T_Matrix, 0.0f, 0.0f);
   return *this;
 }
 //Sets the degrees to rotate and applies it to the matrix
 Transform& Transform::SetRotation(const float &Deg)
 {
   Degree = Deg;
-  AEMtx33RotDeg(&Matrix, Degree);
+  AEMtx33RotDeg(&R_Matrix, Degree);
   return *this;
 }
 //Sets the scale matrix and applies it to the matrix
 Transform& Transform::SetScale(float scaleX, float scaleY)
 {
   AEMtx33Scale(&S_Matrix, scaleX, scaleY);
-  AEMtx33ScaleApply(&Matrix, &S_Matrix, 1.0f, 1.0f);
   return *this;
 }
