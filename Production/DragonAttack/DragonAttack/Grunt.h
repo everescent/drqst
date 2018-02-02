@@ -56,7 +56,7 @@ public:
 	//Grunt(Sprite&& t_sprite, const float x, const float y);
 
 	void Update();
-	void Pos();
+	void Pos(Grunt *grunt);
 
 };
 
@@ -88,3 +88,8 @@ No return.
 /******************************************************************************/
 void Delete_Grunt(Grunt* grunt);
 
+void MoveTowardPlayer();
+
+void AttackPlayer();
+
+void Idle();

@@ -16,9 +16,13 @@ Technology is prohibited.
 
 namespace // global variables just for THIS file
 {
-	const int grunt_hp = 30;
+	const int grunt_hp = 30; // Health here
 
 	Col_Comp t_col{ 0.0f, 0.0f, 5.0f, 5.0f, Rect };   // set the shape for grunt here
+
+	bool PlayerSeen = false;
+
+	bool PlayerInRange = false;
 }
 
 
@@ -40,17 +44,13 @@ Grunt::Grunt(Sprite&& t_sprite)
 //}
 
 
-
-
 Grunt *Create_Grunt()
 {
 	const char* tex_Grunt = ".//Textures/download.jpg";
 
 	Grunt *grunt = new Grunt{ S_CreateSquare(100.0f, 1.0f, 1.0f, tex_Grunt) };
-	
 
 	return  grunt;
-
 }
 
 void Delete_Grunt(Grunt *grunt)
@@ -60,10 +60,46 @@ void Delete_Grunt(Grunt *grunt)
 
 void Grunt::Update()
 {
-	//update the behaviour of the grunt
+	//check for vision range here
+	//check for attack range here
+
+	//PlayerSeen is a bool that returns true or false based on the vision spheres/squares 
+	//between enemies and the player
+	if (PlayerSeen == true) 
+	{
+		//Once player has been seen, use pathfinding to move toward player.
+		MoveTowardPlayer();
+	}
+	else 
+	//PlayerInRange is a bool that returns true or false based on the attack spheres/squares
+	//of the enemies and the player
+	if (PlayerInRange == true) 
+	{
+		//AttackPlayer will run the attack animation/knock back the player/damage the player.
+		AttackPlayer();
+	}
+	else // If neither of the above conditions are true, the enemy will be in its idle state(fn).
+	{
+		Idle();
+	}
 }
 
-void Grunt::Pos()
+void Grunt::Pos(Grunt *grunt)
 {
+	//grunt->Transform_.SetTranslate(0, 0);
+}
 
+void MoveTowardPlayer()
+{
+	//Pathfinding algorithm here
+}
+
+void AttackPlayer()
+{
+	//Attack animation/knock back/damage player here
+}
+
+void Idle() 
+{
+	//Patrol or standstill
 }
