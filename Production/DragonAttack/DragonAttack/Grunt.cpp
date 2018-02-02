@@ -16,7 +16,6 @@ Technology is prohibited.
 
 namespace // global variables just for THIS file
 {
-	const int grunt_hp = 30;
 
 	Col_Comp t_col{ 0.0f, 0.0f, 5.0f, 5.0f, Rect };   // set the shape for grunt here
 }
@@ -40,17 +39,13 @@ Grunt::Grunt(Sprite&& t_sprite)
 //}
 
 
-
-
 Grunt *Create_Grunt()
 {
 	const char* tex_Grunt = ".//Textures/download.jpg";
 
 	Grunt *grunt = new Grunt{ S_CreateSquare(100.0f, 1.0f, 1.0f, tex_Grunt) };
-	
 
 	return  grunt;
-
 }
 
 void Delete_Grunt(Grunt *grunt)
@@ -60,15 +55,16 @@ void Delete_Grunt(Grunt *grunt)
 
 void Grunt::Update()
 {
-	//update the behaviour of the grunt
 }
 
-void Grunt::Pos()
 {
 
 }
 
+<<<<<<< HEAD
 void Grunt::Update(float dt)
 {
 	UNREFERENCED_PARAMETER(dt);
 }
+=======
+>>>>>>> c21747bc9a97357ff2abd4a67bc3f8305d6b05f1

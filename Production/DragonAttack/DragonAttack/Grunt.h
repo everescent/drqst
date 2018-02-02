@@ -55,9 +55,14 @@ public:
 	/******************************************************************************/
 	//Grunt(Sprite&& t_sprite, const float x, const float y);
 
+<<<<<<< HEAD
 	void Update(); //ignored
 	void Update(float dt);
 	void Pos();
+=======
+	void Update();
+	void Pos(Grunt *grunt);
+>>>>>>> c21747bc9a97357ff2abd4a67bc3f8305d6b05f1
 
 };
 
@@ -89,3 +94,8 @@ No return.
 /******************************************************************************/
 void Delete_Grunt(Grunt* grunt);
 
+void MoveTowardPlayer();
+
+void AttackPlayer();
+
+void Idle();
