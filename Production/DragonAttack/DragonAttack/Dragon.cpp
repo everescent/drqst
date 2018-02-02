@@ -39,18 +39,20 @@ void Dragon::Update()
   if (Dir.L)
   {
     PosX -= Speed;
-    Transform_.SetScale(1.0f, 1.0f).SetTranslate(PosX, PosY);
+    Transform_.SetScale(-1.0f, 1.0f);
   }
   if (Dir.R)
   {
     PosX += Speed;
-    Transform_.SetScale(-1.0f, 1.0f).SetTranslate(PosX, PosY);
+    Transform_.SetScale(1.0f, 1.0f);
   }
+  Transform_.SetTranslate(PosX, PosY);
   if (Dir.UP)
     PosY += 30.0f;
   PosY -= Gravity;
   if (PosY <= 0.0f)
     PosY = 0.0f;
+  Transform_.Concat();
   //Check if attack has been made
   if (Attack)
   {
@@ -80,6 +82,7 @@ void Dragon::Update()
         Fireball[i].Transform_.SetTranslate(Fireball[i].PosX, Fireball[i].PosY);
         Fireball[i].Collision_.Update_Col_Pos(Fireball[i].PosX, Fireball[i].PosY);
         Fireball[i].AddDist(Fireball[i].GetVelocity().x);
+        Fireball[i].Transform_.Concat();
       }
       else
       {
@@ -87,6 +90,7 @@ void Dragon::Update()
         Fireball[i].Transform_.SetTranslate(Fireball[i].PosX, Fireball[i].PosY);
         Fireball[i].Collision_.Update_Col_Pos(Fireball[i].PosX, Fireball[i].PosY);
         Fireball[i].AddDist(Fireball[i].GetVelocity().x);
+        Fireball[i].Transform_.Concat();
       }
     }
     else

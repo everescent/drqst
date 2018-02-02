@@ -47,7 +47,7 @@ public:
       Fireball.push_back(Projectile{ S_CreateSquare(50.0f, 1.0f, 1.0f, "fireball.png"),
                                     Col_Comp{ 0.0f, 0.0f, 50, Circle } });
     for (int i = 0; i < 5; ++i)
-      Fireball[i].SetVelocity(AEVec2{ 10.0f, 0.0f }).Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+      Fireball[i].SetVelocity(AEVec2{ 20.0f, 0.0f }).Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
     Mfireball.SetVelocity(AEVec2{ 5.0f, 0.0f }).Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
   }
 private:
