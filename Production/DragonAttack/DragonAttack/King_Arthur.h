@@ -29,6 +29,9 @@ private:
 
 	bool phase2;
 
+	void Init(void);
+
+
 public:
 	/******************************************************************************/
 	/*!
@@ -45,10 +48,13 @@ public:
 	/******************************************************************************/
 	King_Arthur(Sprite&& t_sprite);
 
-	void Update(float dt);
-	void Update() {};
+	
+	void Update(float dt) override;
+	void Update() {}; // ignored
 	void Pos();
 };
 
+King_Arthur *Spawn_KA(void);
 
+void Free_KA(King_Arthur *ka);
 

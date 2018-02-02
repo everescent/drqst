@@ -55,7 +55,8 @@ public:
 	/******************************************************************************/
 	//Grunt(Sprite&& t_sprite, const float x, const float y);
 
-	void Update();
+	void Update(); //ignored
+	void Update(float dt);
 	void Pos();
 
 };

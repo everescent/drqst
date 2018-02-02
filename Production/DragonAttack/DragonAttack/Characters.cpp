@@ -19,7 +19,7 @@ Technology is prohibited.
 
 Characters::Characters(Sprite&& t_sprite, const int HP, Col_Comp &&t_col)
 	: GameObject{ std::move(t_sprite), std::move(t_col) }, hp{ HP }, moving{ false }, 
-	  direction{ 0 }
+	  direction{ RIGHT }
 {
 }
 
@@ -43,10 +43,16 @@ int Characters::Get_HP() const
 	return hp;
 }
 
-
-void Characters::Update()
+Direction Characters::Get_Direction(void) const
 {
+	return direction;
 }
+
+void Characters::Set_Direction(Direction d)
+{
+	direction = d;
+}
+
 bool Characters::collision()
 {
 	return false;

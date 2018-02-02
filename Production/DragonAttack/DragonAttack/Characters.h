@@ -19,13 +19,21 @@ Technology is prohibited.
 #include "Transform.h"
 #include "Create_Object.h"
 
+enum Direction
+{
+	LEFT,
+	RIGHT,
+	TOP,
+	DOWN
+};
+
 // A class that creates a basic character
 class Characters : public GameObject
 {
 	private:
 		int hp;      // hp the character have
 		boolean moving;  // whether its moving or not
-		int direction;   // moving in left or right
+		Direction direction;   // moving in left or right, up or down?
 
 	public:
 		Characters(Sprite&& t_sprite, const int HP, Col_Comp &&t_col); // default constructor
@@ -36,6 +44,9 @@ class Characters : public GameObject
 		boolean Is_Moving() const;     // is character moving
 		void Set_Moving(boolean moving); // make a character stop/move
 
-		void virtual Update();     //  might not be needed for character class
+		Direction Get_Direction() const; // get the direction of mob
+		void Set_Direction(Direction direction);// set the direction of mob
+
+		void virtual Update(float dt) = 0;    //  might not be needed for character class
 		bool collision();
 };

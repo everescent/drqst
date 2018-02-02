@@ -123,6 +123,9 @@
     <ClCompile Include="Dragon.cpp">
       <Filter>Characters\Dragon</Filter>
     </ClCompile>
+    <ClCompile Include="Boss_States.cpp">
+      <Filter>Characters\AI\Bosses</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h">

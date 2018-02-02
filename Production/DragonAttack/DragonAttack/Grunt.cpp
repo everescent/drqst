@@ -67,3 +67,8 @@ void Grunt::Pos()
 {
 
 }
+
+void Grunt::Update(float dt)
+{
+	UNREFERENCED_PARAMETER(dt);
+}
