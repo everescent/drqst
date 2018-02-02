@@ -186,6 +186,7 @@
     <ClInclude Include="King_Arthur.h" />
     <ClInclude Include="Main_Menu.h" />
     <ClInclude Include="Physics.h" />
+    <ClInclude Include="Projectile.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="Render.h" />
     <ClInclude Include="Transform.h" />

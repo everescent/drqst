@@ -39,6 +39,10 @@ public:
   bool IsActive() const { return active; }
   //Sets object position
   void SetPos(const float &X, const float &Y) { PosX = X; PosY = Y; }
+  //Set Velocity
+  GameObject &SetVelocity(const AEVec2 &t_vec) { Velocity = t_vec; return *this; }
+  //Get Velocity
+  AEVec2 GetVelocity() const { return Velocity; }
   //Default constructor; Initializes to zero
   GameObject();
   //Constructs sprite with a mesh, but no texture
@@ -56,4 +60,5 @@ public:
 
 private:
   bool active; //Active or Inactive
+  AEVec2 Velocity{ 0.0f, 0.0f };
 };
