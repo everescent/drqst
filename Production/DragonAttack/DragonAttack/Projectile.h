@@ -20,15 +20,54 @@ Technology is prohibited.
 class Projectile : public GameObject {
 
 public:
-  void Update() {}
+  //Updates the projectile
+  void Update() 
+  {
+    //Update distance travelled and resultant matrix
+    Transform_.SetTranslate(PosX, PosY);
+    Collision_.Update_Col_Pos(PosX, PosY);
+    AddDist(GetVelocity().x);
+    Transform_.Concat();
+  }
+  //Set the position of the projectile
+  void Pos(const float &X, const float &Y)
+  {
+    //Check for active
+    if (IsActive())
+    {
+      if (GetDir())
+      {
+        PosX += GetVelocity().x;
+        Transform_.SetRotation(90.0f);
+      }
+      else
+      {
+        PosX -= GetVelocity().x;
+        Transform_.SetRotation(-90.0f);
+      }
+    }
+    else
+    {
+      PosX = X;
+      PosY = Y;
+    }
+  }
+  //Distance travelled by the projectile
   void AddDist(const float &dist) { Distance += dist; }
+  //Returns Distance travelled by the projectile
   float GetDist() const { return Distance; }
+  //Resets the distance travelled
   void ResetDist() { Distance = 0.0f; }
+  //Sets the direction of the projectile
   void SetDir(const bool &dir) { Direction = dir; }
+  //Returns the direction of the projectile
   bool GetDir() const { return Direction; }
+  //Default contructor does nothing
   Projectile() = default;
+  //Initialize projectile with mesh and collision shape
   Projectile(Sprite &&t_sprite, Col_Comp &&t_col)
-    :GameObject{ std::move(t_sprite), std::move(t_col) }, Distance{ 0.0f }, Direction{ true }
+    :GameObject{ std::move(t_sprite), std::move(t_col) }, 
+    Distance{ 0.0f }, Direction{ true }
   {}
 private:
   bool Direction; //TRUE = Right; FALSE = Left

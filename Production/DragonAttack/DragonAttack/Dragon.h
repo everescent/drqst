@@ -35,34 +35,48 @@ const float Bullet_Death   { 900.0f  }; //Distance when bullet dies
 const float Bullet_Speed   { 20.0f   }; //How fast a bullet travels
 
 const float Jump_Height    { 200.0f  }; //Maximum height player can jump
-const float Jump_Mult      { 1.2f    }; //How fast player can jump
+const float Jump_Mult      { 3.0f    }; //How fast player can jump
 const float Start_Pos_X    { -320.0f }; //Player stating position X
 const float Start_Pos_Y    { -120.0f }; //Player starting position Y
 
-static float Cam_Offset_X  { 320.0f  };
-static float Cam_Offset_Y  { 120.0f  };
+const float Cam_Offset_X   { 320.0f  }; //Camera offset X
+const float Cam_Offset_Y   { 120.0f  }; //Camera offset Y
 
 class Dragon : public Characters{
 
 public:
-  void Input();  //Handles player input
-  void Update(); //Updates data members based on input
+  //Handles player input
+  void Input();
+  //Updates data members based on input
+  void Update();
+  //Don't need to use dt
   void Update(float dt) { UNREFERENCED_PARAMETER(dt); }
-  void Render();
+  //Renders the dragon
+  void Render(); 
+  //Returns Fireballs to check for collision
   const std::vector<Projectile> &&GetFireball() const { return std::move(Fireball); }
+  //Returns Mega Fireball to check for collision
   const Projectile &&GetMfireball() const { return std::move(Mfireball); }
+  //Get the direction the player is facing
   float GetFacing() const { return Facing; }
+  const Dragon &Get_this() const { return *this; }
   Dragon()
+    //Initialize Characters class
     :Characters{ S_CreateSquare(100.0f, 1.0f, 1.0f, "dragon_tmp.png"), 3,
     Col_Comp{-100.0f, -100.0f, 100.0f, 100.0f, Rect} },
+    //Initialize data members
     Attack{ false }, Pwr_Up{ false }, Damage{ 10 }, Charge{ 0 },
     Gravity{ 10.0f }, Speed{ 8.0f }, Dir{}, Buff{}, Fireball{},
+    //Initialize Mega Fireball
     Mfireball{ S_CreateSquare(50.0f, 1.0f, 1.0f, "fireball.png"), 
     Col_Comp{ Start_Pos_X, Start_Pos_Y, 50, Circle} }, Air_Dist{ 0.0f }, Facing{ 1.0f }
   {
+    //Initialize player start location
     PosX = Start_Pos_X;
     PosY = Start_Pos_Y;
+    //Reserve a bloack of memory per number of bullets 
     Fireball.reserve(Bullet_Buffer);
+    //Initialize all the fireballs
     for (int i = 0; i < Bullet_Buffer; ++i)
       Fireball.push_back(Projectile{ S_CreateSquare(50.0f, 1.0f, 1.0f, "fireball.png"),
                                     Col_Comp{ Start_Pos_X, Start_Pos_Y, 50, Circle } });
@@ -71,6 +85,7 @@ public:
       Fireball[i].SetVelocity(AEVec2{ Bullet_Speed, 0.0f });
       Fireball[i].Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
     }
+    //Initialize Mega Fireball
     Mfireball.SetVelocity(AEVec2{ Bullet_Speed / 2, 0.0f });
     Mfireball.Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
   }

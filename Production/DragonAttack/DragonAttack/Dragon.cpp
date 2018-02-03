@@ -16,8 +16,6 @@ Technology is prohibited.
 #include "Dragon.h"
 #include "Camera.h"
 
-static float Jump_Accel{ 1.2f };
-
 void Dragon::ApplyPowerUP()
 {
 
@@ -59,9 +57,8 @@ void Dragon::Update()
   }
   if (Dir.UP)
   {
-    Jump_Accel *= Jump_Accel;
-    PosY += Speed * Jump_Mult * Jump_Accel;
-    Air_Dist += Speed * Jump_Mult * Jump_Accel;
+    PosY += Speed * Jump_Mult;
+    Air_Dist += Speed * Jump_Mult;
   }
   PosY -= Gravity;
   if (PosY <= Start_Pos_Y)
@@ -90,29 +87,10 @@ void Dragon::Update()
   }
   //Check for any active fireballs
   for (int i = 0; i < Bullet_Buffer; ++i)
-    if (Fireball[i].IsActive())
-    {
-      if (Fireball[i].GetDir())
-      {
-        Fireball[i].PosX += Fireball[i].GetVelocity().x;
-        Fireball[i].Transform_.SetRotation(90.0f);
-      }
-      else
-      {
-        Fireball[i].PosX -= Fireball[i].GetVelocity().x;
-        Fireball[i].Transform_.SetRotation(-90.0f);
-      }
-      //Update distance travelled and resultant matrix
-      Fireball[i].Transform_.SetTranslate(Fireball[i].PosX, Fireball[i].PosY);
-      Fireball[i].Collision_.Update_Col_Pos(Fireball[i].PosX, Fireball[i].PosY);
-      Fireball[i].AddDist(Fireball[i].GetVelocity().x);
-      Fireball[i].Transform_.Concat();
-    }
-    else
-    {
-      Fireball[i].PosX = PosX;
-      Fireball[i].PosY = PosY;
-    }
+  {
+    Fireball[i].Pos(PosX, PosY);
+    Fireball[i].Update();
+  }
   //Check for distance limit
   for (int i = 0; i < Bullet_Buffer; ++i)
     if (Fireball[i].IsActive())
@@ -132,7 +110,6 @@ void Dragon::Update()
   {
     Dir.UP = false;
     Air_Dist = 0.0f;
-    Jump_Accel = 1.2f;
   }
 }
 
