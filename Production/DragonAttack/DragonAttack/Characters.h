@@ -21,10 +21,11 @@ Technology is prohibited.
 
 enum Direction
 {
-	LEFT,
+	LEFT = 0,
 	RIGHT,
 	TOP,
-	DOWN
+	DOWN,
+	STAY
 };
 
 // A class that creates a basic character
@@ -47,6 +48,5 @@ class Characters : public GameObject
 		Direction Get_Direction() const; // get the direction of mob
 		void Set_Direction(Direction direction);// set the direction of mob
 
-		void virtual Update(float dt) = 0;    //  might not be needed for character class
 		bool collision();
 };

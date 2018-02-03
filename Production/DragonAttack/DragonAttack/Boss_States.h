@@ -28,6 +28,6 @@ struct Boss_Attack : public Projectile
 
 	void Update() {}; // ignored
 	void Update(float dt);  //has to check cooldown_timer
-	void Pos(); // ignored
+	void Pos(); 
 
 };
