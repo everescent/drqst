@@ -24,10 +24,13 @@ public:
   void Update() 
   {
     //Update distance travelled and resultant matrix
-    Transform_.SetTranslate(PosX, PosY);
-    Collision_.Update_Col_Pos(PosX, PosY);
-    AddDist(GetVelocity().x);
-    Transform_.Concat();
+    if (IsActive())
+    {
+      Transform_.SetTranslate(PosX, PosY);
+      Collision_.Update_Col_Pos(PosX, PosY);
+      AddDist(GetVelocity().x);
+      Transform_.Concat();
+    }
   }
   //Set the position of the projectile
   void Pos(const float &X, const float &Y)

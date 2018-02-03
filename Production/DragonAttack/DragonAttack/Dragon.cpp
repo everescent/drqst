@@ -15,6 +15,7 @@ Technology is prohibited.
 
 #include "Dragon.h"
 #include "Camera.h"
+#include <iostream>
 
 void Dragon::ApplyPowerUP()
 {
@@ -66,6 +67,7 @@ void Dragon::Update()
   //Update position of player
   Transform_.SetTranslate(PosX, PosY);
   Transform_.Concat();
+  //Collision_.Update_Col_Pos(0.0f, 0.0f); Update collision pos when available
   //Check if attack has been made
   if (Attack)
   {
@@ -97,6 +99,8 @@ void Dragon::Update()
     {
       if (Fireball[i].GetDist() >= Bullet_Death)
       {
+        std::cout << "dead\n";
+        std::cout << Fireball[i].GetDist()<<std::endl;
         Fireball[i].ResetDist();
         Fireball[i].SetActive(false);
       }

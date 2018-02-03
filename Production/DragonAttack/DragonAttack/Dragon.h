@@ -19,7 +19,6 @@ Technology is prohibited.
 #include "Characters.h"
 #include "Collision.h"
 #include <vector>
-#include <utility>
 
 //Indicates the type of power up
 enum PowerUp {
@@ -30,7 +29,7 @@ enum PowerUp {
 };
 
 const int   Bullet_Buffer  { 10      }; //Amount of fireballs at any one time
-const float Bullet_Interval{ 600.0f  }; //Minimum distance between each fireball
+const float Bullet_Interval{ 500.0f  }; //Minimum distance between each fireball
 const float Bullet_Death   { 900.0f  }; //Distance when bullet dies
 const float Bullet_Speed   { 20.0f   }; //How fast a bullet travels
 
@@ -54,16 +53,18 @@ public:
   //Renders the dragon
   void Render(); 
   //Returns Fireballs to check for collision
-  const std::vector<Projectile> &&GetFireball() const { return std::move(Fireball); }
+  const std::vector<Projectile> &GetFireball() const { return Fireball; }
   //Returns Mega Fireball to check for collision
-  const Projectile &&GetMfireball() const { return std::move(Mfireball); }
+  const Projectile &GetMfireball() const { return Mfireball; }
   //Get the direction the player is facing
   float GetFacing() const { return Facing; }
+  //Returns this pos
   const Dragon &Get_this() const { return *this; }
   Dragon()
     //Initialize Characters class
     :Characters{ S_CreateSquare(100.0f, 1.0f, 1.0f, "dragon_tmp.png"), 3,
-    Col_Comp{-100.0f, -100.0f, 100.0f, 100.0f, Rect} },
+    Col_Comp{ Start_Pos_X - 100.0f, Start_Pos_Y - 100.0f, 
+              Start_Pos_X + 100.0f, Start_Pos_Y + 100.0f, Rect} },
     //Initialize data members
     Attack{ false }, Pwr_Up{ false }, Damage{ 10 }, Charge{ 0 },
     Gravity{ 10.0f }, Speed{ 8.0f }, Dir{}, Buff{}, Fireball{},
