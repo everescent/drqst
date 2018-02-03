@@ -43,7 +43,7 @@ Parameters:
 Return:
   void
 *************************************************************************/
-void CamFollow(Transform const &PosMatrix, float OffsetX, float OffsetY);
+void CamFollow(Transform const &PosMatrix, float OffsetX, float OffsetY, float dir);
 
 /*************************************************************************
 Description:

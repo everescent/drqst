@@ -14,6 +14,9 @@ Technology is prohibited.
 /* End Header **************************************************************************/
 
 #include "Dragon.h"
+#include "Camera.h"
+
+static float Jump_Accel{ 1.2f };
 
 void Dragon::ApplyPowerUP()
 {
@@ -23,11 +26,15 @@ void Dragon::ApplyPowerUP()
 void Dragon::Input()
 {
   if (AEInputCheckCurr(AEVK_A))
+  {
     Dir.L = true;
-  if (AEInputCheckCurr(AEVK_D))
+  }
+  else if (AEInputCheckCurr(AEVK_D))
+  {
     Dir.R = true;
+  }
   if (AEInputCheckCurr(AEVK_SPACE))
-    if(PosY == 0.0f)
+    if(PosY == Start_Pos_Y)
       Dir.UP = true;
   if (AEInputCheckTriggered(AEVK_RETURN))
     Attack = true;
@@ -35,37 +42,46 @@ void Dragon::Input()
 
 void Dragon::Update()
 {
+  //Call for player input
   Input();
+  //Update position based on direction
   if (Dir.L)
   {
     PosX -= Speed;
-    Transform_.SetScale(-1.0f, 1.0f);
+    Facing = -1.0f;
+    Transform_.SetScale(Facing, 1.0f);
   }
-  if (Dir.R)
+  else if (Dir.R)
   {
     PosX += Speed;
-    Transform_.SetScale(1.0f, 1.0f);
+    Facing = 1.0f;
+    Transform_.SetScale(Facing, 1.0f);
   }
-  Transform_.SetTranslate(PosX, PosY);
   if (Dir.UP)
-    PosY += 30.0f;
+  {
+    Jump_Accel *= Jump_Accel;
+    PosY += Speed * Jump_Mult * Jump_Accel;
+    Air_Dist += Speed * Jump_Mult * Jump_Accel;
+  }
   PosY -= Gravity;
-  if (PosY <= 0.0f)
-    PosY = 0.0f;
+  if (PosY <= Start_Pos_Y)
+    PosY = Start_Pos_Y;
+  //Update position of player
+  Transform_.SetTranslate(PosX, PosY);
   Transform_.Concat();
   //Check if attack has been made
   if (Attack)
   {
-    for (int i = 0; i < 5; ++i)
+    for (int i = 0; i < Bullet_Buffer; ++i)
       if (Fireball[i].IsActive())
       {
-        if (Fireball[i].GetDist() <= 200.f)
+        if (Fireball[i].GetDist() <= Bullet_Interval)
           break;
       }
       else
       {
         Fireball[i].SetActive(true);
-        if (Dir.L)
+        if (Facing < 0.0f)
           Fireball[i].SetDir(false);
         else
           Fireball[i].SetDir(true);
@@ -73,25 +89,24 @@ void Dragon::Update()
       }
   }
   //Check for any active fireballs
-  for (int i = 0; i < 5; ++i)
+  for (int i = 0; i < Bullet_Buffer; ++i)
     if (Fireball[i].IsActive())
     {
       if (Fireball[i].GetDir())
       {
         Fireball[i].PosX += Fireball[i].GetVelocity().x;
-        Fireball[i].Transform_.SetTranslate(Fireball[i].PosX, Fireball[i].PosY);
-        Fireball[i].Collision_.Update_Col_Pos(Fireball[i].PosX, Fireball[i].PosY);
-        Fireball[i].AddDist(Fireball[i].GetVelocity().x);
-        Fireball[i].Transform_.Concat();
+        Fireball[i].Transform_.SetRotation(90.0f);
       }
       else
       {
         Fireball[i].PosX -= Fireball[i].GetVelocity().x;
-        Fireball[i].Transform_.SetTranslate(Fireball[i].PosX, Fireball[i].PosY);
-        Fireball[i].Collision_.Update_Col_Pos(Fireball[i].PosX, Fireball[i].PosY);
-        Fireball[i].AddDist(Fireball[i].GetVelocity().x);
-        Fireball[i].Transform_.Concat();
+        Fireball[i].Transform_.SetRotation(-90.0f);
       }
+      //Update distance travelled and resultant matrix
+      Fireball[i].Transform_.SetTranslate(Fireball[i].PosX, Fireball[i].PosY);
+      Fireball[i].Collision_.Update_Col_Pos(Fireball[i].PosX, Fireball[i].PosY);
+      Fireball[i].AddDist(Fireball[i].GetVelocity().x);
+      Fireball[i].Transform_.Concat();
     }
     else
     {
@@ -99,10 +114,10 @@ void Dragon::Update()
       Fireball[i].PosY = PosY;
     }
   //Check for distance limit
-  for (int i = 0; i < 5; ++i)
+  for (int i = 0; i < Bullet_Buffer; ++i)
     if (Fireball[i].IsActive())
     {
-      if (Fireball[i].GetDist() >= 800.0f)
+      if (Fireball[i].GetDist() >= Bullet_Death)
       {
         Fireball[i].ResetDist();
         Fireball[i].SetActive(false);
@@ -110,17 +125,21 @@ void Dragon::Update()
     }
     else
       continue;
-
+  //Reset direction and attack
   Attack = false;
   Dir.L = Dir.R = false;
-  if (PosY >= 150.0f)
+  if (Air_Dist >= Jump_Height)
+  {
     Dir.UP = false;
+    Air_Dist = 0.0f;
+    Jump_Accel = 1.2f;
+  }
 }
 
 void Dragon::Render()
 {
-  for (int i = 0; i < 5; ++i)
-    if(Fireball[i].IsActive())
-      Fireball[i].Render();
+  for (int i = 0; i < Bullet_Buffer; ++i)
+    Fireball[i].Render();
+  Mfireball.Render();
   GameObject::Render();
 }

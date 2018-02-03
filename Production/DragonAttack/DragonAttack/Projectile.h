@@ -1,3 +1,18 @@
+/* Start Header ************************************************************************/
+/*!
+\file       Projectile.h
+\author     Jacob Lim
+\par email: jacob.lim\@digipen.edu
+\brief
+  Projectile class declared here.
+
+Copyright (C) 20xx DigiPen Institute of Technology.
+Reproduction or disclosure of this file or its contents
+without the prior written consent of DigiPen Institute of
+Technology is prohibited.
+*/
+/* End Header **************************************************************************/
+
 #pragma once
 #include "GameObject.h"
 #include <utility>
@@ -6,7 +21,7 @@ class Projectile : public GameObject {
 
 public:
   void Update() {}
-  void AddDist(float dist) { Distance += dist; }
+  void AddDist(const float &dist) { Distance += dist; }
   float GetDist() const { return Distance; }
   void ResetDist() { Distance = 0.0f; }
   void SetDir(const bool &dir) { Direction = dir; }
@@ -17,5 +32,5 @@ public:
   {}
 private:
   bool Direction; //TRUE = Right; FALSE = Left
-  float Distance;
+  float Distance; //Distance travelled
 };
