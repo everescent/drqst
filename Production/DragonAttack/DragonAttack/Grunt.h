@@ -55,7 +55,7 @@ public:
 	/******************************************************************************/
 	//Grunt(Sprite&& t_sprite, const float x, const float y);
 
-	void Update(float dt) override;
+	void Update(float dt);
 	void Update() {}; // ignored
 
 	void G_Update(Grunt *grunt);
