@@ -167,6 +167,7 @@
     <ClCompile Include="King_Arthur.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Main_Menu.cpp" />
+    <ClCompile Include="Merlin.cpp" />
     <ClCompile Include="Physics.cpp" />
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="Render.cpp" />
@@ -186,6 +187,7 @@
     <ClInclude Include="Input_Handler.h" />
     <ClInclude Include="King_Arthur.h" />
     <ClInclude Include="Main_Menu.h" />
+    <ClInclude Include="Merlin.h" />
     <ClInclude Include="Physics.h" />
     <ClInclude Include="Projectile.h" />
     <ClInclude Include="Sprite.h" />

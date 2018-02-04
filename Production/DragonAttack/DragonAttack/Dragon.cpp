@@ -15,7 +15,6 @@ Technology is prohibited.
 
 #include "Dragon.h"
 #include "Camera.h"
-#include <iostream>
 
 void Dragon::ApplyPowerUP()
 {
@@ -91,6 +90,7 @@ void Dragon::Update()
   for (int i = 0; i < Bullet_Buffer; ++i)
   {
     Fireball[i].Pos(PosX, PosY);
+    Fireball[i].Pos();
     Fireball[i].Update();
   }
   //Check for distance limit
@@ -99,8 +99,6 @@ void Dragon::Update()
     {
       if (Fireball[i].GetDist() >= Bullet_Death)
       {
-        std::cout << "dead\n";
-        std::cout << Fireball[i].GetDist()<<std::endl;
         Fireball[i].ResetDist();
         Fireball[i].SetActive(false);
       }

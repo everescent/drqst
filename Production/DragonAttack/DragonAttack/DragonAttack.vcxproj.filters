@@ -126,6 +126,9 @@
     <ClCompile Include="Boss_States.cpp">
       <Filter>Characters\AI\Bosses</Filter>
     </ClCompile>
+    <ClCompile Include="Merlin.cpp">
+      <Filter>Characters\AI\Bosses</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h">
@@ -181,6 +184,9 @@
     </ClInclude>
     <ClInclude Include="Projectile.h">
       <Filter>Projectile</Filter>
+    </ClInclude>
+    <ClInclude Include="Merlin.h">
+      <Filter>Characters\AI\Bosses</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

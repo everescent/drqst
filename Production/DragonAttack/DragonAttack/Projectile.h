@@ -16,6 +16,7 @@ Technology is prohibited.
 #pragma once
 #include "GameObject.h"
 #include <utility>
+#include <cmath>
 
 class Projectile : public GameObject {
 
@@ -28,12 +29,16 @@ public:
     {
       Transform_.SetTranslate(PosX, PosY);
       Collision_.Update_Col_Pos(PosX, PosY);
-      AddDist(GetVelocity().x);
+      AddDist(
+       sqrtf( (GetVelocity().x) * (GetVelocity().x)
+                                +
+              (GetVelocity().y) * (GetVelocity().y) )
+      );
       Transform_.Concat();
     }
   }
   //Set the position of the projectile
-  void Pos(const float &X, const float &Y)
+  void Pos()
   {
     //Check for active
     if (IsActive())
@@ -41,15 +46,21 @@ public:
       if (GetDir())
       {
         PosX += GetVelocity().x;
+        PosY += GetVelocity().y;
         Transform_.SetRotation(90.0f);
       }
       else
       {
         PosX -= GetVelocity().x;
+        PosY -= GetVelocity().y;
         Transform_.SetRotation(-90.0f);
       }
     }
-    else
+  }
+  //Updates position of projectile
+  void Pos(const float &X, const float &Y)
+  {
+    if (!IsActive())
     {
       PosX = X;
       PosY = Y;
