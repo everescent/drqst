@@ -1,3 +1,19 @@
+/* Start Header ************************************************************************/
+/*!
+\file       Merlin.h
+\author     Jacob Lim
+\par email: jacob.lim\@digipen.edu
+\brief
+  Merlin class declared here.
+
+Copyright (C) 20xx DigiPen Institute of Technology.
+Reproduction or disclosure of this file or its contents
+without the prior written consent of DigiPen Institute of
+Technology is prohibited.
+*/
+/* End Header **************************************************************************/
+
+
 #pragma once
 #include "AEEngine.h"
 #include "Characters.h"
@@ -16,18 +32,18 @@ enum Merlin_Attack_State {
 //Alias for Merlin Attack State
 using MAS = Merlin_Attack_State;
 
-const int Merlin_HP    { 500 };  //Merlin's HP
-const int M_Phase2_HP  { 250 };  //Merlin's phase 2 HP
-const int Blink_CD_Time{ 360  }; //Cooldown time for Blink
-const int Merlin_Att_Inter{ 120 };  //Merlin's Attack Interval
+const int Merlin_HP       { 500 }; //Merlin's HP
+const int M_Phase2_HP     { 250 }; //Merlin's phase 2 HP
+const int Blink_CD_Time   { 360 }; //Cooldown time for Blink
+const int Merlin_Att_Inter{ 120 }; //Merlin's Attack Interval
 
-const float Eball_CD_Time{ 120.0f };
-const float Eball_Death{ 1000.0f };
+const float Eball_CD_Time{ 120.0f  }; //Energy Ball cooldown time
+const float Eball_Death  { 1000.0f }; //How far the energy ball travels
 
-const float Spread_CD_Time{ 240.0f };
-const float Spread_Death{ 1000.0f };
+const float Spread_CD_Time{ 240.0f  }; //Spread shot cooldown time
+const float Spread_Death  { 1000.0f }; //How far the spread shot travels
 
-const float Melee_CD_Time{ 60.0f };
+const float Melee_CD_Time{ 60.0f }; //Melee cooldown time
 
 const AEVec2 Blink_Pos_1{ -300.0f, 100.0f}; //(Point) 1st blink postion
 const AEVec2 Blink_Pos_2{ 300.0f, 100.0f }; //(Point) 2nd blink postion
@@ -60,15 +76,15 @@ public:
   const Projectile &GetEball() const { return Eball; }
 
 private:
-  void(Merlin::*Merlin_Attack)(const Dragon &player);         //Pointer to current attack function
-  void(Merlin::*Merlin_State)(const Dragon &player);          //Pointer to current state function
-  void CheckState(const Dragon &player);  //Sets current state to next, checks for next state
-  bool CheckAttack(const Dragon &player); /*Sets current attack state to next,
-                                            checks for next attack state*/
-  int Attack_Interval;
-  Boss_Action_State M_Curr;               //Current state
-  Boss_Action_State M_Next;               //Next state
-  MAS M_Att_Curr;                         //Current attack state
+  void(Merlin::*Merlin_Attack)(const Dragon &player); //Pointer to current attack function
+  void(Merlin::*Merlin_State)(const Dragon &player);  //Pointer to current state function
+  void CheckState(const Dragon &player);              //Sets current state to next, checks for next state
+  bool CheckAttack(const Dragon &player);             /*Sets current attack state to next,
+                                                        checks for next attack state*/
+  int Attack_Interval;      //Time between attacks
+  Boss_Action_State M_Curr; //Current state
+  Boss_Action_State M_Next; //Next state
+  MAS M_Att_Curr;           //Current attack state
 
   Boss_Attack M_Melee;                   //Melee attack
   Boss_Attack Eball;                     //Projectile for engery ball
