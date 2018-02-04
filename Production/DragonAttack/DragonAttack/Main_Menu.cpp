@@ -7,30 +7,16 @@
 #include "Camera.h"
 #include "Collision.h"
 #include "GameStateManager.h"
+#include "King_Arthur.h"
+#include "Dragon.h"
 #include <utility>
 
 
 namespace
 {
-	Col_Comp t_col{ 1.0, 1.0, Point };
 
-	class testCol : public GameObject {
-	public:
-		void Pos() {/*Do something*/ }
-		void Update() {/*Do something*/ }
-		testCol()
-			:colli{ 0.0f,0.0f, 50, Circle }, GameObject{ S_CreateSquare(50.0f,1.0f,1.0f,"floor.jpg"), t_col }
-		{}
-
-		Col_Comp colli;
-	};
-	static float aX = -300.0f;
-	static float aY = 0.0f;
-	static float bX = 300.0f;
-	static float bY = 0.0f;
-
-	testCol *a = nullptr;
-	testCol *b = nullptr;
+	King_Arthur *ka = nullptr;
+	Dragon *d = nullptr;
 
 	
 }
@@ -44,33 +30,30 @@ namespace Main_Menu
 
 	void Load(void)
 	{
-		a = new testCol;
-		b = new testCol;
+		ka = new King_Arthur{};
+		d = new Dragon{};
 	}
 
 	void Update(float dt)
 	{
 		UNREFERENCED_PARAMETER(dt);
-		aX += 2.0f;
-		bX -= 2.0f;
-		a->Transform_.SetTranslate(aX, aY);
-		b->Transform_.SetTranslate(bX, bY);
-		a->colli.Update_Col_Pos(aX, aY);
-		b->colli.Update_Col_Pos(bX, bY);
-		if (a->colli.Circle_Circle(a->colli, b->colli))
-			GSM::current = GS_QUIT;
+		d->SetActive(true);
+		ka->Update(2.0f, *d);
+		d->Update();
 	}
 
 	void Draw(void)
 	{
-	    a->Render();
-		b->Render();
+		CamFollow(d->Transform_, Cam_Offset_X, Cam_Offset_Y, d->GetFacing());
+		ka->Render();
+		d->Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+		d->Render();
 	}
 
 	void Free(void)
 	{
-		delete a;
-		delete b;
+		delete ka;
+		delete d;
 	}
 
 	void Unload(void)

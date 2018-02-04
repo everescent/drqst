@@ -15,13 +15,14 @@ Technology is prohibited.
 #pragma once
 
 #include "Characters.h"
+#include "Dragon.h"
 
 class King_Arthur : public Characters
 {
 private:
 	void Idle(float dt);
 
-	void Moving();
+	void Moving(const Dragon & d, float dt);
 
 	void AvoidingObstacle();
 
@@ -46,15 +47,11 @@ public:
 	No return.
 	*/
 	/******************************************************************************/
-	King_Arthur(Sprite&& t_sprite);
+	King_Arthur();
 
 	
-	void Update(float dt) override;
-	void Update() {}; // ignored
+	void Update(float dt, const Dragon &player);
+	void Update() override {}; // ignored
 	void Pos();
 };
-
-King_Arthur *Spawn_KA(void);
-
-void Free_KA(King_Arthur *ka);
 

@@ -24,9 +24,30 @@ void CamFollow(float PositionX, float PositionY, float OffsetX, float OffsetY)
 }
 
 //This function follows an object using its transform matrix, with an offset
-void CamFollow(Transform const &PosMatrix, float OffsetX, float OffsetY)
+void CamFollow(Transform const &PosMatrix, float OffsetX, float OffsetY, float Direction)
 {
-  AEGfxSetCamPosition(PosMatrix.GetTranslateMatrix().m[0][2] + OffsetX, PosMatrix.GetTranslateMatrix().m[1][2] + OffsetY);
+  //Moves the camera left or right
+  static float Offset = OffsetX;
+  //To use a quadratic animation curve
+  float Accel = 5.0f;
+  if (Direction < 0.0f)
+  {
+    if (Offset <= -OffsetX)
+      Offset = -OffsetX;
+      AEGfxSetCamPosition(PosMatrix.GetTranslateMatrix().m[0][2] + Offset,
+        PosMatrix.GetTranslateMatrix().m[1][2] + OffsetY);
+      Accel *= Accel;
+      Offset += -Accel;
+  }
+  else
+  {
+    if (Offset >= OffsetX)
+      Offset = OffsetX;
+      AEGfxSetCamPosition(PosMatrix.GetTranslateMatrix().m[0][2] + Offset,
+        PosMatrix.GetTranslateMatrix().m[1][2] + OffsetY);
+      Accel *= Accel;
+      Offset += Accel;
+  }
 }
 
 //This function sets the camera position

@@ -14,6 +14,8 @@ Technology is prohibited.
 /* End Header **************************************************************************/
 
 #include "Dragon.h"
+#include "Camera.h"
+#include <iostream>
 
 void Dragon::ApplyPowerUP()
 {
@@ -23,11 +25,15 @@ void Dragon::ApplyPowerUP()
 void Dragon::Input()
 {
   if (AEInputCheckCurr(AEVK_A))
+  {
     Dir.L = true;
-  if (AEInputCheckCurr(AEVK_D))
+  }
+  else if (AEInputCheckCurr(AEVK_D))
+  {
     Dir.R = true;
+  }
   if (AEInputCheckCurr(AEVK_SPACE))
-    if(PosY == 0.0f)
+    if(PosY == Start_Pos_Y)
       Dir.UP = true;
   if (AEInputCheckTriggered(AEVK_RETURN))
     Attack = true;
@@ -35,37 +41,46 @@ void Dragon::Input()
 
 void Dragon::Update()
 {
+  //Call for player input
   Input();
+  //Update position based on direction
   if (Dir.L)
   {
     PosX -= Speed;
-    Transform_.SetScale(-1.0f, 1.0f);
+    Facing = -1.0f;
+    Transform_.SetScale(Facing, 1.0f);
   }
-  if (Dir.R)
+  else if (Dir.R)
   {
     PosX += Speed;
-    Transform_.SetScale(1.0f, 1.0f);
+    Facing = 1.0f;
+    Transform_.SetScale(Facing, 1.0f);
   }
-  Transform_.SetTranslate(PosX, PosY);
   if (Dir.UP)
-    PosY += 30.0f;
+  {
+    PosY += Speed * Jump_Mult;
+    Air_Dist += Speed * Jump_Mult;
+  }
   PosY -= Gravity;
-  if (PosY <= 0.0f)
-    PosY = 0.0f;
+  if (PosY <= Start_Pos_Y)
+    PosY = Start_Pos_Y;
+  //Update position of player
+  Transform_.SetTranslate(PosX, PosY);
   Transform_.Concat();
+  //Collision_.Update_Col_Pos(0.0f, 0.0f); Update collision pos when available
   //Check if attack has been made
   if (Attack)
   {
-    for (int i = 0; i < 5; ++i)
+    for (int i = 0; i < Bullet_Buffer; ++i)
       if (Fireball[i].IsActive())
       {
-        if (Fireball[i].GetDist() <= 200.f)
+        if (Fireball[i].GetDist() <= Bullet_Interval)
           break;
       }
       else
       {
         Fireball[i].SetActive(true);
-        if (Dir.L)
+        if (Facing < 0.0f)
           Fireball[i].SetDir(false);
         else
           Fireball[i].SetDir(true);
@@ -73,54 +88,39 @@ void Dragon::Update()
       }
   }
   //Check for any active fireballs
-  for (int i = 0; i < 5; ++i)
-    if (Fireball[i].IsActive())
-    {
-      if (Fireball[i].GetDir())
-      {
-        Fireball[i].PosX += Fireball[i].GetVelocity().x;
-        Fireball[i].Transform_.SetTranslate(Fireball[i].PosX, Fireball[i].PosY);
-        Fireball[i].Collision_.Update_Col_Pos(Fireball[i].PosX, Fireball[i].PosY);
-        Fireball[i].AddDist(Fireball[i].GetVelocity().x);
-        Fireball[i].Transform_.Concat();
-      }
-      else
-      {
-        Fireball[i].PosX -= Fireball[i].GetVelocity().x;
-        Fireball[i].Transform_.SetTranslate(Fireball[i].PosX, Fireball[i].PosY);
-        Fireball[i].Collision_.Update_Col_Pos(Fireball[i].PosX, Fireball[i].PosY);
-        Fireball[i].AddDist(Fireball[i].GetVelocity().x);
-        Fireball[i].Transform_.Concat();
-      }
-    }
-    else
-    {
-      Fireball[i].PosX = PosX;
-      Fireball[i].PosY = PosY;
-    }
+  for (int i = 0; i < Bullet_Buffer; ++i)
+  {
+    Fireball[i].Pos(PosX, PosY);
+    Fireball[i].Update();
+  }
   //Check for distance limit
-  for (int i = 0; i < 5; ++i)
+  for (int i = 0; i < Bullet_Buffer; ++i)
     if (Fireball[i].IsActive())
     {
-      if (Fireball[i].GetDist() >= 800.0f)
+      if (Fireball[i].GetDist() >= Bullet_Death)
       {
+        std::cout << "dead\n";
+        std::cout << Fireball[i].GetDist()<<std::endl;
         Fireball[i].ResetDist();
         Fireball[i].SetActive(false);
       }
     }
     else
       continue;
-
+  //Reset direction and attack
   Attack = false;
   Dir.L = Dir.R = false;
-  if (PosY >= 150.0f)
+  if (Air_Dist >= Jump_Height)
+  {
     Dir.UP = false;
+    Air_Dist = 0.0f;
+  }
 }
 
 void Dragon::Render()
 {
-  for (int i = 0; i < 5; ++i)
-    if(Fireball[i].IsActive())
-      Fireball[i].Render();
+  for (int i = 0; i < Bullet_Buffer; ++i)
+    Fireball[i].Render();
+  Mfireball.Render();
   GameObject::Render();
 }
