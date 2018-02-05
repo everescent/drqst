@@ -76,25 +76,30 @@ void King_Arthur::Init(void)
 	const char* tex_3s = ".//Textures/holylight.jpg";
 	const char* tex_ja = ".//Textures/light_texture2320.jpg";
 
-	arthur.push_back(Boss_Attack(S_CreateSquare(20.0f, 1.0f, 1.0f, tex_ss), // for single slash
+	arthur.reserve(3);
+
+	arthur.emplace_back(Boss_Attack(S_CreateSquare(20.0f, 1.0f, 1.0f, tex_ss), // for single slash
 					 Col_Comp(0.0f, 0.0f, 5.0f, 5.0f, Rect))); 
 
-	arthur.push_back(Boss_Attack(S_CreateSquare(10.0f, 1.0f, 1.0f, tex_3s), // 1st triple slash 
+	arthur.emplace_back(Boss_Attack(S_CreateSquare(10.0f, 1.0f, 1.0f, tex_3s), // 1st triple slash 
 					 Col_Comp(0.0f, 0.0f, 5.0f, 5.0f, Rect)));
 
-	arthur.push_back(Boss_Attack(S_CreateSquare(10.0f, 1.0f, 1.0f, tex_3s), // 2nd single slash
+	arthur.emplace_back(Boss_Attack(S_CreateSquare(10.0f, 1.0f, 1.0f, tex_3s), // 2nd single slash
 		Col_Comp(0.0f, 0.0f, 5.0f, 5.0f, Rect)));
 
-	arthur.push_back(Boss_Attack(S_CreateSquare(10.0f, 1.0f, 1.0f, tex_3s), // 3rd triple slash
+	arthur.emplace_back(Boss_Attack(S_CreateSquare(10.0f, 1.0f, 1.0f, tex_3s), // 3rd triple slash
 		Col_Comp(0.0f, 0.0f, 5.0f, 5.0f, Rect)));
 
-	arthur.push_back(Boss_Attack(S_CreateSquare(30.0f, 1.0f, 1.0f, tex_ja), // jump attack
+	arthur.emplace_back(Boss_Attack(S_CreateSquare(30.0f, 1.0f, 1.0f, tex_ja), // jump attack
 					 Col_Comp(0.0f, 0.0f, 5.0f, 5.0f, Rect)));
 
 	(void)arthur[0].SetVelocity(AEVec2{ 3.0f, 0.0f }); // velocity of the slashes
 	(void)arthur[1].SetVelocity(AEVec2{ 3.0f, 0.0f }); // velocity of the slashes
 	(void)arthur[2].SetVelocity(AEVec2{ 3.0f, 0.0f }); // velocity of the slashes
 	(void)arthur[3].SetVelocity(AEVec2{ 3.0f, 0.0f }); // velocity of the slashes
+
+	arthur[0].Transform_.SetScale(2.0f, 2.0f); // determine the size of projectile
+	arthur[0].Transform_.Concat();
 
 	for (char i = 0; i < limit; ++i) // spawning location of slashes
 		arthur[i].PosY = -120.0f;
@@ -126,6 +131,7 @@ void King_Arthur::Update(float dt, const Dragon &d)
 	}
 
 	for (int i = 0; i < 4; ++i) // update cooldowns on attacks
+		if(arthur[i].cooldown)
 		arthur[i].Update(0.016f);
 
 // use the dt to update the cooldown of the attacks?
@@ -286,7 +292,7 @@ namespace {
 		arthur.pop_back(); // delete jump attacl
 
 		const char* tex_ja = ".//Textures/light_texture2320.jpg";
-		arthur.push_back(Boss_Attack(S_CreateSquare(30.0f, 1.0f, 1.0f, tex_ja), 
+		arthur.emplace_back(Boss_Attack(S_CreateSquare(30.0f, 1.0f, 1.0f, tex_ja), 
 						 Col_Comp(0.0f, 0.0f, 5.0f, 5.0f, Rect))); // add the 2nd mechanic, still in progress
 
 		phase2 = true;
@@ -295,6 +301,12 @@ namespace {
 	void Jump_Attack(void)
 	{
 		//calculate the physics to jump and attack player
+		// calculate the distance between KA and player current distance?
+		// do a jump for that much distance?
+
+		//bool flag = false; // for jump in progress
+		//static float distance_to_jump = 0.0f; // store distance to jump
+
 	}
 
 	void Single_Slash(void) 
@@ -312,8 +324,11 @@ namespace {
 			arthur[0].cooldown = true; // skill on cooldown
 
 		}
+		
+		arthur[0].Projectile::Pos(); // need to check what the rotation does
+		arthur[0].Projectile::Update(); // check what the sqrt does also
+		arthur[0].Render();
 
-		arthur[0].Pos();
 		arthur[0].cooldown_timer = 2.0f;
 	}
 
@@ -340,7 +355,7 @@ namespace {
 				}
 			}
 		}	
-
+		// issue here if i want to use jacob projectile update and pos
 		if (arthur[1].GetDist() > interval || ! (arthur[1].IsActive() ) )
 		{
 			//fire the second projectile once the first 1 travels 50 pixels
