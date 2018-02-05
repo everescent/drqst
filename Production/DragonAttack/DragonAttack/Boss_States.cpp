@@ -1,4 +1,6 @@
 #include "Boss_States.h"
+#include <cstdlib>
+#include <ctime>
 #include <iostream>
 
 void Boss_Attack::Update(float dt)  //has to check cooldown_timer
@@ -37,4 +39,11 @@ void Boss_Attack::Pos()
 	// show it on screen
 	this->Render();
 
+}
+
+int Get_Random_Num(int range)
+{
+	srand((unsigned) time(NULL));
+
+	return rand() % range + 1;
 }

@@ -31,3 +31,6 @@ struct Boss_Attack : public Projectile
 	void Pos(); 
 
 };
+
+//returns a random number within a range
+int Get_Random_Num(int range);
