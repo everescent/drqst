@@ -20,7 +20,7 @@ Technology is prohibited.
 
 Merlin::Merlin()
 //Initialize characters class
-  :Characters{ S_CreateSquare(100.0f, 1.0f, 1.0f, "merlin.png"), Merlin_HP,
+  :Characters{ S_CreateSquare(100.0f, 1.0f, 1.0f, "merlin.png"), 100,
   Col_Comp{ Merlin_Start_X - 100.0f, Merlin_Start_Y - 100.0f,
   Merlin_Start_X + 100.0f, Merlin_Start_Y + 100.0f, Rect } },
   //Initialize data members
@@ -30,7 +30,8 @@ Merlin::Merlin()
   M_Melee{ Sprite{}, Col_Comp{} },
   Eball{ Sprite{ S_CreateSquare(50.0f, 1.0f, 1.0f, "energyball.png") },
          Col_Comp{ Merlin_Start_X, Merlin_Start_Y, 50, Circle } },
-  Spread_Eball{}, Arrow{}, Blink_{}, Attack_Interval{ 0 }
+  Spread_Eball{}, Arrow{}, Blink_{}, Attack_Interval{ 0 },
+  MagicCircle{ S_CreateSquare(150.0f, 1.0f, 1.0f, "magic_circle.png") }
 {
   //Set spawn position
   PosX = Merlin_Start_X;
@@ -38,6 +39,8 @@ Merlin::Merlin()
   Transform_.SetTranslate(PosX, PosY);
   Transform_.Concat();
   Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+  //Initialize Magic Circle
+  MagicCircle.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
   //Melee has no special render so always active
   M_Melee.SetActive(true);
   //Initialize Single Energy Ball
@@ -56,7 +59,10 @@ Merlin::Merlin()
     Arrow.push_back(Boss_Attack{ S_CreateSquare(30.0f, 1.0f, 1.0f, "arrow.png"),
       Col_Comp{ Merlin_Start_X, Merlin_Start_Y, 30, Circle } });
   for (int i = 0; i < A_Rain_Buffer; ++i)
+  {
     Arrow[i].Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+    Arrow[i].SetVelocity(AEVec2{ 0.0f, -20.0f });
+  }
 }
 
 void Merlin::Idle(const Dragon &player)
@@ -151,7 +157,18 @@ void Merlin::Sp_Eball(const Dragon &player)
 void Merlin::A_Rain(const Dragon &player)
 {
   UNREFERENCED_PARAMETER(player);
+  srand((unsigned int)time(nullptr));
   std::cout << "Arrow Rain\n";
+  if(castime == 0)
+  for (int i = 0; i < A_Rain_Buffer; ++i)
+  {
+    if(i % 2)
+      Arrow[i].PosX += (float)(rand() % 50);
+    else
+      Arrow[i].PosX -= (float)(rand() % 50);
+    Arrow[i].SetActive(true);
+    Arrow[i].cooldown = true;
+  }
 }
 
 void Merlin::Attack(const Dragon &player)
@@ -216,11 +233,11 @@ bool Merlin::CheckAttack(const Dragon &player)
     CanAttack = true;
     M_Att_Curr = MELEE;
   }
-  /*else if (!Arrow[0].cooldown && Get_HP() > M_Phase2_HP)
+  else if (!Arrow[A_Rain_Buffer - 1].cooldown && Get_HP() <= M_Phase2_HP)
   {
     CanAttack = true;
     M_Att_Curr = ARROW_RAIN;
-  }*/
+  }
   else if (!Spread_Eball[0].cooldown)
   {
     CanAttack = true;
@@ -275,6 +292,7 @@ void Merlin::Update(const Dragon &player)
     }
   }
   //Attack cooldown updates here
+  //Single Shot
   if (Eball.cooldown)
   {
     if (Eball.IsActive())
@@ -298,6 +316,7 @@ void Merlin::Update(const Dragon &player)
   Eball.Projectile::Pos();
   Eball.Projectile::Pos(PosX, PosY);
   Eball.Projectile::Update();
+  //Spread Shot
   if (Spread_Eball[0].cooldown)
   {
     if (Spread_Eball[0].IsActive())
@@ -327,6 +346,61 @@ void Merlin::Update(const Dragon &player)
     Spread_Eball[i].Projectile::Pos(PosX, PosY);
     Spread_Eball[i].Projectile::Update();
   }
+  //Arrow Rain
+  if (Arrow[A_Rain_Buffer - 1].cooldown)
+  {
+    if (Arrow[A_Rain_Buffer - 1].IsActive())
+    {
+      if (Arrow[A_Rain_Buffer - 1].GetDist() >= A_Rain_Death)
+      {
+        for (int i = 0; i < A_Rain_Buffer; ++i)
+        {
+          Arrow[i].ResetDist();
+          Arrow[i].SetActive(false);
+          castime = 100;
+        }
+      }
+    }
+    else for (int i = 0; i < A_Rain_Buffer; ++i)
+    {
+      --Arrow[i].cooldown_timer;
+      if (Arrow[i].cooldown_timer <= 0.0f)
+      {
+        Arrow[i].cooldown = false;
+        Arrow[i].cooldown_timer = A_Rain_CD_Time;
+      }
+    }
+  }
+  if (!Arrow[A_Rain_Buffer - 1].IsActive())
+  {
+    MC_Pos.SetTranslate(player.PosX, 260.0f);
+    MC_Pos.Concat();
+  }
+  if (M_Att_Curr == ARROW_RAIN)
+    --castime;
+  if (castime <= 0)
+    castime = 0;
+  for (int i = 0; i < A_Rain_Buffer; ++i)
+  {
+    if (i == 0)
+    {
+      Arrow[i].Projectile::Pos();
+      Arrow[i].Projectile::Pos(player.PosX, 360.0f);
+      Arrow[i].Projectile::Update();
+      continue;
+    }
+    if (Arrow[i - 1].GetDist() < 100.0f)
+    {
+      Arrow[i].Projectile::Pos(player.PosX, 360.0f);
+    }
+    else
+    {
+      Arrow[i].Projectile::Pos();
+      Arrow[i].Projectile::Pos(player.PosX, 260.0f);
+      Arrow[i].Projectile::Update();
+    }
+  }
+  //Melee
   if (M_Melee.cooldown)
   {
     --M_Melee.cooldown_timer;
@@ -346,6 +420,13 @@ void Merlin::Render()
   {
     Spread_Eball[i].Render();
   }
+  for (int i = 0; i < A_Rain_Buffer; ++i)
+  {
+    if(M_Att_Curr == ARROW_RAIN)
+      MagicCircle.Render_Object(MC_Pos);
+    Arrow[i].Render();
+  }
+
   //Renders Merlin
   GameObject::Render();
 }

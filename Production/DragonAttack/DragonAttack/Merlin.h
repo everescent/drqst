@@ -43,7 +43,7 @@ const float Eball_Death  { 1000.0f }; //How far the energy ball travels
 const float Spread_CD_Time{ 240.0f  }; //Spread shot cooldown time
 const float Spread_Death  { 1000.0f }; //How far the spread shot travels
 
-const int   A_Rain_Buffer { 100     };
+const int   A_Rain_Buffer { 30     };
 const float A_Rain_CD_Time{ 360.0f  };
 const float A_Rain_Death  { 1000.0f };
 
@@ -85,6 +85,7 @@ private:
   void CheckState(const Dragon &player);              //Sets current state to next, checks for next state
   bool CheckAttack(const Dragon &player);             //Check if can attack, and sets the appropriate 
                                                       //function for it; Returns true if can attack, else false
+  int castime;              //Arrow rain cast time
   int Attack_Interval;      //Time between attacks
   Boss_Action_State M_Curr; //Current state
   Boss_Action_State M_Next; //Next state
@@ -99,7 +100,9 @@ private:
     int CD_Time  { Blink_CD_Time }; //Cooldown time
     bool Cooldown{     false     }; //Check if cooldown is active
   };
-  Blink Blink_; //Blink utilities
+  Blink Blink_;       //Blink utilities
+  Sprite MagicCircle; //Magic circle sprite
+  Transform MC_Pos;   //Magic circle transform
 
   //Attack Functions START///////////////////////////////////////////////////////////////
   void Melee(const Dragon &player);    //Melee attack function
