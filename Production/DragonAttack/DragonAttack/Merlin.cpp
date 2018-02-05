@@ -1,3 +1,18 @@
+/* Start Header ************************************************************************/
+/*!
+\file       Merlin.cpp
+\author     Jacob Lim
+\par email: jacob.lim\@digipen.edu
+\brief
+  Merlin class member functions defined here.
+
+Copyright (C) 20xx DigiPen Institute of Technology.
+Reproduction or disclosure of this file or its contents
+without the prior written consent of DigiPen Institute of
+Technology is prohibited.
+*/
+/* End Header **************************************************************************/
+
 #include "Merlin.h"
 #include <ctime>
 #include <cstdlib>
@@ -289,16 +304,13 @@ void Merlin::Update(const Dragon &player)
         }
       }
     }
-    else
+    else for (int i = 0; i < 3; ++i)
     {
-      for (int i = 0; i < 3; ++i)
+      --Spread_Eball[i].cooldown_timer;
+      if (Spread_Eball[i].cooldown_timer <= 0.0f)
       {
-        --Spread_Eball[i].cooldown_timer;
-        if (Spread_Eball[i].cooldown_timer <= 0.0f)
-        {
-          Spread_Eball[i].cooldown = false;
-          Spread_Eball[i].cooldown_timer = Spread_CD_Time;
-        }
+        Spread_Eball[i].cooldown = false;
+        Spread_Eball[i].cooldown_timer = Spread_CD_Time;
       }
     }
   }

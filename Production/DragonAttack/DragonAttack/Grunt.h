@@ -20,6 +20,11 @@ class Grunt : public  Characters
 {
 private: 
 
+	void MoveTowardPlayer(Grunt *grunt);
+
+	void AttackPlayer(Grunt *grunt);
+
+	void Idle(Grunt *grunt);
 public:
 	/******************************************************************************/
 	/*!
@@ -34,8 +39,8 @@ public:
 	No return.
 	*/
 	/******************************************************************************/
-	Grunt(Sprite&& t_sprite);
-
+	//Grunt(Sprite&& t_sprite);
+	Grunt();
 	/******************************************************************************/
 	/*!
 	\fn         Grunt
@@ -55,10 +60,9 @@ public:
 	/******************************************************************************/
 	//Grunt(Sprite&& t_sprite, const float x, const float y);
 
-	void Update(float dt);
-	void Update() {}; // ignored
+	void Update(float dt, Grunt *grunt);
+	void Update() override {}; // ignored
 
-	void G_Update(Grunt *grunt);
 	void Pos(Grunt *grunt);
 
 	//void Idle(Grunt *grunt);
@@ -76,7 +80,7 @@ public:
 No return.
 */
 /******************************************************************************/
-Grunt *Create_Grunt();
+//Grunt *Create_Grunt();
 
 /******************************************************************************/
 /*!
@@ -90,10 +94,4 @@ Grunt *Create_Grunt();
 No return.
 */
 /******************************************************************************/
-void Delete_Grunt(Grunt* grunt);
-
-void MoveTowardPlayer(Grunt *grunt);
-
-void AttackPlayer(Grunt *grunt);
-
-void Idle(Grunt *grunt);
+//void Delete_Grunt(Grunt* grunt);
