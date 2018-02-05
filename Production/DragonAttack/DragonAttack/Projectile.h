@@ -15,8 +15,9 @@ Technology is prohibited.
 
 #pragma once
 #include "GameObject.h"
+#include "f_sqrt.h"
 #include <utility>
-#include <cmath>
+//#include <cmath>
 
 class Projectile : public GameObject {
 
@@ -29,8 +30,9 @@ public:
     {
       Transform_.SetTranslate(PosX, PosY);
       Collision_.Update_Col_Pos(PosX, PosY);
+      //Pythagoras distance equation
       AddDist(
-       sqrtf( (GetVelocity().x) * (GetVelocity().x)
+       f_sqrt( (GetVelocity().x) * (GetVelocity().x)
                                 +
               (GetVelocity().y) * (GetVelocity().y) )
       );
@@ -57,7 +59,7 @@ public:
       }
     }
   }
-  //Updates position of projectile
+  //Updates position of projectile if not active
   void Pos(const float &X, const float &Y)
   {
     if (!IsActive())

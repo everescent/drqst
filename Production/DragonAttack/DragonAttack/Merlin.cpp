@@ -50,6 +50,13 @@ Merlin::Merlin()
                            Col_Comp{ Merlin_Start_X, Merlin_Start_Y, 30, Circle } });
   for (int i = 0; i < 3; ++i)
     Spread_Eball[i].Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+  //Initialize Arrow Rain
+  Arrow.reserve(A_Rain_Buffer);
+  for (int i = 0; i < A_Rain_Buffer; ++i)
+    Arrow.push_back(Boss_Attack{ S_CreateSquare(30.0f, 1.0f, 1.0f, "arrow.png"),
+      Col_Comp{ Merlin_Start_X, Merlin_Start_Y, 30, Circle } });
+  for (int i = 0; i < A_Rain_Buffer; ++i)
+    Arrow[i].Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 }
 
 void Merlin::Idle(const Dragon &player)

@@ -29,7 +29,7 @@ enum PowerUp {
 };
 
 const int   Bullet_Buffer  { 10      }; //Amount of fireballs at any one time
-const float Bullet_Interval{ 500.0f  }; //Minimum distance between each fireball
+const float Bullet_Interval{ 400.0f  }; //Minimum distance between each fireball
 const float Bullet_Death   { 900.0f  }; //Distance when bullet dies
 const float Bullet_Speed   { 20.0f   }; //How fast a bullet travels
 

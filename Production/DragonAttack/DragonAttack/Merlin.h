@@ -43,6 +43,10 @@ const float Eball_Death  { 1000.0f }; //How far the energy ball travels
 const float Spread_CD_Time{ 240.0f  }; //Spread shot cooldown time
 const float Spread_Death  { 1000.0f }; //How far the spread shot travels
 
+const int   A_Rain_Buffer { 100     };
+const float A_Rain_CD_Time{ 360.0f  };
+const float A_Rain_Death  { 1000.0f };
+
 const float Melee_CD_Time{ 60.0f }; //Melee cooldown time
 
 const AEVec2 Blink_Pos_1{ -300.0f, 100.0f}; //(Point) 1st blink postion
@@ -79,8 +83,8 @@ private:
   void(Merlin::*Merlin_Attack)(const Dragon &player); //Pointer to current attack function
   void(Merlin::*Merlin_State)(const Dragon &player);  //Pointer to current state function
   void CheckState(const Dragon &player);              //Sets current state to next, checks for next state
-  bool CheckAttack(const Dragon &player);             /*Sets current attack state to next,
-                                                        checks for next attack state*/
+  bool CheckAttack(const Dragon &player);             //Check if can attack, and sets the appropriate 
+                                                      //function for it; Returns true if can attack, else false
   int Attack_Interval;      //Time between attacks
   Boss_Action_State M_Curr; //Current state
   Boss_Action_State M_Next; //Next state
