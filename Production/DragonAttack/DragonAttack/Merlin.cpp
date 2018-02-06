@@ -20,7 +20,7 @@ Technology is prohibited.
 
 Merlin::Merlin()
 //Initialize characters class
-  :Characters{ S_CreateSquare(100.0f, 1.0f, 1.0f, "merlin.png"), 100,
+  :Characters{ S_CreateSquare(100.0f, 1.0f, 1.0f, "merlin.png"), Merlin_HP,
   Col_Comp{ Merlin_Start_X - 100.0f, Merlin_Start_Y - 100.0f,
   Merlin_Start_X + 100.0f, Merlin_Start_Y + 100.0f, Rect } },
   //Initialize data members
@@ -52,7 +52,10 @@ Merlin::Merlin()
     Spread_Eball.push_back(Boss_Attack{ S_CreateSquare(30.0f, 1.0f, 1.0f, "energyball.png"), 
                            Col_Comp{ Merlin_Start_X, Merlin_Start_Y, 30, Circle } });
   for (int i = 0; i < 3; ++i)
+  {
     Spread_Eball[i].Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+    Spread_Eball[i].cooldown_timer = Spread_CD_Time;
+  }
   //Initialize Arrow Rain
   Arrow.reserve(A_Rain_Buffer);
   for (int i = 0; i < A_Rain_Buffer; ++i)
@@ -62,9 +65,15 @@ Merlin::Merlin()
   {
     Arrow[i].Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
     Arrow[i].SetVelocity(AEVec2{ 0.0f, -20.0f });
+    Arrow[i].cooldown_timer = A_Rain_CD_Time;
   }
 }
-
+//Clears the vector memory
+Merlin::~Merlin()
+{
+  Arrow.clear();
+  Spread_Eball.clear();
+}
 void Merlin::Idle(const Dragon &player)
 {
   UNREFERENCED_PARAMETER(player);
@@ -74,10 +83,10 @@ void Merlin::Idle(const Dragon &player)
 void Merlin::Move(const Dragon &player)
 {
   UNREFERENCED_PARAMETER(player);
-  /*This will move merlin to the 3 different spots*/
+  //This will move merlin to the 3 different spots
   srand((unsigned int)time(nullptr));
   int RNG = rand() % 100;
-
+  //Each position has a 1/3 chance to blink to
   if (RNG < 33 && PosX != Blink_Pos_1.x)
   {
     PosX = Blink_Pos_1.x;
@@ -120,6 +129,7 @@ void Merlin::S_Eball(const Dragon &player)
   //Get the displacement betwwen player and Merlin
   AEVec2 Displacement{ (player.PosX - PosX ),
                        (player.PosY - PosY) };
+  //Normalize and scale displacement
   AEVec2Normalize(&Displacement, &Displacement);
   AEVec2Scale(&Displacement, &Displacement, 6.0f);
   Eball.SetActive(true);
@@ -132,18 +142,23 @@ void Merlin::Sp_Eball(const Dragon &player)
 {
   UNREFERENCED_PARAMETER(player);
   std::cout << "Spread Shot Energy Ball\n";
+  //First vector points towards player
   AEVec2 Displacement0{ (player.PosX - PosX),
                        (player.PosY - PosY) };
+  //Second vector points above player
   AEVec2 Displacement1{ (player.PosX - PosX),
                         (player.PosY - PosY) + 100.0f};
+  //Third vector points below player
   AEVec2 Displacement2{ (player.PosX - PosX),
-                        (player.PosY - PosY)  - 100.0f};
+                        (player.PosY - PosY) - 100.0f};
+  //Normalize and scale all vectors
   AEVec2Normalize(&Displacement0, &Displacement0);
   AEVec2Scale(&Displacement0, &Displacement0, 6.0f);
   AEVec2Normalize(&Displacement1, &Displacement1);
   AEVec2Scale(&Displacement1, &Displacement1, 6.0f);
   AEVec2Normalize(&Displacement2, &Displacement2);
   AEVec2Scale(&Displacement2, &Displacement2, 6.0f);
+  //Set all displacement vectors to be the velocity
   Spread_Eball[0].SetVelocity(Displacement0);
   Spread_Eball[1].SetVelocity(Displacement1);
   Spread_Eball[2].SetVelocity(Displacement2);
@@ -157,11 +172,14 @@ void Merlin::Sp_Eball(const Dragon &player)
 void Merlin::A_Rain(const Dragon &player)
 {
   UNREFERENCED_PARAMETER(player);
+  //Seed rand based on time
   srand((unsigned int)time(nullptr));
   std::cout << "Arrow Rain\n";
+  //Only shoot when cast time completed
   if(castime == 0)
   for (int i = 0; i < A_Rain_Buffer; ++i)
   {
+    //Shoots arrows within +- 50 of the player's last known position
     if(i % 2)
       Arrow[i].PosX += (float)(rand() % 50);
     else
@@ -222,10 +240,10 @@ void Merlin::CheckState(const Dragon &player)
 bool Merlin::CheckAttack(const Dragon &player)
 {
   bool CanAttack{ false };
-
+  //Check if attack interval is over
   if (Attack_Interval > 0)
     return CanAttack;
-
+  //Check if payer within melee range
   if (player.PosY >= PosY - 50.0f && player.PosY <= PosY + 50.0f
     && player.PosX <= PosX + 50.0f && player.PosX >= PosX - 50.0f
     && !M_Melee.cooldown)
@@ -233,16 +251,19 @@ bool Merlin::CheckAttack(const Dragon &player)
     CanAttack = true;
     M_Att_Curr = MELEE;
   }
+  //Check if arrow rain is available for cast
   else if (!Arrow[A_Rain_Buffer - 1].cooldown && Get_HP() <= M_Phase2_HP)
   {
     CanAttack = true;
     M_Att_Curr = ARROW_RAIN;
   }
+  //Check if Spread Shot Energy Ball is available for cast
   else if (!Spread_Eball[0].cooldown)
   {
     CanAttack = true;
     M_Att_Curr = SPREAD_EBALL;
   }
+  //Check if Energy Ball is available for cast
   else if (!Eball.cooldown)
   {
     CanAttack = true;
@@ -250,7 +271,7 @@ bool Merlin::CheckAttack(const Dragon &player)
   }
   else
     return CanAttack;
-
+  //Set attack function pointer to respective attack function
   switch (M_Att_Curr)
   {
     case ARROW_RAIN:
@@ -305,12 +326,7 @@ void Merlin::Update(const Dragon &player)
     }
     else
     {
-      --Eball.cooldown_timer;
-      if (Eball.cooldown_timer <= 0.0f)
-      {
-        Eball.cooldown = false;
-        Eball.cooldown_timer = Eball_CD_Time;
-      }
+      Eball.Update(1.0f);
     }
   }
   Eball.Projectile::Pos();
@@ -332,12 +348,7 @@ void Merlin::Update(const Dragon &player)
     }
     else for (int i = 0; i < 3; ++i)
     {
-      --Spread_Eball[i].cooldown_timer;
-      if (Spread_Eball[i].cooldown_timer <= 0.0f)
-      {
-        Spread_Eball[i].cooldown = false;
-        Spread_Eball[i].cooldown_timer = Spread_CD_Time;
-      }
+      Spread_Eball[i].Update(1.0f);
     }
   }
   for (int i = 0; i < 3; ++i)
@@ -363,12 +374,7 @@ void Merlin::Update(const Dragon &player)
     }
     else for (int i = 0; i < A_Rain_Buffer; ++i)
     {
-      --Arrow[i].cooldown_timer;
-      if (Arrow[i].cooldown_timer <= 0.0f)
-      {
-        Arrow[i].cooldown = false;
-        Arrow[i].cooldown_timer = A_Rain_CD_Time;
-      }
+      Arrow[i].Update(1.0f);
     }
   }
   if (!Arrow[A_Rain_Buffer - 1].IsActive())

@@ -32,29 +32,29 @@ enum Merlin_Attack_State {
 //Alias for Merlin Attack State
 using MAS = Merlin_Attack_State;
 
-const int Merlin_HP       { 500 }; //Merlin's HP
-const int M_Phase2_HP     { 250 }; //Merlin's phase 2 HP
-const int Blink_CD_Time   { 360 }; //Cooldown time for Blink
-const int Merlin_Att_Inter{ 120 }; //Merlin's Attack Interval
+const int    Merlin_HP       { 500 };     //Merlin's HP
+const int    M_Phase2_HP     { 250 };     //Merlin's phase 2 HP
+const int    Blink_CD_Time   { 360 };     //Cooldown time for Blink
+const int    Merlin_Att_Inter{ 120 };     //Merlin's Attack Interval
 
-const float Eball_CD_Time{ 120.0f  }; //Energy Ball cooldown time
-const float Eball_Death  { 1000.0f }; //How far the energy ball travels
+const float  Eball_CD_Time   { 120.0f  }; //Energy Ball cooldown time
+const float  Eball_Death     { 1000.0f }; //How far the energy ball travels
 
-const float Spread_CD_Time{ 240.0f  }; //Spread shot cooldown time
-const float Spread_Death  { 1000.0f }; //How far the spread shot travels
+const float  Spread_CD_Time  { 240.0f  }; //Spread shot cooldown time
+const float  Spread_Death    { 1000.0f }; //How far the spread shot travels
 
-const int   A_Rain_Buffer { 30     };
-const float A_Rain_CD_Time{ 360.0f  };
-const float A_Rain_Death  { 1000.0f };
+const int    A_Rain_Buffer   { 30      }; //How many arrows shot
+const float  A_Rain_CD_Time  { 360.0f  }; //Arrow rain cooldown time
+const float  A_Rain_Death    { 1000.0f }; //Arrow death
 
-const float Melee_CD_Time{ 60.0f }; //Melee cooldown time
+const float  Melee_CD_Time   { 60.0f };   //Melee cooldown time
 
-const AEVec2 Blink_Pos_1{ -300.0f, 100.0f}; //(Point) 1st blink postion
-const AEVec2 Blink_Pos_2{ 300.0f, 100.0f }; //(Point) 2nd blink postion
-const AEVec2 Blink_Pos_3{ 0.0f, 180.0f   }; //(Point) 3rd blink postion
+const AEVec2 Blink_Pos_1     { -300.0f, 100.0f}; //(Point) 1st blink postion
+const AEVec2 Blink_Pos_2     { 300.0f, 100.0f }; //(Point) 2nd blink postion
+const AEVec2 Blink_Pos_3     { 0.0f, 180.0f   }; //(Point) 3rd blink postion
 
-const float Merlin_Start_X{ 320.0f  }; //Merlin default position X
-const float Merlin_Start_Y{ -120.0f }; //Merlin default position Y
+const float  Merlin_Start_X  { 320.0f  }; //Merlin default position X
+const float  Merlin_Start_Y  { -120.0f }; //Merlin default position Y
 
 class Merlin : public Characters {
 
@@ -78,6 +78,7 @@ public:
   const std::vector<Boss_Attack> &GetArrow() const { return Arrow; }
   //Returns Eball to check for collision
   const Projectile &GetEball() const { return Eball; }
+  ~Merlin();
 
 private:
   void(Merlin::*Merlin_Attack)(const Dragon &player); //Pointer to current attack function

@@ -90,6 +90,10 @@ public:
     Mfireball.SetVelocity(AEVec2{ Bullet_Speed / 2, 0.0f });
     Mfireball.Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
   }
+  ~Dragon()
+  {
+    Fireball.clear();
+  }
 private:
 
   bool Attack;    //Check if player is attacking

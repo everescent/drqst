@@ -17,7 +17,6 @@ Technology is prohibited.
 #include "GameObject.h"
 #include "f_sqrt.h"
 #include <utility>
-//#include <cmath>
 
 class Projectile : public GameObject {
 

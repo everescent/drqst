@@ -15,6 +15,7 @@ Technology is prohibited.
 
 #include "Dragon.h"
 #include "Camera.h"
+#include "Input_Handler.h"
 
 void Dragon::ApplyPowerUP()
 {
@@ -23,6 +24,27 @@ void Dragon::ApplyPowerUP()
 
 void Dragon::Input()
 {
+  //const std::vector <int> &Input = Input::Get_User_Input();
+
+  //for (unsigned i = 0; i < Input.size(); ++i)
+  //{
+  //  switch (Input[i])
+  //  {
+  //    case Input::go_left:
+  //      Dir.L = true;
+  //      break;
+  //    case Input::go_right:
+  //      Dir.R = true;
+  //      break;
+  //    case Input::jump_up:
+  //      if (PosY == Start_Pos_Y)
+  //        Dir.UP = true;
+  //      break;
+  //    case Input::fire:
+  //      Attack = true;
+  //      break;
+  //  }
+  //}
   if (AEInputCheckCurr(AEVK_A))
   {
     Dir.L = true;
