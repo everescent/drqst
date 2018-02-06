@@ -109,70 +109,64 @@ void Clear_Buffer(void)
 	input_tail = nullptr;
 }
 */
+namespace Input {
 
-void Get_User_Input(void)
-{
-	using namespace Input;
-
-	AEInputUpdate();
-
-	static float x = 0;
+	std::vector <int> input;
 	
-	if (AEInputCheckCurr(go_right))
+	const std::vector <int> &Get_User_Input(void)
 	{
-		//Enqueue(go_right);
+		using namespace Input;
 
-		CamFollow(x, 3);
+		AEInputUpdate();
 
-		x += 3;
+		static float x = 0;
+
+		if (AEInputCheckCurr(go_right))
+		{
+			input.push_back(go_right);
+		}
+
+		if (AEInputCheckCurr(go_left))
+		{
+			input.push_back(go_left);
+		}
+
+		if (AEInputCheckCurr(go_up))
+		{
+			input.push_back(go_up);
+		}
+
+		if (AEInputCheckCurr(go_down))
+		{
+			input.push_back(go_down);
+		}
+
+		if (AEInputCheckTriggered(jump_up))
+		{
+			input.push_back(jump_up);
+		}
+
+		if (AEInputCheckTriggered(fire))
+		{
+			input.push_back(fire);
+		}
+
+		if (AEInputCheckTriggered(special))
+		{
+			input.push_back(special);
+		}
+
+		// if esc key or the close button was triggered, stop the game
+		if (AEInputCheckTriggered(quit_game) || 0 == AESysDoesWindowExist())
+		{
+			GSM::current = GS_QUIT;
+		}
+
+		return input;
 	}
 
-	if (AEInputCheckCurr(go_left))
+	void ClearBuffer(void)
 	{
-		//Enqueue(go_left);
-
-		CamFollow(x, -3);
-
-		x += -3;
-	}
-
-	if (AEInputCheckCurr(go_up))
-	{
-		//Enqueue(go_left);
-
-		CamFollow(x, -3);
-
-		x += -3;
-	}
-
-	if (AEInputCheckCurr(go_down))
-	{
-		//Enqueue(go_left);
-
-		CamFollow(x, 3);
-
-		x += 3;
-	}
-
-	if(AEInputCheckTriggered(jump_up))
-	{
-		//Enqueue(jump_up);
-
-	}
-
-	if (AEInputCheckTriggered(fire))
-	{
-		//Enqueue(fire);
-	}
-
-	if (AEInputCheckTriggered(special))
-	{
-		//Enqueue(special);
-	}
-
-	// if esc key or the close button was triggered, stop the game
-	if (AEInputCheckTriggered(quit_game) || 0 == AESysDoesWindowExist())
-	{
-		GSM::current = GS_QUIT;
+		input.clear();
 	}
 }
