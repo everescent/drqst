@@ -6,7 +6,7 @@
 \brief
 Manages the game state
 
-Copyright (C) 20xx DigiPen Institute of Technology.
+Copyright (C) 2018 DigiPen Institute of Technology.
 Reproduction or disclosure of this file or its contents
 without the prior written consent of DigiPen Institute of
 Technology is prohibited.
@@ -81,7 +81,7 @@ namespace GSM
 
 	void Update_and_Draw(float dt)
 	{
-		Get_User_Input();
+	    Input::Get_User_Input();
 
 		
 		if (GSF[current].Update != nullptr)

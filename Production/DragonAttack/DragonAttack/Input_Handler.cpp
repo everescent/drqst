@@ -119,8 +119,6 @@ namespace Input {
 
 		AEInputUpdate();
 
-		static float x = 0;
-
 		if (AEInputCheckCurr(go_right))
 		{
 			input.push_back(go_right);

@@ -67,7 +67,7 @@ public:
 	/******************************************************************************/
 	King_Arthur();
 
-	
+	~King_Arthur(); // destructor
 	void Update(float dt, const Dragon &player);
 	void Update() override {}; // ignored
 };

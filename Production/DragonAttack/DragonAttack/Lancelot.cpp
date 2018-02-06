@@ -3,6 +3,16 @@
 #include <iostream>
 #include <vector>
 
+/*
+mad enhancement 
+move faster
+faster attack speed 
+
+phase 2
+arondight longer reach?
+*/
+
+
 namespace
 {
 	std::vector<Boss_Attack> lancelot; // array to store lancelot attack
@@ -34,18 +44,25 @@ void Lancelot::Init()
 
 void Lancelot::Idle(float dt)
 {
+	UNREFERENCED_PARAMETER(dt);
 }
 
 void Lancelot::Attack(const Dragon &d, float dt)
 {
+	UNREFERENCED_PARAMETER(d);
+	UNREFERENCED_PARAMETER(dt);
 }
 
 void Lancelot::Moving(const Dragon &d, float dt)
 {
+	UNREFERENCED_PARAMETER(d);
+	UNREFERENCED_PARAMETER(dt);
 }
 
 void Lancelot::Update(const Dragon &d, float dt)
 {
+	UNREFERENCED_PARAMETER(d);
+	UNREFERENCED_PARAMETER(dt);
 }
 
 void Lancelot::Lancelot_Phase2(void)

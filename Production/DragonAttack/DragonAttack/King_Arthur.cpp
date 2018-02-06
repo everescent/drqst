@@ -23,7 +23,7 @@ namespace {
 
 	std::vector <Characters> spawn_mobs; //an array to store the mobs to be spawn
 
-	Boss_Action_State current_action = MOVING; // different states of boss arthur
+	Boss_Action_State current_action = IDLE; // different states of boss arthur
 
 	const int health = 3000; // initial hp for king arthur
 
@@ -34,6 +34,8 @@ namespace {
 	const int range_limit = 300; // range limit for slash
 
 	const char limit = 5; // num of king arthur attacks
+
+	char behavior_swap = 0; // switch between idling and moving
 	
 }
 
@@ -101,6 +103,12 @@ void King_Arthur::Update(float dt, const Dragon &d)
 		King_Arthur_Phase2();
 	}
 
+	if (behavior_swap == 3)
+	{
+		current_action = MOVING;  // switch state to moving
+		behavior_swap = 0;        // reset the counter
+	}
+
 	// switch between the boss states
 	switch (current_action)
 	{
@@ -117,8 +125,7 @@ void King_Arthur::Update(float dt, const Dragon &d)
 		break;
 	}
 
-	for (int i = 0; i < 4; ++i) // update cooldowns on attacks
-		if(arthur[i].cooldown)
+	for (int i = 0; i < limit; ++i) // update cooldowns on attacks
 			arthur[i].Update(0.016f);
 
 }
@@ -139,11 +146,11 @@ No return.
 void King_Arthur::Idle(float dt)
 {
 	UNREFERENCED_PARAMETER(dt);
-	static float idle = 3.0f; //determine how long king arthurs stops
+	static float idle = 2.0f; //determine how long king arthurs stops
 
 	if (!idle) //sets the timer to 3 seconds 
 	{
-		idle = 3.0f;
+		idle = 2.0f;
 	}
 	
 	//changes state to attack once idling is finished, reset idle
@@ -155,10 +162,10 @@ void King_Arthur::Moving(const Dragon &d, float dt)
 {
 	UNREFERENCED_PARAMETER(dt); // need to check for platform in phsae 2
 	
-	static float move_duration = 1.5f; // duration KA moves
+	static float move_duration = 3.0f; // duration KA moves
 	
 	if (!move_duration) //set the timer for moving
-		move_duration = 1.5f;
+		move_duration = 3.0f;
 	
 	if (d.PosX - this->PosX == 0) // character and boss intersect
 		this->Set_Direction(STAY);
@@ -193,9 +200,16 @@ void King_Arthur::Moving(const Dragon &d, float dt)
 void King_Arthur::Attack(const Dragon &d, float dt)
 {
 	UNREFERENCED_PARAMETER(dt);
+	UNREFERENCED_PARAMETER(d);
 
 	KA_MoveSet currAttk = SINGLE_SLASH; //default attack for king arthur
 	
+	if (d.PosX - this->PosX == 0) // character and boss intersect
+		this->Set_Direction(STAY);
+	else
+		//determine if dragon is right or left of king arthur
+		(d.PosX - this->PosX) > 0 ? this->Set_Direction(RIGHT) :
+		this->Set_Direction(LEFT);
 
 	if (this->Get_Direction() == RIGHT) // set all attacks to go right
 	{
@@ -255,8 +269,6 @@ void King_Arthur::Jump_Attack(void)
 	// doing a temporary dash attack for now
 	if (arthur[4].cooldown) // skill still on cooldown
 		return;
-	
-	static float dash_duration = 1.0f; // temporary storage cause no collision
 
 	static const int left_boundary = -600; // boundaries of charge attack
 	static const int right_boundary = 600; // boundaries of charge attack
@@ -271,13 +283,16 @@ void King_Arthur::Jump_Attack(void)
 		this->PosX -= 20.0f; // move KA to the left
 		(void)this->Transform_.SetTranslate(PosX, PosY);
 	}
+	else
+	{
+		current_action = IDLE;
+		arthur[4].cooldown = true;
+		++behavior_swap;
+	}
 
 	this->Transform_.Concat();
 
 	arthur[4].cooldown_timer = 10.0f; // cooldown of jump attacl
-
-	dash_duration <= 0 ? current_action = IDLE, dash_duration = 0,
-		arthur[4].cooldown = true : dash_duration -= 0.016f;
 }
 
 void King_Arthur::Single_Slash(void)
@@ -299,6 +314,8 @@ void King_Arthur::Single_Slash(void)
 		arthur[0].PosX = 0.0f;  // to remove flicker
 
 		arthur[0].cooldown = true; // skill on cooldown
+
+		++behavior_swap;
 
 	}
 
@@ -338,6 +355,7 @@ void King_Arthur::Triple_Slash(void)
 			{
 				current_action = IDLE; // change state to idle
 				arthur[1].cooldown = true; // start cooldown		
+				++behavior_swap;
 			}
 		}
 	}
@@ -385,4 +403,8 @@ void King_Arthur::Heal_and_Spawn(void)
 	arthur[4].cooldown_timer = 20.0f;
 }
 
+King_Arthur::~King_Arthur(void)
+{
+	arthur.clear();
+}
 
