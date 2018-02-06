@@ -132,6 +132,9 @@
     <ClCompile Include="f_sqrt.cpp">
       <Filter>Projectile</Filter>
     </ClCompile>
+    <ClCompile Include="Lancelot.cpp">
+      <Filter>Characters\AI\Bosses</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h">
@@ -193,6 +196,9 @@
     </ClInclude>
     <ClInclude Include="f_sqrt.h">
       <Filter>Projectile</Filter>
+    </ClInclude>
+    <ClInclude Include="Lancelot.h">
+      <Filter>Characters\AI\Bosses</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

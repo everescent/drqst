@@ -15,16 +15,15 @@ Technology is prohibited.
 #include <iostream>
 #include "King_Arthur.h"
 #include "Boss_States.h"
-#include "Dragon.h"
 #include <vector>
-// @TODO, KA behaviour, physics for jump attack
+
 namespace {
 
 	std::vector <Boss_Attack> arthur; //an array of boss attacks
 
 	std::vector <Characters> spawn_mobs; //an array to store the mobs to be spawn
 
-	Boss_Action_State current_action = ATTACK; // different states of boss arthur
+	Boss_Action_State current_action = MOVING; // different states of boss arthur
 
 	const int health = 3000; // initial hp for king arthur
 
@@ -35,18 +34,16 @@ namespace {
 	const int range_limit = 300; // range limit for slash
 
 	const char limit = 5; // num of king arthur attacks
-
-	bool phase2 = false; // flag for phase 2
 	
 }
 
 
 
-King_Arthur::King_Arthur()
+King_Arthur::King_Arthur(void)
 	: Characters(S_CreateSquare(100.0f, 1.0f, 1.0f, ".//Textures/download.png"),
 	  health, { 0.0f, 0.0f, 5.0f, 5.0f, Rect } ), phase2{false}
 {
-	(void) this->Transform_.SetTranslate(200.0f, -100.0f);
+	(void) this->Transform_.SetTranslate(200.0f, Start_Pos_Y);
 	this->Transform_.Concat(); // spawn king arthur at the location set
 	this->PosX =  200.0f;      // change king arthur coordinates to the location set
 	this->PosY = Start_Pos_Y;  // change king arthur coordinates to the location set
@@ -104,21 +101,6 @@ void King_Arthur::Update(float dt, const Dragon &d)
 		King_Arthur_Phase2();
 	}
 
-	if (this->Get_Direction() == RIGHT) // set all attacks to go right
-	{
-		for (int i = 0; i < limit; ++i)
-		{
-			arthur[i].SetDir(true);
-		}
-	}
-	else if (this->Get_Direction() == LEFT) // set all attacks to go left
-	{
-		for (int i = 0; i < limit; ++i)
-		{
-			arthur[i].SetDir(false);
-		}
-	}
-
 	// switch between the boss states
 	switch (current_action)
 	{
@@ -131,7 +113,7 @@ void King_Arthur::Update(float dt, const Dragon &d)
 	case OBSTACLE: this->AvoidingObstacle();
 		break;
 
-	case ATTACK: this->Attack(dt);
+	case ATTACK: this->Attack(d, dt);
 		break;
 	}
 
@@ -208,12 +190,27 @@ void King_Arthur::Moving(const Dragon &d, float dt)
 
 }
 
-void King_Arthur::Attack(float dt)
+void King_Arthur::Attack(const Dragon &d, float dt)
 {
 	UNREFERENCED_PARAMETER(dt);
 
 	KA_MoveSet currAttk = SINGLE_SLASH; //default attack for king arthur
 	
+
+	if (this->Get_Direction() == RIGHT) // set all attacks to go right
+	{
+		for (int i = 0; i < limit; ++i)
+		{
+			arthur[i].SetDir(true);
+		}
+	}
+	else if (this->Get_Direction() == LEFT) // set all attacks to go left
+	{
+		for (int i = 0; i < limit; ++i)
+		{
+			arthur[i].SetDir(false);
+		}
+	}
 
 	//unique mechanic has the highest priority 
 	if (! (arthur[4].cooldown) )
@@ -244,7 +241,7 @@ void King_Arthur::King_Arthur_Phase2(void)
 	arthur.emplace_back(Boss_Attack(S_CreateSquare(30.0f, 1.0f, 1.0f, tex_ja),
 		Col_Comp(0.0f, 0.0f, 5.0f, 5.0f, Rect))); // add the 2nd mechanic, still in progress
 
-	phase2 = true; // set phase 2 flag to true
+	this->phase2 = true; // set phase 2 flag to true
 
 	// change unique mechanism pointer to heal and spawn for phase 2
 	ka_attacks[UNIQUE_MECHANIC] = &King_Arthur::Heal_and_Spawn; 
@@ -261,12 +258,15 @@ void King_Arthur::Jump_Attack(void)
 	
 	static float dash_duration = 1.0f; // temporary storage cause no collision
 
-	if (this->Get_Direction() == RIGHT) // set all attacks to go right
+	static const int left_boundary = -600; // boundaries of charge attack
+	static const int right_boundary = 600; // boundaries of charge attack
+
+	if (this->Get_Direction() == RIGHT && this->PosX < right_boundary) // set all attacks to go right
 	{
 		this->PosX += 20.0f; // move KA to the right
 		(void)this->Transform_.SetTranslate(PosX, PosY);
 	}
-	else if (this->Get_Direction() == LEFT) // set all attacks to go left
+	else if (this->Get_Direction() == LEFT && this->PosX > left_boundary) // set all attacks to go left
 	{
 		this->PosX -= 20.0f; // move KA to the left
 		(void)this->Transform_.SetTranslate(PosX, PosY);

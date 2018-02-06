@@ -6,7 +6,7 @@
 \brief
 This file creates, set the behaviour and rules for the last boss king arthur
 
-Copyright (C) 20xx DigiPen Institute of Technology.
+Copyright (C) 2018 DigiPen Institute of Technology.
 Reproduction or disclosure of this file or its contents
 without the prior written consent of DigiPen Institute of
 Technology is prohibited.
@@ -29,13 +29,11 @@ private:
 	
 	void Idle(float dt);
 
-	void Moving(const Dragon & d, float dt);
+	void Moving(const Dragon &d, float dt);
 
 	void AvoidingObstacle();
 
-	void Attack(float dt);
-
-	bool phase2;
+	void Attack(const Dragon &d, float dt);
 
 	void Init(void);
 
@@ -50,6 +48,8 @@ private:
 	void Heal_and_Spawn(void); // phase 2, heal and spawm mobs
 
 	void(King_Arthur::*ka_attacks[UNIQUE_MECHANIC + 1])(void);
+
+	bool phase2;
 
 public:
 	/******************************************************************************/
