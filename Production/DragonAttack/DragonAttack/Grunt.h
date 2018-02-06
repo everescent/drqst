@@ -15,16 +15,17 @@ Technology is prohibited.
 
 #pragma once
 #include "Characters.h"
+#include "Dragon.h"
 
 class Grunt : public  Characters
 {
 private: 
+	bool LineOfSight(const Dragon &d);
+	void MoveTowardPlayer(const Dragon &d);
 
-	void MoveTowardPlayer(Grunt *grunt);
+	void AttackPlayer();
 
-	void AttackPlayer(Grunt *grunt);
-
-	void Idle(Grunt *grunt);
+	void Idle();
 public:
 	/******************************************************************************/
 	/*!
@@ -60,10 +61,10 @@ public:
 	/******************************************************************************/
 	//Grunt(Sprite&& t_sprite, const float x, const float y);
 
-	void Update(float dt, Grunt *grunt);
+	void Update(float dt, const Dragon &d);
 	void Update() override {}; // ignored
 
-	void Pos(Grunt *grunt);
+	void Pos();
 
 	//void Idle(Grunt *grunt);
 };

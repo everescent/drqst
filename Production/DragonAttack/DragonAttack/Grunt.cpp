@@ -14,13 +14,19 @@ Technology is prohibited.
 /* End Header **************************************************************************/
 #include "Grunt.h"
 #include "Transform.h"
+#include "Physics.h"
 #include <iostream>
 
 namespace // global variables just for THIS file
 {
 	const int grunt_hp = 30;
-	bool PlayerSeen = false;
+	bool PlayerSeen = true;
 	bool PlayerInRange = false;
+	bool Dir_left = true;
+	bool Dir_right = false;
+	float Movement = ApplyMovement(0.0016f);
+	static float x = 0;
+	static float y = 0;
 }
 
 /*
@@ -38,7 +44,7 @@ Grunt::Grunt()
 {
 	SetActive(true);
 	Transform_.SetTranslate(0.0f, 200.0f);
-	Transform_.Concat(); // ??
+	//Transform_.Concat();
 
 }
 /*
@@ -54,11 +60,12 @@ void Delete_Grunt(Grunt *grunt)
 	delete grunt;
 }
 */
-void Grunt::Update(float dt, Grunt *grunt)
+void Grunt::Update(float dt, const Dragon &d)
 {
 	UNREFERENCED_PARAMETER(dt);
 	//update the behaviour of the grunt
 	//check for vision range here
+	LineOfSight(d);
 	//check for attack range here
 
 	//PlayerSeen is a bool that returns true or false based on the vision spheres/squares 
@@ -66,7 +73,7 @@ void Grunt::Update(float dt, Grunt *grunt)
 	if (PlayerSeen == true)
 	{
 		//Once player has been seen, use pathfinding to move toward player.
-		MoveTowardPlayer(grunt);
+		MoveTowardPlayer(d);
 	}
 	else
 	//PlayerInRange is a bool that returns true or false based on the attack spheres/squares
@@ -74,67 +81,112 @@ void Grunt::Update(float dt, Grunt *grunt)
 	if (PlayerInRange == true)
 	{
 		//AttackPlayer will run the attack animation/knock back the player/damage the player.
-		AttackPlayer(grunt);
+		AttackPlayer();
 	}
 	else // If neither of the above conditions are true, the enemy will be in its idle state(fn).
 	{
-		Idle(grunt);
+		Idle();
 	}
 }
 
-void Grunt::Pos(Grunt *grunt)
+void Grunt::Pos()
 {
-	UNREFERENCED_PARAMETER(grunt);
 	//grunt->Transform_.SetTranslate(0,0);
 }
 
-void Grunt::MoveTowardPlayer(Grunt *grunt)
+void Grunt::MoveTowardPlayer(const Dragon &d)
 {
-	UNREFERENCED_PARAMETER(grunt);
+	UNREFERENCED_PARAMETER(d);
 	//Pathfinding here
+	//float PlayerCoordX = 100.0f;
+	//float PlayerCoordY = 100.0f;
+
+	int findingPlayer = 1;
+
+	while (findingPlayer--)
+	{
+		s32 mx;
+		s32 my;
+		AEInputGetCursorPosition(&mx, &my);
+		mx -= 640;
+		my -= 640;
+		std::cout << "mouse x " << mx << std::endl;
+		/*std::cout << "mouse y " << my << std::endl;
+		//Changing player position
+		if (AEInputCheckCurr(AEVK_X))
+		{
+			std::cout << "Player Coords changed!" << std::endl;
+			PlayerCoordX *= -1;
+		}*/
+
+		if ((this->Transform_.GetTranslateMatrix().m[0][2]) > mx)
+		{
+			Movement = (this->Transform_.GetTranslateMatrix().m[0][2]) - mx;
+		}
+		else
+		if ((this->Transform_.GetTranslateMatrix().m[0][2]) < mx)
+		{
+			Movement = (this->Transform_.GetTranslateMatrix().m[0][2]) - mx;
+		}
+
+		if ((this->Transform_.GetTranslateMatrix().m[0][2]) == mx)
+		{
+			std::cout << "Player found!" << std::endl;
+		}
+
+		x -= Movement/60;
+		
+		this->Transform_.SetTranslate(x, y);
+		this->Transform_.Concat();
+		std::cout << "grunt x " << this->PosX << std::endl;
+	}
 }
 
-void Grunt::AttackPlayer(Grunt *grunt)
+bool Grunt::LineOfSight(const Dragon &d)
 {
-	UNREFERENCED_PARAMETER(grunt);
+	//for (int i = 0;i<NbrObstacles;i++) 
+	//{
+		//Check linexObstacle
+		/*(if your using rectangle's look up linexRectangle, for all simple shapes, 
+		their's simple formula, for complex shapes, you simple loop though all the edges, 
+		and check linexPlane(in 2D, it's basically linexline collision).)*/
+	float playerDist = (d.PosX - this->PosX);
+	if (playerDist > 20.0f || playerDist < 20.0f)
+	{
+		return true;
+	}
+	else
+		return false;
+		/*(if we just care if the other tank can't see the player, 
+		you could return false for a line of sight function here.*/
+	//}
+}
+
+void Grunt::AttackPlayer()
+{
+	UNREFERENCED_PARAMETER(this);
 	//attack animation
 }
 
-void Grunt::Idle(Grunt *grunt)
+void Grunt::Idle()
 {
-	static float x = 0;
-	static float y = 0;
+	//int PatrolDist;
+	float MaxXPos = 120.0f;
+	float MinXPos = -120.0f;
+	int patrol = 1;
 
-	//Patrol
-	int PatrolDist;
-	bool left = true;
-	bool right = false;
+	//std::cout << "CurrentX position is " << grunt->Transform_.GetTranslateMatrix().m[0][2] << std::endl;
 
-	//move left
-	if (left == true) 
+	while (patrol--)
 	{
-		for (PatrolDist = 5; PatrolDist>0; --PatrolDist)
+		if ((this->Transform_.GetTranslateMatrix().m[0][2]) >= MaxXPos ||
+			(this->Transform_.GetTranslateMatrix().m[0][2]) <= MinXPos)
 		{
-			x -= 30.0f;
-			grunt->Transform_.SetTranslate(x, y);
-			//grunt->Render();
-			//Transform_.Concat();
+			Movement *= -1;
 		}
-		left = false;
-		right = true;
-	}
-	
-	//move right
-	if (right == true)
-	{
-		for (PatrolDist = 5; PatrolDist>0; --PatrolDist)
-		{
-			x += 30.0f;
-			grunt->Transform_.SetTranslate(x, y);
-			//grunt->Render();
-			//Transform_.Concat();
-		}
-		left = true;
-		right = false;
+
+		x += Movement;
+		this->Transform_.SetTranslate(x, y);
+		this->Transform_.Concat();
 	}
 }

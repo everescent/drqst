@@ -12,6 +12,8 @@
 #include "Grunt.h"
 #include <utility>
 
+#include <iostream>
+
 namespace
 {
 
@@ -37,12 +39,11 @@ namespace Main_Menu
 
 	void Update(float dt)
 	{
-		UNREFERENCED_PARAMETER(dt);
 		d->SetActive(true);
 		ka->Update(2.0f, *d);
 		d->Update();
 
-		g->Update(dt, g);
+		g->Update(dt, *d);
 	}
 
 	void Draw(void)
