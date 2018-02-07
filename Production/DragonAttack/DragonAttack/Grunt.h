@@ -21,9 +21,10 @@ class Grunt : public  Characters
 {
 private: 
 	bool LineOfSight(const Dragon &d);
+
 	void MoveTowardPlayer(const Dragon &d);
 
-	void AttackPlayer();
+	void AttackPlayer(const Dragon &d);
 
 	void Idle();
 public:
@@ -40,8 +41,8 @@ public:
 	No return.
 	*/
 	/******************************************************************************/
-	//Grunt(Sprite&& t_sprite);
 	Grunt();
+
 	/******************************************************************************/
 	/*!
 	\fn         Grunt
@@ -66,7 +67,7 @@ public:
 
 	void Pos();
 
-	//void Idle(Grunt *grunt);
+	//~Grunt(); // destructor
 };
 
 /******************************************************************************/
