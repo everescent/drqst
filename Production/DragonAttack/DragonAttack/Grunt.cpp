@@ -26,7 +26,7 @@ namespace // global variables just for THIS file
 	float MovementY = 0.5f;
 	float CurrXPos;
 	float CurrYPos;
-	float moveSpd = 1.0f;
+	float moveSpd = 3.0f;
 }
 
 Grunt::Grunt()
@@ -35,7 +35,7 @@ Grunt::Grunt()
 {
 	SetActive(true);
 	PosX = 400.0f;
-	PosY = 100.0f;
+	PosY = -120.0f;
 	CurrXPos = this->PosX;
 	CurrYPos = this->PosY;
 }
@@ -43,30 +43,21 @@ Grunt::Grunt()
 void Grunt::Update(float dt, const Dragon &d)
 {
 	UNREFERENCED_PARAMETER(dt);
-	//update the behaviour of the grunt
-	//check for vision range here
 	LineOfSight(d);
-	//check for attack range here
 
-	//PlayerSeen is a bool that returns true or false based on the vision spheres/squares 
-	//between enemies and the player
 	if (PlayerSeen == true)
 	{
-		//Once player has been seen, use pathfinding to move toward player.
 		MoveTowardPlayer(d);
 
-
-		//PlayerInRange is a bool that returns true or false based on line of sight
-		//of the enemies and the player
 		if (PlayerInRange == true)
 		{
-			//AttackPlayer will run the attack animation/knock back the player/damage the player.
 			AttackPlayer(d);
 		}
 	}	
-	else // If neither of the above conditions are true, the enemy will be in its idle state(fn).
+	else
 	{
-		Idle(d);
+		Idle(d); // issue now is that if im returning back to idle after losing sight of player
+				 // the currPos is still the same as the initial one set at the start
 	}
 }
 
@@ -104,10 +95,12 @@ void Grunt::MoveTowardPlayer(const Dragon &d)
 
 void Grunt::LineOfSight(const Dragon &d)
 {
+	
 	float playerDist = (d.PosX - this->PosX);
-	if (playerDist <= 20.0f) // vision range is 20 units
+	if (playerDist <= 400.0f && playerDist >= -400.0f)  // vision range
 	{
 		PlayerSeen = true;
+		std::cout << "Player Seen" << std::endl;
 	}
 	else
 	{
@@ -140,10 +133,9 @@ void Grunt::AttackPlayer(const Dragon &d)
 void Grunt::Idle(const Dragon &d)
 {
 	UNREFERENCED_PARAMETER(d);
+
 	float MaxXPos = CurrXPos + 100.0f; // max boundary
 	float MinXPos = CurrXPos - 100.0f; // min boundary
-	
-	//int patrol = 1;
 
 	if (PlayerSeen == false)
 	{
