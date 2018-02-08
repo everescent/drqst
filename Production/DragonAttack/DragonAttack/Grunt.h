@@ -20,13 +20,13 @@ Technology is prohibited.
 class Grunt : public  Characters
 {
 private: 
-	bool LineOfSight(const Dragon &d);
+	void LineOfSight(const Dragon &d);
 
 	void MoveTowardPlayer(const Dragon &d);
 
 	void AttackPlayer(const Dragon &d);
 
-	void Idle();
+	void Idle(const Dragon &d);
 public:
 	/******************************************************************************/
 	/*!
