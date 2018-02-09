@@ -24,40 +24,41 @@ void Dragon::ApplyPowerUP()
 
 void Dragon::Input()
 {
-  //const std::vector <int> &Input = Input::Get_User_Input();
+  const std::vector <int> &Input = Input::Get_User_Input();
 
-  //for (unsigned i = 0; i < Input.size(); ++i)
+  for (unsigned i = 0; i < Input.size(); ++i)
+  {
+    switch (Input[i])
+    {
+      case Input::go_left:
+        Dir.L = true;
+        break;
+      case Input::go_right:
+        Dir.R = true;
+        break;
+      case Input::jump_up:
+        if (PosY == Start_Pos_Y)
+          Dir.UP = true;
+        break;
+      case Input::fire:
+        Attack = true;
+        break;
+    }
+  }
+  Input::ClearBuffer();
+  //if (AEInputCheckCurr(AEVK_A))
   //{
-  //  switch (Input[i])
-  //  {
-  //    case Input::go_left:
-  //      Dir.L = true;
-  //      break;
-  //    case Input::go_right:
-  //      Dir.R = true;
-  //      break;
-  //    case Input::jump_up:
-  //      if (PosY == Start_Pos_Y)
-  //        Dir.UP = true;
-  //      break;
-  //    case Input::fire:
-  //      Attack = true;
-  //      break;
-  //  }
+  //  Dir.L = true;
   //}
-  if (AEInputCheckCurr(AEVK_A))
-  {
-    Dir.L = true;
-  }
-  else if (AEInputCheckCurr(AEVK_D))
-  {
-    Dir.R = true;
-  }
-  if (AEInputCheckCurr(AEVK_SPACE))
-    if(PosY == Start_Pos_Y)
-      Dir.UP = true;
-  if (AEInputCheckTriggered(AEVK_RETURN))
-    Attack = true;
+  //else if (AEInputCheckCurr(AEVK_D))
+  //{
+  //  Dir.R = true;
+  //}
+  //if (AEInputCheckCurr(AEVK_SPACE))
+  //  if(PosY == Start_Pos_Y)
+  //    Dir.UP = true;
+  //if (AEInputCheckTriggered(AEVK_RETURN))
+  //  Attack = true;
 }
 
 void Dragon::Update()
@@ -88,7 +89,7 @@ void Dragon::Update()
   //Update position of player
   Transform_.SetTranslate(PosX, PosY);
   Transform_.Concat();
-  //Collision_.Update_Col_Pos(0.0f, 0.0f); Update collision pos when available
+  Collision_.Update_Col_Pos(PosX - 100.0f, PosY - 100.0f, PosX + 100.0f, PosY + 100.0f);
   //Check if attack has been made
   if (Attack)
   {
@@ -114,6 +115,7 @@ void Dragon::Update()
     Fireball[i].Pos(PosX, PosY);
     Fireball[i].Pos();
     Fireball[i].Update();
+    Fireball[i].Collision_.Update_Col_Pos(Fireball[i].PosX, Fireball[i].PosY);
   }
   //Check for distance limit
   for (int i = 0; i < Bullet_Buffer; ++i)

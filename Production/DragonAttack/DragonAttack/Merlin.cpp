@@ -64,7 +64,7 @@ Merlin::Merlin()
   for (int i = 0; i < A_Rain_Buffer; ++i)
   {
     Arrow[i].Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
-    Arrow[i].SetVelocity(AEVec2{ 0.0f, -20.0f });
+    Arrow[i].SetVelocity(AEVec2{ 0.0f, -1200.0f });
     Arrow[i].cooldown_timer = A_Rain_CD_Time;
   }
 }
@@ -131,7 +131,7 @@ void Merlin::S_Eball(const Dragon &player)
                        (player.PosY - PosY) };
   //Normalize and scale displacement
   AEVec2Normalize(&Displacement, &Displacement);
-  AEVec2Scale(&Displacement, &Displacement, 6.0f);
+  AEVec2Scale(&Displacement, &Displacement, 360.0f);
   Eball.SetActive(true);
   //Go towards player
   Eball.SetVelocity(Displacement);
@@ -153,11 +153,11 @@ void Merlin::Sp_Eball(const Dragon &player)
                         (player.PosY - PosY) - 100.0f};
   //Normalize and scale all vectors
   AEVec2Normalize(&Displacement0, &Displacement0);
-  AEVec2Scale(&Displacement0, &Displacement0, 6.0f);
+  AEVec2Scale(&Displacement0, &Displacement0, 360.0f);
   AEVec2Normalize(&Displacement1, &Displacement1);
-  AEVec2Scale(&Displacement1, &Displacement1, 6.0f);
+  AEVec2Scale(&Displacement1, &Displacement1, 360.0f);
   AEVec2Normalize(&Displacement2, &Displacement2);
-  AEVec2Scale(&Displacement2, &Displacement2, 6.0f);
+  AEVec2Scale(&Displacement2, &Displacement2, 360.0f);
   //Set all displacement vectors to be the velocity
   Spread_Eball[0].SetVelocity(Displacement0);
   Spread_Eball[1].SetVelocity(Displacement1);
@@ -332,6 +332,7 @@ void Merlin::Update(const Dragon &player)
   Eball.Projectile::Pos();
   Eball.Projectile::Pos(PosX, PosY);
   Eball.Projectile::Update();
+  Eball.Collision_.Update_Col_Pos(Eball.PosX, Eball.PosY);
   //Spread Shot
   if (Spread_Eball[0].cooldown)
   {
@@ -356,6 +357,7 @@ void Merlin::Update(const Dragon &player)
     Spread_Eball[i].Projectile::Pos();
     Spread_Eball[i].Projectile::Pos(PosX, PosY);
     Spread_Eball[i].Projectile::Update();
+    Spread_Eball[i].Collision_.Update_Col_Pos(Spread_Eball[i].PosX, Spread_Eball[i].PosY);
   }
   //Arrow Rain
   if (Arrow[A_Rain_Buffer - 1].cooldown)
@@ -393,17 +395,20 @@ void Merlin::Update(const Dragon &player)
       Arrow[i].Projectile::Pos();
       Arrow[i].Projectile::Pos(player.PosX, 360.0f);
       Arrow[i].Projectile::Update();
+      Arrow[i].Collision_.Update_Col_Pos(Arrow[i].PosX, Arrow[i].PosY);
       continue;
     }
     if (Arrow[i - 1].GetDist() < 100.0f)
     {
       Arrow[i].Projectile::Pos(player.PosX, 360.0f);
+      Arrow[i].Collision_.Update_Col_Pos(Arrow[i].PosX, Arrow[i].PosY);
     }
     else
     {
       Arrow[i].Projectile::Pos();
       Arrow[i].Projectile::Pos(player.PosX, 260.0f);
       Arrow[i].Projectile::Update();
+      Arrow[i].Collision_.Update_Col_Pos(Arrow[i].PosX, Arrow[i].PosY);
     }
   }
   //Melee
@@ -416,6 +421,18 @@ void Merlin::Update(const Dragon &player)
       M_Melee.cooldown_timer = Melee_CD_Time;
     }
   }
+  //Merlin collision update
+  GameObject::Collision_.Update_Col_Pos(PosX - 100.0f, PosY - 100.0f, PosX + 100.0f, PosY + 100.0f);
+  //If Merlin gets hit, decrease HP
+  for(char i = 0; i < Bullet_Buffer; ++i)
+    if (Collision_.Dy_Rect_Rect(player.GetFireball()[i].Collision_, 0.016f))//Remember to replace with dt
+    {
+      this->Set_HP(20);
+      std::cout << "HIT!\n";
+    }
+  //If Dragon gets hit decrease Dragon HP
+  //Call player's collision and put in my attacks
+  //Check if attacks are on cooldown AND active first
 }
 
 void Merlin::Render()
