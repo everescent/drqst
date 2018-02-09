@@ -38,6 +38,11 @@ void Characters::Set_HP(int hit_points)
 	hp = hit_points;
 }
 
+void Characters::Decrease_HP(const char damage)
+{
+	hp -= (int)damage;
+}
+
 int Characters::Get_HP() const
 {
 	return hp;

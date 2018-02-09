@@ -10,6 +10,7 @@
 #include "King_Arthur.h"
 #include "Dragon.h"
 #include "Grunt.h"
+#include "Lancelot.h"
 #include <utility>
 
 #include <iostream>
@@ -19,6 +20,7 @@ namespace
 
 	King_Arthur *ka = nullptr;
 	Dragon *d = nullptr;
+	Lancelot *l = nullptr;
 	Grunt *g = nullptr;
 	
 }
@@ -35,12 +37,13 @@ namespace Main_Menu
 		ka = new King_Arthur{};
 		d = new Dragon{};
 		g = new Grunt{};
+		l = new Lancelot{};
 	}
 
 	void Update(float dt)
 	{
 		d->SetActive(true);
-		ka->Update(2.0f, *d);
+		ka->Update(dt, *d);
 		d->Update();
 
 		g->Update(dt, *d);
@@ -52,7 +55,7 @@ namespace Main_Menu
 		ka->Render();
 		d->Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 		d->Render();
-
+		//l->Render();
 		g->Render();
 	}
 
@@ -61,6 +64,7 @@ namespace Main_Menu
 		delete ka;
 		delete d;
 		delete g;
+		delete l;
 	}
 
 	void Unload(void)

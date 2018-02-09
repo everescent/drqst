@@ -7,6 +7,7 @@
 #include "GameStateManager.h"
 #include "Collision.h"
 #include <utility>
+#include <iostream>
 
 int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_line, int show)
 {
@@ -18,6 +19,9 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
   const int R_WIDTH{ 1280 }; //Screen width
   const int R_HEIGHT{ 720 }; //Screen height
 
+  float dt = 0.0f;       // delta time
+  float timePast = 0.0f; // time past in game
+
   AESysInit(instanceH, show, R_WIDTH, R_HEIGHT, true, 60, NULL);
   AESysSetWindowTitle("My New Demo!");
   AESysReset();
@@ -25,13 +29,20 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 
   while (GSM::IsGameRunning())
  {
-    GSM::Init_and_Load();
+	GSM::Init_and_Load();
+
     while (GSM::current == GSM::next)
     {
       AESysFrameStart();
-      GSM::Update_and_Draw(2.0);
+      GSM::Update_and_Draw(dt);
       AESysFrameEnd();
+
+	  dt = (f32)AEFrameRateControllerGetFrameTime();
+	  timePast += dt;
     }
+
+
+
     GSM::Cleanup();
   }
   AESysExit();

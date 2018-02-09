@@ -39,8 +39,9 @@ class Characters : public GameObject
 	public:
 		Characters(Sprite&& t_sprite, const int HP, Col_Comp &&t_col); // default constructor
 
-		int Get_HP() const;         //get HP of mob
-		void Set_HP(int hp); //set the hp for mob
+		int Get_HP() const;         // get HP of mob
+		void Set_HP(int hp);       // set the hp for mob
+		void Decrease_HP(const char damage = 1);    // decrease the hp of the character
 
 		boolean Is_Moving() const;     // is character moving
 		void Set_Moving(boolean moving); // make a character stop/move

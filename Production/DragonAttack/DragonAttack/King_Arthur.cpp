@@ -23,7 +23,7 @@ namespace {
 
 	std::vector <Characters> spawn_mobs; //an array to store the mobs to be spawn
 
-	Boss_Action_State current_action = IDLE; // different states of boss arthur
+	Boss_Action_State current_action = ATTACK; // different states of boss arthur
 
 	const int health = 3000; // initial hp for king arthur
 
@@ -36,6 +36,10 @@ namespace {
 	const char limit = 5; // num of king arthur attacks
 
 	char behavior_swap = 0; // switch between idling and moving
+
+	void Move_KA(float dt, King_Arthur &ka);
+
+	void Set_Attack_Dir(King_Arthur &ka);
 	
 }
 
@@ -51,6 +55,7 @@ King_Arthur::King_Arthur(void)
 	this->PosY = Start_Pos_Y;  // change king arthur coordinates to the location set
 	this->SetActive(true);     // show him on screen
 	this->Set_Direction(LEFT); // set king arthur to face left at the start
+	this->SetVelocity({ 120, 0 });    // velocity for king arthur
 	this->Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 	Init();  // call initializer for king arthur move set
 }
@@ -82,7 +87,7 @@ void King_Arthur::Init(void)
 	(void)arthur[1].SetVelocity(AEVec2{ 3.0f, 0.0f }); // velocity of the slashes
 	(void)arthur[2].SetVelocity(AEVec2{ 3.0f, 0.0f }); // velocity of the slashes
 	(void)arthur[3].SetVelocity(AEVec2{ 3.0f, 0.0f }); // velocity of the slashes
-
+														 
 	arthur[0].Transform_.SetScale(2.0f, 2.0f); // determine the size of projectile
 	arthur[0].Transform_.Concat();
 
@@ -126,8 +131,10 @@ void King_Arthur::Update(float dt, const Dragon &d)
 	}
 
 	for (int i = 0; i < limit; ++i) // update cooldowns on attacks
-			arthur[i].Update(0.016f);
+			arthur[i].Update(dt);
 
+
+	
 }
 
 /******************************************************************************/
@@ -154,7 +161,8 @@ void King_Arthur::Idle(float dt)
 	}
 	
 	//changes state to attack once idling is finished, reset idle
-	idle <= 0? current_action = ATTACK, idle = 0 : idle -= 0.016f;
+	idle <= 0? current_action = ATTACK, idle = 0 : idle -= dt;
+	Set_Attack_Dir(*this);
 	
 }
 
@@ -177,24 +185,13 @@ void King_Arthur::Moving(const Dragon &d, float dt)
 	/*if(phase2)
 		d.PosY - this->PosY;*/
 	
-	
-	if (this->Get_Direction() == RIGHT) // set all attacks to go right
-	{
-		this->PosX += 2.0f; // move KA to the right
-		(void) this->Transform_.SetTranslate(PosX, PosY);
-	}
-	else if (this->Get_Direction() == LEFT) // set all attacks to go left
-	{
-		this->PosX -= 2.0f; // move KA to the left
-		(void) this->Transform_.SetTranslate(PosX, PosY);
-	}
-
-	this->Transform_.Concat();
+	Move_KA(dt, *this);
 
 	//change state to attack once move_duration is 0, reset move_duration
 	move_duration <= 0 ? current_action = ATTACK, move_duration = 0 :
-		                 move_duration -= 0.016f;
+		                 move_duration -= dt;
 
+	Set_Attack_Dir(*this);
 }
 
 void King_Arthur::Attack(const Dragon &d, float dt)
@@ -210,21 +207,6 @@ void King_Arthur::Attack(const Dragon &d, float dt)
 		//determine if dragon is right or left of king arthur
 		(d.PosX - this->PosX) > 0 ? this->Set_Direction(RIGHT) :
 		this->Set_Direction(LEFT);
-
-	if (this->Get_Direction() == RIGHT) // set all attacks to go right
-	{
-		for (int i = 0; i < limit; ++i)
-		{
-			arthur[i].SetDir(true);
-		}
-	}
-	else if (this->Get_Direction() == LEFT) // set all attacks to go left
-	{
-		for (int i = 0; i < limit; ++i)
-		{
-			arthur[i].SetDir(false);
-		}
-	}
 
 	//unique mechanic has the highest priority 
 	if (! (arthur[4].cooldown) )
@@ -261,33 +243,24 @@ void King_Arthur::King_Arthur_Phase2(void)
 	ka_attacks[UNIQUE_MECHANIC] = &King_Arthur::Heal_and_Spawn; 
 }
 
-void King_Arthur::Jump_Attack(void)
+void King_Arthur::Jump_Attack()
 {
-	//calculate the physics to jump and attack player
-	// calculate the distance between KA and player current distance?
-	// do a jump for that much distance?
-	// doing a temporary dash attack for now
 	if (arthur[4].cooldown) // skill still on cooldown
 		return;
 
 	static const int left_boundary = -600; // boundaries of charge attack
 	static const int right_boundary = 600; // boundaries of charge attack
 
-	if (this->Get_Direction() == RIGHT && this->PosX < right_boundary) // set all attacks to go right
+	this->SetVelocity({ 600, 0 }); // change king arthur's velocity to dash
+	Move_KA(0.016f, *this); // i am sorry for this
+
+	// need check for collision against dragon
+	if(this->PosX > right_boundary || this->PosX < left_boundary)
 	{
-		this->PosX += 20.0f; // move KA to the right
-		(void)this->Transform_.SetTranslate(PosX, PosY);
-	}
-	else if (this->Get_Direction() == LEFT && this->PosX > left_boundary) // set all attacks to go left
-	{
-		this->PosX -= 20.0f; // move KA to the left
-		(void)this->Transform_.SetTranslate(PosX, PosY);
-	}
-	else
-	{
-		current_action = IDLE;
-		arthur[4].cooldown = true;
-		++behavior_swap;
+		current_action = IDLE;           // switch current state to idle
+		arthur[4].cooldown = true;       // start the cooldown of dash attk
+		this->SetVelocity({ 120, 0 });   // reset the velocity of king arthur
+		++behavior_swap;                 
 	}
 
 	this->Transform_.Concat();
@@ -406,5 +379,44 @@ void King_Arthur::Heal_and_Spawn(void)
 King_Arthur::~King_Arthur(void)
 {
 	arthur.clear();
+}
+
+
+namespace
+{
+	void Move_KA(float dt, King_Arthur &ka)
+	{
+		if (ka.Get_Direction() == RIGHT) // set all attacks to go right
+		{
+			ka.PosX += ka.GetVelocity().x * dt; // move ka to the right
+			(void)ka.Transform_.SetTranslate(ka.PosX, ka.PosY);
+		}
+		else if (ka.Get_Direction() == LEFT) // set all attacks to go left
+		{
+			ka.PosX -= ka.GetVelocity().x * dt; // move KA to the left
+			(void)ka.Transform_.SetTranslate(ka.PosX, ka.PosY);
+		}
+
+		ka.Transform_.Concat();
+	}
+
+	void Set_Attack_Dir(King_Arthur & ka)
+	{
+		
+		if (ka.Get_Direction() == RIGHT) // set all attacks to go right
+		{
+			for (int i = 0; i < limit; ++i)
+			{
+				arthur[i].SetDir(true);
+			}
+		}
+		else if (ka.Get_Direction() == LEFT) // set all attacks to go left
+		{
+			for (int i = 0; i < limit; ++i)
+			{
+				arthur[i].SetDir(false);
+			}
+		}
+	}
 }
 
