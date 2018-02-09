@@ -15,20 +15,20 @@ Technology is prohibited.
 
 #include "Collision.h" 
 
-bool Col_Comp::St_Rect_Rect(const Col_Comp &aabb_obj1, const Col_Comp &aabb_obj2)
+bool Col_Comp::St_Rect_Rect( const Col_Comp &aabb_obj2)
 {
 	//check if the two objects are Rectangles 
 
-	if (aabb_obj1.shape != Rect || aabb_obj2.shape != Rect)
+	if (shape != Rect || aabb_obj2.shape != Rect)
 	{
 		return false; // no collision if wrong function used. 
 	}
 
 
-	f32 left_A = aabb_obj1.min.x, left_B = aabb_obj2.min.x;
-	f32 right_A = aabb_obj1.max.x, right_B = aabb_obj2.max.x;
-	f32 top_A = aabb_obj1.max.y, top_B = aabb_obj2.max.y;
-	f32 btm_A = aabb_obj1.min.y, btm_B = aabb_obj2.min.y;
+	f32 left_A = min.x, left_B = aabb_obj2.min.x;
+	f32 right_A = max.x, right_B = aabb_obj2.max.x;
+	f32 top_A = max.y, top_B = aabb_obj2.max.y;
+	f32 btm_A = min.y, btm_B = aabb_obj2.min.y;
 
 
 	//Check for NO collision using AABB between 2 objects 
@@ -41,10 +41,10 @@ bool Col_Comp::St_Rect_Rect(const Col_Comp &aabb_obj1, const Col_Comp &aabb_obj2
 	return true;
 }
 
-bool Col_Comp::St_Circle_Circle(const Col_Comp &objA, const Col_Comp &objB)
+bool Col_Comp::St_Circle_Circle( const Col_Comp &objB)
 {
-	int RadiusSumSq = (objA.radius + objB.radius)*(objA.radius + objB.radius);
-	f32 DistCircleSq = (objA.mid.x - objB.mid.x)*(objA.mid.x - objB.mid.x) + (objA.mid.y - objB.mid.y)*(objA.mid.y - objB.mid.y);
+	int RadiusSumSq = (radius + objB.radius)*(radius + objB.radius);
+	f32 DistCircleSq = (mid.x - objB.mid.x)*(mid.x - objB.mid.x) + (mid.y - objB.mid.y)*(mid.y - objB.mid.y);
 
 	if (DistCircleSq <= RadiusSumSq) return true; // There's collision
 
@@ -52,7 +52,7 @@ bool Col_Comp::St_Circle_Circle(const Col_Comp &objA, const Col_Comp &objB)
 
 }
 
-bool Col_Comp::Dy_Rect_Rect(const Col_Comp &A, const Col_Comp &B, float dt)
+bool Col_Comp::Dy_Rect_Rect( const Col_Comp &B, float dt)
 {
 	//hard coded velocity for testing 
 	float Vel_x_A = 1000000.0f;
@@ -66,16 +66,16 @@ bool Col_Comp::Dy_Rect_Rect(const Col_Comp &A, const Col_Comp &B, float dt)
 	if (Vel_x_Res < 0)
 	{
 		//Case 1
-		if (A.min.x > B.max.x) // object B on the left of A 
+		if (min.x > B.max.x) // object B on the left of A 
 		{
 			return false;
 		}
 
 		//Case 4 
-		if (A.max.x < B.min.x) // object B on the right of A 
+		if (max.x < B.min.x) // object B on the right of A 
 		{
-			t_first_x = (A.max.x - B.min.x) / Vel_x_Res;
-			t_last_x = (A.min.x - B.max.x) / Vel_x_Res;
+			t_first_x = (max.x - B.min.x) / Vel_x_Res;
+			t_last_x = (min.x - B.max.x) / Vel_x_Res;
 		}
 
 	}
@@ -83,13 +83,13 @@ bool Col_Comp::Dy_Rect_Rect(const Col_Comp &A, const Col_Comp &B, float dt)
 	if (Vel_x_Res > 0)
 	{
 		//Case 2
-		if (A.min.x > B.max.x) // object B on the left of A 
+		if (min.x > B.max.x) // object B on the left of A 
 		{
-			t_first_x = (A.min.x - B.max.x) / Vel_x_Res;
-			t_last_x = (A.max.x - B.min.x) / Vel_x_Res;
+			t_first_x = (min.x - B.max.x) / Vel_x_Res;
+			t_last_x = (max.x - B.min.x) / Vel_x_Res;
 		}
 		//Case 3
-		if (A.max.x < B.min.x) // object B on the right of A 
+		if (max.x < B.min.x) // object B on the right of A 
 		{
 			return false;
 		}
@@ -100,16 +100,16 @@ bool Col_Comp::Dy_Rect_Rect(const Col_Comp &A, const Col_Comp &B, float dt)
 	if (Vel_y_Res < 0)
 	{
 		//Case 1
-		if (A.min.y > B.max.y) // object B on the left of A 
+		if (min.y > B.max.y) // object B on the left of A 
 		{
 			return false;
 		}
 
 		//Case 4 
-		if (A.max.y < B.min.y) // object B on the right of A 
+		if (max.y < B.min.y) // object B on the right of A 
 		{
-			t_first_y = (A.max.y - B.min.y) / Vel_y_Res;
-			t_last_y = (A.min.y - B.max.y) / Vel_y_Res;
+			t_first_y = (max.y - B.min.y) / Vel_y_Res;
+			t_last_y = (min.y - B.max.y) / Vel_y_Res;
 		}
 
 	}
@@ -117,13 +117,13 @@ bool Col_Comp::Dy_Rect_Rect(const Col_Comp &A, const Col_Comp &B, float dt)
 	if (Vel_y_Res > 0)
 	{
 		//Case 2
-		if (A.min.x > B.max.x) // object B on the left of A 
+		if (min.x > B.max.x) // object B on the left of A 
 		{
-			t_first_y = (A.min.y - B.max.y) / Vel_y_Res;
-			t_last_y = (A.max.y - B.min.y) / Vel_y_Res;
+			t_first_y = (min.y - B.max.y) / Vel_y_Res;
+			t_last_y = (max.y - B.min.y) / Vel_y_Res;
 		}
 		//Case 3
-		if (A.max.x < B.min.x) // object B on the right of A 
+		if (max.x < B.min.x) // object B on the right of A 
 		{
 			return false;
 		}
@@ -158,6 +158,16 @@ void Col_Comp::Update_Col_Pos(f32 mid_x, f32 mid_y)
 {
 	mid.x = mid_x;
 	mid.y = mid_y;
+}
+
+Shape Col_Comp::GetShape()
+{
+	return shape;
+}
+
+Obj_T Col_Comp::GetObjType()
+{
+	return ObjectType;
 }
 
 
