@@ -135,6 +135,9 @@
     <ClCompile Include="Lancelot.cpp">
       <Filter>Characters\AI\Bosses</Filter>
     </ClCompile>
+    <ClCompile Include="Collision_update.cpp">
+      <Filter>Game_Engine\Collision</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h">
@@ -199,6 +202,9 @@
     </ClInclude>
     <ClInclude Include="Lancelot.h">
       <Filter>Characters\AI\Bosses</Filter>
+    </ClInclude>
+    <ClInclude Include="Collision_update.h">
+      <Filter>Game_Engine\Collision</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

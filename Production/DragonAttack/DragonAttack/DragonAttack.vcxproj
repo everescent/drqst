@@ -158,6 +158,7 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Characters.cpp" />
     <ClCompile Include="Collision.cpp" />
+    <ClCompile Include="Collision_update.cpp" />
     <ClCompile Include="Create_Object.cpp" />
     <ClCompile Include="Dragon.cpp" />
     <ClCompile Include="f_sqrt.cpp" />
@@ -180,6 +181,7 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Characters.h" />
     <ClInclude Include="Collision.h" />
+    <ClInclude Include="Collision_update.h" />
     <ClInclude Include="Create_Object.h" />
     <ClInclude Include="Dragon.h" />
     <ClInclude Include="f_sqrt.h" />

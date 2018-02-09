@@ -16,19 +16,35 @@ Technology is prohibited.
 #include "AEEngine.h"
 #include "Transform.h"
 
-enum Shape
+namespace
 {
-	NoShape,
-	Point,
-	Rect,
-	Circle
-};
+	enum Shape
+	{
+		NoShape,
+		Point,
+		Rect,
+		Circle
+	};
 
-enum CollisionFlag
-{
-	Collided,
-	Not_Collided
-};
+	enum CollisionFlag
+	{
+		Collided,
+		Not_Collided
+	};
+
+	enum Obj_T //an enumeration that includes all object types for easy comparison between object to object collision. 
+	{
+		Obj_Dragon,
+		Obj_Fireball,
+		Obj_Megafireball,
+		Obj_Enemy,
+		Obj_KA,
+	};
+
+}
+
+
+
 
 class Col_Comp
 {
@@ -77,13 +93,15 @@ public:
 
 	void Update_Col_Pos(f32 mid_x, f32 mid_y); //update for Circle objects 
 
-	bool St_Rect_Rect(const Col_Comp &aabb_obj1, const Col_Comp &aabb_obj2); //static collision for Rectangle to Rectangle
+	bool St_Rect_Rect( const Col_Comp &aabb_obj2); //static collision for Rectangle to Rectangle
 
-	bool St_Circle_Circle(const Col_Comp &aabb_obj1, const Col_Comp &aabb_obj2); //static collision for Circle to Circle
+	bool St_Circle_Circle( const Col_Comp &aabb_obj2); //static collision for Circle to Circle
 
-	bool Dy_Rect_Rect(const Col_Comp &aabb_obj1, const Col_Comp &aabb_obj2, float dt);
+	bool Dy_Rect_Rect(const Col_Comp &aabb_obj2, float dt);
 
+	Shape GetShape(); 
 
+	Obj_T GetObjType();
 
 
 private:
@@ -97,6 +115,8 @@ private:
 	int radius = 0; //represents the radius of a circle 
 
 	Shape shape = NoShape;
+
+	Obj_T ObjectType;
 
 	AEVec2 velocity = { 0, 0 }; //represents the current position of the object 
 
