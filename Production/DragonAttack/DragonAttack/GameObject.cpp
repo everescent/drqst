@@ -17,6 +17,14 @@ Technology is prohibited.
 #include "GameObject.h" //Class declaration
 #include <utility>      //move
 
+
+//Update
+void GameObject::Update()
+{
+  Transform_.SetTranslate(PosX, PosY);
+  Transform_.Concat();
+}
+
 //Renders the object
 void GameObject::Render()
 {
@@ -47,6 +55,7 @@ GameObject::GameObject(AEGfxVertexList *mesh, const char* TexFile,
 {}
 
 //Move constructor for sprite
-GameObject::GameObject(Sprite&& t_Sprite, Col_Comp &&t_Col)
-  : active{ false }, Transform_{}, Sprite_{ std::move(t_Sprite) }, Collision_{ std::move(t_Col) }
+GameObject::GameObject(Sprite&& t_Sprite, Col_Comp &&t_Col, float x, float y)
+  : active{ false }, Transform_{}, Sprite_{ std::move(t_Sprite) }, Collision_{ std::move(t_Col) },
+    PosX{ x }, PosY{ y }
 {}

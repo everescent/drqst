@@ -37,7 +37,6 @@ void Dragon::Input()
         Dir.R = true;
         break;
       case Input::jump_up:
-        if (PosY == Start_Pos_Y)
           Dir.UP = true;
         break;
       case Input::fire:
@@ -84,8 +83,8 @@ void Dragon::Update(float dt = 0.016)
     Air_Dist += GetVelocity().y * dt;
   }
   PosY -= Gravity;
-  if (PosY <= Start_Pos_Y)
-    PosY = Start_Pos_Y;
+  //For platforms, while the platform is colliding with the dragon,
+  //PosY = platform's PosYs
   //Update position of player
   Transform_.SetTranslate(PosX, PosY);
   Transform_.Concat();

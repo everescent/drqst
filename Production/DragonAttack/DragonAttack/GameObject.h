@@ -30,7 +30,7 @@ Deconstructor:
 class GameObject {
 
 public:
-  virtual void Update() = 0; //Overwrite with derived class Update
+  virtual void Update(); //Overwrite with derived class Update
   //Renders the object
   void Render();
   //Sets the object to active or inactive
@@ -51,7 +51,7 @@ public:
   GameObject(AEGfxVertexList * mesh, const char* TexFile,
              float ObjectW, const float &ObjectH);
   //Move constructor for sprite
-  GameObject(Sprite&& t_Sprite, Col_Comp &&t_Col);
+  GameObject(Sprite&& t_Sprite, Col_Comp &&t_Col, float x = 0.0f, float y = 0.0f);
   Transform Transform_; //Transform holds the object's position, scale and rotation
   Sprite Sprite_;       //Sprite handles mesh, texture and rendering
   Col_Comp Collision_;  //Collision handles object collision

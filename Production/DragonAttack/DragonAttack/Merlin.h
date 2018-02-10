@@ -61,7 +61,7 @@ class Merlin : public Characters {
 public:
   Merlin();
   //Updates Merlin
-  void Update(const Dragon &player);
+  void Update(Dragon &player);
   //Don't need to use dt
   void Update(float dt) { UNREFERENCED_PARAMETER(dt); }
   //Don't need default Update function
@@ -81,10 +81,10 @@ public:
   ~Merlin();
 
 private:
-  void(Merlin::*Merlin_Attack)(const Dragon &player); //Pointer to current attack function
-  void(Merlin::*Merlin_State)(const Dragon &player);  //Pointer to current state function
-  void CheckState(const Dragon &player);              //Sets current state to next, checks for next state
-  bool CheckAttack(const Dragon &player);             //Check if can attack, and sets the appropriate 
+  void(Merlin::*Merlin_Attack)(Dragon &player); //Pointer to current attack function
+  void(Merlin::*Merlin_State)(Dragon &player);  //Pointer to current state function
+  void CheckState(Dragon &player);              //Sets current state to next, checks for next state
+  bool CheckAttack(Dragon &player);             //Check if can attack, and sets the appropriate 
                                                       //function for it; Returns true if can attack, else false
   int castime;              //Arrow rain cast time
   int Attack_Interval;      //Time between attacks
@@ -106,16 +106,16 @@ private:
   Transform MC_Pos;   //Magic circle transform
 
   //Attack Functions START///////////////////////////////////////////////////////////////
-  void Melee(const Dragon &player);    //Melee attack function
-  void S_Eball(const Dragon &player);  //Single shot energy ball function
-  void Sp_Eball(const Dragon &player); //Spread shot energy ball function
-  void A_Rain(const Dragon &player);   //Arrow rain function
+  void Melee(Dragon &player);    //Melee attack function
+  void S_Eball(Dragon &player);  //Single shot energy ball function
+  void Sp_Eball(Dragon &player); //Spread shot energy ball function
+  void A_Rain(Dragon &player);   //Arrow rain function
   //Attack Functions END/////////////////////////////////////////////////////////////////
 
   //State Functions START///////////////////////////////////////////////////////////////
-  void Idle(const Dragon &player);   //Idle state function
-  void Move(const Dragon &player);   //Move state function
-  void Attack(const Dragon &player); //Attack state function
+  void Idle(Dragon &player);   //Idle state function
+  void Move(Dragon &player);   //Move state function
+  void Attack(Dragon &player); //Attack state function
   //State Functions END/////////////////////////////////////////////////////////////////
 
 };

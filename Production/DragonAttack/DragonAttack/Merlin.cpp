@@ -62,12 +62,12 @@ Merlin::Merlin()
   Arrow.reserve(A_Rain_Buffer);
   for (int i = 0; i < A_Rain_Buffer; ++i)
     Arrow.push_back(Boss_Attack{ S_CreateSquare(30.0f, 1.0f, 1.0f, "arrow.png"),
-                    Col_Comp{ Merlin_Start_X - 30.0f, Merlin_Start_Y - 30.0f,
-                    Merlin_Start_X + 30.0f, Merlin_Start_Y + 30.0f, Rect } });
+                    Col_Comp{ Merlin_Start_X - 2.0f, Merlin_Start_Y - 30.0f,
+                    Merlin_Start_X + 2.0f, Merlin_Start_Y + 30.0f, Rect } });
   for (int i = 0; i < A_Rain_Buffer; ++i)
   {
     Arrow[i].Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
-    Arrow[i].SetVelocity(AEVec2{ 0.0f, -1200.0f });
+    Arrow[i].SetVelocity(AEVec2{ 0.0f, -520.0f });
     Arrow[i].cooldown_timer = A_Rain_CD_Time;
   }
 }
@@ -77,13 +77,13 @@ Merlin::~Merlin()
   Arrow.clear();
   Spread_Eball.clear();
 }
-void Merlin::Idle(const Dragon &player)
+void Merlin::Idle(Dragon &player)
 {
   UNREFERENCED_PARAMETER(player);
   /*Do some idle animation or something idk yet*/
 }
 
-void Merlin::Move(const Dragon &player)
+void Merlin::Move(Dragon &player)
 {
   UNREFERENCED_PARAMETER(player);
   //This will move merlin to the 3 different spots
@@ -119,14 +119,14 @@ void Merlin::Move(const Dragon &player)
   Blink_.CD_Time = Blink_CD_Time;
 }
 
-void Merlin::Melee(const Dragon &player)
+void Merlin::Melee(Dragon &player)
 {
   UNREFERENCED_PARAMETER(player);
   std::cout << "Melee\n";
   M_Melee.cooldown = true;
 }
 
-void Merlin::S_Eball(const Dragon &player)
+void Merlin::S_Eball(Dragon &player)
 {
   std::cout << "Single Shot Energy Ball\n";
   //Get the displacement betwwen player and Merlin
@@ -141,7 +141,7 @@ void Merlin::S_Eball(const Dragon &player)
   Eball.cooldown = true;
 }
 
-void Merlin::Sp_Eball(const Dragon &player)
+void Merlin::Sp_Eball(Dragon &player)
 {
   UNREFERENCED_PARAMETER(player);
   std::cout << "Spread Shot Energy Ball\n";
@@ -172,7 +172,7 @@ void Merlin::Sp_Eball(const Dragon &player)
   }
 }
 
-void Merlin::A_Rain(const Dragon &player)
+void Merlin::A_Rain(Dragon &player)
 {
   UNREFERENCED_PARAMETER(player);
   //Seed rand based on time
@@ -192,14 +192,14 @@ void Merlin::A_Rain(const Dragon &player)
   }
 }
 
-void Merlin::Attack(const Dragon &player)
+void Merlin::Attack(Dragon &player)
 {
   /*This will execute the attacks*/
   (this->*Merlin_Attack)(player);
   Attack_Interval = Merlin_Att_Inter;
 }
 
-void Merlin::CheckState(const Dragon &player)
+void Merlin::CheckState(Dragon &player)
 {
   M_Curr = M_Next;
   //Assign the respective functions to the pointer
@@ -240,7 +240,7 @@ void Merlin::CheckState(const Dragon &player)
   }
 }
 
-bool Merlin::CheckAttack(const Dragon &player)
+bool Merlin::CheckAttack(Dragon &player)
 {
   bool CanAttack{ false };
   //Check if attack interval is over
@@ -297,7 +297,7 @@ bool Merlin::CheckAttack(const Dragon &player)
   return CanAttack;
 }
 
-void Merlin::Update(const Dragon &player)
+void Merlin::Update(Dragon &player)
 {
   //Check if I am hit here
   //Update all on going attacks first, aka the currently active ones
@@ -335,7 +335,7 @@ void Merlin::Update(const Dragon &player)
   Eball.Projectile::Pos();
   Eball.Projectile::Pos(PosX, PosY);
   Eball.Projectile::Update();
-  Eball.Collision_.Update_Col_Pos(Eball.PosX, Eball.PosY);
+  Eball.Collision_.Update_Col_Pos(Eball.PosX - 50.0f, Eball.PosY - 50.0f, Eball.PosX + 50.0f, Eball.PosY + 50.0f);
   //Spread Shot
   if (Spread_Eball[0].cooldown)
   {
@@ -360,7 +360,7 @@ void Merlin::Update(const Dragon &player)
     Spread_Eball[i].Projectile::Pos();
     Spread_Eball[i].Projectile::Pos(PosX, PosY);
     Spread_Eball[i].Projectile::Update();
-    Spread_Eball[i].Collision_.Update_Col_Pos(Spread_Eball[i].PosX, Spread_Eball[i].PosY);
+    Spread_Eball[i].Collision_.Update_Col_Pos(Spread_Eball[i].PosX - 30.0f, Spread_Eball[i].PosY - 30.0f, Spread_Eball[i].PosX + 30.0f, Spread_Eball[i].PosY + 30.0f);
   }
   //Arrow Rain
   if (Arrow[A_Rain_Buffer - 1].cooldown)
@@ -398,20 +398,20 @@ void Merlin::Update(const Dragon &player)
       Arrow[i].Projectile::Pos();
       Arrow[i].Projectile::Pos(player.PosX, 360.0f);
       Arrow[i].Projectile::Update();
-      Arrow[i].Collision_.Update_Col_Pos(Arrow[i].PosX, Arrow[i].PosY);
+      Arrow[i].Collision_.Update_Col_Pos(Arrow[i].PosX - 2.0f, Arrow[i].PosY - 30.0f, Arrow[i].PosX + 2.0f, Arrow[i].PosY + 30.0f);
       continue;
     }
     if (Arrow[i - 1].GetDist() < 100.0f)
     {
       Arrow[i].Projectile::Pos(player.PosX, 360.0f);
-      Arrow[i].Collision_.Update_Col_Pos(Arrow[i].PosX, Arrow[i].PosY);
+      Arrow[i].Collision_.Update_Col_Pos(Arrow[i].PosX - 2.0f, Arrow[i].PosY - 30.0f, Arrow[i].PosX + 2.0f, Arrow[i].PosY + 30.0f);
     }
     else
     {
       Arrow[i].Projectile::Pos();
       Arrow[i].Projectile::Pos(player.PosX, 260.0f);
       Arrow[i].Projectile::Update();
-      Arrow[i].Collision_.Update_Col_Pos(Arrow[i].PosX, Arrow[i].PosY);
+      Arrow[i].Collision_.Update_Col_Pos(Arrow[i].PosX - 2.0f, Arrow[i].PosY - 30.0f, Arrow[i].PosX + 2.0f, Arrow[i].PosY + 30.0f);
     }
   }
   //Melee
@@ -431,12 +431,57 @@ void Merlin::Update(const Dragon &player)
     if(player.GetFireball()[i].IsActive())
       if (Collision_.Dy_Rect_Rect(player.GetFireball()[i].Collision_, GetVelocity(), player.GetFireball()[i].GetVelocity(), 0.016f))//Remember to replace with dt
       {
-       Decrease_HP(player.GetDamage());
-       std::cout << "HP: " << Get_HP() << std::endl;
+        Decrease_HP(player.GetDamage());
+        player.GetFireball()[i].SetActive(false);
+        //std::cout << "HP: " << Get_HP() << std::endl;
       }
   //If Dragon gets hit decrease Dragon HP
   //Call player's collision and put in my attacks
   //Check if attacks are on cooldown AND active first
+  //Arrow rain collicion check
+  if (Arrow[A_Rain_Buffer - 1].cooldown)
+  {
+    if (Arrow[A_Rain_Buffer - 1].IsActive())
+    {
+      for (int i = 0; i < A_Rain_Buffer; ++i)
+        if (Arrow[i].IsActive())
+        {
+          if (player.Collision_.Dy_Rect_Rect(Arrow[i].Collision_, Arrow[i].GetVelocity(), player.GetVelocity(), 0.016f))
+          {
+            player.Decrease_HP();
+            //Arrow[i].SetActive(false);
+          }
+        }
+    }
+  }
+  //Spread shot collision check
+  if (Spread_Eball[0].cooldown)
+  {
+    if (Spread_Eball[0].IsActive())
+    {
+      for (int i = 0; i < 3; ++i)
+        if (Spread_Eball[i].IsActive())
+        {
+          if (player.Collision_.Dy_Rect_Rect(Spread_Eball[i].Collision_, Spread_Eball[i].GetVelocity(), player.GetVelocity(), 0.016f))
+          {
+            player.Decrease_HP();
+            Spread_Eball[i].SetActive(false);
+          }
+        }
+    }
+  }
+  //Energy ball collision check
+  if (Eball.cooldown)
+  {
+    if (Eball.IsActive())
+    {
+      if (player.Collision_.Dy_Rect_Rect(Eball.Collision_, Eball.GetVelocity(), player.GetVelocity(), 0.016f))
+      {
+        player.Decrease_HP();
+        Eball.SetActive(false);
+      }
+    }
+  }
 }
 
 void Merlin::Render()

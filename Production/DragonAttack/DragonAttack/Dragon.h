@@ -56,10 +56,12 @@ public:
   char GetDamage() const { return Damage; }
   //Get mega fireball damage
   char GetMDamage() const { return M_Damage; }
+  //Jump check
+  bool GetJump() { return Dir.UP; }
   //Returns Fireballs to check for collision
-  const std::vector<Projectile> &GetFireball() const { return Fireball; }
+  std::vector<Projectile> &GetFireball() { return Fireball; }
   //Returns Mega Fireball to check for collision
-  const Projectile &GetMfireball() const { return Mfireball; }
+  Projectile &GetMfireball() { return Mfireball; }
   //Get the direction the player is facing
   float GetFacing() const { return Facing; }
   //Returns this pos
