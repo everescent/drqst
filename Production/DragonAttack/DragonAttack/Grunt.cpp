@@ -1,12 +1,12 @@
 /* Start Header ************************************************************************/
 /*!
 \file       Grunt.cpp
-\author     William Yoong
-\par email: william.yoong\@digipen.edu
+\author     Andrew Chong
+\par email: c.jiahaoandrew\@digipen.edu
 \brief
 Grunts to be created for the game.
 
-Copyright (C) 20xx DigiPen Institute of Technology.
+Copyright (C) 2018 DigiPen Institute of Technology.
 Reproduction or disclosure of this file or its contents
 without the prior written consent of DigiPen Institute of
 Technology is prohibited.
@@ -22,12 +22,12 @@ namespace // global variables just for THIS file
 	const int grunt_hp = 30;
 	bool  PlayerSeen = false;
 	bool  PlayerInRange = false;
-	//bool  IdlePos       = true;
 	float MovementX = 0.5f;
 	float MovementY = 0.5f;
 	float IdleXPos;
 	float IdleYPos;
 	float moveSpd = 3.0f;
+	int EstIdleX;
 }
 
 Grunt::Grunt()
@@ -39,7 +39,7 @@ Grunt::Grunt()
 	PosY = -120.0f;
 	IdleXPos = this->PosX;
 	IdleYPos = this->PosY;
-
+	EstIdleX = (int)IdleXPos;
 }
 
 void Grunt::Update(float dt, const Dragon &d)
@@ -61,7 +61,7 @@ void Grunt::Update(float dt, const Dragon &d)
 		Idle(d);
 	}
 
-	/*this->Transform_.SetTranslate(PosX, PosY); //
+	/*this->Transform_.SetTranslate(PosX, PosY);
 	this->Transform_.Concat();*/
 }
 
@@ -83,21 +83,13 @@ void Grunt::MoveTowardPlayer(const Dragon &d)
 	if (MovementX < 100.0f && MovementY < 50.0f &&
 		MovementX > -100.0f && MovementY > -50.0f) // Attack Range (change accordingly)
 	{
-		//std::cout << "in attack range" << std::endl;
 		PlayerInRange = true;
 	}
 	else
-		if (MovementX > 100.0f || MovementX < -100.0f) // not entering
-		{
-			//std::cout << "out of attack range" << std::endl;
-			PlayerInRange = false;
-		}
-
-	//if (MovementX > 100.0f || MovementX < -100.0f) // not entering
-	//{
-	//	std::cout << "out of range" << std::endl;
-	//	PlayerInRange = false;
-	//}
+	if (MovementX > 100.0f || MovementX < -100.0f) // not entering
+	{
+		PlayerInRange = false;
+	}
 
 	PosX -= MovementX / 60;
 	//PosY -= MovementY / 60;
@@ -112,7 +104,6 @@ void Grunt::LineOfSight(const Dragon &d)
 	if (playerDist <= 400.0f && playerDist >= -400.0f)  // vision range
 	{
 		PlayerSeen = true;
-		//std::cout << "Player Seen" << std::endl;
 	}
 	else
 	{
@@ -147,26 +138,26 @@ void Grunt::AttackPlayer(const Dragon &d)
 void Grunt::Idle(const Dragon &d)
 {
 	UNREFERENCED_PARAMETER(d);
+	int MaxXPos =(int)( IdleXPos + 120.0f); // max boundary
+	int MinXPos =(int) (IdleXPos - 120.0f); // min boundary
+	int EstCurrentX = (int)(this->PosX);
 
-	//if ((this->PosX) != IdleXPos) // if not at idle position
-	//{
-	//	std::cout << "idleReturn" << std::endl;
-	//	//move to idle position
-	//	MovementX = (this->PosX) - IdleXPos;
-	//	PosX -= MovementX / 120;
-	//	this->Transform_.SetTranslate(PosX, PosY);
-	//	this->Transform_.Concat();
-	//}
-	//else 
-	if ((int)(this->PosX) == (int)IdleXPos) // if at idle position
+	if ( EstCurrentX < (EstIdleX-121) || EstCurrentX > (EstIdleX+120)) // if lesser than min boundary OR greater than max boundary
+	{	
+		//reason for strange values is due to how the obj will enter the bottom loop if it is close to the boundary
+		//then re-enter this loop because of the *= -1, forever continuing the back and forth
+
+		MovementX = (this->PosX) - IdleXPos;
+		PosX -= MovementX / 120;
+
+		this->Transform_.SetTranslate(PosX, PosY);
+		this->Transform_.Concat();
+	}
+	else
 	{
-		std::cout << "idleNow" << std::endl;
-		float MaxXPos = IdleXPos + 100.0f; // max boundary
-		float MinXPos = IdleXPos - 100.0f; // min boundary
-
 		if (PlayerSeen == false)
 		{
-			if ((PosX >= MaxXPos) || (PosX <= MinXPos))
+			if ((PosX > MaxXPos) || (PosX < MinXPos))
 			{
 				moveSpd *= -1;
 			}
@@ -175,15 +166,5 @@ void Grunt::Idle(const Dragon &d)
 			this->Transform_.SetTranslate(PosX, PosY);
 			this->Transform_.Concat();
 		}
-	}
-	else
-	{
-		std::cout << "this X " << (int)this->PosX << std::endl;
-		std::cout << "returning" << (int)IdleXPos << std::endl;
-
-		MovementX = (this->PosX) - IdleXPos;
-		PosX -= MovementX / 120;
-		this->Transform_.SetTranslate(PosX, PosY);
-		this->Transform_.Concat();
 	}
 }
