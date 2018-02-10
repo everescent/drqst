@@ -61,27 +61,27 @@ void Dragon::Input()
   //  Attack = true;
 }
 
-void Dragon::Update(float dt = 0.016f)
+void Dragon::Update()
 {
   //Call for player input
   Input();
   //Update position based on direction
   if (Dir.L)
   {
-    PosX -= GetVelocity().x * dt;
+    PosX -= Speed;
     Facing = -1.0f;
     Transform_.SetScale(Facing, 1.0f);
   }
   else if (Dir.R)
   {
-    PosX += GetVelocity().x * dt;
+    PosX += Speed;
     Facing = 1.0f;
     Transform_.SetScale(Facing, 1.0f);
   }
   if (Dir.UP)
   {
-    PosY += GetVelocity().x * Jump_Mult * dt;
-    Air_Dist += GetVelocity().x * Jump_Mult * dt;
+    PosY += Speed * Jump_Mult;
+    Air_Dist += Speed * Jump_Mult;
   }
   PosY -= Gravity;
   if (PosY <= Start_Pos_Y)
