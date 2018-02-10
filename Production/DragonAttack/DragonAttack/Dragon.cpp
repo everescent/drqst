@@ -89,7 +89,7 @@ void Dragon::Update(float dt = 0.016)
   //Update position of player
   Transform_.SetTranslate(PosX, PosY);
   Transform_.Concat();
-  //Collision_.Update_Col_Pos(PosX - 100.0f, PosY - 100.0f, PosX + 100.0f, PosY + 100.0f);
+  Collision_.Update_Col_Pos(PosX - 100.0f * 0.6f, PosY - 100.0f * 0.6f, PosX + 100.0f * 0.6f, PosY + 100.0f * 0.6f);
   //Check if attack has been made
   if (Attack)
   {
@@ -115,7 +115,7 @@ void Dragon::Update(float dt = 0.016)
     Fireball[i].Pos(PosX, PosY);
     Fireball[i].Pos();
     Fireball[i].Update();
-    Fireball[i].Collision_.Update_Col_Pos(Fireball[i].PosX, Fireball[i].PosY);
+    Fireball[i].Collision_.Update_Col_Pos(Fireball[i].PosX - 50.0f, Fireball[i].PosY - 50.0f, Fireball[i].PosX + 50.0f, Fireball[i].PosY + 50.0f);
   }
   //Check for distance limit
   for (int i = 0; i < Bullet_Buffer; ++i)
