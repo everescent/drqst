@@ -29,7 +29,8 @@ Merlin::Merlin()
   //All Boss Attacks to be properly initialized later
   M_Melee{ Sprite{}, Col_Comp{} },
   Eball{ Sprite{ S_CreateSquare(50.0f, 1.0f, 1.0f, "energyball.png") },
-         Col_Comp{ Merlin_Start_X, Merlin_Start_Y, 50, Circle } },
+         Col_Comp{ Merlin_Start_X - 50.0f, Merlin_Start_Y - 50.0f,
+                   Merlin_Start_X + 50.0f, Merlin_Start_Y + 50.0f, Rect } },
   Spread_Eball{}, Arrow{}, Blink_{}, Attack_Interval{ 0 },
   MagicCircle{ S_CreateSquare(150.0f, 1.0f, 1.0f, "magic_circle.png") }
 {
@@ -50,7 +51,8 @@ Merlin::Merlin()
   Spread_Eball.reserve(3);
   for (int i = 0; i < 3; ++i)
     Spread_Eball.push_back(Boss_Attack{ S_CreateSquare(30.0f, 1.0f, 1.0f, "energyball.png"), 
-                           Col_Comp{ Merlin_Start_X, Merlin_Start_Y, 30, Circle } });
+                           Col_Comp{ Merlin_Start_X - 30.0f, Merlin_Start_Y - 30.0f,
+                           Merlin_Start_X + 30.0f, Merlin_Start_Y + 30.0f, Rect } });
   for (int i = 0; i < 3; ++i)
   {
     Spread_Eball[i].Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
@@ -60,7 +62,8 @@ Merlin::Merlin()
   Arrow.reserve(A_Rain_Buffer);
   for (int i = 0; i < A_Rain_Buffer; ++i)
     Arrow.push_back(Boss_Attack{ S_CreateSquare(30.0f, 1.0f, 1.0f, "arrow.png"),
-      Col_Comp{ Merlin_Start_X, Merlin_Start_Y, 30, Circle } });
+                    Col_Comp{ Merlin_Start_X - 30.0f, Merlin_Start_Y - 30.0f,
+                    Merlin_Start_X + 30.0f, Merlin_Start_Y + 30.0f, Rect } });
   for (int i = 0; i < A_Rain_Buffer; ++i)
   {
     Arrow[i].Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
@@ -422,14 +425,15 @@ void Merlin::Update(const Dragon &player)
     }
   }
   //Merlin collision update
-  GameObject::Collision_.Update_Col_Pos(PosX - 100.0f, PosY - 100.0f, PosX + 100.0f, PosY + 100.0f);
+  GameObject::Collision_.Update_Col_Pos(PosX - 100.0f * 0.6f, PosY - 100.0f * 0.6f, PosX + 100.0f * 0.6f, PosY + 100.0f * 0.6f);
   //If Merlin gets hit, decrease HP
   for(char i = 0; i < Bullet_Buffer; ++i)
-    if (Collision_.Dy_Rect_Rect(player.GetFireball()[i].Collision_, player.GetFireball()[i].GetVelocity(), AEVec2{}, 0.016f))//Remember to replace with dt
-    {
-      this->Set_HP(20);
-      std::cout << "HIT!\n";
-    }
+    if(player.GetFireball()[i].IsActive())
+      if (Collision_.Dy_Rect_Rect(player.GetFireball()[i].Collision_, GetVelocity(), player.GetFireball()[i].GetVelocity(), 0.016f))//Remember to replace with dt
+      {
+       Decrease_HP(player.GetDamage());
+       std::cout << "HP: " << Get_HP() << std::endl;
+      }
   //If Dragon gets hit decrease Dragon HP
   //Call player's collision and put in my attacks
   //Check if attacks are on cooldown AND active first

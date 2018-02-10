@@ -31,7 +31,7 @@ enum PowerUp {
 const int   Bullet_Buffer  { 10      }; //Amount of fireballs at any one time
 const float Bullet_Interval{ 400.0f  }; //Minimum distance between each fireball
 const float Bullet_Death   { 900.0f  }; //Distance when bullet dies
-const float Bullet_Speed   { 1200.0f   }; //How fast a bullet travels
+const float Bullet_Speed   { 1200.0f }; //How fast a bullet travels
 
 const float Jump_Height    { 200.0f  }; //Maximum height player can jump
 const float Jump_Mult      { 3.0f    }; //How fast player can jump
@@ -52,6 +52,10 @@ public:
   void Update(float dt);
   //Renders the dragon
   void Render(); 
+  //Get fireball damage
+  char GetDamage() const { return Damage; }
+  //Get mega fireball damage
+  char GetMDamage() const { return M_Damage; }
   //Returns Fireballs to check for collision
   const std::vector<Projectile> &GetFireball() const { return Fireball; }
   //Returns Mega Fireball to check for collision
@@ -63,14 +67,15 @@ public:
   Dragon()
     //Initialize Characters class
     :Characters{ S_CreateSquare(100.0f, 1.0f, 1.0f, "dragon_tmp.png"), 3,
-    Col_Comp{ Start_Pos_X - 100.0f, Start_Pos_Y - 100.0f, 
-              Start_Pos_X + 100.0f, Start_Pos_Y + 100.0f, Rect} },
+    Col_Comp{ Start_Pos_X - 100.0f * 0.6f, Start_Pos_Y - 100.0f * 0.6f,
+              Start_Pos_X + 100.0f * 0.6f, Start_Pos_Y + 100.0f * 0.6f, Rect} },
     //Initialize data members
-    Attack{ false }, Pwr_Up{ false }, Damage{ 10 }, Charge{ 0 },
-    Gravity{ 10.0f }, Speed{ 8.0f }, Dir{}, Buff{}, Fireball{},
+    Attack{ false }, Pwr_Up{ false }, Damage{ 10 }, M_Damage{ 15 }, Charge{ 0 },
+    Gravity{ 10.0f }, Dir{}, Buff{}, Fireball{},
     //Initialize Mega Fireball
     Mfireball{ S_CreateSquare(50.0f, 1.0f, 1.0f, "fireball.png"), 
-    Col_Comp{ Start_Pos_X, Start_Pos_Y, 50, Circle} }, Air_Dist{ 0.0f }, Facing{ 1.0f }
+    Col_Comp{ Start_Pos_X - 50.0f, Start_Pos_Y - 50.0f,
+    Start_Pos_X + 50.0f, Start_Pos_Y + 50.0f, Rect } }, Air_Dist{ 0.0f }, Facing{ 1.0f }
   {
     //Initialize player start location
     PosX = Start_Pos_X;
@@ -82,7 +87,8 @@ public:
     //Initialize all the fireballs
     for (int i = 0; i < Bullet_Buffer; ++i)
       Fireball.push_back(Projectile{ S_CreateSquare(50.0f, 1.0f, 1.0f, "fireball.png"),
-                                    Col_Comp{ Start_Pos_X, Start_Pos_Y, 50, Circle } });
+                                     Col_Comp{ Start_Pos_X - 50.0f, Start_Pos_Y - 50.0f,
+                                     Start_Pos_X + 50.0f, Start_Pos_Y + 50.0f, Rect } });
     for (int i = 0; i < Bullet_Buffer; ++i)
     {
       Fireball[i].SetVelocity(AEVec2{ Bullet_Speed, 0.0f });
@@ -100,10 +106,10 @@ private:
 
   bool Attack;    //Check if player is attacking
   bool Pwr_Up;    //Check if power up is in effect
-  int Damage;     //Amount of damage each attack does
+  char Damage;    //Amount of damage each fireball does
+  char M_Damage;    //Amount of damage each mega fireball does
   int Charge;     //Charge for Mega Fireball
   float Gravity;  //Gravity
-  float Speed;    //Speed of the dragon
   float Air_Dist; //Distance jumped
   float Facing;   //Direction of player is facing
   //Determines direction 
