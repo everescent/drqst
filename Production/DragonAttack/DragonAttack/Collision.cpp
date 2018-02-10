@@ -64,7 +64,7 @@ bool Col_Comp::Dy_Rect_Rect( const Col_Comp &B, const AEVec2 &velocity_A, const 
 	float t_first = 0, t_first_x = 0 , t_first_y = 0 ;
 	float t_last = dt, t_last_x = 0, t_last_y = 0;
 	
-	if (Vel_x_Res < 0)
+	if (Vel_x_Res <= 0)
 	{
 		//Case 1
 		if (this->min.x > B.max.x) // object B on the left of A 
@@ -81,7 +81,7 @@ bool Col_Comp::Dy_Rect_Rect( const Col_Comp &B, const AEVec2 &velocity_A, const 
 
 	}
 
-	if (Vel_x_Res > 0)
+	if (Vel_x_Res >= 0)
 	{
 		//Case 2
 		if (this->min.x > B.max.x) // object B on the left of A 
