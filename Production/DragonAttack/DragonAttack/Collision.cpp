@@ -59,7 +59,8 @@ bool Col_Comp::Dy_Rect_Rect( const Col_Comp &B, const AEVec2 &velocity_A, const 
 	float Vel_x_B = velocity_B.x;
 	float Vel_y_A = velocity_A.y;
 	float Vel_y_B = velocity_B.y;
-	float Vel_x_Res = Vel_x_B - Vel_x_A, Vel_y_Res = Vel_y_B - Vel_y_A; 
+	float Vel_x_Res = Vel_x_B - Vel_x_A;
+	float Vel_y_Res = Vel_y_B - Vel_y_A;
 	float t_first = 0, t_first_x = 0 , t_first_y = 0 ;
 	float t_last = dt, t_last_x = 0, t_last_y = 0;
 	
@@ -97,10 +98,10 @@ bool Col_Comp::Dy_Rect_Rect( const Col_Comp &B, const AEVec2 &velocity_A, const 
 
 	//--------------------------------------Repeat Step for Y 
 
-	if (Vel_y_Res < 0)
+	if (Vel_y_Res <= 0)
 	{
 		//Case 1
-		if (this->min.y > B.max.y) // object B on the left of A 
+		if (this->min.y > B.max.y) //object B is below A 
 		{
 			return false;
 		}
@@ -109,12 +110,13 @@ bool Col_Comp::Dy_Rect_Rect( const Col_Comp &B, const AEVec2 &velocity_A, const 
 		if (this->max.y < B.min.y) // object B on the right of A 
 		{
 			t_first_y = (this->max.y - B.min.y) / Vel_y_Res;
-			t_last_y = (this->min.y - B.max.y) / Vel_y_Res;
+			t_last_y = (this->min.y - B.max.y) / 
+				Vel_y_Res;
 		}
 
 	}
 
-	if (Vel_y_Res > 0)
+	if (Vel_y_Res >= 0)
 	{
 		//Case 2
 		if (this->min.x > B.max.x) // object B on the left of A 
@@ -123,7 +125,7 @@ bool Col_Comp::Dy_Rect_Rect( const Col_Comp &B, const AEVec2 &velocity_A, const 
 			t_last_y = (this->max.y - B.min.y) / Vel_y_Res;
 		}
 		//Case 3
-		if (this->max.x < B.min.x) // object B on the right of A 
+		if (this->max.x < B.min.x) // object B is on top of A 
 		{
 			return false;
 		}
