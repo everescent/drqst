@@ -97,7 +97,7 @@ public:
 
 	bool St_Circle_Circle( const Col_Comp &aabb_obj2); //static collision for Circle to Circle
 
-	bool Dy_Rect_Rect(const Col_Comp &aabb_obj2, float dt);
+	bool Dy_Rect_Rect(const Col_Comp &B, const AEVec2 &velocity_A, const AEVec2 &velocity_B, float dt);
 
 	Shape GetShape(); 
 

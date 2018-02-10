@@ -52,13 +52,13 @@ bool Col_Comp::St_Circle_Circle( const Col_Comp &objB)
 
 }
 
-bool Col_Comp::Dy_Rect_Rect( const Col_Comp &B, float dt)
+bool Col_Comp::Dy_Rect_Rect( const Col_Comp &B, const AEVec2 &velocity_A, const AEVec2 &velocity_B, float dt)
 {
 	//hard coded velocity for testing 
-	float Vel_x_A = 1000000.0f;
-	float Vel_x_B = 9324324.0f;
-	float Vel_y_A = 45234325.3f;
-	float Vel_y_B = 4534545.5f;
+	float Vel_x_A = velocity_A.x;
+	float Vel_x_B = velocity_B.x;
+	float Vel_y_A = velocity_A.y;
+	float Vel_y_B = velocity_B.y;
 	float Vel_x_Res = Vel_x_B - Vel_x_A, Vel_y_Res = Vel_y_B - Vel_y_A; 
 	float t_first = 0, t_first_x = 0 , t_first_y = 0 ;
 	float t_last = dt, t_last_x = 0, t_last_y = 0;
@@ -66,16 +66,16 @@ bool Col_Comp::Dy_Rect_Rect( const Col_Comp &B, float dt)
 	if (Vel_x_Res < 0)
 	{
 		//Case 1
-		if (min.x > B.max.x) // object B on the left of A 
+		if (this->min.x > B.max.x) // object B on the left of A 
 		{
 			return false;
 		}
 
 		//Case 4 
-		if (max.x < B.min.x) // object B on the right of A 
+		if (this->max.x < B.min.x) // object B on the right of A 
 		{
-			t_first_x = (max.x - B.min.x) / Vel_x_Res;
-			t_last_x = (min.x - B.max.x) / Vel_x_Res;
+			t_first_x = (this->max.x - B.min.x) / Vel_x_Res;
+			t_last_x = (this->min.x - B.max.x) / Vel_x_Res;
 		}
 
 	}
@@ -83,13 +83,13 @@ bool Col_Comp::Dy_Rect_Rect( const Col_Comp &B, float dt)
 	if (Vel_x_Res > 0)
 	{
 		//Case 2
-		if (min.x > B.max.x) // object B on the left of A 
+		if (this->min.x > B.max.x) // object B on the left of A 
 		{
-			t_first_x = (min.x - B.max.x) / Vel_x_Res;
-			t_last_x = (max.x - B.min.x) / Vel_x_Res;
+			t_first_x = (this->min.x - B.max.x) / Vel_x_Res;
+			t_last_x = (this->max.x - B.min.x) / Vel_x_Res;
 		}
 		//Case 3
-		if (max.x < B.min.x) // object B on the right of A 
+		if (this->max.x < B.min.x) // object B on the right of A 
 		{
 			return false;
 		}
@@ -100,16 +100,16 @@ bool Col_Comp::Dy_Rect_Rect( const Col_Comp &B, float dt)
 	if (Vel_y_Res < 0)
 	{
 		//Case 1
-		if (min.y > B.max.y) // object B on the left of A 
+		if (this->min.y > B.max.y) // object B on the left of A 
 		{
 			return false;
 		}
 
 		//Case 4 
-		if (max.y < B.min.y) // object B on the right of A 
+		if (this->max.y < B.min.y) // object B on the right of A 
 		{
-			t_first_y = (max.y - B.min.y) / Vel_y_Res;
-			t_last_y = (min.y - B.max.y) / Vel_y_Res;
+			t_first_y = (this->max.y - B.min.y) / Vel_y_Res;
+			t_last_y = (this->min.y - B.max.y) / Vel_y_Res;
 		}
 
 	}
@@ -117,13 +117,13 @@ bool Col_Comp::Dy_Rect_Rect( const Col_Comp &B, float dt)
 	if (Vel_y_Res > 0)
 	{
 		//Case 2
-		if (min.x > B.max.x) // object B on the left of A 
+		if (this->min.x > B.max.x) // object B on the left of A 
 		{
-			t_first_y = (min.y - B.max.y) / Vel_y_Res;
-			t_last_y = (max.y - B.min.y) / Vel_y_Res;
+			t_first_y = (this->min.y - B.max.y) / Vel_y_Res;
+			t_last_y = (this->max.y - B.min.y) / Vel_y_Res;
 		}
 		//Case 3
-		if (max.x < B.min.x) // object B on the right of A 
+		if (this->max.x < B.min.x) // object B on the right of A 
 		{
 			return false;
 		}
