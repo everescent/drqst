@@ -54,7 +54,7 @@ bool Col_Comp::St_Circle_Circle( const Col_Comp &objB)
 
 bool Col_Comp::Dy_Rect_Rect( const Col_Comp &B, const AEVec2 &velocity_A, const AEVec2 &velocity_B, float dt)
 {
-	//hard coded velocity for testing 
+	
 	float Vel_x_A = velocity_A.x;
 	float Vel_x_B = velocity_B.x;
 	float Vel_y_A = velocity_A.y;
@@ -64,7 +64,19 @@ bool Col_Comp::Dy_Rect_Rect( const Col_Comp &B, const AEVec2 &velocity_A, const 
 	float t_first = 0, t_first_x = 0 , t_first_y = 0 ;
 	float t_last = dt, t_last_x = 0, t_last_y = 0;
 	
-	if (Vel_x_Res <= 0)
+	f32 left_A = min.x, left_B = B.min.x;
+	f32 right_A = max.x, right_B = B.max.x;
+	f32 top_A = max.y, top_B = B.max.y;
+	f32 btm_A = min.y, btm_B = B.min.y;
+
+
+	//Check for NO collision using AABB between 2 objects 
+	if (left_A > right_B) return false;
+	if (left_B > right_A) return false;
+	if (top_A < btm_B) return false;
+	if (top_B < btm_A) return false;
+
+	if (Vel_x_Res < 0)
 	{
 		//Case 1
 		if (this->min.x > B.max.x) // object B on the left of A 
@@ -81,7 +93,7 @@ bool Col_Comp::Dy_Rect_Rect( const Col_Comp &B, const AEVec2 &velocity_A, const 
 
 	}
 
-	if (Vel_x_Res >= 0)
+	if (Vel_x_Res > 0)
 	{
 		//Case 2
 		if (this->min.x > B.max.x) // object B on the left of A 
@@ -95,10 +107,10 @@ bool Col_Comp::Dy_Rect_Rect( const Col_Comp &B, const AEVec2 &velocity_A, const 
 			return false;
 		}
 	}
-
+	a
 	//--------------------------------------Repeat Step for Y 
 
-	if (Vel_y_Res <= 0)
+	if (Vel_y_Res < 0)
 	{
 		//Case 1
 		if (this->min.y > B.max.y) //object B is below A 
@@ -116,9 +128,10 @@ bool Col_Comp::Dy_Rect_Rect( const Col_Comp &B, const AEVec2 &velocity_A, const 
 
 	}
 
-	if (Vel_y_Res >= 0)
+	if (Vel_y_Res > 0)
 	{
 		//Case 2
+
 		if (this->min.x > B.max.x) // object B on the left of A 
 		{
 			t_first_y = (this->min.y - B.max.y) / Vel_y_Res;
