@@ -52,8 +52,8 @@ public:
       }
       else
       {
-        PosX -= GetVelocity().x;
-        PosY -= GetVelocity().y;
+        PosX -= GetVelocity().x * 0.016f;
+        PosY -= GetVelocity().y * 0.016f;
         Transform_.SetRotation(-90.0f);
       }
     }

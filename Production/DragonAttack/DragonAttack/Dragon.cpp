@@ -61,27 +61,27 @@ void Dragon::Input()
   //  Attack = true;
 }
 
-void Dragon::Update()
+void Dragon::Update(float dt = 0.016)
 {
   //Call for player input
   Input();
   //Update position based on direction
   if (Dir.L)
   {
-    PosX -= Speed;
+    PosX -= GetVelocity().x * dt;
     Facing = -1.0f;
     Transform_.SetScale(Facing, 1.0f);
   }
   else if (Dir.R)
   {
-    PosX += Speed;
+    PosX += GetVelocity().x * dt;
     Facing = 1.0f;
     Transform_.SetScale(Facing, 1.0f);
   }
   if (Dir.UP)
   {
-    PosY += Speed * Jump_Mult;
-    Air_Dist += Speed * Jump_Mult;
+    PosY += GetVelocity().y * dt;
+    Air_Dist += GetVelocity().y * dt;
   }
   PosY -= Gravity;
   if (PosY <= Start_Pos_Y)
@@ -89,7 +89,7 @@ void Dragon::Update()
   //Update position of player
   Transform_.SetTranslate(PosX, PosY);
   Transform_.Concat();
-  Collision_.Update_Col_Pos(PosX - 100.0f, PosY - 100.0f, PosX + 100.0f, PosY + 100.0f);
+  //Collision_.Update_Col_Pos(PosX - 100.0f, PosY - 100.0f, PosX + 100.0f, PosY + 100.0f);
   //Check if attack has been made
   if (Attack)
   {

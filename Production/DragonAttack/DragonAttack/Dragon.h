@@ -47,9 +47,9 @@ public:
   //Handles player input
   void Input();
   //Updates data members based on input
-  void Update();
+  void Update() {};
   //Don't need to use dt
-  void Update(float dt) { UNREFERENCED_PARAMETER(dt); }
+  void Update(float dt);
   //Renders the dragon
   void Render(); 
   //Returns Fireballs to check for collision
@@ -75,6 +75,8 @@ public:
     //Initialize player start location
     PosX = Start_Pos_X;
     PosY = Start_Pos_Y;
+    //Set velocity
+    SetVelocity(AEVec2{ 480.0f, 480.0f * Jump_Mult });
     //Reserve a bloack of memory per number of bullets 
     Fireball.reserve(Bullet_Buffer);
     //Initialize all the fireballs

@@ -425,7 +425,7 @@ void Merlin::Update(const Dragon &player)
   GameObject::Collision_.Update_Col_Pos(PosX - 100.0f, PosY - 100.0f, PosX + 100.0f, PosY + 100.0f);
   //If Merlin gets hit, decrease HP
   for(char i = 0; i < Bullet_Buffer; ++i)
-    if (Collision_.Dy_Rect_Rect(player.GetFireball()[i].Collision_, 0.016f))//Remember to replace with dt
+    if (Collision_.Dy_Rect_Rect(player.GetFireball()[i].Collision_, player.GetFireball()[i].GetVelocity(), AEVec2{}, 0.016f))//Remember to replace with dt
     {
       this->Set_HP(20);
       std::cout << "HIT!\n";
