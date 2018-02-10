@@ -37,27 +37,27 @@ namespace {
 
 	char behavior_swap = 0; // switch between idling and moving
 
-	void Move_KA(float dt, King_Arthur &ka);
+	void Move_KA(const float dt, King_Arthur &ka, const Dragon &d); // move king arthur towards player
 
-	void Set_Attack_Dir(King_Arthur &ka);
+	void Set_Attack_Dir(King_Arthur &ka); // set the attack directions
 	
 }
 
 
 
 King_Arthur::King_Arthur(void)
-	: Characters(S_CreateSquare(100.0f, 1.0f, 1.0f, ".//Textures/download.png"),
+	: Characters(S_CreateSquare(60.0f, 1.0f, 1.0f, ".//Textures/download.png"),
 	  health, { 0.0f, 0.0f, 5.0f, 5.0f, Rect } ), phase2{false}
 {
 	(void) this->Transform_.SetTranslate(200.0f, Start_Pos_Y);
-	this->Transform_.Concat(); // spawn king arthur at the location set
-	this->PosX =  200.0f;      // change king arthur coordinates to the location set
-	this->PosY = Start_Pos_Y;  // change king arthur coordinates to the location set
-	this->SetActive(true);     // show him on screen
-	this->Set_Direction(LEFT); // set king arthur to face left at the start
+	this->Transform_.Concat();        // spawn king arthur at the location set
+	this->PosX =  200.0f;             // change king arthur coordinates to the location set
+	this->PosY = Start_Pos_Y;         // change king arthur coordinates to the location set
+	this->SetActive(true);            // show him on screen
+	this->Set_Direction(LEFT);        // set king arthur to face left at the start
 	this->SetVelocity({ 120, 0 });    // velocity for king arthur
 	this->Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
-	Init();  // call initializer for king arthur move set
+	Init();							  // call initializer for king arthur move set
 }
 
 void King_Arthur::Init(void)
@@ -66,7 +66,7 @@ void King_Arthur::Init(void)
 	const char* tex_3s = ".//Textures/holylight.jpg";
 	const char* tex_ja = ".//Textures/light_texture2320.jpg";
 
-	arthur.reserve(3);
+	arthur.reserve(limit);
 
 	arthur.emplace_back(Boss_Attack(S_CreateSquare(20.0f, 1.0f, 1.0f, tex_ss), // for single slash
 					 Col_Comp(0.0f, 0.0f, 5.0f, 5.0f, Rect))); 
@@ -83,26 +83,30 @@ void King_Arthur::Init(void)
 	arthur.emplace_back(Boss_Attack(S_CreateSquare(30.0f, 1.0f, 1.0f, tex_ja), // jump attack
 					 Col_Comp(0.0f, 0.0f, 5.0f, 5.0f, Rect)));
 
-	(void)arthur[0].SetVelocity(AEVec2{ 3.0f, 0.0f }); // velocity of the slashes
-	(void)arthur[1].SetVelocity(AEVec2{ 3.0f, 0.0f }); // velocity of the slashes
-	(void)arthur[2].SetVelocity(AEVec2{ 3.0f, 0.0f }); // velocity of the slashes
-	(void)arthur[3].SetVelocity(AEVec2{ 3.0f, 0.0f }); // velocity of the slashes
-														 
-	arthur[0].Transform_.SetScale(2.0f, 2.0f); // determine the size of projectile
-	arthur[0].Transform_.Concat();
-
-	for (char i = 0; i < limit; ++i) // spawning location of slashes
+	for (char i = 0; i < limit - 1; ++i) // spawning location of slashes
+	{
 		arthur[i].PosY = -120.0f;
+(void) arthur[i].SetVelocity(AEVec2{ 200.0f, 0.0f }); // velocity for slash
+		arthur[i].Transform_.SetScale(2.0f, 2.0f); // determine the size of projectile
+		arthur[i].Transform_.Concat();
+	}
 
 	ka_attacks[SINGLE_SLASH]    = &King_Arthur::Single_Slash;
 	ka_attacks[TRIPLE_SLASH]    = &King_Arthur::Triple_Slash;
-	ka_attacks[UNIQUE_MECHANIC] = &King_Arthur::Jump_Attack;
+	ka_attacks[UNIQUE_MECHANIC] = &King_Arthur::Dash_Attack;
 
 }
 
-void King_Arthur::Update(float dt, const Dragon &d) 
+void King_Arthur::Update(const float dt, const Dragon &d) 
 {
 
+	if ((int)(d.PosX - this->PosX) == 0) // character and boss intersect
+		this->Set_Direction(STAY);
+	else
+		//determine if dragon is right or left of king arthur
+		(d.PosX - this->PosX) > 0 ? this->Set_Direction(RIGHT) :
+		this->Set_Direction(LEFT);
+	
 	if (this->Get_HP() < phase2_hp) // activate phase 2 once hp drops is 50%
 	{
 		King_Arthur_Phase2();
@@ -128,9 +132,11 @@ void King_Arthur::Update(float dt, const Dragon &d)
 
 	case ATTACK: this->Attack(d, dt);
 		break;
+
+	default: break;
 	}
 
-	for (int i = 0; i < limit; ++i) // update cooldowns on attacks
+	for (char i = 0; i < limit; ++i) // update cooldowns on attacks
 			arthur[i].Update(dt);
 
 
@@ -150,7 +156,7 @@ void King_Arthur::Update(float dt, const Dragon &d)
 No return.
 */
 /******************************************************************************/
-void King_Arthur::Idle(float dt)
+void King_Arthur::Idle(const float dt)
 {
 	UNREFERENCED_PARAMETER(dt);
 	static float idle = 2.0f; //determine how long king arthurs stops
@@ -166,16 +172,14 @@ void King_Arthur::Idle(float dt)
 	
 }
 
-void King_Arthur::Moving(const Dragon &d, float dt)
-{
-	UNREFERENCED_PARAMETER(dt); // need to check for platform in phsae 2
-	
+void King_Arthur::Moving(const Dragon &d, const float dt)
+{	
 	static float move_duration = 3.0f; // duration KA moves
 	
 	if (!move_duration) //set the timer for moving
 		move_duration = 3.0f;
 	
-	if (d.PosX - this->PosX == 0) // character and boss intersect
+	if( (int) (d.PosX - this->PosX) == 0) // character and boss intersect
 		this->Set_Direction(STAY);
 	else
 	//determine if dragon is right or left of king arthur
@@ -185,28 +189,21 @@ void King_Arthur::Moving(const Dragon &d, float dt)
 	/*if(phase2)
 		d.PosY - this->PosY;*/
 	
-	Move_KA(dt, *this);
+	Move_KA(dt, *this, d);
 
 	//change state to attack once move_duration is 0, reset move_duration
-	move_duration <= 0 ? current_action = ATTACK, move_duration = 0 :
-		                 move_duration -= dt;
+	move_duration <= 0 || this->Get_Direction() == STAY ? 
+    current_action = ATTACK, move_duration = 0 : move_duration -= dt;
 
 	Set_Attack_Dir(*this);
 }
 
-void King_Arthur::Attack(const Dragon &d, float dt)
+void King_Arthur::Attack(const Dragon &d, const float dt)
 {
 	UNREFERENCED_PARAMETER(dt);
 	UNREFERENCED_PARAMETER(d);
 
 	KA_MoveSet currAttk = SINGLE_SLASH; //default attack for king arthur
-	
-	if (d.PosX - this->PosX == 0) // character and boss intersect
-		this->Set_Direction(STAY);
-	else
-		//determine if dragon is right or left of king arthur
-		(d.PosX - this->PosX) > 0 ? this->Set_Direction(RIGHT) :
-		this->Set_Direction(LEFT);
 
 	//unique mechanic has the highest priority 
 	if (! (arthur[4].cooldown) )
@@ -216,7 +213,7 @@ void King_Arthur::Attack(const Dragon &d, float dt)
 	else if (! (arthur[1].cooldown) ) 
 		currAttk = TRIPLE_SLASH; 
 
-	(this->*ka_attacks[currAttk])(); // call the coresponding attack function
+	(this->*ka_attacks[currAttk])(d, dt); // call the coresponding attack function
 }
 
 void King_Arthur::AvoidingObstacle(void)
@@ -243,19 +240,22 @@ void King_Arthur::King_Arthur_Phase2(void)
 	ka_attacks[UNIQUE_MECHANIC] = &King_Arthur::Heal_and_Spawn; 
 }
 
-void King_Arthur::Jump_Attack()
+void King_Arthur::Dash_Attack(const Dragon &d, const float dt)
 {
+	UNREFERENCED_PARAMETER(dt);
+	
 	if (arthur[4].cooldown) // skill still on cooldown
 		return;
 
 	static const int left_boundary = -600; // boundaries of charge attack
 	static const int right_boundary = 600; // boundaries of charge attack
 
-	this->SetVelocity({ 600, 0 }); // change king arthur's velocity to dash
-	Move_KA(0.016f, *this); // i am sorry for this
+	this->SetVelocity({ 800, 0 }); // change king arthur's velocity to dash
+	Move_KA(0.016f, *this, d); // i am sorry for this
 
 	// need check for collision against dragon
-	if(this->PosX > right_boundary || this->PosX < left_boundary)
+	if(/*this->PosX > right_boundary || this->PosX < left_boundary ||*/
+	  (int)(d.PosX - this->PosX) == 0)
 	{
 		current_action = IDLE;           // switch current state to idle
 		arthur[4].cooldown = true;       // start the cooldown of dash attk
@@ -268,8 +268,11 @@ void King_Arthur::Jump_Attack()
 	arthur[4].cooldown_timer = 10.0f; // cooldown of jump attacl
 }
 
-void King_Arthur::Single_Slash(void)
+void King_Arthur::Single_Slash(const Dragon &d, const float dt)
 {
+	UNREFERENCED_PARAMETER(d);
+	UNREFERENCED_PARAMETER(dt);
+	
 	if (!(arthur[0].cooldown_timer)) // sets the attack to start from KA
 	{
 		arthur[0].PosX = this->PosX;
@@ -280,7 +283,7 @@ void King_Arthur::Single_Slash(void)
 	{
 		arthur[0].SetActive(false); // makes it disappears form screen
 
-		arthur[0].ResetDist(); // error here, need to reset it to king arthur's position			
+		arthur[0].ResetDist(); 		// reset to 0 distance traveled
 
 		current_action = IDLE; // set the behaviour to idle
 
@@ -292,15 +295,19 @@ void King_Arthur::Single_Slash(void)
 
 	}
 
-	arthur[0].Projectile::Pos(); // need to check what the rotation does
+	arthur[0].Projectile::Pos();    // need to check what the rotation does
 	arthur[0].Projectile::Update(); // check what the sqrt does also
 	arthur[0].Render();
 
 	arthur[0].cooldown_timer = 2.0f;
 }
 
-void King_Arthur::Triple_Slash(void)
+void King_Arthur::Triple_Slash(const Dragon &d, const float dt)
 {
+	
+	UNREFERENCED_PARAMETER(d);
+	UNREFERENCED_PARAMETER(dt);
+
 	char ts_limit = limit - 1; // limit the loop to just the triple slashes
 
 	if (arthur[1].cooldown) // skill still on cooldown
@@ -321,36 +328,45 @@ void King_Arthur::Triple_Slash(void)
 		if (arthur[i].GetDist() > range_limit) // makes projectiles disappear
 		{
 			arthur[i].SetActive(false); // disappears from screen
-			arthur[i].ResetDist();     // reset the projectile distance traveled
-			arthur[i].PosX = 0.0f; // remove flicker
+			arthur[i].ResetDist();      // reset the projectile distance traveled
+			arthur[i].PosX = 0.0f;      // remove flicker
 
 			if (i == 3) // last slash has completed
 			{
-				current_action = IDLE; // change state to idle
+				current_action = IDLE;     // change state to idle
 				arthur[1].cooldown = true; // start cooldown		
 				++behavior_swap;
 			}
 		}
 	}
-	// issue here if i want to use jacob projectile update and pos
+	
 	if (arthur[1].GetDist() > interval || !(arthur[1].IsActive()))
 	{
 		//fire the second projectile once the first 1 travels 50 pixels
-		arthur[2].Pos();
+		arthur[2].Projectile::Pos();
+		arthur[2].Projectile::Update();
+		arthur[2].Render();
 
 		if (arthur[2].GetDist() > interval || !(arthur[2].IsActive()))
-			// fires the third one once the second 1 travels 0 pixel
-			arthur[3].Pos();
+		{	// fires the third one once the second 1 travels 0 pixel
+			arthur[3].Projectile::Pos();
+			arthur[3].Projectile::Update();
+			arthur[3].Render();
+		}
 	}
 
-	arthur[1].Pos(); // render the first slash
+	arthur[1].Projectile::Pos(); // render the first slash
+	arthur[1].Projectile::Update();
+	arthur[1].Render();
 	arthur[1].cooldown_timer = 10.0f;
 
 
 }
 
-void King_Arthur::Heal_and_Spawn(void)
+void King_Arthur::Heal_and_Spawn(const Dragon &d, const float dt)
 {
+	UNREFERENCED_PARAMETER(d);
+	UNREFERENCED_PARAMETER(dt);
 	//teleport to a platform, heal and spawn mobs
 
 	if (!(arthur[4].cooldown_timer)) // teleport once
@@ -384,8 +400,9 @@ King_Arthur::~King_Arthur(void)
 
 namespace
 {
-	void Move_KA(float dt, King_Arthur &ka)
+	void Move_KA(const float dt, King_Arthur &ka, const Dragon &d)
 	{
+		UNREFERENCED_PARAMETER(d);
 		if (ka.Get_Direction() == RIGHT) // set all attacks to go right
 		{
 			ka.PosX += ka.GetVelocity().x * dt; // move ka to the right

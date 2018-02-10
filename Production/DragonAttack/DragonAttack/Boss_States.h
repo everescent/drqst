@@ -28,9 +28,10 @@ struct Boss_Attack : public Projectile
 
 	void Update() {}; // ignored
 	void Update(float dt);  //has to check cooldown_timer
-	void Pos(); 
+	//void Pos(); 
 
 };
 
 //returns a random number within a range
 int Get_Random_Num(int range);
+void seed_initializer(void);
