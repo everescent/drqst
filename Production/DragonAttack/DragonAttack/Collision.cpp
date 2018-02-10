@@ -107,7 +107,7 @@ bool Col_Comp::Dy_Rect_Rect( const Col_Comp &B, const AEVec2 &velocity_A, const 
 			return false;
 		}
 	}
-	a
+	
 	//--------------------------------------Repeat Step for Y 
 
 	if (Vel_y_Res < 0)
