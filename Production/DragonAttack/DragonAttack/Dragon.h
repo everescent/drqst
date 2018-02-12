@@ -6,7 +6,7 @@
 \brief
   Dragon class declared here.
 
-Copyright (C) 20xx DigiPen Institute of Technology.
+Copyright (C) 2018 DigiPen Institute of Technology.
 Reproduction or disclosure of this file or its contents
 without the prior written consent of DigiPen Institute of
 Technology is prohibited.
@@ -34,7 +34,7 @@ const float Bullet_Death   { 900.0f  }; //Distance when bullet dies
 const float Bullet_Speed   { 1200.0f }; //How fast a bullet travels
 
 const float Jump_Height    { 200.0f  }; //Maximum height player can jump
-const float Jump_Mult      { 3.0f    }; //How fast player can jump
+const float Jump_Mult      { 3.2f    }; //How fast player can jump
 const float Start_Pos_X    { -320.0f }; //Player stating position X
 const float Start_Pos_Y    { -120.0f }; //Player starting position Y
 
@@ -69,11 +69,11 @@ public:
   Dragon()
     //Initialize Characters class
     :Characters{ S_CreateSquare(100.0f, 1.0f, 1.0f, "dragon_tmp.png"), 3,
-    Col_Comp{ Start_Pos_X - 100.0f * 0.6f, Start_Pos_Y - 100.0f * 0.6f,
-              Start_Pos_X + 100.0f * 0.6f, Start_Pos_Y + 100.0f * 0.6f, Rect} },
+    Col_Comp{ Start_Pos_X - 100.0f, Start_Pos_Y - 100.0f,
+              Start_Pos_X + 100.0f, Start_Pos_Y + 100.0f, Rect} },
     //Initialize data members
-    Attack{ false }, Pwr_Up{ false }, Damage{ 10 }, M_Damage{ 15 }, Charge{ 0 },
-    Gravity{ 10.0f }, Dir{}, Buff{}, Fireball{},
+    Attack{ false }, Pwr_Up{ false }, Falling{ false }, Damage { 10 }, 
+    M_Damage{ 15 }, Charge{ 0 }, Gravity{ 10.0f }, Dir{}, Buff{}, Fireball{},
     //Initialize Mega Fireball
     Mfireball{ S_CreateSquare(50.0f, 1.0f, 1.0f, "fireball.png"), 
     Col_Comp{ Start_Pos_X - 50.0f, Start_Pos_Y - 50.0f,
@@ -106,14 +106,15 @@ public:
   }
 private:
 
-  bool Attack;    //Check if player is attacking
-  bool Pwr_Up;    //Check if power up is in effect
-  char Damage;    //Amount of damage each fireball does
-  char M_Damage;    //Amount of damage each mega fireball does
-  int Charge;     //Charge for Mega Fireball
-  float Gravity;  //Gravity
-  float Air_Dist; //Distance jumped
-  float Facing;   //Direction of player is facing
+  bool  Attack;    //Check if player is attacking
+  bool  Pwr_Up;    //Check if power up is in effect
+  bool  Falling;   //Check if player is falling
+  char  Damage;    //Amount of damage each fireball does
+  char  M_Damage;  //Amount of damage each mega fireball does
+  int   Charge;    //Charge for Mega Fireball
+  float Gravity;   //Gravity
+  float Air_Dist;  //Distance jumped
+  float Facing;    //Direction of player is facing
   //Determines direction 
   struct Direction {
     bool L { false }; //Check for left
@@ -121,10 +122,10 @@ private:
     bool UP{ false }; //Check for jump
     Direction() = default;
   };
-  Direction Dir;                    //Direction variable
-  PowerUp Buff;                     //Type of power up
-  std::vector<Projectile> Fireball; //Array of Fireball projectile
-  Projectile Mfireball;             //Mega Fireball projectile
+  Direction               Dir;       //Direction variable
+  PowerUp                 Buff;      //Type of power up
+  std::vector<Projectile> Fireball;  //Array of Fireball projectile
+  Projectile              Mfireball; //Mega Fireball projectile
 
   //Private Functions START//////////////////////////////////////////////////////////////
   void ApplyPowerUP();

@@ -6,7 +6,7 @@
 \brief
   Dragon class member function definitions here.
 
-Copyright (C) 20xx DigiPen Institute of Technology.
+Copyright (C) 2018 DigiPen Institute of Technology.
 Reproduction or disclosure of this file or its contents
 without the prior written consent of DigiPen Institute of
 Technology is prohibited.
@@ -37,6 +37,7 @@ void Dragon::Input()
         Dir.R = true;
         break;
       case Input::jump_up:
+        if (!Falling)
           Dir.UP = true;
         break;
       case Input::fire:
@@ -45,19 +46,6 @@ void Dragon::Input()
     }
   }
   Input::ClearBuffer();
-  //if (AEInputCheckCurr(AEVK_A))
-  //{
-  //  Dir.L = true;
-  //}
-  //else if (AEInputCheckCurr(AEVK_D))
-  //{
-  //  Dir.R = true;
-  //}
-  //if (AEInputCheckCurr(AEVK_SPACE))
-  //  if(PosY == Start_Pos_Y)
-  //    Dir.UP = true;
-  //if (AEInputCheckTriggered(AEVK_RETURN))
-  //  Attack = true;
 }
 
 void Dragon::Update(float dt = 0.016)
@@ -88,7 +76,7 @@ void Dragon::Update(float dt = 0.016)
   //Update position of player
   Transform_.SetTranslate(PosX, PosY);
   Transform_.Concat();
-  Collision_.Update_Col_Pos(PosX - 100.0f * 0.6f, PosY - 100.0f * 0.6f, PosX + 100.0f * 0.6f, PosY + 100.0f * 0.6f);
+  Collision_.Update_Col_Pos(PosX - 100.0f, PosY - 100.0f, PosX + 100.0f, PosY + 100.0f);
   //Check if attack has been made
   if (Attack)
   {
@@ -133,9 +121,16 @@ void Dragon::Update(float dt = 0.016)
   Dir.L = Dir.R = false;
   if (Air_Dist >= Jump_Height)
   {
+    Falling = true;
     Dir.UP = false;
-    Air_Dist = 0.0f;
   }
+  if (Falling)
+  {
+    Air_Dist -= Gravity;
+    if(Air_Dist <= 0.0f)
+      Falling = false;
+  }
+
 }
 
 void Dragon::Render()

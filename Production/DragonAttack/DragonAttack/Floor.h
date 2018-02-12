@@ -1,8 +1,8 @@
 /* Start Header ************************************************************************/
 /*!
 \file       Platform.h
-\author     Andrew Chong
-\par email: c.jiahaoandrew\@digipen.edu
+\author     Andrew Chong/Jacob Lim
+\par email: c.jiahaoandrew\@digipen.edu/jacob.lim\@digipen.edu
 \brief
 Character class, parent class of the characters to be created
 
@@ -14,9 +14,9 @@ Technology is prohibited.
 /* End Header **************************************************************************/
 
 #pragma once
-#include <utility>
 #include "GameObject.h"
 #include "Transform.h"
+#include "Dragon.h"
 #include "Create_Object.h"
 
 // A class that creates a basic character
@@ -26,7 +26,7 @@ private:
 
 public:
 	Floor(); // default constructor
-
-	void Update(float X, float Y);
+  //(Jacob) Changed to take in player and dt
+	void Update(Dragon &player, const float &dt = 0.016f);
 	void Update() override {};
 };
