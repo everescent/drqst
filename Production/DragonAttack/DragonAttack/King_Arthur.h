@@ -33,21 +33,21 @@ private:
 
 	void AvoidingObstacle();
 
-	void Attack(const Dragon &d, const float dt);
+	void Attack(Dragon &d, const float dt);
 
 	void Init(void);
 
 	void King_Arthur_Phase2(void); // changes mechanics for phase 2
 
-	void Dash_Attack(const Dragon &d, const float dt); // jump attack
+	void Dash_Attack(Dragon &d, const float dt); // jump attack
 
-	void Single_Slash(const Dragon &d, const float dt); // single slash + wave
+	void Single_Slash(Dragon &d, const float dt); // single slash + wave
 
-	void Triple_Slash(const Dragon &d, const float dt); // single slash 3 times
+	void Triple_Slash(Dragon &d, const float dt); // single slash 3 times
 
-	void Heal_and_Spawn(const Dragon &d, const float dt); // phase 2, heal and spawm mobs
+	void Heal_and_Spawn(Dragon &d, const float dt); // phase 2, heal and spawm mobs
 
-	void(King_Arthur::*ka_attacks[UNIQUE_MECHANIC + 1])(const Dragon &d, float dt);
+	void(King_Arthur::*ka_attacks[UNIQUE_MECHANIC + 1])(Dragon &d, float dt);
 
 	bool phase2;
 
@@ -68,8 +68,9 @@ public:
 	King_Arthur();
 
 	~King_Arthur(); // destructor
-	void Update(const float dt, const Dragon &player);
+	void Update(const float dt, Dragon &player);
 	void Update() override {}; // ignored
+	void Render();
 
 };
 

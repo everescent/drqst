@@ -14,6 +14,7 @@ Technology is prohibited.
 /* End Header **************************************************************************/
 
 #include "Characters.h"
+#include <iostream>
 #include <utility>
 
 
@@ -38,9 +39,10 @@ void Characters::Set_HP(int hit_points)
 	hp = hit_points;
 }
 
-void Characters::Decrease_HP(const char damage)
+void Characters::Decrease_HP(const char damage) 
 {
 	hp -= damage;
+std::cout << "HP reduced! " << hp << std::endl;
 }
 
 int Characters::Get_HP() const

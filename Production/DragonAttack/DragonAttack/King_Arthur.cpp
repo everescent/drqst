@@ -23,15 +23,21 @@ namespace {
 
 	std::vector <Characters> spawn_mobs; //an array to store the mobs to be spawn
 
-	Boss_Action_State current_action = ATTACK; // different states of boss arthur
+	Boss_Action_State current_action = IDLE; // different states of boss arthur
 
 	const int health = 3000; // initial hp for king arthur
 
 	const int phase2_hp = 1500; //phase 2 trigger
 
-	const int interval = 50; // interval for triple slash
+	const int interval = 80; // interval for triple slash
 
-	const int range_limit = 300; // range limit for slash
+	const int range_limit = 500; // range limit for slash
+
+	const float start_point_x = 200.0f;
+
+	const float start_point_y = -100.0f;
+
+	const float slash_box = 40.0f;
 
 	const char limit = 5; // num of king arthur attacks
 
@@ -46,18 +52,20 @@ namespace {
 
 
 King_Arthur::King_Arthur(void)
-	: Characters(S_CreateSquare(60.0f, 1.0f, 1.0f, ".//Textures/download.png"),
-	  health, { 0.0f, 0.0f, 5.0f, 5.0f, Rect } ), phase2{false}
+	: Characters(S_CreateSquare(100.0f, 1.0f, 1.0f, ".//Textures/download.png"), health,
+	  Col_Comp{ start_point_x - 30.0f, start_point_y - 30.0f,
+				start_point_x + 30.0f, start_point_y + 30.0f, Rect } ), 
+	phase2{false}
 {
-	(void) this->Transform_.SetTranslate(200.0f, Start_Pos_Y);
-	this->Transform_.Concat();        // spawn king arthur at the location set
-	this->PosX =  200.0f;             // change king arthur coordinates to the location set
-	this->PosY = Start_Pos_Y;         // change king arthur coordinates to the location set
-	this->SetActive(true);            // show him on screen
-	this->Set_Direction(LEFT);        // set king arthur to face left at the start
-	this->SetVelocity({ 120, 0 });    // velocity for king arthur
+	this->PosX =  start_point_x;         // change king arthur coordinates to the location set
+	this->PosY =  start_point_y;         // change king arthur coordinates to the location set
+	this->SetActive(true);               // show him on screen
+	this->Set_Direction(LEFT);           // set king arthur to face left at the start
+	this->SetVelocity({ 120, 0 });       // velocity for king arthur
 	this->Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
-	Init();							  // call initializer for king arthur move set
+	(void) this->Transform_.SetTranslate(PosX, PosY);
+	this->Transform_.Concat();           // spawn king arthur at the location set
+	Init();							     // call initializer for king arthur move set
 }
 
 void King_Arthur::Init(void)
@@ -68,26 +76,31 @@ void King_Arthur::Init(void)
 
 	arthur.reserve(limit);
 
-	arthur.emplace_back(Boss_Attack(S_CreateSquare(20.0f, 1.0f, 1.0f, tex_ss), // for single slash
-					 Col_Comp(0.0f, 0.0f, 5.0f, 5.0f, Rect))); 
+	arthur.emplace_back(Boss_Attack(S_CreateSquare(20.0, 1.0f, 1.0f, tex_ss), // for single slash
+					 Col_Comp(start_point_x - slash_box, start_point_y -  slash_box,
+							  start_point_y + slash_box, start_point_y + slash_box, Rect)));
 
-	arthur.emplace_back(Boss_Attack(S_CreateSquare(10.0f, 1.0f, 1.0f, tex_3s), // 1st triple slash 
+	arthur.emplace_back(Boss_Attack(S_CreateSquare(20.0, 1.0f, 1.0f, tex_3s), // 1st triple slash 
+		Col_Comp(start_point_x - slash_box, start_point_y - slash_box,
+				 start_point_y + slash_box, start_point_y + slash_box, Rect)));
+
+	arthur.emplace_back(Boss_Attack(S_CreateSquare(20.0, 1.0f, 1.0f, tex_3s), // 2nd single slash
+		Col_Comp(start_point_x - slash_box, start_point_y - slash_box,
+				 start_point_y + slash_box, start_point_y + slash_box, Rect)));
+
+	arthur.emplace_back(Boss_Attack(S_CreateSquare(20.0, 1.0f, 1.0f, tex_3s), // 3rd triple slash
+		Col_Comp(start_point_x - slash_box, start_point_y - slash_box,
+				 start_point_y + slash_box, start_point_y + slash_box, Rect)));
+
+	arthur.emplace_back(Boss_Attack(S_CreateSquare(slash_box, 1.0f, 1.0f, tex_ja), // jump attack
 					 Col_Comp(0.0f, 0.0f, 5.0f, 5.0f, Rect)));
 
-	arthur.emplace_back(Boss_Attack(S_CreateSquare(10.0f, 1.0f, 1.0f, tex_3s), // 2nd single slash
-		Col_Comp(0.0f, 0.0f, 5.0f, 5.0f, Rect)));
-
-	arthur.emplace_back(Boss_Attack(S_CreateSquare(10.0f, 1.0f, 1.0f, tex_3s), // 3rd triple slash
-		Col_Comp(0.0f, 0.0f, 5.0f, 5.0f, Rect)));
-
-	arthur.emplace_back(Boss_Attack(S_CreateSquare(30.0f, 1.0f, 1.0f, tex_ja), // jump attack
-					 Col_Comp(0.0f, 0.0f, 5.0f, 5.0f, Rect)));
-
-	for (char i = 0; i < limit - 1; ++i) // spawning location of slashes
+	for (char i = 0; i < limit - 1; ++i) // initializing other variables in slash
 	{
 		arthur[i].PosY = -120.0f;
-(void) arthur[i].SetVelocity(AEVec2{ 200.0f, 0.0f }); // velocity for slash
-		arthur[i].Transform_.SetScale(2.0f, 2.0f); // determine the size of projectile
+(void)  arthur[i].SetVelocity(AEVec2{ 200.0f, 0.0f }); // velocity for slash
+(void)  arthur[i].Transform_.SetScale(2.0f, 2.0f); // determine the size of projectile
+(void)	arthur[i].Transform_.SetTranslate( start_point_x, start_point_y );
 		arthur[i].Transform_.Concat();
 	}
 
@@ -97,15 +110,12 @@ void King_Arthur::Init(void)
 
 }
 
-void King_Arthur::Update(const float dt, const Dragon &d) 
+void King_Arthur::Update(const float dt, Dragon &d) 
 {
 
-	if ((int)(d.PosX - this->PosX) == 0) // character and boss intersect
-		this->Set_Direction(STAY);
-	else
-		//determine if dragon is right or left of king arthur
-		(d.PosX - this->PosX) > 0 ? this->Set_Direction(RIGHT) :
-		this->Set_Direction(LEFT);
+
+	(d.PosX - this->PosX) > 0 ? this->Set_Direction(RIGHT) :
+	this->Set_Direction(LEFT);
 	
 	if (this->Get_HP() < phase2_hp) // activate phase 2 once hp drops is 50%
 	{
@@ -198,20 +208,25 @@ void King_Arthur::Moving(const Dragon &d, const float dt)
 	Set_Attack_Dir(*this);
 }
 
-void King_Arthur::Attack(const Dragon &d, const float dt)
+void King_Arthur::Attack(Dragon &d, const float dt)
 {
 	UNREFERENCED_PARAMETER(dt);
 	UNREFERENCED_PARAMETER(d);
 
-	KA_MoveSet currAttk = SINGLE_SLASH; //default attack for king arthur
+	static KA_MoveSet currAttk;
+	
+	currAttk = SINGLE_SLASH; //default attack for king arthur
 
 	//unique mechanic has the highest priority 
-	if (! (arthur[4].cooldown) )
-		currAttk = UNIQUE_MECHANIC;
+	if (! arthur[currAttk].ongoing_attack)
+	{
+		if (!(arthur[4].cooldown))
+			currAttk = UNIQUE_MECHANIC;
 
-	//followed by triple slash
-	else if (! (arthur[1].cooldown) ) 
-		currAttk = TRIPLE_SLASH; 
+		//followed by triple slash
+		else if (!(arthur[1].cooldown))
+			currAttk = TRIPLE_SLASH;
+	}
 
 	(this->*ka_attacks[currAttk])(d, dt); // call the coresponding attack function
 }
@@ -240,46 +255,64 @@ void King_Arthur::King_Arthur_Phase2(void)
 	ka_attacks[UNIQUE_MECHANIC] = &King_Arthur::Heal_and_Spawn; 
 }
 
-void King_Arthur::Dash_Attack(const Dragon &d, const float dt)
-{
-	UNREFERENCED_PARAMETER(dt);
-	
+void King_Arthur::Dash_Attack(Dragon &d, const float dt)
+{	
 	if (arthur[4].cooldown) // skill still on cooldown
 		return;
 
-	static const int left_boundary = -600; // boundaries of charge attack
-	static const int right_boundary = 600; // boundaries of charge attack
+	static Direction dash;           // direction KA should dash in
+
+	if (!(arthur[4].cooldown_timer)) // called once to fix dash direction
+	{
+		dash = this->Get_Direction();
+		arthur[2].ongoing_attack = true;
+	}
+
+	this->Set_Direction(dash);       // change back the dash direction
+
+	const short left_boundary = -600; // boundaries of charge attack
+    const short right_boundary = 600; // boundaries of charge attack
 
 	this->SetVelocity({ 800, 0 }); // change king arthur's velocity to dash
-	Move_KA(0.016f, *this, d); // i am sorry for this
+	Move_KA(dt, *this, d);         // move king arthur towards player
 
 	// need check for collision against dragon
-	if(/*this->PosX > right_boundary || this->PosX < left_boundary ||*/
-	  (int)(d.PosX - this->PosX) == 0)
+	if(this->PosX > right_boundary || this->PosX < left_boundary ||
+	   this->Get_Direction() == STAY)
 	{
 		current_action = IDLE;           // switch current state to idle
 		arthur[4].cooldown = true;       // start the cooldown of dash attk
 		this->SetVelocity({ 120, 0 });   // reset the velocity of king arthur
-		++behavior_swap;                 
+		++behavior_swap;    
+		arthur[2].ongoing_attack = false;
+
+		if(this->Get_Direction() == STAY)
+			d.Decrease_HP();
 	}
 
 	this->Transform_.Concat();
 
-	arthur[4].cooldown_timer = 10.0f; // cooldown of jump attacl
+	arthur[4].cooldown_timer = 10.0f; // cooldown of jump attack
 }
 
-void King_Arthur::Single_Slash(const Dragon &d, const float dt)
+void King_Arthur::Single_Slash(Dragon &d, const float dt)
 {
-	UNREFERENCED_PARAMETER(d);
 	UNREFERENCED_PARAMETER(dt);
 	
-	if (!(arthur[0].cooldown_timer)) // sets the attack to start from KA
+	if (arthur[0].cooldown) // skill still on cooldown
+		return;
+
+	if (!(arthur[0].IsActive())) // sets the attack to start from KA
 	{
 		arthur[0].PosX = this->PosX;
 		arthur[0].SetActive(true);
+		arthur[0].ongoing_attack = true;
 	}
+
+	bool collided = arthur[0].Collision_.Dy_Rect_Rect(d.Collision_, arthur[0].GetVelocity(), d.GetVelocity(), dt);
 	
-	if (arthur[0].GetDist() > range_limit) //disappears once it flys 500 unit away
+	//disappears once it flys 500 unit away
+	if (arthur[0].GetDist() > range_limit || collided) 
 	{
 		arthur[0].SetActive(false); // makes it disappears form screen
 
@@ -291,24 +324,36 @@ void King_Arthur::Single_Slash(const Dragon &d, const float dt)
 
 		arthur[0].cooldown = true; // skill on cooldown
 
+		arthur[0].ongoing_attack = false;
+
+		if (collided)
+		{
+			d.Decrease_HP();
+		}
+
 		++behavior_swap;
-
 	}
-
+	
 	arthur[0].Projectile::Pos();    // need to check what the rotation does
 	arthur[0].Projectile::Update(); // check what the sqrt does also
-	arthur[0].Render();
+	arthur[0].Collision_.Update_Col_Pos(arthur[0].PosX - slash_box, arthur[0].PosY - slash_box,
+										arthur[0].PosX + slash_box, arthur[0].PosY + slash_box);
+	
 
 	arthur[0].cooldown_timer = 2.0f;
 }
 
-void King_Arthur::Triple_Slash(const Dragon &d, const float dt)
+void King_Arthur::Triple_Slash(Dragon &d, const float dt)
 {
 	
 	UNREFERENCED_PARAMETER(d);
 	UNREFERENCED_PARAMETER(dt);
 
-	char ts_limit = limit - 1; // limit the loop to just the triple slashes
+	bool collided[3]  { 0 };
+
+	static bool sec_flag = true, third_flag = true, hit = false; // for second and third wave
+
+	const char ts_limit = limit - 1; // limit the loop to just the triple slashes
 
 	if (arthur[1].cooldown) // skill still on cooldown
 		return;
@@ -317,8 +362,58 @@ void King_Arthur::Triple_Slash(const Dragon &d, const float dt)
 	{
 		for (char i = 1; i < ts_limit; ++i)
 		{
-			arthur[i].SetActive(true);
 			arthur[i].PosX = this->PosX;
+		}
+		arthur[1].SetActive(true);
+		arthur[1].ongoing_attack = true;
+	}
+
+	if (arthur[1].GetDist() > interval || ! (arthur[1].IsActive() ) )
+	{
+		//fire the second projectile once the first 1 travels 50 pixels
+
+		if (sec_flag)
+		{
+			arthur[2].SetActive(true);
+			sec_flag = false;
+		}
+
+		arthur[2].Projectile::Pos();
+		arthur[2].Projectile::Update();
+		arthur[2].cooldown_timer = 5.0f;
+
+		arthur[2].Collision_.Update_Col_Pos(arthur[2].PosX - slash_box, arthur[2].PosY - slash_box,
+											arthur[2].PosX + slash_box, arthur[2].PosY + slash_box);
+
+		if (arthur[2].GetDist() > interval || !(arthur[2].IsActive()))
+		{	// fires the third one once the second 1 travels 0 pixel
+
+			if (third_flag)
+			{
+				arthur[3].SetActive(true);
+				third_flag = false;
+			}
+			arthur[3].Projectile::Pos();
+			arthur[3].Projectile::Update();
+			arthur[3].cooldown_timer = 5.0f;
+
+			arthur[3].Collision_.Update_Col_Pos(arthur[3].PosX - slash_box, arthur[3].PosY - slash_box,
+												arthur[3].PosX + slash_box, arthur[3].PosY + slash_box);
+		}
+	}
+
+	if (! hit)
+	{
+		for (int i : collided)
+		{
+			collided[i] = arthur[i].Collision_.Dy_Rect_Rect(d.Collision_, arthur[i].GetVelocity(), d.GetVelocity(), dt);
+
+			if (collided[i])
+			{
+				d.Decrease_HP();
+				hit = true;
+				break;
+			}
 		}
 	}
 
@@ -336,34 +431,24 @@ void King_Arthur::Triple_Slash(const Dragon &d, const float dt)
 				current_action = IDLE;     // change state to idle
 				arthur[1].cooldown = true; // start cooldown		
 				++behavior_swap;
+				sec_flag = third_flag = true;
+				arthur[1].ongoing_attack = false;
+				hit = false;
 			}
 		}
 	}
-	
-	if (arthur[1].GetDist() > interval || !(arthur[1].IsActive()))
-	{
-		//fire the second projectile once the first 1 travels 50 pixels
-		arthur[2].Projectile::Pos();
-		arthur[2].Projectile::Update();
-		arthur[2].Render();
 
-		if (arthur[2].GetDist() > interval || !(arthur[2].IsActive()))
-		{	// fires the third one once the second 1 travels 0 pixel
-			arthur[3].Projectile::Pos();
-			arthur[3].Projectile::Update();
-			arthur[3].Render();
-		}
-	}
 
 	arthur[1].Projectile::Pos(); // render the first slash
 	arthur[1].Projectile::Update();
-	arthur[1].Render();
-	arthur[1].cooldown_timer = 10.0f;
+	arthur[1].Collision_.Update_Col_Pos(arthur[1].PosX - slash_box, arthur[1].PosY - slash_box,
+										arthur[1].PosX + slash_box, arthur[1].PosY + slash_box);
 
 
+	arthur[1].cooldown_timer = 5.0f;
 }
 
-void King_Arthur::Heal_and_Spawn(const Dragon &d, const float dt)
+void King_Arthur::Heal_and_Spawn(Dragon &d, const float dt)
 {
 	UNREFERENCED_PARAMETER(d);
 	UNREFERENCED_PARAMETER(dt);
@@ -392,6 +477,17 @@ void King_Arthur::Heal_and_Spawn(const Dragon &d, const float dt)
 	arthur[4].cooldown_timer = 20.0f;
 }
 
+void King_Arthur::Render(void)
+{
+	for (char i = 0; i < limit; ++i)
+	{
+		if (arthur[i].cooldown_timer)
+			arthur[i].Render();
+	}
+
+	this->GameObject::Render();
+}
+
 King_Arthur::~King_Arthur(void)
 {
 	arthur.clear();
@@ -412,6 +508,14 @@ namespace
 		{
 			ka.PosX -= ka.GetVelocity().x * dt; // move KA to the left
 			(void)ka.Transform_.SetTranslate(ka.PosX, ka.PosY);
+		}
+
+		ka.Collision_.Update_Col_Pos(ka.PosX - 30.0f, ka.PosY - 30.0f,  // min point
+									 ka.PosX + 30.0f, ka.PosY + 30.0f);	// max point
+		
+		if (ka.Collision_.Dy_Rect_Rect(d.Collision_, d.GetVelocity(), ka.GetVelocity(), dt))
+		{
+			ka.Set_Direction(STAY);
 		}
 
 		ka.Transform_.Concat();

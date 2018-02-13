@@ -109,6 +109,9 @@ namespace GSM
 				GSF[current].Unload();
 			}
 		}
+
+		previous = current;
+		current = next;
 	}
 
 	bool IsGameRunning(void)

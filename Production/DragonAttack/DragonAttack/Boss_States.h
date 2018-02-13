@@ -18,7 +18,7 @@ enum Boss_Action_State
 struct Boss_Attack : public Projectile
 {
 	float cooldown_timer;
-	bool cooldown;
+	bool cooldown, ongoing_attack = false;
 
 	Boss_Attack(Sprite&& t_attack, Col_Comp &&t_col)
 		:cooldown_timer{0}, Projectile(std::move(t_attack), std::move(t_col)), 
