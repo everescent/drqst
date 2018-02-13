@@ -52,10 +52,8 @@ namespace Main_Menu
 	plat4  = new Platform  { 0.0f, 120.0f };
 	plat5  = new Platform  { -350.0f, 120.0f };
 	plat6  = new Platform  { 350.0f, 120.0f };
-	
 	Lwall1 = new Wall      { -620.0f, -160.0f };
 	Lwall2 = new Wall      { -620.0f, 160.0f };
-
 	player = new Dragon    { };
 	enemy  = new Merlin    { };
 	grunt  = new Grunt     { 400.0f, -160.0f };
