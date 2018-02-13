@@ -179,16 +179,19 @@ void Merlin::A_Rain(Dragon &player)
   srand((unsigned int)time(nullptr));
   std::cout << "Arrow Rain\n";
   //Only shoot when cast time completed
-  if(castime == 0)
-  for (int i = 0; i < A_Rain_Buffer; ++i)
+  if (castime == 0)
   {
-    //Shoots arrows within +- 50 of the player's last known position
-    if(i % 2)
-      Arrow[i].PosX += (float)(rand() % 50);
-    else
-      Arrow[i].PosX -= (float)(rand() % 50);
-    Arrow[i].SetActive(true);
-    Arrow[i].cooldown = true;
+    for (int i = 0; i < A_Rain_Buffer; ++i)
+    {
+      //Shoots arrows within +- 50 of the player's last known position
+      if (i % 2)
+        Arrow[i].PosX += (float)(rand() % 50);
+      else
+        Arrow[i].PosX -= (float)(rand() % 50);
+      Arrow[i].SetActive(true);
+      Arrow[i].cooldown = true;
+      Arrow[i].Projectile::Update();
+    }
   }
 }
 
@@ -388,7 +391,7 @@ void Merlin::Update(Dragon &player)
     MC_Pos.Concat();
   }
   if (M_Att_Curr == ARROW_RAIN)
-    --castime;
+   --castime;
   if (castime <= 0)
     castime = 0;
   for (int i = 0; i < A_Rain_Buffer; ++i)
@@ -396,24 +399,24 @@ void Merlin::Update(Dragon &player)
     if (i == 0)
     {
       Arrow[i].Projectile::Pos();
-      Arrow[i].Projectile::Pos(player.PosX, 360.0f);
+      Arrow[i].Projectile::Pos(player.PosX, 460.0f);
       Arrow[i].Projectile::Update();
       Arrow[i].Collision_.Update_Col_Pos(Arrow[i].PosX - 2.0f, Arrow[i].PosY - 30.0f, Arrow[i].PosX + 2.0f, Arrow[i].PosY + 30.0f);
-      continue;
     }
-    if (Arrow[i - 1].GetDist() < 100.0f)
+    else if (Arrow[i - 1].GetDist() < 100.0f)
     {
-      Arrow[i].Projectile::Pos(player.PosX, 360.0f);
+      Arrow[i].Projectile::Pos(player.PosX, 460.0f);
       Arrow[i].Collision_.Update_Col_Pos(Arrow[i].PosX - 2.0f, Arrow[i].PosY - 30.0f, Arrow[i].PosX + 2.0f, Arrow[i].PosY + 30.0f);
     }
     else
     {
       Arrow[i].Projectile::Pos();
-      Arrow[i].Projectile::Pos(player.PosX, 260.0f);
+      Arrow[i].Projectile::Pos(player.PosX, 460.0f);
       Arrow[i].Projectile::Update();
       Arrow[i].Collision_.Update_Col_Pos(Arrow[i].PosX - 2.0f, Arrow[i].PosY - 30.0f, Arrow[i].PosX + 2.0f, Arrow[i].PosY + 30.0f);
     }
   }
+
   //Melee
   if (M_Melee.cooldown)
   {
@@ -433,12 +436,11 @@ void Merlin::Update(Dragon &player)
       {
         Decrease_HP(player.GetDamage());
         player.GetFireball()[i].SetActive(false);
-        //std::cout << "HP: " << Get_HP() << std::endl;
       }
   //If Dragon gets hit decrease Dragon HP
   //Call player's collision and put in my attacks
   //Check if attacks are on cooldown AND active first
-  //Arrow rain collicion check
+  //Arrow rain collision check
   if (Arrow[A_Rain_Buffer - 1].cooldown)
   {
     if (Arrow[A_Rain_Buffer - 1].IsActive())
@@ -449,7 +451,7 @@ void Merlin::Update(Dragon &player)
           if (player.Collision_.Dy_Rect_Rect(Arrow[i].Collision_, Arrow[i].GetVelocity(), player.GetVelocity(), 0.016f))
           {
             player.Decrease_HP();
-            //Arrow[i].SetActive(false);
+            Arrow[i].SetActive(false);
           }
         }
     }

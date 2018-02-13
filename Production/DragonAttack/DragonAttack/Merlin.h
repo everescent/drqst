@@ -86,7 +86,7 @@ private:
   void CheckState(Dragon &player);              //Sets current state to next, checks for next state
   bool CheckAttack(Dragon &player);             //Check if can attack, and sets the appropriate 
                                                       //function for it; Returns true if can attack, else false
-  int castime;              //Arrow rain cast time
+  int castime{ 100 };              //Arrow rain cast time
   int Attack_Interval;      //Time between attacks
   Boss_Action_State M_Curr; //Current state
   Boss_Action_State M_Next; //Next state
