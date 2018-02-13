@@ -1,16 +1,21 @@
 #include "Wall.h"
-#include "Transform.h"
-#include <utility>
 
-Wall::Wall()
+Wall::Wall(float x, float y)
 	: GameObject{ S_CreateRectangle(50.0f, 200.0f, 1.0f, 1.0f, ".//Textures/download.jpg"),
-	Col_Comp{ 0.0f, 0.0f, 5.0f, 5.0f, Rect } }
+	Col_Comp{ x - 50.0f, y - 200.0f,
+			  x + 50.0f, y + 200.0f, Rect },
+			  x, y }
 {
 	SetActive(true);
 }
 
-void Wall::Update(float X, float Y)
+void Wall::Update(Dragon &player)
 {
-	this->Transform_.SetTranslate(X, Y);
+	if (player.PosX < AEGfxGetWinMinX())
+	{
+		player.PosX = PosX + Sprite_.Get_Width() - 50.0f;
+	}
+
+	this->Transform_.SetTranslate(PosX, PosY);
 	this->Transform_.Concat();
 }

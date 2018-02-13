@@ -30,13 +30,13 @@ namespace // global variables just for THIS file
 	int EstIdleX;
 }
 
-Grunt::Grunt()
+Grunt::Grunt(float x, float y)
 	: Characters(S_CreateSquare(100.0f, 1.0f, 1.0f, ".//Textures/grunt.png"),
-		grunt_hp, Col_Comp{ 0.0f, 0.0f, 5.0f, 5.0f, Rect })
+		grunt_hp, Col_Comp{ x - 50.0f, y - 50.0f , x + 50.0f , y + 50.0f, Rect })
 {
 	SetActive(true);
-	PosX = 400.0f;
-	PosY = -120.0f;
+	PosX = x;
+	PosY = y;
 	IdleXPos = this->PosX;
 	IdleYPos = this->PosY;
 	EstIdleX = (int)IdleXPos;
@@ -86,10 +86,10 @@ void Grunt::MoveTowardPlayer(const Dragon &d)
 		PlayerInRange = true;
 	}
 	else
-	if (MovementX > 100.0f || MovementX < -100.0f) // not entering
-	{
-		PlayerInRange = false;
-	}
+		if (MovementX > 100.0f || MovementX < -100.0f) // not entering
+		{
+			PlayerInRange = false;
+		}
 
 	PosX -= MovementX / 60;
 	//PosY -= MovementY / 60;
@@ -138,12 +138,12 @@ void Grunt::AttackPlayer(const Dragon &d)
 void Grunt::Idle(const Dragon &d)
 {
 	UNREFERENCED_PARAMETER(d);
-	int MaxXPos =(int)( IdleXPos + 120.0f); // max boundary
-	int MinXPos =(int) (IdleXPos - 120.0f); // min boundary
+	int MaxXPos = (int)(IdleXPos + 120.0f); // max boundary
+	int MinXPos = (int)(IdleXPos - 120.0f); // min boundary
 	int EstCurrentX = (int)(this->PosX);
 
-	if ( EstCurrentX < (EstIdleX-121) || EstCurrentX > (EstIdleX+120)) // if lesser than min boundary OR greater than max boundary
-	{	
+	if (EstCurrentX < (EstIdleX - 121) || EstCurrentX >(EstIdleX + 120)) // if lesser than min boundary OR greater than max boundary
+	{
 		//reason for strange values is due to how the obj will enter the bottom loop if it is close to the boundary
 		//then re-enter this loop because of the *= -1, forever continuing the back and forth
 

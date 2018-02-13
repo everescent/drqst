@@ -1,10 +1,10 @@
 #include "Floor.h"
 
-Floor::Floor()
-	: GameObject{ CreateFloor(1.0f, 1.0f, 1.0f, ".//Textures/download.jpg"),
-	  Col_Comp{ 0.0f - FLOOR_WIDTH, -300.0f - FLOOR_HEIGHT, 
-              0.0f + FLOOR_WIDTH, -300.0f + FLOOR_HEIGHT, Rect }, 
-              0.0f, -300.0f }
+Floor::Floor(float x, float y)
+	: GameObject{ CreateFloor(2.0f, 1.0f, 1.0f, ".//Textures/download.jpg"),
+	  Col_Comp{ x - FLOOR_WIDTH*2, y - FLOOR_HEIGHT, 
+              x + FLOOR_WIDTH*2, y + FLOOR_HEIGHT, Rect }, 
+              x, y }
 {
 	SetActive(true);
 }

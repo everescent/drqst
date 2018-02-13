@@ -25,8 +25,9 @@ class Platform : public GameObject
 private:
 
 public:
-	Platform(); // default constructor
-  //(Jacob) Changed to take in player and dt
-  void Update(Dragon &player, const float &dt = 0.016f);
+	Platform(float x, float y); // default constructor
+	//(Jacob) Changed to take in player and dt
+	void Update(Dragon &player, const float &dt);
 	void Update() override {};
+
 };

@@ -10,37 +10,28 @@
 #include "Dragon.h"
 #include "Merlin.h"
 #include "Floor.h"
+#include "Grunt.h"
 #include "Platform.h"
+#include "Wall.h"
 #include <utility>
 
 
 namespace
 {
-  //Col_Comp t_col{ 1.0, 1.0, Point };
-
-  //class testCol : public GameObject {
-  //public:
-  //	void Pos() {/*Do something*/ }
-  //	void Update() {/*Do something*/ }
-  //	testCol()
-  //		:colli{ 0.0f,0.0f, 50, Circle }, GameObject{ S_CreateSquare(50.0f,1.0f,1.0f,"floor.jpg"), t_col }
-  //	{}
-
-  //	Col_Comp colli;
-  //};
-  //static float aX = -300.0f;
-  //static float aY = 0.0f;
-  //static float bX = 300.0f;
-  //static float bY = 0.0f;
-
-  //testCol *a = nullptr;
-  //testCol *b = nullptr;
   Dragon *player;
   Merlin *enemy;
+  Grunt *grunt;
   Sprite *BG;
   Transform *M_BG;
   Floor *floor1;
   Platform *plat1;
+  Platform *plat2;
+  Platform *plat3;
+  Platform *plat4;
+  Platform *plat5;
+  Platform *plat6;
+  Wall *Lwall1;
+  Wall *Lwall2;
 }
 
 namespace Main_Menu
@@ -52,58 +43,94 @@ namespace Main_Menu
 
   void Load(void)
   {
-    //a = new testCol;
-    //b = new testCol;
-    player = new Dragon{};
-    enemy = new Merlin{};
-    BG = new Sprite{ CreateBG(1.0f, 1.0f, 1.0f, "floor.jpg") };
-    M_BG = new Transform{};
-	floor1 = new Floor{};
-	plat1 = new Platform{};
+    BG     = new Sprite    { CreateBG(1.0f, 1.0f, 1.0f, "floor.jpg") };
+    M_BG   = new Transform { };
+	floor1 = new Floor     { 0.0f, -350.0f };
+	plat1  = new Platform  { 0.0f, -150.0f};
+	plat2  = new Platform  { 200.0f, -20.0f };
+	plat3  = new Platform  { -200.0f, -20.0f };
+	plat4  = new Platform  { 0.0f, 120.0f };
+	plat5  = new Platform  { -350.0f, 120.0f };
+	plat6  = new Platform  { 350.0f, 120.0f };
+	
+	Lwall1 = new Wall      { -620.0f, -160.0f };
+	Lwall2 = new Wall      { -620.0f, 160.0f };
+
+	player = new Dragon    { };
+	enemy  = new Merlin    { };
+	grunt  = new Grunt     { 400.0f, -160.0f };
   }
 
   void Update(float dt)
   {
-    //UNREFERENCED_PARAMETER(dt);
-    //aX += 2.0f;
-    //bX -= 2.0f;
-    //a->Transform_.SetTranslate(aX, aY);
-    //b->Transform_.SetTranslate(bX, bY);
-    //a->colli.Update_Col_Pos(aX, aY);
-    //b->colli.Update_Col_Pos(bX, bY);
-    //if (a->colli.Circle_Circle(a->colli, b->colli))
-    //	GSM::current = GS_QUIT;
-	plat1->SetActive(true);
-	floor1->SetActive(true);
-    player->SetActive(true);
+	floor1->Update(*player, dt);
+	plat1->Update (*player, dt);
+	plat2->Update (*player, dt);
+	plat3->Update (*player, dt);
+	plat4->Update (*player, dt);
+	plat5->Update (*player, dt);
+	plat6->Update (*player, dt);
+
+	Lwall1->Update(*player);
+	Lwall2->Update(*player);
+
+	player->SetActive(true);
     player->Update(dt);
     enemy->SetActive(true);
     enemy->Update(*player);
-	plat1->Update(*player);
-	floor1->Update(*player);
+	grunt->Update(dt, *player);
+
+	if (AEInputCheckCurr(AEVK_0))
+	{
+
+	}
+
   }
 
   void Draw(void)
   {
-    // a->Render();
-    //b->Render();
-    //CamFollow(player->Transform_, Cam_Offset_X, Cam_Offset_Y, player->GetFacing());
-    CamStatic();
-    BG->Render_Object(*M_BG);
-    player->Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
-    player->Render();
-    enemy->Render();
-	plat1->Render();
+
+	if (AEInputCheckCurr(AEVK_LSHIFT)) 
+	{
+		CamFollow(player->Transform_, Cam_Offset_X, Cam_Offset_Y, player->GetFacing());
+	}
+	else
+	{
+		CamStatic();
+	}
+
+	BG->Render_Object(*M_BG);
 	floor1->Render();
+	plat1->Render();
+	plat2->Render();
+	plat3->Render();
+	plat4->Render();
+	plat5->Render();
+	plat6->Render();
+    
+    player->Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+	player->Render();
+    enemy->Render();
+	grunt->Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+	grunt->Render();
   }
 
   void Free(void)
   {
-    //delete a;
-    //delete b;
     delete BG;
-    delete player;
-    delete enemy;
+	delete plat1;
+	delete plat2;
+	delete plat3;
+	delete plat4;
+	delete plat5;
+	delete plat6;
+	delete Lwall1;
+	delete Lwall2;
+	delete floor1;
+
+	delete enemy;
+	delete player;
+	delete grunt;
   }
 
   void Unload(void)

@@ -19,7 +19,7 @@ Technology is prohibited.
 
 class Grunt : public  Characters
 {
-private: 
+private:
 	void LineOfSight(const Dragon &d);
 
 	void MoveTowardPlayer(const Dragon &d);
@@ -35,13 +35,13 @@ public:
 	\brief      Constructor for a Grunt Object
 
 	\param      Sprite&& t_sprite
-					- an rvalue of the sprite to be moved
+	- an rvalue of the sprite to be moved
 
 	\retval     void
 	No return.
 	*/
 	/******************************************************************************/
-	Grunt();
+	Grunt(float x, float y);
 
 	/******************************************************************************/
 	/*!
@@ -50,11 +50,11 @@ public:
 	\brief      Constructor for a Grunt Object
 
 	\param      Sprite&& t_sprite
-					- an rvalue of the sprite to be moved
-				x 
-					- location to spawn the enemy
-				y 
-					- location to spawn the enemy
+	- an rvalue of the sprite to be moved
+	x
+	- location to spawn the enemy
+	y
+	- location to spawn the enemy
 
 	\retval     void
 	No return.

@@ -150,6 +150,9 @@
     <ClCompile Include="Platform.cpp">
       <Filter>Game_Object\Objects</Filter>
     </ClCompile>
+    <ClCompile Include="Test_Stage1.cpp">
+      <Filter>Game_States\Stage</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h">
@@ -226,6 +229,9 @@
     </ClInclude>
     <ClInclude Include="Wall.h">
       <Filter>Game_Object\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Test_Stage1.h">
+      <Filter>Game_States\Stage</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
