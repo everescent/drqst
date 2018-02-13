@@ -9,6 +9,8 @@
 #include "GameStateManager.h"
 #include "Dragon.h"
 #include "Merlin.h"
+#include "Floor.h"
+#include "Platform.h"
 #include <utility>
 
 
@@ -37,6 +39,8 @@ namespace
   Merlin *enemy;
   Sprite *BG;
   Transform *M_BG;
+  Floor *floor1;
+  Platform *plat1;
 }
 
 namespace Main_Menu
@@ -54,6 +58,8 @@ namespace Main_Menu
     enemy = new Merlin{};
     BG = new Sprite{ CreateBG(1.0f, 1.0f, 1.0f, "floor.jpg") };
     M_BG = new Transform{};
+	floor1 = new Floor{};
+	plat1 = new Platform{};
   }
 
   void Update(float dt)
@@ -67,10 +73,14 @@ namespace Main_Menu
     //b->colli.Update_Col_Pos(bX, bY);
     //if (a->colli.Circle_Circle(a->colli, b->colli))
     //	GSM::current = GS_QUIT;
+	plat1->SetActive(true);
+	floor1->SetActive(true);
     player->SetActive(true);
     player->Update(dt);
     enemy->SetActive(true);
     enemy->Update(*player);
+	plat1->Update(*player);
+	floor1->Update(*player);
   }
 
   void Draw(void)
@@ -83,6 +93,8 @@ namespace Main_Menu
     player->Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
     player->Render();
     enemy->Render();
+	plat1->Render();
+	floor1->Render();
   }
 
   void Free(void)
