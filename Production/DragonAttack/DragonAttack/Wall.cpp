@@ -1,7 +1,7 @@
 #include "Wall.h"
 
 Wall::Wall(float x, float y)
-	: GameObject{ S_CreateRectangle(50.0f, 200.0f, 1.0f, 1.0f, ".//Textures/download.jpg"),
+	: GameObject{ S_CreateRectangle(50.0f, 200.0f, ".//Textures/download.jpg"),
 	Col_Comp{ x - 50.0f, y - 200.0f,
 			  x + 50.0f, y + 200.0f, Rect },
 			  x, y }

@@ -1,7 +1,7 @@
 #include "Platform.h"
 
 Platform::Platform(float x, float y)
-	: GameObject{ CreatePlatform(1.0f, 1.0f, 1.0f, 1.0f, ".//Textures/download.jpg"),
+	: GameObject{ CreatePlatform(1.0f, 1.0f, ".//Textures/download.jpg"),
 	  Col_Comp{ x - PLAT_WIDTH, y - PLAT_HEIGHT, 
               x + PLAT_WIDTH, y + PLAT_HEIGHT, Rect }, 
               x, y }

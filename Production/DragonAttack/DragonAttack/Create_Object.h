@@ -30,8 +30,7 @@ color  : Mesh color.
 Return:
 A pointer to a mesh.
 ****************************************************************************************/
-AEGfxVertexList* CreateSquare(float size, float scaleU = 1.0f, 
-                              float scaleV = 1.0f, unsigned int color = 0xFFFFFF);
+AEGfxVertexList* CreateSquare(float size, unsigned int color = 0xFFFFFF);
 
 /****************************************************************************************
 Description:
@@ -47,8 +46,8 @@ color  : Mesh color.
 Return:
 A pointer to a mesh.
 ****************************************************************************************/
-AEGfxVertexList* CreateRectangle(float width, float height, float ScaleU = 1.0f, 
-                                 float ScaleV = 1.0f, unsigned int color = 0xFFFFFF);
+AEGfxVertexList* CreateRectangle(float width, float height, 
+                                 unsigned int color = 0xFFFFFF);
 
 /****************************************************************************************
 Description:
@@ -64,8 +63,8 @@ color   : Mesh color.
 Return:
 Sprite object.
 ****************************************************************************************/
-Sprite S_CreateSquare(float size, float scaleU = 1.0f, float scaleV = 1.0f, 
-                    const char* texFile = nullptr, unsigned int color = 0xFFFFFF);
+Sprite S_CreateSquare(float size, const char* texFile = nullptr, 
+                      unsigned int color = 0xFFFFFF);
 
 /****************************************************************************************
 Description:
@@ -82,9 +81,8 @@ color   : Mesh color.
 Return:
 Sprite object
 ****************************************************************************************/
-Sprite S_CreateRectangle(float width, float height, float ScaleU = 1.0f, 
-                       float ScaleV = 1.0f, const char* texFile = nullptr, 
-                       unsigned int color = 0xFFFFFF);
+Sprite S_CreateRectangle(float width, float height, const char* texFile = nullptr, 
+                         unsigned int color = 0xFFFFFF);
 
 /****************************************************************************************
 Description:
@@ -101,8 +99,8 @@ color   : Mesh color.
 Return:
 Sprite object
 ****************************************************************************************/
-Sprite CreatePlatform(float MultW = 1.0f, float MultH = 1.0f, float ScaleU = 1.0f, 
-                      float ScaleV = 1.0f, const char* texFile = nullptr, 
+Sprite CreatePlatform(float MultW = 1.0f, float MultH = 1.0f,
+                      const char* texFile = nullptr, 
                       unsigned int color = 0xFFFFFF);
 
 /****************************************************************************************
@@ -119,8 +117,8 @@ color   : Mesh color.
 Return:
 Sprite object
 ****************************************************************************************/
-Sprite CreateFloor(float MultW = 1.0f, float ScaleU = 1.0f, float ScaleV = 1.0f, 
-                   const char* texFile = nullptr, unsigned int color = 0xFFFFFF);
+Sprite CreateFloor(float MultW = 1.0f, const char* texFile = nullptr,
+                   unsigned int color = 0xFFFFFF);
 
 /****************************************************************************************
 Description:
@@ -136,5 +134,5 @@ color   : Mesh color.
 Return:
 Sprite object
 ****************************************************************************************/
-Sprite CreateBG(float MultW = 1.0f, float ScaleU = 1.0f, float ScaleV = 1.0f, 
-                const char* texFile = nullptr, unsigned int color = 0xFFFFFF);
+Sprite CreateBG(float MultW = 1.0f, const char* texFile = nullptr,
+                unsigned int color = 0xFFFFFF);

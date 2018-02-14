@@ -20,7 +20,7 @@ Technology is prohibited.
 
 Merlin::Merlin()
 //Initialize characters class
-  :Characters{ S_CreateSquare(100.0f, 1.0f, 1.0f, "merlin.png"), Merlin_HP,
+  :Characters{ S_CreateSquare(100.0f, "merlin.png"), Merlin_HP,
   Col_Comp{ Merlin_Start_X - 100.0f, Merlin_Start_Y - 100.0f,
   Merlin_Start_X + 100.0f, Merlin_Start_Y + 100.0f, Rect } },
   //Initialize data members
@@ -28,11 +28,11 @@ Merlin::Merlin()
   M_Curr{ IDLE }, M_Next{ IDLE }, M_Att_Curr{ MELEE },
   //All Boss Attacks to be properly initialized later
   M_Melee{ Sprite{}, Col_Comp{} },
-  Eball{ Sprite{ S_CreateSquare(50.0f, 1.0f, 1.0f, "energyball.png") },
+  Eball{ Sprite{ S_CreateSquare(50.0f, "energyball.png") },
          Col_Comp{ Merlin_Start_X - 50.0f, Merlin_Start_Y - 50.0f,
                    Merlin_Start_X + 50.0f, Merlin_Start_Y + 50.0f, Rect } },
   Spread_Eball{}, Arrow{}, Blink_{}, Attack_Interval{ 0 },
-  MagicCircle{ S_CreateSquare(150.0f, 1.0f, 1.0f, "magic_circle.png") }
+  MagicCircle{ S_CreateSquare(150.0f, "magic_circle.png") }
 {
   //Set spawn position
   PosX = Merlin_Start_X;
@@ -50,7 +50,7 @@ Merlin::Merlin()
   //Initialize Spread Shot
   Spread_Eball.reserve(3);
   for (int i = 0; i < 3; ++i)
-    Spread_Eball.push_back(Boss_Attack{ S_CreateSquare(30.0f, 1.0f, 1.0f, "energyball.png"), 
+    Spread_Eball.push_back(Boss_Attack{ S_CreateSquare(30.0f, "energyball.png"), 
                            Col_Comp{ Merlin_Start_X - 30.0f, Merlin_Start_Y - 30.0f,
                            Merlin_Start_X + 30.0f, Merlin_Start_Y + 30.0f, Rect } });
   for (int i = 0; i < 3; ++i)
@@ -61,7 +61,7 @@ Merlin::Merlin()
   //Initialize Arrow Rain
   Arrow.reserve(A_Rain_Buffer);
   for (int i = 0; i < A_Rain_Buffer; ++i)
-    Arrow.push_back(Boss_Attack{ S_CreateSquare(30.0f, 1.0f, 1.0f, "arrow.png"),
+    Arrow.push_back(Boss_Attack{ S_CreateSquare(30.0f, "arrow.png"),
                     Col_Comp{ Merlin_Start_X - 2.0f, Merlin_Start_Y - 30.0f,
                     Merlin_Start_X + 2.0f, Merlin_Start_Y + 30.0f, Rect } });
   for (int i = 0; i < A_Rain_Buffer; ++i)

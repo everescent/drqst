@@ -43,7 +43,7 @@ namespace Main_Menu
 
   void Load(void)
   {
-    BG     = new Sprite    { CreateBG(1.0f, 1.0f, 1.0f, "floor.jpg") };
+    BG     = new Sprite    { CreateBG(1.0f, "floor.jpg") };
     M_BG   = new Transform { };
 	floor1 = new Floor     { 0.0f, -350.0f };
 	plat1  = new Platform  { 0.0f, -150.0f};
@@ -52,8 +52,10 @@ namespace Main_Menu
 	plat4  = new Platform  { 0.0f, 120.0f };
 	plat5  = new Platform  { -350.0f, 120.0f };
 	plat6  = new Platform  { 350.0f, 120.0f };
+	
 	Lwall1 = new Wall      { -620.0f, -160.0f };
 	Lwall2 = new Wall      { -620.0f, 160.0f };
+
 	player = new Dragon    { };
 	enemy  = new Merlin    { };
 	grunt  = new Grunt     { 400.0f, -160.0f };

@@ -68,14 +68,14 @@ public:
   const Dragon &Get_this() const { return *this; }
   Dragon()
     //Initialize Characters class
-    :Characters{ S_CreateSquare(100.0f, 1.0f, 1.0f, "dragon_tmp.png"), 3,
+    :Characters{ S_CreateSquare(100.0f, "dragon_tmp.png"), 3,
     Col_Comp{ Start_Pos_X - 100.0f, Start_Pos_Y - 100.0f,
               Start_Pos_X + 100.0f, Start_Pos_Y + 100.0f, Rect} },
     //Initialize data members
     Attack{ false }, Pwr_Up{ false }, Falling{ false }, Damage { 10 }, 
     M_Damage{ 15 }, Charge{ 0 }, Gravity{ 10.0f }, Dir{}, Buff{}, Fireball{},
     //Initialize Mega Fireball
-    Mfireball{ S_CreateSquare(50.0f, 1.0f, 1.0f, "fireball.png"), 
+    Mfireball{ S_CreateSquare(50.0f, "fireball.png"), 
     Col_Comp{ Start_Pos_X - 50.0f, Start_Pos_Y - 50.0f,
     Start_Pos_X + 50.0f, Start_Pos_Y + 50.0f, Rect } }, Air_Dist{ 0.0f }, Facing{ 1.0f }
   {
@@ -88,7 +88,7 @@ public:
     Fireball.reserve(Bullet_Buffer);
     //Initialize all the fireballs
     for (int i = 0; i < Bullet_Buffer; ++i)
-      Fireball.push_back(Projectile{ S_CreateSquare(50.0f, 1.0f, 1.0f, "fireball.png"),
+      Fireball.push_back(Projectile{ S_CreateSquare(50.0f, "fireball.png"),
                                      Col_Comp{ Start_Pos_X - 50.0f, Start_Pos_Y - 50.0f,
                                      Start_Pos_X + 50.0f, Start_Pos_Y + 50.0f, Rect } });
     for (int i = 0; i < Bullet_Buffer; ++i)

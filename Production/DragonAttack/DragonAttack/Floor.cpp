@@ -1,7 +1,7 @@
 #include "Floor.h"
 
 Floor::Floor(float x, float y)
-	: GameObject{ CreateFloor(2.0f, 1.0f, 1.0f, ".//Textures/download.jpg"),
+	: GameObject{ CreateFloor(2.0f, ".//Textures/download.jpg"),
 	  Col_Comp{ x - FLOOR_WIDTH*2, y - FLOOR_HEIGHT, 
               x + FLOOR_WIDTH*2, y + FLOOR_HEIGHT, Rect }, 
               x, y }

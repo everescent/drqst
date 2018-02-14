@@ -34,7 +34,7 @@ namespace Test_Stage1
 
 	void Load(void)
 	{
-		BG = new Sprite{ CreateBG(1.0f, 1.0f, 1.0f, "floor.jpg") };
+		BG = new Sprite{ CreateBG(1.0f, "floor.jpg") };
 		M_BG = new Transform{};
 		floor1 = new Floor{ 0.0f, -350.0f };
 

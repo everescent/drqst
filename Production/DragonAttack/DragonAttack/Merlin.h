@@ -44,7 +44,7 @@ const float  Spread_CD_Time  { 240.0f  }; //Spread shot cooldown time
 const float  Spread_Death    { 1000.0f }; //How far the spread shot travels
 
 const int    A_Rain_Buffer   { 30      }; //How many arrows shot
-const float  A_Rain_CD_Time  { 360.0f  }; //Arrow rain cooldown time
+const float  A_Rain_CD_Time  { 600.0f  }; //Arrow rain cooldown time
 const float  A_Rain_Death    { 1000.0f }; //Arrow death
 
 const float  Melee_CD_Time   { 60.0f };   //Melee cooldown time
