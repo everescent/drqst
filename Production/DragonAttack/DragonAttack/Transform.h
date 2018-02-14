@@ -33,7 +33,7 @@ public:
   //Sets the scale matrix and applies it to the matrix
   Transform &SetScale(float scaleX, float scaleY);
   void Concat() { 
-    AEMtx33Concat(&Matrix, &S_Matrix, &R_Matrix); 
+    AEMtx33Concat(&Matrix, &R_Matrix, &S_Matrix);
     AEMtx33Concat(&Matrix, &T_Matrix, &Matrix);
   }
   float GetDeterminant() { return AEMtx33Determinant(&Matrix); }
