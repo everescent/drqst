@@ -24,8 +24,8 @@ namespace GSM
 	typedef void(*void_fp_float)(float deltaTime);
 
 	GAME_STATE previous = GS_MAIN;
-	GAME_STATE current = GS_MAIN;
-	GAME_STATE next = GS_MAIN;
+	GAME_STATE current  = GS_MAIN;
+	GAME_STATE next     = GS_MAIN;
 
 	// putting all the different functions to one object
 	struct GameStateFunctions
@@ -50,6 +50,13 @@ namespace GSM
 		GSF[GS_MAIN].Free   = Main_Menu::Free;
 		GSF[GS_MAIN].Unload = Main_Menu::Unload;
 
+		GSF[GS_LEVEL1].Init	= Test_Stage1::Init;
+		GSF[GS_LEVEL1].Load	= Test_Stage1::Load;
+		GSF[GS_LEVEL1].Update = Test_Stage1::Update;
+		GSF[GS_LEVEL1].Draw	= Test_Stage1::Draw;
+		GSF[GS_LEVEL1].Free	= Test_Stage1::Free;
+		GSF[GS_LEVEL1].Unload = Test_Stage1::Unload;
+		
 		GSF[GS_QUIT].Init   = nullptr;
 		GSF[GS_QUIT].Load   = nullptr;
 		GSF[GS_QUIT].Update = nullptr;
@@ -112,6 +119,11 @@ namespace GSM
 
 		previous = current;
 		current = next;
+	}
+
+	void Change_GameState(GAME_STATE newState)
+	{
+		next = newState;
 	}
 
 	bool IsGameRunning(void)

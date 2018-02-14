@@ -25,7 +25,7 @@ namespace {
 
 	Boss_Action_State current_action = IDLE; // different states of boss arthur
 
-	const int health = 3000; // initial hp for king arthur
+	const int health = 300; // initial hp for king arthur
 
 	const int phase2_hp = 1500; //phase 2 trigger
 
@@ -35,7 +35,7 @@ namespace {
 
 	const float start_point_x = 200.0f;
 
-	const float start_point_y = -100.0f;
+	const float start_point_y = -150.0f;
 
 	const float slash_box = 40.0f;
 
@@ -97,9 +97,9 @@ void King_Arthur::Init(void)
 
 	for (char i = 0; i < limit - 1; ++i) // initializing other variables in slash
 	{
-		arthur[i].PosY = -120.0f;
+		arthur[i].PosY = start_point_y;
 (void)  arthur[i].SetVelocity(AEVec2{ 200.0f, 0.0f }); // velocity for slash
-(void)  arthur[i].Transform_.SetScale(2.0f, 2.0f); // determine the size of projectile
+(void)  arthur[i].Transform_.SetScale(1.5f, 1.5f); // determine the size of projectile
 (void)	arthur[i].Transform_.SetTranslate( start_point_x, start_point_y );
 		arthur[i].Transform_.Concat();
 	}
@@ -112,21 +112,27 @@ void King_Arthur::Init(void)
 
 void King_Arthur::Update(const float dt, Dragon &d) 
 {
-
-
 	(d.PosX - this->PosX) > 0 ? this->Set_Direction(RIGHT) :
 	this->Set_Direction(LEFT);
 	
-	if (this->Get_HP() < phase2_hp) // activate phase 2 once hp drops is 50%
-	{
-		King_Arthur_Phase2();
-	}
+	//if (this->Get_HP() < phase2_hp) // activate phase 2 once hp drops is 50%
+	//{
+	//	King_Arthur_Phase2();
+	//}
 
 	if (behavior_swap == 3)
 	{
 		current_action = MOVING;  // switch state to moving
 		behavior_swap = 0;        // reset the counter
 	}
+
+	for (char i = 0; i < Bullet_Buffer; ++i)
+		if (d.GetFireball()[i].IsActive())
+			if (Collision_.Dy_Rect_Rect(d.GetFireball()[i].Collision_, this->GetVelocity(), d.GetFireball()[i].GetVelocity(), dt))
+			{
+				Decrease_HP(d.GetDamage());
+				d.GetFireball()[i].SetActive(false);
+			}
 
 	// switch between the boss states
 	switch (current_action)
@@ -224,8 +230,8 @@ void King_Arthur::Attack(Dragon &d, const float dt)
 			currAttk = UNIQUE_MECHANIC;
 
 		//followed by triple slash
-		else if (!(arthur[1].cooldown))
-			currAttk = TRIPLE_SLASH;
+		/*else if (!(arthur[1].cooldown))
+			currAttk = TRIPLE_SLASH;*/
 	}
 
 	(this->*ka_attacks[currAttk])(d, dt); // call the coresponding attack function
@@ -351,12 +357,13 @@ void King_Arthur::Triple_Slash(Dragon &d, const float dt)
 
 	bool collided[3]  { 0 };
 
-	static bool sec_flag = true, third_flag = true, hit = false; // for second and third wave
-
-	const char ts_limit = limit - 1; // limit the loop to just the triple slashes
-
 	if (arthur[1].cooldown) // skill still on cooldown
 		return;
+
+	static bool sec_flag = true, third_flag = true; // for second and third wave
+	static bool hit = false;						// check if slash hit the player
+
+	const char ts_limit = limit - 1; // limit the loop to just the triple slashes
 	
 	if (!(arthur[1].cooldown_timer)) // sets the attack to start from KA
 	{
@@ -364,8 +371,8 @@ void King_Arthur::Triple_Slash(Dragon &d, const float dt)
 		{
 			arthur[i].PosX = this->PosX;
 		}
-		arthur[1].SetActive(true);
-		arthur[1].ongoing_attack = true;
+		arthur[1].SetActive(true);         // set the first attack to show
+		arthur[1].ongoing_attack = true;   // attack is currently ongoing
 	}
 
 	if (arthur[1].GetDist() > interval || ! (arthur[1].IsActive() ) )
@@ -404,7 +411,7 @@ void King_Arthur::Triple_Slash(Dragon &d, const float dt)
 
 	if (! hit)
 	{
-		for (int i : collided)
+		for (int i = 0; i < 3; ++i)
 		{
 			collided[i] = arthur[i].Collision_.Dy_Rect_Rect(d.Collision_, arthur[i].GetVelocity(), d.GetVelocity(), dt);
 

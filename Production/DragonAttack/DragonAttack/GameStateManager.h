@@ -16,6 +16,7 @@ Technology is prohibited.
 #pragma once
 #include "GameStateList.h"
 #include "Main_Menu.h"
+#include "Test_Stage1.h"
 
 namespace GSM
 {
@@ -77,6 +78,20 @@ namespace GSM
 	*/
 	/******************************************************************************/
 	void Cleanup(void);
+
+	/******************************************************************************/
+	/*!
+	\fn         void Change_GameState
+
+	\brief      Change the next game state
+
+	\param      GAME_STATE newState
+
+	\retval     void
+	No return.
+	*/
+	/******************************************************************************/
+	void Change_GameState(GAME_STATE newState);
 
 	/******************************************************************************/
 	/*!
