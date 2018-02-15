@@ -20,7 +20,7 @@ Technology is prohibited.
 
 Merlin::Merlin()
 //Initialize characters class
-  :Characters{ S_CreateSquare(100.0f, "merlin.png"), Merlin_HP,
+  :Characters{ S_CreateSquare(100.0f, "merlin.png"), Merlin_HP - 300,
   Col_Comp{ Merlin_Start_X - 100.0f, Merlin_Start_Y - 100.0f,
   Merlin_Start_X + 100.0f, Merlin_Start_Y + 100.0f, Rect } },
   //Initialize data members
@@ -124,6 +124,7 @@ void Merlin::Melee(Dragon &player)
   UNREFERENCED_PARAMETER(player);
   std::cout << "Melee\n";
   M_Melee.cooldown = true;
+  M_Melee.cooldown_timer = Melee_CD_Time;
 }
 
 void Merlin::S_Eball(Dragon &player)
@@ -139,6 +140,7 @@ void Merlin::S_Eball(Dragon &player)
   //Go towards player
   Eball.SetVelocity(Displacement);
   Eball.cooldown = true;
+  Eball.cooldown_timer = Eball_CD_Time;
 }
 
 void Merlin::Sp_Eball(Dragon &player)
@@ -169,6 +171,7 @@ void Merlin::Sp_Eball(Dragon &player)
   {
     Spread_Eball[i].SetActive(true);
     Spread_Eball[i].cooldown = true;
+    Spread_Eball[i].cooldown_timer = Spread_CD_Time;
   }
 }
 
@@ -190,6 +193,7 @@ void Merlin::A_Rain(Dragon &player)
         Arrow[i].PosX -= (float)(rand() % 50);
       Arrow[i].SetActive(true);
       Arrow[i].cooldown = true;
+      Arrow[i].cooldown_timer = A_Rain_CD_Time;
       Arrow[i].Projectile::Update();
     }
   }
@@ -230,13 +234,20 @@ void Merlin::CheckState(Dragon &player)
     else
       M_Next = IDLE;
   }
-  else if (M_Curr == ATTACK || M_Curr == IDLE)
+  else if (M_Curr == IDLE)
   {
     //Check if all are on cooldown
     if (CheckAttack(player))
       M_Next = ATTACK;
     //If none, check if can blink
     else if (Blink_.Cooldown)
+      M_Next = IDLE;
+    else
+      M_Next = MOVING;
+  }
+  else if (M_Curr == ATTACK)
+  {
+    if (Blink_.Cooldown)
       M_Next = IDLE;
     else
       M_Next = MOVING;
@@ -258,7 +269,7 @@ bool Merlin::CheckAttack(Dragon &player)
     M_Att_Curr = MELEE;
   }
   //Check if arrow rain is available for cast
-  else if (!Arrow[A_Rain_Buffer - 1].cooldown && Get_HP() <= M_Phase2_HP)
+  else if (!Arrow[0].cooldown && Get_HP() <= M_Phase2_HP)
   {
     CanAttack = true;
     M_Att_Curr = ARROW_RAIN;
@@ -306,12 +317,12 @@ void Merlin::Update(Dragon &player)
   //Update all on going attacks first, aka the currently active ones
   CheckState(player);
   (this->*Merlin_State)(player);
-  --Attack_Interval;
+  Attack_Interval -= 0.016f;
   if (Attack_Interval <= 0)
     Attack_Interval = 0;
   if (Blink_.Cooldown)
   {
-    --Blink_.CD_Time;
+    Blink_.CD_Time -= 0.016f;
     if (Blink_.CD_Time <= 0)
     {
       Blink_.Cooldown = false;
@@ -332,7 +343,7 @@ void Merlin::Update(Dragon &player)
     }
     else
     {
-      Eball.Update(1.0f);
+      Eball.Update(0.016f);
     }
   }
   Eball.Projectile::Pos();
@@ -340,22 +351,32 @@ void Merlin::Update(Dragon &player)
   Eball.Projectile::Update();
   Eball.Collision_.Update_Col_Pos(Eball.PosX - 50.0f, Eball.PosY - 50.0f, Eball.PosX + 50.0f, Eball.PosY + 50.0f);
   //Spread Shot
-  if (Spread_Eball[0].cooldown)
+  bool SS_cd     = false; //Check if any bullets for spread shot are on cooldown
+  bool SS_active = false; //Check if any bullets for spread shot are active
+  for (Boss_Attack& i : Spread_Eball)
   {
-    if (Spread_Eball[0].IsActive())
+    SS_cd = SS_cd || i.cooldown;
+  }
+  for (Boss_Attack& i : Spread_Eball)
+  {
+    SS_active = SS_active || i.IsActive();
+  }
+  if (SS_cd)
+  {
+    if (SS_active)
     {
-      if (Spread_Eball[0].GetDist() >= Spread_Death)
-      {
         for (int i = 0; i < 3; ++i)
         {
-          Spread_Eball[i].ResetDist();
-          Spread_Eball[i].SetActive(false);
+          if (Spread_Eball[i].GetDist() >= Spread_Death)
+          {
+            Spread_Eball[i].ResetDist();
+            Spread_Eball[i].SetActive(false);
+          }
         }
-      }
     }
     else for (int i = 0; i < 3; ++i)
     {
-      Spread_Eball[i].Update(1.0f);
+      Spread_Eball[i].Update(0.016f);
     }
   }
   for (int i = 0; i < 3; ++i)
@@ -382,7 +403,7 @@ void Merlin::Update(Dragon &player)
     }
     else for (int i = 0; i < A_Rain_Buffer; ++i)
     {
-      Arrow[i].Update(1.0f);
+      Arrow[i].Update(0.016f);
     }
   }
   if (!Arrow[A_Rain_Buffer - 1].IsActive())
@@ -467,6 +488,7 @@ void Merlin::Update(Dragon &player)
           if (player.Collision_.Dy_Rect_Rect(Spread_Eball[i].Collision_, Spread_Eball[i].GetVelocity(), player.GetVelocity(), 0.016f))
           {
             player.Decrease_HP();
+            Spread_Eball[i].ResetDist();
             Spread_Eball[i].SetActive(false);
           }
         }
@@ -480,6 +502,7 @@ void Merlin::Update(Dragon &player)
       if (player.Collision_.Dy_Rect_Rect(Eball.Collision_, Eball.GetVelocity(), player.GetVelocity(), 0.016f))
       {
         player.Decrease_HP();
+        Eball.ResetDist();
         Eball.SetActive(false);
       }
     }

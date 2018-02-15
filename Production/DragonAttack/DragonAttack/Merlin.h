@@ -34,17 +34,17 @@ using MAS = Merlin_Attack_State;
 
 const int    Merlin_HP       { 500 };     //Merlin's HP
 const int    M_Phase2_HP     { 250 };     //Merlin's phase 2 HP
-const int    Blink_CD_Time   { 360 };     //Cooldown time for Blink
-const int    Merlin_Att_Inter{ 120 };     //Merlin's Attack Interval
+const float  Blink_CD_Time   { 10.0f };     //Cooldown time for Blink
+const float  Merlin_Att_Inter{ 2.0f };     //Merlin's Attack Interval
 
-const float  Eball_CD_Time   { 120.0f  }; //Energy Ball cooldown time
+const float  Eball_CD_Time   { 100.0f  }; //Energy Ball cooldown time
 const float  Eball_Death     { 1000.0f }; //How far the energy ball travels
 
-const float  Spread_CD_Time  { 240.0f  }; //Spread shot cooldown time
+const float  Spread_CD_Time  { 150.0f  }; //Spread shot cooldown time
 const float  Spread_Death    { 1000.0f }; //How far the spread shot travels
 
 const int    A_Rain_Buffer   { 30      }; //How many arrows shot
-const float  A_Rain_CD_Time  { 600.0f  }; //Arrow rain cooldown time
+const float  A_Rain_CD_Time  { 10.0f  }; //Arrow rain cooldown time
 const float  A_Rain_Death    { 1000.0f }; //Arrow death
 
 const float  Melee_CD_Time   { 60.0f };   //Melee cooldown time
@@ -87,7 +87,7 @@ private:
   bool CheckAttack(Dragon &player);             //Check if can attack, and sets the appropriate 
                                                       //function for it; Returns true if can attack, else false
   int castime{ 100 };              //Arrow rain cast time
-  int Attack_Interval;      //Time between attacks
+  float Attack_Interval;      //Time between attacks
   Boss_Action_State M_Curr; //Current state
   Boss_Action_State M_Next; //Next state
   MAS M_Att_Curr;           //Current attack state
@@ -98,7 +98,7 @@ private:
   std::vector<Boss_Attack> Arrow;        //Projectiles for arrow rain
   //Blink attack struct
   struct Blink {
-    int CD_Time  { Blink_CD_Time }; //Cooldown time
+    float CD_Time  { Blink_CD_Time }; //Cooldown time
     bool Cooldown{     false     }; //Check if cooldown is active
   };
   Blink Blink_;       //Blink utilities

@@ -19,7 +19,7 @@ float f_sqrt(const float &x)
 {
   float result = x;
   float tmp = x / 2.0f;
-  for (char i = 0; i < 5; ++i)
+  for (char i = 0; i < 8; ++i)
   {
     result = (tmp + (x / tmp)) / 2.0f;
     tmp = result;
