@@ -52,7 +52,7 @@ namespace {
 
 
 King_Arthur::King_Arthur(void)
-	: Characters(S_CreateSquare(100.0f, 1.0f, 1.0f, ".//Textures/download.png"), health,
+	: Characters(S_CreateSquare(100.0f, ".//Textures/download.png"), health,
 	  Col_Comp{ start_point_x - 30.0f, start_point_y - 30.0f,
 				start_point_x + 30.0f, start_point_y + 30.0f, Rect } ), 
 	phase2{false}
@@ -76,23 +76,23 @@ void King_Arthur::Init(void)
 
 	arthur.reserve(limit);
 
-	arthur.emplace_back(Boss_Attack(S_CreateSquare(20.0, 1.0f, 1.0f, tex_ss), // for single slash
+	arthur.emplace_back(Boss_Attack(S_CreateSquare(20.0, tex_ss), // for single slash
 					 Col_Comp(start_point_x - slash_box, start_point_y -  slash_box,
 							  start_point_y + slash_box, start_point_y + slash_box, Rect)));
 
-	arthur.emplace_back(Boss_Attack(S_CreateSquare(20.0, 1.0f, 1.0f, tex_3s), // 1st triple slash 
+	arthur.emplace_back(Boss_Attack(S_CreateSquare(20.0, tex_3s), // 1st triple slash 
 		Col_Comp(start_point_x - slash_box, start_point_y - slash_box,
 				 start_point_y + slash_box, start_point_y + slash_box, Rect)));
 
-	arthur.emplace_back(Boss_Attack(S_CreateSquare(20.0, 1.0f, 1.0f, tex_3s), // 2nd single slash
+	arthur.emplace_back(Boss_Attack(S_CreateSquare(20.0, tex_3s), // 2nd single slash
 		Col_Comp(start_point_x - slash_box, start_point_y - slash_box,
 				 start_point_y + slash_box, start_point_y + slash_box, Rect)));
 
-	arthur.emplace_back(Boss_Attack(S_CreateSquare(20.0, 1.0f, 1.0f, tex_3s), // 3rd triple slash
+	arthur.emplace_back(Boss_Attack(S_CreateSquare(20.0, tex_3s), // 3rd triple slash
 		Col_Comp(start_point_x - slash_box, start_point_y - slash_box,
 				 start_point_y + slash_box, start_point_y + slash_box, Rect)));
 
-	arthur.emplace_back(Boss_Attack(S_CreateSquare(slash_box, 1.0f, 1.0f, tex_ja), // jump attack
+	arthur.emplace_back(Boss_Attack(S_CreateSquare(slash_box, tex_ja), // jump attack
 					 Col_Comp(0.0f, 0.0f, 5.0f, 5.0f, Rect)));
 
 	for (char i = 0; i < limit - 1; ++i) // initializing other variables in slash
@@ -252,7 +252,7 @@ void King_Arthur::King_Arthur_Phase2(void)
 	arthur.pop_back(); // delete jump attack
 
 	const char* tex_ja = ".//Textures/light_texture2320.jpg";
-	arthur.emplace_back(Boss_Attack(S_CreateSquare(30.0f, 1.0f, 1.0f, tex_ja),
+	arthur.emplace_back(Boss_Attack(S_CreateSquare(30.0f, tex_ja),
 		Col_Comp(0.0f, 0.0f, 5.0f, 5.0f, Rect))); // add the 2nd mechanic, still in progress
 
 	this->phase2 = true; // set phase 2 flag to true

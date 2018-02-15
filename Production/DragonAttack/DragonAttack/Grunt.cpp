@@ -31,7 +31,7 @@ namespace // global variables just for THIS file
 }
 
 Grunt::Grunt(float x, float y)
-	: Characters(S_CreateSquare(100.0f, 1.0f, 1.0f, ".//Textures/grunt.png"),
+	: Characters(S_CreateSquare(100.0f, ".//Textures/grunt.png"),
 		grunt_hp, Col_Comp{ x - 50.0f, y - 50.0f , x + 50.0f , y + 50.0f, Rect })
 {
 	SetActive(true);

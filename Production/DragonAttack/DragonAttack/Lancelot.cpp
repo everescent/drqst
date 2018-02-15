@@ -36,7 +36,7 @@ namespace
 }
 
 Lancelot::Lancelot(void)
-	: Characters(S_CreateSquare(60.0f, 1.0f, 1.0f, ".//Textures/lancelot.jpg"),
+	: Characters(S_CreateSquare(60.0f, ".//Textures/lancelot.jpg"),
 	  health, { 0.0f, 0.0f, 5.0f, 5.0f, Rect }), phase2{ false }, M_E{false}
 {
 	(void) this->Transform_.SetTranslate(200.0f, Start_Pos_Y); // spawn lancelot at this location
@@ -59,13 +59,13 @@ void Lancelot::Init()
 
 	lancelot.reserve(limit);
 
-	lancelot.emplace_back(Boss_Attack(S_CreateSquare(20.0f, 1.0f, 1.0f, slash), // for stab
+	lancelot.emplace_back(Boss_Attack(S_CreateSquare(20.0f, slash), // for stab
 		Col_Comp(0.0f, 0.0f, 5.0f, 5.0f, Rect))); 
 
-	lancelot.emplace_back(Boss_Attack(S_CreateSquare(20.0f, 1.0f, 1.0f, stab), // for slash
+	lancelot.emplace_back(Boss_Attack(S_CreateSquare(20.0f, stab), // for slash
 		Col_Comp(0.0f, 0.0f, 5.0f, 5.0f, Rect)));
 
-	lancelot.emplace_back(Boss_Attack(S_CreateSquare(0.0f, 0.0f, 0.0f, nullptr),
+	lancelot.emplace_back(Boss_Attack(S_CreateSquare(0.0f, nullptr),
 		Col_Comp()));
 
 	for (char i = 0; i < limit - 1; ++i) // spawning location of slashes
@@ -191,7 +191,7 @@ void Lancelot::Lancelot_Phase2(void)
 	M_E = false;
 
 	const char* tex = ".//Textures/arondight.png";
-	lancelot.emplace_back(Boss_Attack(S_CreateSquare(30.0f, 1.0f, 1.0f, tex),
+	lancelot.emplace_back(Boss_Attack(S_CreateSquare(30.0f, tex),
 		Col_Comp(0.0f, 0.0f, 5.0f, 5.0f, Rect))); // add the 2nd mechanic, still in progress
 
 	ll_attacks[UNIQUE_MECHANIC+1] = &Lancelot::Arondight;
