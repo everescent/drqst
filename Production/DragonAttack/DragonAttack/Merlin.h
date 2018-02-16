@@ -37,14 +37,14 @@ const int    M_Phase2_HP     { 250 };     //Merlin's phase 2 HP
 const float  Blink_CD_Time   { 10.0f };     //Cooldown time for Blink
 const float  Merlin_Att_Inter{ 2.0f };     //Merlin's Attack Interval
 
-const float  Eball_CD_Time   { 100.0f  }; //Energy Ball cooldown time
+const float  Eball_CD_Time   { 1.0f    }; //Energy Ball cooldown time
 const float  Eball_Death     { 1000.0f }; //How far the energy ball travels
 
-const float  Spread_CD_Time  { 150.0f  }; //Spread shot cooldown time
+const float  Spread_CD_Time  { 10.0f   }; //Spread shot cooldown time
 const float  Spread_Death    { 1000.0f }; //How far the spread shot travels
 
 const int    A_Rain_Buffer   { 30      }; //How many arrows shot
-const float  A_Rain_CD_Time  { 10.0f  }; //Arrow rain cooldown time
+const float  A_Rain_CD_Time  { 20.0f   }; //Arrow rain cooldown time
 const float  A_Rain_Death    { 1000.0f }; //Arrow death
 
 const float  Melee_CD_Time   { 60.0f };   //Melee cooldown time
@@ -85,9 +85,9 @@ private:
   void(Merlin::*Merlin_State)(Dragon &player);  //Pointer to current state function
   void CheckState(Dragon &player);              //Sets current state to next, checks for next state
   bool CheckAttack(Dragon &player);             //Check if can attack, and sets the appropriate 
-                                                      //function for it; Returns true if can attack, else false
-  int castime{ 100 };              //Arrow rain cast time
-  float Attack_Interval;      //Time between attacks
+                                                //function for it; Returns true if can attack, else false
+  int castime{ 100 };       //Arrow rain cast time
+  float Attack_Interval;    //Time between attacks
   Boss_Action_State M_Curr; //Current state
   Boss_Action_State M_Next; //Next state
   MAS M_Att_Curr;           //Current attack state
@@ -99,17 +99,35 @@ private:
   //Blink attack struct
   struct Blink {
     float CD_Time  { Blink_CD_Time }; //Cooldown time
-    bool Cooldown{     false     }; //Check if cooldown is active
+    bool  Cooldown {     false     }; //Check if cooldown is active
+    //Update Blink
+    void Update()
+    {
+      if (Cooldown)
+      {
+        CD_Time -= 0.016f;
+        if (CD_Time <= 0)
+        {
+          Cooldown = false;
+          CD_Time = Blink_CD_Time;
+        }
+      }
+    }
   };
   Blink Blink_;       //Blink utilities
   Sprite MagicCircle; //Magic circle sprite
   Transform MC_Pos;   //Magic circle transform
 
   //Attack Functions START///////////////////////////////////////////////////////////////
-  void Melee(Dragon &player);    //Melee attack function
-  void S_Eball(Dragon &player);  //Single shot energy ball function
-  void Sp_Eball(Dragon &player); //Spread shot energy ball function
-  void A_Rain(Dragon &player);   //Arrow rain function
+  void Melee(Dragon &player);          //Melee attack function
+  void S_Eball(Dragon &player);        //Single shot energy ball function
+  void Sp_Eball(Dragon &player);       //Spread shot energy ball function
+  void A_Rain(Dragon &player);         //Arrow rain function
+  void Melee_Update();                 //Melee Update
+  void S_Eball_Update();               //Single shot update
+  void Sp_Eball_Update();              //Spread shot update
+  void A_Rain_Update(Dragon &player);  //Arrow rain update
+  void Colision_Check(Dragon &player); //Checks if attacks hiht
   //Attack Functions END/////////////////////////////////////////////////////////////////
 
   //State Functions START///////////////////////////////////////////////////////////////
