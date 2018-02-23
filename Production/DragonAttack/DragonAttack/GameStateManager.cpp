@@ -38,33 +38,25 @@ namespace GSM
 		void_fp_void  Unload;
 	};
 
-	GameStateFunctions GSF[GS_RESTART] = { 0 };
+	GameStateFunctions GSF[GS_QUIT] = { 0 };
 
 	// initializes the array of function pointers for each state
 	void GSM_Init(void)
 	{
-		GSF[GS_MAIN].Init   = Main_Menu::Init;
-		GSF[GS_MAIN].Load   = Main_Menu::Load;
-		GSF[GS_MAIN].Update = Main_Menu::Update;
-		GSF[GS_MAIN].Draw   = Main_Menu::Draw;
-		GSF[GS_MAIN].Free   = Main_Menu::Free;
-		GSF[GS_MAIN].Unload = Main_Menu::Unload;
+		GSF[GS_MAIN].Init     = Main_Menu::Init;
+		GSF[GS_MAIN].Load     = Main_Menu::Load;
+		GSF[GS_MAIN].Update   = Main_Menu::Update;
+		GSF[GS_MAIN].Draw     = Main_Menu::Draw;
+		GSF[GS_MAIN].Free     = Main_Menu::Free;
+		GSF[GS_MAIN].Unload   = Main_Menu::Unload;
 
-		GSF[GS_LEVEL1].Init	= Test_Stage1::Init;
-		GSF[GS_LEVEL1].Load	= Test_Stage1::Load;
+		GSF[GS_LEVEL1].Init	  = Test_Stage1::Init;
+		GSF[GS_LEVEL1].Load	  = Test_Stage1::Load;
 		GSF[GS_LEVEL1].Update = Test_Stage1::Update;
-		GSF[GS_LEVEL1].Draw	= Test_Stage1::Draw;
-		GSF[GS_LEVEL1].Free	= Test_Stage1::Free;
+		GSF[GS_LEVEL1].Draw	  = Test_Stage1::Draw;
+		GSF[GS_LEVEL1].Free	  = Test_Stage1::Free;
 		GSF[GS_LEVEL1].Unload = Test_Stage1::Unload;
 		
-		GSF[GS_QUIT].Init   = nullptr;
-		GSF[GS_QUIT].Load   = nullptr;
-		GSF[GS_QUIT].Update = nullptr;
-		GSF[GS_QUIT].Draw   = nullptr;
-		GSF[GS_QUIT].Free   = nullptr;
-		GSF[GS_QUIT].Unload = nullptr;
-
-		GSF[current].Init();
 	}
 
 	void Init_and_Load(void)
@@ -75,56 +67,45 @@ namespace GSM
 			current = next = previous;
 		}
 
-		else if (GSF[current].Load != nullptr)
+		else if (current != GS_RESTART)
 		{
 			GSF[current].Load();
 		}
 
-		if (GSF[current].Init != nullptr)
-		{
-			GSF[current].Init();
-		}
+
+		GSF[current].Init();
+
 	}
 
 	void Update_and_Draw(float dt)
 	{
 	    Input::Get_User_Input();
 
-		
-		if (GSF[current].Update != nullptr)
-		{
-			GSF[current].Update(dt);
-		}
 
-		if (GSF[current].Draw != nullptr)
-		{
-			GSF[current].Draw();
-		}
+		GSF[current].Update(dt);
+
+
+		GSF[current].Draw();
+
 	}
 
 	void Cleanup(void)
 	{
-		if (GSF[current].Free != nullptr)
-		{
-			GSF[current].Free();
-		}
+
+		GSF[current].Free();
+
 
 		if (next != GS_RESTART)
 		{
-			if (GSF[current].Unload != nullptr)
-			{
-				GSF[current].Unload();
-			}
+
+			GSF[current].Unload();
 		}
 
 		previous = current;
 		current = next;
 	}
 
-	void Change_GameState(GAME_STATE newState)
-	{
-		next = newState;
-	}
+
 
 	bool IsGameRunning(void)
 	{

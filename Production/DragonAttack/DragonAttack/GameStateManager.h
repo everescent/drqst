@@ -81,20 +81,6 @@ namespace GSM
 
 	/******************************************************************************/
 	/*!
-	\fn         void Change_GameState
-
-	\brief      Change the next game state
-
-	\param      GAME_STATE newState
-
-	\retval     void
-	No return.
-	*/
-	/******************************************************************************/
-	void Change_GameState(GAME_STATE newState);
-
-	/******************************************************************************/
-	/*!
 	\fn         void IsGameRunning
 
 	\brief      Checks if the game is still running
