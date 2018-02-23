@@ -20,7 +20,7 @@ Technology is prohibited.
 
 Merlin::Merlin()
   //Initialize characters class
-  :Characters{ S_CreateSquare(100.0f, "merlin.png"), Merlin_HP,
+  :Characters{ S_CreateSquare(100.0f, "merlin.png"), Merlin_HP - 300,
   Col_Comp{ Merlin_Start_X - 100.0f, Merlin_Start_Y - 100.0f,
   Merlin_Start_X + 100.0f, Merlin_Start_Y + 100.0f, Rect } },
   //Initialize Merlin State Machine
@@ -122,7 +122,7 @@ void Merlin::Move(Dragon &player)
 
 void Merlin::Attack(Dragon &player)
 {
-  /*This will execute the attacks*/
+  //This will execute the attacks
   (this->*Merlin_Attack)(player);
   Attack_Interval = Merlin_Att_Inter;
 }
@@ -284,6 +284,7 @@ void Merlin::Sp_Eball_Update()
                                  SS.PosX + 30.0f, SS.PosY + 30.0f);
   }
 }
+
 void Merlin::A_Rain_Update(Dragon &player)
 {
   if (Arrow[A_Rain_Buffer - 1].cooldown)
@@ -337,6 +338,7 @@ void Merlin::A_Rain_Update(Dragon &player)
     }
   }
 }
+
 void Merlin::Colision_Check(Dragon &player)
 {
   //If Dragon gets hit decrease Dragon HP
@@ -347,10 +349,11 @@ void Merlin::Colision_Check(Dragon &player)
   {
     if (Arrow[A_Rain_Buffer - 1].IsActive())
     {
-      for (int i = 0; i < A_Rain_Buffer; ++i)
+      for (int i = 0; i < A_Rain_Buffer - 1; ++i)
         if (Arrow[i].IsActive())
         {
-          if (player.Collision_.Dy_Rect_Rect(Arrow[i].Collision_, Arrow[i].GetVelocity(), player.GetVelocity(), 0.016f))
+          if (player.Collision_.Dy_Rect_Rect(Arrow[i].Collision_, 
+              Arrow[i].GetVelocity(), player.GetVelocity(), 0.016f))
           {
             player.Decrease_HP();
             Arrow[i].SetActive(false);
@@ -542,7 +545,7 @@ void Merlin::Render()
   {
     SS.Render();
   }
-  for (int i = 0; i < A_Rain_Buffer; ++i)
+  for (int i = 0; i < A_Rain_Buffer - 1; ++i)
   {
     if(M_Att_Curr == ARROW_RAIN)
       MagicCircle.Render_Object(MC_Pos);
