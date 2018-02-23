@@ -76,6 +76,9 @@
     <Filter Include="Game_Object\Objects">
       <UniqueIdentifier>{4ca9ae69-d2ad-4e97-a931-72c997cbe2ee}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game_States\Level_Editor">
+      <UniqueIdentifier>{89021b9c-68ec-4bc2-961a-fc6882f78ed8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -152,6 +155,9 @@
     </ClCompile>
     <ClCompile Include="Test_Stage1.cpp">
       <Filter>Game_States\Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="Level_Editor.cpp">
+      <Filter>Game_States\Level_Editor</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -232,6 +238,9 @@
     </ClInclude>
     <ClInclude Include="Test_Stage1.h">
       <Filter>Game_States\Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="Level_Editor.h">
+      <Filter>Game_States\Level_Editor</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
