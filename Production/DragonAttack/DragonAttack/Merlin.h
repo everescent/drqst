@@ -44,7 +44,7 @@ const float  Spread_CD_Time  { 10.0f   }; //Spread shot cooldown time
 const float  Spread_Death    { 1000.0f }; //How far the spread shot travels
 
 const int    A_Rain_Buffer   { 30      }; //How many arrows shot
-const float  A_Rain_CD_Time  { 5.0f   }; //Arrow rain cooldown time
+const float  A_Rain_CD_Time  { 20.0f   }; //Arrow rain cooldown time
 const float  A_Rain_Death    { 1000.0f }; //Arrow death
 
 const float  Melee_CD_Time   { 60.0f };   //Melee cooldown time
@@ -99,7 +99,7 @@ private:
   //Blink attack struct
   struct Blink {
     float CD_Time  { Blink_CD_Time }; //Cooldown time
-    bool  Cooldown {     false     }; //Check if cooldown is active
+    bool  Cooldown {     true      }; //Check if cooldown is active
     //Update Blink
     void Update()
     {
@@ -117,7 +117,7 @@ private:
   Blink Blink_;       //Blink utilities
   Sprite MagicCircle; //Magic circle sprite
   Transform MC_Pos;   //Magic circle transform
-
+  
   //Attack Functions START///////////////////////////////////////////////////////////////
   void Melee(Dragon &player);          //Melee attack function
   void S_Eball(Dragon &player);        //Single shot energy ball function

@@ -20,7 +20,7 @@ Technology is prohibited.
 
 Merlin::Merlin()
   //Initialize characters class
-  :Characters{ S_CreateSquare(100.0f, "merlin.png"), Merlin_HP - 300,
+  :Characters{ S_CreateSquare(100.0f, "merlin.png"), Merlin_HP,
   Col_Comp{ Merlin_Start_X - 100.0f, Merlin_Start_Y - 100.0f,
   Merlin_Start_X + 100.0f, Merlin_Start_Y + 100.0f, Rect } },
   //Initialize Merlin State Machine
@@ -322,28 +322,31 @@ void Merlin::A_Rain_Update(Dragon &player)
       Arrow[i].Projectile::Pos();
       Arrow[i].Projectile::Pos(player.PosX, 460.0f);
       Arrow[i].Projectile::Update();
-      Arrow[i].Collision_.Update_Col_Pos(Arrow[i].PosX - 2.0f, Arrow[i].PosY - 30.0f, Arrow[i].PosX + 2.0f, Arrow[i].PosY + 30.0f);
+      Arrow[i].Collision_.Update_Col_Pos
+      (Arrow[i].PosX - 2.0f, Arrow[i].PosY - 30.0f,
+       Arrow[i].PosX + 2.0f, Arrow[i].PosY + 30.0f);
     }
     else if (Arrow[i - 1].GetDist() < 100.0f)
     {
       Arrow[i].Projectile::Pos(player.PosX, 460.0f);
-      Arrow[i].Collision_.Update_Col_Pos(Arrow[i].PosX - 2.0f, Arrow[i].PosY - 30.0f, Arrow[i].PosX + 2.0f, Arrow[i].PosY + 30.0f);
+      Arrow[i].Collision_.Update_Col_Pos
+      (Arrow[i].PosX - 2.0f, Arrow[i].PosY - 30.0f,
+       Arrow[i].PosX + 2.0f, Arrow[i].PosY + 30.0f);
     }
     else
     {
       Arrow[i].Projectile::Pos();
       Arrow[i].Projectile::Pos(player.PosX, 460.0f);
       Arrow[i].Projectile::Update();
-      Arrow[i].Collision_.Update_Col_Pos(Arrow[i].PosX - 2.0f, Arrow[i].PosY - 30.0f, Arrow[i].PosX + 2.0f, Arrow[i].PosY + 30.0f);
+      Arrow[i].Collision_.Update_Col_Pos
+      (Arrow[i].PosX - 2.0f, Arrow[i].PosY - 30.0f,
+       Arrow[i].PosX + 2.0f, Arrow[i].PosY + 30.0f);
     }
   }
 }
 
 void Merlin::Colision_Check(Dragon &player)
 {
-  //If Dragon gets hit decrease Dragon HP
-  //Call player's collision and put in my attacks
-  //Check if attacks are on cooldown AND active first
   //Arrow rain collision check
   if (Arrow[A_Rain_Buffer - 1].cooldown)
   {
@@ -505,7 +508,7 @@ bool Merlin::CheckAttack(Dragon &player)
 void Merlin::Update(Dragon &player)
 {
   //Determine Merlin's state
-  CheckState(player);
+  CheckState(player);  
   //Execute state
   (this->*Merlin_State)(player);
   //Update attack interval
