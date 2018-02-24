@@ -15,31 +15,34 @@ Technology is prohibited.
 #include <iostream>
 #include "King_Arthur.h"
 #include "Boss_States.h"
+#include "Grunt.h"
 #include <vector>
 
 namespace {
 
 	std::vector <Boss_Attack> arthur; //an array of boss attacks
 
-	std::vector <Characters> spawn_mobs; //an array to store the mobs to be spawn
+	std::vector <Grunt*> mobs; //an array to store the mobs to be spawn
 
 	Boss_Action_State current_action = IDLE; // different states of boss arthur
 
 	const int health = 300; // initial hp for king arthur
-
 	const int phase2_hp = 200; //phase 2 trigger
 
-	const int interval = 80; // interval for triple slash
-
+	const int interval = 80;     // interval for triple slash
 	const int range_limit = 500; // range limit for slash
 
-	const float start_point_x = 200.0f;
-
-	const float start_point_y = -150.0f;
+	const float start_point_x = 200.0f; // spawn point of king arthur
+	const float start_point_y = -150.0f;// spawn point of king arthur
 
 	const float slash_box = 40.0f;
 
+    float left_boundary = -600; // boundaries of charge attack
+    float right_boundary = 600; // boundaries of charge attack
+
 	const char limit = 5; // num of king arthur attacks
+	const char num_of_mobs = 2; // number of mobs to spawn
+	bool spawn_mob = false;
 
 	char behavior_swap = 0; // switch between idling and moving
 
@@ -86,27 +89,25 @@ King_Arthur::King_Arthur(void)
 
 void King_Arthur::Init(void)
 {
-	const char* tex_ss = ".//Textures/1.jpg"; 
 	const char* tex_3s = ".//Textures/holylight.jpg";
 	const char* tex_ja = ".//Textures/light_texture2320.jpg";
 
 	arthur.reserve(limit);
+	
+	mobs.push_back(new Grunt(-601.0f, start_point_y));
+	mobs.push_back(new Grunt(601.0f, start_point_y));
 
-	arthur.emplace_back(Boss_Attack(S_CreateSquare(20.0, tex_ss), // for single slash
-					 Col_Comp(start_point_x - slash_box, start_point_y -  slash_box,
-							  start_point_y + slash_box, start_point_y + slash_box, Rect)));
+	for (char i = 0; i < num_of_mobs; ++i)
+	{
 
-	arthur.emplace_back(Boss_Attack(S_CreateSquare(20.0, tex_3s), // 1st triple slash 
-		Col_Comp(start_point_x - slash_box, start_point_y - slash_box,
-				 start_point_y + slash_box, start_point_y + slash_box, Rect)));
+		mobs[i]->SetActive(false);
+	}
 
-	arthur.emplace_back(Boss_Attack(S_CreateSquare(20.0, tex_3s), // 2nd single slash
-		Col_Comp(start_point_x - slash_box, start_point_y - slash_box,
-				 start_point_y + slash_box, start_point_y + slash_box, Rect)));
+	for(char i = 0; i < limit-1; ++i) // add the single slash and triple slash
+		arthur.emplace_back(Boss_Attack(S_CreateSquare(20.0, tex_3s), 
+						 Col_Comp(start_point_x - slash_box, start_point_y -  slash_box,
+								  start_point_y + slash_box, start_point_y + slash_box, Rect)));
 
-	arthur.emplace_back(Boss_Attack(S_CreateSquare(20.0, tex_3s), // 3rd triple slash
-		Col_Comp(start_point_x - slash_box, start_point_y - slash_box,
-				 start_point_y + slash_box, start_point_y + slash_box, Rect)));
 
 	arthur.emplace_back(Boss_Attack(S_CreateSquare(slash_box, tex_ja), // jump attack
 					 Col_Comp(0.0f, 0.0f, 5.0f, 5.0f, Rect)));
@@ -142,6 +143,22 @@ void King_Arthur::Update(const float dt, Dragon &d)
 	{
 		current_action = MOVING;  // switch state to moving
 		behavior_swap = 0;        // reset the counter
+	}
+
+	if (spawn_mob)
+	{
+		char i = 0, mobs_dead = 0;
+		for (;i < num_of_mobs; ++i)
+		{
+			if (mobs[i]->IsActive())
+			{
+				mobs[i]->Update(dt, d);
+			}
+			else
+				++mobs_dead;
+		}
+		if (mobs_dead == i)
+			spawn_mob = false;
 	}
 
 	for (char i = 0; i < Bullet_Buffer; ++i)
@@ -287,15 +304,11 @@ void King_Arthur::Dash_Attack(Dragon &d, const float dt)
 
 	this->Set_Direction(dash);       // change back the dash direction
 
-	const short left_boundary = -600; // boundaries of charge attack
-    const short right_boundary = 600; // boundaries of charge attack
-
 	this->SetVelocity({ 800, 0 }); // change king arthur's velocity to dash
 	Move_KA(dt, *this, d);         // move king arthur towards player
 
 	// need check for collision against dragon
-	if(this->PosX > right_boundary || this->PosX < left_boundary ||
-	   this->Get_Direction() == STAY)
+	if(this->Get_Direction() == STAY)
 	{
 		current_action = IDLE;           // switch current state to idle
 		arthur[4].cooldown = true;       // start the cooldown of dash attk
@@ -315,7 +328,7 @@ void King_Arthur::Dash_Attack(Dragon &d, const float dt)
 void King_Arthur::Single_Slash(Dragon &d, const float dt)
 {
 	UNREFERENCED_PARAMETER(dt);
-	
+
 	if (arthur[0].cooldown) // skill still on cooldown
 		return;
 
@@ -327,10 +340,19 @@ void King_Arthur::Single_Slash(Dragon &d, const float dt)
 		arthur[0].ongoing_attack = true;
 	}
 
-	bool collided = arthur[0].Collision_.Dy_Rect_Rect(d.Collision_, arthur[0].GetVelocity(), d.GetVelocity(), dt);
-	
+	static bool not_collided = true;
+
+	if(not_collided)			
+	{
+		if (arthur[0].Collision_.Dy_Rect_Rect(d.Collision_, arthur[0].GetVelocity(), d.GetVelocity(), dt))
+		{
+			d.Decrease_HP();
+			not_collided = false;
+		}
+	}
+
 	//disappears once it flys 500 unit away
-	if (arthur[0].GetDist() > range_limit || collided) 
+	if (arthur[0].GetDist() > range_limit) 
 	{
 		arthur[0].SetActive(false); // makes it disappears form screen
 
@@ -344,10 +366,7 @@ void King_Arthur::Single_Slash(Dragon &d, const float dt)
 
 		arthur[0].ongoing_attack = false;
 
-		if (collided)
-		{
-			d.Decrease_HP();
-		}
+		not_collided = true;
 
 		++behavior_swap;
 	}
@@ -480,14 +499,23 @@ void King_Arthur::Heal_and_Spawn(Dragon &d, const float dt)
 		{
 		case TOP_RIGHT: this->PosX = teleport_location[TOP_RIGHT].max.x;
 						this->PosY = teleport_location[TOP_RIGHT].max.y;
+						
+						left_boundary  = teleport_location[TOP_RIGHT].max.x - 100.0f;
+						right_boundary = teleport_location[TOP_RIGHT].max.x + 100.0f;
 			break;
 
 		case MIDDLE: this->PosX = teleport_location[MIDDLE].max.x;
 					 this->PosY = teleport_location[MIDDLE].max.y;
+
+					 left_boundary  = teleport_location[MIDDLE].max.x - 100.0f;
+					 right_boundary = teleport_location[MIDDLE].max.x + 100.0f;
 			break;
 
 		case TOP_LEFT: this->PosX = teleport_location[TOP_LEFT].max.x;
 					   this->PosY = teleport_location[TOP_LEFT].max.y;
+
+					   left_boundary  = teleport_location[TOP_LEFT].max.x - 100.0f;
+					   right_boundary = teleport_location[TOP_LEFT].max.x + 100.0f;
 			break;
 
 		default: break;
@@ -497,13 +525,17 @@ void King_Arthur::Heal_and_Spawn(Dragon &d, const float dt)
 		healing = true;
 		arthur[4].skill_active = true;
 		arthur[4].ongoing_attack = true;
+		spawn_mob = true;
+
+		for (char i = 0; i < num_of_mobs; ++i)
+			mobs[i]->SetActive(true);
 	}
 
 	if (healing && Get_HP() != health)
 	{
 		static float timer = 0.5f;
 
-		timer <= 0 ? Set_HP(Get_HP() + 2), timer = 0.5f : timer -= dt;
+		timer <= 0 ? Set_HP(Get_HP() + 10), timer = 0.5f : timer -= dt;
 
 		std::cout << Get_HP() << std::endl;
 	}
@@ -513,7 +545,7 @@ void King_Arthur::Heal_and_Spawn(Dragon &d, const float dt)
 		arthur[4].ongoing_attack = false;
 		
 		arthur[4].skill_active = false;
-		arthur[4].cooldown_timer = 0.0f;
+		arthur[4].cooldown_timer = 20.0f;
 	}
 
 }
@@ -524,6 +556,13 @@ void King_Arthur::Render(void)
 	{
 		if (arthur[i].cooldown_timer)
 			arthur[i].Render();
+	}
+
+	for (char i = 0; i < num_of_mobs; ++i)
+	{
+		mobs[i]->Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+		if (mobs[i]->IsActive())
+			mobs[i]->Render();
 	}
 
 	this->GameObject::Render();
@@ -539,20 +578,27 @@ namespace
 {
 	void Move_KA(const float dt, King_Arthur &ka, const Dragon &d)
 	{
-		if (ka.Get_Direction() == RIGHT) // set all attacks to go right
+		if (ka.PosX < right_boundary && ka.PosX > left_boundary)
 		{
-			ka.PosX += ka.GetVelocity().x * dt; // move ka to the right
-			(void)ka.Transform_.SetTranslate(ka.PosX, ka.PosY);
-		}
-		else if (ka.Get_Direction() == LEFT) // set all attacks to go left
-		{
-			ka.PosX -= ka.GetVelocity().x * dt; // move KA to the left
-			(void)ka.Transform_.SetTranslate(ka.PosX, ka.PosY);
+			if (ka.Get_Direction() == RIGHT) // set all attacks to go right
+			{
+				ka.PosX += ka.GetVelocity().x * dt; // move ka to the right
+				(void)ka.Transform_.SetTranslate(ka.PosX, ka.PosY);
+			}
+			else if (ka.Get_Direction() == LEFT) // set all attacks to go left
+			{
+				ka.PosX -= ka.GetVelocity().x * dt; // move KA to the left
+				(void)ka.Transform_.SetTranslate(ka.PosX, ka.PosY);
+			}
+
+
+			ka.Collision_.Update_Col_Pos(ka.PosX - 30.0f, ka.PosY - 30.0f,  // min point
+				ka.PosX + 30.0f, ka.PosY + 30.0f);	// max point
 		}
 
-		ka.Collision_.Update_Col_Pos(ka.PosX - 30.0f, ka.PosY - 30.0f,  // min point
-									 ka.PosX + 30.0f, ka.PosY + 30.0f);	// max point
-		
+		else
+			ka.Set_Direction(STAY);
+
 		if (ka.Collision_.Dy_Rect_Rect(d.Collision_, d.GetVelocity(), ka.GetVelocity(), dt))
 		{
 			ka.Set_Direction(STAY);
