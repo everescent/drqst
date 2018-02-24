@@ -19,7 +19,7 @@ Technology is prohibited.
 
 namespace // global variables just for THIS file
 {
-	const int grunt_hp = 30;
+	const int grunt_hp = 20;
 	bool  PlayerSeen = false;
 	bool  PlayerInRange = false;
 	float MovementX = 0.5f;
@@ -42,9 +42,8 @@ Grunt::Grunt(float x, float y)
 	EstIdleX = (int)IdleXPos;
 }
 
-void Grunt::Update(float dt, const Dragon &d)
+void Grunt::Update(const float dt, Dragon &d)
 {
-	UNREFERENCED_PARAMETER(dt);
 	LineOfSight(d);
 
 	if (PlayerSeen == true)
@@ -61,8 +60,13 @@ void Grunt::Update(float dt, const Dragon &d)
 		Idle(d);
 	}
 
-	/*this->Transform_.SetTranslate(PosX, PosY);
-	this->Transform_.Concat();*/
+	for (char i = 0; i < Bullet_Buffer; ++i)
+		if (d.GetFireball()[i].IsActive())
+			if (Collision_.Dy_Rect_Rect(d.GetFireball()[i].Collision_, this->GetVelocity(), d.GetFireball()[i].GetVelocity(), dt))
+			{
+				Decrease_HP(d.GetDamage());
+				d.GetFireball()[i].SetActive(false);
+			}
 }
 
 void Grunt::Pos()
