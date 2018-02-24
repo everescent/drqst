@@ -43,6 +43,10 @@ void Dragon::Input()
       case Input::fire:
         Attack = true;
         break;
+      case Input::special:
+        Attack = true;
+        Mfireball.SetActive(true);
+        break;
     }
   }
   Input::ClearBuffer();
@@ -71,8 +75,7 @@ void Dragon::Update(float dt = 0.016)
     Air_Dist += GetVelocity().y * dt;
   }
   PosY -= Gravity;
-  //For platforms, while the platform is colliding with the dragon,
-  //PosY = platform's PosYs
+
   //Update position of player
   Transform_.SetTranslate(PosX, PosY);
   Transform_.Concat();
@@ -95,8 +98,13 @@ void Dragon::Update(float dt = 0.016)
           Fireball[i].SetDir(true);
         break;
       }
+    if(Mfireball.IsActive())
+      if (Facing < 0.0f)
+        Mfireball.SetDir(false);
+      else
+        Mfireball.SetDir(true);
   }
-  //Check for any active fireballs
+  //Update fireballs
   for (int i = 0; i < Bullet_Buffer; ++i)
   {
     Fireball[i].Pos(PosX, PosY);
@@ -104,7 +112,12 @@ void Dragon::Update(float dt = 0.016)
     Fireball[i].Update();
     Fireball[i].Collision_.Update_Col_Pos(Fireball[i].PosX - 50.0f, Fireball[i].PosY - 50.0f, Fireball[i].PosX + 50.0f, Fireball[i].PosY + 50.0f);
   }
-  //Check for distance limit
+  //Update Mega Fireball
+  Mfireball.Pos(PosX, PosY);
+  Mfireball.Pos();
+  Mfireball.Update();
+  Mfireball.Collision_.Update_Col_Pos(Mfireball.PosX - 70.0f, Mfireball.PosY - 70.0f, Mfireball.PosX + 70.0f, Mfireball.PosY + 70.0f);
+  //Check for distance limit (Fireball)
   for (int i = 0; i < Bullet_Buffer; ++i)
     if (Fireball[i].IsActive())
     {
@@ -116,6 +129,16 @@ void Dragon::Update(float dt = 0.016)
     }
     else
       continue;
+  //Check for distance limit (Mega Fireball)
+  if (Mfireball.IsActive())
+  {
+    if (Mfireball.GetDist() >= Bullet_Death)
+    {
+      Mfireball.ResetDist();
+      Mfireball.SetActive(false);
+    }
+  }
+
   //Reset direction and attack
   Attack = false;
   Dir.L = Dir.R = false;
