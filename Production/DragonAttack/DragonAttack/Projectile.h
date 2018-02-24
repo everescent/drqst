@@ -77,14 +77,17 @@ public:
   void SetDir(const bool &dir) { Direction = dir; }
   //Returns the direction of the projectile
   bool GetDir() const { return Direction; }
+  //Sets Collided true or false
+  void SetCollided(const bool &Colide) { Collided = Colide; }
   //Default contructor does nothing
   Projectile() = default;
   //Initialize projectile with mesh and collision shape
   Projectile(Sprite &&t_sprite, Col_Comp &&t_col)
     :GameObject{ std::move(t_sprite), std::move(t_col) }, 
-    Distance{ 0.0f }, Direction{ true }
+    Distance{ 0.0f }, Direction{ true }, Collided{ false }
   {}
 private:
+  bool Collided;
   bool Direction; //TRUE = Right; FALSE = Left
   float Distance; //Distance travelled
 };
