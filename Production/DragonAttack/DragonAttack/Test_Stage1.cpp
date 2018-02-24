@@ -80,9 +80,10 @@ namespace Test_Stage1
 	void Free(void)
 	{
 		delete BG;
-		delete Lwall1, Lwall2;
+		delete Lwall1;
+		delete Lwall2;
 		delete floor1;
-
+		delete M_BG;
 		delete player;
 		delete enemy;
 	}

@@ -37,6 +37,7 @@ private:
 	void Moving(const Dragon &d, const float dt);
 	void AvoidingObstacle();
 	void Attack(Dragon &d, const float dt);
+	void Dead(void);
 	// boss behaviours end /////////////////////////////////////////////
 
 	// attack functions /////////////////////////////////////////////////
@@ -46,9 +47,9 @@ private:
 	void Heal_and_Spawn(Dragon &d, const float dt); // phase 2, heal and spawm mobs
     // attack functions /////////////////////////////////////////////////
 
-	void(King_Arthur::*ka_attacks[UNIQUE_MECHANIC + 1])(Dragon &d, float dt);
+	void(King_Arthur::*ka_attacks[3])(Dragon &d, float dt);
 
-	bool phase2;
+	bool phase1;
 
 public:
 	/******************************************************************************/
