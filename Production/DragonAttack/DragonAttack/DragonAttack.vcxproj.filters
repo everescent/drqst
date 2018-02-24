@@ -159,6 +159,9 @@
     <ClCompile Include="Level_Editor.cpp">
       <Filter>Game_States\Level_Editor</Filter>
     </ClCompile>
+    <ClCompile Include="StageManager.cpp">
+      <Filter>Stage_Manager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h">
@@ -241,6 +244,9 @@
     </ClInclude>
     <ClInclude Include="Level_Editor.h">
       <Filter>Game_States\Level_Editor</Filter>
+    </ClInclude>
+    <ClInclude Include="StageManager.h">
+      <Filter>Stage_Manager</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

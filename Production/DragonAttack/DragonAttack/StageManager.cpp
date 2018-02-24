@@ -5,7 +5,7 @@ static STAGE_LIST s_previous, s_current, s_next;
 
 namespace SM
 {
-	GameStateFunctions StageManager[SS_QUI] = { nullptr };
+	GameStateFunctions StageManager[SS_QUIT] = { nullptr };
 
 	void StageManagerInit()
 	{
