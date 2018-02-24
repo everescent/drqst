@@ -19,19 +19,13 @@
 namespace
 {
   Dragon *player;
-  Merlin *enemy;
+  //Merlin *enemy;
   Grunt *grunt;
   Sprite *BG;
   Transform *M_BG;
   Floor *floor1;
-  Platform *plat1;
-  Platform *plat2;
-  Platform *plat3;
-  Platform *plat4;
-  Platform *plat5;
-  Platform *plat6;
-  Wall *Lwall1;
-  Wall *Lwall2;
+  Platform *plat1, *plat2, *plat3, *plat4, *plat5, *plat6;
+  Wall *Lwall1, *Lwall2;
 }
 
 namespace Main_Menu
@@ -57,7 +51,7 @@ namespace Main_Menu
 	Lwall2 = new Wall      { -620.0f, 160.0f };
 
 	player = new Dragon    { };
-	enemy  = new Merlin    { };
+	//enemy  = new Merlin    { };
 	grunt  = new Grunt     { 400.0f, -160.0f };
   }
 
@@ -76,8 +70,8 @@ namespace Main_Menu
 
 	player->SetActive(true);
     player->Update(dt);
-    enemy->SetActive(true);
-    enemy->Update(*player);
+    //enemy->SetActive(true);
+    //enemy->Update(*player);
 	grunt->Update(dt, *player);
 
 	if (AEInputCheckCurr(AEVK_0))
@@ -110,7 +104,7 @@ namespace Main_Menu
     
     player->Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 	player->Render();
-    enemy->Render();
+    //enemy->Render();
 	grunt->Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 	grunt->Render();
   }
@@ -118,17 +112,11 @@ namespace Main_Menu
   void Free(void)
   {
     delete BG;
-	delete plat1;
-	delete plat2;
-	delete plat3;
-	delete plat4;
-	delete plat5;
-	delete plat6;
-	delete Lwall1;
-	delete Lwall2;
+	delete plat1, plat2, plat3, plat4, plat5, plat6;
+	delete Lwall1, Lwall2;
 	delete floor1;
 
-	delete enemy;
+	//delete enemy;
 	delete player;
 	delete grunt;
   }

@@ -21,8 +21,7 @@ namespace
 	Sprite *BG;
 	Transform *M_BG;
 	Floor *floor1;
-	Wall *Lwall1;
-	Wall *Lwall2;
+	Wall *Lwall1, *Lwall2;
 }
 
 namespace Test_Stage1
@@ -81,8 +80,7 @@ namespace Test_Stage1
 	void Free(void)
 	{
 		delete BG;
-		delete Lwall1;
-		delete Lwall2;
+		delete Lwall1, Lwall2;
 		delete floor1;
 
 		delete player;
