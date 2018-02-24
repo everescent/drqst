@@ -8,7 +8,7 @@
 \brief
 This header file contains the enum for the different states the game haves
 
-Copyright (C) 20xx DigiPen Institute of Technology.
+Copyright (C) 2018 DigiPen Institute of Technology.
 Reproduction or disclosure of this file or its contents
 without the prior written consent of DigiPen Institute of
 Technology is prohibited.
@@ -24,7 +24,37 @@ enum GAME_STATE
 	GS_LEVEL2,
 	GS_LEVEL3,
 
+
+	// do not touch this bottom area
 	GS_CREDITS,
 	GS_QUIT,
 	GS_RESTART
+};
+
+// the different sub stages for stage manager
+enum STAGE_LIST
+{
+	SUB_STAGE1 = 0,
+
+
+	// don't touch the bottom area, add from top
+	SS_QUIT,
+	SS_RESTART
+};
+
+// defining a pointer to a void funtion that takes in void
+typedef void(*void_fp_void)(void);
+
+// defining a pointer to a void funtion that takes in a float
+typedef void(*void_fp_float)(float deltaTime);
+
+// putting all the different functions to one object
+struct GameStateFunctions
+{
+	void_fp_void  Init;
+	void_fp_void  Load;
+	void_fp_float Update;
+	void_fp_void  Draw;
+	void_fp_void  Free;
+	void_fp_void  Unload;
 };

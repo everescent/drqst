@@ -13,30 +13,15 @@ Technology is prohibited.
 */
 /* End Header **************************************************************************/
 #include "GameStateManager.h"
+#include "StageManager.h"
 #include "Input_Handler.h"
 
 namespace GSM
 {
-	// defining a pointer to a void funtion that takes in void
-	typedef void(*void_fp_void)(void);
-
-	// defining a pointer to a void funtion that takes in a float
-	typedef void(*void_fp_float)(float deltaTime);
 
 	GAME_STATE previous = GS_MAIN;
 	GAME_STATE current  = GS_MAIN;
 	GAME_STATE next     = GS_MAIN;
-
-	// putting all the different functions to one object
-	struct GameStateFunctions
-	{
-		void_fp_void  Init;
-		void_fp_void  Load;
-		void_fp_float Update;
-		void_fp_void  Draw;
-		void_fp_void  Free;
-		void_fp_void  Unload;
-	};
 
 	GameStateFunctions GSF[GS_QUIT] = { 0 };
 
@@ -57,6 +42,7 @@ namespace GSM
 		GSF[GS_LEVEL1].Free	  = Test_Stage1::Free;
 		GSF[GS_LEVEL1].Unload = Test_Stage1::Unload;
 		
+		SM::StageManagerInit();
 	}
 
 	void Init_and_Load(void)
@@ -92,14 +78,13 @@ namespace GSM
 	void Cleanup(void)
 	{
 
-		GSF[current].Free();
-
-
 		if (next != GS_RESTART)
 		{
 
 			GSF[current].Unload();
 		}
+
+		GSF[current].Free();
 
 		previous = current;
 		current = next;
