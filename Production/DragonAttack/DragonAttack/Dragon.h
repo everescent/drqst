@@ -28,6 +28,7 @@ enum PowerUp {
   INVUL   //Invul
 };
 
+const char  Max_Charge     { 15      }; //Maximum charge for mega fireball
 const int   Bullet_Buffer  { 10      }; //Amount of fireballs at any one time
 const float Bullet_Interval{ 400.0f  }; //Minimum distance between each fireball
 const float Bullet_Death   { 900.0f  }; //Distance when bullet dies
@@ -50,6 +51,10 @@ public:
   void Update() {};
   //Don't need to use dt
   void Update(float dt);
+  //Adds charge to the Mega Fireball, caps at Max_Charge
+  void AddCharge() { Charge == Max_Charge ? Max_Charge : ++Charge; }
+  //Resets Mega Fireball charge
+  void ResetCharge() { Charge = 0; }
   //Renders the dragon
   void Render(); 
   //Get fireball damage
@@ -75,7 +80,7 @@ public:
     Attack{ false }, Pwr_Up{ false }, Falling{ false }, Damage { 10 }, 
     M_Damage{ 15 }, Charge{ 0 }, Gravity{ 10.0f }, Dir{}, Buff{}, Fireball{},
     //Initialize Mega Fireball
-    Mfireball{ S_CreateSquare(50.0f, "fireball.png"), 
+    Mfireball{ S_CreateSquare(70.0f, "fireball.png"), 
     Col_Comp{ Start_Pos_X - 50.0f, Start_Pos_Y - 50.0f,
     Start_Pos_X + 50.0f, Start_Pos_Y + 50.0f, Rect } }, Air_Dist{ 0.0f }, Facing{ 1.0f }
   {
