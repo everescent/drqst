@@ -27,7 +27,7 @@ namespace {
 
 	const int health = 300; // initial hp for king arthur
 
-	const int phase2_hp = 1500; //phase 2 trigger
+	const int phase2_hp = 200; //phase 2 trigger
 
 	const int interval = 80; // interval for triple slash
 
@@ -43,10 +43,26 @@ namespace {
 
 	char behavior_swap = 0; // switch between idling and moving
 
+	bool healing = true; // determine if king arthur is healing
+
 	void Move_KA(const float dt, King_Arthur &ka, const Dragon &d); // move king arthur towards player
 
 	void Set_Attack_Dir(King_Arthur &ka); // set the attack directions
-	
+
+	enum 
+	{
+		TOP_LEFT,
+		TOP_RIGHT,
+		MIDDLE
+	};
+
+	struct LOCATION
+	{
+		AEVec2 min;
+		AEVec2 max;
+	};
+
+	LOCATION teleport_location[3];
 }
 
 
@@ -108,6 +124,8 @@ void King_Arthur::Init(void)
 	ka_attacks[TRIPLE_SLASH]    = &King_Arthur::Triple_Slash;
 	ka_attacks[UNIQUE_MECHANIC] = &King_Arthur::Dash_Attack;
 
+	seed_initializer();// remove once we finish
+
 }
 
 void King_Arthur::Update(const float dt, Dragon &d) 
@@ -115,10 +133,10 @@ void King_Arthur::Update(const float dt, Dragon &d)
 	(d.PosX - this->PosX) > 0 ? this->Set_Direction(RIGHT) :
 	this->Set_Direction(LEFT);
 	
-	//if (this->Get_HP() < phase2_hp) // activate phase 2 once hp drops is 50%
-	//{
-	//	King_Arthur_Phase2();
-	//}
+	if (this->Get_HP() < phase2_hp && ! phase2) // activate phase 2 once hp drops is 50%
+	{
+		King_Arthur_Phase2();
+	}
 
 	if (behavior_swap == 3)
 	{
@@ -132,6 +150,7 @@ void King_Arthur::Update(const float dt, Dragon &d)
 			{
 				Decrease_HP(d.GetDamage());
 				d.GetFireball()[i].SetActive(false);
+				healing = false;
 			}
 
 	// switch between the boss states
@@ -159,19 +178,6 @@ void King_Arthur::Update(const float dt, Dragon &d)
 	
 }
 
-/******************************************************************************/
-/*!
-\fn         Idle
-
-\brief      King arthur pauses for awhile for the player to refocus
-
-\param      float dt
-- delta time to calculate how long king arthur freezes
-
-\retval     void
-No return.
-*/
-/******************************************************************************/
 void King_Arthur::Idle(const float dt)
 {
 	UNREFERENCED_PARAMETER(dt);
@@ -216,13 +222,9 @@ void King_Arthur::Moving(const Dragon &d, const float dt)
 
 void King_Arthur::Attack(Dragon &d, const float dt)
 {
-	UNREFERENCED_PARAMETER(dt);
-	UNREFERENCED_PARAMETER(d);
-
 	static KA_MoveSet currAttk;
 	
-	currAttk = SINGLE_SLASH; //default attack for king arthur
-
+	
 	//unique mechanic has the highest priority 
 	if (! arthur[currAttk].ongoing_attack)
 	{
@@ -230,8 +232,11 @@ void King_Arthur::Attack(Dragon &d, const float dt)
 			currAttk = UNIQUE_MECHANIC;
 
 		//followed by triple slash
-		/*else if (!(arthur[1].cooldown))
-			currAttk = TRIPLE_SLASH;*/
+		else if (!(arthur[1].cooldown))
+			currAttk = TRIPLE_SLASH;
+		else
+			currAttk = SINGLE_SLASH; //default attack for king arthur
+
 	}
 
 	(this->*ka_attacks[currAttk])(d, dt); // call the coresponding attack function
@@ -245,9 +250,6 @@ void King_Arthur::AvoidingObstacle(void)
 
 void King_Arthur::King_Arthur_Phase2(void)
 {
-	// change the phase 1 machanic to phase 2
-	// play some cinematic shit
-	// healing should be just particle effects
 
 	arthur.pop_back(); // delete jump attack
 
@@ -259,6 +261,15 @@ void King_Arthur::King_Arthur_Phase2(void)
 
 	// change unique mechanism pointer to heal and spawn for phase 2
 	ka_attacks[UNIQUE_MECHANIC] = &King_Arthur::Heal_and_Spawn; 
+
+	teleport_location[TOP_RIGHT].max.x = 200.0f;
+	teleport_location[TOP_RIGHT].max.y = 150.0f;
+	
+	teleport_location[MIDDLE].max.x = 00.0f;
+	teleport_location[MIDDLE].max.y = 50.0f;
+
+	teleport_location[TOP_LEFT].max.x = -200.0f;
+	teleport_location[TOP_LEFT].max.y = 150.0f;
 }
 
 void King_Arthur::Dash_Attack(Dragon &d, const float dt)
@@ -311,6 +322,7 @@ void King_Arthur::Single_Slash(Dragon &d, const float dt)
 	if (!(arthur[0].IsActive())) // sets the attack to start from KA
 	{
 		arthur[0].PosX = this->PosX;
+		arthur[0].PosY = this->PosY;
 		arthur[0].SetActive(true);
 		arthur[0].ongoing_attack = true;
 	}
@@ -324,11 +336,11 @@ void King_Arthur::Single_Slash(Dragon &d, const float dt)
 
 		arthur[0].ResetDist(); 		// reset to 0 distance traveled
 
-		current_action = IDLE; // set the behaviour to idle
+		current_action = IDLE;      // set the behaviour to idle
 
-		arthur[0].PosX = 0.0f;  // to remove flicker
+		arthur[0].PosX = 0.0f;      // to remove flicker
 
-		arthur[0].cooldown = true; // skill on cooldown
+		arthur[0].cooldown = true;  // skill on cooldown
 
 		arthur[0].ongoing_attack = false;
 
@@ -370,6 +382,7 @@ void King_Arthur::Triple_Slash(Dragon &d, const float dt)
 		for (char i = 1; i < ts_limit; ++i)
 		{
 			arthur[i].PosX = this->PosX;
+			arthur[i].PosY = this->PosY;
 		}
 		arthur[1].SetActive(true);         // set the first attack to show
 		arthur[1].ongoing_attack = true;   // attack is currently ongoing
@@ -458,30 +471,51 @@ void King_Arthur::Triple_Slash(Dragon &d, const float dt)
 void King_Arthur::Heal_and_Spawn(Dragon &d, const float dt)
 {
 	UNREFERENCED_PARAMETER(d);
-	UNREFERENCED_PARAMETER(dt);
 	//teleport to a platform, heal and spawn mobs
 
-	if (!(arthur[4].cooldown_timer)) // teleport once
+	if (!arthur[4].skill_active) // teleport once
 	{
 		//get a random number and teleport to the coresponding platform
-		switch (Get_Random_Num(3)) 
+		switch (Get_Random_Num(2))
 		{
-		case 1: this->PosX = 300.0f, this->PosY = 100.0f;
+		case TOP_RIGHT: this->PosX = teleport_location[TOP_RIGHT].max.x;
+						this->PosY = teleport_location[TOP_RIGHT].max.y;
 			break;
 
-		case 2: this->PosX = -300.0f, this->PosY = 100.0f;
+		case MIDDLE: this->PosX = teleport_location[MIDDLE].max.x;
+					 this->PosY = teleport_location[MIDDLE].max.y;
 			break;
 
-		case 3: this->PosX = 50.0f, this->PosY = 200.0f;
+		case TOP_LEFT: this->PosX = teleport_location[TOP_LEFT].max.x;
+					   this->PosY = teleport_location[TOP_LEFT].max.y;
 			break;
 
 		default: break;
 		}
 		this->Transform_.SetTranslate(this->PosX, this->PosY);
 		this->Transform_.Concat();
+		healing = true;
+		arthur[4].skill_active = true;
+		arthur[4].ongoing_attack = true;
 	}
 
-	arthur[4].cooldown_timer = 20.0f;
+	if (healing && Get_HP() != health)
+	{
+		static float timer = 0.5f;
+
+		timer <= 0 ? Set_HP(Get_HP() + 2), timer = 0.5f : timer -= dt;
+
+		std::cout << Get_HP() << std::endl;
+	}
+	else
+	{
+		arthur[4].cooldown = true;
+		arthur[4].ongoing_attack = false;
+		
+		arthur[4].skill_active = false;
+		arthur[4].cooldown_timer = 0.0f;
+	}
+
 }
 
 void King_Arthur::Render(void)
@@ -505,7 +539,6 @@ namespace
 {
 	void Move_KA(const float dt, King_Arthur &ka, const Dragon &d)
 	{
-		UNREFERENCED_PARAMETER(d);
 		if (ka.Get_Direction() == RIGHT) // set all attacks to go right
 		{
 			ka.PosX += ka.GetVelocity().x * dt; // move ka to the right

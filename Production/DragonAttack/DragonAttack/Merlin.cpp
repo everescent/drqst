@@ -122,7 +122,7 @@ void Merlin::Move(Dragon &player)
 
 void Merlin::Attack(Dragon &player)
 {
-  /*This will execute the attacks*/
+  //This will execute the attacks
   (this->*Merlin_Attack)(player);
   Attack_Interval = Merlin_Att_Inter;
 }
@@ -284,6 +284,7 @@ void Merlin::Sp_Eball_Update()
                                  SS.PosX + 30.0f, SS.PosY + 30.0f);
   }
 }
+
 void Merlin::A_Rain_Update(Dragon &player)
 {
   if (Arrow[A_Rain_Buffer - 1].cooldown)
@@ -321,36 +322,41 @@ void Merlin::A_Rain_Update(Dragon &player)
       Arrow[i].Projectile::Pos();
       Arrow[i].Projectile::Pos(player.PosX, 460.0f);
       Arrow[i].Projectile::Update();
-      Arrow[i].Collision_.Update_Col_Pos(Arrow[i].PosX - 2.0f, Arrow[i].PosY - 30.0f, Arrow[i].PosX + 2.0f, Arrow[i].PosY + 30.0f);
+      Arrow[i].Collision_.Update_Col_Pos
+      (Arrow[i].PosX - 2.0f, Arrow[i].PosY - 30.0f,
+       Arrow[i].PosX + 2.0f, Arrow[i].PosY + 30.0f);
     }
     else if (Arrow[i - 1].GetDist() < 100.0f)
     {
       Arrow[i].Projectile::Pos(player.PosX, 460.0f);
-      Arrow[i].Collision_.Update_Col_Pos(Arrow[i].PosX - 2.0f, Arrow[i].PosY - 30.0f, Arrow[i].PosX + 2.0f, Arrow[i].PosY + 30.0f);
+      Arrow[i].Collision_.Update_Col_Pos
+      (Arrow[i].PosX - 2.0f, Arrow[i].PosY - 30.0f,
+       Arrow[i].PosX + 2.0f, Arrow[i].PosY + 30.0f);
     }
     else
     {
       Arrow[i].Projectile::Pos();
       Arrow[i].Projectile::Pos(player.PosX, 460.0f);
       Arrow[i].Projectile::Update();
-      Arrow[i].Collision_.Update_Col_Pos(Arrow[i].PosX - 2.0f, Arrow[i].PosY - 30.0f, Arrow[i].PosX + 2.0f, Arrow[i].PosY + 30.0f);
+      Arrow[i].Collision_.Update_Col_Pos
+      (Arrow[i].PosX - 2.0f, Arrow[i].PosY - 30.0f,
+       Arrow[i].PosX + 2.0f, Arrow[i].PosY + 30.0f);
     }
   }
 }
+
 void Merlin::Colision_Check(Dragon &player)
 {
-  //If Dragon gets hit decrease Dragon HP
-  //Call player's collision and put in my attacks
-  //Check if attacks are on cooldown AND active first
   //Arrow rain collision check
   if (Arrow[A_Rain_Buffer - 1].cooldown)
   {
     if (Arrow[A_Rain_Buffer - 1].IsActive())
     {
-      for (int i = 0; i < A_Rain_Buffer; ++i)
+      for (int i = 0; i < A_Rain_Buffer - 1; ++i)
         if (Arrow[i].IsActive())
         {
-          if (player.Collision_.Dy_Rect_Rect(Arrow[i].Collision_, Arrow[i].GetVelocity(), player.GetVelocity(), 0.016f))
+          if (player.Collision_.Dy_Rect_Rect(Arrow[i].Collision_, 
+              Arrow[i].GetVelocity(), player.GetVelocity(), 0.016f))
           {
             player.Decrease_HP();
             Arrow[i].SetActive(false);
@@ -502,7 +508,7 @@ bool Merlin::CheckAttack(Dragon &player)
 void Merlin::Update(Dragon &player)
 {
   //Determine Merlin's state
-  CheckState(player);
+  CheckState(player);  
   //Execute state
   (this->*Merlin_State)(player);
   //Update attack interval
@@ -542,7 +548,7 @@ void Merlin::Render()
   {
     SS.Render();
   }
-  for (int i = 0; i < A_Rain_Buffer; ++i)
+  for (int i = 0; i < A_Rain_Buffer - 1; ++i)
   {
     if(M_Att_Curr == ARROW_RAIN)
       MagicCircle.Render_Object(MC_Pos);

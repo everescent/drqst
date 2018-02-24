@@ -43,7 +43,7 @@ void Boss_Attack::Update(float dt)  //has to check cooldown_timer
 
 int Get_Random_Num(int range)
 {
-	return rand() % range + 1;
+	return rand() % (range + 1);
 }
 
 void seed_initializer(void) // initialize the seed

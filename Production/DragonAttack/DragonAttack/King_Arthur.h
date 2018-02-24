@@ -27,25 +27,24 @@ private:
 		UNIQUE_MECHANIC
 	};
 	
-	void Idle(const float dt);
-
-	void Moving(const Dragon &d, const float dt);
-
-	void AvoidingObstacle();
-
-	void Attack(Dragon &d, const float dt);
-
 	void Init(void);
 
 	void King_Arthur_Phase2(void); // changes mechanics for phase 2
 
+	
+	// boss behaviours /////////////////////////////////////////////////
+	void Idle(const float dt);
+	void Moving(const Dragon &d, const float dt);
+	void AvoidingObstacle();
+	void Attack(Dragon &d, const float dt);
+	// boss behaviours end /////////////////////////////////////////////
+
+	// attack functions /////////////////////////////////////////////////
 	void Dash_Attack(Dragon &d, const float dt); // jump attack
-
 	void Single_Slash(Dragon &d, const float dt); // single slash + wave
-
 	void Triple_Slash(Dragon &d, const float dt); // single slash 3 times
-
 	void Heal_and_Spawn(Dragon &d, const float dt); // phase 2, heal and spawm mobs
+    // attack functions /////////////////////////////////////////////////
 
 	void(King_Arthur::*ka_attacks[UNIQUE_MECHANIC + 1])(Dragon &d, float dt);
 

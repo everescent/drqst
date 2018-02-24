@@ -1,4 +1,4 @@
-//#include <iostream>
+//
 //
 //#include "Level_Editor.h"
 //
@@ -28,6 +28,25 @@
 //	FILE * Exported_file;
 //
 //	errno_t error = (fopen_s(&Exported_file, filename, "r"));
+//
+//	if (error) return 0;
+//
+//	fscanf_s(Exported_file, "%*s %d", &Map_Width); // %*s is used to skip the first string character 
+//	fscanf_s(Exported_file, "%*s %d", &Map_Height); //continue the scan for the height 
+//	Map_Array = new int*[Map_Height];
+//	for (int i = 0; i < Map_Height; ++i)
+//	{
+//		Map_Array[i] = new int [Map_Width];
+//	}
+//
+//
+//}
+//
+//void SnapToCell(float *Coordinate)
+//{
+//	int i = (int)*Coordinate;
+//
+//	*Coordinate = (float)i + 0.5f;
 //}
 //
 //namespace Level_Editor

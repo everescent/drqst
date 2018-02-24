@@ -99,7 +99,7 @@ private:
   //Blink attack struct
   struct Blink {
     float CD_Time  { Blink_CD_Time }; //Cooldown time
-    bool  Cooldown {     false     }; //Check if cooldown is active
+    bool  Cooldown {     true      }; //Check if cooldown is active
     //Update Blink
     void Update()
     {
@@ -117,7 +117,7 @@ private:
   Blink Blink_;       //Blink utilities
   Sprite MagicCircle; //Magic circle sprite
   Transform MC_Pos;   //Magic circle transform
-
+  
   //Attack Functions START///////////////////////////////////////////////////////////////
   void Melee(Dragon &player);          //Melee attack function
   void S_Eball(Dragon &player);        //Single shot energy ball function

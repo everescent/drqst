@@ -5,6 +5,7 @@
 //#include "Create_Object.h"
 //#include <cmath>
 //#include <vector>
+//#include <iostream>
 //
 //namespace Level_Editor
 //{
@@ -15,7 +16,6 @@
 //
 //	void Update(float dt);
 //
-
 //	void Draw(void);
 //
 //	void Free(void);
@@ -24,7 +24,7 @@
 //
 //}
 ////determine necessary functions for Level Editor 
-////void SnapToCell(float *Coordinate);
+// void SnapToCell(float *Coordinate);
 //
 ////void FreeMapData(void); Got to free the allocated memory 
 //
