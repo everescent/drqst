@@ -171,6 +171,7 @@
     <ClCompile Include="King_Arthur.cpp" />
     <ClCompile Include="Lancelot.cpp" />
     <ClCompile Include="Level_Editor.cpp" />
+    <ClCompile Include="Mage.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Main_Menu.cpp" />
     <ClCompile Include="Merlin.cpp" />
@@ -202,6 +203,7 @@
     <ClInclude Include="King_Arthur.h" />
     <ClInclude Include="Lancelot.h" />
     <ClInclude Include="Level_Editor.h" />
+    <ClInclude Include="Mage.h" />
     <ClInclude Include="Main_Menu.h" />
     <ClInclude Include="Merlin.h" />
     <ClInclude Include="Physics.h" />

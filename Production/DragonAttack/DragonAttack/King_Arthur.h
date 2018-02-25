@@ -24,12 +24,12 @@ private:
 	{
 		SINGLE_SLASH = 0,
 		TRIPLE_SLASH,
-		UNIQUE_MECHANIC
+		UNIQUE_MECHANIC = 4
 	};
-	
-	void Init(void);
 
 	void King_Arthur_Phase2(void); // changes mechanics for phase 2
+	void Init_KA_Attacks(void);    // initialize king arthur attacks
+	void Init_MobArray(void);      // initialize the mob array for phase 2
 
 	
 	// boss behaviours /////////////////////////////////////////////////

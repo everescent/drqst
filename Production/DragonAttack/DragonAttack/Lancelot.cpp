@@ -221,7 +221,7 @@ void Lancelot::Stab(const float dt)
 
 	}
 
-	lancelot[0].Projectile::Pos();
+//	lancelot[0].Projectile::Pos();
 	lancelot[0].Projectile::Update();
 	lancelot[0].Render();
 
@@ -254,7 +254,7 @@ void Lancelot::Slash(const float dt)
 
 	}
 
-	lancelot[1].Projectile::Pos();
+//	lancelot[1].Projectile::Pos();
 	lancelot[1].Projectile::Update();
 	lancelot[1].Render();
 
