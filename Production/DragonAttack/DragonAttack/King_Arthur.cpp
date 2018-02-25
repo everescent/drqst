@@ -36,7 +36,7 @@ namespace {
 	const float START_POINT_X = 200.0f; // spawn point of king arthur
 	const float START_POINT_Y = -150.0f;// spawn point of king arthur
 
-	const float slash_box = 20.0f;
+	const float SLASH_SCALE = 20.0f;
 
     float left_boundary = -600; // boundaries of charge attack
     float right_boundary = 600; // boundaries of charge attack
@@ -95,8 +95,8 @@ void King_Arthur::Init_KA_Attacks(void)
 
 	for(char i = 0; i < limit-1; ++i) // add the single slash and triple slash
 		arthur.emplace_back(Boss_Attack(S_CreateSquare(20.0, tex_3s), 
-						 Col_Comp(START_POINT_X - slash_box, START_POINT_Y -  slash_box,
-								  START_POINT_Y + slash_box, START_POINT_Y + slash_box, Rect)));
+						 Col_Comp(START_POINT_X - SLASH_SCALE, START_POINT_Y - SLASH_SCALE,
+								  START_POINT_Y + SLASH_SCALE, START_POINT_Y + SLASH_SCALE, Rect)));
 
 
 	arthur.emplace_back(Boss_Attack()); // for jump attack since it does not need textures
@@ -360,7 +360,7 @@ void King_Arthur::Single_Slash(Dragon &d, const float dt)
 	}
 	
 	arthur[SINGLE_SLASH].Projectile::Pos(this->PosX, this->PosY);
-	arthur[SINGLE_SLASH].Projectile::Update(20.0f); 
+	arthur[SINGLE_SLASH].Projectile::Update(SLASH_SCALE);
 	/*arthur[SINGLE_SLASH].Collision_.Update_Col_Pos(arthur[SINGLE_SLASH].PosX - slash_box, arthur[SINGLE_SLASH].PosY - slash_box,
 												   arthur[SINGLE_SLASH].PosX + slash_box, arthur[SINGLE_SLASH].PosY + slash_box);*/
 	
@@ -428,7 +428,7 @@ void King_Arthur::Triple_Slash(Dragon &d, const float dt)
 		}
 
 		arthur[i].Projectile::Pos(this->PosX, this->PosY); // render the first slash
-		arthur[i].Projectile::Update(20.0f);
+		arthur[i].Projectile::Update(SLASH_SCALE);
 		/*arthur[i].Collision_.Update_Col_Pos(arthur[i].PosX - slash_box, arthur[i].PosY - slash_box,
 											arthur[i].PosX + slash_box, arthur[i].PosY + slash_box);*/
 	}
