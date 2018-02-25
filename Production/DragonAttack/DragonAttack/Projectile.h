@@ -21,7 +21,7 @@ Technology is prohibited.
 class Projectile : public GameObject {
 
 public:
-  //Updates the projectile
+  //Updates the projectile, if active
   void Update(const float scale = 0.0f, const bool circle = false) 
   {
     //Update distance travelled and resultant matrix
@@ -56,7 +56,7 @@ public:
       Transform_.Concat();
     }
   }
-  //Set the position of the projectile
+  //Set the position of the projectile, if not active
   void Pos(const float &X, const float &Y)
   {
     //Check for active

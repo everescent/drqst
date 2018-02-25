@@ -1,22 +1,52 @@
 #include "Animation.h"
+#include <iostream>
 
-
-
-Animation::Animation(unsigned stateNum, void(*InitState)())
-  :Complete{ false }, Animation_State{}
+Animation::Animation(unsigned stateNum, const float &width, const float &height, const float &row, const float &col,
+                     const std::function <void(std::vector <Range>&)>& Init)
+  :Complete{ false }, Tex_Width{ width }, Tex_Height{ height }, Tex_Row{ row }, Tex_Col{ col },
+   Animation_State {}
 {
   Animation_State.reserve(stateNum);
-  *InitState;
+  Init(Animation_State);
 }
 
-void Animation::Update(const int& state)
+void Animation::Update(AEGfxTexture *Texture, const int& state, const bool &reset)
 {
-
+  static const float offsetX = Tex_Width / Tex_Col;
+  static const float offsetY = Tex_Height / Tex_Row;
+  static float startX = Animation_State[state].startRow;
+  static float startY = Animation_State[state].startCol;
+  //Check for state reset
+  if (reset)
+  {
+    startX = Animation_State[state].startRow;
+    startY = Animation_State[state].startCol;
+  }
+  //Check if texture state has reached the end column
+  if (startX >= Animation_State[state].endCol)
+  {
+    //Reset startX position
+    startX = Animation_State[state].startCol;
+    //Increment the row
+    startY += offsetY;
+    //If both row and column reached the end
+    if (startY >= Animation_State[state].endRow && 
+        startX >= Animation_State[state].endCol)
+      //Reset both, column reset should have been done above
+      startY = Animation_State[state].startRow;
+  }
+  //Dont do anything at first frame
+  if (startX == Animation_State[state].endCol);
+  else
+    //Increment the column
+    startX += offsetX;
+  //Set texture position
+  AEGfxTextureSet(Texture, startX, startY);
 }
 
-void Animation::SetComplete(const bool& Complete)
+void Animation::SetComplete(const bool& t_complete)
 {
-  this->Complete = Complete;
+  Complete = t_complete;
 }
 
 Animation::~Animation()

@@ -13,6 +13,7 @@
 #include "Grunt.h"
 #include "Platform.h"
 #include "Wall.h"
+#include "Animation.h"
 #include <utility>
 
 
@@ -26,6 +27,7 @@ namespace
   Floor *floor1;
   Platform *plat1, *plat2, *plat3, *plat4, *plat5, *plat6;
   Wall *Lwall1, *Lwall2;
+  Animation *ani;
 }
 
 namespace Main_Menu
@@ -49,7 +51,25 @@ namespace Main_Menu
 	
 	Lwall1 = new Wall      { -620.0f, -160.0f };
 	Lwall2 = new Wall      { -620.0f, 160.0f };
-
+  /*Animation class example: 
+    In the instantiation below, I am passing in a lambda function.
+    This lambda function initializes the Animation_State array to the desired ranges of each state. \
+    []  -> This means the lamda can only use variables declared within the scope of the lambda
+    [=] -> This means the lambda can use variables within the scope (by copy)
+    [&] -> This means the lambda can use variables within the scope (by referemce)
+    [Variable Name]  -> This means the lambda only uses variable by copy and nothing else
+    [&Variable Name] -> This means the lambda only uses variable by reference and nothing else
+    ()  -> Put in parameters as you would in a normal function
+    -> T ---> This specifies the return type is T, if not compiler will guess
+  */
+  ani = new Animation{ 3, 12.0f, 12.0f, 10.0f, 10.0f, [](std::vector <Range> &A_State) -> void{
+      float x = 0.0f, y = 0.0f;
+      float x1 = 0.0f, y1 = 0.0f;
+      for (int i = 0; i < 3; ++i, x += 10.0f, y += 10.0f, x1 += 12.0f, y1 += 12.0f)
+      {
+        A_State.push_back(Range{ x, y, x1, y1 });
+      }
+    }};
 	player = new Dragon    { };
 	//enemy  = new Merlin    { };
 	grunt  = new Grunt     { 400.0f, -160.0f };
