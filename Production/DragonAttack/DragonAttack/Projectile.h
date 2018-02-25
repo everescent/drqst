@@ -27,6 +27,18 @@ public:
     //Update distance travelled and resultant matrix
     if (IsActive())
     {
+      if (GetDir())
+      {
+        PosX += GetVelocity().x * 0.016f;
+        PosY += GetVelocity().y * 0.016f;
+        Transform_.SetRotation(90.0f);
+      }
+      else
+      {
+        PosX -= GetVelocity().x * 0.016f;
+        PosY -= GetVelocity().y * 0.016f;
+        Transform_.SetRotation(-90.0f);
+      }
       Transform_.SetTranslate(PosX, PosY);
       //If circle update circle
       if(circle)
@@ -48,22 +60,7 @@ public:
   void Pos(const float &X, const float &Y)
   {
     //Check for active
-    if (IsActive())
-    {
-      if (GetDir())
-      {
-        PosX += GetVelocity().x * 0.016f;
-        PosY += GetVelocity().y * 0.016f;
-        Transform_.SetRotation(90.0f);
-      }
-      else
-      {
-        PosX -= GetVelocity().x * 0.016f;
-        PosY -= GetVelocity().y * 0.016f;
-        Transform_.SetRotation(-90.0f);
-      }
-    }
-    else
+    if (!IsActive())
     {
       PosX = X;
       PosY = Y;

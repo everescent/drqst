@@ -237,11 +237,8 @@ void Merlin::S_Eball_Update()
       Eball.Update(0.016f);
     }
   }
-  Eball.Projectile::Pos();
   Eball.Projectile::Pos(PosX, PosY);
-  Eball.Projectile::Update();
-  Eball.Collision_.Update_Col_Pos(Eball.PosX - 50.0f, Eball.PosY - 50.0f, 
-                                  Eball.PosX + 50.0f, Eball.PosY + 50.0f);
+  Eball.Projectile::Update(50.0f);
 }
 void Merlin::Sp_Eball_Update()
 {
@@ -277,11 +274,8 @@ void Merlin::Sp_Eball_Update()
   }
   for (Boss_Attack& SS : Spread_Eball)
   {
-    SS.Projectile::Pos();
     SS.Projectile::Pos(PosX, PosY);
-    SS.Projectile::Update();
-    SS.Collision_.Update_Col_Pos(SS.PosX - 30.0f, SS.PosY - 30.0f, 
-                                 SS.PosX + 30.0f, SS.PosY + 30.0f);
+    SS.Projectile::Update(30.0f);
   }
 }
 
@@ -319,7 +313,6 @@ void Merlin::A_Rain_Update(Dragon &player)
   {
     if (i == 0)
     {
-      Arrow[i].Projectile::Pos();
       Arrow[i].Projectile::Pos(player.PosX, 460.0f);
       Arrow[i].Projectile::Update();
       Arrow[i].Collision_.Update_Col_Pos
@@ -335,7 +328,6 @@ void Merlin::A_Rain_Update(Dragon &player)
     }
     else
     {
-      Arrow[i].Projectile::Pos();
       Arrow[i].Projectile::Pos(player.PosX, 460.0f);
       Arrow[i].Projectile::Update();
       Arrow[i].Collision_.Update_Col_Pos
@@ -533,7 +525,10 @@ void Merlin::Update(Dragon &player)
                                   player.GetFireball()[i].GetVelocity(), 
                                   0.016f))//Remember to replace with dt
       {
+        //Decrease HP by player's damage
         Decrease_HP(player.GetDamage());
+        //Reset the distance of the fireball and set false
+        player.GetFireball()[i].Projectile::ResetDist();
         player.GetFireball()[i].SetActive(false);
       }
   //Check for attack colision with player

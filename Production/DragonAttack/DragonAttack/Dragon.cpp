@@ -108,15 +108,11 @@ void Dragon::Update(float dt = 0.016)
   for (int i = 0; i < Bullet_Buffer; ++i)
   {
     Fireball[i].Pos(PosX, PosY);
-    Fireball[i].Pos();
-    Fireball[i].Update();
-    Fireball[i].Collision_.Update_Col_Pos(Fireball[i].PosX - 50.0f, Fireball[i].PosY - 50.0f, Fireball[i].PosX + 50.0f, Fireball[i].PosY + 50.0f);
+    Fireball[i].Update(50.0f);
   }
   //Update Mega Fireball
   Mfireball.Pos(PosX, PosY);
-  Mfireball.Pos();
-  Mfireball.Update();
-  Mfireball.Collision_.Update_Col_Pos(Mfireball.PosX - 70.0f, Mfireball.PosY - 70.0f, Mfireball.PosX + 70.0f, Mfireball.PosY + 70.0f);
+  Mfireball.Update(70.0f);
   //Check for distance limit (Fireball)
   for (int i = 0; i < Bullet_Buffer; ++i)
     if (Fireball[i].IsActive())
