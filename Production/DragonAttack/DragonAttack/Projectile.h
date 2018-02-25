@@ -22,24 +22,30 @@ class Projectile : public GameObject {
 
 public:
   //Updates the projectile
-  void Update() 
+  void Update(const float scale = 0.0f, const bool circle = false) 
   {
     //Update distance travelled and resultant matrix
     if (IsActive())
     {
       Transform_.SetTranslate(PosX, PosY);
-      Collision_.Update_Col_Pos(PosX, PosY);
+      //If circle update circle
+      if(circle)
+        Collision_.Update_Col_Pos(PosX, PosY);
+      //If not update by rectangle
+      else
+        Collision_.Update_Col_Pos(PosX - scale, PosY - scale, 
+                                  PosX + scale, PosY + scale);
       //Pythagoras distance equation
       AddDist(
        f_sqrt( (GetVelocity().x) * 0.016f * (GetVelocity().x * 0.016f)
-                                +
+                                       +
               (GetVelocity().y) * 0.016f * (GetVelocity().y) * 0.016f)
       );
       Transform_.Concat();
     }
   }
   //Set the position of the projectile
-  void Pos()
+  void Pos(const float &X, const float &Y)
   {
     //Check for active
     if (IsActive())
@@ -57,11 +63,7 @@ public:
         Transform_.SetRotation(-90.0f);
       }
     }
-  }
-  //Updates position of projectile if not active
-  void Pos(const float &X, const float &Y)
-  {
-    if (!IsActive())
+    else
     {
       PosX = X;
       PosY = Y;
@@ -79,6 +81,8 @@ public:
   bool GetDir() const { return Direction; }
   //Sets Collided true or false
   void SetCollided(const bool &Colide) { Collided = Colide; }
+  //Returns Collided
+  bool GetCollided() const { return Collided; }
   //Default contructor does nothing
   Projectile() = default;
   //Initialize projectile with mesh and collision shape
@@ -87,7 +91,7 @@ public:
     Distance{ 0.0f }, Direction{ true }, Collided{ false }
   {}
 private:
-  bool Collided;
+  bool Collided;  //TRUE = Collided; FALSE = Not Collided
   bool Direction; //TRUE = Right; FALSE = Left
   float Distance; //Distance travelled
 };
