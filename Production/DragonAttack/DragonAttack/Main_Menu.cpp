@@ -51,16 +51,19 @@ namespace Main_Menu
 	
 	Lwall1 = new Wall      { -620.0f, -160.0f };
 	Lwall2 = new Wall      { -620.0f, 160.0f };
+
   /*Animation class example: 
     In the instantiation below, I am passing in a lambda function.
-    This lambda function initializes the Animation_State array to the desired ranges of each state. \
+    This lambda function initializes the Animation_State array to the desired ranges of each state.
     []  -> This means the lamda can only use variables declared within the scope of the lambda
-    [=] -> This means the lambda can use variables within the scope (by copy)
-    [&] -> This means the lambda can use variables within the scope (by referemce)
+    [=] -> This means the lambda can use local variables within the scope (by copy)
+    [&] -> This means the lambda can use local variables within the scope (by referemce)
     [Variable Name]  -> This means the lambda only uses variable by copy and nothing else
     [&Variable Name] -> This means the lambda only uses variable by reference and nothing else
     ()  -> Put in parameters as you would in a normal function
     -> T ---> This specifies the return type is T, if not compiler will guess
+
+    You can also pass in a normal function if you do not understand how to use lambdas
   */
   ani = new Animation{ 3, 12.0f, 12.0f, 10.0f, 10.0f, [](std::vector <Range> &A_State) -> void{
       float x = 0.0f, y = 0.0f;
