@@ -44,8 +44,9 @@ namespace Test_Stage1
 
 		player = new Dragon{};
 		//enemy = new King_Arthur{};
-		enemy = new Mage{ 200.0f, 300.0f };
-	}					 
+		enemy = new Mage{ AEVec2 {200.0f, 300.0f} };
+	}
+						 
 
 	void Update(float dt)
 	{
