@@ -25,18 +25,16 @@ Animation::Animation(unsigned stateNum, const float &width, const float &height,
   Init(Animation_State);
 }
 
-void Animation::Update(AEGfxTexture *Texture, const int& state, const bool &reset)
+void Animation::Update(Sprite &test, const int& state, const bool &reset)
 {
-  static const float offsetX = Tex_Width / Tex_Col;
-  static const float offsetY = Tex_Height / Tex_Row;
+  UNREFERENCED_PARAMETER(reset);
+  static const float offsetX = 1.0f / Tex_Col;
+  static const float offsetY = 1.0f / Tex_Row;
   static float startX = Animation_State[state].startRow;
   static float startY = Animation_State[state].startCol;
   //Check for state reset
-  if (reset)
-  {
-    startX = Animation_State[state].startRow;
-    startY = Animation_State[state].startCol;
-  }
+    //startX = Animation_State[state].startRow;
+    //startY = Animation_State[state].startCol;
   //Check if texture state has reached the end column
   if (startX >= Animation_State[state].endCol)
   {
@@ -56,7 +54,7 @@ void Animation::Update(AEGfxTexture *Texture, const int& state, const bool &rese
     //Increment the column
     startX += offsetX;
   //Set texture position
-  AEGfxTextureSet(Texture, startX, startY);
+  test.SetTexPos(startX, startY);
 }
 
 void Animation::SetComplete(const bool& t_complete)

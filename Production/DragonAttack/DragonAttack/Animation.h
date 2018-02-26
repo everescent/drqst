@@ -17,11 +17,12 @@ Technology is prohibited.
 #include <AEEngine.h>
 #include <functional>
 #include <vector>
+#include "Sprite.h"
 
 struct Range {
   //Constructs Range with start and end range for row and column
   Range(const float &stX, const float &edX, const float &stY, const float &edY)
-  :startRow{ stX }, endRow{ edX }, startCol{ stY }, endCol{ edY }
+  :startRow{ stY }, endRow{ edY }, startCol{ stX }, endCol{ edX }
   {}
   float startRow{ 0.0f }; //Animation start frame
   float endRow  { 0.0f }; //Animation end frame
@@ -37,7 +38,7 @@ public:
   Animation(unsigned stateNum, const float &width, const float &height, const float &row, const float &col,
             //const function wrapper to take in lambda functions
             const std::function <void (std::vector <Range>&)>& Init);
-  void Update(AEGfxTexture *Texture, const int& state, const bool &reset = false);
+  void Update(Sprite &test, const int& state, const bool &reset = false);
   //Set Complete status
   void SetComplete(const bool& Complete);
   //Get Complete status

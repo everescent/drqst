@@ -94,7 +94,7 @@ void King_Arthur::Init_KA_Attacks(void)
 	arthur.reserve(limit);
 
 	for(char i = 0; i < limit-1; ++i) // add the single slash and triple slash
-		arthur.emplace_back(Boss_Attack(S_CreateSquare(20.0, tex_3s), 
+		arthur.emplace_back(Boss_Attack(S_CreateSquare(SLASH_SCALE, tex_3s), 
 						 Col_Comp(START_POINT_X - SLASH_SCALE, START_POINT_Y - SLASH_SCALE,
 								  START_POINT_Y + SLASH_SCALE, START_POINT_Y + SLASH_SCALE, Rect)));
 
@@ -122,11 +122,14 @@ void King_Arthur::Init_MobArray(void)
 	for (char i = 0; i < num_of_mobs; ++i)
 	{
 		// spawn the mobs at the left/right of the screen
-		i % 2 ? mobs.push_back(new Grunt(-601.0f, START_POINT_Y)) :
-			mobs.push_back(new Grunt(601.0f, START_POINT_Y));
+		i % 2 ? mobs.push_back(new Grunt(-601.0f, START_POINT_Y)) 
+			  : mobs.push_back(new Grunt(601.0f, START_POINT_Y));
 
 		// do not render on screen yet
 		mobs[i]->SetActive(false);
+
+		// set the blend mode
+		mobs[i]->Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 	}
 }
 
@@ -331,13 +334,14 @@ void King_Arthur::Single_Slash(Dragon &d, const float dt)
 
 	if (! arthur[SINGLE_SLASH].ongoing_attack) // sets the attack to start from KA
 	{
-		arthur[SINGLE_SLASH].Projectile::Pos(this->PosX, this->PosY);
+		arthur[SINGLE_SLASH].SetPos(this->PosX, this->PosY);
 		arthur[SINGLE_SLASH].SetActive(true);
 		arthur[SINGLE_SLASH].ongoing_attack = true;
 	}
 
+	arthur[SINGLE_SLASH].Projectile::Update(SLASH_SCALE); // move the slash
 
-	if(! arthur[SINGLE_SLASH].GetCollided())
+	if(! arthur[SINGLE_SLASH].GetCollided()) // check for collision
 	{
 		if (arthur[SINGLE_SLASH].Collision_.Dy_Rect_Rect(d.Collision_, arthur[SINGLE_SLASH].GetVelocity(), d.GetVelocity(), dt))
 		{
@@ -354,15 +358,11 @@ void King_Arthur::Single_Slash(Dragon &d, const float dt)
 		arthur[SINGLE_SLASH].PosX           = 0.0f;        // to remove flicker
 		arthur[SINGLE_SLASH].cooldown       = true;        // skill on cooldown
 		arthur[SINGLE_SLASH].ongoing_attack = false;       // attack has finished
+		arthur[SINGLE_SLASH].SetCollided(false);		   // Reset the collision variable
 
 		current_action = IDLE;                       // set the behaviour to idle
 		++behavior_swap;
 	}
-	
-	arthur[SINGLE_SLASH].Projectile::Pos(this->PosX, this->PosY);
-	arthur[SINGLE_SLASH].Projectile::Update(SLASH_SCALE);
-	/*arthur[SINGLE_SLASH].Collision_.Update_Col_Pos(arthur[SINGLE_SLASH].PosX - slash_box, arthur[SINGLE_SLASH].PosY - slash_box,
-												   arthur[SINGLE_SLASH].PosX + slash_box, arthur[SINGLE_SLASH].PosY + slash_box);*/
 	
 
 }
@@ -382,20 +382,23 @@ void King_Arthur::Triple_Slash(Dragon &d, const float dt)
 	{
 		for (char i = 1; i < ts_limit; ++i)
 		{
-			arthur[i].Projectile::Pos(this->PosX, this->PosY);
+			arthur[i].SetPos(this->PosX, this->PosY);
 		}
 		arthur[TRIPLE_SLASH].SetActive(true);         // set the first attack to show
 		arthur[TRIPLE_SLASH].ongoing_attack = true;   // attack is currently ongoing
 	}
 
+
 	//slashes 3 times at the player with an interval inbetween
 	for (char i = 1; i < ts_limit; ++i)
-	{
+	{		
 		// release the 2nd and third projectile after the one in front travels a certain distance
 		if (i > 1 && arthur[i-1].GetDist() > interval)
 		{
 			arthur[i].SetActive(true);
 		}
+
+		arthur[i].Projectile::Update(SLASH_SCALE); // update the pos of the slash
 		
 		// checks if it has collided with the player
 		if (!arthur[i].GetCollided())
@@ -426,11 +429,6 @@ void King_Arthur::Triple_Slash(Dragon &d, const float dt)
 					arthur[j].SetCollided(false);
 			}
 		}
-
-		arthur[i].Projectile::Pos(this->PosX, this->PosY); // render the first slash
-		arthur[i].Projectile::Update(SLASH_SCALE);
-		/*arthur[i].Collision_.Update_Col_Pos(arthur[i].PosX - slash_box, arthur[i].PosY - slash_box,
-											arthur[i].PosX + slash_box, arthur[i].PosY + slash_box);*/
 	}
 
 }
@@ -506,7 +504,6 @@ void King_Arthur::Render(void)
 
 	for (char i = 0; i < num_of_mobs; ++i)
 	{
-		mobs[i]->Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 		if (mobs[i]->IsActive())
 			mobs[i]->Render();
 	}
@@ -519,7 +516,7 @@ void King_Arthur::Dead(void)
 	SetActive(false);
 	// play some animation. Camera shake?
 
-	GSM::next = GS_CREDITS;
+	//GSM::next = GS_CREDITS;
 }
 
 King_Arthur::~King_Arthur(void)

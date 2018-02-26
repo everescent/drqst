@@ -18,6 +18,7 @@ Technology is prohibited.
 #include "GameObject.h"
 #include "Transform.h"
 #include "Create_Object.h"
+#include "Animation.h"
 
 enum Direction
 {

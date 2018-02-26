@@ -18,19 +18,19 @@
 namespace
 {
 	Dragon *player;
-	King_Arthur *enemy;
+	//King_Arthur *enemy;
 	Sprite *BG;
 	Transform *M_BG;
 	Floor *floor1;
 	Wall *Lwall1, *Lwall2;
-	//Mage *enemy;
+	Mage *enemy;
 }
 
 namespace Test_Stage1
 {
 	void Init(void)
 	{
-
+		enemy->SetActive(true);
 	}
 
 	void Load(void)
@@ -43,8 +43,8 @@ namespace Test_Stage1
 		Lwall2 = new Wall{ -620.0f, 160.0f };
 
 		player = new Dragon{};
-		enemy = new King_Arthur{};
-		//enemy = new Mage{ 200.0f, -150.0f };
+		//enemy = new King_Arthur{};
+		enemy = new Mage{ 200.0f, 300.0f };
 	}					 
 
 	void Update(float dt)
@@ -56,7 +56,6 @@ namespace Test_Stage1
 
 		player->SetActive(true);
 		player->Update(dt);
-		enemy->SetActive(true);
 		enemy->Update(dt, *player);
 	}
 

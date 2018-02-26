@@ -7,14 +7,16 @@
 class Mage : public Characters
 {
 private:
-	void Idle(const float dt);
-	void Attack(const float dt, const Dragon &);
+	void Idle(const float dt, const Dragon&);
+	void Attack(const float dt, Dragon &);
 	void Move(const Dragon &);     // teleport the mage
 	void Dead(void);
+
 	bool Line_Of_Sight(const Dragon &);
 
 	Boss_Action_State current_action; // mage behaviour
 	bool teleport = true;
+	Boss_Attack energy_ball;
 	
 public:
 	//------------------------------------------------------------------
@@ -34,4 +36,6 @@ public:
 	void Update(const float dt, Dragon &player);
 	void Update() override {}; // ignored
 	void Render();
+
+	Animation ani;
 };
