@@ -1,6 +1,7 @@
 # Prerequisites
 *.d
 *.tlog
+*.log
 
 # Compiled Object files
 *.slo
@@ -27,6 +28,11 @@
 *.la
 *.a
 *.lib
+*.ilk
+*.idb
+*.pdb
+*.opendb
+*.db
 
 # Executables
 *.exe
@@ -34,7 +40,6 @@
 *.out
 *.app
 *.svn-base
-*Production/DragonAttack/Debug
 .svn/entries
 .svn/format
 .svn/wc.db
@@ -42,58 +47,7 @@
 
 # Directories
 Production/DragonAttack/Debug/*
-Production/DragonAttack/Release
+Production/DragonAttack/Release/*
 Production/DragonAttack/DragonAttack/Debug/*
-Production/DragonAttack/DragonAttack/Release
-Production/DragonAttack/Debug/DragonAttack.exp
-Production/DragonAttack/Debug/DragonAttack.ilk
-Production/DragonAttack/Debug/DragonAttack.exp
-Production/DragonAttack/DragonAttack/Debug/vc140.pdb
-Production/DragonAttack/DragonAttack/Debug/DragonAttack.tlog/link.read.1.tlog
-Production/DragonAttack/DragonAttack/Debug/vc140.idb
-Production/DragonAttack/DragonAttack/Debug/vc140.pdb
-Production/DragonAttack/Debug/DragonAttack.exp
-Production/DragonAttack/Debug/DragonAttack.ilk
-Production/DragonAttack/Debug/DragonAttack.pdb
-Production/DragonAttack/DragonAttack/Debug/DragonAttack.log
-Production/DragonAttack/DragonAttack/Debug/DragonAttack.tlog/CL.read.1.tlog
-Production/DragonAttack/DragonAttack/Debug/DragonAttack.tlog/CL.write.1.tlog
-Production/DragonAttack/DragonAttack/Debug/DragonAttack.tlog/DragonAttack.write.1u.tlog
-Production/DragonAttack/DragonAttack/Debug/DragonAttack.tlog/link.read.1.tlog
-Production/DragonAttack/DragonAttack/Debug/vc140.idb
-Production/DragonAttack/DragonAttack/Debug/vc140.pdb
-*.ilk
-*.pdb
-*.idb
-*.pdb
-*.tlog
-*.exp
-*.ilk
-*.pdb
-*.tlog
-*.tlog
-*.tlog
-*.tlog
-*.tlog
-*.tlog
-*.tlog
-*.idb
-*.pdb
-*.opendb
-Production/DragonAttack/.vs/DragonAttack/v14/.suo
-Production/DragonAttack/.vs/DragonAttack/v14/.suo
-Production/DragonAttack/.vs/DragonAttack/v14/.suo
-Production/DragonAttack/.vs/DragonAttack/v14/.suo
-*.exp
-*.ilk
-*.pdb
-*.db
-*.log
-*.tlog
+Production/DragonAttack/DragonAttack/Release/*
 *.lastbuildstate
-*.idb
-*.pdb
-Production/DragonAttack/.vs/DragonAttack/v15/ipch/AutoPCH/3c0ba6525f22fb9b/OBJECTS.ipch
-Production/DragonAttack/.vs/DragonAttack/v15/ipch/AutoPCH/5fc5a52f611b0263/ANIMATION.ipch
-*.ipch
-*.tlog
