@@ -39,7 +39,7 @@
 .svn/wc.db-journal
 
 # Directories
-*Production/DragonAttack/Debug
+Production/DragonAttack/Debug/*
 Production/DragonAttack/Release
 Production/DragonAttack/DragonAttack/Debug
 Production/DragonAttack/DragonAttack/Release
