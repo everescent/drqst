@@ -49,14 +49,14 @@ Mage::Mage()
 	energy_ball.Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 }
 
-Mage::Mage(const float x, const float y)
+Mage::Mage(const AEVec2 & pos)
 	:Characters(S_CreateSquare(MAGE_SCALE, ".//Textures/mage.png"),
-				HEALTH, Col_Comp{x - MAGE_SCALE, y - MAGE_SCALE , x + MAGE_SCALE , y + MAGE_SCALE, Rect }) ,
+				HEALTH, Col_Comp{pos.x - MAGE_SCALE, pos.y - MAGE_SCALE , pos.x + MAGE_SCALE , pos.y + MAGE_SCALE, Rect }) ,
 	current_action{ IDLE },
 
 	energy_ball{ Sprite{ S_CreateSquare(EBALL_SCALE, "energyball.png") },
-				 Col_Comp{ x - EBALL_SCALE, y - EBALL_SCALE,
-						   x + EBALL_SCALE, y + EBALL_SCALE, Rect } }
+				 Col_Comp{ pos.x - EBALL_SCALE, pos.y - EBALL_SCALE,
+						   pos.x + EBALL_SCALE, pos.y + EBALL_SCALE, Rect } }
 
 
 	,ani {
@@ -75,8 +75,8 @@ Mage::Mage(const float x, const float y)
 
 {
 	this->SetActive(false);
-	this->SetPos(x, y);
-	this->Transform_.SetTranslate(x, y);
+	this->SetPos(pos.x, pos.y);
+	this->Transform_.SetTranslate(pos.x,pos.y);
 	this->Transform_.Concat();
 	this->Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 	energy_ball.Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);

@@ -51,4 +51,6 @@ class Characters : public GameObject
 		void Set_Direction(Direction direction);// set the direction of mob
 
 		bool collision();
+
+		virtual void Update() {};
 };
