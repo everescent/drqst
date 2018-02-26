@@ -93,3 +93,7 @@ Production/DragonAttack/.vs/DragonAttack/v14/.suo
 *.lastbuildstate
 *.idb
 *.pdb
+Production/DragonAttack/.vs/DragonAttack/v15/ipch/AutoPCH/3c0ba6525f22fb9b/OBJECTS.ipch
+Production/DragonAttack/.vs/DragonAttack/v15/ipch/AutoPCH/5fc5a52f611b0263/ANIMATION.ipch
+*.ipch
+*.tlog
