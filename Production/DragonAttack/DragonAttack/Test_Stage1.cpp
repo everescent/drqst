@@ -11,6 +11,7 @@
 #include "King_Arthur.h"
 #include "Floor.h"
 #include "Wall.h"
+#include "Mage.h"
 #include <utility>
 
 
@@ -22,6 +23,7 @@ namespace
 	Transform *M_BG;
 	Floor *floor1;
 	Wall *Lwall1, *Lwall2;
+	//Mage *enemy;
 }
 
 namespace Test_Stage1
@@ -42,7 +44,8 @@ namespace Test_Stage1
 
 		player = new Dragon{};
 		enemy = new King_Arthur{};
-	}
+		//enemy = new Mage{ 200.0f, -150.0f };
+	}					 
 
 	void Update(float dt)
 	{
