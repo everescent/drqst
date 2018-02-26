@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="1024"
+   height="1024"
+   viewBox="0 0 270.93333 270.93334"
+   version="1.1"
+   id="svg2653"
+   inkscape:version="0.92.2 (5c3e80d, 2017-08-06)"
+   sodipodi:docname="Cape.svg"
+   inkscape:export-filename="G:\Documents\Digipen\Semester 02\GAM150\drqst\Production\Illustrations\King_Arthur\Cape.png"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96">
+  <defs
+     id="defs2647" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.7"
+     inkscape:cx="245.3837"
+     inkscape:cy="563.32384"
+     inkscape:document-units="mm"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     units="px"
+     inkscape:pagecheckerboard="true"
+     inkscape:window-width="1920"
+     inkscape:window-height="1057"
+     inkscape:window-x="1912"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata2650">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(0,-26.06665)">
+    <path
+       style="fill:#d40000;stroke:#000000;stroke-width:4.27207518;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;fill-opacity:1"
+       d="m 167.80894,32.964811 c 16.50895,1.151044 -16.40164,9.237535 -15.44845,15.909863 0.9532,6.672327 50.13531,-4.52839 39.53474,2.922343 -63.30592,44.495354 65.05563,231.263293 66.96202,236.029243 1.90637,4.76595 -68.3505,-63.92565 -91.22705,-65.83203 -28.59567,4.28936 -43.84671,88.64665 -61.00413,66.24668 C 89.468665,265.84095 78.506975,228.18996 67.068706,228.66656 55.630427,229.14316 6.5411581,276.80265 12.736892,268.22393 20.013412,258.14874 56.459574,100.4755 118.54095,47.560529 131.57646,36.449731 151.29998,31.813769 167.80894,32.964811 Z"
+       id="path3198"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="zcsccsssaz" />
+    <ellipse
+       style="opacity:1;fill:#f9f9f9;fill-opacity:1;stroke:#000000;stroke-width:0;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.97979796"
+       id="path3200"
+       cx="194.06667"
+       cy="49.083893"
+       rx="4.5778308"
+       ry="4.6163001" />
+    <ellipse
+       ry="4.6163001"
+       rx="4.5778308"
+       cy="33.964844"
+       cx="173.84494"
+       id="ellipse3202"
+       style="opacity:1;fill:#f9f9f9;fill-opacity:1;stroke:#000000;stroke-width:0;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.97979796" />
+  </g>
+</svg>

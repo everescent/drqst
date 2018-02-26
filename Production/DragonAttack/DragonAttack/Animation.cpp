@@ -18,48 +18,53 @@ Technology is prohibited.
 
 Animation::Animation(unsigned stateNum, const float &width, const float &height, const float &row, const float &col,
                      const std::function <void(std::vector <Range>&)>& Init)
-  :Complete{ false }, Tex_Width{ width }, Tex_Height{ height }, Tex_Row{ row }, Tex_Col{ col },
+  :Tex_Width{ width }, Tex_Height{ height }, Tex_Row{ row }, Tex_Col{ col }, State{ 0 },
    Animation_State {}
 {
   Animation_State.reserve(stateNum);
   Init(Animation_State);
 }
 
-void Animation::Update(Sprite &test, const int& state, const bool &reset)
+void Animation::ResetState(int t_state)
 {
-  UNREFERENCED_PARAMETER(reset);
-  static const float offsetX = 1.0f / Tex_Col;
-  static const float offsetY = 1.0f / Tex_Row;
-  static float startX = Animation_State[state].startRow;
-  static float startY = Animation_State[state].startCol;
-  //Check for state reset
-    //startX = Animation_State[state].startRow;
-    //startY = Animation_State[state].startCol;
-  //Check if texture state has reached the end column
-  if (startX >= Animation_State[state].endCol)
-  {
-    //Reset startX position
-    startX = Animation_State[state].startCol;
-    //Increment the row
-    startY += offsetY;
-    //If both row and column reached the end
-    if (startY >= Animation_State[state].endRow && 
-        startX >= Animation_State[state].endCol)
-      //Reset both, column reset should have been done above
-      startY = Animation_State[state].startRow;
-  }
-  //Dont do anything at first frame
-  if (startX == Animation_State[state].endCol);
-  else
-    //Increment the column
-    startX += offsetX;
-  //Set texture position
-  test.SetTexPos(startX, startY);
+  Animation_State[t_state].Rowcurr = Animation_State[t_state].startRow;
+  Animation_State[t_state].Colcurr = Animation_State[t_state].startCol;
 }
 
-void Animation::SetComplete(const bool& t_complete)
+void Animation::SetState(int t_state)
 {
-  Complete = t_complete;
+  State = t_state;
+}
+
+void Animation::Update(Sprite &t_Sprite)
+{
+  static const float offsetX = 1.0f / Tex_Col;
+  static const float offsetY = 1.0f / Tex_Row;
+  
+  //Check if texture state has reached the end column
+  if (Animation_State[State].Colcurr >= Animation_State[State].endCol)
+  {
+    //Reset startX position
+    Animation_State[State].Colcurr = Animation_State[State].startCol;
+    //Increment the row
+    Animation_State[State].Rowcurr += offsetY;
+    //If both row and column reached the end
+    if (Animation_State[State].Rowcurr >= Animation_State[State].endRow &&
+      Animation_State[State].Colcurr >= Animation_State[State].endCol)
+      //Reset both, column reset should have been done above
+      Animation_State[State].Rowcurr = Animation_State[State].startRow;
+  }
+  //Increment the column
+  Animation_State[State].Colcurr += offsetX;
+  //Check if animation cycle is complete
+  if (Animation_State[State].Rowcurr >= Animation_State[State].endRow &&
+    Animation_State[State].Colcurr >= Animation_State[State].endCol)
+    Animation_State[State].Complete = true;
+  else
+    Animation_State[State].Complete = false;
+
+  //Set texture position
+  t_Sprite.SetTexPos(Animation_State[State].Rowcurr, Animation_State[State].Colcurr);
 }
 
 Animation::~Animation()

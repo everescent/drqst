@@ -24,10 +24,13 @@ struct Range {
   Range(const float &stX, const float &edX, const float &stY, const float &edY)
   :startRow{ stY }, endRow{ edY }, startCol{ stX }, endCol{ edX }
   {}
-  float startRow{ 0.0f }; //Animation start frame
-  float endRow  { 0.0f }; //Animation end frame
-  float startCol{ 0.0f }; //Animation start frame
-  float endCol  { 0.0f }; //Animation end frame
+  const float startRow{ 0.0f }; //Animation start frame
+  const float endRow  { 0.0f }; //Animation end frame
+  const float startCol{ 0.0f }; //Animation start frame
+  const float endCol  { 0.0f }; //Animation end frame
+  float Rowcurr       { startRow };
+  float Colcurr       { startCol };
+  bool  Complete      { false };   //Checks if animation cycle is complete
 };
 
 class Animation
@@ -38,18 +41,21 @@ public:
   Animation(unsigned stateNum, const float &width, const float &height, const float &row, const float &col,
             //const function wrapper to take in lambda functions
             const std::function <void (std::vector <Range>&)>& Init);
-  void Update(Sprite &test, const int& state, const bool &reset = false);
-  //Set Complete status
-  void SetComplete(const bool& Complete);
+  void Update(Sprite &t_Sprite);
   //Get Complete status
-  bool GetComplete() const { return Complete; }
+  bool GetComplete(int state) const { return Animation_State[state].Complete; }
+  //Reset state row and col current
+  void ResetState(int t_state);
+  //Set state to update
+  void SetState(int t_state);
+  //Clear Animation_State
   ~Animation();
 
 private:
-  bool  Complete;   //Checks if animation cycle is complete
   float Tex_Width;  //Texture width
   float Tex_Height; //Texture height
   float Tex_Row;    //Number of rows
   float Tex_Col;    //Number of columns
+  int   State;
   std::vector <Range> Animation_State; //This holds different ranges to suit each sprite
 };
