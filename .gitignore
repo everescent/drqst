@@ -41,7 +41,7 @@
 # Directories
 /Production/DragonAttack/Debug/*
 Production/DragonAttack/Release
-*/Production/DragonAttack/DragonAttack/Debug/*
+Production/DragonAttack/DragonAttack/Debug/*
 Production/DragonAttack/DragonAttack/Release
 Production/DragonAttack/Debug/DragonAttack.exp
 Production/DragonAttack/Debug/DragonAttack.ilk
