@@ -24,13 +24,13 @@ struct Range {
   Range(const float &stX, const float &edX, const float &stY, const float &edY)
   :startRow{ stY }, endRow{ edY }, startCol{ stX }, endCol{ edX }
   {}
-  const float startRow{ 0.0f }; //Animation start frame
-  const float endRow  { 0.0f }; //Animation end frame
-  const float startCol{ 0.0f }; //Animation start frame
-  const float endCol  { 0.0f }; //Animation end frame
-  float Rowcurr       { startRow };
-  float Colcurr       { startCol };
-  bool  Complete      { false };   //Checks if animation cycle is complete
+  const float startRow{ 0.0f     }; //Animation start frame
+  const float endRow  { 0.0f     }; //Animation end frame
+  const float startCol{ 0.0f     }; //Animation start frame
+  const float endCol  { 0.0f     }; //Animation end frame
+  float Rowcurr       { startRow }; //Current row
+  float Colcurr       { startCol }; //Current colum
+  bool  Complete      { false    }; //Checks if animation cycle is complete
 };
 
 class Animation
@@ -38,9 +38,14 @@ class Animation
 public:
   //Initializes the Animation module
   //Takes in the required number of states, and a function to initialize it
-  Animation(unsigned stateNum, const float &width, const float &height, const float &row, const float &col,
+  Animation(unsigned stateNum, const float &width, const float &height, 
+            const float &row, const float &col,
             //const function wrapper to take in lambda functions
             const std::function <void (std::vector <Range>&)>& Init);
+  //Copy assignment
+  Animation(const Animation& rhs);
+  //No assignment operator, have const members
+  //Updates the animation frame
   void Update(Sprite &t_Sprite);
   //Get Complete status
   bool GetComplete(int state) const { return Animation_State[state].Complete; }
@@ -52,10 +57,13 @@ public:
   ~Animation();
 
 private:
-  float Tex_Width;  //Texture width
-  float Tex_Height; //Texture height
-  float Tex_Row;    //Number of rows
-  float Tex_Col;    //Number of columns
-  int   State;
-  std::vector <Range> Animation_State; //This holds different ranges to suit each sprite
+  float       Tex_Width;  //Texture width
+  float       Tex_Height; //Texture height
+  float       Tex_Row;    //Number of rows
+  float       Tex_Col;    //Number of columns
+  const float offsetX;    //Value to increment column
+  const float offsetY;    //Value to increment row
+  int         State;      //Current state to update
+  //This holds different ranges to suit each sprite
+  std::vector <Range> Animation_State;
 };
