@@ -62,8 +62,7 @@ public:
 	/******************************************************************************/
 	//Grunt(Sprite&& t_sprite, const float x, const float y);
 
-	void Update(const float dt, Dragon &d);
-	void Update() override {}; // ignored
+	void Update(Dragon &d, const float dt);
 
 	void Pos();
 

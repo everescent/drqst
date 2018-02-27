@@ -29,6 +29,8 @@ enum Direction
 	STAY
 };
 
+class Dragon; //forward declaration
+
 // A class that creates a basic character
 class Characters : public GameObject
 {
@@ -52,5 +54,5 @@ class Characters : public GameObject
 
 		bool collision();
 
-		virtual void Update() {};
+    virtual void Update(Dragon& d, const float dt) = 0/*{ UNREFERENCED_PARAMETER(d); UNREFERENCED_PARAMETER(dt); }*/;
 };

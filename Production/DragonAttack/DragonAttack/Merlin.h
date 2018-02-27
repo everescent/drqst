@@ -61,11 +61,7 @@ class Merlin : public Characters {
 public:
   Merlin();
   //Updates Merlin
-  void Update(Dragon &player);
-  //Don't need to use dt
-  void Update(float dt) { UNREFERENCED_PARAMETER(dt); }
-  //Don't need default Update function
-  void Update() {};
+  void Update(Dragon &player, const float dt);
   //Renders Merlin and attacks
   void Render();
   //Returns boss state, use this to check if boss is attacking

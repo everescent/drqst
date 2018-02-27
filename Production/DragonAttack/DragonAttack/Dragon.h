@@ -47,10 +47,8 @@ class Dragon : public Characters{
 public:
   //Handles player input
   void Input();
-  //Updates data members based on input
-  void Update() {};
   //Don't need to use dt
-  void Update(float dt);
+  void Update(Dragon&, const float dt);
   //Adds charge to the Mega Fireball, caps at Max_Charge
   void AddCharge() { Charge == Max_Charge ? Max_Charge : ++Charge; }
   //Resets Mega Fireball charge

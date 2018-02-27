@@ -30,9 +30,8 @@ Deconstructor:
 class GameObject {
 
 public:
-  virtual void Update(); //Overwrite with derived class Update
   //Renders the object
-  void Render();
+  virtual void Render();
   //Sets the object to active or inactive
   void SetActive(bool status);
   //Returns Active or Inactive status

@@ -25,23 +25,6 @@ Mage::Mage()
 				 Col_Comp{SPAWN_OUTSIDE.x - EBALL_SCALE, SPAWN_OUTSIDE.y - EBALL_SCALE,
 						  SPAWN_OUTSIDE.x + EBALL_SCALE, SPAWN_OUTSIDE.y + EBALL_SCALE, Rect} }
 
-
-	, ani{
-	4, 900, 900, 9, 9,
-	[](std::vector <Range> &A_State)
-{
-	A_State.push_back(Range{ 0, 0, 0, 9 });
-	A_State.push_back(Range{ 1, 1, 1, 9 });
-	A_State.push_back(Range{ 2, 2, 2, 9 });
-	A_State.push_back(Range{ 3, 3, 3, 9 });
-}
-
-}
-
-
-
-
-
 {
 	this->SetActive(false);
 	this->SetPos(SPAWN_OUTSIDE.x, SPAWN_OUTSIDE.y);
@@ -49,40 +32,25 @@ Mage::Mage()
 	energy_ball.Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 }
 
-Mage::Mage(const AEVec2 & pos)
+Mage::Mage(const AEVec2& position)
 	:Characters(S_CreateSquare(MAGE_SCALE, ".//Textures/mage.png"),
-				HEALTH, Col_Comp{pos.x - MAGE_SCALE, pos.y - MAGE_SCALE , pos.x + MAGE_SCALE , pos.y + MAGE_SCALE, Rect }) ,
+				HEALTH, Col_Comp{position.x - MAGE_SCALE, position.y - MAGE_SCALE , position.x + MAGE_SCALE , position.y + MAGE_SCALE, Rect }) ,
 	current_action{ IDLE },
 
 	energy_ball{ Sprite{ S_CreateSquare(EBALL_SCALE, "energyball.png") },
-				 Col_Comp{ pos.x - EBALL_SCALE, pos.y - EBALL_SCALE,
-						   pos.x + EBALL_SCALE, pos.y + EBALL_SCALE, Rect } }
-
-
-	,ani {
-	4, 900, 900, 9, 9,
-		[](std::vector <Range> &A_State)
-	{
-		A_State.push_back(Range{ 0, 9, 1, 2 });
-		A_State.push_back(Range{ 0, 9, 3, 4 });
-		A_State.push_back(Range{ 0, 9, 5, 6 });
-		A_State.push_back(Range{ 0, 9, 7, 8 });
-	}
-}
-
-
-
+				 Col_Comp{ position.x - EBALL_SCALE, position.y - EBALL_SCALE,
+						   position.x + EBALL_SCALE, position.y + EBALL_SCALE, Rect } }
 
 {
 	this->SetActive(false);
-	this->SetPos(pos.x, pos.y);
-	this->Transform_.SetTranslate(pos.x,pos.y);
+	this->SetPos(position.x, position.y);
+	this->Transform_.SetTranslate(position.x, position.y);
 	this->Transform_.Concat();
 	this->Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 	energy_ball.Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 }
 
-void Mage::Update(const float dt, Dragon &d)
+void Mage::Update(Dragon &d, const float dt)
 {	
 	if (this->Get_HP() <= 0 && ! energy_ball.ongoing_attack)
 		this->current_action = DEAD;
@@ -119,12 +87,6 @@ void Mage::Update(const float dt, Dragon &d)
 
 
 
-	ani.Update(this->Sprite_, current_action);
-
-
-
-
-
 
 
 }
@@ -150,12 +112,7 @@ void Mage::Idle(const float dt, const Dragon &d)
 		timer = 0.0f;
 
 		//  change behavior to attack if player is within sight
-		if (Line_Of_Sight(d))
-			ani.Update(this->Sprite_, current_action, true),
-			
-			
-			
-			
+		if (Line_Of_Sight(d))			
 			current_action = ATTACK;
 	}
 	else
@@ -203,11 +160,11 @@ void Mage::Attack(const float dt, Dragon &d)
 
 		if (this->Get_HP() < TELEPORT_FLAG && this->teleport)
 		{
-			this->current_action = MOVING; ani.Update(this->Sprite_, current_action, true);
+			this->current_action = MOVING; 
 		}
 		else
 		{
-			this->current_action = IDLE; ani.Update(this->Sprite_, current_action, true);
+			this->current_action = IDLE;
 		}
 	}
 
@@ -241,8 +198,6 @@ void Mage::Move(const Dragon &d)
 	this->teleport = false;
 	this->current_action = IDLE;
 
-
-	ani.Update(this->Sprite_, current_action, true);
 }
 
 void Mage::Dead(void)

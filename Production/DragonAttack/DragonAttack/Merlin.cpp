@@ -497,8 +497,9 @@ bool Merlin::CheckAttack(Dragon &player)
   return CanAttack;
 }
 
-void Merlin::Update(Dragon &player)
+void Merlin::Update(Dragon &player, const float dt = 0.016f)
 {
+  UNREFERENCED_PARAMETER(dt);
   //Determine Merlin's state
   CheckState(player);  
   //Execute state

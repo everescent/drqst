@@ -54,7 +54,6 @@ private:
 public:
 	Lancelot(); //default constructor for lancelot
 
-	void Update() override {}; // ignored
 	void Update(const Dragon &player, const float dt);
 
 };

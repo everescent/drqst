@@ -17,14 +17,6 @@ Technology is prohibited.
 #include "GameObject.h" //Class declaration
 #include <utility>      //move
 
-
-//Update
-void GameObject::Update()
-{
-  Transform_.SetTranslate(PosX, PosY);
-  Transform_.Concat();
-}
-
 //Renders the object
 void GameObject::Render()
 {

@@ -52,8 +52,9 @@ void Dragon::Input()
   Input::ClearBuffer();
 }
 
-void Dragon::Update(float dt = 0.016)
+void Dragon::Update(Dragon& dummy, const float dt)
 {
+  UNREFERENCED_PARAMETER(dummy);
   //Call for player input
   Input();
   //Update position based on direction

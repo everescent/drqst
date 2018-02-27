@@ -68,8 +68,7 @@ public:
 	King_Arthur();
 
 	~King_Arthur(); // destructor
-	void Update(const float dt, Dragon &player);
-	void Update() override {}; // ignored
+	void Update(Dragon &player, const float dt);
 	void Render();
 
 };

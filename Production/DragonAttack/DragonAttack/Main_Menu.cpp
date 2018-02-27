@@ -92,10 +92,10 @@ namespace Main_Menu
 	Lwall2->Update(*player);
 
 	player->SetActive(true);
-    player->Update(dt);
+    player->Update(*player, dt);
     //enemy->SetActive(true);
     //enemy->Update(*player);
-	grunt->Update(dt, *player);
+	grunt->Update(*player, dt);
 
 	if (AEInputCheckCurr(AEVK_0))
 	{

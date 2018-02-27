@@ -133,7 +133,7 @@ void King_Arthur::Init_MobArray(void)
 	}
 }
 
-void King_Arthur::Update(const float dt, Dragon &d) 
+void King_Arthur::Update(Dragon &d, const float dt)
 {
 	(d.PosX - this->PosX) > 0 ? this->Set_Direction(RIGHT) :
 	this->Set_Direction(LEFT);
@@ -161,7 +161,7 @@ void King_Arthur::Update(const float dt, Dragon &d)
 		{
 			if (mobs[i]->IsActive())
 			{
-				mobs[i]->Update(dt, d);
+				mobs[i]->Update(d, dt);
 			}
 			else
 				++mobs_dead;

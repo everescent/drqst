@@ -28,6 +28,5 @@ public:
 	Platform(float x, float y); // default constructor
 	//(Jacob) Changed to take in player and dt
 	void Update(Dragon &player, const float &dt);
-	void Update() override {};
 
 };

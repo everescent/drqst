@@ -42,7 +42,7 @@ Grunt::Grunt(float x, float y)
 	EstIdleX = (int)IdleXPos;
 }
 
-void Grunt::Update(const float dt, Dragon &d)
+void Grunt::Update(Dragon &d, const float dt)
 {
 	LineOfSight(d);
 
