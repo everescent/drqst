@@ -65,6 +65,7 @@ void Grunt::Update(Dragon &d, const float dt)
 			if (Collision_.Dy_Rect_Rect(d.GetFireball()[i].Collision_, this->GetVelocity(), d.GetFireball()[i].GetVelocity(), dt))
 			{
 				Decrease_HP(d.GetDamage());
+				d.GetFireball()[i].Projectile::ResetDist();
 				d.GetFireball()[i].SetActive(false);
 			}
 }
