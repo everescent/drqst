@@ -272,5 +272,8 @@
     <ClInclude Include="Animation.h">
       <Filter>Game_Engine\Graphics\Animation</Filter>
     </ClInclude>
+    <ClInclude Include="Boss_Phase.h">
+      <Filter>Characters\AI\Bosses</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
