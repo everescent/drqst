@@ -1,3 +1,18 @@
+/* Start Header ************************************************************************/
+/*!
+\file       AI_Data_Factory.cpp
+\author     William Yoong
+\par email: william.yoong\@digipen.edu
+\brief
+This file has the ai behaviour enums and a struct to create projectile attacks
+
+Copyright (C) 2018 DigiPen Institute of Technology.
+Reproduction or disclosure of this file or its contents
+without the prior written consent of DigiPen Institute of
+Technology is prohibited.
+*/
+/* End Header **************************************************************************/
+
 #pragma once
 #include <utility>
 #include "Projectile.h"
