@@ -15,7 +15,7 @@ Technology is prohibited.
 #include <iostream>
 #include "King_Arthur.h"
 #include "Boss_States.h"
-#include "Grunt.h"
+#include "AI_Data_Factory.h"
 #include "GameStateManager.h"
 #include <vector>
 
@@ -23,14 +23,14 @@ namespace {
 
 	std::vector <Boss_Attack> arthur; //an array of boss attacks
 
-	std::vector <Grunt*> mobs; //an array to store the mobs to be spawn
+	std::vector <Characters*> mobs; //an array to store the mobs to be spawn
 
 	Boss_Action_State current_action = IDLE; // different states of boss arthur
 
-	const int HEALTH = 300; // initial hp for king arthur
+	const int HEALTH    = 300; // initial hp for king arthur
 	const int PHASE2_HP = 200; //phase 2 trigger
 
-	const int interval = 80;     // interval for triple slash
+	const int interval    = 80;  // interval for triple slash
 	const int range_limit = 500; // range limit for slash
 
 	const float START_POINT_X = 200.0f; // spawn point of king arthur
@@ -122,8 +122,8 @@ void King_Arthur::Init_MobArray(void)
 	for (char i = 0; i < num_of_mobs; ++i)
 	{
 		// spawn the mobs at the left/right of the screen
-		i % 2 ? mobs.push_back(new Grunt(-601.0f, START_POINT_Y)) 
-			  : mobs.push_back(new Grunt(601.0f, START_POINT_Y));
+		i % 2 ? mobs.push_back(Create_Basic_AI(GRUNT, { -700.0f, START_POINT_Y }))
+			  : mobs.push_back(Create_Basic_AI(GRUNT, { 701.0f, START_POINT_Y }));
 
 		// do not render on screen yet
 		mobs[i]->SetActive(false);
@@ -516,12 +516,16 @@ void King_Arthur::Dead(void)
 	SetActive(false);
 	// play some animation. Camera shake?
 
+	for (char i = 0; i < num_of_mobs; ++i)
+		mobs[i]->SetActive(false);
+
 	//GSM::next = GS_CREDITS;
 }
 
 King_Arthur::~King_Arthur(void)
 {
 	arthur.clear();
+	mobs.clear();
 }
 
 

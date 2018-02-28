@@ -1,8 +1,23 @@
+/* Start Header ************************************************************************/
+/*!
+\file       AI_Data_Factory.cpp
+\author     William Yoong
+\par email: william.yoong\@digipen.edu
+\brief
+This file creates ais base on the enum that was passed in
+
+Copyright (C) 2018 DigiPen Institute of Technology.
+Reproduction or disclosure of this file or its contents
+without the prior written consent of DigiPen Institute of
+Technology is prohibited.
+*/
+/* End Header **************************************************************************/
+
 #include "AI_Data_Factory.h"
 
 Characters *Create_Basic_AI(const BASIC_AI mob, const AEVec2& position)
 {
-	
+
 	switch (mob)
 	{
 	case GRUNT: return new Grunt (position.x, position.y);
@@ -13,7 +28,7 @@ Characters *Create_Basic_AI(const BASIC_AI mob, const AEVec2& position)
 	default: break;
 	}
 	
-	
+	// returns nullptr if no match was found
 	return nullptr;
 }
 
@@ -23,7 +38,7 @@ Characters *Create_Boss_AI(const BOSS_AI boss)
 	{
 	case LANCELOT:
 		break;
-	case MERLIN: return new Merlin;
+	case MERLIN:      return new Merlin;
 		break;
 	case KING_ARTHUR: return new King_Arthur;
 		break;
@@ -31,6 +46,6 @@ Characters *Create_Boss_AI(const BOSS_AI boss)
 	default: break;
 	}
 	
-	
+	// returns null ptr if no match was found
 	return nullptr;
 }

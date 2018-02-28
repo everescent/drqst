@@ -8,10 +8,9 @@
 #include "Collision.h"
 #include "GameStateManager.h"
 #include "Dragon.h"
-#include "King_Arthur.h"
 #include "Floor.h"
 #include "Wall.h"
-#include "Mage.h"
+#include "AI_Data_Factory.h"
 #include <utility>
 
 
@@ -23,14 +22,21 @@ namespace
 	Transform *M_BG;
 	Floor *floor1;
 	Wall *Lwall1, *Lwall2;
-	Mage *enemy;
+	//Mage *enemy;
+
+	std::vector<Characters*> c;
+
+	char num_of_mob = 1;
 }
 
 namespace Test_Stage1
 {
 	void Init(void)
 	{
-		enemy->SetActive(true);
+		for(char i = 0; i < num_of_mob; ++i)
+		c[i]->SetActive(true);
+
+		player->SetActive(true);
 	}
 
 	void Load(void)
@@ -44,7 +50,9 @@ namespace Test_Stage1
 
 		player = new Dragon{};
 		//enemy = new King_Arthur{};
-		enemy = new Mage{ AEVec2 {200.0f, 300.0f} };
+		//enemy = new Mage{ AEVec2 {200.0f, 300.0f} };
+
+		c.push_back(Create_Boss_AI(KING_ARTHUR));
 	}
 						 
 
@@ -55,9 +63,11 @@ namespace Test_Stage1
 		Lwall1->Update(*player);
 		Lwall2->Update(*player);
 
-		player->SetActive(true);
-		player->Update(dt);
-		enemy->Update(dt, *player);
+		player->Update(*player, dt);
+
+		for (char i = 0; i < num_of_mob; ++i)
+			c[i]->Update(*player, dt);
+			
 	}
 
 	void Draw(void)
@@ -77,7 +87,9 @@ namespace Test_Stage1
 
 		player->Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 		player->Render();
-		enemy->Render();
+
+		for (char i = 0; i < num_of_mob; ++i)
+			c[i]->Render();
 	}
 
 	void Free(void)
@@ -88,7 +100,9 @@ namespace Test_Stage1
 		delete floor1;
 		delete M_BG;
 		delete player;
-		delete enemy;
+		//delete enemy;
+
+		c.clear();
 	}
 
 	void Unload(void)

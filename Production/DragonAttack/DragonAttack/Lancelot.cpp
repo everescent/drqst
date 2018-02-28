@@ -19,17 +19,16 @@ namespace
 
 	Boss_Action_State current_action = ATTACK; // lancelot current action
 
-	const int health = 1500; // health that lancelot start with
-
-	const int phase2_hp = 750; // phase 2 trigger
+	const int HEALTH = 1500; // health that lancelot start with
+	const int PHASE2_HP = 750; // phase 2 trigger
 
 	const char limit = 3; // num of lancelot attacks
 
 	char behavior_swap = 0; // switch between idling, attacking and moving
+	char behavior_threshold = 0; // threshold for swapping behavior
 
 	float idle_time = 3.0f; // idling time for lancelot
-
-	void Move_Lancelot(const float dt, Lancelot &ll); // move lancelot towards player
+	const float ATTACK_RANGE = 50.0f;
 
 	void Set_Attack_Dir(Lancelot &ll); // set the attack direction of lancelot
 
@@ -37,12 +36,11 @@ namespace
 
 Lancelot::Lancelot(void)
 	: Characters(S_CreateSquare(60.0f, ".//Textures/lancelot.jpg"),
-	  health, { 0.0f, 0.0f, 5.0f, 5.0f, Rect }), phase2{ false }, M_E{false}
+	  HEALTH, { 0.0f, 0.0f, 5.0f, 5.0f, Rect }), phase2{ false }, M_E{false}
 {
 	(void) this->Transform_.SetTranslate(200.0f, Start_Pos_Y); // spawn lancelot at this location
 	this->Transform_.Concat();
-	this->PosX = 200.0f;      // update lancelot current coordinates
-	this->PosY = Start_Pos_Y; // update lancelot current coordinates
+	this->SetPos( 200.0f , Start_Pos_Y);      // update lancelot current coordinates
 	this->SetActive(true);    // spawn lancelot
 	this->Set_Direction(LEFT); 
 	this->SetVelocity({ 120.0f, 0.0f });    // velocity for lancelot
@@ -65,15 +63,15 @@ void Lancelot::Init()
 	lancelot.emplace_back(Boss_Attack(S_CreateSquare(20.0f, stab), // for slash
 		Col_Comp(0.0f, 0.0f, 5.0f, 5.0f, Rect)));
 
-	lancelot.emplace_back(Boss_Attack(S_CreateSquare(0.0f, nullptr),
-		Col_Comp()));
+	lancelot.emplace_back(Boss_Attack());
 
-	for (char i = 0; i < limit - 1; ++i) // spawning location of slashes
+	for (char i = 0; i < limit - 1; ++i) // spawning location of attacks
 	{
-		lancelot[i].PosY = -120.0f;
+		lancelot[i].PosY = -120.0f;                      // y coordinates of attacks
   (void)lancelot[i].SetVelocity(AEVec2{ 200.0f, 0.0f }); // velocity for slash
-		lancelot[i].Transform_.SetScale(3.0f, 2.0f); // determine the size of projectile
+		lancelot[i].Transform_.SetScale(3.0f, 2.0f);     // determine the size of projectile
 		lancelot[i].Transform_.Concat();
+		lancelot[i].Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 	}
 
 	seed_initializer(); // initializes the seed for rng purposes
@@ -84,7 +82,7 @@ void Lancelot::Init()
 
 }
 
-void Lancelot::Idle(const float dt)
+void Lancelot::Idle(const Dragon& d, const float dt)
 {
 	static float idle = idle_time; //local variable just for this function
 
@@ -94,9 +92,13 @@ void Lancelot::Idle(const float dt)
 	}
 
 	// change current_action to attack and idle to 0 once idling is over
-	idle <= 0 ? current_action = ATTACK, idle = 0 : idle -= dt;
-
-	Set_Attack_Dir(*this); // set the direction of lancelot attacks
+	if (idle <= 0)
+	{
+		current_action = d.PosX - this->PosX <= ATTACK_RANGE ? ATTACK : MOVING;
+		idle = 0;
+	}
+	else
+		idle -= dt;
 }
 
 void Lancelot::Moving(const Dragon &d, const float dt)
@@ -114,7 +116,18 @@ void Lancelot::Moving(const Dragon &d, const float dt)
 		(d.PosX - this->PosX) > 0 ? this->Set_Direction(RIGHT) :
 		this->Set_Direction(LEFT);
 
-	Move_Lancelot(dt, *this);
+	if (Get_Direction() == RIGHT) // set all attacks to go right
+	{
+		PosX += GetVelocity().x * dt; // move lancelot to the right
+		(void)Transform_.SetTranslate(PosX, PosY);
+	}
+	else if (Get_Direction() == LEFT) // set all attacks to go left
+	{
+		PosX -= GetVelocity().x * dt; // move lancelot to the left
+		(void)Transform_.SetTranslate(PosX, PosY);
+	}
+
+	Transform_.Concat();
 	
 	//change state to attack once move_duration is 0, reset move_duration
 	move_duration <= 0 || this->Get_Direction() == STAY ?
@@ -123,7 +136,7 @@ void Lancelot::Moving(const Dragon &d, const float dt)
 	Set_Attack_Dir(*this);
 }
 
-void Lancelot::Update(const Dragon &d, float dt)
+void Lancelot::Update(Dragon &d, float dt)
 {
 	if ((int)(d.PosX - this->PosX) == 0) // character and boss intersect
 		this->Set_Direction(STAY);
@@ -132,7 +145,7 @@ void Lancelot::Update(const Dragon &d, float dt)
 		(d.PosX - this->PosX) > 0 ? this->Set_Direction(RIGHT) :
 		this->Set_Direction(LEFT);	
 	
-	if (this->Get_HP() < phase2_hp)
+	if (this->Get_HP() < PHASE2_HP)
 	{
 		Lancelot_Phase2(); // change to phase 2
 	}
@@ -154,7 +167,7 @@ void Lancelot::Update(const Dragon &d, float dt)
 	// switch between boss states
 	switch (current_action)
 	{
-	case IDLE: this->Idle(dt);
+	case IDLE: this->Idle(d, dt);
 		break;
 
 	case MOVING: this->Moving(d, dt);
@@ -170,10 +183,12 @@ void Lancelot::Update(const Dragon &d, float dt)
 		lancelot[i].Update(dt);
 }
 
-void Lancelot::Attack(const Dragon &d, float dt)
+void Lancelot::Attack(Dragon &d, float dt)
 {
 	UNREFERENCED_PARAMETER(d);
 	UNREFERENCED_PARAMETER(dt);
+
+	Set_Attack_Dir(*this);
 
 	Lancelot_Moveset currAttk = STAB;
 
@@ -299,22 +314,6 @@ void Lancelot::Arondight(const float dt)
 
 namespace
 {
-	void Move_Lancelot(const float dt, Lancelot &l)
-	{
-		if (l.Get_Direction() == RIGHT) // set all attacks to go right
-		{
-			l.PosX += l.GetVelocity().x * dt; // move lancelot to the right
-			(void)l.Transform_.SetTranslate(l.PosX, l.PosY);
-		}
-		else if (l.Get_Direction() == LEFT) // set all attacks to go left
-		{
-			l.PosX -= l.GetVelocity().x * dt; // move lancelot to the left
-			(void)l.Transform_.SetTranslate(l.PosX, l.PosY);
-		}
-
-		l.Transform_.Concat();
-	}
-	
 	void Set_Attack_Dir(Lancelot &l)
 	{
 		if (l.Get_Direction() == RIGHT) // set all attacks to go right

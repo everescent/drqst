@@ -27,22 +27,17 @@ private:
 		UNIQUE_MECHANIC
 	};
 
-	void Idle(const float dt); // lancelot idle state
-
-	void Moving(const Dragon &player, const float dt); // moving state of lancelot
-
-	void Attack(const Dragon &player, const float dt); // attack state of lancelot
+	void Idle(const Dragon &  , const float dt); // lancelot idle state
+	void Moving(const Dragon& , const float dt); // moving state of lancelot
+	void Attack(Dragon &      , const float dt); // attack state of lancelot
 
 	void Init(void); //initializer for lancelot
 
 	void Lancelot_Phase2(void);
 
 	void Stab(float dt); // first basic attack of lancelot
-
 	void Slash(float dt); // second basic attack of lancelot
-
 	void Mad_Enhancement(const float dt); // makes lancelot move faster, shorter cooldown
-
 	void Arondight(const float dt); // phase 2 mechanism, long range attack
 
 	void (Lancelot::*ll_attacks[3])(const float dt); // function pointer to lancelot attacks
@@ -54,6 +49,6 @@ private:
 public:
 	Lancelot(); //default constructor for lancelot
 
-	void Update(const Dragon &player, const float dt);
+	void Update(Dragon &player, const float dt);
 
 };
