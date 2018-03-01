@@ -85,6 +85,9 @@
     <Filter Include="Game_States\Level_Reader">
       <UniqueIdentifier>{89021b9c-68ec-4bc2-961a-fc6882f78ed8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game_Engine\Audio">
+      <UniqueIdentifier>{51a70cae-782c-4df2-a52b-4646c63943f9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -179,6 +182,9 @@
     </ClCompile>
     <ClCompile Include="Barrier.cpp">
       <Filter>Game_Object\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Audio_Engine.cpp">
+      <Filter>Game_Engine\Audio</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -280,6 +286,9 @@
     </ClInclude>
     <ClInclude Include="Barrier.h">
       <Filter>Game_Object\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Audio_Engine.h">
+      <Filter>Game_Engine\Audio</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
