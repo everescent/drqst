@@ -17,21 +17,13 @@ Technology is prohibited.
 #include <iostream>
 #include <utility>
 
+ int Characters::score = 0;            // player score for the stage
+ int Characters::enemies_killed = 0;   // number of enemies killed
 
 Characters::Characters(Sprite&& t_sprite, const int HP, Col_Comp &&t_col)
-	: GameObject{ std::move(t_sprite), std::move(t_col) }, hp{ HP }, moving{ false }, 
+	: GameObject{ std::move(t_sprite), std::move(t_col) }, hp{ HP }, 
 	  direction{ RIGHT }
 {
-}
-
-boolean Characters::Is_Moving() const
-{
-	return moving;
-}
-
-void Characters::Set_Moving(boolean movement)
-{
-	moving = movement;
 }
 
 void Characters::Set_HP(int hit_points)
@@ -60,7 +52,46 @@ void Characters::Set_Direction(Direction d)
 	direction = d;
 }
 
-bool Characters::collision()
+int Characters::Get_Score()
 {
-	return false;
+	return score;
+}
+
+void Characters::Add_Score(const int s)
+{
+	score += s;
+}
+
+void Characters::Reset_Score()
+{
+	score = 0;
+}
+
+float Characters::Get_Idle_Time() const
+{
+	return idle_timing;
+}
+
+void Characters::Reset_Idle_Time(float time)
+{
+	idle_timing = time;
+}
+
+void Characters::Decrease_Idle_Time(float time)
+{
+	idle_timing -= time;
+}
+
+
+int Characters::Get_Enemies_Killed()
+{
+	return enemies_killed;
+}
+void Characters::Add_Kill_count()
+{
+	++enemies_killed;
+}
+void Characters::Reset_Enemy_Killed()
+{
+	enemies_killed = 0;
 }

@@ -36,7 +36,7 @@ Characters *Create_Boss_AI(const BOSS_AI boss)
 {
 	switch (boss)
 	{
-	case LANCELOT:
+	case LANCELOT:    return new Lancelot;
 		break;
 	case MERLIN:      return new Merlin;
 		break;

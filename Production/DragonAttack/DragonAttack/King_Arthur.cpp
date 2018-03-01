@@ -71,7 +71,7 @@ namespace {
 
 
 King_Arthur::King_Arthur(void)
-	: Characters(S_CreateSquare(100.0f, ".//Textures/download.png"), HEALTH,
+	: Characters(S_CreateSquare(100.0f, ".//Textures/King_Arthur.png"), HEALTH,
 		Col_Comp{ START_POINT_X - 30.0f, START_POINT_Y - 30.0f,
 				  START_POINT_X + 30.0f, START_POINT_Y + 30.0f, Rect }),
 	phase1{ true }
@@ -83,7 +83,9 @@ King_Arthur::King_Arthur(void)
 	this->SetVelocity({ 120, 0 });       // velocity for king arthur
 	this->Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 	(void)this->Transform_.SetTranslate(PosX, PosY);
+	this->Transform_.SetScale(-1.0f, 1.0f); // set king arthur to face right at the start
 	this->Transform_.Concat();           // spawn king arthur at the location set
+	this->Reset_Idle_Time(1.0f);           // duration king arthur will idle
 	Init_KA_Attacks();	                 // call initializer for king arthur move set
 	Init_MobArray();                     // call initializer for mob array
 }
@@ -135,9 +137,19 @@ void King_Arthur::Init_MobArray(void)
 
 void King_Arthur::Update(Dragon &d, const float dt)
 {
-	(d.PosX - this->PosX) > 0 ? this->Set_Direction(RIGHT) :
-	this->Set_Direction(LEFT);
+	if ((d.PosX - this->PosX) > 0)
+	{
+		this->Set_Direction(RIGHT);
+		this->Transform_.SetScale(1.0f, 1.0f);
+	}
+	else
+	{
+		this->Set_Direction(LEFT);
+		this->Transform_.SetScale(-1.0f, 1.0f);
+	}
 	
+	this->Transform_.Concat();
+
 	if (this->Get_HP() < PHASE2_HP && phase1) // activate phase 2 once hp drops is 50%
 	{
 		King_Arthur_Phase2();
@@ -209,17 +221,9 @@ void King_Arthur::Update(Dragon &d, const float dt)
 
 void King_Arthur::Idle(const float dt)
 {
-	UNREFERENCED_PARAMETER(dt);
-	static float idle = 2.0f; //determine how long king arthurs stops
-
-	if (!idle) //sets the timer to 3 seconds 
-	{
-		idle = 2.0f;
-	}
-	
 	//changes state to attack once idling is finished, reset idle
-	idle <= 0? current_action = ATTACK, idle = 0 : idle -= dt;
-	Set_Attack_Dir(*this);
+	Get_Idle_Time() <= 0 ? current_action = ATTACK, Reset_Idle_Time(1.0f) 
+		                 : Decrease_Idle_Time(dt), Set_Attack_Dir(*this);
 	
 }
 
@@ -227,14 +231,11 @@ void King_Arthur::Moving(const Dragon &d, const float dt)
 {	
 	static float move_duration = 3.0f; // duration KA moves
 	
-	if (!move_duration) //set the timer for moving
-		move_duration = 3.0f;
-	
 	Move_KA(dt, *this, d); // move king arthur
 
 	//change state to idle if move_duration is 0 or player reached, reset move_duration
 	move_duration <= 0 || this->Get_Direction() == STAY ? 
-    current_action = IDLE, move_duration = 0 : move_duration -= dt;
+    current_action = IDLE, move_duration = 3.0f : move_duration -= dt;
 
 	Set_Attack_Dir(*this); // set attack directions
 }

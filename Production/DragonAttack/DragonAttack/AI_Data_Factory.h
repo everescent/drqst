@@ -18,6 +18,7 @@ Technology is prohibited.
 #include "Mage.h"
 #include "Merlin.h"
 #include "King_Arthur.h"
+#include "Lancelot.h"
 
 
 enum BASIC_AI
