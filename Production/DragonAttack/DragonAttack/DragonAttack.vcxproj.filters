@@ -76,14 +76,14 @@
     <Filter Include="Game_Object\Objects">
       <UniqueIdentifier>{4ca9ae69-d2ad-4e97-a931-72c997cbe2ee}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Game_States\Level_Editor">
-      <UniqueIdentifier>{89021b9c-68ec-4bc2-961a-fc6882f78ed8}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Characters\AI\Basic_Mobs">
       <UniqueIdentifier>{b2738c32-87bc-49ee-80a2-d090d2d9095d}</UniqueIdentifier>
     </Filter>
     <Filter Include="Game_Engine\Graphics\Animation">
       <UniqueIdentifier>{23eefb83-1833-48d6-822d-47f07db4b1ca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game_States\Level_Reader">
+      <UniqueIdentifier>{89021b9c-68ec-4bc2-961a-fc6882f78ed8}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -159,9 +159,6 @@
     <ClCompile Include="Test_Stage1.cpp">
       <Filter>Game_States\Stage</Filter>
     </ClCompile>
-    <ClCompile Include="Level_Editor.cpp">
-      <Filter>Game_States\Level_Editor</Filter>
-    </ClCompile>
     <ClCompile Include="StageManager.cpp">
       <Filter>Stage_Manager</Filter>
     </ClCompile>
@@ -176,6 +173,9 @@
     </ClCompile>
     <ClCompile Include="Animation.cpp">
       <Filter>Game_Engine\Graphics\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="Level_Import.cpp">
+      <Filter>Game_States\Level_Reader</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -254,9 +254,6 @@
     <ClInclude Include="Test_Stage1.h">
       <Filter>Game_States\Stage</Filter>
     </ClInclude>
-    <ClInclude Include="Level_Editor.h">
-      <Filter>Game_States\Level_Editor</Filter>
-    </ClInclude>
     <ClInclude Include="StageManager.h">
       <Filter>Stage_Manager</Filter>
     </ClInclude>
@@ -275,5 +272,13 @@
     <ClInclude Include="Boss_Phase.h">
       <Filter>Characters\AI\Bosses</Filter>
     </ClInclude>
+    <ClInclude Include="Level_Import.h">
+      <Filter>Game_States\Level_Reader</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="level_2.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
   </ItemGroup>
 </Project>

@@ -171,7 +171,7 @@
     <ClCompile Include="Input_Handler.cpp" />
     <ClCompile Include="King_Arthur.cpp" />
     <ClCompile Include="Lancelot.cpp" />
-    <ClCompile Include="Level_Editor.cpp" />
+    <ClCompile Include="Level_Import.cpp" />
     <ClCompile Include="Mage.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Main_Menu.cpp" />
@@ -205,7 +205,7 @@
     <ClInclude Include="Input_Handler.h" />
     <ClInclude Include="King_Arthur.h" />
     <ClInclude Include="Lancelot.h" />
-    <ClInclude Include="Level_Editor.h" />
+    <ClInclude Include="Level_Import.h" />
     <ClInclude Include="Mage.h" />
     <ClInclude Include="Main_Menu.h" />
     <ClInclude Include="Merlin.h" />
@@ -218,6 +218,9 @@
     <ClInclude Include="Test_Stage1.h" />
     <ClInclude Include="Transform.h" />
     <ClInclude Include="Wall.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="level_2.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
