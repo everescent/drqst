@@ -1,0 +1,76 @@
+Audio List:
+
+BGM:
+
+Stage 1
+Should have a forest feel, like you are walking in the woods.
+
+Stage 2 / Stage 3
+Should have a more action packed, faster paced soundtrack. 
+Each stage should have a different soundtrack. 
+
+Main Menu
+Folk like music.
+
+Lancelot
+Fast paced celtic music
+
+Merlin
+Fast paced comedic rock music.
+
+King Arthur
+Epic orchestral music. Fast paced. 
+
+Foley:
+
+Hit Sounds
+Dragon, Grunt, Knight, Mage, Archer, Lancelot, Merlin, King Arthur
+
+Fireball Sound
+Dragon. Two variations one for normal, other for Mega.
+
+Explosion
+Dragon fireball hit. Two variations one for normal, other for Mega.
+
+Sword Swing
+Grunt, Knight, Lancelot, King Arthur
+
+Energy Ball
+Mage, Merlin
+
+Magic Circle
+Magic like sounds.
+
+Arrow Rain
+Merlin
+
+Slash
+King Arthur slash sounds. Should sound magical. 
+
+Heavy Swoosh
+Lancelot lance throw. 
+
+Arrow Sounds
+Archer
+
+Landing Sounds
+For jumps. Get 3 variations. 
+
+Button Click
+Main Menu. Should sound light, like a twinkle.
+
+Footsteps
+One heavy footsteps for dragon. The rest get 4 variations.
+
+Armour
+Armour clanking sounds for the knights. Get 3 variations.
+
+Transition
+Sounds to be played when transitioning. Like a swoosh, etc.
+
+Score Page
+Triumphant music.
+
+Game Over
+Sad music, but not too sad.
+
