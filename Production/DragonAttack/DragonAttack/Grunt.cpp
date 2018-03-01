@@ -36,10 +36,7 @@ Grunt::Grunt(float x, float y)
 {
 	SetActive(true);
 	PosX = x;
-	PosY = y;/*
-	IdleXPos = this->PosX;
-	IdleYPos = this->PosY;
-	EstIdleX = (int)IdleXPos;*/
+	PosY = y;
 }
 
 void Grunt::Update(Dragon &d, const float dt)
@@ -82,18 +79,8 @@ void Grunt::Update(Dragon &d, const float dt)
 			}
 }
 
-//void Grunt::Pos()
-//{
-//}
-
 void Grunt::MoveTowardPlayer(const Dragon &d)
 {
-	/*
-	s32 mx , my;
-	AEInputGetCursorPosition(&mx, &my);
-	mx -= 640; my -= 640;
-	*/
-
 	MovementX = (this->PosX) - d.PosX;
 	MovementY = (this->PosY) - d.PosY;
 
@@ -108,11 +95,11 @@ void Grunt::MoveTowardPlayer(const Dragon &d)
 		PlayerInRange = false;
 	}
 
-	PosX -= MovementX / 60;
+	//PosX -= MovementX / 60;
 	//PosY -= MovementY / 60;
 
-	this->Transform_.SetTranslate(PosX, PosY); //PosX += GetVelocity
-	this->Transform_.Concat();
+	//this->Transform_.SetTranslate(PosX, PosY); //PosX += GetVelocity
+	//this->Transform_.Concat();
 }
 
 void Grunt::LineOfSight(const Dragon &d)
@@ -121,7 +108,6 @@ void Grunt::LineOfSight(const Dragon &d)
 	if (playerDist <= 400.0f && playerDist >= -400.0f)  // vision range
 	{
 		PlayerSeen = true;
-		std::cout << "seen" << std::endl;
 	}
 	else
 	{

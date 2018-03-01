@@ -10,8 +10,11 @@
 #include "Dragon.h"
 #include "Floor.h"
 #include "Wall.h"
+#include "Wall2.h"
 #include "Platform.h"
 #include "Barrier.h"
+#include "Tower.h"
+#include "Scarecrow.h"
 #include "AI_Data_Factory.h"
 #include <utility>
 #include <iostream>
@@ -22,16 +25,16 @@ namespace
 	Sprite *BG;
 	Transform *M_BG;
 	
-	Grunt *scarecrow1;
-	Grunt *scarecrow2;
-	Barrier *fence1;
+	Scarecrow *scarecrow1, *scarecrow2;
+	Barrier *box1, *box_health;
 	Grunt *soldier1 ,*soldier2;
 	Grunt *archer1;
-	//Grunt *archerTower;
+	Tower *archerTower;
 	Platform *plat1, *plat2, *plat3;
 
 	Floor *floor1, *floor2, *platformingFloor, *exitFloor;
-	Wall *LeftWall, *platformingWall1, *platformingWall2, *exitWall;
+	Wall *LeftWall, *platformingWall1;
+	Wall2 *platformingWall2, *exitWall;
 
 	/*std::vector<Characters*> c;
 	char num_of_mob = 1;*/
@@ -54,14 +57,18 @@ namespace Test_Stage1
 		player = new Dragon    { };
 
 		// Enemies
-		scarecrow1       = new Grunt { 750.0f, -190.0f };
-		scarecrow2       = new Grunt { 950.0f, -190.0f };
+		scarecrow1       = new Scarecrow{ 750.0f, -190.0f };
+		scarecrow2       = new Scarecrow{ 1050.0f, -190.0f };
 		soldier1         = new Grunt { 1900.0f, -190.0f };
 		soldier2         = new Grunt { 2000.0f, -190.0f };
-		archer1          = new Grunt { 4500.0f, -70.0f };
+		archer1          = new Grunt { 4500.0f, 230.0f };
+
+		// Tower
+		archerTower = new Tower { 4500.0f, 0.0f };
 
 		// Fence
-		fence1           = new Barrier{ 1400.0f, -170.0f };
+		box1           = new Barrier{ 1400.0f, -170.0f };
+		box_health     = new Barrier{ 4900.0f, -50.0f };
 
 		// Floating Platforms
 		plat1            = new Platform { 2600.0f, -150.0f }; //ok
@@ -71,14 +78,14 @@ namespace Test_Stage1
 		// Walls
 		LeftWall         = new Wall { -620.0f, -160.0f }; //ok
 		platformingWall1 = new Wall { 2430.0f, -475.0f }; //ok
-		platformingWall2 = new Wall { 3350.0f, -475.0f };
-		exitWall         = new Wall { 5000.0f, -70.0f }; //ok
+		platformingWall2 = new Wall2 { 3335.0f, -475.0f }; //ok
+		exitWall         = new Wall2 { 5200.0f, -70.0f }; //ok
 
 		// Floors
 		floor1           = new Floor { 0.0f, -350.0f }; //ok
 		floor2           = new Floor { 1200.0f, -350.0f }; //ok
 		platformingFloor = new Floor { 2500.0f, -500.0f }; //ok
-		exitFloor        = new Floor { 4575.0f, -230.0f }; //ok
+		exitFloor        = new Floor { 4650.0f, -230.0f }; //ok
 
 		//c.push_back(Create_Boss_AI(KING_ARTHUR));
 	}
@@ -92,7 +99,9 @@ namespace Test_Stage1
 		soldier2->Update(*player, dt);
 		archer1->Update(*player, dt);
 
-		fence1->Update(*player, dt);
+		archerTower->Update(*player, dt);
+		box1->Update(*player, dt);
+		box_health->Update(*player, dt);
 
 		plat1->Update(*player, dt);
 		plat2->Update(*player, dt);
@@ -109,7 +118,7 @@ namespace Test_Stage1
 		exitFloor->Update(*player, dt);
 
 		player->Update(*player, dt);
-		std::cout << (int)player->PosX <<", "<< (int)player->PosY << std::endl;
+		//std::cout << (int)player->PosX <<", "<< (int)player->PosY << std::endl;
 		/*for (char i = 0; i < num_of_mob; ++i)
 			c[i]->Update(*player, dt);*/
 			
@@ -141,16 +150,21 @@ namespace Test_Stage1
 		archer1->Render();
 		archer1->Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 
-		fence1->Render();
-		fence1->Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+		archerTower->Render();
+		archerTower->Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+
+		box1->Render();
+		box1->Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+		box_health->Render();
+		box_health->Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 
 		plat1->Render();
 		plat2->Render();
 		plat3->Render();
 
 		LeftWall->Render();
-		platformingWall1->Render();
-		platformingWall2->Render();
+		/*platformingWall1->Render();
+		platformingWall2->Render();*/
 		exitWall->Render();
 
 		floor1->Render();
@@ -159,7 +173,7 @@ namespace Test_Stage1
 		exitFloor->Render();
 
 		player->Render();
-		//player->Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+		player->Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 
 		/*for (char i = 0; i < num_of_mob; ++i)
 			c[i]->Render();*/
@@ -178,7 +192,9 @@ namespace Test_Stage1
 		delete archer1;
 
 		// Static Objs
-		delete fence1;
+		delete archerTower;
+		delete box1;
+		delete box_health;
 
 		delete plat1;
 		delete plat2;

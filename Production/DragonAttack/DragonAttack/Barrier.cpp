@@ -1,9 +1,10 @@
 #include "Barrier.h"
 
 Barrier::Barrier(float x, float y)
-	: GameObject{ S_CreateRectangle(120.0f, 100.0f, ".//Textures/fence.jpg"),
-	Col_Comp{ x - 120.0f, y - 100.0f,
-	x + 120.0f, y + 100.0f, Rect },
+	:// GameObject{ S_CreateRectangle(120.0f, 100.0f, ".//Textures/box.png"),
+	GameObject{S_CreateSquare(130.0f, ".//Textures/box.png" ),
+	Col_Comp{ x - 100.0f, y - 100.0f,
+	x + 100.0f, y + 100.0f, Rect },
 	x, y }
 {
 	SetActive(true);
