@@ -44,6 +44,7 @@ Mage::Mage(const AEVec2& position)
 	this->Transform_.SetTranslate(position.x, position.y);				   // add to matrix
 	this->Transform_.Concat();											   // add to final matrix
 	this->Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);			   // rendering mode of mage
+	this->Reset_Idle_Time(2.0f);										   // idling time for mage
 	energy_ball.Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);	   // rendering mode of energyball
 }
 
@@ -104,16 +105,10 @@ void Mage::Render(void)
 // idle function of mage
 void Mage::Idle(const float dt, const Dragon &d)
 {
-	static float timer = 1.0f; // idle duration
-	
-	// resets the timer if timer is 0
-	if ( ! timer )
-		timer = 1.0f;
-
 	// changes the behaviour to attack once the timer hits 0
-	if (timer <= 0)
+	if (Get_Idle_Time() <= 0)
 	{
-		timer = 0.0f;
+		Reset_Idle_Time(2.0f);
 
 		//  change behavior to attack if player is within sight
 		if (Line_Of_Sight(d))			
@@ -122,7 +117,7 @@ void Mage::Idle(const float dt, const Dragon &d)
 	else
 	{
 		// reduce timer by delta time
-		timer -= dt;
+		Decrease_Idle_Time(dt);
 	}
 }
 
