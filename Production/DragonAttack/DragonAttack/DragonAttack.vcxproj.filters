@@ -177,6 +177,9 @@
     <ClCompile Include="Level_Import.cpp">
       <Filter>Game_States\Level_Reader</Filter>
     </ClCompile>
+    <ClCompile Include="Barrier.cpp">
+      <Filter>Game_Object\Objects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h">
@@ -274,6 +277,9 @@
     </ClInclude>
     <ClInclude Include="Level_Import.h">
       <Filter>Game_States\Level_Reader</Filter>
+    </ClInclude>
+    <ClInclude Include="Barrier.h">
+      <Filter>Game_Object\Objects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

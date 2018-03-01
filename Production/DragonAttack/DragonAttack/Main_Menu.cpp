@@ -88,8 +88,8 @@ namespace Main_Menu
 	plat5->Update (*player, dt);
 	plat6->Update (*player, dt);
 
-	Lwall1->Update(*player);
-	Lwall2->Update(*player);
+	Lwall1->Update(*player, dt);
+	Lwall2->Update(*player, dt);
 
 	player->SetActive(true);
     player->Update(*player, dt);

@@ -1,10 +1,10 @@
 /* Start Header ************************************************************************/
 /*!
-\file       Platform.h
-\author     Andrew Chong/Jacob Lim
-\par email: c.jiahaoandrew\@digipen.edu/jacob.lim\@digipen.edu
+\file       Barrier.h
+\author     Andrew Chong
+\par email: c.jiahaoandrew\@digipen.edu
 \brief
-Character class, parent class of the characters to be created
+Character class, parent class of a destructable object to be created
 
 Copyright (C) 2018 DigiPen Institute of Technology.
 Reproduction or disclosure of this file or its contents
@@ -20,12 +20,12 @@ Technology is prohibited.
 #include "Create_Object.h"
 
 // A class that creates a basic character
-class Wall : public GameObject
+class Barrier : public GameObject
 {
 private:
 
 public:
-	Wall(float x, float y); // default constructor
+	Barrier(float x, float y); // default constructor
 
 	void Update(Dragon &player, const float &dt);
 };

@@ -12,9 +12,20 @@ Floor::Floor(float x, float y)
 void Floor::Update(Dragon &player, const float &dt)
 {
   //Checks for collision, and have player stand on platform if true
+	//if (Collision_.Dy_Rect_Rect(player.Collision_, GetVelocity(), player.GetVelocity(), dt) && player.PosX > Sprite_.Get_Width())//collison from right
+	//{
+	//	player.PosX = PosX + Sprite_.Get_Width() + 70;
+	//}
+	//player.GetFacing() == ;
+	//if (Collision_.Dy_Rect_Rect(player.Collision_, GetVelocity(), player.GetVelocity(), dt) && player.PosX < Sprite_.Get_Width())
+	//{
+	//	player.PosX = PosX + Sprite_.Get_Width() - 70;
+	//}
+
+  
   if (Collision_.Dy_Rect_Rect(player.Collision_, GetVelocity(), player.GetVelocity(), dt))
   {
-    player.PosY = PosY + Sprite_.Get_Height() + 100;
+    player.PosY = PosY + Sprite_.Get_Height() + 70;
   }
   //(Jacob) Changed to PosX and PosY
 	this->Transform_.SetTranslate(PosX, PosY);

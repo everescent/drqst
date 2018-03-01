@@ -28,10 +28,10 @@ void Platform::Update(Dragon &player, const float &dt)
   //(Jacob) Make sure player is on the platform if colide
   if (Colide && !player.GetJump())
   {
-	if (player.PosY - 100.0f < PosY)
+	if (player.PosY - 70.0f < PosY)
 		return;
-    if(player.PosY <= PosY + Sprite_.Get_Height() + 100.0f)
-      player.PosY = PosY + Sprite_.Get_Height() + 100.0f;
+    if(player.PosY <= PosY + Sprite_.Get_Height() + 70.0f)
+      player.PosY = PosY + Sprite_.Get_Height() + 70.0f;
   }
   //(Jacob) Changed to PosX and PosY
   this->Transform_.SetTranslate(PosX, PosY);

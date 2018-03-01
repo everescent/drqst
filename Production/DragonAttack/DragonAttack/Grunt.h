@@ -64,7 +64,7 @@ public:
 
 	void Update(Dragon &d, const float dt);
 
-	void Pos();
+	//void Pos();
 
 	//~Grunt(); // destructor
 };
