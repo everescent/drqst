@@ -3,7 +3,7 @@
 \file GameStateList.h
 \author William Yoong, william.yoong, 1701674
 
-\par william.yoong\@digipen.edu)
+\par william.yoong\@digipen.edu
 \date Jan 24, 2017
 \brief
 This header file contains the enum for the different states the game haves
@@ -22,7 +22,7 @@ enum GAME_STATE
 	GS_MAIN = 0,
 	GS_LEVEL1,
 	GS_LEVEL2,
-	GS_LEVEL3,
+	GS_LEVEL_IMPORT,
 
 
 	// do not touch this bottom area

@@ -35,19 +35,28 @@ namespace GSM
 		GSF[GS_MAIN].Free     = Main_Menu::Free;
 		GSF[GS_MAIN].Unload   = Main_Menu::Unload;
 
-		GSF[GS_LEVEL1].Init	  = Test_Stage1::Init;
-		GSF[GS_LEVEL1].Load	  = Test_Stage1::Load;
-		GSF[GS_LEVEL1].Update = Test_Stage1::Update;
-		GSF[GS_LEVEL1].Draw	  = Test_Stage1::Draw;
-		GSF[GS_LEVEL1].Free	  = Test_Stage1::Free;
-		GSF[GS_LEVEL1].Unload = Test_Stage1::Unload;
+		GSF[GS_LEVEL1].Init	  = Test_Stage1_1::Init;
+		GSF[GS_LEVEL1].Load	  = Test_Stage1_1::Load;
+		GSF[GS_LEVEL1].Update = Test_Stage1_1::Update;
+		GSF[GS_LEVEL1].Draw	  = Test_Stage1_1::Draw;
+		GSF[GS_LEVEL1].Free	  = Test_Stage1_1::Free;
+		GSF[GS_LEVEL1].Unload = Test_Stage1_1::Unload;
 
-		//GSF[GS_LEVEL2].Init = Level_Import::Init;
-		//GSF[GS_LEVEL2].Load = Level_Import::Load;
-		//GSF[GS_LEVEL2].Update = Level_Import::Update;
-		//GSF[GS_LEVEL2].Draw = Level_Import::Draw;
-		//GSF[GS_LEVEL2].Free = Level_Import::Free;
-		//GSF[GS_LEVEL2].Unload = Level_Import::Unload;
+		/*
+		GSF[GS_LEVEL2].Init   = Test_Stage1_2::Init;
+		GSF[GS_LEVEL2].Load   = Test_Stage1_2::Load;
+		GSF[GS_LEVEL2].Update = Test_Stage1_2::Update;
+		GSF[GS_LEVEL2].Draw   = Test_Stage1_2::Draw;
+		GSF[GS_LEVEL2].Free   = Test_Stage1_2::Free;
+		GSF[GS_LEVEL2].Unload = Test_Stage1_2::Unload;
+		*/
+
+		GSF[GS_LEVEL_IMPORT].Init   = Level_Import::Init;
+		GSF[GS_LEVEL_IMPORT].Load   = Level_Import::Load;
+		GSF[GS_LEVEL_IMPORT].Update = Level_Import::Update;
+		GSF[GS_LEVEL_IMPORT].Draw   = Level_Import::Draw;
+		GSF[GS_LEVEL_IMPORT].Free   = Level_Import::Free;
+		GSF[GS_LEVEL_IMPORT].Unload = Level_Import::Unload;
 		
 		SM::StageManagerInit();
 	}
