@@ -31,32 +31,57 @@ Audio_Engine::Audio_Engine(unsigned SoundNum, const std::function<void(std::vect
   Playlist_.reserve(SoundNum);
   Soundlist_.reserve(SoundNum);
   Channel_.reserve(SoundNum);
+  for (unsigned i = 0; i < SoundNum; ++i)
+  {
+    Soundlist_.push_back(nullptr);
+    Channel_.push_back(nullptr);
+  }
   Init(Playlist_);
   for (unsigned i = 0; i < SoundNum; ++i)
   {
     FMOD_RESULT soundResult;
-    FMOD_RESULT channelResult;
-    soundResult = Audio_->createSound(Playlist_[i].c_str(), FMOD_LOOP_OFF, NULL, &Soundlist_[i]);
-    channelResult = Audio_->createChannelGroup(NULL, &Channel_[i]);
+    soundResult = Audio_->createStream(Playlist_[i].c_str(), FMOD_LOOP_OFF, NULL, &Soundlist_[i]);
     if (soundResult != FMOD_OK)
     {
       throw "Sound cannot be created. Exception thrown!";
     }
-    if (channelResult != FMOD_OK)
-    {
-      throw "Channel cannot be created. Exception thrown!";
-    }
+  }
+  FMOD_RESULT ChannelResult;
+  ChannelResult = Audio_->createChannelGroup(NULL, &ChannelGroup_);
+  if (ChannelResult != FMOD_OK)
+  {
+    throw "Channel cannot be created. Exception thrown!";
+  }
+  for (unsigned i = 0; i < SoundNum; ++i)
+  {
+    Channel_[i]->setChannelGroup(ChannelGroup_);
+    Channel_[i]->setPaused(false);
   }
 }
 
-void Audio_Engine::PlaySound(const int /*SongNum*/)
+void Audio_Engine::Play(const int SongNum, const bool /*pause*/)
 {
-  
+  Audio_->playSound(Soundlist_[SongNum], ChannelGroup_, false, &Channel_[SongNum]);
 }
 
-void Audio_Engine::SetVolume(const int /*SongNum*/)
+void Audio_Engine::SetVolume(const int SongNum, const float Volume)
 {
+  Channel_[SongNum]->setVolume(Volume);
+}
 
+void Audio_Engine::SetLoop(const int SongNum, FMOD_MODE Loop)
+{
+  Channel_[SongNum]->setMode(Loop);
+}
+
+void Audio_Engine::SetPause(const int SongNum, const bool Pause)
+{
+  Channel_[SongNum]->setPaused(Pause);
+}
+
+void Audio_Engine::Update()
+{
+  Audio_->update();
 }
 
 Audio_Engine::~Audio_Engine()
@@ -64,7 +89,7 @@ Audio_Engine::~Audio_Engine()
   for (unsigned i = 0; i < Playlist_.size(); ++i)
   {
     Soundlist_[i]->release();
-    Channel_[i]->release();
+    ChannelGroup_->release();
   }
   Channel_.clear();
   Playlist_.clear();

@@ -25,12 +25,15 @@ class Audio_Engine {
 public:
   Audio_Engine(unsigned SoundNum, const std::function<void (std::vector<std::string>&)>& Init);
   ~Audio_Engine();
-  void PlaySound(const int SongNum);
-  void SetVolume(const int SongNum);
-
+  void Play(const int SongNum, const bool Loop);
+  void SetVolume(const int SongNum, const float Volume);
+  void SetLoop(const int SongNum, FMOD_MODE Loop);
+  void SetPause(const int SongNum, const bool Pause);
+  void Update();
 private:
   FMOD::System *Audio_;
   std::vector <std::string> Playlist_;
   std::vector <FMOD::Sound*> Soundlist_;
-  std::vector <FMOD::ChannelGroup*> Channel_;
+  std::vector <FMOD::Channel*> Channel_;
+  FMOD::ChannelGroup* ChannelGroup_;
 };
