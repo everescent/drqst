@@ -1,10 +1,7 @@
 #include "Platform.h"
 #include <iostream>
 Platform::Platform(float x, float y)
-	: GameObject{ CreatePlatform(1.0f, 1.0f, ".//Textures/download.jpg"),
 	  Col_Comp{ x - PLAT_WIDTH, y - PLAT_HEIGHT, 
-              x + PLAT_WIDTH, y + PLAT_HEIGHT, Rect }, 
-              x, y }
 {
 	SetActive(true);
 }
@@ -36,4 +33,8 @@ void Platform::Update(Dragon &player, const float &dt)
     if(player.PosY <= PosY + Sprite_.Get_Height() + 70.0f)
       player.PosY = PosY + Sprite_.Get_Height() + 70.0f;
   }
+<<<<<<< HEAD
+=======
+  
+>>>>>>> 6d13e8859f80e6fe3d662d0b5535d26fc05a0f0b
 }
