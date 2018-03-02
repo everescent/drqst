@@ -230,6 +230,7 @@
     <ClInclude Include="Wall2.h" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="level2.txt" />
     <Text Include="level_2.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
