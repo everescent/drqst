@@ -53,7 +53,7 @@ Lancelot::Lancelot(void)
 	this->Set_Direction(LEFT);				// face left
 	this->SetVelocity({ 300.0f, 0.0f });    // velocity for lancelot
 	this->Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
-
+	this->Reset_Idle_Time(idle_time);
 	this->Init();							// initialize the attacks lancelot have
 }
 
@@ -246,46 +246,63 @@ void Lancelot::Stab(Dragon& d, const float dt)
 void Lancelot::Slash(Dragon& d, const float dt)
 {
 	UNREFERENCED_PARAMETER(dt);
-	UNREFERENCED_PARAMETER(d);
-	static float slash_interval;
+	static float slash_interval = 0.5f;
+	static float angle = -25.0f;
+	static float angle_offset = 2.0f;
+	static bool second_slash = false;
 
 	if (!lancelot[SLASH].ongoing_attack)
-	{
-		auto & gg = lancelot[SLASH];
-		
+	{		
 		lancelot[SLASH].PosX = this->PosX - 100.0f;       // start attack from lancelot position
 		lancelot[SLASH].ongoing_attack = true;   // attack currently ongoing
-		lancelot[SLASH].Transform_.SetTranslate(gg.PosX, gg.PosY);
-		lancelot[SLASH].Transform_.Concat();
+		lancelot[SLASH].Transform_.SetTranslate(lancelot[SLASH].PosX, lancelot[SLASH].PosY);
 		lancelot[SLASH].SetActive(true);
 		lancelot[SLASH].Render();
 	}			 
-		
-	//lancelot[SLASH].Projectile::Update(ATTACK_SCALE);
 
-	//if (!lancelot[SLASH].GetCollided())
-	//{
-	//	if (lancelot[SLASH].Collision_.Dy_Rect_Rect(d.Collision_, lancelot[SLASH].GetVelocity(), d.GetVelocity(), dt))
-	//	{
-	//		lancelot[SLASH].SetCollided(true);
-	//		d.Decrease_HP();
-	//	}
-	//}
+	lancelot[SLASH].Projectile::Update(ATTACK_SCALE);
+	lancelot[SLASH].Transform_.SetRotation(angle += angle_offset);
+	lancelot[SLASH].Transform_.Concat();
 
-	//if (lancelot[SLASH].GetDist() > 100.0f) // range of slash
-	//{			 
-	//	lancelot[SLASH].SetActive(false);   // make stab disappaer
-	//	lancelot[SLASH].cooldown = true;    // start cooldown
-	//	lancelot[SLASH].ResetDist();        // reset distance travled back to 0
-	//	lancelot[SLASH].cooldown_timer = M_E ? 2.0f : 4.0f; // shorter cooldown when berserked
-	//	lancelot[SLASH].SetCollided(false);					// reset collision flag
+	if (!lancelot[SLASH].GetCollided())
+	{
+		if (lancelot[SLASH].Collision_.Dy_Rect_Rect(d.Collision_, lancelot[SLASH].GetVelocity(), d.GetVelocity(), dt))
+		{
+			lancelot[SLASH].SetCollided(true);
+			d.Decrease_HP();
+		}
+	}
 
-	//	current_action = IDLE;          // set behavior to idle
-	//	slash_interval = 1.0f;
-	//}
+	if (lancelot[SLASH].GetDist() > 200.0f) // range of slash
+	{			 
+		AEVec2 reverse = lancelot[SLASH].GetVelocity();
+		if (second_slash)
+		{
+			lancelot[SLASH].SetActive(false);   // make stab disappaer
+			lancelot[SLASH].cooldown = true;    // start cooldown
+			lancelot[SLASH].ResetDist();        // reset distance travled back to 0
+			lancelot[SLASH].cooldown_timer = M_E ? 2.0f : 0.0f; // shorter cooldown when berserked.
+			lancelot[SLASH].SetCollided(false);					// reset collision flag
+			lancelot[SLASH].ongoing_attack = false;
 
+			reverse.x = -reverse.x;
+			reverse.y = -reverse.y;
+			lancelot[SLASH].SetVelocity(reverse);
 
-
+			current_action = IDLE;          // set behavior to idle
+			second_slash = false;
+			angle_offset = -angle_offset;
+		}
+		else
+		{
+			reverse.x = -reverse.x;
+			reverse.y = -reverse.y;
+			second_slash = true;
+			lancelot[SLASH].SetVelocity(reverse);
+			lancelot[SLASH].ResetDist();        // reset distance travled back to 0
+			angle_offset = -angle_offset;
+		}
+	}
 
 }
 
@@ -356,7 +373,7 @@ void Lancelot::Init_Stab(void)
 void Lancelot::Init_Slash(void)
 {
 	lancelot[SLASH].PosY = ATK_START_POINT.y;
-	lancelot[SLASH].SetVelocity(AEVec2{ 0.0f, 0.0f }); // velocity for slash
+	lancelot[SLASH].SetVelocity(AEVec2{ 20.0f, 500.0f }); // velocity for slash
 	lancelot[SLASH].Transform_.SetScale(3.0f, 2.0f);       // determine the size of projectile
 	lancelot[SLASH].Transform_.SetRotation(-30.0f);
 	lancelot[SLASH].Transform_.Concat();
