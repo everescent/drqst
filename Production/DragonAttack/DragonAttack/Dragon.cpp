@@ -80,7 +80,7 @@ void Dragon::Update(Dragon& dummy, const float dt)
   //Update position of player
   Transform_.SetTranslate(PosX, PosY);
   Transform_.Concat();
-  Collision_.Update_Col_Pos(PosX - 100.0f, PosY - 100.0f, PosX + 100.0f, PosY + 100.0f);
+  Collision_.Update_Col_Pos(PosX - 70.0f, PosY - 70.0f, PosX + 70.0f, PosY + 70.0f);
   //Check if attack has been made
   if (Attack)
   {

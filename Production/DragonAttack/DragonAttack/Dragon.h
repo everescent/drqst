@@ -71,9 +71,9 @@ public:
   const Dragon &Get_this() const { return *this; }
   Dragon()
     //Initialize Characters class
-    :Characters{ S_CreateSquare(100.0f, "Bob.png"), 3,
-    Col_Comp{ Start_Pos_X - 100.0f, Start_Pos_Y - 100.0f,
-              Start_Pos_X + 100.0f, Start_Pos_Y + 100.0f, Rect} },
+    :Characters{ S_CreateSquare(70.0f, "Bob.png"), 3,
+    Col_Comp{ Start_Pos_X - 70.0f, Start_Pos_Y - 70.0f,
+              Start_Pos_X + 70.0f, Start_Pos_Y + 70.0f, Rect} },
     //Initialize data members
     Attack{ false }, Pwr_Up{ false }, Falling{ false }, Damage { 10 }, 
     M_Damage{ 15 }, Charge{ 0 }, Gravity{ 10.0f }, Dir{}, Buff{}, Fireball{},

@@ -1,6 +1,7 @@
 #include "Lancelot.h"
 #include "Boss_States.h"
 #include <iostream>
+#include <cmath>
 #include <vector>
 
 /*
@@ -25,29 +26,32 @@ namespace
 	
 	std::vector<Boss_Attack> lancelot; // array to store lancelot attack
 
-	Boss_Action_State current_action = ATTACK; // lancelot current action
+	Boss_Action_State current_action = MOVING; // lancelot current action
 
 	const int HEALTH = 1500; // health that lancelot start with
 	const int PHASE2_HP = 750; // phase 2 trigger
 
 	const char limit = 4; // num of lancelot attacks
 
-	float idle_time          = 3.0f; // idling time for lancelot
-	const float ATTACK_RANGE = 50.0f;
+	float idle_time          = 1.0f; // idling time for lancelot
+	const float ATTACK_RANGE = 100.0f;
 	const float ATTACK_SCALE = 20.0f;
 	static Lancelot_Moveset currAttk = STAB;
+	const AEVec2 ATK_START_POINT {0.0f, -30.0f};
+
+	const AEVec2 STARTING_POINT{ 200.0f, -200.0f };
 }
 
 Lancelot::Lancelot(void)
 	: Characters(S_CreateSquare(60.0f, ".//Textures/lancelot.jpg"),
 	  HEALTH, { 0.0f, 0.0f, 5.0f, 5.0f, Rect }),  M_E{false}
 {
-	(void) this->Transform_.SetTranslate(200.0f, Start_Pos_Y); // spawn lancelot at this location
+	(void) this->Transform_.SetTranslate(STARTING_POINT.x, STARTING_POINT.y); // spawn lancelot at this location
 	this->Transform_.Concat();
 	this->SetPos( 200.0f , Start_Pos_Y);    // update lancelot current coordinates
 	this->SetActive(true);					// spawn lancelot
 	this->Set_Direction(LEFT);				// face left
-	this->SetVelocity({ 120.0f, 0.0f });    // velocity for lancelot
+	this->SetVelocity({ 300.0f, 0.0f });    // velocity for lancelot
 	this->Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 
 	this->Init();							// initialize the attacks lancelot have
@@ -73,14 +77,8 @@ void Lancelot::Init()
 	lancelot.emplace_back(Boss_Attack(S_CreateSquare(ATTACK_SCALE, tex), // arondight
 		Col_Comp(0.0f, 0.0f, 5.0f, 5.0f, Rect))); 
 
-	for (char i = 0; i < limit - 1; ++i) // spawning location of attacks
-	{
-		lancelot[i].PosY = -120.0f;                      // y coordinates of attacks
-  (void)lancelot[i].SetVelocity(AEVec2{ 200.0f, 0.0f }); // velocity for slash
-		lancelot[i].Transform_.SetScale(3.0f, 2.0f);     // determine the size of projectile
-		lancelot[i].Transform_.Concat();
-		lancelot[i].Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
-	}
+	Init_Stab();
+	Init_Slash();
 
 	lancelot[MAD_ENHANCEMENT].cooldown_timer = 10.0f;  // prevent unique mechanic from activating at the start of fight
 	
@@ -90,29 +88,22 @@ void Lancelot::Init()
 
 void Lancelot::Idle(const Dragon& d, const float dt)
 {
-	static float idle = idle_time; //local variable just for this function
-
-	if (!idle)
-	{
-		idle = idle_time; // set the idling time
-	}
-
 	// change current_action to attack and idle to 0 once idling is over
-	if (idle <= 0)
+	if (Get_Idle_Time() <= 0)
 	{
-		current_action = d.PosX - this->PosX <= ATTACK_RANGE ? ATTACK : MOVING;
-		idle = 0;
+		current_action = abs(d.PosX - this->PosX) <= ATTACK_RANGE ? ATTACK : MOVING;
+		Reset_Idle_Time(idle_time);
 		Set_Attk_Dir();
 	}
 	else
-		idle -= dt;
+		Decrease_Idle_Time(dt);
 }
 
 void Lancelot::Moving(const Dragon &d, const float dt)
 {
 	// change the direction lancelot is facing
 
-	if ((d.PosX - this->PosX) == ATTACK_RANGE) // character and boss intersect
+	if (abs(d.PosX - this->PosX) <= ATTACK_RANGE) // character and boss intersect
 		this->Set_Direction(STAY);
 	else
 		//determine if dragon is right or left of king arthur
@@ -181,20 +172,16 @@ void Lancelot::Render(void)
 
 void Lancelot::Attack(Dragon &d, const float dt)
 {
-	//static const unsigned MAD_ENHANCEMENT_NOT_CD = 1;
-	//static const unsigned ARONDIGHT_NOT_CD = 2;
-	//static const unsigned SLASH_NOT_CD = 1 << 3;
-	//static const unsigned ALL_ON_CD = 1 << 4;
-
 	if (!lancelot[currAttk].ongoing_attack)
 	{
-		if(phase & PHASE_1 && ! lancelot[MAD_ENHANCEMENT].cooldown)
+	/*	if(phase == PHASE_1 && ! lancelot[MAD_ENHANCEMENT].cooldown)
 			currAttk = MAD_ENHANCEMENT;
 
-		else if (phase & PHASE_2 && ! lancelot[ARONDIGHT].cooldown)
+		else if (phase == PHASE_2 && ! lancelot[ARONDIGHT].cooldown)
 			currAttk = ARONDIGHT;
-
-		else if (! lancelot[SLASH].cooldown)
+;*/
+		//else 
+		if (!lancelot[SLASH].cooldown)
 			currAttk = SLASH;
 
 		else
@@ -222,7 +209,7 @@ void Lancelot::Lancelot_Phase2(void)
 }
 
 void Lancelot::Stab(Dragon& d, const float dt)
-{// need to account for increase in movement speed
+{
 	UNREFERENCED_PARAMETER(dt);
 
 	if (! lancelot[STAB].ongoing_attack)
@@ -245,11 +232,11 @@ void Lancelot::Stab(Dragon& d, const float dt)
 
 	if (lancelot[STAB].GetDist() > 100.0f) // range of stab
 	{
-		lancelot[STAB].SetActive(false);   // make stab disappaer
-		lancelot[STAB].cooldown = true;    // start cooldown
-		lancelot[STAB].ResetDist();        // reset distance travled back to 0
-		lancelot[STAB].SetCollided(false); // reset collided flag
-
+		lancelot[STAB].SetActive(false);       // make stab disappaer
+		lancelot[STAB].cooldown = true;        // start cooldown
+		lancelot[STAB].ResetDist();            // reset distance travled back to 0
+		lancelot[STAB].SetCollided(false);     // reset collided flag
+		lancelot[STAB].ongoing_attack = false; // attack animation has concluded
 		current_action = IDLE;             // set behavior to idle
 	}
 
@@ -259,39 +246,43 @@ void Lancelot::Stab(Dragon& d, const float dt)
 void Lancelot::Slash(Dragon& d, const float dt)
 {
 	UNREFERENCED_PARAMETER(dt);
-
+	UNREFERENCED_PARAMETER(d);
 	static float slash_interval;
 
 	if (!lancelot[SLASH].ongoing_attack)
 	{
-		lancelot[SLASH].PosX = this->PosX;       // start attack from lancelot position
-		lancelot[SLASH].SetActive(true);         // render attack on screen
+		auto & gg = lancelot[SLASH];
+		
+		lancelot[SLASH].PosX = this->PosX - 100.0f;       // start attack from lancelot position
 		lancelot[SLASH].ongoing_attack = true;   // attack currently ongoing
-		slash_interval = 1.0f;
+		lancelot[SLASH].Transform_.SetTranslate(gg.PosX, gg.PosY);
+		lancelot[SLASH].Transform_.Concat();
+		lancelot[SLASH].SetActive(true);
+		lancelot[SLASH].Render();
 	}			 
 		
-	lancelot[SLASH].Projectile::Update(ATTACK_SCALE);
+	//lancelot[SLASH].Projectile::Update(ATTACK_SCALE);
 
-	if (!lancelot[SLASH].GetCollided())
-	{
-		if (lancelot[SLASH].Collision_.Dy_Rect_Rect(d.Collision_, lancelot[SLASH].GetVelocity(), d.GetVelocity(), dt))
-		{
-			lancelot[SLASH].SetCollided(true);
-			d.Decrease_HP();
-		}
-	}
+	//if (!lancelot[SLASH].GetCollided())
+	//{
+	//	if (lancelot[SLASH].Collision_.Dy_Rect_Rect(d.Collision_, lancelot[SLASH].GetVelocity(), d.GetVelocity(), dt))
+	//	{
+	//		lancelot[SLASH].SetCollided(true);
+	//		d.Decrease_HP();
+	//	}
+	//}
 
-	if (lancelot[SLASH].GetDist() > 100.0f) // range of slash
-	{			 
-		lancelot[SLASH].SetActive(false);   // make stab disappaer
-		lancelot[SLASH].cooldown = true;    // start cooldown
-		lancelot[SLASH].ResetDist();        // reset distance travled back to 0
-		lancelot[SLASH].cooldown_timer = M_E ? 2.0f : 4.0f; // shorter cooldown when berserked
-		lancelot[SLASH].SetCollided(false);					// reset collision flag
+	//if (lancelot[SLASH].GetDist() > 100.0f) // range of slash
+	//{			 
+	//	lancelot[SLASH].SetActive(false);   // make stab disappaer
+	//	lancelot[SLASH].cooldown = true;    // start cooldown
+	//	lancelot[SLASH].ResetDist();        // reset distance travled back to 0
+	//	lancelot[SLASH].cooldown_timer = M_E ? 2.0f : 4.0f; // shorter cooldown when berserked
+	//	lancelot[SLASH].SetCollided(false);					// reset collision flag
 
-		current_action = IDLE;          // set behavior to idle
-		slash_interval = 1.0f;
-	}
+	//	current_action = IDLE;          // set behavior to idle
+	//	slash_interval = 1.0f;
+	//}
 
 
 
@@ -309,7 +300,7 @@ void Lancelot::Mad_Enhancement()
 	}
 	else
 	{
-		this->SetVelocity(AEVec2{ 500.0f, 0.0f });               // increase velocity
+		this->SetVelocity(AEVec2{ 350.0f, 0.0f });               // increase velocity
 		lancelot[MAD_ENHANCEMENT].cooldown_timer = 20.0f;        // start cooldown
 		lancelot[MAD_ENHANCEMENT].cooldown = true;               // cooldown duration
 		idle_time = 0.0f;                                        // no idle interval
@@ -352,6 +343,32 @@ void Lancelot::Set_Attk_Dir()
 	}
 }
 
+void Lancelot::Init_Stab(void)
+{
+	
+	lancelot[STAB].PosY = STARTING_POINT.y;
+	lancelot[STAB].SetVelocity(AEVec2{ 500.0f, 0.0f }); // velocity for slash
+	lancelot[STAB].Transform_.SetScale(3.0f, 2.0f);     // determine the size of projectile
+	lancelot[STAB].Transform_.Concat();
+	lancelot[STAB].Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+}
+
+void Lancelot::Init_Slash(void)
+{
+	lancelot[SLASH].PosY = ATK_START_POINT.y;
+	lancelot[SLASH].SetVelocity(AEVec2{ 0.0f, 0.0f }); // velocity for slash
+	lancelot[SLASH].Transform_.SetScale(3.0f, 2.0f);       // determine the size of projectile
+	lancelot[SLASH].Transform_.SetRotation(-30.0f);
+	lancelot[SLASH].Transform_.Concat();
+	lancelot[SLASH].Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+}
+
+void Lancelot::Init_Arondight(void)
+{
+
+	//lancelot[ARONDIGHT].SetVelocity(AEVec2{ 200.0f, 0.0f }); // velocity for slash
+
+}
 
 Lancelot::~Lancelot()
 {

@@ -35,9 +35,11 @@ class Dragon; //forward declaration
 class Characters : public GameObject
 {
 	private:
-		int hp;      // hp the character have
-		boolean moving;  // whether its moving or not
-		Direction direction;   // moving in left or right, up or down?
+		int hp;                    // hp the character have
+		Direction direction;       // moving in left or right, up or down?
+		static int score;          // player score for the stage
+		static int enemies_killed; // number of enemies killed
+		float idle_timing;         // idle timing for mob
 
 	public:
 		Characters(Sprite&& t_sprite, const int HP, Col_Comp &&t_col); // default constructor
@@ -46,13 +48,22 @@ class Characters : public GameObject
 		void Set_HP(int hp);       // set the hp for mob
 		void Decrease_HP(const char damage = 1);    // decrease the hp of the character
 
-		boolean Is_Moving() const;     // is character moving
-		void Set_Moving(boolean moving); // make a character stop/move
-
 		Direction Get_Direction() const; // get the direction of mob
 		void Set_Direction(Direction direction);// set the direction of mob
 
-		bool collision();
+		float Get_Idle_Time() const;
+		void  Reset_Idle_Time(float);
+		void  Decrease_Idle_Time(float);
+
+		//------------------------------------------------------------------------------------------
+		//STATIC FUNCTIONS--------------------------------------------------------------------------
+		static int Get_Score();                 // get current score
+		static void Add_Score(const int score); // add score
+		static void Reset_Score();              // reset score
+
+		static int Get_Enemies_Killed();        // get enemies killed
+		static void Add_Kill_count();			// add enemy kill count
+		static void Reset_Enemy_Killed();		// reset enemy kill count
 
     virtual void Update(Dragon& d, const float dt) = 0/*{ UNREFERENCED_PARAMETER(d); UNREFERENCED_PARAMETER(dt); }*/;
 };

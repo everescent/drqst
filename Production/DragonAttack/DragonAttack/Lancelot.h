@@ -26,6 +26,9 @@ private:
 	void Attack(Dragon &      , const float dt); // attack state of lancelot
 
 	void Init(void); //initializer for lancelot
+	void Init_Stab(void);
+	void Init_Slash(void);
+	void Init_Arondight(void);
 	void Set_Attk_Dir(void); // set the attack direction of lancelot
 
 	void Lancelot_Phase2(void);

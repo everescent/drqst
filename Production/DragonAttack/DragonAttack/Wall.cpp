@@ -9,11 +9,11 @@ Wall::Wall(float x, float y)
 	SetActive(true);
 }
 
-void Wall::Update(Dragon &player)
+void Wall::Update(Dragon &player, const float &dt)
 {
-	if (player.PosX < AEGfxGetWinMinX())
+	if (Collision_.Dy_Rect_Rect(player.Collision_, GetVelocity(), player.GetVelocity(), dt))
 	{
-		player.PosX = PosX + Sprite_.Get_Width() - 50.0f;
+		player.PosX = PosX + Sprite_.Get_Width() + 70.0f;
 	}
 
 	this->Transform_.SetTranslate(PosX, PosY);

@@ -27,5 +27,5 @@ private:
 public:
 	Wall(float x, float y); // default constructor
 
-	void Update(Dragon &player);
+	void Update(Dragon &player, const float &dt);
 };

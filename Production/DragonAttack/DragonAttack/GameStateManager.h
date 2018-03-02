@@ -17,6 +17,8 @@ Technology is prohibited.
 #include "GameStateList.h"
 #include "Main_Menu.h"
 #include "Test_Stage1.h"
+#include "Level_Import.h"
+
 
 namespace GSM
 {
