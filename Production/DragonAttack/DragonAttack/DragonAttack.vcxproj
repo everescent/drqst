@@ -185,6 +185,7 @@
     <ClCompile Include="Render.cpp" />
     <ClCompile Include="StageManager.cpp" />
     <ClCompile Include="Test_Stage1.cpp" />
+    <ClCompile Include="Test_Stage1_2.cpp" />
     <ClCompile Include="Tower.cpp" />
     <ClCompile Include="Transform.cpp" />
     <ClCompile Include="Wall.cpp" />
@@ -223,6 +224,7 @@
     <ClInclude Include="Render.h" />
     <ClInclude Include="StageManager.h" />
     <ClInclude Include="Test_Stage1.h" />
+    <ClInclude Include="Test_Stage1_2.h" />
     <ClInclude Include="Tower.h" />
     <ClInclude Include="Transform.h" />
     <ClInclude Include="Wall.h" />

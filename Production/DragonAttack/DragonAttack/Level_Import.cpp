@@ -18,58 +18,39 @@ Technology is prohibited.
 #include "Platform.h"
 #include "Grunt.h"
 #include <vector>
+#include "Camera.h"
+#include "GameStateList.h"
+#include "Floor.h"
+#include "Scarecrow.h"
 
-namespace
-{
-	static int ** MapData;
-	static int Map_Width;
-	static int Map_Height;
-	std::vector<Platform> platforms;  
-	Dragon *player; // for updating platforms because i can't render it properly without calling the update function that requires a ptr to Dragon as a parameter
 
-	//Platform ** P_array; 
-	int count = 6;
-
-	enum OBJ_TYPE
-	{
-		OBJ_TYPE_EMPTY, // 0
-		OBJ_PLATFORM,   // 1
-		OBJ_DRAGON,		// 2
-		OBJ_GRUNT,		// 3
-		OBJ_KING,		// 4
-		OBJ_MERLIN,		// 5
-		OBJ_LANCE,		// 6
-	};
-
-}
-
-bool Import_MapData(char* filename)
+bool Import_MapData(char* filename,  int**& MapData, int& Map_Width, int& Map_Height)
 {
 	FILE * Exported_file;
 
 	errno_t error = fopen_s(&Exported_file, filename, "r");
 
 	if (error)
-	{
-		return false;
-	};
+		{
+			return false;
+		};
 	
 	fscanf_s(Exported_file, "%*s %d", &Map_Width); 
 	fscanf_s(Exported_file, "%*s %d", &Map_Height); //continue the scan for the height 
 	//Allocate sufficient memory for the map 2d array
 	MapData = new int*[Map_Height];
 	for (int i = 0; i < Map_Height; ++i)
-	{
-		MapData[i] = new int [Map_Width];
-	}
+		{
+			MapData[i] = new int [Map_Width];
+		}
 
 	for (int y = 0; y < Map_Height; ++y)
-	{
-		for (int x = 0; x < Map_Width; ++x)
 		{
-			fscanf_s(Exported_file, "%d", &MapData[y][x]);
+			for (int x = 0; x < Map_Width; ++x)
+				{
+					fscanf_s(Exported_file, "%d", &MapData[y][x]);
+				}
 		}
-	}
 
 	return true;
 }
@@ -81,7 +62,7 @@ void SnapToCell(float *Coordinate)
 	*Coordinate = (float)i + 0.5f;
 }
 
-void PrintRetrievedInformation(void) //for checking Import function 
+void PrintRetrievedInformation(int** MapData, int Map_Width, int Map_Height) //for checking Import function 
 {
 	int x; //x_coordinate counter 
 	int y; //y_coordinate counter 
@@ -99,91 +80,120 @@ void PrintRetrievedInformation(void) //for checking Import function
 		for (x = 0; x < Map_Width; ++x)
 		{
 			printf("%d ", MapData[y][x]);
-			//If the x counter reaches the last column 
-			if ((x + 1) % Map_Height == 0)
-			{
-				printf("\n");
-			}
 		}
+		printf("\n");
 	}
 }
 
 float Convert_X(float& x)
 {
-	float global_x = x - AEGfxGetWinMinX();
-	std::cout <<" winMin:" << AEGfxGetWinMinX() << std::endl;
-	std::cout << global_x << std::endl;
+	float global_x = x* 80 + AEGfxGetWinMinX();
 	return global_x;
 }
 
  float Convert_Y(float& y)
  {
-	 float global_y = y ;
-	 global_y = AEGfxGetWinMaxY() - y;
-	 std::cout << global_y << std::endl;
+	 float global_y = AEGfxGetWinMaxY() - y* 90;
 	 return global_y;
  }
 
+ //void Construct_ALL() // call in Init
+ //{
+	// 
+	// for (int y = 0; y < Map_Height; ++y)
+	// {
+	//	 for (int x = 0; x < Map_Width; ++x)
+	//	 {
+	//		 //--------------------------------construct platform objects------------------------------------
+	//		 if (MapData[y][x] == OBJ_PLATFORM)
+	//		 {
+	//			 float f_x = (float)x;
+	//			 float f_y = (float)y;
+	//			 platforms.push_back(Platform{ Convert_X(f_x) , Convert_Y(f_y) });
+	//		 }
+	//		 //--------------------------------construct floor objects------------------------------------
+	//		 if (MapData[y][x] == OBJ_FLOOR)
+	//		 {
+	//			 float f_x = (float)x;
+	//			 float f_y = (float)y;
+	//			 floors.push_back( Floor { Convert_X(f_x) , Convert_Y(f_y) });
+	//		 }
+	//		 //--------------------------------construct enemy objects------------------------------------
+	//		 if (MapData[y][x] == OBJ_GRUNT)
+	//		 {
+	//			 float f_x = (float)x;
+	//			 float f_y = (float)y;
+	//			 enemies.push_back(Grunt{ Convert_X(f_x) , Convert_Y(f_y) });
+	//		 }
+	//		 //--------------------------------construct scarecrow objects-------------------------------
+	//		 if (MapData[y][x] == OBJ_SC)
+	//		 {
+	//			 float f_x = (float)x;
+	//			 float f_y = (float)y;
+	//			 scarecrows.push_back(Scarecrow { Convert_X(f_x) , Convert_Y(f_y) });
+	//		 }
+	//	 }
+	// }
+ //}
 
-namespace Level_Import
-{
-	void Load(void)
-	{
-		if (!Import_MapData("level_2.txt"))
-		{
-			AEGfxExit();
-		}
-	}	
-	
-	void Init(void)
-	{
-		player = new Dragon{};
-
-		int counter = 0;
-		for (int y = 0; y < Map_Height; ++y)
-		{
-			for (int x = 0; x < Map_Width; ++x)
-			{
-				if (MapData[y][x] == OBJ_PLATFORM)
-				{
-					//INSERT CODE HERE
-					if (count >= 0)
-					{
-						float f_x = (float)x;
-						float f_y = (float)y;
-					counter++;
-					platforms.push_back(Platform{ Convert_X(f_x) , Convert_Y(f_y) });
-						count--;
-					}
-				}
-			}
-		}
-		std::cout << counter << std::endl;
-	}
-
-	void Update(float dt)
-	{
-		for (Platform& elem : platforms)
-		{
-			elem.Update(*player, dt);
-		}
-	}
-
-	void Draw(void)
-	{
-		for ( Platform& elem : platforms)
-		{
-			elem.Render();
-		}
-	}
-
-	void Free(void)
-	{
-
-	}
-
-	void Unload(void)
-	{
-
-	}
-}
+//void Load_file(GAME_STATE game_state)
+//{
+//	switch (game_state)
+//	{
+//		case 1:
+//		{
+//			if (!Import_MapData("level1.txt"))
+//			{
+//				AEGfxExit();
+//			}
+//			break;
+//		}
+//		case 2:
+//		{
+//			if (!Import_MapData("level2.txt"))
+//			{
+//				AEGfxExit();
+//			}
+//			break;
+//		}
+//
+//		default:
+//		{
+//			std::cout << "wrong usuage of Load_file function, must be a level gamestate." << std::endl;
+//			AEGfxExit(); // Exit the game app
+//			break;
+//		}
+//	}
+//}	
+//	void Update(float dt)
+//	{
+//		for (Platform& elem : platforms)
+//		{
+//			elem.Update(*player, dt);
+//		}
+//
+//		player->Update(*player, dt);
+//	}
+//
+//	void Draw(void)
+//	{
+//		CamFollow(player->Transform_, 20, 120, player->GetFacing());
+//		for ( Platform& elem : platforms)
+//		{
+//			elem.Render();
+//		}
+//
+//		player->Render();
+//		player->Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+//	}
+//
+//	void Free(void)
+//	{
+//
+//	}
+//
+//	void Unload_file(GAME_STATE)
+//	{
+//
+//	}
+//}

@@ -1,13 +1,20 @@
 #include "Platform.h"
 #include <iostream>
 Platform::Platform(float x, float y)
+	: GameObject{ CreatePlatform(1.5f, 1.0f, ".//Textures/download.jpg"),
 	  Col_Comp{ x - PLAT_WIDTH, y - PLAT_HEIGHT, 
+                x + PLAT_WIDTH, y + PLAT_HEIGHT, Rect }, 
+                x, y }
 {
 	SetActive(true);
 }
 //(Jacob) Updated to make dragon stand on platform
 void Platform::Update(Dragon &player, const float &dt)
 {
+	//(Jacob) Changed to PosX and PosY
+	this->Transform_.SetTranslate(PosX, PosY);
+	this->Transform_.Concat();
+
   //(Jacob) So that I don't have to check for collision twice
   bool Colide = Collision_.Dy_Rect_Rect(player.Collision_, GetVelocity(), 
                 player.GetVelocity(), dt);
