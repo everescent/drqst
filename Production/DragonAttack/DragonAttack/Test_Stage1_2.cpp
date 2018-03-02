@@ -1,4 +1,4 @@
-#include "Test_Stage1.h"
+#include "Test_Stage1_2.h"
 #include "AEEngine.h"
 #include "Sprite.h"
 #include "Transform.h"
@@ -9,14 +9,12 @@
 #include "GameStateManager.h"
 #include "Dragon.h"
 #include "Floor.h"
-#include "Wall.h"  
-
+#include "Wall.h"
 #include "Platform.h"
 #include "Barrier.h"
 #include "Tower.h"
 #include "Scarecrow.h"
 #include "AI_Data_Factory.h"
-#include "Level_Import.h"
 #include <utility>
 #include <iostream>
 
@@ -25,38 +23,34 @@ namespace
 	Dragon *player;
 	Sprite *BG;
 	Transform *M_BG;
-	
+
 	Scarecrow *scarecrow1, *scarecrow2;
 	Barrier *box1, *box_health;
-	Grunt *soldier1 ,*soldier2;
+	Grunt *soldier1, *soldier2;
 	Grunt *archer1;
 	Tower *archerTower;
 	Platform *plat1, *plat2, *plat3;
 
-	Floor *floor1, *floor2, *platformingFloor, *exitFloor, *testFloor;
+	Floor *floor1, *floor2, *platformingFloor, *exitFloor;
 	Wall *LeftWall, *platformingWall1, *platformingWall2, *platformingWall3, *exitWall;
-
-	static int** MapData;
-	int Map_Width;
-	int Map_Height;
-	std::vector<Platform> platforms;
 
 	/*std::vector<Characters*> c;
 	char num_of_mob = 1;*/
 }
 
-namespace Test_Stage1_1
+namespace Test_Stage1_2
 {
+	void Init(void)
+	{
+		/*for(char i = 0; i < num_of_mob; ++i)
+		c[i]->SetActive(true);*/
+
+		player->SetActive(true);
+	}
+
 	void Load(void)
 	{
-		if (!Import_MapData("level2.txt", MapData, Map_Width, Map_Height)) { AEGfxExit(); }
-
-		std::cout << "Width:" << Map_Width << std::endl;
-		std::cout << "Height:" << Map_Height << std::endl;
-		PrintRetrievedInformation(MapData, Map_Width, Map_Height);
-
-<<<<<<< HEAD
-		BG = new Sprite{ CreateBG(1.0f, "../../Illustrations/Environment/Cobblestone.png") };
+		BG = new Sprite{ CreateBG(4.0f, "../../Illustrations/Environment/Cobblestone.png", 10.0f, 10.0f) };
 		M_BG = new Transform{};
 		player = new Dragon{};
 
@@ -79,96 +73,25 @@ namespace Test_Stage1_1
 		plat2 = new Platform{ 2800.0f, -20.0f }; //ok
 		plat3 = new Platform{ 3000.0f, 110.0f }; //ok
 
-																						 // Walls
+												 // Walls
 		LeftWall = new Wall{ -620.0f, -160.0f }; //ok
 		platformingWall1 = new Wall{ 2430.0f, -475.0f }; //ok
-		platformingWall2 = new Wall2{ 3335.0f, -475.0f }; //ok
-		exitWall = new Wall2{ 5200.0f, -70.0f }; //ok
+		platformingWall2 = new Wall{ 3360.0f, -475.0f }; //ok
+		platformingWall3 = new Wall{ 3360.0f, -405.0f }; //ok
+		exitWall = new Wall{ 5200.0f, -70.0f }; //ok
 
-																						 // Floors
+												 // Floors
 		floor1 = new Floor{ 0.0f, -350.0f }; //ok
 		floor2 = new Floor{ 1200.0f, -350.0f }; //ok
 		platformingFloor = new Floor{ 2500.0f, -500.0f }; //ok
-		exitFloor = new Floor{ 4650.0f, -230.0f }; //ok
+		exitFloor = new Floor{ 4600.0f, -230.0f }; //ok
 
-																							 //c.push_back(Create_Boss_AI(KING_ARTHUR));
-=======
-	void Load(void)
-	{
-		BG = new Sprite { CreateBG(5.0f, "../../Illustrations/BG/BG_Stage1.png", 1.0f, 5.0f)};
-		M_BG   = new Transform { };
-		player = new Dragon    { };
-
-		// Enemies
-		scarecrow1       = new Scarecrow {  750.0f, -190.0f };
-		scarecrow2       = new Scarecrow { 1050.0f, -190.0f };
-
-		soldier1         = new Grunt { 1900.0f, -190.0f };
-		soldier2         = new Grunt { 2000.0f, -190.0f };
-		archer1          = new Grunt { 4500.0f,  230.0f };
-
-		// Tower
-		archerTower      = new Tower { 4500.0f, 0.0f };
-
-		// Fence
-		box1             = new Barrier { 1400.0f, -170.0f };
-		box_health       = new Barrier { 4900.0f,  -50.0f };
-
-		// Floating Platforms
-		plat1            = new Platform { 2600.0f, -150.0f }; //ok
-		plat2            = new Platform { 2850.0f,  -20.0f }; //ok
-		plat3            = new Platform { 3050.0f,  110.0f }; //ok
-				
-		// Walls
-		LeftWall         = new Wall  { -620.0f, -160.0f }; //ok
-		platformingWall1 = new Wall  { 2430.0f, -475.0f }; //ok
-		platformingWall2 = new Wall { 3360.0f, -475.0f }; //ok
-		platformingWall3 = new Wall { 3360.0f, -405.0f }; //ok
-		exitWall         = new Wall { 5200.0f, -70.0f  }; //ok
-
-		// Floors
-		floor1           = new Floor {    0.0f, -350.0f }; //ok
-		floor2           = new Floor { 1200.0f, -350.0f }; //ok
-		platformingFloor = new Floor { 2500.0f, -500.0f }; //ok
-		exitFloor        = new Floor { 4600.0f, -230.0f }; //ok
-		testFloor        = new Floor { 4600.0f, -330.0f }; //ok
-
-		//c.push_back(Create_Boss_AI(KING_ARTHUR));
->>>>>>> 6d13e8859f80e6fe3d662d0b5535d26fc05a0f0b
-	}
-	
-	void Init(void)
-	{
-		/*for(char i = 0; i < num_of_mob; ++i)
-		c[i]->SetActive(true);*/
-
-		player->SetActive(true);
-
-		for (int y = 0; y < Map_Height; ++y)
-		{
-			for (int x = 0; x < Map_Width; ++x)
-			{
-				if (MapData[y][x] == OBJ_PLATFORM)
-							 {
-								 float f_x = (float)x;
-								 float f_y = (float)y;
-								 platforms.push_back(Platform{ Convert_X(f_x) , Convert_Y(f_y) });
-							 }
-			}
-		}
+												   //c.push_back(Create_Boss_AI(KING_ARTHUR));
 	}
 
-	
-						 
 
 	void Update(float dt)
 	{
-		for (Platform& elem : platforms)
-					{
-						elem.Update(*player, dt);
-					}
-
-
 		scarecrow1->Update(*player, dt);
 		scarecrow2->Update(*player, dt);
 		soldier1->Update(*player, dt);
@@ -193,13 +116,12 @@ namespace Test_Stage1_1
 		floor2->Update(*player, dt);
 		platformingFloor->Update(*player, dt);
 		exitFloor->Update(*player, dt);
-		testFloor->Update(*player, dt);
 
 		player->Update(*player, dt);
 		//std::cout << (int)player->PosX <<", "<< (int)player->PosY << std::endl;
 		/*for (char i = 0; i < num_of_mob; ++i)
-			c[i]->Update(*player, dt);*/
-			
+		c[i]->Update(*player, dt);*/
+
 	}
 
 	void Draw(void)
@@ -207,14 +129,15 @@ namespace Test_Stage1_1
 		CamFollow(player->Transform_, 20, 120, player->GetFacing());
 		/*if (AEInputCheckCurr(AEVK_LSHIFT))
 		{
-			CamFollow(player->Transform_, Cam_Offset_X, Cam_Offset_Y, player->GetFacing());
+		CamFollow(player->Transform_, Cam_Offset_X, Cam_Offset_Y, player->GetFacing());
 		}
 		else
 		{
-			CamStatic();
+		CamStatic();
 		}*/
 
 		BG->Render_Object(*M_BG);
+
 
 		scarecrow1->Render();
 		scarecrow1->Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
@@ -239,28 +162,22 @@ namespace Test_Stage1_1
 		plat2->Render();
 		plat3->Render();
 
-		//LeftWall->Render();
+		LeftWall->Render();
 		//platformingWall1->Render();
 		//platformingWall2->Render();
 		//platformingWall3->Render();
-		//exitWall->Render();
+		exitWall->Render();
 
 		floor1->Render();
 		floor2->Render();
 		platformingFloor->Render();
 		exitFloor->Render();
-		testFloor->Render();
 
 		player->Render();
 		player->Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 
-		for (Platform& elem : platforms)
-					{
-						elem.Render();
-					}
-
 		/*for (char i = 0; i < num_of_mob; ++i)
-			c[i]->Render();*/
+		c[i]->Render();*/
 	}
 
 	void Free(void)
@@ -268,7 +185,6 @@ namespace Test_Stage1_1
 		delete BG;
 		delete M_BG;
 		delete player;
-
 		// Enemies
 		delete scarecrow1;
 		delete scarecrow2;
@@ -290,8 +206,7 @@ namespace Test_Stage1_1
 		delete platformingWall2;
 		delete platformingWall3;
 		delete exitWall;
-		
-		delete testFloor;
+
 		delete floor1;
 		delete floor2;
 		delete platformingFloor;

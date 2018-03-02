@@ -41,42 +41,50 @@ Grunt::Grunt(float x, float y)
 
 void Grunt::Update(Dragon &d, const float dt)
 {
-	LineOfSight(d);
-
-	if (PlayerSeen == true)
+	if (this->IsActive() == true)
 	{
-		MoveTowardPlayer(d);
+		LineOfSight(d);
 
-		if (PlayerInRange == true)
+		if (PlayerSeen == true)
 		{
-			AttackPlayer(d);
-		}
-	}
-	else
-	{
-		Idle(d);
-	}
+			MoveTowardPlayer(d);
 
-
-
-	// update the collision box of grunt
-	this->Collision_.Update_Col_Pos(this->PosX - GRUNT_SCALE, this->PosY - GRUNT_SCALE,  // min point
-									this->PosX + GRUNT_SCALE, this->PosY + GRUNT_SCALE);	// max point
-
-	/*this->Transform_.SetTranslate(this->PosX, this->PosY);
-	this->Transform_.Concat();		*/						
-
-
-
-	for (char i = 0; i < Bullet_Buffer; ++i)
-		if (d.GetFireball()[i].IsActive())
-			if (Collision_.Dy_Rect_Rect(d.GetFireball()[i].Collision_, this->GetVelocity(), d.GetFireball()[i].GetVelocity(), dt))
+			if (PlayerInRange == true)
 			{
-				Decrease_HP(d.GetDamage());
-				//SetActive false here
-				d.GetFireball()[i].Projectile::ResetDist();
-				d.GetFireball()[i].SetActive(false);
+				AttackPlayer(d);
 			}
+		}
+		else
+		{
+			Idle(d);
+		}
+
+
+
+		// update the collision box of grunt
+		this->Collision_.Update_Col_Pos(this->PosX - GRUNT_SCALE, this->PosY - GRUNT_SCALE,  // min point
+			this->PosX + GRUNT_SCALE, this->PosY + GRUNT_SCALE);	// max point
+
+		/*this->Transform_.SetTranslate(this->PosX, this->PosY);
+		this->Transform_.Concat();		*/
+
+
+
+		for (char i = 0; i < Bullet_Buffer; ++i)
+			if (d.GetFireball()[i].IsActive())
+				if (Collision_.Dy_Rect_Rect(d.GetFireball()[i].Collision_, this->GetVelocity(), d.GetFireball()[i].GetVelocity(), dt))
+				{
+					Decrease_HP(d.GetDamage());
+
+					if (this->Get_HP() == 0)
+					{
+						SetActive(false);
+					}
+
+					d.GetFireball()[i].Projectile::ResetDist();
+					d.GetFireball()[i].SetActive(false);
+				}
+	}
 }
 
 void Grunt::MoveTowardPlayer(const Dragon &d)

@@ -20,7 +20,7 @@ Technology is prohibited.
 
 const float FLOOR_WIDTH { 640.0f }; //The width of the floor
 const float FLOOR_HEIGHT{ 100.0f }; //The height of the floor
-const float PLAT_WIDTH  { 64.0f  }; //The width of one platform
+const float PLAT_WIDTH  { 45.0f  }; //The width of one platform
 const float PLAT_HEIGHT { 20.0f  }; //The height of one platform
 const float BG_WIDTH    { 640.0f }; //The width of one background
 const float BG_HEIGHT   { 360.0f }; //The height of one background

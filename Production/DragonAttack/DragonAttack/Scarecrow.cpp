@@ -21,17 +21,21 @@ Scarecrow::Scarecrow(float x, float y)
 
 void Scarecrow::Update(Dragon &d, const float dt)
 {
-	this->Transform_.SetTranslate(PosX, PosY);
-	this->Transform_.Concat();
+	if (this->IsActive() == true)
+	{
+		this->Transform_.SetTranslate(PosX, PosY);
+		this->Transform_.Concat();
 
-	for (char i = 0; i < Bullet_Buffer; ++i)
-		if (d.GetFireball()[i].IsActive())
-			if (Collision_.Dy_Rect_Rect(d.GetFireball()[i].Collision_, this->GetVelocity(), d.GetFireball()[i].GetVelocity(), dt))
-			{
-				Decrease_HP(d.GetDamage());
-				//SetActive false here
-				d.GetFireball()[i].Projectile::ResetDist();
-				d.GetFireball()[i].SetActive(false);
-			}
+		for (char i = 0; i < Bullet_Buffer; ++i)
+			if (d.GetFireball()[i].IsActive())
+				if (Collision_.Dy_Rect_Rect(d.GetFireball()[i].Collision_, this->GetVelocity(), d.GetFireball()[i].GetVelocity(), dt))
+				{
+					Decrease_HP(d.GetDamage());
+					SetActive(false);
+					d.GetFireball()[i].Projectile::ResetDist();
+					d.GetFireball()[i].SetActive(false);
+				}
+
+	}
 }
 

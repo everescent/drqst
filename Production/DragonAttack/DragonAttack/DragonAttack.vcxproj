@@ -185,10 +185,10 @@
     <ClCompile Include="Render.cpp" />
     <ClCompile Include="StageManager.cpp" />
     <ClCompile Include="Test_Stage1.cpp" />
+    <ClCompile Include="Test_Stage1_2.cpp" />
     <ClCompile Include="Tower.cpp" />
     <ClCompile Include="Transform.cpp" />
     <ClCompile Include="Wall.cpp" />
-    <ClCompile Include="Wall2.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AI_Data_Factory.h" />
@@ -224,12 +224,13 @@
     <ClInclude Include="Render.h" />
     <ClInclude Include="StageManager.h" />
     <ClInclude Include="Test_Stage1.h" />
+    <ClInclude Include="Test_Stage1_2.h" />
     <ClInclude Include="Tower.h" />
     <ClInclude Include="Transform.h" />
     <ClInclude Include="Wall.h" />
-    <ClInclude Include="Wall2.h" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="level2.txt" />
     <Text Include="level_2.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
