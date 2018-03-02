@@ -189,11 +189,11 @@
     <ClCompile Include="Tower.cpp">
       <Filter>Game_Object\Objects</Filter>
     </ClCompile>
-    <ClCompile Include="Wall2.cpp">
-      <Filter>Game_Object\Objects</Filter>
-    </ClCompile>
     <ClCompile Include="Scarecrow.cpp">
       <Filter>Characters\AI\Basic_Mobs</Filter>
+    </ClCompile>
+    <ClCompile Include="Test_Stage1_2.cpp">
+      <Filter>Game_States\Stage</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -302,11 +302,11 @@
     <ClInclude Include="Tower.h">
       <Filter>Game_Object\Objects</Filter>
     </ClInclude>
-    <ClInclude Include="Wall2.h">
-      <Filter>Game_Object\Objects</Filter>
-    </ClInclude>
     <ClInclude Include="Scarecrow.h">
       <Filter>Characters\AI\Basic_Mobs</Filter>
+    </ClInclude>
+    <ClInclude Include="Test_Stage1_2.h">
+      <Filter>Game_States\Stage</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

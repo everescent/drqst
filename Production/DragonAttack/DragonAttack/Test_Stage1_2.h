@@ -1,6 +1,6 @@
 #pragma once
 
-namespace Test_Stage1_1
+namespace Test_Stage1_2
 {
 	void Init(void);
 
