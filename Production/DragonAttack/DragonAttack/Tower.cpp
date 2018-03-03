@@ -40,12 +40,16 @@ void Tower::Update(Dragon &player, const float &dt)
 			}
 
 			for (char i = 0; i < Bullet_Buffer; ++i)
+			{
 				if (player.GetFireball()[i].IsActive())
+				{
 					if (Collision_.Dy_Rect_Rect(player.GetFireball()[i].Collision_, this->GetVelocity(), player.GetFireball()[i].GetVelocity(), dt))
 					{
+						player.AddCharge();
 						player.GetFireball()[i].Projectile::ResetDist();
 						player.GetFireball()[i].SetActive(false);
 					}
-
+				}
+			}
 	}
 }

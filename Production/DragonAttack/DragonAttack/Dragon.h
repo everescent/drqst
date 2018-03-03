@@ -28,7 +28,7 @@ enum PowerUp {
   INVUL   //Invul
 };
 
-const char  Max_Charge     { 15      }; //Maximum charge for mega fireball
+const char  Max_Charge     { 10      }; //Maximum charge for mega fireball
 const int   Bullet_Buffer  { 10      }; //Amount of fireballs at any one time
 const float Bullet_Interval{ 400.0f  }; //Minimum distance between each fireball
 const float Bullet_Death   { 900.0f  }; //Distance when bullet dies
@@ -69,6 +69,9 @@ public:
   float GetFacing() const { return Facing; }
   //Returns this pos
   const Dragon &Get_this() const { return *this; }
+  //Gets current charge
+  int Get_Charge();
+
   Dragon()
     //Initialize Characters class
     :Characters{ S_CreateSquare(70.0f, "Bob.png"), 3,
@@ -110,6 +113,7 @@ public:
 private:
 
   bool  Attack;    //Check if player is attacking
+  bool  MAttack;   //Check if player is mega attacking
   bool  Pwr_Up;    //Check if power up is in effect
   bool  Falling;   //Check if player is falling
   char  Damage;    //Amount of damage each fireball does

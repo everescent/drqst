@@ -18,7 +18,8 @@ Technology is prohibited.
 #include "Main_Menu.h"
 #include "Test_Stage1.h"
 #include "Level_Import.h"
-
+#include "Test_Stage1_2.h"
+#include "test_level_import.h"
 
 namespace GSM
 {

@@ -31,8 +31,8 @@ namespace // global variables just for THIS file
 
 Grunt::Grunt(float x, float y)
 	: Characters(S_CreateSquare(GRUNT_SCALE, ".//Textures/grunt.png"),
-	  grunt_hp, 
-	  Col_Comp{ x - GRUNT_SCALE, y - GRUNT_SCALE , x + GRUNT_SCALE , y + GRUNT_SCALE, Rect })
+		grunt_hp,
+		Col_Comp{ x - GRUNT_SCALE, y - GRUNT_SCALE , x + GRUNT_SCALE , y + GRUNT_SCALE, Rect })
 {
 	SetActive(true);
 	PosX = x;
@@ -47,7 +47,7 @@ void Grunt::Update(Dragon &d, const float dt)
 
 		if (PlayerSeen == true)
 		{
-			MoveTowardPlayer(d);
+			MoveTowardPlayer(d, dt);
 
 			if (PlayerInRange == true)
 			{
@@ -59,35 +59,62 @@ void Grunt::Update(Dragon &d, const float dt)
 			Idle(d);
 		}
 
+		this->Transform_.SetTranslate(this->PosX, this->PosY);
+		this->Transform_.Concat();
 
+		PosY -= 10.0f; //testing gravity
 
 		// update the collision box of grunt
 		this->Collision_.Update_Col_Pos(this->PosX - GRUNT_SCALE, this->PosY - GRUNT_SCALE,  // min point
-			this->PosX + GRUNT_SCALE, this->PosY + GRUNT_SCALE);	// max point
+		this->PosX + GRUNT_SCALE, this->PosY + GRUNT_SCALE); // max point
 
-		/*this->Transform_.SetTranslate(this->PosX, this->PosY);
-		this->Transform_.Concat();		*/
-
+		/*if (Collision_.Dy_Rect_Rect(d.Collision_, GetVelocity(), d.GetVelocity(), dt))
+		{
+		if (d.PosX > this->PosX)
+		{
+		d.PosX = PosX + Sprite_.Get_Width() + Sprite_.Get_Height();
+		}
+		else if (d.PosX < this->PosX)
+		{
+		d.PosX = PosX - Sprite_.Get_Width() - Sprite_.Get_Height();
+		}
+		}*/
 
 
 		for (char i = 0; i < Bullet_Buffer; ++i)
+		{
 			if (d.GetFireball()[i].IsActive())
+			{
 				if (Collision_.Dy_Rect_Rect(d.GetFireball()[i].Collision_, this->GetVelocity(), d.GetFireball()[i].GetVelocity(), dt))
 				{
 					Decrease_HP(d.GetDamage());
-
-					if (this->Get_HP() == 0)
-					{
-						SetActive(false);
-					}
+					d.AddCharge();
 
 					d.GetFireball()[i].Projectile::ResetDist();
 					d.GetFireball()[i].SetActive(false);
 				}
+			}
+		}
+
+		if (d.GetMfireball().IsActive())
+		{
+			if (Collision_.Dy_Rect_Rect(d.GetMfireball().Collision_, this->GetVelocity(), d.GetMfireball().GetVelocity(), dt))
+			{
+				Decrease_HP(d.GetMDamage());
+				d.GetMfireball().Projectile::ResetDist();
+				d.GetMfireball().SetActive(false);
+			}
+		}
+
+		if (this->Get_HP() <= 0)
+		{
+			SetActive(false);
+		}
+
 	}
 }
 
-void Grunt::MoveTowardPlayer(const Dragon &d)
+void Grunt::MoveTowardPlayer(const Dragon &d, const float dt)
 {
 	MovementX = (this->PosX) - d.PosX;
 	MovementY = (this->PosY) - d.PosY;
@@ -98,12 +125,12 @@ void Grunt::MoveTowardPlayer(const Dragon &d)
 		PlayerInRange = true;
 	}
 	else
-	if (MovementX > 100.0f || MovementX < -100.0f) // not entering
-	{
-		PlayerInRange = false;
-	}
+		if (MovementX > 100.0f || MovementX < -100.0f) // not entering
+		{
+			PlayerInRange = false;
+		}
 
-	//PosX -= MovementX / 60;
+	PosX -= MovementX * 0.6f * dt;
 	//PosY -= MovementY / 60;
 
 	//this->Transform_.SetTranslate(PosX, PosY); //PosX += GetVelocity
@@ -113,7 +140,7 @@ void Grunt::MoveTowardPlayer(const Dragon &d)
 void Grunt::LineOfSight(const Dragon &d)
 {
 	float playerDist = (d.PosX - this->PosX);
-	if (playerDist <= 400.0f && playerDist >= -400.0f)  // vision range
+	if (playerDist <= 600.0f && playerDist >= -600.0f)  // vision range
 	{
 		PlayerSeen = true;
 	}
@@ -164,8 +191,8 @@ void Grunt::Idle(const Dragon &d)
 		MovementX = (this->PosX) - IdleXPos;
 		PosX -= MovementX / 120;
 
-		this->Transform_.SetTranslate(PosX, PosY);
-		this->Transform_.Concat();
+		/*this->Transform_.SetTranslate(PosX, PosY);
+		this->Transform_.Concat();*/
 	}
 	else
 	{
@@ -177,8 +204,8 @@ void Grunt::Idle(const Dragon &d)
 			}
 
 			PosX += moveSpd;
-			this->Transform_.SetTranslate(PosX, PosY);
-			this->Transform_.Concat();
+			/*this->Transform_.SetTranslate(PosX, PosY);
+			this->Transform_.Concat();*/
 		}
 	}
 }

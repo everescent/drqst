@@ -22,7 +22,7 @@ class Grunt : public  Characters
 private:
 	void LineOfSight(const Dragon &d);
 
-	void MoveTowardPlayer(const Dragon &d);
+	void MoveTowardPlayer(const Dragon &d, const float dt);
 
 	void AttackPlayer(const Dragon &d);
 

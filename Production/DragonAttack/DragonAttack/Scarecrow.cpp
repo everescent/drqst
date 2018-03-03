@@ -23,14 +23,22 @@ void Scarecrow::Update(Dragon &d, const float dt)
 {
 	if (this->IsActive() == true)
 	{
+		this->PosY -= 10.0f; //testing gravity
+
 		this->Transform_.SetTranslate(PosX, PosY);
 		this->Transform_.Concat();
+
+
+		this->Collision_.Update_Col_Pos(this->PosX - SC_SCALE, this->PosY - SC_SCALE,  // min point
+		this->PosX + SC_SCALE, this->PosY + SC_SCALE); // max point
+
 
 		for (char i = 0; i < Bullet_Buffer; ++i)
 			if (d.GetFireball()[i].IsActive())
 				if (Collision_.Dy_Rect_Rect(d.GetFireball()[i].Collision_, this->GetVelocity(), d.GetFireball()[i].GetVelocity(), dt))
 				{
-					Decrease_HP(d.GetDamage());
+					//Decrease_HP(d.GetDamage());
+					d.AddCharge();
 					SetActive(false);
 					d.GetFireball()[i].Projectile::ResetDist();
 					d.GetFireball()[i].SetActive(false);

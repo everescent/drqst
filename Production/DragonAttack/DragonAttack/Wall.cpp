@@ -1,12 +1,15 @@
 #include "Wall.h"
 #include <iostream>
+
 Wall::Wall(float x, float y)
 	: GameObject{ S_CreateRectangle(50.0f, 200.0f, ".//Textures/download.jpg"),
 	Col_Comp{ x - 50.0f, y - 200.0f,
-			  x + 50.0f, y + 200.0f, Rect },
-			  x, y }
+	x + 50.0f, y + 200.0f, Rect },
+	x, y }
 {
 	SetActive(true);
+	PosX = x;
+	PosY = y;
 }
 
 void Wall::Update(Dragon &player, const float &dt)
@@ -18,11 +21,11 @@ void Wall::Update(Dragon &player, const float &dt)
 	{
 		if (player.PosX > this->PosX)
 		{
-			player.PosX = PosX + Sprite_.Get_Width() + 70.0f;
+			player.PosX = PosX + Sprite_.Get_Width() + player.Sprite_.Get_Width();
 		}
 		else if (player.PosX < this->PosX)
 		{
-			player.PosX = PosX - Sprite_.Get_Width() - 70.0f;
+			player.PosX = PosX - Sprite_.Get_Width() - player.Sprite_.Get_Width();
 		}
 	}
 
