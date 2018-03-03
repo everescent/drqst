@@ -40,8 +40,6 @@ void Platform::Update(Dragon &player, const float &dt)
     if(player.PosY <= PosY + Sprite_.Get_Height() + 70.0f)
       player.PosY = PosY + Sprite_.Get_Height() + 70.0f;
   }
-<<<<<<< HEAD
-=======
+
   
->>>>>>> 6d13e8859f80e6fe3d662d0b5535d26fc05a0f0b
 }

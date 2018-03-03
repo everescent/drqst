@@ -47,52 +47,52 @@ namespace
 
 namespace Test_Stage1_1
 {
-	void Load(void)
-	{
-		if (!Import_MapData("level2.txt", MapData, Map_Width, Map_Height)) { AEGfxExit(); }
-
-		std::cout << "Width:" << Map_Width << std::endl;
-		std::cout << "Height:" << Map_Height << std::endl;
-		PrintRetrievedInformation(MapData, Map_Width, Map_Height);
-
-<<<<<<< HEAD
-		BG = new Sprite{ CreateBG(1.0f, "../../Illustrations/Environment/Cobblestone.png") };
-		M_BG = new Transform{};
-		player = new Dragon{};
-
-		// Enemies
-		scarecrow1 = new Scarecrow{ 750.0f, -190.0f };
-		scarecrow2 = new Scarecrow{ 1050.0f, -190.0f };
-		soldier1 = new Grunt{ 1900.0f, -190.0f };
-		soldier2 = new Grunt{ 2000.0f, -190.0f };
-		archer1 = new Grunt{ 4500.0f, 230.0f };
-
-		// Tower
-		archerTower = new Tower{ 4500.0f, 0.0f };
-
-		// Fence
-		box1 = new Barrier{ 1400.0f, -170.0f };
-		box_health = new Barrier{ 4900.0f, -50.0f };
-
-		// Floating Platforms
-		plat1 = new Platform{ 2600.0f, -150.0f }; //ok
-		plat2 = new Platform{ 2800.0f, -20.0f }; //ok
-		plat3 = new Platform{ 3000.0f, 110.0f }; //ok
-
-																						 // Walls
-		LeftWall = new Wall{ -620.0f, -160.0f }; //ok
-		platformingWall1 = new Wall{ 2430.0f, -475.0f }; //ok
-		platformingWall2 = new Wall2{ 3335.0f, -475.0f }; //ok
-		exitWall = new Wall2{ 5200.0f, -70.0f }; //ok
-
-																						 // Floors
-		floor1 = new Floor{ 0.0f, -350.0f }; //ok
-		floor2 = new Floor{ 1200.0f, -350.0f }; //ok
-		platformingFloor = new Floor{ 2500.0f, -500.0f }; //ok
-		exitFloor = new Floor{ 4650.0f, -230.0f }; //ok
-
-																							 //c.push_back(Create_Boss_AI(KING_ARTHUR));
-=======
+//	void Load(void)
+//	{
+//		if (!Import_MapData("level2.txt", MapData, Map_Width, Map_Height)) { AEGfxExit(); }
+//
+//		std::cout << "Width:" << Map_Width << std::endl;
+//		std::cout << "Height:" << Map_Height << std::endl;
+//		PrintRetrievedInformation(MapData, Map_Width, Map_Height);
+//
+//
+//		BG = new Sprite{ CreateBG(1.0f, "../../Illustrations/Environment/Cobblestone.png") };
+//		M_BG = new Transform{};
+//		player = new Dragon{};
+//
+//		// Enemies
+//		scarecrow1 = new Scarecrow{ 750.0f, -190.0f };
+//		scarecrow2 = new Scarecrow{ 1050.0f, -190.0f };
+//		soldier1 = new Grunt{ 1900.0f, -190.0f };
+//		soldier2 = new Grunt{ 2000.0f, -190.0f };
+//		archer1 = new Grunt{ 4500.0f, 230.0f };
+//
+//		// Tower
+//		archerTower = new Tower{ 4500.0f, 0.0f };
+//
+//		// Fence
+//		box1 = new Barrier{ 1400.0f, -170.0f };
+//		box_health = new Barrier{ 4900.0f, -50.0f };
+//
+//		// Floating Platforms
+//		plat1 = new Platform{ 2600.0f, -150.0f }; //ok
+//		plat2 = new Platform{ 2800.0f, -20.0f }; //ok
+//		plat3 = new Platform{ 3000.0f, 110.0f }; //ok
+//
+//																						 // Walls
+//		LeftWall = new Wall{ -620.0f, -160.0f }; //ok
+//		platformingWall1 = new Wall{ 2430.0f, -475.0f }; //ok
+//		platformingWall2 = new Wall2{ 3335.0f, -475.0f }; //ok
+//		exitWall = new Wall2{ 5200.0f, -70.0f }; //ok
+//
+//																						 // Floors
+//		floor1 = new Floor{ 0.0f, -350.0f }; //ok
+//		floor2 = new Floor{ 1200.0f, -350.0f }; //ok
+//		platformingFloor = new Floor{ 2500.0f, -500.0f }; //ok
+//		exitFloor = new Floor{ 4650.0f, -230.0f }; //ok
+//
+//																							 //c.push_back(Create_Boss_AI(KING_ARTHUR));
+//=======
 	void Load(void)
 	{
 		BG = new Sprite { CreateBG(5.0f, "../../Illustrations/BG/BG_Stage1.png", 1.0f, 5.0f)};
@@ -133,8 +133,6 @@ namespace Test_Stage1_1
 		exitFloor        = new Floor { 4600.0f, -230.0f }; //ok
 		testFloor        = new Floor { 4600.0f, -330.0f }; //ok
 
-		//c.push_back(Create_Boss_AI(KING_ARTHUR));
->>>>>>> 6d13e8859f80e6fe3d662d0b5535d26fc05a0f0b
 	}
 	
 	void Init(void)
