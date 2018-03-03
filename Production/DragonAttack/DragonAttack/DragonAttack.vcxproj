@@ -155,7 +155,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AI_Data_Factory.cpp" />
-    <ClCompile Include="AI_Test_Stage.cpp" />
     <ClCompile Include="Animation.cpp" />
     <ClCompile Include="Archer.cpp" />
     <ClCompile Include="Audio_Engine.cpp" />
@@ -178,6 +177,7 @@
     <ClCompile Include="Level_Import.cpp" />
     <ClCompile Include="Mage.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="EngineProof.cpp" />
     <ClCompile Include="Main_Menu.cpp" />
     <ClCompile Include="Merlin.cpp" />
     <ClCompile Include="Physics.cpp" />
@@ -194,7 +194,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AI_Data_Factory.h" />
-    <ClInclude Include="AI_Test_Stage.h" />
     <ClInclude Include="Animation.h" />
     <ClInclude Include="Archer.h" />
     <ClInclude Include="Audio_Engine.h" />
@@ -218,6 +217,7 @@
     <ClInclude Include="Lancelot.h" />
     <ClInclude Include="Level_Import.h" />
     <ClInclude Include="Mage.h" />
+    <ClInclude Include="EngineProof.h" />
     <ClInclude Include="Main_Menu.h" />
     <ClInclude Include="Merlin.h" />
     <ClInclude Include="Physics.h" />
