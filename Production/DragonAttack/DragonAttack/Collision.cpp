@@ -14,7 +14,7 @@ Technology is prohibited.
 /* End Header **************************************************************************/
 
 #include "Collision.h" 
-#include <iostream> // for debugging
+
 bool Col_Comp::St_Rect_Rect( const Col_Comp &aabb_obj2)
 {
 	//check if the two objects are Rectangles 
@@ -50,14 +50,6 @@ bool Col_Comp::St_Circle_Circle( const Col_Comp &objB)
 
 	return false;
 
-}
-
-bool Col_Comp::St_Rect_Point(float point_x, float point_y)
-{
-
-	if (point_x >= min.x && point_x <= max.x && point_y >= min.y && point_y <= max.y ) return true;
-
-	return false;
 }
 
 bool Col_Comp::Dy_Rect_Rect( const Col_Comp &B, const AEVec2 &velocity_A, const AEVec2 &velocity_B, float dt)
@@ -188,7 +180,10 @@ Shape Col_Comp::GetShape()
 	return shape;
 }
 
-
+Obj_T Col_Comp::GetObjType()
+{
+	return ObjectType;
+}
 
 
 

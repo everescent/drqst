@@ -1,7 +1,2 @@
-﻿  Objects.cpp
-  Generating Code...
-  Compiling...
-  main.cpp
-  Generating Code...
-  DragonAttack.vcxproj -> G:\Documents\Digipen\Semester 02\GAM150\drqst\Production\DragonAttack\Debug\DragonAttack.exe
-  DragonAttack.vcxproj -> G:\Documents\Digipen\Semester 02\GAM150\drqst\Production\DragonAttack\Debug\DragonAttack.pdb (Full PDB)
+﻿  GameStateManager.cpp
+LINK : fatal error LNK1201: error writing to program database 'C:\Users\xiongweijavon.lee\Desktop\drqst\Production\DragonAttack\Debug\DragonAttack.pdb'; check for insufficient disk space, invalid path, or insufficient privilege

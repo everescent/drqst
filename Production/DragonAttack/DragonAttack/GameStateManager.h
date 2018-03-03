@@ -15,10 +15,9 @@ Technology is prohibited.
 
 #pragma once
 #include "GameStateList.h"
-#include "EngineProof.h"
+#include "Main_Menu.h"
 #include "Test_Stage1.h"
 #include "Level_Import.h"
-#include "Main_Menu.h"
 
 
 namespace GSM
