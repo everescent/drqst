@@ -24,7 +24,7 @@ Characters *Create_Basic_AI(const BASIC_AI mob, const AEVec2& position)
 		break;
 	case MAGE:  return new Mage (position);
 		break;
-
+  case ARCHER: return new Archer(position.x, position.y);
 	default: break;
 	}
 	

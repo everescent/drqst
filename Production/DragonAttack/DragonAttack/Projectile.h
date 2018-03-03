@@ -22,7 +22,7 @@ class Projectile : public GameObject {
 
 public:
   //Updates the projectile, if active
-  void Update(const float scale = 0.0f, const bool circle = false) 
+  void Update(const float scale = 0.0f, const bool circle = false, const float angle = 90.0f) 
   {
     //Update distance travelled and resultant matrix
     if (IsActive())
@@ -31,13 +31,13 @@ public:
       {
         PosX += GetVelocity().x * 0.016f;
         PosY += GetVelocity().y * 0.016f;
-        Transform_.SetRotation(90.0f);
+        Transform_.SetRotation(angle);
       }
       else
       {
         PosX -= GetVelocity().x * 0.016f;
         PosY -= GetVelocity().y * 0.016f;
-        Transform_.SetRotation(-90.0f);
+        Transform_.SetRotation(-angle);
       }
       Transform_.SetTranslate(PosX, PosY);
       //If circle update circle
@@ -67,17 +67,17 @@ public:
     }
   }
   //Distance travelled by the projectile
-  void AddDist(const float &dist) { Distance += dist; }
+  void AddDist(const float dist) { Distance += dist; }
   //Returns Distance travelled by the projectile
   float GetDist() const { return Distance; }
   //Resets the distance travelled
   void ResetDist() { Distance = 0.0f; }
   //Sets the direction of the projectile
-  void SetDir(const bool &dir) { Direction = dir; }
+  void SetDir(const bool dir) { Direction = dir; }
   //Returns the direction of the projectile
   bool GetDir() const { return Direction; }
   //Sets Collided true or false
-  void SetCollided(const bool &Colide) { Collided = Colide; }
+  void SetCollided(const bool Colide) { Collided = Colide; }
   //Returns Collided
   bool GetCollided() const { return Collided; }
   //Default contructor does nothing

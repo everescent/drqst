@@ -14,6 +14,7 @@ Technology is prohibited.
 /* End Header **************************************************************************/
 
 #pragma once
+#include "Archer.h"
 #include "Grunt.h"
 #include "Mage.h"
 #include "Merlin.h"
@@ -25,7 +26,7 @@ enum BASIC_AI
 {
 	GRUNT,
 	MAGE,
-
+  ARCHER
 	// add any mobs that you have created here
 };
 

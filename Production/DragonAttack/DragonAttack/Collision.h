@@ -32,14 +32,14 @@ namespace
 		Not_Collided
 	};
 
-	enum Obj_T //an enumeration that includes all object types for easy comparison between object to object collision. 
-	{
-		Obj_Dragon,
-		Obj_Fireball,
-		Obj_Megafireball,
-		Obj_Enemy,
-		Obj_KA,
-	};
+	//enum Obj_T //an enumeration that includes all object types for easy comparison between object to object collision. 
+	//{
+	//	Obj_Dragon,
+	//	Obj_Fireball,
+	//	Obj_Megafireball,
+	//	Obj_Enemy,
+	//	Obj_KA,
+	//};
 
 }
 
@@ -85,7 +85,7 @@ public:
   }
   //Jacob Suggested Edit END////////////////////////////////////////////////////////////////////////////
 
-	Col_Comp() {} // call default constructor if no parameters given. 
+	Col_Comp() {} // call this constructor for non-collidable objects
 
 	~Col_Comp() {}; //default dstor
 
@@ -97,11 +97,11 @@ public:
 
 	bool St_Circle_Circle( const Col_Comp &aabb_obj2); //static collision for Circle to Circle
 
+	bool St_Rect_Point(float point_x, float point_y);
+
 	bool Dy_Rect_Rect(const Col_Comp &B, const AEVec2 &velocity_A, const AEVec2 &velocity_B, float dt);
 
 	Shape GetShape(); 
-
-	Obj_T GetObjType();
 
 
 private:
@@ -115,8 +115,6 @@ private:
 	int radius = 0; //represents the radius of a circle 
 
 	Shape shape = NoShape;
-
-	Obj_T ObjectType;
 
 	AEVec2 velocity = { 0, 0 }; //represents the current position of the object 
 
