@@ -75,10 +75,11 @@ void Lancelot::Init()
 	lancelot.emplace_back(Boss_Attack());                                // mad enhancement
 
 	lancelot.emplace_back(Boss_Attack(S_CreateSquare(ATTACK_SCALE, tex), // arondight
-		Col_Comp(0.0f, 0.0f, 5.0f, 5.0f, Rect))); 
+		Col_Comp(0.0f, 400.0f, Point))); 
 
 	Init_Stab();
 	Init_Slash();
+	Init_Arondight();
 
 	lancelot[MAD_ENHANCEMENT].cooldown_timer = 10.0f;  // prevent unique mechanic from activating at the start of fight
 	
@@ -177,13 +178,11 @@ void Lancelot::Attack(Dragon &d, const float dt)
 	/*	if(phase == PHASE_1 && ! lancelot[MAD_ENHANCEMENT].cooldown)
 			currAttk = MAD_ENHANCEMENT;
 
-		else if (phase == PHASE_2 && ! lancelot[ARONDIGHT].cooldown)
+		else */ if (phase == PHASE_2 && ! lancelot[ARONDIGHT].cooldown)
 			currAttk = ARONDIGHT;
-;*/
-		//else 
-		if (!lancelot[SLASH].cooldown)
+   
+		else if (!lancelot[SLASH].cooldown)
 			currAttk = SLASH;
-
 		else
 			currAttk = STAB;
 	}
@@ -196,7 +195,7 @@ void Lancelot::Attack(Dragon &d, const float dt)
 		break;
 	case MAD_ENHANCEMENT: Mad_Enhancement();
 		break;
-	case ARONDIGHT:
+	case ARONDIGHT: Arondight(d, dt);
 		break;
 	}
 
@@ -257,7 +256,6 @@ void Lancelot::Slash(Dragon& d, const float dt)
 		lancelot[SLASH].ongoing_attack = true;   // attack currently ongoing
 		lancelot[SLASH].Transform_.SetTranslate(lancelot[SLASH].PosX, lancelot[SLASH].PosY);
 		lancelot[SLASH].SetActive(true);
-		lancelot[SLASH].Render();
 	}			 
 
 	lancelot[SLASH].Projectile::Update(ATTACK_SCALE);
@@ -330,16 +328,60 @@ void Lancelot::Mad_Enhancement()
 void Lancelot::Arondight(Dragon& d, const float dt)
 {
 	UNREFERENCED_PARAMETER(d);
-	UNREFERENCED_PARAMETER(dt);
-	
+
+	static float angle = -90.0f;
+	static float angle_offset = 2.0f;
+	static float charge_time;
+	static AEVec2 end_point;
+	// translate lancelot to the middle of the screen first
 	// lancelot pauses for 1 second before unleashing arondight
-	static float pause = 1.0f;
 
-	while (pause < 0)
-		pause -= dt;
+	// need a line collision
+	// line needs a normal
+	// rotate the normal
+	// translate the point
+
+	if ( ! lancelot[ARONDIGHT].ongoing_attack)
+	{
+		this->PosX = 0.0f;
+		this->Transform_.SetTranslate(PosX, PosY);
+		this->Transform_.Concat();
+
+		charge_time = 2.0f;
+		angle = -90.0f;
+		end_point = { 0.0f, 400.0f };
+
+		lancelot[ARONDIGHT].SetPos(0.0f, ATK_START_POINT.y +200);
+		lancelot[ARONDIGHT].Transform_.SetTranslate(lancelot[ARONDIGHT].PosX, lancelot[ARONDIGHT].PosY);
+		lancelot[ARONDIGHT].Transform_.SetRotation(-90.0f);
+		lancelot[ARONDIGHT].Transform_.Concat();
+		lancelot[ARONDIGHT].SetActive(true);
+		lancelot[ARONDIGHT].ongoing_attack = true;
+
+	}
 
 
-	pause = 2.0f;
+
+	while (charge_time > 0)
+	{
+		charge_time -= dt;
+		return;
+	}
+
+	lancelot[ARONDIGHT].Projectile::Update(ATTACK_SCALE);
+	lancelot[ARONDIGHT].Transform_.SetRotation(angle += angle_offset);
+	lancelot[ARONDIGHT].Transform_.Concat();
+
+	if (lancelot[ARONDIGHT].GetDist() > 600.0f)
+	{
+		lancelot[ARONDIGHT].SetActive(false);
+		lancelot[ARONDIGHT].ongoing_attack = false;
+		lancelot[ARONDIGHT].ResetDist();
+		lancelot[ARONDIGHT].cooldown = true;
+		lancelot[ARONDIGHT].cooldown_timer = 0.0f;
+	}
+
+
 }
 
 void Lancelot::Set_Attk_Dir()
@@ -375,16 +417,18 @@ void Lancelot::Init_Slash(void)
 	lancelot[SLASH].PosY = ATK_START_POINT.y;
 	lancelot[SLASH].SetVelocity(AEVec2{ 20.0f, 500.0f }); // velocity for slash
 	lancelot[SLASH].Transform_.SetScale(3.0f, 2.0f);       // determine the size of projectile
-	lancelot[SLASH].Transform_.SetRotation(-30.0f);
 	lancelot[SLASH].Transform_.Concat();
 	lancelot[SLASH].Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 }
 
 void Lancelot::Init_Arondight(void)
 {
+	lancelot[ARONDIGHT].SetVelocity(AEVec2{ 600.0f, 600.0f }); // velocity for slash
+	lancelot[ARONDIGHT].Transform_.SetScale(11.5f, 3.0f);       // determine the size of projectile
+	
 
-	//lancelot[ARONDIGHT].SetVelocity(AEVec2{ 200.0f, 0.0f }); // velocity for slash
-
+	lancelot[ARONDIGHT].Transform_.Concat();
+	lancelot[ARONDIGHT].Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 }
 
 Lancelot::~Lancelot()
