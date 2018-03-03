@@ -59,6 +59,7 @@ Audio_Engine::Audio_Engine(unsigned SoundNum, const std::function<void(std::vect
   }
 }
 
+void Audio_Engine::Play(const int SongNum)
 {
   Audio_->playSound(Soundlist_[SongNum], ChannelGroup_, false, &Channel_[SongNum]);
 }
@@ -93,3 +94,4 @@ Audio_Engine::~Audio_Engine()
   Channel_.clear();
   Playlist_.clear();
   Audio_->release();
+}
