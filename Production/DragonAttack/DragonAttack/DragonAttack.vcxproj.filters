@@ -195,15 +195,12 @@
     <ClCompile Include="Test_Stage1_2.cpp">
       <Filter>Game_States\Stage</Filter>
     </ClCompile>
-<<<<<<< HEAD
     <ClCompile Include="Archer.cpp">
       <Filter>Characters\AI\Basic_Mobs</Filter>
     </ClCompile>
     <ClCompile Include="AI_Test_Stage.cpp">
       <Filter>Game_States\Stage</Filter>
     </ClCompile>
-=======
->>>>>>> 7fbdacc84fa4f0434d8efca4ec2518ebc1df553a
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h">
@@ -317,15 +314,12 @@
     <ClInclude Include="Test_Stage1_2.h">
       <Filter>Game_States\Stage</Filter>
     </ClInclude>
-<<<<<<< HEAD
     <ClInclude Include="Archer.h">
       <Filter>Characters\AI\Basic_Mobs</Filter>
     </ClInclude>
     <ClInclude Include="AI_Test_Stage.h">
       <Filter>Game_States\Stage</Filter>
     </ClInclude>
-=======
->>>>>>> 7fbdacc84fa4f0434d8efca4ec2518ebc1df553a
   </ItemGroup>
   <ItemGroup>
     <Text Include="level_2.txt">
