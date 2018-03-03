@@ -26,6 +26,7 @@ public:
   Audio_Engine(unsigned SoundNum, const std::function<void (std::vector<std::string>&)>& Init);
   ~Audio_Engine();
   void Play(const int SongNum, const bool Loop);
+  void Play(const int SongNum);
   void SetVolume(const int SongNum, const float Volume);
   void SetLoop(const int SongNum, FMOD_MODE Loop);
   void SetPause(const int SongNum, const bool Pause);
