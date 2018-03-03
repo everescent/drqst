@@ -155,6 +155,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AI_Data_Factory.cpp" />
+    <ClCompile Include="AI_Test_Stage.cpp" />
     <ClCompile Include="Animation.cpp" />
     <ClCompile Include="Audio_Engine.cpp" />
     <ClCompile Include="Barrier.cpp" />
@@ -193,6 +194,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AI_Data_Factory.h" />
+    <ClInclude Include="AI_Test_Stage.h" />
     <ClInclude Include="Animation.h" />
     <ClInclude Include="Audio_Engine.h" />
     <ClInclude Include="Barrier.h" />
