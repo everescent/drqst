@@ -102,9 +102,6 @@
     <ClCompile Include="GameStateManager.cpp">
       <Filter>GSM</Filter>
     </ClCompile>
-    <ClCompile Include="Main_Menu.cpp">
-      <Filter>Game_States</Filter>
-    </ClCompile>
     <ClCompile Include="Characters.cpp">
       <Filter>Characters</Filter>
     </ClCompile>
@@ -195,6 +192,12 @@
     <ClCompile Include="Test_Stage1_2.cpp">
       <Filter>Game_States\Stage</Filter>
     </ClCompile>
+    <ClCompile Include="EngineProof.cpp">
+      <Filter>Game_States</Filter>
+    </ClCompile>
+    <ClCompile Include="Main_Menu.cpp">
+      <Filter>Game_States</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h">
@@ -208,9 +211,6 @@
     </ClInclude>
     <ClInclude Include="GameStateManager.h">
       <Filter>GSM</Filter>
-    </ClInclude>
-    <ClInclude Include="Main_Menu.h">
-      <Filter>Game_States</Filter>
     </ClInclude>
     <ClInclude Include="Characters.h">
       <Filter>Characters</Filter>
@@ -307,6 +307,12 @@
     </ClInclude>
     <ClInclude Include="Test_Stage1_2.h">
       <Filter>Game_States\Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="EngineProof.h">
+      <Filter>Game_States</Filter>
+    </ClInclude>
+    <ClInclude Include="Main_Menu.h">
+      <Filter>Game_States</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

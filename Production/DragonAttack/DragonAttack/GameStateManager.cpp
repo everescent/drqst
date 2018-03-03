@@ -19,21 +19,21 @@ Technology is prohibited.
 namespace GSM
 {
 
-	GAME_STATE previous = GS_LEVEL1;
-	GAME_STATE current  = GS_LEVEL1;
-	GAME_STATE next     = GS_LEVEL1;
+	GAME_STATE previous = GS_MAIN;
+	GAME_STATE current  = GS_MAIN;
+	GAME_STATE next     = GS_MAIN;
 
 	GameStateFunctions GSF[GS_QUIT] = { 0 };
 
 	// initializes the array of function pointers for each state
 	void GSM_Init(void)
 	{
-		GSF[GS_MAIN].Init     = Main_Menu::Init;
-		GSF[GS_MAIN].Load     = Main_Menu::Load;
-		GSF[GS_MAIN].Update   = Main_Menu::Update;
-		GSF[GS_MAIN].Draw     = Main_Menu::Draw;
-		GSF[GS_MAIN].Free     = Main_Menu::Free;
-		GSF[GS_MAIN].Unload   = Main_Menu::Unload;
+		GSF[GS_MAIN].Init     = EngineProof::Init;
+		GSF[GS_MAIN].Load     = EngineProof::Load;
+		GSF[GS_MAIN].Update   = EngineProof::Update;
+		GSF[GS_MAIN].Draw     = EngineProof::Draw;
+		GSF[GS_MAIN].Free     = EngineProof::Free;
+		GSF[GS_MAIN].Unload   = EngineProof::Unload;
 
 		GSF[GS_LEVEL1].Init	  = Test_Stage1_1::Init;
 		GSF[GS_LEVEL1].Load	  = Test_Stage1_1::Load;
@@ -57,6 +57,13 @@ namespace GSM
 		//GSF[GS_LEVEL_IMPORT].Draw   = Level_Import::Draw;
 		//GSF[GS_LEVEL_IMPORT].Free   = Level_Import::Free;
 		//GSF[GS_LEVEL_IMPORT].Unload = Level_Import::Unload;
+
+		GSF[GS_MAIN].Init		= Main_Menu::Init;
+		GSF[GS_MAIN].Load		= Main_Menu::Load;
+		GSF[GS_MAIN].Update = Main_Menu::Update;
+		GSF[GS_MAIN].Draw		= Main_Menu::Draw;
+		GSF[GS_MAIN].Free		= Main_Menu::Free;
+		GSF[GS_MAIN].Unload = Main_Menu::Unload;
 		
 		SM::StageManagerInit();
 	}

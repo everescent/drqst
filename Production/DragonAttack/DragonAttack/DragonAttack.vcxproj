@@ -176,6 +176,7 @@
     <ClCompile Include="Level_Import.cpp" />
     <ClCompile Include="Mage.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="EngineProof.cpp" />
     <ClCompile Include="Main_Menu.cpp" />
     <ClCompile Include="Merlin.cpp" />
     <ClCompile Include="Physics.cpp" />
@@ -214,6 +215,7 @@
     <ClInclude Include="Lancelot.h" />
     <ClInclude Include="Level_Import.h" />
     <ClInclude Include="Mage.h" />
+    <ClInclude Include="EngineProof.h" />
     <ClInclude Include="Main_Menu.h" />
     <ClInclude Include="Merlin.h" />
     <ClInclude Include="Physics.h" />
