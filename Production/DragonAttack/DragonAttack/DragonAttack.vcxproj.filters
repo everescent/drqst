@@ -204,6 +204,9 @@
     <ClCompile Include="AI_Test_Stage.cpp">
       <Filter>Characters\AI</Filter>
     </ClCompile>
+    <ClCompile Include="test_level_import.cpp">
+      <Filter>Game_States\Stage</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h">
@@ -325,6 +328,9 @@
     </ClInclude>
     <ClInclude Include="AI_Test_Stage.h">
       <Filter>Characters\AI</Filter>
+    </ClInclude>
+    <ClInclude Include="test_level_import.h">
+      <Filter>Game_States\Stage</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
