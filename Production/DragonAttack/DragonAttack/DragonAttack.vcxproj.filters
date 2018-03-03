@@ -198,8 +198,11 @@
     <ClCompile Include="Archer.cpp">
       <Filter>Characters\AI\Basic_Mobs</Filter>
     </ClCompile>
+    <ClCompile Include="EngineProof.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="AI_Test_Stage.cpp">
-      <Filter>Game_States\Stage</Filter>
+      <Filter>Characters\AI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -317,8 +320,11 @@
     <ClInclude Include="Archer.h">
       <Filter>Characters\AI\Basic_Mobs</Filter>
     </ClInclude>
+    <ClInclude Include="EngineProof.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="AI_Test_Stage.h">
-      <Filter>Game_States\Stage</Filter>
+      <Filter>Characters\AI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

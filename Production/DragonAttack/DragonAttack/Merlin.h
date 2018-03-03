@@ -13,7 +13,6 @@ Technology is prohibited.
 */
 /* End Header **************************************************************************/
 
-
 #pragma once
 #include "AEEngine.h"
 #include "Characters.h"
@@ -32,10 +31,11 @@ enum Merlin_Attack_State {
 //Alias for Merlin Attack State
 using MAS = Merlin_Attack_State;
 
-const int    Merlin_HP       { 500 };     //Merlin's HP
-const int    M_Phase2_HP     { 250 };     //Merlin's phase 2 HP
-const float  Blink_CD_Time   { 10.0f };     //Cooldown time for Blink
-const float  Merlin_Att_Inter{ 2.0f };     //Merlin's Attack Interval
+//Global Read-Only Variables START///////////////////////////////////////////////////////
+const int    Merlin_HP       { 500   };   //Merlin's HP
+const int    M_Phase2_HP     { 250   };   //Merlin's phase 2 HP
+const float  Blink_CD_Time   { 10.0f };   //Cooldown time for Blink
+const float  Merlin_Att_Inter{ 2.0f  };   //Merlin's Attack Interval
 
 const float  Eball_CD_Time   { 1.0f    }; //Energy Ball cooldown time
 const float  Eball_Death     { 1000.0f }; //How far the energy ball travels
@@ -55,6 +55,7 @@ const AEVec2 Blink_Pos_3     { 0.0f, 180.0f   }; //(Point) 3rd blink postion
 
 const float  Merlin_Start_X  { 320.0f  }; //Merlin default position X
 const float  Merlin_Start_Y  { -120.0f }; //Merlin default position Y
+//Global Read-Only Variables END/////////////////////////////////////////////////////////
 
 class Merlin : public Characters {
 
@@ -123,7 +124,7 @@ private:
   void S_Eball_Update();               //Single shot update
   void Sp_Eball_Update();              //Spread shot update
   void A_Rain_Update(Dragon &player);  //Arrow rain update
-  void Colision_Check(Dragon &player); //Checks if attacks hiht
+  void Colision_Check(Dragon &player); //Checks if attacks hit
   //Attack Functions END/////////////////////////////////////////////////////////////////
 
   //State Functions START///////////////////////////////////////////////////////////////
