@@ -47,6 +47,7 @@ class Characters : public GameObject
 
 		int Get_HP() const;         // get HP of mob
 		void Set_HP(int hp);       // set the hp for mob
+		void Increase_HP(const int increment);      // increase hp via power ups / status
 		void Decrease_HP(const char damage = 1);    // decrease the hp of the character
 
 		Direction Get_Direction() const; // get the direction of mob

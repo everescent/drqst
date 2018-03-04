@@ -45,6 +45,11 @@ int Characters::Get_HP() const
 	return hp;
 }
 
+void Characters::Increase_HP(const int increment)
+{
+	hp += increment;
+}
+
 Direction Characters::Get_Direction(void) const
 {
 	return direction;
