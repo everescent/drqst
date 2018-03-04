@@ -1,3 +1,18 @@
+/* Start Header ************************************************************************/
+/*!
+\file       PickUp.h
+\author     Jacob Lim
+\par email: jacob.lim\@digipen.edu
+\brief
+  PickUp class body declared here.
+
+Copyright (C) 2018 DigiPen Institute of Technology.
+Reproduction or disclosure of this file or its contents
+without the prior written consent of DigiPen Institute of
+Technology is prohibited.
+*/
+/* End Header **************************************************************************/
+
 #pragma once
 #include "GameObject.h"
 #include "Dragon.h"
@@ -24,7 +39,10 @@ class PickUp : public GameObject{
 public:
   PickUp(Sprite &&t_sprite, Col_Comp && t_col, const PUT type, const float posX, const float posY);
   void Update(Dragon &player, const float dt);
+  //Returns the number of coins collected
   static int GetCoin() { return Coin_Counter; }
+  //Resets teh number of coins collected
+  static void ResetCoin() { Coin_Counter = 0; }
 
 private:
   PUT Type_;

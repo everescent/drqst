@@ -1,5 +1,19 @@
+/* Start Header ************************************************************************/
+/*!
+\file       Archer.cpp
+\author     Jacob Lim
+\par email: jacob.lim\@digipen.edu
+\brief
+  Archer class member functions defined here.
+
+Copyright (C) 2018 DigiPen Institute of Technology.
+Reproduction or disclosure of this file or its contents
+without the prior written consent of DigiPen Institute of
+Technology is prohibited.
+*/
+/* End Header **************************************************************************/
+
 #include "Archer.h"
-#include <iostream>
 
 using namespace ArcherMacros;
 
@@ -122,7 +136,6 @@ void Archer::Attack(Dragon &player, const float /*dt*/)
   Arrow_CD = Archer_CD_Time;
   Attack_ = true;
   Distance = 0.0f;
-  std::cout << "ATTACK";
 }
 
 void Archer::CheckState(Dragon &player, const float /*dt*/)

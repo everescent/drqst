@@ -1,3 +1,18 @@
+/* Start Header ************************************************************************/
+/*!
+\file       Archer.h
+\author     Jacob Lim
+\par email: jacob.lim\@digipen.edu
+\brief
+  Archer class body declared here.
+
+Copyright (C) 2018 DigiPen Institute of Technology.
+Reproduction or disclosure of this file or its contents
+without the prior written consent of DigiPen Institute of
+Technology is prohibited.
+*/
+/* End Header **************************************************************************/
+
 #pragma once
 #include "Characters.h"
 #include "Projectile.h"
@@ -7,15 +22,15 @@
 
 namespace ArcherMacros {
   //Global Read-Only Variables START///////////////////////////////////////////////////////
-  const int   Archer_HP{ 10 }; //Archer HP
-  const float Archer_Scale{ 100.0f }; //Scale of Archer mesh
-  const float Archer_Speed{ 120.0f }; //Scale of Archer mesh
-  const float Arrow_Scale{ 20.0f }; //Scale of arrow mesh
-  const float Arrow_Death{ 800.0f }; //Scale of arrow mesh
-  const float Archer_LOS{ 350.0f }; //Line Of Sight
-  const float Archer_CD_Time{ 2.0f }; //Attack Interval
+  const int   Archer_HP      { 10     }; //Archer HP
+  const float Archer_Scale   { 100.0f }; //Scale of Archer mesh
+  const float Archer_Speed   { 120.0f }; //Scale of Archer mesh
+  const float Arrow_Scale    { 20.0f  }; //Scale of arrow mesh
+  const float Arrow_Death    { 800.0f }; //Scale of arrow mesh
+  const float Archer_LOS     { 350.0f }; //Line Of Sight
+  const float Archer_CD_Time { 2.0f   }; //Attack Interval
   const float Archer_Max_Dist{ 200.0f }; //Maximum travelling distance
-  const float Gravity{ 10.0f }; //Gravity
+  const float Gravity        { 10.0f  }; //Gravity
   //Global Read-Only Variables END/////////////////////////////////////////////////////////
 }
 class Archer : public Characters {
@@ -32,14 +47,15 @@ public:
 
 private:
 
-  Projectile Arrow;                            //Arrow to shoot
-  void(Archer::*Archer_State)(Dragon &player, const float dt); //Pointer to current state function
-  Boss_Action_State A_Curr;                    //Current state
-  Boss_Action_State A_Next;                    //Next state
-  bool Dragon_Seen;                            //Flag to check if dragon is seen
-  bool Attack_;                                //Check if attack on cooldown
-  float Distance;                              //Distacne travelled by Archer
-  float Arrow_CD;                              //Arrow cooldown timer
+  Projectile Arrow;         //Arrow to shoot
+  //Pointer to current state function
+  void(Archer::*Archer_State)(Dragon &player, const float dt);
+  Boss_Action_State A_Curr; //Current state
+  Boss_Action_State A_Next; //Next state
+  bool Dragon_Seen;         //Flag to check if dragon is seen
+  bool Attack_;             //Check if attack on cooldown
+  float Distance;           //Distacne travelled by Archer
+  float Arrow_CD;           //Arrow cooldown timer
   float Angle;
 
 //Attack Functions START///////////////////////////////////////////////////////////////
@@ -51,6 +67,7 @@ private:
   void Idle(Dragon &player, const float dt);       //Idle state function
   void Move(Dragon &player, const float dt);       //Move state function
   void Attack(Dragon &player, const float dt);     //Attack state function
-  void CheckState(Dragon &player, const float dt); //Sets current state to next, checks for next state
+  void CheckState(Dragon &player, const float dt); //Sets current state to next, 
+                                                   //checks for next state
 //State Functions END//////////////////////////////////////////////////////////////////
 };

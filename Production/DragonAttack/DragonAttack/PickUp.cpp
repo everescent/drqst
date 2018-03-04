@@ -1,7 +1,23 @@
+/* Start Header ************************************************************************/
+/*!
+\file       PickUp.cpp
+\author     Jacob Lim
+\par email: jacob.lim\@digipen.edu
+\brief
+  PickUp class member functions defined here.
+
+Copyright (C) 2018 DigiPen Institute of Technology.
+Reproduction or disclosure of this file or its contents
+without the prior written consent of DigiPen Institute of
+Technology is prohibited.
+*/
+/* End Header **************************************************************************/
+
 #include "PickUp.h"
 #include <utility>
 #include <iostream>
 
+//Counts the number of coins collected
 int PickUp::Coin_Counter = 0;
 
 PickUp::PickUp(Sprite &&t_sprite, Col_Comp && t_col, const PUT type, const float posX, const float posY)
