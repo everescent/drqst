@@ -207,6 +207,9 @@
     <ClCompile Include="test_level_import.cpp">
       <Filter>Game_States\Stage</Filter>
     </ClCompile>
+    <ClCompile Include="PickUp.cpp">
+      <Filter>Game_Object\Objects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h">
@@ -331,6 +334,9 @@
     </ClInclude>
     <ClInclude Include="test_level_import.h">
       <Filter>Game_States\Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="PickUp.h">
+      <Filter>Game_Object\Objects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

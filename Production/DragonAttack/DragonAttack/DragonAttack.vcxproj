@@ -182,6 +182,7 @@
     <ClCompile Include="Main_Menu.cpp" />
     <ClCompile Include="Merlin.cpp" />
     <ClCompile Include="Physics.cpp" />
+    <ClCompile Include="PickUp.cpp" />
     <ClCompile Include="Platform.cpp" />
     <ClCompile Include="Scarecrow.cpp" />
     <ClCompile Include="Sprite.cpp" />
@@ -224,6 +225,7 @@
     <ClInclude Include="Main_Menu.h" />
     <ClInclude Include="Merlin.h" />
     <ClInclude Include="Physics.h" />
+    <ClInclude Include="PickUp.h" />
     <ClInclude Include="Platform.h" />
     <ClInclude Include="Projectile.h" />
     <ClInclude Include="Scarecrow.h" />

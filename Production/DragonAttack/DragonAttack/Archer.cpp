@@ -43,17 +43,44 @@ void Archer::Attack_Update(Dragon &/*player*/, const float dt)
       Attack_ = false;
     }
   }
+  Arrow.Pos(PosX, PosY);
   Arrow.Update(50.0f, false, Angle);
 }
 
-void Archer::Colision_Check(Dragon &/*player*/, const float /*dt*/)
+void Archer::Colision_Check(Dragon &player, const float dt)
 {
-  
+  //If Archer gets hit, decrease HP
+  for (char i = 0; i < Bullet_Buffer; ++i)
+    if (player.GetFireball()[i].IsActive())
+      if (Collision_.Dy_Rect_Rect(player.GetFireball()[i].Collision_, GetVelocity(),
+          player.GetFireball()[i].GetVelocity(), dt))
+      {
+        //Decrease HP by player's damage
+        Decrease_HP(player.GetDamage());
+        //Reset the distance of the fireball and set false
+        player.GetFireball()[i].Projectile::ResetDist();
+        player.GetFireball()[i].SetActive(false);
+      }
+  //Arrow collision check
+  if (Attack_)
+  {
+    if (Arrow.IsActive())
+    {
+      if (player.Collision_.Dy_Rect_Rect(Arrow.Collision_, Arrow.GetVelocity(),
+          player.GetVelocity(), 0.016f))
+      {
+        player.Decrease_HP();
+        Arrow.ResetDist();
+        Arrow.SetActive(false);
+      }
+    }
+  }
 }
 
 void Archer::Idle(Dragon &/*player*/, const float /*dt*/)
 {
   //Do some idle animation
+  Distance = 0.0f;
 }
 
 void Archer::Move(Dragon &player, const float dt)
@@ -81,17 +108,20 @@ void Archer::Attack(Dragon &player, const float /*dt*/)
   float Y{ PosY - player.PosY };
   AEVec2 Disp{ -X, -Y };
   Arrow.SetActive(true);
-  //Adjacent / Hypotenuse
-  Angle = (X / (f_sqrt(AEVec2Length(&Disp))));
-  //if (X < 0.0f)
-  //  Angle = -Angle;
+  //Opposite / Adjacent
+  Angle = atan(Y / X);
+  //Convert to degrees
+  Angle *= (180.0f / PI);
+  //Directional check
+  if (X < 0.0f)
+    Angle += 180.0f;
+  //Normalize and scale
   AEVec2Normalize(&Disp, &Disp);
   AEVec2Scale(&Disp, &Disp, 260.0f);
   Arrow.SetVelocity(Disp);
   Arrow_CD = Archer_CD_Time;
   Attack_ = true;
-  Arrow.PosX = PosX;
-  Arrow.PosY = PosY;
+  Distance = 0.0f;
   std::cout << "ATTACK";
 }
 
@@ -116,7 +146,7 @@ void Archer::CheckState(Dragon &player, const float /*dt*/)
   if(A_Curr == ATTACK)
     A_Next = IDLE;
   //Only move if dragon was seen and my distance has not reached max
-  if (abs(player.PosX - PosX) < Archer_LOS && 
+  if (abs(player.PosX - PosX) > Archer_LOS && 
       Distance < Archer_Max_Dist && Dragon_Seen)
   {
     A_Next = MOVING;
@@ -136,11 +166,10 @@ void Archer::CheckState(Dragon &player, const float /*dt*/)
 void Archer::Update(Dragon& player, const float dt)
 {
   //Check if Dragon within Line Of Sight
-  //if (player.PosX - PosX < Archer_LOS)
-  //{
-  //  std::cout << "hi";
+  if (player.PosX - PosX < Archer_LOS)
+  {
     Dragon_Seen = true;
-  //}
+  }
   //Assign state
   CheckState(player, dt);
   //Execute state

@@ -16,10 +16,53 @@ Technology is prohibited.
 #include "Dragon.h"
 #include "Camera.h"
 #include "Input_Handler.h"
+#include <iostream>
+
+void Dragon::SetPickup(const int type, const bool status)
+{
+  switch (type)
+  {
+    case DMG:
+      Pickup_.DMG = status;
+      break;
+    case SPD:
+      Pickup_.SPD = status;
+      break;
+    case INVUL:
+      Pickup_.INVUL = status;
+      break;
+  }
+}
 
 void Dragon::ApplyPowerUP()
 {
-
+  if (Pickup_.DMG)
+  {
+    //Increase DMG
+    Damage = Fireball_Damage + 10;
+  }
+  else
+  {
+    Damage = Fireball_Damage;
+  }
+  if (Pickup_.SPD)
+  {
+    //Increase SPD
+    SetVelocity(AEVec2{ Player_Speed.x * 1.5f, Player_Speed.y * 1.5f });
+  }
+  else
+  {
+    SetVelocity(Player_Speed);
+  }
+  if (Pickup_.INVUL)
+  {
+    //Make Player Invulnerable
+    Set_Vulnerable(false);
+  }
+  else
+  {
+    Set_Vulnerable(true);
+  }
 }
 
 void Dragon::Input()
@@ -85,6 +128,7 @@ void Dragon::Update(Dragon& dummy, const float dt)
   Transform_.SetTranslate(PosX, PosY);
   Transform_.Concat();
   Collision_.Update_Col_Pos(PosX - 70.0f, PosY - 70.0f, PosX + 70.0f, PosY + 70.0f);
+  ApplyPowerUP();
   //Check if attack has been made
   if (Attack)
   {

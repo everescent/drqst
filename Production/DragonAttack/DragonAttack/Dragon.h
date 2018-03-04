@@ -18,27 +18,22 @@ Technology is prohibited.
 #include "Projectile.h"
 #include "Characters.h"
 #include "Collision.h"
+#include "PickUp.h"
 #include <vector>
-
-//Indicates the type of power up
-enum PowerUp {
-  HP = 0, //Health Point +1
-  DMG,    //Damage up
-  SPD,    //Speed up
-  INVUL   //Invul
-};
 
 const char  Max_Charge     { 10      }; //Maximum charge for mega fireball
 const int   Bullet_Buffer  { 10      }; //Amount of fireballs at any one time
 const float Bullet_Interval{ 400.0f  }; //Minimum distance between each fireball
 const float Bullet_Death   { 900.0f  }; //Distance when bullet dies
 const float Bullet_Speed   { 1200.0f }; //How fast a bullet travels
+const int Fireball_Damage{ 10 };
+const int MFireball_Damage{ 15 };
 
 const float Jump_Height    { 200.0f  }; //Maximum height player can jump
 const float Jump_Mult      { 3.2f    }; //How fast player can jump
 const float Start_Pos_X    { -320.0f }; //Player stating position X
 const float Start_Pos_Y    { -120.0f }; //Player starting position Y
-
+const AEVec2 Player_Speed{ 480.0f, 480.0f * Jump_Mult };
 const float Cam_Offset_X   { 320.0f  }; //Camera offset X
 const float Cam_Offset_Y   { 120.0f  }; //Camera offset Y
 
@@ -53,6 +48,8 @@ public:
   void AddCharge() { Charge == Max_Charge ? Max_Charge : ++Charge; }
   //Resets Mega Fireball charge
   void ResetCharge() { Charge = 0; }
+  //Set pickup type
+  void SetPickup(const int type, const bool status);
   //Renders the dragon
   void Render(); 
   //Get fireball damage
@@ -78,8 +75,8 @@ public:
     Col_Comp{ Start_Pos_X - 70.0f, Start_Pos_Y - 70.0f,
               Start_Pos_X + 70.0f, Start_Pos_Y + 70.0f, Rect} },
     //Initialize data members
-    Attack{ false }, Pwr_Up{ false }, Falling{ false }, Damage { 10 }, 
-    M_Damage{ 15 }, Charge{ 0 }, Gravity{ 10.0f }, Dir{}, Buff{}, Fireball{},
+    Attack{ false }, Pwr_Up{ false }, Falling{ false }, Damage { Fireball_Damage },
+    M_Damage{ MFireball_Damage }, Charge{ 0 }, Gravity{ 10.0f }, Dir{}, Pickup_{}, Fireball{},
     //Initialize Mega Fireball
     Mfireball{ S_CreateSquare(70.0f, "fireball.png"), 
     Col_Comp{ Start_Pos_X - 50.0f, Start_Pos_Y - 50.0f,
@@ -89,7 +86,7 @@ public:
     PosX = Start_Pos_X;
     PosY = Start_Pos_Y;
     //Set velocity
-    SetVelocity(AEVec2{ 480.0f, 480.0f * Jump_Mult });
+    SetVelocity(Player_Speed);
     //Reserve a bloack of memory per number of bullets 
     Fireball.reserve(Bullet_Buffer);
     //Initialize all the fireballs
@@ -129,8 +126,14 @@ private:
     bool UP{ false }; //Check for jump
     Direction() = default;
   };
+  struct Pickup {
+    bool DMG  { false };
+    bool SPD  { false };
+    bool INVUL{ false };
+    Pickup() =  default;
+  };
   Direction               Dir;       //Direction variable
-  PowerUp                 Buff;      //Type of power up
+  Pickup                  Pickup_;   //Type of power up
   std::vector<Projectile> Fireball;  //Array of Fireball projectile
   Projectile              Mfireball; //Mega Fireball projectile
 
