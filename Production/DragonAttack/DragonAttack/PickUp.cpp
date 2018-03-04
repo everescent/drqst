@@ -15,7 +15,6 @@ Technology is prohibited.
 
 #include "PickUp.h"
 #include <utility>
-#include <iostream>
 
 //Counts the number of coins collected
 int PickUp::Coin_Counter = 0;
