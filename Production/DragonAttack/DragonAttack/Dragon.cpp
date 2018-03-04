@@ -52,8 +52,8 @@ void Dragon::Input()
 				break;
 			}
 		}
-		Input::ClearBuffer();
 	}
+	Input::ClearBuffer();
 }
 
 void Dragon::Update(Dragon& dummy, const float dt)
