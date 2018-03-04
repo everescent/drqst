@@ -22,7 +22,7 @@ Technology is prohibited.
 
 Characters::Characters(Sprite&& t_sprite, const int HP, Col_Comp &&t_col)
 	: GameObject{ std::move(t_sprite), std::move(t_col) }, hp{ HP }, 
-	  direction{ RIGHT }
+	  direction{ RIGHT }, vulnerable {true}
 {
 }
 
@@ -33,8 +33,11 @@ void Characters::Set_HP(int hit_points)
 
 void Characters::Decrease_HP(const char damage) 
 {
-	hp -= damage;
-std::cout << "HP reduced! " << hp << std::endl;
+	if (vulnerable)
+	{
+		hp -= damage;
+		std::cout << "HP reduced! " << hp << std::endl;
+	}
 }
 
 int Characters::Get_HP() const
@@ -50,6 +53,16 @@ Direction Characters::Get_Direction(void) const
 void Characters::Set_Direction(Direction d)
 {
 	direction = d;
+}
+
+void Characters::Set_Vulnerable(const bool status)
+{
+	vulnerable = status;
+}
+
+bool Characters::Get_Vulnerable() const
+{
+	return vulnerable;
 }
 
 int Characters::Get_Score()

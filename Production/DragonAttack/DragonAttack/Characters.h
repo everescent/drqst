@@ -40,6 +40,7 @@ class Characters : public GameObject
 		static int score;          // player score for the stage
 		static int enemies_killed; // number of enemies killed
 		float idle_timing;         // idle timing for mob
+		bool vulnerable;  	       // immune to damage if true
 
 	public:
 		Characters(Sprite&& t_sprite, const int HP, Col_Comp &&t_col); // default constructor
@@ -54,6 +55,9 @@ class Characters : public GameObject
 		float Get_Idle_Time() const;
 		void  Reset_Idle_Time(float);
 		void  Decrease_Idle_Time(float);
+
+		void Set_Vulnerable(const bool status);
+		bool Get_Vulnerable(void) const;
 
 		//------------------------------------------------------------------------------------------
 		//STATIC FUNCTIONS--------------------------------------------------------------------------
