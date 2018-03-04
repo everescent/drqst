@@ -174,6 +174,7 @@
     <ClCompile Include="Grunt.cpp" />
     <ClCompile Include="Input_Handler.cpp" />
     <ClCompile Include="King_Arthur.cpp" />
+    <ClCompile Include="Knight.cpp" />
     <ClCompile Include="Lancelot.cpp" />
     <ClCompile Include="Level_Import.cpp" />
     <ClCompile Include="Mage.cpp" />
@@ -218,6 +219,7 @@
     <ClInclude Include="Grunt.h" />
     <ClInclude Include="Input_Handler.h" />
     <ClInclude Include="King_Arthur.h" />
+    <ClInclude Include="Knight.h" />
     <ClInclude Include="Lancelot.h" />
     <ClInclude Include="Level_Import.h" />
     <ClInclude Include="Mage.h" />

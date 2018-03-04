@@ -40,10 +40,8 @@ namespace
 	//	Obj_Enemy,
 	//	Obj_KA,
 	//};
-
+	
 }
-
-
 
 
 class Col_Comp
@@ -103,7 +101,11 @@ public:
 
 	Shape GetShape(); 
 
+	//William Edit START//////////////////////////////////////////////////////////////////////////
+	bool Line_Point(Col_Comp &A, Col_Comp &B, AEVec2 & A_Pos);
 
+	AEVec2 Get_Point(void) const;
+	//William Edit END////////////////////////////////////////////////////////////////////////////
 private:
 
 	AEVec2 min = { 0, 0 }; //represents btm left of a rect/sq

@@ -24,6 +24,7 @@ private:
 	void Idle(const Dragon &  , const float dt); // lancelot idle state
 	void Moving(const Dragon& , const float dt); // moving state of lancelot
 	void Attack(Dragon &      , const float dt); // attack state of lancelot
+	void Dead(void);
 
 	void Init(void); //initializer for lancelot
 	void Init_Stab(void);
@@ -40,7 +41,7 @@ private:
 
 	//void (Lancelot::*ll_attacks[3])(const float dt); // function pointer to lancelot attacks
 
-	BOSS_PHASE phase = PHASE_1;  // flag for lancelot second phase
+	BOSS_PHASE phase = PHASE_2;  // flag for lancelot second phase
 
 	bool M_E; // lancelot berserk state
 

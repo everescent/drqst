@@ -210,6 +210,9 @@
     <ClCompile Include="PickUp.cpp">
       <Filter>Game_Object\Objects</Filter>
     </ClCompile>
+    <ClCompile Include="Knight.cpp">
+      <Filter>Characters\AI\Basic_Mobs</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h">
@@ -337,6 +340,9 @@
     </ClInclude>
     <ClInclude Include="PickUp.h">
       <Filter>Game_Object\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Knight.h">
+      <Filter>Characters\AI\Basic_Mobs</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

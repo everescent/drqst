@@ -50,6 +50,8 @@ struct Boss_Attack : public Projectile
 
 	void Update() {}; // ignored
 	void Update(float dt);  //has to check cooldown_timer
+	void Start_Attack(const float x, const float y);
+	void End_Attack();
 	//void Pos(); 
 
 };

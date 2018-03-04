@@ -140,12 +140,12 @@ void King_Arthur::Update(Dragon &d, const float dt)
 	if ((d.PosX - this->PosX) > 0)
 	{
 		this->Set_Direction(RIGHT);
-		this->Transform_.SetScale(1.0f, 1.0f);
+		this->Transform_.SetScale(1.0f, 1.0f); // reflect the texture to face player
 	}
 	else
 	{
 		this->Set_Direction(LEFT);
-		this->Transform_.SetScale(-1.0f, 1.0f);
+		this->Transform_.SetScale(-1.0f, 1.0f); // reflect the texture to face player
 	}
 	
 	this->Transform_.Concat();
@@ -254,7 +254,10 @@ void King_Arthur::Attack(Dragon &d, const float dt)
 		else if (!(arthur[TRIPLE_SLASH].cooldown))
 			currAttk = TRIPLE_SLASH;
 		else
+		{
 			currAttk = SINGLE_SLASH; //default attack for king arthur
+			arthur[SINGLE_SLASH].Start_Attack(this->PosX, this->PosY);
+		}
 
 	}
 
@@ -333,13 +336,6 @@ void King_Arthur::Single_Slash(Dragon &d, const float dt)
 {
 	UNREFERENCED_PARAMETER(dt);
 
-	if (! arthur[SINGLE_SLASH].ongoing_attack) // sets the attack to start from KA
-	{
-		arthur[SINGLE_SLASH].SetPos(this->PosX, this->PosY);
-		arthur[SINGLE_SLASH].SetActive(true);
-		arthur[SINGLE_SLASH].ongoing_attack = true;
-	}
-
 	arthur[SINGLE_SLASH].Projectile::Update(SLASH_SCALE); // move the slash
 
 	if(! arthur[SINGLE_SLASH].GetCollided()) // check for collision
@@ -354,12 +350,7 @@ void King_Arthur::Single_Slash(Dragon &d, const float dt)
 	//disappears once it flys 500 unit away
 	if (arthur[SINGLE_SLASH].GetDist() > range_limit) 
 	{
-		arthur[SINGLE_SLASH].SetActive(false);             // makes it disappears form screen
-		arthur[SINGLE_SLASH].ResetDist(); 		           // reset to 0 distance traveled
-		arthur[SINGLE_SLASH].PosX           = 0.0f;        // to remove flicker
-		arthur[SINGLE_SLASH].cooldown       = true;        // skill on cooldown
-		arthur[SINGLE_SLASH].ongoing_attack = false;       // attack has finished
-		arthur[SINGLE_SLASH].SetCollided(false);		   // Reset the collision variable
+		arthur[SINGLE_SLASH].End_Attack();
 
 		current_action = IDLE;                       // set the behaviour to idle
 		++behavior_swap;
@@ -373,9 +364,6 @@ void King_Arthur::Triple_Slash(Dragon &d, const float dt)
 	
 	UNREFERENCED_PARAMETER(d);
 	UNREFERENCED_PARAMETER(dt);
-
-	if (arthur[TRIPLE_SLASH].cooldown) // skill still on cooldown
-		return;
 
 	const char ts_limit = limit - 1; // limit the loop to just the triple slashes
 	

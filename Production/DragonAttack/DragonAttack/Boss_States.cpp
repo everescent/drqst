@@ -18,28 +18,25 @@ void Boss_Attack::Update(float dt)  //has to check cooldown_timer
 
 
 }
-//void Boss_Attack::Pos()
-//{
-//	//calculate the position and shit for attack
-//	
-//	if (! IsActive()) // only render when its shown on screen
-//		return;
-//	
-//	if (this->GetDir()) // shoots projectile to the right
-//		this->PosX += this->GetVelocity().x;
-//	else // shoots projectile to the left
-//		this->PosX -= this->GetVelocity().x;
-//
-//	//moves the projectile in the correct direction frame by frame
-//	this->AddDist (this->GetVelocity().x);
-//	(void)this->Transform_.SetScale(2.0f,2.0f);
-//	(void)this->Transform_.SetTranslate(this->PosX, this->PosY);
-//	this->Transform_.Concat();
-//	
-//	// show it on screen
-//	this->Render();
-//
-//}
+
+void Boss_Attack::Start_Attack(const float x, const float y)
+{
+	PosX = x;      // start x position of attack
+	PosY = y;      // satrt y position of attack
+	SetActive(true);         // render attack on screen
+	ongoing_attack = true;   // attack is ongoing
+}
+
+void Boss_Attack::End_Attack()
+{
+	//calculate the position and shit for attack
+	
+	SetActive(false);       // make stab disappaer
+	cooldown = true;        // start cooldown
+	ResetDist();            // reset distance travled back to 0
+	SetCollided(false);     // reset collided flag
+	ongoing_attack = false; // attack animation has concluded
+}
 
 int Get_Random_Num(int range)
 {
