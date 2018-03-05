@@ -22,12 +22,12 @@ Technology is prohibited.
 
 namespace ArcherMacros {
   //Global Read-Only Variables START///////////////////////////////////////////////////////
-  const int   Archer_HP      { 10     }; //Archer HP
+  const int   Archer_HP      { 50     }; //Archer HP
   const float Archer_Scale   { 100.0f }; //Scale of Archer mesh
   const float Archer_Speed   { 120.0f }; //Scale of Archer mesh
   const float Arrow_Scale    { 20.0f  }; //Scale of arrow mesh
   const float Arrow_Death    { 800.0f }; //Scale of arrow mesh
-  const float Archer_LOS     { 350.0f }; //Line Of Sight
+  const float Archer_LOS     { 300.0f }; //Line Of Sight
   const float Archer_CD_Time { 2.0f   }; //Attack Interval
   const float Archer_Max_Dist{ 200.0f }; //Maximum travelling distance
   const float Gravity        { 10.0f  }; //Gravity
