@@ -20,6 +20,7 @@ namespace
 	Transform *M_BG;
 	GameObject* Play_Button;
 	GameObject* Quit_Button;
+	Audio_Engine* Audio;
 	//GameObject* Credits_Button;
 	const float Menu_Width = AEGfxGetWinMaxX() * 2;
 	const float Menu_Height = AEGfxGetWinMaxY() * 2;
@@ -38,6 +39,9 @@ namespace Main_Menu
 		// BG constructed by using Move constructor 
 		MM_Background = new Sprite{ CreateBG(1.0f, "../../Illustrations/Main_Menu/Main_Menu_BG.png" ) };
 		M_BG = new Transform{};
+
+		Audio = new Audio_Engine{ 1, [](std::vector <std::string> &playlist)->void{playlist.push_back(".//Audio/MainMenu_BGM.mp3"); } };
+
 		// Construct Play Button 
 		Play_Button = new GameObject{ S_CreateRectangle(Button_Width,Button_Height,"../../Illustrations/Main_Menu/Play_Button.png"),
 			Col_Comp(0.0f -( Button_Width ), 0.0f - (Button_Height),
@@ -53,6 +57,8 @@ namespace Main_Menu
 	void Init(void)
 	{
 		//Initialise buttons here
+		Audio->Play(0);
+		Audio->SetLoop(0,1);
 	}
 
 	void Update(float /*dt*/)
@@ -61,6 +67,9 @@ namespace Main_Menu
 		Quit_Button->SetActive(true);
 		Quit_Button->Transform_.SetTranslate(0.0f, -100.0f);
 		Quit_Button->Transform_.Concat();
+
+		Audio->Update();
+
 		if (AEInputCheckTriggered(AEVK_LBUTTON))
 		{
 			AEInputGetCursorPosition(&Store_X, &Store_Y);
@@ -88,7 +97,12 @@ namespace Main_Menu
 		Quit_Button->Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 	}
 
-	void Free(void) { delete MM_Background; }
+	void Free(void) { 
+		delete MM_Background;
+		delete Play_Button;
+		delete Quit_Button;
+		delete Audio;
+	}
 
 	void Unload(void) {}
 }
