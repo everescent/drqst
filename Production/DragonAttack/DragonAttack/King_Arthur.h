@@ -30,10 +30,11 @@ private:
 	void King_Arthur_Phase2(void); // changes mechanics for phase 2
 	void Init_KA_Attacks(void);    // initialize king arthur attacks
 	void Init_MobArray(void);      // initialize the mob array for phase 2
+	void Set_Forward_Dir(const Dragon&);
 
 	
 	// boss behaviours /////////////////////////////////////////////////
-	void Idle(const float dt);
+	void Idle(const Dragon &d, const float dt);
 	void Moving(const Dragon &d, const float dt);
 	void AvoidingObstacle();
 	void Attack(Dragon &d, const float dt);

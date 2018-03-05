@@ -137,19 +137,6 @@ void King_Arthur::Init_MobArray(void)
 
 void King_Arthur::Update(Dragon &d, const float dt)
 {
-	if ((d.PosX - this->PosX) > 0)
-	{
-		this->Set_Direction(RIGHT);
-		this->Transform_.SetScale(1.0f, 1.0f); // reflect the texture to face player
-	}
-	else
-	{
-		this->Set_Direction(LEFT);
-		this->Transform_.SetScale(-1.0f, 1.0f); // reflect the texture to face player
-	}
-	
-	this->Transform_.Concat();
-
 	if (this->Get_HP() < PHASE2_HP && phase1) // activate phase 2 once hp drops is 50%
 	{
 		King_Arthur_Phase2();
@@ -194,7 +181,7 @@ void King_Arthur::Update(Dragon &d, const float dt)
 	// switch between the boss states
 	switch (current_action)
 	{
-	case IDLE:     this->Idle(dt);
+	case IDLE:     this->Idle(d, dt);
 		break;
 
 	case MOVING:   this->Moving(d,dt);
@@ -219,18 +206,29 @@ void King_Arthur::Update(Dragon &d, const float dt)
 	
 }
 
-void King_Arthur::Idle(const float dt)
+void King_Arthur::Idle(const Dragon& d, const float dt)
 {
 	//changes state to attack once idling is finished, reset idle
-	Get_Idle_Time() <= 0 ? current_action = ATTACK, Reset_Idle_Time(1.0f) 
-		                 : Decrease_Idle_Time(dt), Set_Attack_Dir(*this);
+	if (Get_Idle_Time() <= 0)
+	{
+		current_action = ATTACK;
+		Reset_Idle_Time(1.0f);
+
+		Set_Forward_Dir(d);
+		Set_Attack_Dir(*this);
+	}
+	else
+	{
+		Decrease_Idle_Time(dt);
+	}
 	
 }
 
 void King_Arthur::Moving(const Dragon &d, const float dt)
 {	
 	static float move_duration = 3.0f; // duration KA moves
-	
+
+	Set_Forward_Dir(d);    // set KA to face player
 	Move_KA(dt, *this, d); // move king arthur
 
 	//change state to idle if move_duration is 0 or player reached, reset move_duration
@@ -361,8 +359,6 @@ void King_Arthur::Single_Slash(Dragon &d, const float dt)
 
 void King_Arthur::Triple_Slash(Dragon &d, const float dt)
 {
-	
-	UNREFERENCED_PARAMETER(d);
 	UNREFERENCED_PARAMETER(dt);
 
 	const char ts_limit = limit - 1; // limit the loop to just the triple slashes
@@ -511,6 +507,21 @@ void King_Arthur::Dead(void)
 	//GSM::next = GS_CREDITS;
 }
 
+void King_Arthur::Set_Forward_Dir(const Dragon& d)
+{
+	if ((d.PosX - this->PosX) > 0)
+	{
+		this->Set_Direction(RIGHT);
+		this->Transform_.SetScale(1.0f, 1.0f); // reflect the texture to face player
+	}
+	else
+	{
+		this->Set_Direction(LEFT);
+		this->Transform_.SetScale(-1.0f, 1.0f); // reflect the texture to face player
+	}
+	this->Transform_.Concat();
+}
+
 King_Arthur::~King_Arthur(void)
 {
 	arthur.clear();
@@ -524,18 +535,16 @@ namespace
 	{
 		if (ka.PosX < right_boundary && ka.PosX > left_boundary)
 		{
-			if (ka.Get_Direction() == RIGHT) // set all attacks to go right
+			if (ka.Get_Direction() == RIGHT) 
 			{
 				ka.PosX += ka.GetVelocity().x * dt; // move ka to the right
-				(void)ka.Transform_.SetTranslate(ka.PosX, ka.PosY);
 			}
-			else if (ka.Get_Direction() == LEFT) // set all attacks to go left
+			else if (ka.Get_Direction() == LEFT) 
 			{
-				ka.PosX -= ka.GetVelocity().x * dt; // move KA to the left
-				(void)ka.Transform_.SetTranslate(ka.PosX, ka.PosY);
+				ka.PosX -= ka.GetVelocity().x * dt; // move KA to the left			
 			}
 
-			
+			(void)ka.Transform_.SetTranslate(ka.PosX, ka.PosY);
 			ka.Collision_.Update_Col_Pos(ka.PosX - 30.0f, ka.PosY - 30.0f,  // min point
 										 ka.PosX + 30.0f, ka.PosY + 30.0f);	// max point
 		}

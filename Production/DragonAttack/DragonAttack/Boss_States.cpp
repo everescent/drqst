@@ -33,7 +33,7 @@ void Boss_Attack::End_Attack()
 	
 	SetActive(false);       // make stab disappaer
 	cooldown = true;        // start cooldown
-	ResetDist();            // reset distance travled back to 0
+	ResetDist();            // reset distance traveled back to 0
 	SetCollided(false);     // reset collided flag
 	ongoing_attack = false; // attack animation has concluded
 }

@@ -20,11 +20,14 @@ Characters *Create_Basic_AI(const BASIC_AI mob, const AEVec2& position)
 
 	switch (mob)
 	{
-	case GRUNT: return new Grunt (position.x, position.y);
+	case GRUNT:  return new Grunt (position.x, position.y);
 		break;
-	case MAGE:  return new Mage (position);
+	case MAGE:   return new Mage (position);
 		break;
-  case ARCHER: return new Archer(position.x, position.y);
+    case ARCHER: return new Archer(position.x, position.y);
+	    break;
+	case KNIGHT: return new Knight(position);
+		break;
 	default: break;
 	}
 	

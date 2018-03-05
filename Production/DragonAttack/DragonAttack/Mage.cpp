@@ -160,10 +160,7 @@ void Mage::Attack(const float dt, Dragon &d)
 	// kills the energy ball if it flew past its limit or it collided with player
 	if (energy_ball.GetDist() > RANGE_LIMIT || energy_ball.GetCollided())
 	{
-		energy_ball.SetActive(false);        // set active to false
-		energy_ball.ResetDist();			 // reset distance traveled to 0
-		energy_ball.ongoing_attack = false;	 // attack is no longer ongoing
-		energy_ball.SetCollided(false);		 // reset collision flag
+		energy_ball.End_Attack();
 		this->current_action = IDLE;         // change behaviour
 	}
 

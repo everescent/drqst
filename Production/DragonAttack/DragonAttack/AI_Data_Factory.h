@@ -19,6 +19,7 @@ Technology is prohibited.
 #include "Mage.h"
 #include "Merlin.h"
 #include "King_Arthur.h"
+#include "Knight.h"
 #include "Lancelot.h"
 
 
@@ -26,7 +27,8 @@ enum BASIC_AI
 {
 	GRUNT,
 	MAGE,
-  ARCHER
+    ARCHER,
+	KNIGHT
 	// add any mobs that you have created here
 };
 
