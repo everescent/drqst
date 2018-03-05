@@ -28,44 +28,65 @@ PickUp::PickUp(Sprite &&t_sprite, Col_Comp && t_col, const PUT type, const float
   PosY = posY;
   Transform_.SetTranslate(PosX, PosY);
   Transform_.Concat();
-  //init cooldown here as well
-  Cooldown_ = 5.0f;
+  //Initialize cooldown
+  switch (Type_)
+  {
+    case DMG:
+      Cooldown_ = DMG_CD;
+      break;
+    case SPD:
+      Cooldown_ = SPD_CD;
+      break;
+    case INVUL:
+      Cooldown_ = INVUL_CD;
+      break;
+  }
 }
 
 void PickUp::Update(Dragon &player, const float dt)
 {
   //Pick up collision check
-    if (IsActive())
+  if (IsActive())
+  {
+    //Update collision position
+    Collision_.Update_Col_Pos(PosX - PickUp_Scale, PosY - PickUp_Scale, 
+                              PosX + PickUp_Scale, PosY + PickUp_Scale);
+    //Check for collision with player
+    if (player.Collision_.Dy_Rect_Rect(Collision_, GetVelocity(),
+      player.GetVelocity(), 0.016f))
     {
-      Collision_.Update_Col_Pos(PosX - PickUp_Scale, PosY - PickUp_Scale, PosX + PickUp_Scale, PosY + PickUp_Scale);
-      if (player.Collision_.Dy_Rect_Rect(Collision_, GetVelocity(),
-        player.GetVelocity(), 0.016f))
-      {
-        player.SetPickup(Type_, true);
-        SetActive(false);
-        if (Type_ == COIN)
-        {
-          player.Add_Score(10);
-          ++Coin_Counter;
-        }
-        else if (Type_ == HP)
-        {
-          player.SetPickup(Type_, false);
-          player.Increase_HP(1);
-        }
-        else
-          Active_ = true;
-      }
-    }
-    else if (Active_)
-    {
-      Cooldown_ -= dt;
+      //If collide, activate the power up
       player.SetPickup(Type_, true);
-      if (Cooldown_ <= 0.0f)
+      //Disable render
+      SetActive(false);
+      if (Type_ == COIN)
       {
-        Cooldown_ = 0.0f;
-        player.SetPickup(Type_, false);
-        Active_ = false;
+        //Adds score if coin is picked up
+        player.Add_Score(10);
+        ++Coin_Counter;
       }
+      else if (Type_ == HP)
+      {
+        //Give HP if HP is picked up
+        player.SetPickup(Type_, false);
+        player.Increase_HP(1);
+      }
+      else
+        //If not activate cooldown timer
+        Active_ = true;
     }
+  }
+  else if (Active_)
+  {
+    //Update cooldown timer
+    Cooldown_ -= dt;
+    player.SetPickup(Type_, true);
+    if (Cooldown_ <= 0.0f)
+    {
+      //Deactivate power up
+      Cooldown_ = 0.0f;
+      player.SetPickup(Type_, false);
+      Active_ = false;
+    }
+  }
 }

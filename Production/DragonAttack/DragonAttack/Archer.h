@@ -33,6 +33,7 @@ namespace ArcherMacros {
   const float Gravity        { 10.0f  }; //Gravity
   //Global Read-Only Variables END/////////////////////////////////////////////////////////
 }
+
 class Archer : public Characters {
 
 public: 
@@ -52,8 +53,8 @@ private:
   void(Archer::*Archer_State)(Dragon &player, const float dt);
   Boss_Action_State A_Curr; //Current state
   Boss_Action_State A_Next; //Next state
-  bool Dragon_Seen;         //Flag to check if dragon is seen
-  bool Attack_;             //Check if attack on cooldown
+  bool  Dragon_Seen;        //Flag to check if dragon is seen
+  bool  Attack_;            //Check if attack on cooldown
   float Distance;           //Distacne travelled by Archer
   float Arrow_CD;           //Arrow cooldown timer
   float Angle;

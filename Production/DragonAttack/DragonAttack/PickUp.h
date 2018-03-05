@@ -31,13 +31,17 @@ enum PickUpType {
 //Alias for PickUpType
 using PUT = PickUpType;
 
-//Scale of the pickup object
-const float PickUp_Scale{ 30.0f };
+const float PickUp_Scale{ 30.0f }; //Scale of the pickup object
+const float DMG_CD      { 20.0f }; //Damage power up cooldown time
+const float SPD_CD      { 30.0f }; //Speed power up cooldown time
+const float INVUL_CD    { 15.0f }; //Invulnerability cooldown time 
 
 class PickUp : public GameObject{
 
 public:
+  //Initialize with sprite, collision, type of power up and position
   PickUp(Sprite &&t_sprite, Col_Comp && t_col, const PUT type, const float posX, const float posY);
+  //Updates collition and cooldown
   void Update(Dragon &player, const float dt);
   //Returns the number of coins collected
   static int GetCoin() { return Coin_Counter; }
@@ -45,8 +49,8 @@ public:
   static void ResetCoin() { Coin_Counter = 0; }
 
 private:
-  PUT Type_;
-  static int Coin_Counter;
-  float Cooldown_;
-  bool Active_;
+  PUT        Type_;        //Type of power up
+  static int Coin_Counter; //Counts the number of coins collected
+  float      Cooldown_;    //Cooldown timer
+  bool       Active_;      //Power Up active or not
 };

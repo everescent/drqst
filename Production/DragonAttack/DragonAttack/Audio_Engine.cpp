@@ -21,37 +21,45 @@ Technology is prohibited.
 */
 
 Audio_Engine::Audio_Engine(unsigned SoundNum, const std::function<void(std::vector<std::string>&)>& Init)
-  :Audio_{ nullptr }, Playlist_{}, Soundlist_{}, Channel_{}
+  :Audio_{ nullptr }, Playlist_{}, Soundlist_{}, Channel_{}, ChannelGroup_{ nullptr }
 {
+  //Create audio system
   if (FMOD::System_Create(&Audio_) != FMOD_OK)
   {
-    throw "Audio system cannot be created. Exception thrown!";
+    throw std::runtime_error("Audio system cannot be created. Exception thrown!");
   }
+  //Initialize audio system
   Audio_->init(SoundNum, FMOD_INIT_NORMAL, NULL);
+  //Reserve memory for vectors
   Playlist_.reserve(SoundNum);
   Soundlist_.reserve(SoundNum);
   Channel_.reserve(SoundNum);
+  //Initialize the vectors
   for (unsigned i = 0; i < SoundNum; ++i)
   {
     Soundlist_.push_back(nullptr);
     Channel_.push_back(nullptr);
   }
+  //Receive the filenames from user
   Init(Playlist_);
+  //Creates the sounds from given filenames
   for (unsigned i = 0; i < SoundNum; ++i)
   {
     FMOD_RESULT soundResult;
     soundResult = Audio_->createStream(Playlist_[i].c_str(), FMOD_LOOP_OFF, NULL, &Soundlist_[i]);
     if (soundResult != FMOD_OK)
     {
-      throw "Sound cannot be created. Exception thrown!";
+      throw std::runtime_error("Sound cannot be created. Exception thrown!");
     }
   }
   FMOD_RESULT ChannelResult;
+  //Create the channel group
   ChannelResult = Audio_->createChannelGroup(NULL, &ChannelGroup_);
   if (ChannelResult != FMOD_OK)
   {
-    throw "Channel cannot be created. Exception thrown!";
+    throw std::runtime_error("Channel cannot be created. Exception thrown!");
   }
+  //Assign the channels to the channel group
   for (unsigned i = 0; i < SoundNum; ++i)
   {
     Channel_[i]->setChannelGroup(ChannelGroup_);
@@ -61,27 +69,57 @@ Audio_Engine::Audio_Engine(unsigned SoundNum, const std::function<void(std::vect
 
 void Audio_Engine::Play(const int SongNum)
 {
-  Audio_->playSound(Soundlist_[SongNum], ChannelGroup_, false, &Channel_[SongNum]);
+  FMOD_RESULT result;
+  //Play the sound, from given song number
+  result = Audio_->playSound(Soundlist_[SongNum], ChannelGroup_, false, &Channel_[SongNum]);
+  if (result != FMOD_OK)
+  {
+    throw std::runtime_error("Sound cannot be played. Exception thrown!");
+  }
 }
 
 void Audio_Engine::SetVolume(const int SongNum, const float Volume)
 {
-  Channel_[SongNum]->setVolume(Volume);
+  FMOD_RESULT result;
+  //Set volume for given song number
+  result = Channel_[SongNum]->setVolume(Volume);
+  if (result != FMOD_OK)
+  {
+    throw std::runtime_error("Volume cannot be set. Exception thrown!");
+  }
 }
 
 void Audio_Engine::SetLoop(const int SongNum, FMOD_MODE Loop)
 {
-  Channel_[SongNum]->setMode(Loop);
+  FMOD_RESULT result;
+  //Activate loop, fro given song number
+  result = Channel_[SongNum]->setMode(Loop);
+  if (result != FMOD_OK)
+  {
+    throw std::runtime_error("Loop cannot be set. Exception thrown!");
+  }
 }
 
 void Audio_Engine::SetPause(const int SongNum, const bool Pause)
 {
-  Channel_[SongNum]->setPaused(Pause);
+  FMOD_RESULT result;
+  //Pause song
+  result = Channel_[SongNum]->setPaused(Pause);
+  if (result != FMOD_OK)
+  {
+    throw std::runtime_error("Sound cannot be paused. Exception thrown!");
+  }
 }
 
 void Audio_Engine::Update()
 {
-  Audio_->update();
+  FMOD_RESULT result;
+  //Updates the audio system
+  result = Audio_->update();
+  if (result != FMOD_OK)
+  {
+    throw std::runtime_error("Audio system cannot be updated. Exception thrown!");
+  }
 }
 
 Audio_Engine::~Audio_Engine()

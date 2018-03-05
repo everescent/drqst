@@ -19,21 +19,30 @@ Technology is prohibited.
 #include <vector>
 #include <string>
 #include <functional>
+#include <exception>
 
 class Audio_Engine {
 
 public:
+  //Provide number of songs, and give a function to initialize the list of filenames
   Audio_Engine(unsigned SoundNum, const std::function<void (std::vector<std::string>&)>& Init);
+  //Release the audio system
   ~Audio_Engine();
+  //Plays the song numnber given
   void Play(const int SongNum);
+  //Set volume for the given song number
   void SetVolume(const int SongNum, const float Volume);
+  //Set song to loop, does not loop by default
   void SetLoop(const int SongNum, FMOD_MODE Loop);
+  //Pause the given song number
   void SetPause(const int SongNum, const bool Pause);
+  //Updates the audio system; CALL THIS!
   void Update();
+
 private:
-  FMOD::System *Audio_;
-  std::vector <std::string> Playlist_;
-  std::vector <FMOD::Sound*> Soundlist_;
-  std::vector <FMOD::Channel*> Channel_;
-  FMOD::ChannelGroup* ChannelGroup_;
+  FMOD::System *Audio_;                  //The audio system
+  std::vector <std::string> Playlist_;   //The filenames for each song
+  std::vector <FMOD::Sound*> Soundlist_; //The songs
+  std::vector <FMOD::Channel*> Channel_; //The channel for each song
+  FMOD::ChannelGroup* ChannelGroup_;     //Channel group to hold all channels
 };
