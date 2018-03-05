@@ -37,7 +37,11 @@ namespace
 	const float ATTACK_RANGE = 100.0f;
 	const float ATTACK_SCALE = 20.0f;
 	static Lancelot_Moveset currAttk = STAB;
-	const AEVec2 ATK_START_POINT {-100.0f, -30.0f}; // for slash
+
+	// variables for slash and arondight
+	const AEVec2 ATK_START_POINT {-100.0f, -30.0f}; 
+	static float angle = 25.0f;
+	static float angle_offset = 2.0f;
 
 	const AEVec2 STARTING_POINT{ 200.0f, -200.0f };
 }
@@ -184,13 +188,15 @@ void Lancelot::Attack(Dragon &d, const float dt)
 	/*	if(phase == PHASE_1 && ! lancelot[MAD_ENHANCEMENT].cooldown)
 			currAttk = MAD_ENHANCEMENT;
 
-		else*/  if (phase == PHASE_2 && !lancelot[ARONDIGHT].cooldown)
+		else  if (phase == PHASE_2 && !lancelot[ARONDIGHT].cooldown)
 		{
 			currAttk = ARONDIGHT;
 			//lancelot[ARONDIGHT].SetDir(true);
+			angle = -90.0f;
+			angle_offset = 2.0f;
 		}
    
-		else if (!lancelot[SLASH].cooldown)
+		else*/ if (!lancelot[SLASH].cooldown)
 		{
 			currAttk = SLASH;
 
@@ -198,10 +204,14 @@ void Lancelot::Attack(Dragon &d, const float dt)
 			{
 				lancelot[SLASH].Start_Attack(this->PosX + -ATK_START_POINT.x, ATK_START_POINT.y);
 				lancelot[SLASH].SetDir(false);
+				angle = -200.0f;
+				angle_offset = 2.0f;
 			}
 			else
 			{
 				lancelot[SLASH].Start_Attack(this->PosX + ATK_START_POINT.x, ATK_START_POINT.y);
+				angle = 25.0f;
+				angle_offset = -2.0f;
 			}
 		}
 		else
@@ -259,13 +269,9 @@ void Lancelot::Slash(Dragon& d, const float dt)
 {
 	UNREFERENCED_PARAMETER(dt);
 	static float slash_interval = 0.5f;
-	static float angle = -25.0f;
-	static float angle_offset = 2.0f;
 	static bool second_slash = false;
 
-	lancelot[SLASH].Projectile::Update(ATTACK_SCALE);
-	lancelot[SLASH].Transform_.SetRotation(angle += angle_offset);
-	lancelot[SLASH].Transform_.Concat();
+	lancelot[SLASH].Projectile::Update(ATTACK_SCALE,false , angle += angle_offset);
 
 	if (!lancelot[SLASH].GetCollided())
 	{
@@ -281,7 +287,7 @@ void Lancelot::Slash(Dragon& d, const float dt)
 		AEVec2 reverse = lancelot[SLASH].GetVelocity();
 		if (second_slash)
 		{
-			lancelot[SLASH].cooldown_timer = M_E ? 2.0f : 4.0f; // shorter cooldown when berserked.
+			lancelot[SLASH].cooldown_timer = M_E ? 2.0f : .0f; // shorter cooldown when berserked.
 			lancelot[SLASH].End_Attack();
 			reverse.x = -reverse.x;
 			reverse.y = -reverse.y;
@@ -329,8 +335,6 @@ void Lancelot::Arondight(Dragon& d, const float dt)
 {
 	UNREFERENCED_PARAMETER(d);
 
-	static float angle = -90.0f;
-	static float angle_offset = 2.0f;
 	static float charge_time;
 
 
