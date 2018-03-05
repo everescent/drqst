@@ -23,7 +23,7 @@ Archer::Archer(const float posX, const float posY)
              Col_Comp{ posX - Archer_Scale, posY - Archer_Scale,
              posX + Archer_Scale, posY + Archer_Scale, Rect } },
   //Initialize Arrow
-  Arrow{ S_CreateSquare(Arrow_Scale, "Arrow.png"),
+  Arrow{ S_CreateSquare(Arrow_Scale, ".//Textures/Arrow.png"),
           Col_Comp{ posX - Arrow_Scale, posY - Arrow_Scale,
           posX + Arrow_Scale, posY + Arrow_Scale, Rect } }, 
   //Initialize other members
@@ -81,7 +81,7 @@ void Archer::Colision_Check(Dragon &player, const float dt)
     if (Arrow.IsActive())
     {
       if (player.Collision_.Dy_Rect_Rect(Arrow.Collision_, Arrow.GetVelocity(),
-          player.GetVelocity(), 0.016f))
+          player.GetVelocity(), dt))
       {
         player.Decrease_HP();
         Arrow.ResetDist();
@@ -141,7 +141,6 @@ void Archer::Attack(Dragon &player, const float /*dt*/)
 void Archer::Dead()
 {
   SetActive(false);
-  Arrow.SetActive(false);
 }
 
 void Archer::CheckState(Dragon &player, const float /*dt*/)
@@ -188,29 +187,39 @@ void Archer::Update(Dragon& player, const float dt)
   {
     Dead();
   }
-  //Check if Dragon within Line Of Sight
-  if (abs(player.PosX - PosX) < Archer_LOS)
+  else
   {
-    Dragon_Seen = true;
+    //Check if Dragon within Line Of Sight
+    if (abs(player.PosX - PosX) < Archer_LOS)
+    {
+      Dragon_Seen = true;
+    }
+    if (player.PosX < PosX)
+    {
+      Transform_.SetScale(-1.0f, 1.0f);
+    }
+    else
+    {
+      Transform_.SetScale(1.0f, 1.0f);
+    }
+   // PosY -= Gravity;
+    //Assign state
+    CheckState(player, dt);
+    //Execute state
+    (this->*Archer_State)(player, dt);
+    //Update attacks
+    Attack_Update(player, dt);
+    //Check for collision
+    Colision_Check(player, dt);
+    //Concatenate all matrices
+    Transform_.SetTranslate(PosX, PosY);
+    Transform_.Concat();
   }
-  PosY -= Gravity;
-  //Assign state
-  CheckState(player, dt);
-  //Execute state
-  (this->*Archer_State)(player, dt);
-  //Update attacks
-  Attack_Update(player, dt);
-  //Check for collision
-  Colision_Check(player, dt);
-  //Concatenate all matrices
-  Transform_.SetTranslate(PosX, PosY);
-  Transform_.Concat();
 }
 
 //Renders Archer and attacks
 void Archer::Render()
 {
-  
   GameObject::Render();
   Arrow.Render();
 }
