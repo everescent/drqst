@@ -2,9 +2,9 @@
 #include <iostream>
 
 Floor::Floor(float x, float y)
-	: GameObject{ CreateFloor(2.0f, "../../Illustrations/Environment/Cobblestone.png", 1.0f, 10.0f),
-	Col_Comp{ x - FLOOR_WIDTH * 2, y - FLOOR_HEIGHT,
-	x + FLOOR_WIDTH * 2, y + FLOOR_HEIGHT, Rect },
+	: GameObject{ CreateFloor(1.0f, "../../Illustrations/Environment/Cobblestone.png", 1.0f, 1.0f),
+	Col_Comp{ x - FLOOR_WIDTH, y - FLOOR_HEIGHT,
+	x + FLOOR_WIDTH, y + FLOOR_HEIGHT, Rect },
 	x, y }
 {
 	SetActive(true);

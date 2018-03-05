@@ -80,6 +80,19 @@ void Grunt::Update(Dragon &d, const float dt)
 		}
 		}*/
 
+		//collision with player, player loses health
+		/*if (Collision_.Dy_Rect_Rect(d.Collision_, GetVelocity(), d.GetVelocity(), dt))
+		{
+			d.Decrease_HP();
+			if (d.PosX > this->PosX)
+			{
+				d.PosX = PosX + 200.0f;
+			}
+			else if (d.PosX < this->PosX)
+			{
+				d.PosX = PosX - 200.0f;
+			}
+		}*/
 
 		for (char i = 0; i < Bullet_Buffer; ++i)
 		{

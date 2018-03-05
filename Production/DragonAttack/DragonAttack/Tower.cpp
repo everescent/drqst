@@ -20,11 +20,11 @@ void Tower::Update(Dragon &player, const float &dt)
 		{
 			if (player.PosX > this->PosX)
 			{
-				player.PosX = PosX + (Sprite_.Get_Width() - 200.0f) + 70.0f;
+				player.PosX = PosX + (Sprite_.Get_Width() - 200.0f) + player.Sprite_.Get_Width();
 			}
 			else if (player.PosX < this->PosX)
 			{
-				player.PosX = PosX - (Sprite_.Get_Width() - 200.0f) - 70.0f;
+				player.PosX = PosX - (Sprite_.Get_Width() - 200.0f) - player.Sprite_.Get_Width();
 			}
 		}
 

@@ -18,8 +18,10 @@ Technology is prohibited.
 #include "Transform.h"
 #include "Render.h"
 
-const float FLOOR_WIDTH{ 640.0f }; //The half width of the floor
-const float FLOOR_HEIGHT{ 100.0f }; //The half height of the floor
+//const float FLOOR_WIDTH{ 640.0f }; //The half width of the floor
+//const float FLOOR_HEIGHT{ 100.0f }; //The half height of the floor
+const float FLOOR_WIDTH{ 40.0f }; //The half width of the floor
+const float FLOOR_HEIGHT{ 45.0f }; //The half height of the floor
 const float PLAT_WIDTH{ 45.0f }; //The half width of one platform
 const float PLAT_HEIGHT{ 20.0f }; //The half height of one platform
 const float BG_WIDTH{ 640.0f }; //The half width of one background

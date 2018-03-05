@@ -16,7 +16,12 @@ enum OBJ_TYPE
 	OBJ_SC,			// 4
 	OBJ_WALL,		// 5
 	OBJ_BARRIER,	// 6
-	OBJ_TOWER		// 7
+	OBJ_COIN,		// 7
+	OBJ_HP,			// 8
+	OBJ_SPD,		// 9
+	OBJ_INVUL,		// 10
+	OBJ_DMG,		// 11
+	OBJ_ARCHER		// 12
 };
 
 //determine necessary functions for Level Editor 
