@@ -27,7 +27,7 @@ namespace ArcherMacros {
   const float Archer_Speed   { 120.0f }; //Scale of Archer mesh
   const float Arrow_Scale    { 20.0f  }; //Scale of arrow mesh
   const float Arrow_Death    { 800.0f }; //Scale of arrow mesh
-  const float Archer_LOS     { 300.0f }; //Line Of Sight
+  const float Archer_LOS     { 1000.0f }; //Line Of Sight
   const float Archer_CD_Time { 2.0f   }; //Attack Interval
   const float Archer_Max_Dist{ 200.0f }; //Maximum travelling distance
   const float Gravity        { 10.0f  }; //Gravity
@@ -57,7 +57,7 @@ private:
   bool  Attack_;            //Check if attack on cooldown
   float Distance;           //Distacne travelled by Archer
   float Arrow_CD;           //Arrow cooldown timer
-  float Angle;
+  float Angle;              //Arrow rotation
 
 //Attack Functions START///////////////////////////////////////////////////////////////
   void Attack_Update(Dragon &player, const float dt);  //Arrow rain update
@@ -68,6 +68,7 @@ private:
   void Idle(Dragon &player, const float dt);       //Idle state function
   void Move(Dragon &player, const float dt);       //Move state function
   void Attack(Dragon &player, const float dt);     //Attack state function
+  void Dead();                                     //Kills an archer when HP is 0
   void CheckState(Dragon &player, const float dt); //Sets current state to next, 
                                                    //checks for next state
 //State Functions END//////////////////////////////////////////////////////////////////

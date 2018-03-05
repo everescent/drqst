@@ -138,6 +138,12 @@ void Archer::Attack(Dragon &player, const float /*dt*/)
   Distance = 0.0f;
 }
 
+void Archer::Dead()
+{
+  SetActive(false);
+  Arrow.SetActive(false);
+}
+
 void Archer::CheckState(Dragon &player, const float /*dt*/)
 {
   //Check if dragon is seen
@@ -178,11 +184,16 @@ void Archer::CheckState(Dragon &player, const float /*dt*/)
 
 void Archer::Update(Dragon& player, const float dt)
 {
+  if (Get_HP() <= 0)
+  {
+    Dead();
+  }
   //Check if Dragon within Line Of Sight
-  if (player.PosX - PosX < Archer_LOS)
+  if (abs(player.PosX - PosX) < Archer_LOS)
   {
     Dragon_Seen = true;
   }
+  PosY -= Gravity;
   //Assign state
   CheckState(player, dt);
   //Execute state
