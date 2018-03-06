@@ -42,6 +42,7 @@ namespace
 	const AEVec2 ATK_START_POINT {-100.0f, -30.0f}; 
 	static float angle = 25.0f;
 	static float angle_offset = 2.0f;
+	static float charge_time;
 
 	const AEVec2 STARTING_POINT{ 200.0f, -200.0f };
 }
@@ -189,11 +190,23 @@ void Lancelot::Attack(Dragon &d, const float dt)
 			currAttk = MAD_ENHANCEMENT;
 
 		else*/  if (phase == PHASE_2 && !lancelot[ARONDIGHT].cooldown)
-		{
-			currAttk = ARONDIGHT;
-			//lancelot[ARONDIGHT].SetDir(true);
+		{				
 			angle = -90.0f;
 			angle_offset = 2.0f;
+			charge_time = 2.0f;
+			currAttk = ARONDIGHT;
+
+			this->PosX = 0.0f;
+			this->Transform_.SetTranslate(PosX, PosY);
+			this->Transform_.Concat();
+
+			lancelot[ARONDIGHT].Start_Attack(0.0f, ATK_START_POINT.y + 200);
+			lancelot[ARONDIGHT].Collision_.Update_Col_Pos(0.0f, 400.0f);
+			lancelot[ARONDIGHT].Transform_.SetRotation(angle);
+			lancelot[ARONDIGHT].Transform_.SetTranslate(0.0f, ATK_START_POINT.y + 200);
+			lancelot[ARONDIGHT].Transform_.Concat();
+
+			//lancelot[ARONDIGHT].SetDir(true);
 		}
    
 		else if (!lancelot[SLASH].cooldown)
@@ -333,30 +346,6 @@ void Lancelot::Mad_Enhancement()
 
 void Lancelot::Arondight(Dragon& d, const float dt)
 {
-	UNREFERENCED_PARAMETER(d);
-
-	static float charge_time;
-
-
-	if ( ! lancelot[ARONDIGHT].ongoing_attack)
-	{
-		this->PosX = 0.0f;
-		this->Transform_.SetTranslate(PosX, PosY);
-		this->Transform_.Concat();
-
-		charge_time = 2.0f;
-		angle = -90.0f;
-		lancelot[ARONDIGHT].Collision_.Update_Col_Pos(400.0f, 0.0f);
-		lancelot[ARONDIGHT].SetPos(0.0f, ATK_START_POINT.y +200);
-		lancelot[ARONDIGHT].Transform_.SetTranslate(lancelot[ARONDIGHT].PosX, lancelot[ARONDIGHT].PosY);
-		lancelot[ARONDIGHT].Transform_.SetRotation(-90.0f);
-		lancelot[ARONDIGHT].Transform_.Concat();
-		lancelot[ARONDIGHT].SetActive(true);
-		lancelot[ARONDIGHT].ongoing_attack = true;
-
-	}
-
-
 
 	while (charge_time > 0)
 	{
@@ -364,19 +353,18 @@ void Lancelot::Arondight(Dragon& d, const float dt)
 		return;
 	}
 
+	AEVec2 new_point = lancelot[ARONDIGHT].Collision_.Get_Point();
+
 	lancelot[ARONDIGHT].Projectile::Update(ATTACK_SCALE);
 	lancelot[ARONDIGHT].Transform_.SetRotation(angle += angle_offset);
 	lancelot[ARONDIGHT].Transform_.Concat();
 	AEVec2 position = { this->PosX, this->PosY };
-
 
 	if ( ! lancelot[ARONDIGHT].GetCollided() && lancelot[ARONDIGHT].Collision_.Line_Point(lancelot[ARONDIGHT].Collision_, d.Collision_, position))
 	{
 		d.Decrease_HP();
 		lancelot[ARONDIGHT].SetCollided(true);
 	}
-
-	AEVec2 new_point = lancelot[ARONDIGHT].Collision_.Get_Point();
 
 	if (lancelot[ARONDIGHT].GetDir())
 	{
@@ -385,13 +373,16 @@ void Lancelot::Arondight(Dragon& d, const float dt)
 	}
 	else
 	{
-		float radians = (float)(20 * 3.14159265 / 180.0);
+		float radians = AEDegToRad(2);
 
 		float s = sin(radians);
 		float c = cos(radians);
 		
+	
+		//std::cout << new_point.x << " " << new_point.y << std::endl;
 		new_point.x = new_point.x * c - new_point.y * s;
 		new_point.y = new_point.x * s + new_point.y * c;
+		//std::cout << new_point.x << " " << new_point.y << std::endl;
 		
 	}
 
@@ -401,6 +392,7 @@ void Lancelot::Arondight(Dragon& d, const float dt)
 	{
 		lancelot[ARONDIGHT].End_Attack();
 		lancelot[ARONDIGHT].cooldown_timer = 0.0f;
+		charge_time = 2.0f;
 	}
 
 

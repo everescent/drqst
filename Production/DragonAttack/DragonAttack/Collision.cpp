@@ -191,18 +191,11 @@ Shape Col_Comp::GetShape()
 
 bool Col_Comp::Line_Point(Col_Comp &A, Col_Comp &B,  AEVec2 & A_Pos)
 {
-	float line_dist  = AEVec2SquareDistance(&A.mid, &A_Pos);
-	float start_dist = AEVec2SquareDistance(&A.mid, &B.max);
-	float end_dist   = AEVec2SquareDistance(&A_Pos, &B.max);
-	float buffer = 0.1f;
+	AEVec2 normal = { -(A.mid.y - A_Pos.y), (A.mid.x - A_Pos.x) };
+	AEVec2 vector = { (B.max.x - A.mid.x), (B.max.y = A.max.y) };
 
 
-	//std::cout << line_dist << std::endl;
-	//std::cout << start_dist + end_dist << std::endl;
-	//std::cout << A_Pos.x <<  " " << A_Pos.y<<std::endl;
-	//std::cout << "\n";
-
-	if (start_dist + end_dist >= line_dist - buffer && start_dist + end_dist <= line_dist + buffer)
+	if ( AEVec2DotProduct(&normal, &vector) < 0)
 	{
 		return true;
 	}
