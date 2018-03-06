@@ -192,8 +192,16 @@ Shape Col_Comp::GetShape()
 bool Col_Comp::Line_Point(Col_Comp &A, Col_Comp &B,  AEVec2 & A_Pos)
 {
 	AEVec2 normal = { -(A.mid.y - A_Pos.y), (A.mid.x - A_Pos.x) };
-	AEVec2 vector = { (B.max.x - A.mid.x), (B.max.y = A.max.y) };
+	AEVec2 vector = { (B.max.x - A_Pos.x), (B.max.y - A_Pos.y) };
 
+	using namespace std;
+	cout << "dragon pos = " << B.max.x << " " << B.max.y << endl;
+	cout << "tip pos = " << A.mid.x << " " << A.mid.y << endl;
+	cout << "normal : " << normal.x << " " << normal.y << endl;
+	cout << "vector : " << vector.x << " " << vector.y << endl;
+	cout << "result = " << AEVec2DotProduct(&normal, &vector) << endl;
+	
+	//std::cout << AEVec2SquareDistance(&A.mid, &A_Pos) << std::endl;
 
 	if ( AEVec2DotProduct(&normal, &vector) < 0)
 	{
