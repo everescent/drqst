@@ -22,12 +22,14 @@ namespace AI_Test_Stage
 	{
 		d->SetActive(true);
 		d->Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+		
+		floor1->Collision_.Update_Col_Pos(-600.0f, -360.0f, 600.0f, -300.0f);
 	}
 
 	void Load(void)
 	{
 		BG = new Sprite{ CreateBG(1.0f, "../../Illustrations/Environment/Cobblestone.png") };
-		floor1 = new Floor{ 0.0f, -350.0f }; //ok
+		floor1 = new Floor{ -200.0f, -350.0f }; //ok
 		M_BG = new Transform;
 		d = new Dragon;
 		c.push_back( Create_Boss_AI(LANCELOT));

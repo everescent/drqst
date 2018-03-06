@@ -188,7 +188,7 @@ void Lancelot::Attack(Dragon &d, const float dt)
 	/*	if(phase == PHASE_1 && ! lancelot[MAD_ENHANCEMENT].cooldown)
 			currAttk = MAD_ENHANCEMENT;
 
-		else  if (phase == PHASE_2 && !lancelot[ARONDIGHT].cooldown)
+		else*/  if (phase == PHASE_2 && !lancelot[ARONDIGHT].cooldown)
 		{
 			currAttk = ARONDIGHT;
 			//lancelot[ARONDIGHT].SetDir(true);
@@ -196,7 +196,7 @@ void Lancelot::Attack(Dragon &d, const float dt)
 			angle_offset = 2.0f;
 		}
    
-		else*/ if (!lancelot[SLASH].cooldown)
+		else if (!lancelot[SLASH].cooldown)
 		{
 			currAttk = SLASH;
 
