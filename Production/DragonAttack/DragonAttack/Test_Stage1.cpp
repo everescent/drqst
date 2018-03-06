@@ -75,7 +75,7 @@ namespace Test_Stage1_1
 			Col_Comp{ 0.0f - 25.0f, 0.0f - 25.0f, 0.0f + 25.0f, 0.0f + 25.0f, Rect },
 			HP, 5300.0f, -100.0f };
 
-		if (!Import_MapData("level2.txt", MapData, Map_Width, Map_Height)) { AEGfxExit(); }
+		if (!Import_MapData("level1-1.txt", MapData, Map_Width, Map_Height)) { AEGfxExit(); }
 
 		/*std::cout << "Width:" << Map_Width << std::endl;
 		std::cout << "Height:" << Map_Height << std::endl;

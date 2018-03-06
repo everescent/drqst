@@ -242,8 +242,8 @@
     <ClInclude Include="Wall.h" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="level2.txt" />
-    <Text Include="level_2.txt" />
+    <Text Include="level1-1.txt" />
+    <Text Include="level1-2.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
