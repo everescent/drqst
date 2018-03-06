@@ -8,6 +8,7 @@ Wall::Wall(float x, float y)
 	x, y }
 {
 	SetActive(true);
+	Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 	PosX = x;
 	PosY = y;
 }

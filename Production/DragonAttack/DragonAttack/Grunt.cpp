@@ -35,6 +35,7 @@ Grunt::Grunt(const float posX, const float posY)
 		Col_Comp{ posX - GRUNT_SCALE, posY - GRUNT_SCALE , posX + GRUNT_SCALE - 60.0f , posY + GRUNT_SCALE, Rect })
 {
 	SetActive(true);
+	Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 	PosX = posX;
 	PosY = posY;
 }
