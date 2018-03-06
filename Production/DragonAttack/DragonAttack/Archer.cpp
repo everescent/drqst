@@ -19,7 +19,7 @@ using namespace ArcherMacros;
 
 Archer::Archer(const float posX, const float posY)
   //Initialize characters class
-  :Characters{ S_CreateSquare(Archer_Scale, ".//Textures/grunt.png"), Archer_HP,
+  :Characters{ S_CreateSquare(Archer_Scale, ".//Textures/Archer.png"), Archer_HP,
              Col_Comp{ posX - Archer_Scale, posY - Archer_Scale,
              posX + Archer_Scale, posY + Archer_Scale, Rect } },
   //Initialize Arrow

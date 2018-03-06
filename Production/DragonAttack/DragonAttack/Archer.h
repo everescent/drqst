@@ -23,7 +23,7 @@ Technology is prohibited.
 namespace ArcherMacros {
   //Global Read-Only Variables START///////////////////////////////////////////////////////
   const int   Archer_HP      { 50      }; //Archer HP
-  const float Archer_Scale   { 100.0f  }; //Scale of Archer mesh
+  const float Archer_Scale   { 70.0f  }; //Scale of Archer mesh
   const float Archer_Speed   { 120.0f  }; //Scale of Archer mesh
   const float Arrow_Scale    { 20.0f   }; //Scale of arrow mesh
   const float Arrow_Death    { 800.0f  }; //Scale of arrow mesh
