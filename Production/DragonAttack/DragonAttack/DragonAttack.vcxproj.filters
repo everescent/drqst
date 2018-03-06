@@ -88,6 +88,9 @@
     <Filter Include="Game_Engine\Audio">
       <UniqueIdentifier>{51a70cae-782c-4df2-a52b-4646c63943f9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game_Object\User_Interface">
+      <UniqueIdentifier>{22df9dde-bf35-49ea-bc6a-7d853199bfdd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -212,6 +215,9 @@
     </ClCompile>
     <ClCompile Include="Knight.cpp">
       <Filter>Characters\AI\Basic_Mobs</Filter>
+    </ClCompile>
+    <ClCompile Include="UI.cpp">
+      <Filter>Game_Object\User_Interface</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -343,6 +349,9 @@
     </ClInclude>
     <ClInclude Include="Knight.h">
       <Filter>Characters\AI\Basic_Mobs</Filter>
+    </ClInclude>
+    <ClInclude Include="UI.h">
+      <Filter>Game_Object\User_Interface</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

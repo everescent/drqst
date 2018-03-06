@@ -194,6 +194,7 @@
     <ClCompile Include="Test_Stage1_2.cpp" />
     <ClCompile Include="Tower.cpp" />
     <ClCompile Include="Transform.cpp" />
+    <ClCompile Include="UI.cpp" />
     <ClCompile Include="Wall.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -239,6 +240,7 @@
     <ClInclude Include="Test_Stage1_2.h" />
     <ClInclude Include="Tower.h" />
     <ClInclude Include="Transform.h" />
+    <ClInclude Include="UI.h" />
     <ClInclude Include="Wall.h" />
   </ItemGroup>
   <ItemGroup>
