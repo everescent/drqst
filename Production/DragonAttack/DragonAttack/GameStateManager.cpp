@@ -36,12 +36,12 @@ namespace GSM
 		GSF[GS_MAIN].Free     = Main_Menu::Free;
 		GSF[GS_MAIN].Unload   = Main_Menu::Unload;
 
-		GSF[GS_LEVEL1].Init	  = Test_Stage1_1::Init;
-		GSF[GS_LEVEL1].Load	  = Test_Stage1_1::Load;
-		GSF[GS_LEVEL1].Update = Test_Stage1_1::Update;
-		GSF[GS_LEVEL1].Draw	  = Test_Stage1_1::Draw;
-		GSF[GS_LEVEL1].Free	  = Test_Stage1_1::Free;
-		GSF[GS_LEVEL1].Unload = Test_Stage1_1::Unload;
+		GSF[GS_LEVEL1_1].Init	  = Test_Stage1_1::Init;
+		GSF[GS_LEVEL1_1].Load	  = Test_Stage1_1::Load;
+		GSF[GS_LEVEL1_1].Update = Test_Stage1_1::Update;
+		GSF[GS_LEVEL1_1].Draw	  = Test_Stage1_1::Draw;
+		GSF[GS_LEVEL1_1].Free	  = Test_Stage1_1::Free;
+		GSF[GS_LEVEL1_1].Unload = Test_Stage1_1::Unload;
 
 		GSF[AI_TEST_STAGE].Init   = AI_Test_Stage::Init;
 		GSF[AI_TEST_STAGE].Load   = AI_Test_Stage::Load;
@@ -50,12 +50,12 @@ namespace GSM
 		GSF[AI_TEST_STAGE].Free   = AI_Test_Stage::Free;
 		GSF[AI_TEST_STAGE].Unload = AI_Test_Stage::Unload;
 
-		GSF[GS_LEVEL2].Init   = Test_Stage1_2::Init;
-		GSF[GS_LEVEL2].Load   = Test_Stage1_2::Load;
-		GSF[GS_LEVEL2].Update = Test_Stage1_2::Update;
-		GSF[GS_LEVEL2].Draw   = Test_Stage1_2::Draw;
-		GSF[GS_LEVEL2].Free   = Test_Stage1_2::Free;
-		GSF[GS_LEVEL2].Unload = Test_Stage1_2::Unload;
+		GSF[GS_LEVEL1_2].Init   = Test_Stage1_2::Init;
+		GSF[GS_LEVEL1_2].Load   = Test_Stage1_2::Load;
+		GSF[GS_LEVEL1_2].Update = Test_Stage1_2::Update;
+		GSF[GS_LEVEL1_2].Draw   = Test_Stage1_2::Draw;
+		GSF[GS_LEVEL1_2].Free   = Test_Stage1_2::Free;
+		GSF[GS_LEVEL1_2].Unload = Test_Stage1_2::Unload;
 		
 		GSF[GS_LEVEL_IMPORT].Init   = Test_Stage_Import::Init;
 		GSF[GS_LEVEL_IMPORT].Load   = Test_Stage_Import::Load;

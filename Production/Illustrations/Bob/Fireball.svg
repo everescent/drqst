@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="1024"
+   height="1024"
+   viewBox="0 0 270.93333 270.93334"
+   version="1.1"
+   id="svg8"
+   inkscape:version="0.92.2 (5c3e80d, 2017-08-06)"
+   sodipodi:docname="Fireball.svg"
+   inkscape:export-filename="D:\Documents\Digipen\Semester 02\GAM150\drqst\Production\Illustrations\Bob\Fireball.png"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96">
+  <defs
+     id="defs2">
+    <filter
+       inkscape:label="Blur Double"
+       inkscape:menu="Blurs"
+       inkscape:menu-tooltip="Overlays two copies with different blur amounts and modifiable blend and composite"
+       style="color-interpolation-filters:sRGB;"
+       id="filter829">
+      <feGaussianBlur
+         stdDeviation="5"
+         result="fbSourceGraphic"
+         id="feGaussianBlur821" />
+      <feGaussianBlur
+         stdDeviation="0.01"
+         in="SourceGraphic"
+         result="result1"
+         id="feGaussianBlur823" />
+      <feComposite
+         in2="result1"
+         operator="arithmetic"
+         in="fbSourceGraphic"
+         k2="0.5"
+         k3="0.5"
+         result="result2"
+         id="feComposite825" />
+      <feBlend
+         in2="fbSourceGraphic"
+         mode="normal"
+         result="result3"
+         id="feBlend827" />
+    </filter>
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.35"
+     inkscape:cx="392.78136"
+     inkscape:cy="545.98646"
+     inkscape:document-units="mm"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     units="px"
+     inkscape:pagecheckerboard="true"
+     inkscape:window-width="1920"
+     inkscape:window-height="1057"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata5">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(0,-26.06665)">
+    <path
+       style="fill:#ff2a2a;fill-opacity:1;stroke:#000000;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="m 21.922618,147.32141 c -2.901127,27.76423 -4.843329,60.37422 11.589512,82.94036 21.204548,29.11881 61.246432,46.97673 97.26763,47.08345 36.81478,0.10907 77.96943,-17.80902 99.69392,-47.53084 16.52872,-22.61333 15.00213,-55.46747 11.43108,-83.24892 C 237.18252,109.82828 212.22753,44.102655 199.43914,43.881703 187.98893,43.683871 178.25061,217.09645 147.41071,120.10712 139.28598,94.555401 134.22808,21.769141 126.61483,43.057641 117.1653,69.480811 107.08583,157.75279 101.79417,140.36589 96.502502,122.97898 69.818821,24.754962 60.47619,40.732126 42.964504,70.679481 25.849192,109.7435 21.922618,147.32141 Z"
+       id="path815"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="aaaaasssssa" />
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer2"
+     inkscape:label="Layer 2">
+    <path
+       sodipodi:nodetypes="aaaaasssssa"
+       inkscape:connector-curvature="0"
+       id="path818"
+       d="m 54.228051,152.4517 c 2.729375,16.50199 12.39451,32.24816 24.499046,43.79135 13.437389,12.81423 31.307143,23.87556 49.848993,24.85941 21.0471,1.11678 43.95533,-7.57293 59.25272,-22.07181 11.19689,-10.61242 16.17977,-27.18404 18.4551,-42.44237 3.01953,-20.24896 -0.35448,-60.902504 -6.99299,-61.019164 -5.94385,-0.10445 -26.30875,62.728784 -44.73148,35.710244 -7.90485,-11.59315 -21.32858,-64.016317 -25.58403,-52.776287 -5.28185,13.951067 -25.374,65.093147 -27.87597,55.913107 C 98.597485,125.23614 71.76743,76.399037 66.689055,84.834757 57.170219,100.64654 50.48821,129.84037 54.228051,152.4517 Z"
+       style="fill:#ffe680;fill-opacity:1;stroke:#000000;stroke-width:0.138549px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;filter:url(#filter829)" />
+  </g>
+</svg>

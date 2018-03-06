@@ -346,10 +346,10 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="level_2.txt">
+    <Text Include="level1-1.txt">
       <Filter>Resource Files</Filter>
     </Text>
-    <Text Include="level2.txt">
+    <Text Include="level1-2.txt">
       <Filter>Resource Files</Filter>
     </Text>
   </ItemGroup>
