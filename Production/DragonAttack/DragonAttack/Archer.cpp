@@ -63,6 +63,8 @@ void Archer::Attack_Update(Dragon &/*player*/, const float dt)
 
 void Archer::Colision_Check(Dragon &player, const float dt)
 {
+  GameObject::Collision_.Update_Col_Pos(PosX - Archer_Scale, PosY - Archer_Scale,
+                                        PosX + Archer_Scale, PosY + Archer_Scale);
   //If Archer gets hit, decrease HP
   for (char i = 0; i < Bullet_Buffer; ++i)
     if (player.GetFireball()[i].IsActive())
@@ -202,7 +204,8 @@ void Archer::Update(Dragon& player, const float dt)
     {
       Transform_.SetScale(1.0f, 1.0f);
     }
-   // PosY -= Gravity;
+    PosY -= Gravity;
+    
     //Assign state
     CheckState(player, dt);
     //Execute state
