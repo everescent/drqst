@@ -29,19 +29,17 @@ namespace
 	int Map_Height;
 	std::vector<Platform> platforms;
 	std::vector<Floor> floors;
-	std::vector<Grunt> grunts;
+	//std::vector<Grunt> grunts;
 	std::vector<Wall> walls;
 	std::vector<Barrier> barriers;
 	std::vector<Scarecrow> scarecrows;
-	std::vector<PickUp> powerups;
-	//std::vector<Archer> archers;
+	//std::vector<PickUp> powerups;
 
 	Tower *archerTower;
-	Archer *archer1, *archer2;
-	PickUp *coin1, *coin2, *coin3;
-	PickUp *power1, *power2;
-	/*std::vector<Characters*> c;
-	char num_of_mob = 1;*/
+	PickUp *coin1, *coin2, *coin3, *hp;
+	Platform *up1, *up2;
+	//PickUp *power1, *power2;
+	std::vector<Characters*> c;
 }
 
 namespace Test_Stage1_2
@@ -54,18 +52,45 @@ namespace Test_Stage1_2
 
 		if (!Import_MapData("level1-2.txt", MapData, Map_Width, Map_Height)) { AEGfxExit(); }
 
-		archer1 = new Archer{ 4500.0f, 230.0f };
-
 		// Tower
-		archerTower = new Tower{ 4500.0f, 0.0f };
-		//c.push_back(Create_Boss_AI(KING_ARTHUR));
+		archerTower = new Tower{ 7000.0f, 170.0f };
+
+		up1 = new Platform{ 6000.0f, -30.0f };
+		up2 = new Platform{ 6000.0f, -120.0f };
+
+		coin1 = new PickUp{ S_CreateSquare(50.0f, "Textures/coin.png",1.0f),
+			Col_Comp{ 0.0f - 25.0f, 0.0f - 25.0f, 0.0f + 25.0f, 0.0f + 25.0f, Rect },
+			COIN, 2080.0f , -145.0f };
+
+		coin2 = new PickUp{ S_CreateSquare(50.0f, "Textures/coin.png",1.0f),
+			Col_Comp{ 0.0f - 25.0f, 0.0f - 25.0f, 0.0f + 25.0f, 0.0f + 25.0f, Rect },
+			COIN, 4200.0f , -325.0f };
+
+		coin3 = new PickUp{ S_CreateSquare(50.0f, "Textures/coin.png",1.0f),
+			Col_Comp{ 0.0f - 25.0f, 0.0f - 25.0f, 0.0f + 25.0f, 0.0f + 25.0f, Rect },
+			COIN, 5450.0f , 200.0f };
+
+		hp = new PickUp{ S_CreateSquare(50.0f, "Textures/coin.png",1.0f),
+			Col_Comp{ 0.0f - 25.0f, 0.0f - 25.0f, 0.0f + 25.0f, 0.0f + 25.0f, Rect },
+			HP, 5450.0f , 200.0f };
+
+		c.push_back(Create_Basic_AI(GRUNT, AEVec2{ 727.0f , 105.0f }));
+		c.push_back(Create_Basic_AI(GRUNT, AEVec2{ 1895.0f , -165.0f }));
+		c.push_back(Create_Basic_AI(ARCHER, AEVec2{ 2335.0f , 195.0f }));
+		c.push_back(Create_Basic_AI(GRUNT, AEVec2{ 4500.0f , -345.0f }));
+		c.push_back(Create_Basic_AI(ARCHER, AEVec2{ 4700.0f , -345.0f }));
+		c.push_back(Create_Basic_AI(GRUNT, AEVec2{ 4900.0f , -345.0f }));
+		c.push_back(Create_Basic_AI(GRUNT, AEVec2{ 5550.0f , 195.0f }));
+		c.push_back(Create_Basic_AI(GRUNT, AEVec2{ 5300.0f , 195.0f }));
+		c.push_back(Create_Basic_AI(GRUNT, AEVec2{ 6450.0f , 195.0f }));
+		c.push_back(Create_Basic_AI(ARCHER, AEVec2{ 7000.0f, 400.0f }));
 	}
 
 
 	void Init(void)
 	{
-		/*for(char i = 0; i < num_of_mob; ++i)
-		c[i]->SetActive(true);*/
+		for(size_t i = 0; i < c.size(); ++i)
+			c[i]->SetActive(true);
 
 		player->SetActive(true);
 
@@ -85,12 +110,12 @@ namespace Test_Stage1_2
 					float f_y = (float)y;
 					floors.push_back(Floor{ Convert_X(f_x) , Convert_Y(f_y) });
 				}
-				if (MapData[y][x] == OBJ_GRUNT)
+				/*if (MapData[y][x] == OBJ_GRUNT)
 				{
 					float f_x = (float)x;
 					float f_y = (float)y;
 					grunts.push_back(Grunt{ Convert_X(f_x) , Convert_Y(f_y) });
-				}
+				}*/
 				if (MapData[y][x] == OBJ_SC)
 				{
 					float f_x = (float)x;
@@ -109,7 +134,7 @@ namespace Test_Stage1_2
 					float f_y = (float)y;
 					barriers.push_back(Barrier{ Convert_X(f_x) , Convert_Y(f_y) });
 				}
-				if (MapData[y][x] == OBJ_SPD)
+				/*if (MapData[y][x] == OBJ_SPD)
 				{
 					float f_x = (float)x;
 					float f_y = (float)y;
@@ -132,12 +157,6 @@ namespace Test_Stage1_2
 					powerups.push_back(PickUp{ S_CreateSquare(50.0f, "Textures/coin.png",1.0f),
 						Col_Comp{ 0.0f - 25.0f, 0.0f - 25.0f, 0.0f + 25.0f, 0.0f + 25.0f, Rect },
 						HP, Convert_X(f_x) , Convert_Y(f_y) });
-				}
-				/*if (MapData[y][x] == OBJ_ARCHER)
-				{
-				float f_x = (float)x;
-				float f_y = (float)y;
-				archers.push_back(Archer{ Convert_X(f_x) , Convert_Y(f_y) });
 				}*/
 			}
 		}
@@ -148,16 +167,20 @@ namespace Test_Stage1_2
 
 	void Update(float dt)
 	{
+		for (size_t i = 0; i < c.size(); ++i)
+			c[i]->Update(*player, dt);
+
 		for (Platform& elem : platforms)
 		{
 			elem.Update(*player, dt);
 		}
 		for (Floor& elem : floors)
 		{
-			for (Grunt& elem2 : grunts)
+			for (size_t i = 0; i < c.size(); ++i)
 			{
-				elem.Update(elem2, dt);
+				elem.Update(*(c[i]), dt);
 			}
+
 			for (Scarecrow& elem3 : scarecrows)
 			{
 				elem.Update(elem3, dt);
@@ -166,6 +189,12 @@ namespace Test_Stage1_2
 		}
 		for (Wall& elem : walls)
 		{
+			for (size_t i = 0; i < c.size(); ++i)
+			{
+				elem.Update(*(c[i]), dt);
+			}
+
+
 			elem.Update(*player, dt);
 		}
 		for (Barrier& elem : barriers)
@@ -176,19 +205,20 @@ namespace Test_Stage1_2
 		{
 			elem.Update(*player, dt);
 		}
-		for (Grunt& elem : grunts)
+		/*for (PickUp& elem : powerups)
 		{
 			elem.Update(*player, dt);
-		}
+		}*/
 
-		archer1->Update(*player, dt);
+		coin1->Update(*player, dt);
+		coin2->Update(*player, dt);
+		coin3->Update(*player, dt);
 		archerTower->Update(*player, dt);
+		up1->Update(*player, dt);
+		up2->Update(*player, dt);
 		player->Update(*player, dt);
 
-		//std::cout << (int)player->PosX <<", "<< (int)player->PosY << std::endl;
-
-		/*for (char i = 0; i < num_of_mob; ++i)
-		c[i]->Update(*player, dt);*/
+		std::cout << (int)player->PosX <<", "<< (int)player->PosY << std::endl;
 	}
 
 	void Draw(void)
@@ -197,10 +227,10 @@ namespace Test_Stage1_2
 
 		BG->Render_Object(*M_BG);
 
-		archer1->Render();
-		archer1->Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 		archerTower->Render();
 		archerTower->Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+		up1->Render();
+		up2->Render();
 
 		for (Platform& elem : platforms)
 		{
@@ -224,22 +254,26 @@ namespace Test_Stage1_2
 			elem.Render();
 			elem.Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 		}
-		for (Grunt& elem : grunts)
+	/*	for (PickUp& elem : powerups)
 		{
 			elem.Render();
 			elem.Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
-		}
-		/*for (Archer& elem : archers)
-		{
-		elem.Render();
-		elem.Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 		}*/
 
 		player->Render();
 		player->Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 
-		/*for (char i = 0; i < num_of_mob; ++i)
-		c[i]->Render();*/
+		for (size_t i = 0; i < c.size(); ++i)
+		{
+			c[i]->Render();
+			c[i]->Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+		}
+		coin1->Render();
+		coin1->Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+		coin2->Render();
+		coin2->Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+		coin3->Render();
+		coin3->Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 	}
 
 	void Free(void)
@@ -247,10 +281,14 @@ namespace Test_Stage1_2
 		delete BG;
 		delete M_BG;
 		delete player;
-		delete archer1;
 		// Static Objs
 		delete archerTower;
-		//c.clear();
+		delete up1;
+		delete up2;
+		delete coin1;
+		delete coin2;
+		delete coin3;
+		c.clear();
 	}
 
 	void Unload(void)

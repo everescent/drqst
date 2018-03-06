@@ -29,14 +29,14 @@ namespace // global variables just for THIS file
 	const float GRUNT_SCALE = 70.0F;
 }
 
-Grunt::Grunt(float x, float y)
+Grunt::Grunt(const float posX, const float posY)
 	: Characters(S_CreateSquare(GRUNT_SCALE, ".//Textures/grunt.png"),
 		grunt_hp,
-		Col_Comp{ x - GRUNT_SCALE, y - GRUNT_SCALE , x + GRUNT_SCALE , y + GRUNT_SCALE, Rect })
+		Col_Comp{ posX - GRUNT_SCALE, posY - GRUNT_SCALE , posX + GRUNT_SCALE - 60.0f , posY + GRUNT_SCALE, Rect })
 {
 	SetActive(true);
-	PosX = x;
-	PosY = y;
+	PosX = posX;
+	PosY = posY;
 }
 
 void Grunt::Update(Dragon &d, const float dt)
@@ -66,7 +66,7 @@ void Grunt::Update(Dragon &d, const float dt)
 
 		// update the collision box of grunt
 		this->Collision_.Update_Col_Pos(this->PosX - GRUNT_SCALE, this->PosY - GRUNT_SCALE,  // min point
-		this->PosX + GRUNT_SCALE, this->PosY + GRUNT_SCALE); // max point
+		this->PosX + GRUNT_SCALE - 60.0f, this->PosY + GRUNT_SCALE); // max point
 
 		/*if (Collision_.Dy_Rect_Rect(d.Collision_, GetVelocity(), d.GetVelocity(), dt))
 		{
@@ -155,12 +155,17 @@ void Grunt::LineOfSight(const Dragon &d)
 	float playerDist = (d.PosX - this->PosX);
 	if (playerDist <= 600.0f && playerDist >= -600.0f)  // vision range
 	{
-		PlayerSeen = true;
+		if ((d.PosY < PosY + 200.0f) && (d.PosY > PosY - 200.0f))
+		{
+			PlayerSeen = true;
+		}
 	}
 	else
 	{
 		PlayerSeen = false;
 	}
+
+	
 }
 
 void Grunt::AttackPlayer(const Dragon &d)
