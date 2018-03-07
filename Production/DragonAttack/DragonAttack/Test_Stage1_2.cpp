@@ -6,7 +6,7 @@ namespace
 	Sprite *BG;
 	Transform *M_BG;
 	Audio_Engine* Audio;
-
+	UI* ui;
 	int** MapData;
 	int Map_Width;
 	int Map_Height;
@@ -33,7 +33,7 @@ namespace Test_Stage1_2
 		M_BG = new Transform{};
 		player = new Dragon{};
 		Audio = new Audio_Engine{ 1, [](std::vector <std::string> &playlist)->void {playlist.push_back(".//Audio/Stage_1_BGM.mp3"); } };
-
+		ui = new UI(player);
 		if (!Import_MapData("level1-2.txt", MapData, Map_Width, Map_Height)) { AEGfxExit(); }
 
 		//archerTower = new Tower        { 7000.0f,  170.0f };
@@ -178,7 +178,7 @@ namespace Test_Stage1_2
 		up2->Update(*player, dt);
 		next->Update(*player, dt);
 		player->Update(*player, dt);
-
+		ui->UI_Update(player);
 		std::cout << (int)player->PosX <<", "<< (int)player->PosY << std::endl;
 	}
 
@@ -216,6 +216,7 @@ namespace Test_Stage1_2
 
 		player->Render();
 		player->Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+		ui->Render();
 
 	}
 
@@ -233,7 +234,7 @@ namespace Test_Stage1_2
 		delete coin2;
 		delete coin3;
 		delete next;
-
+		delete ui;
 		platforms.clear();
 		floors.clear();
 		walls.clear();
