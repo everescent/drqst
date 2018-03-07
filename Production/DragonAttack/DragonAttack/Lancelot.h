@@ -42,7 +42,7 @@ private:
 
 	//void (Lancelot::*ll_attacks[3])(const float dt); // function pointer to lancelot attacks
 
-	BOSS_PHASE phase = PHASE_1;  // flag for lancelot second phase
+	BOSS_PHASE phase = PHASE_2;  // flag for lancelot second phase
 
 	bool M_E; // lancelot berserk state
 

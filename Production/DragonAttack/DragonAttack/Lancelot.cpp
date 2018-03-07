@@ -56,8 +56,9 @@ Lancelot::Lancelot(void)
 
 {
 	Transform_.SetTranslate(STARTING_POINT.x, STARTING_POINT.y); // spawn lancelot at this location
+	Transform_.SetScale(-1.0f, 1.0f);
 	Transform_.Concat();
-	SetPos( 200.0f , Start_Pos_Y);    // update lancelot current coordinates
+	SetPos(STARTING_POINT.x, STARTING_POINT.y);    // update lancelot current coordinates
 	SetActive(true);					// spawn lancelot
 	Set_Direction(LEFT);				// face left
 	SetVelocity({ 300.0f, 0.0f });    // velocity for lancelot
@@ -214,10 +215,10 @@ void Lancelot::Attack(Dragon &d, const float dt)
 			this->Transform_.SetTranslate(PosX, PosY);
 			this->Transform_.Concat();
 
-			lancelot[ARONDIGHT].Start_Attack(0.0f, ATK_START_POINT.y + 200);
+			lancelot[ARONDIGHT].Start_Attack(0.0f, ATK_START_POINT.y + 100);
 			lancelot[ARONDIGHT].Collision_.Update_Col_Pos(0.0f, 400.0f);
 			lancelot[ARONDIGHT].Transform_.SetRotation(-90.0f);
-			lancelot[ARONDIGHT].Transform_.SetTranslate(0.0f, ATK_START_POINT.y + 200);
+			lancelot[ARONDIGHT].Transform_.SetTranslate(lancelot[ARONDIGHT].PosX, lancelot[ARONDIGHT].PosY);
 			lancelot[ARONDIGHT].Transform_.Concat();
 
 		}
@@ -374,7 +375,7 @@ void Lancelot::Arondight(Dragon& d, const float dt)
 	float tempX = new_vector.x;   // old value of x
 	new_vector.x -= PosX;		  // rotate collision point with using lancelot as the origin
 	new_vector.y -= PosY;		  // rotate collision point with using lancelot as the origin
-	lancelot[ARONDIGHT].Transform_.SetRotation(AERadToDeg(atan(new_vector.y / new_vector.x)));
+	//lancelot[ARONDIGHT].Transform_.SetRotation(AERadToDeg(atan(new_vector.y / new_vector.x)));
 
 	//auto& haha = lancelot[ARONDIGHT].Collision_;
 	//(void)haha;
@@ -384,6 +385,7 @@ void Lancelot::Arondight(Dragon& d, const float dt)
 	{
 		radians = AEDegToRad(-angle_offset); // rotate the sword by -3 degrees
 		side = OUTSIDE;					     // check the outisde half plane
+		lancelot[ARONDIGHT].Transform_.SetScale(-11.5f, 3.0f);
 	}
 	else
 	{
@@ -430,11 +432,14 @@ void Lancelot::Set_Face_Dir(const Dragon& d)
 	if (d.PosX - this->PosX > 0)
 	{
 		this->Set_Direction(RIGHT);
+		this->Transform_.SetScale(1.0f, 1.0f);
 	}
 	else
 	{
 		this->Set_Direction(LEFT);
+		this->Transform_.SetScale(-1.0f, 1.0f);
 	}
+	this->Transform_.Concat();
 }
 
 void Lancelot::Set_Attk_Dir()
