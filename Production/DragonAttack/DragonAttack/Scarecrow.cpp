@@ -15,6 +15,7 @@ Scarecrow::Scarecrow(float x, float y)
 		Col_Comp{ x - SC_SCALE, y - SC_SCALE , x + SC_SCALE , y + SC_SCALE, Rect })
 {
 	SetActive(true);
+	Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 	PosX = x;
 	PosY = y;
 }

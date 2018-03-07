@@ -176,6 +176,7 @@
     <ClCompile Include="King_Arthur.cpp" />
     <ClCompile Include="Knight.cpp" />
     <ClCompile Include="Lancelot.cpp" />
+    <ClCompile Include="LevelChangePlatform.cpp" />
     <ClCompile Include="Level_Import.cpp" />
     <ClCompile Include="Mage.cpp" />
     <ClCompile Include="main.cpp" />
@@ -222,6 +223,7 @@
     <ClInclude Include="King_Arthur.h" />
     <ClInclude Include="Knight.h" />
     <ClInclude Include="Lancelot.h" />
+    <ClInclude Include="LevelChangePlatform.h" />
     <ClInclude Include="Level_Import.h" />
     <ClInclude Include="Mage.h" />
     <ClInclude Include="EngineProof.h" />

@@ -1,8 +1,8 @@
 /* Start Header ************************************************************************/
 /*!
-\file       Platform.h
-\author     Andrew Chong/Jacob Lim
-\par email: c.jiahaoandrew\@digipen.edu/jacob.lim\@digipen.edu
+\file       LevelChangePlatform.h
+\author     Andrew Chong
+\par email: c.jiahaoandrew\@digipen.edu
 \brief
 Character class, parent class of the characters to be created
 
@@ -18,14 +18,14 @@ Technology is prohibited.
 #include "Transform.h"
 #include "Dragon.h"
 #include "Create_Object.h"
+#include "GameStateManager.h"
 
 // A class that creates a basic character
-class Wall : public GameObject
+class LevelChangePlatform : public GameObject
 {
 private:
 
 public:
-	Wall(float x, float y); // default constructor
-
-	void Update(Characters &obj, const float &dt);
+	LevelChangePlatform(float x, float y); // default constructor
+	void Update(Dragon &player, const float &dt);
 };

@@ -24,6 +24,7 @@ PickUp::PickUp(Sprite &&t_sprite, Col_Comp && t_col, const PUT type, const float
   Type_{ type }, Active_{ false }, Cooldown_{ 0 }
 {
   SetActive(true);
+  Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
   PosX = posX;
   PosY = posY;
   Transform_.SetTranslate(PosX, PosY);

@@ -219,6 +219,9 @@
     <ClCompile Include="UI.cpp">
       <Filter>Game_Object\User_Interface</Filter>
     </ClCompile>
+    <ClCompile Include="LevelChangePlatform.cpp">
+      <Filter>Game_Object\Objects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h">
@@ -352,6 +355,9 @@
     </ClInclude>
     <ClInclude Include="UI.h">
       <Filter>Game_Object\User_Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="LevelChangePlatform.h">
+      <Filter>Game_Object\Objects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

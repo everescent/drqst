@@ -1,46 +1,29 @@
 #include "Test_Stage1.h"
-#include "AEEngine.h"
-#include "Sprite.h"
-#include "Transform.h"
-#include "Create_Object.h"
-#include "GameObject.h"
-#include "Camera.h"
-#include "Collision.h"
-#include "GameStateManager.h"
-#include "Dragon.h"
-#include "Floor.h"
-#include "Wall.h"
-#include "Platform.h"
-#include "Barrier.h"
-#include "Tower.h"
-#include "Scarecrow.h"
-#include "AI_Data_Factory.h"
-#include "Level_Import.h"
-#include <utility>
-#include <iostream>
 
 namespace
 {
 	Dragon *player;
 	Sprite *BG;
 	Transform *M_BG;
+	Audio_Engine* Audio;
 
 	static int** MapData;
 	int Map_Width;
 	int Map_Height;
+
 	std::vector<Platform> platforms;
 	std::vector<Floor> floors;
-	std::vector<Grunt> grunts;
 	std::vector<Wall> walls;
 	std::vector<Barrier> barriers;
 	std::vector<Scarecrow> scarecrows;
 	std::vector<PickUp> powerups;
-	//std::vector<Archer> archers;
 
+	LevelChangePlatform *next;
 	Tower *archerTower;
-	Archer *archer1, *archer2;
 	PickUp *coin1, *coin2, *coin3;
 	PickUp *power1, *power2;
+
+	std::vector<Characters*> c;
 }
 
 namespace Test_Stage1_1
@@ -50,10 +33,12 @@ namespace Test_Stage1_1
 		BG = new Sprite{ CreateBG(5.0f, "../../Illustrations/BG/BG_Stage1.png", 1.0f, 5.0f) };
 		M_BG = new Transform{};
 		player = new Dragon{};
+		Audio = new Audio_Engine{ 1, [](std::vector <std::string> &playlist)->void {playlist.push_back(".//Audio/Stage_1_BGM.mp3"); } };
 		archerTower = new Tower{ 4800.0f, 0.0f };
 
-		archer1 = new Archer{ 5000.0f, 200.0f };
-		archer2 = new Archer{ 6200.0f, -220.0f };
+		//archer1 = new Archer{ 5000.0f, 200.0f };
+		//archer2 = new Archer{ 6200.0f, -220.0f };
+		next = new LevelChangePlatform{ 6550.0f, -120.0f };
 
 		coin1 = new PickUp{ S_CreateSquare(50.0f, "Textures/coin.png",1.0f),
 			Col_Comp{ 0.0f - 25.0f, 0.0f - 25.0f, 0.0f + 25.0f, 0.0f + 25.0f, Rect },
@@ -77,14 +62,21 @@ namespace Test_Stage1_1
 
 		if (!Import_MapData("level1-1.txt", MapData, Map_Width, Map_Height)) { AEGfxExit(); }
 
-		/*std::cout << "Width:" << Map_Width << std::endl;
-		std::cout << "Height:" << Map_Height << std::endl;
-		PrintRetrievedInformation(MapData, Map_Width, Map_Height);*/
+		c.push_back(Create_Basic_AI(GRUNT,  AEVec2  { 2320.0f , -180.0f }));
+		c.push_back(Create_Basic_AI(GRUNT,  AEVec2  { 2480.0f , -180.0f }));
+		c.push_back(Create_Basic_AI(GRUNT,  AEVec2  { 4000.0f ,  -90.0f }));
+		c.push_back(Create_Basic_AI(ARCHER, AEVec2  { 4750.0f ,  140.0f }));
+		c.push_back(Create_Basic_AI(ARCHER, AEVec2  { 6200.0f , -220.0f }));
 	}
 
 	void Init(void)
 	{
 		player->SetActive(true);
+		Audio->Play(0);
+		Audio->SetLoop(0, 1);
+
+		for (size_t i = 0; i < c.size(); ++i)
+			c[i]->SetActive(true);
 
 		for (int y = 0; y < Map_Height; ++y)
 		{
@@ -101,12 +93,6 @@ namespace Test_Stage1_1
 					float f_x = (float)x;
 					float f_y = (float)y;
 					floors.push_back(Floor{ Convert_X(f_x) , Convert_Y(f_y) });
-				}
-				if (MapData[y][x] == OBJ_GRUNT)
-				{
-					float f_x = (float)x;
-					float f_y = (float)y;
-					grunts.push_back(Grunt{ Convert_X(f_x) , Convert_Y(f_y) });
 				}
 				if (MapData[y][x] == OBJ_SC)
 				{
@@ -150,28 +136,31 @@ namespace Test_Stage1_1
 						Col_Comp{ 0.0f - 25.0f, 0.0f - 25.0f, 0.0f + 25.0f, 0.0f + 25.0f, Rect },
 						HP, Convert_X(f_x) , Convert_Y(f_y) });
 				}
-				/*if (MapData[y][x] == OBJ_ARCHER)
-				{
-				float f_x = (float)x;
-				float f_y = (float)y;
-				archers.push_back(Archer{ Convert_X(f_x) , Convert_Y(f_y) });
-				}*/
 			}
 		}
 	}
 
 	void Update(float dt)
 	{
+		Audio->Update();
+
+		for (size_t i = 0; i < c.size(); ++i)
+		{
+			c[i]->Update(*player, dt);
+			archerTower->Update(*(c[i]), dt);
+		}
+
 		for (Platform& elem : platforms)
 		{
 			elem.Update(*player, dt);
 		}
 		for (Floor& elem : floors)
 		{
-			for (Grunt& elem2 : grunts)
+			for (size_t i = 0; i < c.size(); ++i)
 			{
-				elem.Update(elem2, dt);
+				elem.Update(*(c[i]), dt);
 			}
+
 			for (Scarecrow& elem3 : scarecrows)
 			{
 				elem.Update(elem3, dt);
@@ -180,35 +169,33 @@ namespace Test_Stage1_1
 		}
 		for (Wall& elem : walls)
 		{
+			for (size_t i = 0; i < c.size(); ++i)
+			{
+				elem.Update(*(c[i]), dt);
+			}
 			elem.Update(*player, dt);
 		}
 		for (Barrier& elem : barriers)
 		{
 			elem.Update(*player, dt);
+			elem.Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 		}
 		for (Scarecrow& elem : scarecrows)
 		{
 			elem.Update(*player, dt);
+			elem.Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 		}
-		for (Grunt& elem : grunts)
-		{
-			elem.Update(*player, dt);
-		}
-		/*for (Archer& elem : archers)
-		{
-		elem.Update(*player, dt);
-		}*/
+		
 		archerTower->Update(*player, dt);
-		archer1->Update(*player, dt);
-		archer2->Update(*player, dt);
 		player->Update(*player, dt);
 		coin1->Update(*player, dt);
 		coin2->Update(*player, dt);
 		coin3->Update(*player, dt);
 		power1->Update(*player, dt);
 		power2->Update(*player, dt);
+		next->Update(*player, dt);
 
-		//std::cout << player->Get_Charge() << std::endl;
+		//std::cout << (int)player->PosX << ", " << (int)player->PosY << std::endl;
 	}
 
 	void Draw(void)
@@ -217,25 +204,17 @@ namespace Test_Stage1_1
 
 		BG->Render_Object(*M_BG);
 
-		archer1->Render();
-		archer1->Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
-		archer2->Render();
-		archer2->Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
-
 		coin1->Render();
-		coin1->Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 		coin2->Render();
-		coin2->Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 		coin3->Render();
-		coin3->Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 		power1->Render();
-		power1->Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 		power2->Render();
-		power2->Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 
+		for (size_t i = 0; i < c.size(); ++i)
+		{
+			c[i]->Render();
+		}
 		archerTower->Render();
-		archerTower->Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
-
 		for (Platform& elem : platforms)
 		{
 			elem.Render();
@@ -244,33 +223,18 @@ namespace Test_Stage1_1
 		{
 			elem.Render();
 		}
-		/*for (Wall& elem : walls)
-		{
-		elem.Render();
-		}*/
 		for (Scarecrow& elem : scarecrows)
 		{
 			elem.Render();
-			elem.Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 		}
 		for (Barrier& elem : barriers)
 		{
 			elem.Render();
-			elem.Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 		}
-		for (Grunt& elem : grunts)
-		{
-			elem.Render();
-			elem.Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
-		}
-		/*for (Archer& elem : archers)
-		{
-		elem.Render();
-		elem.Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
-		}*/
+
 		player->Render();
 		player->Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
-
+		next->Render();
 	}
 
 	void Free(void)
@@ -278,14 +242,15 @@ namespace Test_Stage1_1
 		delete BG;
 		delete M_BG;
 		delete player;
+		delete Audio;
+
 		delete archerTower;
-		delete archer1;
-		delete archer2;
 		delete coin1;
 		delete coin2;
 		delete coin3;
 		delete power1;
 		delete power2;
+		delete next;
 	}
 
 	void Unload(void)
