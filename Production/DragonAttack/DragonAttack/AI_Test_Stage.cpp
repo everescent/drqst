@@ -2,6 +2,21 @@
 #include "AI_Data_Factory.h"
 #include "Floor.h"
 
+/*
+platforms.clear();
+floors.clear();
+walls.clear();
+barriers.clear();
+scarecrows.clear();
+powerups.clear();
+
+for (int y = 0; y < Map_Height; ++y)
+{
+delete[] MapData[y];
+}
+
+delete [] MapData;
+*/
 
 namespace
 {
