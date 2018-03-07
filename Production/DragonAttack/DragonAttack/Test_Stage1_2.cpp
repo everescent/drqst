@@ -258,7 +258,18 @@ namespace Test_Stage1_2
 		delete coin2;
 		delete coin3;
 		delete next;
+
+		platforms.clear();
+		floors.clear();
+		walls.clear();
+		barriers.clear();
 		c.clear();
+
+		for (int y = 0; y < Map_Height; ++y)
+		{
+			delete[] MapData[y];
+		}
+		delete[] MapData;
 	}
 
 	void Unload(void)

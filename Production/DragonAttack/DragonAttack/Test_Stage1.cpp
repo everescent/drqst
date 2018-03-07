@@ -251,6 +251,20 @@ namespace Test_Stage1_1
 		delete power1;
 		delete power2;
 		delete next;
+
+		platforms.clear();
+		floors.clear();
+		walls.clear();
+		barriers.clear();
+		scarecrows.clear();
+		powerups.clear();
+		c.clear();
+
+		for (int y = 0; y < Map_Height; ++y)
+		{
+			delete[] MapData[y];
+		}
+		delete[] MapData;
 	}
 
 	void Unload(void)
