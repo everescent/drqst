@@ -78,7 +78,7 @@ namespace Main_Menu
 			Mouse_Y =   AEGfxGetWinMaxY() - (float)Store_Y  ;
 			if (Play_Button->Collision_.St_Rect_Point((float)Mouse_X, (float)Mouse_Y))
 			{
-				GSM::next = GS_LEVEL1_2;
+				GSM::next = GS_LEVEL1_1;
 			}
 			if (Quit_Button->Collision_.St_Rect_Point((float)Mouse_X, (float)Mouse_Y))
 			{
