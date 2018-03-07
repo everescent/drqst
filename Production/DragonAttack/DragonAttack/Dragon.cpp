@@ -124,7 +124,7 @@ void Dragon::Update(Dragon& dummy, const float dt)
     Air_Dist += GetVelocity().y * dt;
   }
   PosY -= Gravity;
-
+  SFX_.Update();
   //Update position of player
   Transform_.SetTranslate(PosX, PosY);
   Transform_.Concat();

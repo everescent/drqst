@@ -79,6 +79,7 @@ void Archer::Colision_Check(Dragon &player, const float dt)
         Decrease_HP(player.GetDamage());
         //Add mega fireball charge
         player.AddCharge();
+        player.PlayImpact();
         //Reset the distance of the fireball and set false
         player.GetFireball()[i].Projectile::ResetDist();
         player.GetFireball()[i].SetActive(false);
@@ -92,6 +93,7 @@ void Archer::Colision_Check(Dragon &player, const float dt)
           player.GetVelocity(), dt))
       {
         player.Decrease_HP();
+        player.PlayHit();
         Arrow.ResetDist();
         Arrow.SetActive(false);
       }
@@ -212,7 +214,7 @@ void Archer::Update(Dragon& player, const float dt)
       Transform_.SetScale(1.0f, 1.0f);
     }
     PosY -= Gravity;
-    
+    Audio_.Update();
     //Assign state
     CheckState(player, dt);
     //Execute state
