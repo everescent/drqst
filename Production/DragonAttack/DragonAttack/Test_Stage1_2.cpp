@@ -7,7 +7,7 @@ namespace
 	Transform *M_BG;
 	Audio_Engine* Audio;
 
-	static int** MapData;
+	int** MapData;
 	int Map_Width;
 	int Map_Height;
 
@@ -96,18 +96,6 @@ namespace Test_Stage1_2
 					float f_y = (float)y;
 					floors.push_back(Floor{ Convert_X(f_x) , Convert_Y(f_y) });
 				}
-				/*if (MapData[y][x] == OBJ_GRUNT)
-				{
-					float f_x = (float)x;
-					float f_y = (float)y;
-					grunts.push_back(Grunt{ Convert_X(f_x) , Convert_Y(f_y) });
-				}
-				if (MapData[y][x] == OBJ_SC)
-				{
-					float f_x = (float)x;
-					float f_y = (float)y;
-					scarecrows.push_back(Scarecrow{ Convert_X(f_x) , Convert_Y(f_y) });
-				}*/
 				if (MapData[y][x] == OBJ_WALL)
 				{
 					float f_x = (float)x;
@@ -167,11 +155,6 @@ namespace Test_Stage1_2
 			{
 				elem.Update(*(c[i]), dt);
 			}
-
-			/*for (Scarecrow& elem3 : scarecrows)
-			{
-				elem.Update(elem3, dt);
-			}*/
 			elem.Update(*player, dt);
 		}
 		for (Wall& elem : walls)
@@ -185,11 +168,7 @@ namespace Test_Stage1_2
 		for (Barrier& elem : barriers)
 		{
 			elem.Update(*player, dt);
-		}/*
-		for (Scarecrow& elem : scarecrows)
-		{
-			elem.Update(*player, dt);
-		}*/
+		}
 
 		coin1->Update(*player, dt);
 		coin2->Update(*player, dt);
@@ -220,11 +199,7 @@ namespace Test_Stage1_2
 		for (Floor& elem : floors)
 		{
 			elem.Render();
-		}/*
-		for (Scarecrow& elem : scarecrows)
-		{
-			elem.Render();
-		}*/
+		}
 		for (Barrier& elem : barriers)
 		{
 			elem.Render();

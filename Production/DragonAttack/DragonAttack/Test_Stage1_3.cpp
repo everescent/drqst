@@ -7,7 +7,7 @@ namespace
 	Transform *M_BG;
 	Audio_Engine* Audio;
 
-	static int** MapData;
+	int** MapData;
 	int Map_Width;
 	int Map_Height;
 
@@ -25,7 +25,7 @@ namespace Test_Stage1_3
 		BG = new Sprite{ CreateBG(5.0f, "../../Illustrations/BG/BG_Stage1.png", 1.0f, 5.0f) };
 		M_BG = new Transform{};
 		player = new Dragon{};
-		Audio = new Audio_Engine{ 1, [](std::vector <std::string> &playlist)->void {playlist.push_back(".//Audio/Stage_1_BGM.mp3"); } };
+		Audio = new Audio_Engine{ 1, [](std::vector <std::string> &playlist)->void {playlist.push_back(".//Audio/Lancelot_BGM.mp3"); } };
 
 		if (!Import_MapData("level1-3.txt", MapData, Map_Width, Map_Height)) { AEGfxExit(); }
 

@@ -7,7 +7,7 @@ namespace
 	Transform *M_BG;
 	Audio_Engine* Audio;
 
-	static int** MapData;
+	int** MapData;
 	int Map_Width;
 	int Map_Height;
 
