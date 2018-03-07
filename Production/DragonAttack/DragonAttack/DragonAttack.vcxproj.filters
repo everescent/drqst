@@ -222,6 +222,9 @@
     <ClCompile Include="LevelChangePlatform.cpp">
       <Filter>Game_Object\Objects</Filter>
     </ClCompile>
+    <ClCompile Include="Test_Stage1_3.cpp">
+      <Filter>Game_States\Stage</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h">
@@ -359,12 +362,18 @@
     <ClInclude Include="LevelChangePlatform.h">
       <Filter>Game_Object\Objects</Filter>
     </ClInclude>
+    <ClInclude Include="Test_Stage1_3.h">
+      <Filter>Game_States\Stage</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="level1-1.txt">
       <Filter>Resource Files</Filter>
     </Text>
     <Text Include="level1-2.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="level1-3.txt">
       <Filter>Resource Files</Filter>
     </Text>
   </ItemGroup>

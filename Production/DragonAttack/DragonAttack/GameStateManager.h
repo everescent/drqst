@@ -19,6 +19,7 @@ Technology is prohibited.
 #include "Test_Stage1.h"
 #include "Level_Import.h"
 #include "Test_Stage1_2.h"
+#include "Test_Stage1_3.h"
 #include "test_level_import.h"
 
 namespace GSM

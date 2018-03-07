@@ -193,6 +193,7 @@
     <ClCompile Include="test_level_import.cpp" />
     <ClCompile Include="Test_Stage1.cpp" />
     <ClCompile Include="Test_Stage1_2.cpp" />
+    <ClCompile Include="Test_Stage1_3.cpp" />
     <ClCompile Include="Tower.cpp" />
     <ClCompile Include="Transform.cpp" />
     <ClCompile Include="UI.cpp" />
@@ -240,6 +241,7 @@
     <ClInclude Include="test_level_import.h" />
     <ClInclude Include="Test_Stage1.h" />
     <ClInclude Include="Test_Stage1_2.h" />
+    <ClInclude Include="Test_Stage1_3.h" />
     <ClInclude Include="Tower.h" />
     <ClInclude Include="Transform.h" />
     <ClInclude Include="UI.h" />
@@ -248,6 +250,7 @@
   <ItemGroup>
     <Text Include="level1-1.txt" />
     <Text Include="level1-2.txt" />
+    <Text Include="level1-3.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
