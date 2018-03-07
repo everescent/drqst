@@ -82,18 +82,18 @@ void Grunt::Update(Dragon &d, const float dt)
 		}*/
 
 		//collision with player, player loses health
-		/*if (Collision_.Dy_Rect_Rect(d.Collision_, GetVelocity(), d.GetVelocity(), dt))
+		if (Collision_.Dy_Rect_Rect(d.Collision_, GetVelocity(), d.GetVelocity(), dt))
 		{
 			d.Decrease_HP();
-			if (d.PosX > this->PosX)
+			/*if (d.PosX > this->PosX)
 			{
 				d.PosX = PosX + 200.0f;
 			}
 			else if (d.PosX < this->PosX)
 			{
 				d.PosX = PosX - 200.0f;
-			}
-		}*/
+			}*/
+		}
 
 		for (char i = 0; i < Bullet_Buffer; ++i)
 		{
@@ -115,6 +115,7 @@ void Grunt::Update(Dragon &d, const float dt)
 			if (Collision_.Dy_Rect_Rect(d.GetMfireball().Collision_, this->GetVelocity(), d.GetMfireball().GetVelocity(), dt))
 			{
 				Decrease_HP(d.GetMDamage());
+
 				d.GetMfireball().Projectile::ResetDist();
 				d.GetMfireball().SetActive(false);
 			}
@@ -156,7 +157,7 @@ void Grunt::LineOfSight(const Dragon &d)
 	float playerDist = (d.PosX - this->PosX);
 	if (playerDist <= 600.0f && playerDist >= -600.0f)  // vision range
 	{
-		if ((d.PosY < PosY + 200.0f) && (d.PosY > PosY - 200.0f))
+		if ((d.PosY < PosY + 150.0f) && (d.PosY > PosY - 150.0f))
 		{
 			PlayerSeen = true;
 		}

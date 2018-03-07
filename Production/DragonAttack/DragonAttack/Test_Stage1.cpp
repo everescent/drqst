@@ -22,6 +22,8 @@ namespace
 	Tower *archerTower;
 	PickUp *coin1, *coin2, *coin3;
 	PickUp *power1, *power2;
+	Scarecrow *sc1, *sc2;
+	Barrier *box1;
 
 	std::vector<Characters*> c;
 }
@@ -30,14 +32,12 @@ namespace Test_Stage1_1
 {
 	void Load(void)
 	{
-		BG = new Sprite{ CreateBG(5.0f, "../../Illustrations/BG/BG_Stage1.png", 1.0f, 5.0f) };
+		BG = new Sprite{ CreateBG(15.0f, "../../Illustrations/BG/BG_Stage1.png", 1.0f, 15.0f) };
 		M_BG = new Transform{};
 		player = new Dragon{};
 		Audio = new Audio_Engine{ 1, [](std::vector <std::string> &playlist)->void {playlist.push_back(".//Audio/Stage_1_BGM.mp3"); } };
 		archerTower = new Tower{ 4800.0f, 0.0f };
 
-		//archer1 = new Archer{ 5000.0f, 200.0f };
-		//archer2 = new Archer{ 6200.0f, -220.0f };
 		next = new LevelChangePlatform{ 6550.0f, -120.0f };
 
 		coin1 = new PickUp{ S_CreateSquare(50.0f, "Textures/coin.png",1.0f),
@@ -52,13 +52,17 @@ namespace Test_Stage1_1
 			Col_Comp{ 0.0f - 25.0f, 0.0f - 25.0f, 0.0f + 25.0f, 0.0f + 25.0f, Rect },
 			COIN, 6300.0f, -220.0f };
 
-		power1 = new PickUp{ S_CreateSquare(50.0f, "Textures/spd.png",1.0f),
-			Col_Comp{ 0.0f - 25.0f, 0.0f - 25.0f, 0.0f + 25.0f, 0.0f + 25.0f, Rect },
-			SPD, 0.0f, -220.0f };
+		//power1 = new PickUp{ S_CreateSquare(50.0f, "Textures/spd.png",1.0f),
+		//	Col_Comp{ 0.0f - 25.0f, 0.0f - 25.0f, 0.0f + 25.0f, 0.0f + 25.0f, Rect },
+		//	SPD, 0.0f, -220.0f };
 
 		power2 = new PickUp{ S_CreateSquare(50.0f, "Textures/hp.png",1.0f),
 			Col_Comp{ 0.0f - 25.0f, 0.0f - 25.0f, 0.0f + 25.0f, 0.0f + 25.0f, Rect },
 			HP, 5300.0f, -100.0f };
+
+		sc1 = new Scarecrow{ 700.0f, -240.0f };
+		sc2 = new Scarecrow{ 1000.0f, -240.0f };
+		box1 = new Barrier{ 1500.0f, -235.0f };
 
 		if (!Import_MapData("level1-1.txt", MapData, Map_Width, Map_Height)) { AEGfxExit(); }
 
@@ -74,7 +78,6 @@ namespace Test_Stage1_1
 		player->SetActive(true);
 		Audio->Play(0);
 		Audio->SetLoop(0, 1);
-
 		for (size_t i = 0; i < c.size(); ++i)
 			c[i]->SetActive(true);
 
@@ -150,6 +153,11 @@ namespace Test_Stage1_1
 			archerTower->Update(*(c[i]), dt);
 		}
 
+		if (!(box1->IsActive()))
+		{
+			coin1->Update(*player, dt);
+		}
+
 		for (Platform& elem : platforms)
 		{
 			elem.Update(*player, dt);
@@ -165,6 +173,9 @@ namespace Test_Stage1_1
 			{
 				elem.Update(elem3, dt);
 			}
+
+			elem.Update(*sc1, dt);
+			elem.Update(*sc2, dt);
 			elem.Update(*player, dt);
 		}
 		for (Wall& elem : walls)
@@ -188,10 +199,12 @@ namespace Test_Stage1_1
 		
 		archerTower->Update(*player, dt);
 		player->Update(*player, dt);
-		coin1->Update(*player, dt);
+		sc1->Update(*player, dt);
+		sc2->Update(*player, dt);
+		box1->Update(*player, dt);
 		coin2->Update(*player, dt);
 		coin3->Update(*player, dt);
-		power1->Update(*player, dt);
+		//power1->Update(*player, dt);
 		power2->Update(*player, dt);
 		next->Update(*player, dt);
 
@@ -204,10 +217,14 @@ namespace Test_Stage1_1
 
 		BG->Render_Object(*M_BG);
 
-		coin1->Render();
+
+		if (!(box1->IsActive()))
+		{
+			coin1->Render();
+		}
 		coin2->Render();
 		coin3->Render();
-		power1->Render();
+		//power1->Render();
 		power2->Render();
 
 		for (size_t i = 0; i < c.size(); ++i)
@@ -232,6 +249,9 @@ namespace Test_Stage1_1
 			elem.Render();
 		}
 
+		sc1->Render();
+		sc2->Render();
+		box1->Render();
 		player->Render();
 		player->Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 		next->Render();
@@ -244,11 +264,14 @@ namespace Test_Stage1_1
 		delete player;
 		delete Audio;
 
+		delete sc1;
+		delete sc2;
+		delete box1;
 		delete archerTower;
 		delete coin1;
 		delete coin2;
 		delete coin3;
-		delete power1;
+		//delete power1;
 		delete power2;
 		delete next;
 

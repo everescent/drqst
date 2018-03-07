@@ -18,8 +18,8 @@ namespace
 	//std::vector<Scarecrow> scarecrows;
 
 	LevelChangePlatform *next;
-	Tower *archerTower;
-	PickUp *coin1, *coin2, *coin3, *hp;
+	//Tower *archerTower;
+	PickUp *coin1, *coin2, *coin3, *hp, *invul;
 	Platform *up1, *up2;
 	//PickUp *power1, *power2;
 	std::vector<Characters*> c;
@@ -29,14 +29,14 @@ namespace Test_Stage1_2
 {
 	void Load(void)
 	{
-		BG = new Sprite{ CreateBG(5.0f, "../../Illustrations/BG/BG_Stage1.png", 1.0f, 5.0f) };
+		BG = new Sprite{ CreateBG(15.0f, "../../Illustrations/BG/BG_Stage1.png", 1.0f, 15.0f) };
 		M_BG = new Transform{};
 		player = new Dragon{};
 		Audio = new Audio_Engine{ 1, [](std::vector <std::string> &playlist)->void {playlist.push_back(".//Audio/Stage_1_BGM.mp3"); } };
 
 		if (!Import_MapData("level1-2.txt", MapData, Map_Width, Map_Height)) { AEGfxExit(); }
 
-		archerTower = new Tower        { 7000.0f,  170.0f };
+		//archerTower = new Tower        { 7000.0f,  170.0f };
 		up1 = new Platform             { 6000.0f,  -30.0f };
 		up2 = new Platform             { 6000.0f, -120.0f };
 		next = new LevelChangePlatform { 7500.0f,  150.0f };
@@ -173,7 +173,7 @@ namespace Test_Stage1_2
 		coin1->Update(*player, dt);
 		coin2->Update(*player, dt);
 		coin3->Update(*player, dt);
-		archerTower->Update(*player, dt);
+		//archerTower->Update(*player, dt);
 		up1->Update(*player, dt);
 		up2->Update(*player, dt);
 		next->Update(*player, dt);
@@ -188,7 +188,7 @@ namespace Test_Stage1_2
 
 		BG->Render_Object(*M_BG);
 
-		archerTower->Render();
+		//archerTower->Render();
 		up1->Render();
 		up2->Render();
 
@@ -226,7 +226,7 @@ namespace Test_Stage1_2
 		delete player;
 		delete Audio;
 
-		delete archerTower;
+		//delete archerTower;
 		delete up1;
 		delete up2;
 		delete coin1;

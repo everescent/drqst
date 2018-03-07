@@ -20,7 +20,7 @@ void Barrier::Update(Dragon &player, const float &dt)
 		this->Transform_.SetTranslate(PosX, PosY);
 		this->Transform_.Concat();
 
-		if (Collision_.Dy_Rect_Rect(player.Collision_, GetVelocity(), player.GetVelocity(), dt))
+	/*	if (Collision_.Dy_Rect_Rect(player.Collision_, GetVelocity(), player.GetVelocity(), dt))
 		{
 			if (player.PosX > this->PosX)
 			{
@@ -30,7 +30,7 @@ void Barrier::Update(Dragon &player, const float &dt)
 			{
 				player.PosX = PosX - Sprite_.Get_Width() - player.Sprite_.Get_Width();
 			}
-		}
+		}*/
 
 
 		//check for player projectile

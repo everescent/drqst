@@ -73,6 +73,8 @@ void Archer::Colision_Check(Dragon &player, const float dt)
       {
         //Decrease HP by player's damage
         Decrease_HP(player.GetDamage());
+		player.AddCharge();
+
         //Reset the distance of the fireball and set false
         player.GetFireball()[i].Projectile::ResetDist();
         player.GetFireball()[i].SetActive(false);

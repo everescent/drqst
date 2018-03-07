@@ -12,7 +12,7 @@ namespace // global variables just for THIS file
 Scarecrow::Scarecrow(float x, float y)
 	: Characters(S_CreateSquare(SC_SCALE, ".//Textures/scarecrow.png"),
 		scarecrow_hp,
-		Col_Comp{ x - SC_SCALE, y - SC_SCALE , x + SC_SCALE , y + SC_SCALE, Rect })
+		Col_Comp{ x - SC_SCALE, y - SC_SCALE + 50.0f , x + SC_SCALE , y + SC_SCALE, Rect })
 {
 	SetActive(true);
 	Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
@@ -24,13 +24,13 @@ void Scarecrow::Update(Dragon &d, const float dt)
 {
 	if (this->IsActive() == true)
 	{
-		this->PosY -= 10.0f; //testing gravity
+		//this->PosY -= 10.0f; //testing gravity
 
 		this->Transform_.SetTranslate(PosX, PosY);
 		this->Transform_.Concat();
 
 
-		this->Collision_.Update_Col_Pos(this->PosX - SC_SCALE, this->PosY - SC_SCALE,  // min point
+		this->Collision_.Update_Col_Pos(this->PosX - SC_SCALE, this->PosY - SC_SCALE + 50.0f,  // min point
 		this->PosX + SC_SCALE, this->PosY + SC_SCALE); // max point
 
 
