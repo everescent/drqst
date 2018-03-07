@@ -23,7 +23,7 @@ Technology is prohibited.
 namespace ArcherMacros {
   //Global Read-Only Variables START///////////////////////////////////////////////////////
   const int   Archer_HP      { 50      }; //Archer HP
-  const float Archer_Scale   { 70.0f  }; //Scale of Archer mesh
+  const float Archer_Scale   { 70.0f   }; //Scale of Archer mesh
   const float Archer_Speed   { 120.0f  }; //Scale of Archer mesh
   const float Arrow_Scale    { 20.0f   }; //Scale of arrow mesh
   const float Arrow_Death    { 800.0f  }; //Scale of arrow mesh
@@ -58,6 +58,11 @@ private:
   float Distance;           //Distacne travelled by Archer
   float Arrow_CD;           //Arrow cooldown timer
   float Angle;              //Arrow rotation
+  Audio_Engine Audio_;      //Audio SFX
+  enum AudioState {
+    HIT,
+    SHOOT
+  };
 
 //Attack Functions START///////////////////////////////////////////////////////////////
   void Attack_Update(Dragon &player, const float dt);  //Arrow rain update

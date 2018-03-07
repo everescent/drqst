@@ -67,36 +67,37 @@ void Dragon::ApplyPowerUP()
 
 void Dragon::Input()
 {
-	const std::vector <int> &Input = Input::Get_User_Input();
+  const std::vector <int> &Input = Input::Get_User_Input();
 
-	for (unsigned i = 0; i < Input.size(); ++i)
-	{
-		switch (Input[i])
-		{
-		case Input::go_left:
-			Dir.L = true;
-			break;
-		case Input::go_right:
-			Dir.R = true;
-			break;
-		case Input::jump_up:
-			if (!Falling)
-				Dir.UP = true;
-			break;
-		case Input::fire:
-			Attack = true;
-			break;
-		case Input::special:
-			if (Charge == Max_Charge)
-			{
-				MAttack = true;
-				Mfireball.SetActive(true);
-				ResetCharge();
-				break;
-			}
-		}
-	}
-	Input::ClearBuffer();
+  for (unsigned i = 0; i < Input.size(); ++i)
+  {
+    switch (Input[i])
+    {
+      case Input::go_left:
+        Dir.L = true;
+        break;
+      case Input::go_right:
+        Dir.R = true;
+        break;
+      case Input::jump_up:
+        if (!Falling)
+          Dir.UP = true;
+        break;
+      case Input::fire:
+        SFX_.Play(SHOOT);
+        Attack = true;
+        break;
+      case Input::special:
+        if (Charge == Max_Charge)
+        {
+          MAttack = true;
+          Mfireball.SetActive(true);
+          ResetCharge();
+          break;
+        }
+    }
+  }
+  Input::ClearBuffer();
 }
 
 void Dragon::Update(Dragon& dummy, const float dt)

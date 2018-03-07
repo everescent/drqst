@@ -118,6 +118,13 @@ void Audio_Engine::SetPause(const int SongNum, const bool Pause)
   }
 }
 
+bool Audio_Engine::GetPlaying(const int SongNum)
+{ 
+  bool len; 
+  Channel_[SongNum]->isPlaying(&len);
+  return len; 
+}
+
 void Audio_Engine::Update()
 {
   FMOD_RESULT result;

@@ -35,7 +35,7 @@ namespace Main_Menu
 {
 	void Load(void)
 	{
-		AEToogleFullScreen(true);
+		AEToogleFullScreen(false);
 		// BG constructed by using Move constructor 
 		MM_Background = new Sprite{ CreateBG(1.0f, "../../Illustrations/Main_Menu/Main_Menu_BG.png" ) };
 		M_BG = new Transform{};

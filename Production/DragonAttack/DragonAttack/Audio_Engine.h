@@ -36,6 +36,8 @@ public:
   void SetLoop(const int SongNum, FMOD_MODE Loop);
   //Pause the given song number
   void SetPause(const int SongNum, const bool Pause);
+  //Song Length in ms
+  bool GetPlaying(const int SongNum);
   //Updates the audio system; CALL THIS!
   void Update();
 

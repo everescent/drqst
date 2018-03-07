@@ -28,7 +28,11 @@ Archer::Archer(const float posX, const float posY)
           posX + Arrow_Scale, posY + Arrow_Scale, Rect } }, 
   //Initialize other members
   Archer_State{ &Archer::Idle }, A_Curr{ IDLE }, A_Next{ IDLE },
-  Dragon_Seen{ false }, Attack_{ false }, Distance{ 0.0f }, Arrow_CD{ 0.0f }
+  Dragon_Seen{ false }, Attack_{ false }, Distance{ 0.0f }, Arrow_CD{ 0.0f },
+  Audio_{ 1, [](std::vector<std::string> &playlist) ->void {
+    playlist.push_back(".//Audio/Hit_01.mp3");
+    //playlist.push_back(".//Audio/Arrow_Swoosh.mp3"); 
+  } }
 {
   SetActive(true);
   GameObject::Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
@@ -73,8 +77,8 @@ void Archer::Colision_Check(Dragon &player, const float dt)
       {
         //Decrease HP by player's damage
         Decrease_HP(player.GetDamage());
-		player.AddCharge();
-
+        //Add mega fireball charge
+        player.AddCharge();
         //Reset the distance of the fireball and set false
         player.GetFireball()[i].Projectile::ResetDist();
         player.GetFireball()[i].SetActive(false);
@@ -145,6 +149,7 @@ void Archer::Attack(Dragon &player, const float /*dt*/)
 void Archer::Dead()
 {
   SetActive(false);
+  Arrow.SetActive(false);
 }
 
 void Archer::CheckState(Dragon &player, const float /*dt*/)

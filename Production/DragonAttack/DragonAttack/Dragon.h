@@ -19,21 +19,22 @@ Technology is prohibited.
 #include "Characters.h"
 #include "Collision.h"
 #include "PickUp.h"
+#include "Audio_Engine.h"
 #include <vector>
 
-const char  Max_Charge     { 10      }; //Maximum charge for mega fireball
-const int   Bullet_Buffer  { 10      }; //Amount of fireballs at any one time
-const float Bullet_Interval{ 400.0f  }; //Minimum distance between each fireball
-const float Bullet_Death   { 900.0f  }; //Distance when bullet dies
-const float Bullet_Speed   { 1200.0f }; //How fast a bullet travels
-const int Fireball_Damage{ 10 };
-const int MFireball_Damage{ 15 };
+const char  Max_Charge      { 10      }; //Maximum charge for mega fireball
+const int   Bullet_Buffer   { 10      }; //Amount of fireballs at any one time
+const float Bullet_Interval { 400.0f  }; //Minimum distance between each fireball
+const float Bullet_Death    { 900.0f  }; //Distance when bullet dies
+const float Bullet_Speed    { 1200.0f }; //How fast a bullet travels
+const int   Fireball_Damage { 10      };
+const int   MFireball_Damage{ 15      };
 
-const float Jump_Height    { 200.0f  }; //Maximum height player can jump
+const float Jump_Height    { 300.0f  }; //Maximum height player can jump
 const float Jump_Mult      { 3.2f    }; //How fast player can jump
 const float Start_Pos_X    { -320.0f }; //Player stating position X
 const float Start_Pos_Y    { -120.0f }; //Player starting position Y
-const AEVec2 Player_Speed{ 480.0f, 480.0f * Jump_Mult };
+const AEVec2 Player_Speed  { 480.0f, 480.0f * Jump_Mult };
 const float Cam_Offset_X   { 320.0f  }; //Camera offset X
 const float Cam_Offset_Y   { 120.0f  }; //Camera offset Y
 
@@ -50,6 +51,10 @@ public:
   void ResetCharge() { Charge = 0; }
   //Set pickup type
   void SetPickup(const int type, const bool status);
+  //Play this when firebal made contact
+  void PlayImpact() { SFX_.Play(IMPACT); }
+  //Play this when dragon gets hit
+  void PlayHit() { SFX_.Play(HIT); }
   //Renders the dragon
   void Render(); 
   //Get fireball damage
@@ -71,16 +76,21 @@ public:
 
   Dragon()
     //Initialize Characters class
-    :Characters{ S_CreateSquare(70.0f, "Bob.png"), 3,
+    :Characters{ S_CreateSquare(70.0f, ".//Textures/Bob.png"), 3,
     Col_Comp{ Start_Pos_X - 70.0f, Start_Pos_Y - 70.0f,
               Start_Pos_X + 70.0f, Start_Pos_Y + 70.0f, Rect} },
     //Initialize data members
     Attack{ false }, Pwr_Up{ false }, Falling{ false }, Damage { Fireball_Damage },
     M_Damage{ MFireball_Damage }, Charge{ 0 }, Gravity{ 10.0f }, Dir{}, Pickup_{}, Fireball{},
     //Initialize Mega Fireball
-    Mfireball{ S_CreateSquare(70.0f, "fireball.png"), 
+    Mfireball{ S_CreateSquare(70.0f, ".//Textures/Fireball.png"), 
     Col_Comp{ Start_Pos_X - 50.0f, Start_Pos_Y - 50.0f,
-    Start_Pos_X + 50.0f, Start_Pos_Y + 50.0f, Rect } }, Air_Dist{ 0.0f }, Facing{ 1.0f }
+    Start_Pos_X + 50.0f, Start_Pos_Y + 50.0f, Rect } }, Air_Dist{ 0.0f }, Facing{ 1.0f },
+    //Initialize Audio Engine
+    SFX_{ 3, [](std::vector<std::string> &playlist) ->void {
+      playlist.push_back(".//Audio/Dragon_Hit.mp3");
+      playlist.push_back(".//Audio/Fireball_Hit.mp3"); 
+      playlist.push_back(".//Audio/Fireball.mp3");     } }
   {
     //Initialize player start location
     PosX = Start_Pos_X;
@@ -91,7 +101,7 @@ public:
     Fireball.reserve(Bullet_Buffer);
     //Initialize all the fireballs
     for (int i = 0; i < Bullet_Buffer; ++i)
-      Fireball.push_back(Projectile{ S_CreateSquare(50.0f, "fireball.png"),
+      Fireball.push_back(Projectile{ S_CreateSquare(50.0f, ".//Textures/Fireball.png"),
                                      Col_Comp{ Start_Pos_X - 50.0f, Start_Pos_Y - 50.0f,
                                      Start_Pos_X + 50.0f, Start_Pos_Y + 50.0f, Rect } });
     for (int i = 0; i < Bullet_Buffer; ++i)
@@ -132,11 +142,16 @@ private:
     bool INVUL{ false };
     Pickup() =  default;
   };
+  enum AudioState {
+    HIT,    //Dragon get hit SFX
+    IMPACT, //Fireball impact SFX
+    SHOOT   //Fireball shot SFX
+  };
   Direction               Dir;       //Direction variable
   Pickup                  Pickup_;   //Type of power up
   std::vector<Projectile> Fireball;  //Array of Fireball projectile
   Projectile              Mfireball; //Mega Fireball projectile
-
+  Audio_Engine            SFX_;      //Dragon Sounds
   //Private Functions START//////////////////////////////////////////////////////////////
   void ApplyPowerUP();
   //Private Functions END////////////////////////////////////////////////////////////////
