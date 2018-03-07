@@ -225,6 +225,9 @@
     <ClCompile Include="Test_Stage1_3.cpp">
       <Filter>Game_States\Stage</Filter>
     </ClCompile>
+    <ClCompile Include="Sign.cpp">
+      <Filter>Game_Object\Objects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h">
@@ -364,6 +367,9 @@
     </ClInclude>
     <ClInclude Include="Test_Stage1_3.h">
       <Filter>Game_States\Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="Sign.h">
+      <Filter>Game_Object\Objects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

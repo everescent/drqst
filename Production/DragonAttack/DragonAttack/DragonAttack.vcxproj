@@ -187,6 +187,7 @@
     <ClCompile Include="PickUp.cpp" />
     <ClCompile Include="Platform.cpp" />
     <ClCompile Include="Scarecrow.cpp" />
+    <ClCompile Include="Sign.cpp" />
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="Render.cpp" />
     <ClCompile Include="StageManager.cpp" />
@@ -235,6 +236,7 @@
     <ClInclude Include="Platform.h" />
     <ClInclude Include="Projectile.h" />
     <ClInclude Include="Scarecrow.h" />
+    <ClInclude Include="Sign.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="Render.h" />
     <ClInclude Include="StageManager.h" />

@@ -25,6 +25,8 @@ namespace
 	PickUp *power1, *power2;
 	Scarecrow *sc1, *sc2;
 	Barrier *box1;
+	Sign *s1, *s2, *s3, *s4, *s5, *s6;
+	GameObject *tut1, *tut2, *tut3, *tut4, *tut5, *tut6;
 
 	std::vector<Characters*> c;
 }
@@ -58,9 +60,9 @@ namespace Test_Stage1_1
 		//	Col_Comp{ 0.0f - 25.0f, 0.0f - 25.0f, 0.0f + 25.0f, 0.0f + 25.0f, Rect },
 		//	SPD, 0.0f, -220.0f };
 
-		power2 = new PickUp{ S_CreateSquare(50.0f, "Textures/hp.png",1.0f),
+		power2 = new PickUp{ S_CreateSquare(50.0f, "Textures/spd.png",1.0f),
 			Col_Comp{ 0.0f - 25.0f, 0.0f - 25.0f, 0.0f + 25.0f, 0.0f + 25.0f, Rect },
-			HP, 5300.0f, -100.0f };
+			HP, 5300.0f, -80.0f };
 
 		sc1 = new Scarecrow{ 700.0f, -240.0f };
 		sc2 = new Scarecrow{ 1000.0f, -240.0f };
@@ -73,10 +75,30 @@ namespace Test_Stage1_1
 		c.push_back(Create_Basic_AI(GRUNT,  AEVec2  { 4000.0f ,  -90.0f }));
 		c.push_back(Create_Basic_AI(ARCHER, AEVec2  { 4750.0f ,  140.0f }));
 		c.push_back(Create_Basic_AI(ARCHER, AEVec2  { 6200.0f , -220.0f }));
+
+		  s1 = new Sign{ 400.0f, -255.0f };
+		tut1 = new GameObject{ S_CreateRectangle(150.0f, 50.0f,"Textures/Shoot_Tutorial_MSG.png"),	Col_Comp()};
+		  s2 = new Sign{ 1270.0f, -255.0f };
+		tut2 = new GameObject{ S_CreateRectangle(230.0f, 80.0f,"Textures/Boxes_Tutorial_MSG.png"),	Col_Comp() };
+		  s3 = new Sign{ 1650.0f, -255.0f };
+		tut3 = new GameObject{ S_CreateRectangle(250.0f, 100.0f,"Textures/Enemy_Tutorial_MSG.png"),	Col_Comp() };
+		  s4 = new Sign{ 2600.0f, -255.0f };
+		tut4 = new GameObject{ S_CreateRectangle(300.0f, 100.0f,"Textures/Platforming_Tutorial_MSG.png"),	Col_Comp() };
+		  s5 = new Sign{ 4200.0f, -75.0f };
+		tut5 = new GameObject{ S_CreateRectangle(300.0f, 100.0f,"Textures/MegaFireball_Tutorial_MSG.png"),	Col_Comp() };
+		  s6 = new Sign{ 5200.0f, -75.0f };
+		tut6 = new GameObject{ S_CreateRectangle(200.0f, 80.0f,"Textures/PowerUp_Tutorial_MSG.png"),	Col_Comp() };
 	}
 
 	void Init(void)
 	{
+		tut1->SetActive(true);
+		tut2->SetActive(true);
+		tut3->SetActive(true);
+		tut4->SetActive(true);
+		tut5->SetActive(true);
+		tut6->SetActive(true);
+
 		player->SetActive(true);
 		Audio->Play(0);
 		Audio->SetLoop(0, 1);
@@ -148,6 +170,30 @@ namespace Test_Stage1_1
 	void Update(float dt)
 	{
 		Audio->Update();
+ 
+		  s1->Update(*player, dt);	   
+		tut1->Transform_.SetTranslate( 400.0f, -20.0f );
+		tut1->Transform_.Concat();	    
+									    
+		  s2->Update(*player, dt);	    
+		tut2->Transform_.SetTranslate( 1270.0f, -20.0f );
+		tut2->Transform_.Concat();	    
+									    
+		  s3->Update(*player, dt);	    
+		tut3->Transform_.SetTranslate( 1650.0f, -20.0f );
+		tut3->Transform_.Concat();	   
+									   
+		  s4->Update(*player, dt);	   
+		tut4->Transform_.SetTranslate( 2600.0f, -20.0f );
+		tut4->Transform_.Concat();	    
+									    
+	      s5->Update(*player, dt);	    
+		tut5->Transform_.SetTranslate( 4200.0f, 160.0f );
+		tut5->Transform_.Concat();	    
+									    
+		  s6->Update(*player, dt);	    
+		tut6->Transform_.SetTranslate( 5200.0f, 160.0f );
+		tut6->Transform_.Concat();
 
 		for (size_t i = 0; i < c.size(); ++i)
 		{
@@ -211,7 +257,7 @@ namespace Test_Stage1_1
 		next->Update(*player, dt);
 		ui->UI_Update(player);
 
-		//std::cout << (int)player->PosX << ", " << (int)player->PosY << std::endl;
+		std::cout << (int)player->PosX << ", " << (int)player->PosY << std::endl;
 	}
 
 	void Draw(void)
@@ -219,6 +265,43 @@ namespace Test_Stage1_1
 		CamFollow(player->Transform_, 200, 120, player->GetFacing());
 
 		BG->Render_Object(*M_BG);
+
+		s1->Render();
+		if (s1->ShowTutorial)
+		{
+			tut1->Render();
+			tut1->Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+		}
+		s2->Render();
+		if (s2->ShowTutorial)
+		{
+			tut2->Render();
+			tut2->Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+		}
+		s3->Render();
+		if (s3->ShowTutorial)
+		{
+			tut3->Render();
+			tut3->Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+		}
+		s4->Render();
+		if (s4->ShowTutorial)
+		{
+			tut4->Render();
+			tut4->Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+		}
+		s5->Render();
+		if (s5->ShowTutorial)
+		{
+			tut5->Render();
+			tut5->Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+		}
+		s6->Render();
+		if (s6->ShowTutorial)
+		{
+			tut6->Render();
+			tut6->Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+		}
 
 
 		if (!(box1->IsActive()))
@@ -267,7 +350,18 @@ namespace Test_Stage1_1
 		delete M_BG;
 		delete player;
 		delete Audio;
-
+		delete s1;
+		delete s2;
+		delete s3;
+		delete s4;
+		delete s5;
+		delete s6;
+		delete tut1;
+		delete tut2;
+		delete tut3;
+		delete tut4;
+		delete tut5;
+		delete tut6;
 		delete sc1;
 		delete sc2;
 		delete box1;
