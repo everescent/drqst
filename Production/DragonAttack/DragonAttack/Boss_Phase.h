@@ -2,6 +2,6 @@
 
 enum BOSS_PHASE
 {
-	PHASE_1,
+	PHASE_1 = 1,
 	PHASE_2,
 };
