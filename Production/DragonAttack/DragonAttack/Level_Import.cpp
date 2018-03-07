@@ -87,13 +87,14 @@ void PrintRetrievedInformation(int** MapData, int Map_Width, int Map_Height) //f
 
 float Convert_X(float& x)
 {
-	float global_x = x* 80 + AEGfxGetWinMinX();
+	float global_x = x* 80 -640.0f;
 	return global_x;
 }
 
  float Convert_Y(float& y)
  {
-	 float global_y = AEGfxGetWinMaxY() - y* 90;
+	 float global_y = 360.0f - y* 90;
+	 
 	 return global_y;
  }
 
