@@ -32,7 +32,11 @@ namespace // global variables just for THIS file
 Grunt::Grunt(const float posX, const float posY)
 	: Characters(S_CreateSquare(GRUNT_SCALE, ".//Textures/grunt.png"),
 		grunt_hp,
-		Col_Comp{ posX - GRUNT_SCALE, posY - GRUNT_SCALE , posX + GRUNT_SCALE - 60.0f , posY + GRUNT_SCALE, Rect })
+		Col_Comp{ posX - GRUNT_SCALE, posY - GRUNT_SCALE , 
+				  posX + GRUNT_SCALE - 60.0f , posY + GRUNT_SCALE, Rect }), 
+		SFX{ 1, [](std::vector<std::string> &playlist) 
+		->void {	playlist.push_back(".//Audio/Hit_02.mp3");
+} }
 {
 	SetActive(true);
 	Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
@@ -103,7 +107,7 @@ void Grunt::Update(Dragon &d, const float dt)
 				{
 					Decrease_HP(d.GetDamage());
 					d.AddCharge();
-
+					SFX.Play(0);
 					d.GetFireball()[i].Projectile::ResetDist();
 					d.GetFireball()[i].SetActive(false);
 				}
@@ -115,7 +119,7 @@ void Grunt::Update(Dragon &d, const float dt)
 			if (Collision_.Dy_Rect_Rect(d.GetMfireball().Collision_, this->GetVelocity(), d.GetMfireball().GetVelocity(), dt))
 			{
 				Decrease_HP(d.GetMDamage());
-
+				SFX.Play(0);
 				d.GetMfireball().Projectile::ResetDist();
 				d.GetMfireball().SetActive(false);
 			}
