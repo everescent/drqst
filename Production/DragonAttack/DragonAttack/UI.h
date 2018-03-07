@@ -38,4 +38,5 @@ private:
 	GameObject charge_icon;
 	int Dragon_hp;
 	int Fireball_charge;
+	//AEVec2 offset1;
 };

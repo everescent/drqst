@@ -22,6 +22,9 @@ UI::UI(Dragon* dragon)
 	charge_icon{ S_CreateSquare(icon_w,"Textures/Fireball.png"), Col_Comp() },
 	Dragon_hp{ dragon->Get_HP() }, Fireball_charge{ dragon->Get_Charge() }
 	{
+		
+	// put icons at {AEGfxWinMinX() + offsetX, AEGfxWinMaxY() - offsetY}
+	hp_icon1.Transform_.Concat();
 	} //empty ctor body 
 
 	void UI::UI_Update(Dragon* dragon)
@@ -33,7 +36,7 @@ UI::UI(Dragon* dragon)
 		hp_icon3.SetActive(true);
 		charge_icon.SetActive(false);
 		
-		std::cout << Dragon_hp  << std::endl;
+	
 		if (Dragon_hp == 2)
 		{
 			hp_icon3.SetActive(false);
@@ -57,10 +60,17 @@ UI::UI(Dragon* dragon)
 		}
 		else 
 			charge_icon.SetActive(false);
-		//update the icons to follow the dragon , Translate it first 
+
+		//f32 testX, testY;
+		//AEGfxGetCamPosition(&testX, &testY);
+		//std::cout << testX << " " << testY << std::endl;
+		//update the icons to follow the dragon , Translate it first
 		hp_icon1.Transform_.SetTranslate(dragon->PosX - 50, dragon->PosY + 90);
-		hp_icon2.Transform_.SetTranslate(dragon->PosX , dragon->PosY + 90);
+		hp_icon2.Transform_.SetTranslate(dragon->PosX, dragon->PosY + 90);
 		hp_icon3.Transform_.SetTranslate(dragon->PosX + 50, dragon->PosY + 90);
+		//hp_icon1.Transform_.SetTranslate(testX - 550 , testY + 300);
+		//hp_icon2.Transform_.SetTranslate(testX - 500, testY + 300);
+		//hp_icon3.Transform_.SetTranslate(testX - 450, testY + 300);
 		//Concat the matrix for the icons
 		hp_icon1.Transform_.Concat();
 		hp_icon2.Transform_.Concat();
