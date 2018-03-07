@@ -6,6 +6,7 @@ namespace
 	Sprite *BG;
 	Transform *M_BG;
 	Audio_Engine* Audio;
+	UI* ui;
 
 	int** MapData;
 	int Map_Width;
@@ -37,6 +38,7 @@ namespace Test_Stage1_1
 		player = new Dragon{};
 		Audio = new Audio_Engine{ 1, [](std::vector <std::string> &playlist)->void {playlist.push_back(".//Audio/Stage_1_BGM.mp3"); } };
 		archerTower = new Tower{ 4800.0f, 0.0f };
+		ui = new UI{ player };
 
 		next = new LevelChangePlatform{ 6550.0f, -120.0f };
 
@@ -207,6 +209,7 @@ namespace Test_Stage1_1
 		//power1->Update(*player, dt);
 		power2->Update(*player, dt);
 		next->Update(*player, dt);
+		ui->UI_Update(player);
 
 		//std::cout << (int)player->PosX << ", " << (int)player->PosY << std::endl;
 	}
@@ -255,6 +258,7 @@ namespace Test_Stage1_1
 		player->Render();
 		player->Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 		next->Render();
+		ui->Render();
 	}
 
 	void Free(void)
@@ -274,6 +278,7 @@ namespace Test_Stage1_1
 		//delete power1;
 		delete power2;
 		delete next;
+		delete ui;
 
 		platforms.clear();
 		floors.clear();
