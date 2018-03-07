@@ -192,8 +192,8 @@ void Lancelot::Attack(Dragon &d, const float dt)
 
 		else*/  if (phase == PHASE_2 && !lancelot[ARONDIGHT].cooldown)
 		{				
-			angle = 90.0f;
-			angle_offset = -2.0f;
+			angle = 0.0f;
+			angle_offset = 3.0f;
 			charge_time = 2.0f;
 			currAttk = ARONDIGHT;
 
@@ -355,18 +355,13 @@ void Lancelot::Arondight(Dragon& d, const float dt)
 	}
 
 	AEVec2 new_vector = lancelot[ARONDIGHT].Collision_.Get_Point();
-	new_vector.x -= PosX;    // rotate collision point with using lancelot as the origin
-	new_vector.y -= PosY;	 // rotate collision point with using lancelot as the origin
-	//lancelot[ARONDIGHT].Projectile::Update(ATTACK_SCALE, false, angle += angle_offset);
-	AEVec2 position = { this->PosX, this->PosY };
+	new_vector.x -= PosX;                         // rotate collision point with using lancelot as the origin
+	new_vector.y -= PosY;	                      // rotate collision point with using lancelot as the origin
+	AEVec2 position = { this->PosX, this->PosY }; // position of lancelot
 
 	auto& haha = lancelot[ARONDIGHT].Collision_;
 	(void)haha;
-	if ( ! lancelot[ARONDIGHT].GetCollided() && lancelot[ARONDIGHT].Collision_.Line_Point(lancelot[ARONDIGHT].Collision_, d.Collision_, position))
-	{
-		d.Decrease_HP();
-		lancelot[ARONDIGHT].SetCollided(true);
-	}
+
 
 	if (lancelot[ARONDIGHT].GetDir())
 	{
@@ -375,17 +370,15 @@ void Lancelot::Arondight(Dragon& d, const float dt)
 	}
 	else
 	{
-		float radians = AEDegToRad(2);
+		float radians = AEDegToRad(3); // rotate the sword by 3 degrees
 
-		float s = sin(radians);
-		float c = cos(radians);
+		float s = sin(radians);		   // sin(3)
+		float c = cos(radians);		   // cos(3)
 		
 		
-		float tempX = new_vector.x;
-		//std::cout << new_point.x << " " << new_point.y << std::endl;
-		new_vector.x = new_vector.x * c - new_vector.y * s + PosX;
-		new_vector.y = tempX * s + new_vector.y * c + PosY;
-		//std::cout << new_point.x << " " << new_point.y << std::endl;
+		float tempX = new_vector.x;   // old value of x
+		new_vector.x = new_vector.x * c - new_vector.y * s + PosX; // collision new point after rotation
+		new_vector.y = tempX * s + new_vector.y * c + PosY;		   // collision new point after rotation
 	
 	}
 
@@ -398,12 +391,21 @@ void Lancelot::Arondight(Dragon& d, const float dt)
 
 	lancelot[ARONDIGHT].PosX = new_vector.x * 0.5f + PosX * 0.5f;
 	lancelot[ARONDIGHT].PosY = new_vector.y * 0.5f + PosY * 0.5f;
-	lancelot[ARONDIGHT].Transform_.SetTranslate(lancelot[ARONDIGHT].PosX, lancelot[ARONDIGHT].PosY);
-	
+	lancelot[ARONDIGHT].Transform_.SetTranslate(lancelot[ARONDIGHT].PosX, lancelot[ARONDIGHT].PosY);	
 	lancelot[ARONDIGHT].Transform_.Concat();
 	lancelot[ARONDIGHT].Collision_.Update_Col_Pos(new_vector.x, new_vector.y);
 
-	if (lancelot[ARONDIGHT].GetDist() > 600.0f)
+	angle += angle_offset;
+
+	// checks if the attack collided with player
+	if (!lancelot[ARONDIGHT].GetCollided() && lancelot[ARONDIGHT].Collision_.Line_Point(lancelot[ARONDIGHT].Collision_, d.Collision_, position))
+	{
+		d.Decrease_HP();
+		lancelot[ARONDIGHT].SetCollided(true);
+	}
+
+
+	if (angle > 140.0f)
 	{
 		lancelot[ARONDIGHT].End_Attack();
 		lancelot[ARONDIGHT].cooldown_timer = 0.0f;
