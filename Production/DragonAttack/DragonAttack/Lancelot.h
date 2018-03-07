@@ -37,12 +37,12 @@ private:
 
 	void Stab(Dragon&, const float dt); // first basic attack of lancelot
 	void Slash(Dragon&, const float dt); // second basic attack of lancelot
-	void Mad_Enhancement(); // makes lancelot move faster, shorter cooldown
+	void Mad_Enhancement(const float dt); // makes lancelot move faster, shorter cooldown
 	void Arondight(Dragon&, const float dt); // phase 2 mechanism, long range attack
 
 	//void (Lancelot::*ll_attacks[3])(const float dt); // function pointer to lancelot attacks
 
-	BOSS_PHASE phase = PHASE_2;  // flag for lancelot second phase
+	BOSS_PHASE phase = PHASE_1;  // flag for lancelot second phase
 
 	bool M_E; // lancelot berserk state
 
