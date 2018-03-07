@@ -30,6 +30,7 @@ private:
 	void Init_Stab(void);
 	void Init_Slash(void);
 	void Init_Arondight(void);
+	void Set_Face_Dir(const Dragon &);
 	void Set_Attk_Dir(void); // set the attack direction of lancelot
 
 	void Lancelot_Phase2(void);
@@ -41,7 +42,7 @@ private:
 
 	//void (Lancelot::*ll_attacks[3])(const float dt); // function pointer to lancelot attacks
 
-	BOSS_PHASE phase = PHASE_2;  // flag for lancelot second phase
+	BOSS_PHASE phase = PHASE_1;  // flag for lancelot second phase
 
 	bool M_E; // lancelot berserk state
 
