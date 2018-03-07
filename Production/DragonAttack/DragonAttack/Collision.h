@@ -16,6 +16,13 @@ Technology is prohibited.
 #include "AEEngine.h"
 #include "Transform.h"
 
+// Meant to be shared to determine if you want which side of the ling you want to check
+enum HalfPlane 
+{
+	INSIDE = 1,
+	OUTSIDE
+};
+
 namespace
 {
 	enum Shape
@@ -32,6 +39,8 @@ namespace
 		Not_Collided
 	};
 
+
+
 	//enum Obj_T //an enumeration that includes all object types for easy comparison between object to object collision. 
 	//{
 	//	Obj_Dragon,
@@ -42,7 +51,6 @@ namespace
 	//};
 	
 }
-
 
 class Col_Comp
 {
@@ -102,7 +110,7 @@ public:
 	Shape GetShape(); 
 
 	//William Edit START//////////////////////////////////////////////////////////////////////////
-	bool Line_Point(Col_Comp &A, Col_Comp &B, AEVec2 & A_Pos);
+	bool Line_Point(Col_Comp &A, Col_Comp &B, AEVec2 & A_Pos, HalfPlane);
 
 	AEVec2 Get_Point(void) const;
 	//William Edit END////////////////////////////////////////////////////////////////////////////
