@@ -27,7 +27,7 @@ private:
 	void AttackPlayer(const Dragon &d);
 
 	void Idle(const Dragon &d);
-	Audio_Engine SFX;
+	//Audio_Engine SFX;
 public:
 	/******************************************************************************/
 	/*!
