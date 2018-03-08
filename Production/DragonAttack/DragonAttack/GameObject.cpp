@@ -48,6 +48,6 @@ GameObject::GameObject(AEGfxVertexList *mesh, const char* TexFile,
 
 //Move constructor for sprite
 GameObject::GameObject(Sprite&& t_Sprite, Col_Comp &&t_Col, float x, float y)
-  : active{ false }, Transform_{}, Sprite_{ std::move(t_Sprite) }, Collision_{ std::move(t_Col) },
+  : active{ false }, Velocity{ 0.0f, 0.0f }, Transform_{}, Sprite_{ std::move(t_Sprite) }, Collision_{ std::move(t_Col) },
     PosX{ x }, PosY{ y }
 {}

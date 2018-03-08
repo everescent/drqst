@@ -28,7 +28,7 @@ void CamFollow(Transform const &PosMatrix, float OffsetX, float OffsetY, float D
 {
   //Moves the camera left or right
   static float Offset = OffsetX;
-  //To use a quadratic animation curve
+  //To use a smooth animation curve
   float Accel = 2.0f;
   if (Direction < 0.0f)
   {

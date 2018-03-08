@@ -14,28 +14,20 @@ Technology is prohibited.
 /* End Header **************************************************************************/
 
 #include "Audio_Engine.h"
-#include <exception>
+
 /*Guide Links: 
   https://cuboidzone.wordpress.com/2013/07/26/tutorial-implementing-fmod/
   https://katyscode.wordpress.com/2012/10/05/cutting-your-teeth-on-fmod-part-1-build-environment-initialization-and-playing-sounds/
   https://katyscode.wordpress.com/2013/01/15/cutting-your-teeth-on-fmod-part-2-channel-groups/
 */
-static int dctor = 0;
+
 Audio_Engine::Audio_Engine(unsigned SoundNum, const std::function<void(std::vector<std::string>&)>& Init)
   :Audio_{ nullptr }, Playlist_{}, Soundlist_{}, Channel_{}, ChannelGroup_{ nullptr }
 {
   //Create audio system
-  //if (FMOD::System_Create(&Audio_) != FMOD_OK)
-  //{
-  //  std::cerr << "Audio system cannot be created. Exception thrown!";
-  //  throw;
-  //}
+  FMOD::System_Create(&Audio_);
   //Initialize audio system
-  FMOD_RESULT test;
-    test = FMOD::System_Create(&Audio_);
-    std::cerr << test << std::endl;
-    test = Audio_->init(SoundNum, FMOD_INIT_NORMAL, NULL);
-    std::cerr << test << std::endl;
+  Audio_->init(SoundNum, FMOD_INIT_NORMAL, NULL);
   //Reserve memory for vectors
   Playlist_.reserve(SoundNum);
   Soundlist_.reserve(SoundNum);
@@ -61,8 +53,6 @@ Audio_Engine::Audio_Engine(unsigned SoundNum, const std::function<void(std::vect
     Channel_[i]->setChannelGroup(ChannelGroup_);
     Channel_[i]->setPaused(false);
   }
-  ++dctor;
-  std::cerr << "ctor: " << dctor << std::endl;
 }
 
 void Audio_Engine::Play(const int SongNum)
@@ -92,6 +82,7 @@ void Audio_Engine::SetPause(const int SongNum, const bool Pause)
 bool Audio_Engine::GetPlaying(const int SongNum)
 { 
   bool len; 
+  //Check if song is playing
   Channel_[SongNum]->isPlaying(&len);
   return len; 
 }
@@ -112,6 +103,4 @@ Audio_Engine::~Audio_Engine()
   Channel_.clear();
   Playlist_.clear();
   Audio_->release();
-  --dctor;
-  std::cerr << "dctor: " << dctor << std::endl;
 }

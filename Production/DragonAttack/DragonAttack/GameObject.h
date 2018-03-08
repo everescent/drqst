@@ -54,10 +54,10 @@ public:
   Transform Transform_; //Transform holds the object's position, scale and rotation
   Sprite Sprite_;       //Sprite handles mesh, texture and rendering
   Col_Comp Collision_;  //Collision handles object collision
-  float PosX{ 0.0f };   //Position X
-  float PosY{ 0.0f };   //Position Y
+  float PosX;           //Position X
+  float PosY;           //Position Y
 
 private:
-  bool active; //Active or Inactive
-  AEVec2 Velocity{ 0.0f, 0.0f };
+  bool   active;   //Active or Inactive
+  AEVec2 Velocity; //Object Velocity
 };

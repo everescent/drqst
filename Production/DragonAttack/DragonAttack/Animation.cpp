@@ -29,12 +29,14 @@ Animation::Animation(unsigned stateNum, const float &width, const float &height,
 Animation::Animation(const Animation& rhs)
   :Tex_Width{ rhs.Tex_Width }, Tex_Height{ rhs.Tex_Height }, 
    Tex_Row{ rhs.Tex_Row }, Tex_Col{ rhs.Tex_Col },
-   offsetX{ 1.0f / Tex_Col }, offsetY{ 1.0f / Tex_Row }, State{ rhs.State }, FrameCount{ rhs.FrameCount },
+   offsetX{ 1.0f / Tex_Col }, offsetY{ 1.0f / Tex_Row }, State{ rhs.State }, 
+   FrameCount{ rhs.FrameCount },
    Animation_State{ rhs.Animation_State }
 {}
 
 void Animation::ResetState(int t_state)
 {
+  //Reset animation cycle
   Animation_State[t_state].Rowcurr = Animation_State[t_state].startRow;
   Animation_State[t_state].Colcurr = Animation_State[t_state].startCol;
 }

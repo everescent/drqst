@@ -131,16 +131,17 @@ private:
   float Facing;    //Direction of player is facing
   //Determines direction 
   struct Direction {
-    bool L { false }; //Check for left
-    bool R { false }; //Check for right
-    bool UP{ false }; //Check for jump
-    Direction() = default;
+    bool L;  //Check for left
+    bool R;  //Check for right
+    bool UP; //Check for jump
+    Direction() :L{ false }, R{ false }, UP{ false } {};
   };
+  //Determines what kind of pickup is activated
   struct Pickup {
-    bool DMG  { false };
-    bool SPD  { false };
-    bool INVUL{ false };
-    Pickup() =  default;
+    bool DMG;   //Damage
+    bool SPD;   //Speed
+    bool INVUL; //Invulnerability
+    Pickup() :DMG{ false }, SPD{ false }, INVUL{ false } {};
   };
   enum AudioState {
     HIT,    //Dragon get hit SFX
