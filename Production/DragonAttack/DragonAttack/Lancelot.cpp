@@ -43,6 +43,10 @@ namespace
 
 	// Variables for stab
 	const AEVec2 STAB_VELOCITY{ 20.0f, 0.0f };
+
+
+
+	bool Player_Facing_Me(Lancelot&, Dragon&);
 }
 
 Lancelot::Lancelot(void)
@@ -440,10 +444,13 @@ void Lancelot::Arondight(Dragon& d, const float dt)
 	angle += angle_offset;
 
 	// checks if the attack collided with player
-	if (!lancelot[ARONDIGHT].GetCollided() && lancelot[ARONDIGHT].Collision_.Line_Point(lancelot[ARONDIGHT].Collision_, d.Collision_, position, side))
+	if (!lancelot[ARONDIGHT].GetCollided() && Player_Facing_Me (*this, d) )
 	{
-		d.Decrease_HP();
-		lancelot[ARONDIGHT].SetCollided(true);
+		if (lancelot[ARONDIGHT].Collision_.Line_Point(lancelot[ARONDIGHT].Collision_, d.Collision_, position, side))
+		{
+			d.Decrease_HP();
+			lancelot[ARONDIGHT].SetCollided(true);
+		}
 	}
 
 
@@ -536,3 +543,19 @@ Lancelot::~Lancelot()
 	lancelot.clear();
 }
 
+namespace{
+
+bool Player_Facing_Me(Lancelot& l, Dragon& d)
+{
+	Direction boss_face = l.Get_Direction();
+
+	switch (boss_face)
+	{
+	case LEFT: return d.PosX - l.PosX < 0 ;
+		break;
+	case RIGHT: return d.PosX - l.PosX > 0;
+		break;
+	default: return false;
+	}
+}
+}
