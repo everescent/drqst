@@ -28,6 +28,8 @@ namespace
 	Sign *s1, *s2, *s3, *s4, *s5, *s6;
 	GameObject *tut1, *tut2, *tut3, *tut4, *tut5, *tut6;
 
+	Wall *w1, *w2, *w22, *w3, *w4, *w5;
+
 	std::vector<Characters*> c;
 }
 
@@ -41,6 +43,13 @@ namespace Test_Stage1_1
 		Audio = new Audio_Engine{ 1, [](std::vector <std::string> &playlist)->void {playlist.push_back(".//Audio/Stage_1_BGM.mp3"); } };
 		archerTower = new Tower{ 4800.0f, 0.0f };
 		ui = new UI{ player };
+
+		w1 = new Wall{ 2700.0f, -380.0f };
+		w2 = new Wall{ 3750.0f, -345.0f };
+		w22 = new Wall{ 3750.0f, -230.0f };
+		w3 = new Wall{ 5500.0f, -200.0f };
+		w4 = new Wall{ 5650.0f, -295.0f };
+		w5 = new Wall{ 6485.0f, -150.0f };
 
 		next = new LevelChangePlatform{ 6550.0f, -120.0f };
 
@@ -199,6 +208,12 @@ namespace Test_Stage1_1
 		{
 			c[i]->Update(*player, dt);
 			archerTower->Update(*(c[i]), dt);
+			w1->Update (*(c[i]), dt);
+			w2->Update (*(c[i]), dt);
+			w22->Update(*(c[i]), dt);
+			w3->Update (*(c[i]), dt);
+			w4->Update (*(c[i]), dt);
+			w5->Update (*(c[i]), dt);
 		}
 
 		if (!(box1->IsActive()))
@@ -245,6 +260,13 @@ namespace Test_Stage1_1
 			elem.Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 		}*/
 		
+		w1->Update(*player, dt);
+		w2->Update(*player, dt);
+		w22->Update(*player, dt);
+		w3->Update(*player, dt);
+		w4->Update(*player, dt);
+		w5->Update(*player, dt);
+
 		archerTower->Update(*player, dt);
 		player->Update(*player, dt);
 		//sc1->Update(*player, dt);
@@ -335,6 +357,13 @@ namespace Test_Stage1_1
 			elem.Render();
 		}
 
+		/*w1->Render();
+		w2->Render();
+		w22->Render();
+		w3->Render();
+		w4->Render();
+		w5->Render();*/
+
 		//sc1->Render();
 		//sc2->Render();
 		box1->Render();
@@ -373,6 +402,8 @@ namespace Test_Stage1_1
 		delete power2;
 		delete next;
 		delete ui;
+
+		delete w1, w2, w22, w3, w4, w5;
 
 		platforms.clear();
 		floors.clear();
