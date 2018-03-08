@@ -33,7 +33,7 @@ const int   MFireball_Damage{ 15      };
 const float Jump_Height    { 400.0f  }; //Maximum height player can jump
 const float Jump_Mult      { 3.2f    }; //How fast player can jump
 const float Start_Pos_X    { -320.0f }; //Player stating position X
-const float Start_Pos_Y    { -120.0f }; //Player starting position Y
+const float Start_Pos_Y    { -100.0f }; //Player starting position Y
 const AEVec2 Player_Speed  { 480.0f, 480.0f * Jump_Mult };
 const float Cam_Offset_X   { 320.0f  }; //Camera offset X
 const float Cam_Offset_Y   { 120.0f  }; //Camera offset Y
