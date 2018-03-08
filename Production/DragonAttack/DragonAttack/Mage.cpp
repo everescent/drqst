@@ -69,12 +69,27 @@ void Mage::Update(Dragon &d, const float dt)
 				if (Collision_.Dy_Rect_Rect(d.GetFireball()[i].Collision_, GetVelocity(),
 					d.GetFireball()[i].GetVelocity(), dt))
 				{
-					//Decrease HP by d's damage
+					//Decrease HP by player's damage
 					Decrease_HP(d.GetDamage());
+					//Add mega fireball charge
+					d.AddCharge();
+					d.PlayImpact();
 					//Reset the distance of the fireball and set false
 					d.GetFireball()[i].Projectile::ResetDist();
 					d.GetFireball()[i].SetActive(false);
 				}
+
+		// mega fire ball hit lancelot
+		if (d.GetMfireball().IsActive())
+		{
+			if (Collision_.Dy_Rect_Rect(d.GetMfireball().Collision_, GetVelocity(),
+				d.GetMfireball().GetVelocity(), dt))
+			{
+				Decrease_HP(d.GetMDamage());
+				d.GetMfireball().Projectile::ResetDist();
+				d.GetMfireball().SetActive(false);
+			}
+		}
 	}
 
 	// calls the behaviour function depending on current behaviour

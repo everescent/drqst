@@ -27,14 +27,14 @@ namespace
 	const char limit = 4; // num of lancelot attacks
 
 	float idle_time          = 1.0f; // idling time for lancelot
-	const float ATTACK_RANGE = 100.0f;
+	const float ATTACK_RANGE = 150.0f;
 	const float ATTACK_SCALE = 20.0f;
 	static Lancelot_Moveset currAttk = STAB;
 
 	// variables for slash and arondight
 	const AEVec2 ATK_START_POINT {-100.0f, -130.0f}; 
 	const AEVec2 ARONDIGHT_SCALE { 11.5f, 3.0f };
-	const AEVec2 STARTING_POINT { 200.0f, -200.0f };
+	const AEVec2 STARTING_POINT { 200.0f, -250.0f };
 	const AEVec2 SLASH_VELOCITY { 20.0f, 500.0f };
 	float angle = 25.0f;
 	float angle_offset = 2.0f;
@@ -43,6 +43,10 @@ namespace
 
 	// Variables for stab
 	const AEVec2 STAB_VELOCITY{ 20.0f, 0.0f };
+
+
+
+	bool Player_Facing_Me(Lancelot&, Dragon&);
 }
 
 Lancelot::Lancelot(void)
@@ -89,7 +93,7 @@ void Lancelot::Init()
 	Init_Arondight();
 
 	// prevent unique mechanic from activating at the start of fight
-	lancelot[MAD_ENHANCEMENT].cooldown_timer = 5.0f; 
+	lancelot[MAD_ENHANCEMENT].cooldown_timer = 10.0f; 
 	lancelot[MAD_ENHANCEMENT].cooldown = true; 
 	
 	seed_initializer(); // initializes the seed for rng purposes
@@ -156,17 +160,33 @@ void Lancelot::Update(Dragon &d, float dt)
 			this->Mad_Enhancement(dt);         
 	}
 
+	// fireball hit lancelot
 	for (char i = 0; i < Bullet_Buffer; ++i)
 		if (d.GetFireball()[i].IsActive())
 			if (Collision_.Dy_Rect_Rect(d.GetFireball()[i].Collision_, GetVelocity(),
 				d.GetFireball()[i].GetVelocity(), dt))
 			{
-				//Decrease HP by d's damage
+				//Decrease HP by player's damage
 				Decrease_HP(d.GetDamage());
+				//Add mega fireball charge
+				d.AddCharge();
+				d.PlayImpact();
 				//Reset the distance of the fireball and set false
 				d.GetFireball()[i].Projectile::ResetDist();
 				d.GetFireball()[i].SetActive(false);
 			}
+
+	// mega fire ball hit lancelot
+	if (d.GetMfireball().IsActive())
+	{
+		if (Collision_.Dy_Rect_Rect(d.GetMfireball().Collision_, GetVelocity(),
+			d.GetMfireball().GetVelocity(), dt))
+		{
+			Decrease_HP(d.GetMDamage());
+			d.GetMfireball().Projectile::ResetDist();
+			d.GetMfireball().SetActive(false);
+		}
+	}
 
 	// switch between boss states
 	switch (current_action)
@@ -243,7 +263,7 @@ void Lancelot::Attack(Dragon &d, const float dt)
 		else if (!lancelot[SLASH].cooldown)
 		{
 			currAttk = SLASH;
-
+			charge_time = 1.0f;
 			if (this->Get_Direction())
 			{
 				lancelot[SLASH].Start_Attack(this->PosX + -ATK_START_POINT.x, ATK_START_POINT.y);
@@ -257,6 +277,7 @@ void Lancelot::Attack(Dragon &d, const float dt)
 				angle = 25.0f;
 				angle_offset = -2.0f;
 			}
+			lancelot[SLASH].SetActive(false);
 		}
 		else
 		{
@@ -288,6 +309,8 @@ void Lancelot::Lancelot_Phase2(void)
 void Lancelot::Stab(Dragon& d, const float dt)
 {
 	lancelot[STAB].Projectile::Update(ATTACK_SCALE); // move the stab projectile
+	Collision_.Update_Col_Pos(PosX - ATTACK_SCALE, PosY - ATTACK_SCALE,
+							  PosX + ATTACK_SCALE, PosY + ATTACK_SCALE);
 
 	if (!lancelot[STAB].GetCollided()) // check for collision
 	{
@@ -321,7 +344,14 @@ void Lancelot::Slash(Dragon& d, const float dt)
 	UNREFERENCED_PARAMETER(dt);
 	static float slash_interval = 0.5f;
 	static bool second_slash = false;
+	
+	while (charge_time > 0)
+	{
+		charge_time -= dt;
+		return;
+	}
 
+	lancelot[SLASH].SetActive(true);
 	lancelot[SLASH].Projectile::Update(ATTACK_SCALE,false , angle += angle_offset);
 
 	if (!lancelot[SLASH].GetCollided())
@@ -372,7 +402,7 @@ void Lancelot::Mad_Enhancement(const float dt)
 		this->SetVelocity(AEVec2 { 200.0f, 0.0f }); // return to original velocity
 		idle_time = 1.0f;							// set the idle time back
 		M_E = false;								// turn mad enhancement off
-		Set_Vulnerable(true);
+		
 	}
 	else
 	{
@@ -383,6 +413,7 @@ void Lancelot::Mad_Enhancement(const float dt)
 		M_E = true;												 // mad enhancement flag
 		lancelot[MAD_ENHANCEMENT].ongoing_attack = false;
 		current_action = MOVING;
+		Set_Vulnerable(true);
 	}
 
 }
@@ -440,17 +471,20 @@ void Lancelot::Arondight(Dragon& d, const float dt)
 	angle += angle_offset;
 
 	// checks if the attack collided with player
-	if (!lancelot[ARONDIGHT].GetCollided() && lancelot[ARONDIGHT].Collision_.Line_Point(lancelot[ARONDIGHT].Collision_, d.Collision_, position, side))
+	if (!lancelot[ARONDIGHT].GetCollided() && Player_Facing_Me (*this, d) )
 	{
-		d.Decrease_HP();
-		lancelot[ARONDIGHT].SetCollided(true);
+		if (lancelot[ARONDIGHT].Collision_.Line_Point(lancelot[ARONDIGHT].Collision_, d.Collision_, position, side))
+		{
+			d.Decrease_HP();
+			lancelot[ARONDIGHT].SetCollided(true);
+		}
 	}
 
 
 	if (angle > 140.0f)
 	{
 		lancelot[ARONDIGHT].End_Attack();
-		lancelot[ARONDIGHT].cooldown_timer = 0.0f;
+		lancelot[ARONDIGHT].cooldown_timer = 10.0f;
 		lancelot[ARONDIGHT].cooldown = true;
 		charge_time = 2.0f;
 		current_action = IDLE;
@@ -536,3 +570,19 @@ Lancelot::~Lancelot()
 	lancelot.clear();
 }
 
+namespace{
+
+bool Player_Facing_Me(Lancelot& l, Dragon& d)
+{
+	Direction boss_face = l.Get_Direction();
+
+	switch (boss_face)
+	{
+	case LEFT: return d.PosX - l.PosX < 0 ;
+		break;
+	case RIGHT: return d.PosX - l.PosX > 0;
+		break;
+	default: return false;
+	}
+}
+}
