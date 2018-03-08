@@ -148,7 +148,10 @@ void Dragon::Update(Dragon& dummy, const float dt)
           Fireball[i].SetDir(true);
         break;
       }
-    if(Mfireball.IsActive())
+  }
+  if (MAttack)
+  {
+    if (Mfireball.IsActive())
       if (Facing < 0.0f)
         Mfireball.SetDir(false);
       else
