@@ -22,7 +22,6 @@ void Floor::Update(Characters &obj, const float &dt)
 
 		if ( (obj.PosY - obj.Sprite_.Get_Height() )  > this->PosY)
 		{
-			//COLLISION_TOP = true ; 
 			obj.PosY = PosY + this->Sprite_.Get_Height() + obj.Sprite_.Get_Height();
 			//std::cout << "top " << std::endl;
 		}
@@ -43,7 +42,7 @@ void Floor::Update(Characters &obj, const float &dt)
 				//std::cout << "right" << std::endl;
 			}
 
-			if (obj.PosX < ((this->PosX - this->Sprite_.Get_Width())))//obj.Get_Direction() == RIGHT)
+			if (obj.PosX < ((this->PosX - this->Sprite_.Get_Width())))
 			{
 				
 				//if the dragon is on the left of platform

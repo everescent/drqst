@@ -15,16 +15,14 @@ namespace
 	std::vector<Floor> floors;
 	std::vector<Wall> walls;
 	std::vector<Barrier> barriers;
-	//std::vector<Scarecrow> scarecrows;
 
 	LevelChangePlatform *next;
-	//Tower *archerTower;
 	PickUp *coin1, *coin2, *coin3, *hp, *invul;
 	Platform *up1, *up2;
 	//PickUp *power1, *power2;
 	std::vector<Characters*> c;
 
-	Wall *w1, *w2, *w3, *w4, *w5, *w6, *w7, *w8, *w9, *w10, *w11, *w12, *w13, *w14, *w15, *w16, *w17, *w18;
+	Wall *w6, *w12, *w13, *w16, *w17, *w18;
 }
 
 namespace Test_Stage1_2
@@ -38,26 +36,13 @@ namespace Test_Stage1_2
 		ui = new UI(player);
 		if (!Import_MapData("level1-2.txt", MapData, Map_Width, Map_Height)) { AEGfxExit(); }
 
-		//archerTower = new Tower        { 7000.0f,  170.0f };
 		up1 = new Platform             { 6000.0f,  -30.0f };
 		up2 = new Platform             { 6000.0f, -120.0f };
 		next = new LevelChangePlatform { 7500.0f,  150.0f };
 
-		w1  = new Wall{ 260.0f, -110.0f };
-		w2  = new Wall{ 430.0f, -20.0f };
-		w3  = new Wall{ 1095.0f, -20.0f };
-		w4  = new Wall{ 1260.0f, -110.0f };
-		w5  = new Wall{ 1410.0f,-200.0f };
 		w6  = new Wall{ 2240.0f,-165.0f };//?
-		w7  = new Wall{ 2030.0f,70.0f };
-		w8  = new Wall{ 2610.0f,70.0f };
-		w9  = new Wall{ 2760.0f,-30.0f };
-		w10 = new Wall{ 2930.0f,-120.0f };
-		w11 = new Wall{ 3090.0f,-210.0f };
-		w12 = new Wall{ 3820.0f,-385.0f };//
-		w13 = new Wall{ 3820.0f,-290.0f };
-		w14 = new Wall{ 5380.0f,-385.0f };
-		w15 = new Wall{ 5470.0f,-295.0f };
+		w12 = new Wall{ 3850.0f,-385.0f };//
+		w13 = new Wall{ 3850.0f,-290.0f };
 		w16 = new Wall{ 6230.0f,-165.0f };
 		w17 = new Wall{ 6230.0f,-100.0f };
 		w18 = new Wall{ 6230.0f,0.0f };
@@ -85,7 +70,7 @@ namespace Test_Stage1_2
 		c.push_back(Create_Basic_AI(ARCHER, AEVec2{ 4700.0f , -345.0f }));
 		c.push_back(Create_Basic_AI(GRUNT , AEVec2{ 4900.0f , -345.0f }));
 		c.push_back(Create_Basic_AI(GRUNT , AEVec2{ 5500.0f ,  195.0f }));
-		c.push_back(Create_Basic_AI(GRUNT , AEVec2{ 5800.0f ,  195.0f }));
+		//c.push_back(Create_Basic_AI(GRUNT , AEVec2{ 5800.0f ,  195.0f }));
 		c.push_back(Create_Basic_AI(GRUNT , AEVec2{ 6450.0f ,  195.0f }));
 		c.push_back(Create_Basic_AI(ARCHER, AEVec2{ 6950.0f ,  300.0f }));
 	}
@@ -166,21 +151,9 @@ namespace Test_Stage1_2
 		for (size_t i = 0; i < c.size(); ++i)
 		{
 			c[i]->Update(*player, dt);
-			w1-> Update(*(c[i]), dt);
-			w2-> Update(*(c[i]), dt);
-			w3-> Update(*(c[i]), dt);
-			w4-> Update(*(c[i]), dt);
-			w5-> Update(*(c[i]), dt);
 			w6-> Update(*(c[i]), dt);
-			w7-> Update(*(c[i]), dt);
-			w8-> Update(*(c[i]), dt);
-			w9-> Update(*(c[i]), dt);
-			w10->Update(*(c[i]), dt);
-			w11->Update(*(c[i]), dt);
 			w12->Update(*(c[i]), dt);
 			w13->Update(*(c[i]), dt);
-			w14->Update(*(c[i]), dt);
-			w15->Update(*(c[i]), dt);
 			w16->Update(*(c[i]), dt);
 			w17->Update(*(c[i]), dt);
 			w18->Update(*(c[i]), dt);
@@ -214,28 +187,15 @@ namespace Test_Stage1_2
 		coin1->Update(*player, dt);
 		coin2->Update(*player, dt);
 		coin3->Update(*player, dt);
-		//archerTower->Update(*player, dt);
 		up1->Update(*player, dt);
 		up2->Update(*player, dt);
 		next->Update(*player, dt);
 		player->Update(*player, dt);
 		ui->UI_Update(player);
 
-		w1 ->Update(*player, dt);
-		w2 ->Update(*player, dt);
-		w3 ->Update(*player, dt);
-		w4 ->Update(*player, dt);
-		w5 ->Update(*player, dt);
 		w6 ->Update(*player, dt);
-		w7 ->Update(*player, dt);
-		w8 ->Update(*player, dt);
-		w9 ->Update(*player, dt);
-		w10->Update(*player, dt);
-		w11->Update(*player, dt);
 		w12->Update(*player, dt);
 		w13->Update(*player, dt);
-		w14->Update(*player, dt);
-		w15->Update(*player, dt);
 		w16->Update(*player, dt);
 		w17->Update(*player, dt);
 		w18->Update(*player, dt);
@@ -249,7 +209,6 @@ namespace Test_Stage1_2
 
 		BG->Render_Object(*M_BG);
 
-		//archerTower->Render();
 		up1->Render();
 		up2->Render();
 
@@ -272,28 +231,6 @@ namespace Test_Stage1_2
 		coin1->Render();
 		coin2->Render();
 		coin3->Render();
-
-
-		//w1-> Render();
-		//w2-> Render();
-		//w3-> Render();
-		//w4-> Render();
-		//w5-> Render();
-		//w6-> Render();
-		//w7-> Render();
-		//w8-> Render();
-		//w9-> Render();
-		//w10->Render();
-		//w11->Render();
-		//w12->Render();
-		//w13->Render();
-		//w14->Render();
-		//w15->Render();
-		//w16->Render();
-		//w17->Render();
-		//w18->Render();
-
-
 		next->Render();
 
 		player->Render();
@@ -309,26 +246,13 @@ namespace Test_Stage1_2
 		delete player;
 		delete Audio;
 
-		delete w1;
-		delete w2;
-		delete w3;
-		delete w4;
-		delete w5;
 		delete w6;
-		delete w7;
-		delete w8;
-		delete w9;
-		delete w10;
-		delete w11;
 		delete w12;
 		delete w13;
-		delete w14;
-		delete w15;
 		delete w16;
 		delete w17;
 		delete w18;
 		
-		//delete archerTower;
 		delete up1;
 		delete up2;
 		delete coin1;
