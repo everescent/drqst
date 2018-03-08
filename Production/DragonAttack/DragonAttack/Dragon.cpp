@@ -192,6 +192,7 @@ void Dragon::Update(Dragon& dummy, const float dt)
 
   //Reset direction and attack
   Attack = false;
+  MAttack = false;
   Dir.L = Dir.R = false;
   if (Air_Dist >= Jump_Height)
   {

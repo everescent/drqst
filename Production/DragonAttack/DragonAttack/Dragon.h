@@ -30,7 +30,7 @@ const float Bullet_Speed    { 1200.0f }; //How fast a bullet travels
 const int   Fireball_Damage { 10      };
 const int   MFireball_Damage{ 15      };
 
-const float Jump_Height    { 300.0f  }; //Maximum height player can jump
+const float Jump_Height    { 400.0f  }; //Maximum height player can jump
 const float Jump_Mult      { 3.2f    }; //How fast player can jump
 const float Start_Pos_X    { -320.0f }; //Player stating position X
 const float Start_Pos_Y    { -120.0f }; //Player starting position Y
