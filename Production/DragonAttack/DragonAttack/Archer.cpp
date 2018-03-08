@@ -79,12 +79,24 @@ void Archer::Colision_Check(Dragon &player, const float dt)
         Decrease_HP(player.GetDamage());
         //Add mega fireball charge
         player.AddCharge();
-        //player.PlayImpact();
+        player.PlayImpact();
         Audio_.Play(HIT);
         //Reset the distance of the fireball and set false
         player.GetFireball()[i].Projectile::ResetDist();
         player.GetFireball()[i].SetActive(false);
       }
+  if(player.GetMfireball().IsActive())
+	  if (Collision_.Dy_Rect_Rect(player.GetMfireball().Collision_, GetVelocity(),
+		  player.GetMfireball().GetVelocity(), dt))
+	  {
+		  //Decrease HP by player's damage
+		  Decrease_HP(player.GetMDamage());
+		  player.PlayImpact();
+		  Audio_.Play(HIT);
+		  //Reset the distance of the fireball and set false
+		  player.GetMfireball().Projectile::ResetDist();
+		  player.GetMfireball().SetActive(false);
+	  }
   //Arrow collision check
   if (Attack_)
   {
@@ -94,7 +106,7 @@ void Archer::Colision_Check(Dragon &player, const float dt)
           player.GetVelocity(), dt))
       {
         player.Decrease_HP();
-        //player.PlayHit();
+        player.PlayHit();
         Arrow.ResetDist();
         Arrow.SetActive(false);
       }
