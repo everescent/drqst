@@ -16,6 +16,10 @@ Technology is prohibited.
 #include "Archer.h"
 
 using namespace ArcherMacros;
+Audio_Engine Archer::Audio_{ 1, [](std::vector<std::string> &playlist) ->void {
+  playlist.push_back(".//Audio/Hit_01.mp3");
+  //playlist.push_back(".//Audio/Arrow_Swoosh.mp3"); 
+} };
 
 Archer::Archer(const float posX, const float posY)
   //Initialize characters class
@@ -28,11 +32,7 @@ Archer::Archer(const float posX, const float posY)
           posX + Arrow_Scale, posY + Arrow_Scale, Rect } }, 
   //Initialize other members
   Archer_State{ &Archer::Idle }, A_Curr{ IDLE }, A_Next{ IDLE },
-  Dragon_Seen{ false }, Attack_{ false }, Distance{ 0.0f }, Arrow_CD{ 0.0f },
-  Audio_{ 1, [](std::vector<std::string> &playlist) ->void {
-    playlist.push_back(".//Audio/Hit_01.mp3");
-    //playlist.push_back(".//Audio/Arrow_Swoosh.mp3"); 
-  } }
+  Dragon_Seen{ false }, Attack_{ false }, Distance{ 0.0f }, Arrow_CD{ 0.0f }
 {
   SetActive(true);
   GameObject::Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
@@ -79,7 +79,8 @@ void Archer::Colision_Check(Dragon &player, const float dt)
         Decrease_HP(player.GetDamage());
         //Add mega fireball charge
         player.AddCharge();
-        player.PlayImpact();
+        //player.PlayImpact();
+        Audio_.Play(HIT);
         //Reset the distance of the fireball and set false
         player.GetFireball()[i].Projectile::ResetDist();
         player.GetFireball()[i].SetActive(false);
@@ -93,7 +94,7 @@ void Archer::Colision_Check(Dragon &player, const float dt)
           player.GetVelocity(), dt))
       {
         player.Decrease_HP();
-        player.PlayHit();
+        //player.PlayHit();
         Arrow.ResetDist();
         Arrow.SetActive(false);
       }
@@ -214,7 +215,6 @@ void Archer::Update(Dragon& player, const float dt)
       Transform_.SetScale(1.0f, 1.0f);
     }
     PosY -= Gravity;
-    Audio_.Update();
     //Assign state
     CheckState(player, dt);
     //Execute state
@@ -223,6 +223,7 @@ void Archer::Update(Dragon& player, const float dt)
     Attack_Update(player, dt);
     //Check for collision
     Colision_Check(player, dt);
+    Audio_.Update();
     //Concatenate all matrices
     Transform_.SetTranslate(PosX, PosY);
     Transform_.Concat();

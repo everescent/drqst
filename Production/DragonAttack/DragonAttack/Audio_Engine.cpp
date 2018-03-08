@@ -14,23 +14,28 @@ Technology is prohibited.
 /* End Header **************************************************************************/
 
 #include "Audio_Engine.h"
+#include <exception>
 /*Guide Links: 
   https://cuboidzone.wordpress.com/2013/07/26/tutorial-implementing-fmod/
   https://katyscode.wordpress.com/2012/10/05/cutting-your-teeth-on-fmod-part-1-build-environment-initialization-and-playing-sounds/
   https://katyscode.wordpress.com/2013/01/15/cutting-your-teeth-on-fmod-part-2-channel-groups/
 */
-
+static int dctor = 0;
 Audio_Engine::Audio_Engine(unsigned SoundNum, const std::function<void(std::vector<std::string>&)>& Init)
   :Audio_{ nullptr }, Playlist_{}, Soundlist_{}, Channel_{}, ChannelGroup_{ nullptr }
 {
   //Create audio system
-  if (FMOD::System_Create(&Audio_) != FMOD_OK)
-  {
-    std::cerr << "Audio system cannot be created. Exception thrown!";
-    throw;
-  }
+  //if (FMOD::System_Create(&Audio_) != FMOD_OK)
+  //{
+  //  std::cerr << "Audio system cannot be created. Exception thrown!";
+  //  throw;
+  //}
   //Initialize audio system
-  Audio_->init(SoundNum, FMOD_INIT_NORMAL, NULL);
+  FMOD_RESULT test;
+    test = FMOD::System_Create(&Audio_);
+    std::cerr << test << std::endl;
+    test = Audio_->init(SoundNum, FMOD_INIT_NORMAL, NULL);
+    std::cerr << test << std::endl;
   //Reserve memory for vectors
   Playlist_.reserve(SoundNum);
   Soundlist_.reserve(SoundNum);
@@ -46,76 +51,42 @@ Audio_Engine::Audio_Engine(unsigned SoundNum, const std::function<void(std::vect
   //Creates the sounds from given filenames
   for (unsigned i = 0; i < SoundNum; ++i)
   {
-    FMOD_RESULT soundResult;
-    soundResult = Audio_->createStream(Playlist_[i].c_str(), FMOD_LOOP_OFF, NULL, &Soundlist_[i]);
-    if (soundResult != FMOD_OK)
-    {
-      std::cerr << "Sound cannot be created. Exception thrown!";
-      throw;
-    }
+    Audio_->createStream(Playlist_[i].c_str(), FMOD_LOOP_OFF, NULL, &Soundlist_[i]);
   }
-  FMOD_RESULT ChannelResult;
   //Create the channel group
-  ChannelResult = Audio_->createChannelGroup(NULL, &ChannelGroup_);
-  if (ChannelResult != FMOD_OK)
-  {
-    std::cerr << "Channel cannot be created. Exception thrown!";
-    throw;
-  }
+  Audio_->createChannelGroup(NULL, &ChannelGroup_);
   //Assign the channels to the channel group
   for (unsigned i = 0; i < SoundNum; ++i)
   {
     Channel_[i]->setChannelGroup(ChannelGroup_);
     Channel_[i]->setPaused(false);
   }
+  ++dctor;
+  std::cerr << "ctor: " << dctor << std::endl;
 }
 
 void Audio_Engine::Play(const int SongNum)
 {
-  FMOD_RESULT result;
   //Play the sound, from given song number
-  result = Audio_->playSound(Soundlist_[SongNum], ChannelGroup_, false, &Channel_[SongNum]);
-  if (result != FMOD_OK)
-  {
-    std::cerr << "Sound cannot be played. Exception thrown!";
-    throw;
-  }
+  Audio_->playSound(Soundlist_[SongNum], ChannelGroup_, false, &Channel_[SongNum]);
 }
 
 void Audio_Engine::SetVolume(const int SongNum, const float Volume)
 {
-  FMOD_RESULT result;
   //Set volume for given song number
-  result = Channel_[SongNum]->setVolume(Volume);
-  if (result != FMOD_OK)
-  {
-    std::cerr << "Volume cannot be set. Exception thrown!";
-    throw;
-  }
+  Channel_[SongNum]->setVolume(Volume);
 }
 
 void Audio_Engine::SetLoop(const int SongNum, FMOD_MODE Loop)
 {
-  FMOD_RESULT result;
   //Activate loop, fro given song number
-  result = Channel_[SongNum]->setMode(Loop);
-  if (result != FMOD_OK)
-  {
-    std::cerr << "Loop cannot be set. Exception thrown!";
-    throw;
-  }
+  Channel_[SongNum]->setMode(Loop);
 }
 
 void Audio_Engine::SetPause(const int SongNum, const bool Pause)
 {
-  FMOD_RESULT result;
   //Pause song
-  result = Channel_[SongNum]->setPaused(Pause);
-  if (result != FMOD_OK)
-  {
-    std::cerr << "Sound cannot be paused. Exception thrown!";
-    throw;
-  }
+  Channel_[SongNum]->setPaused(Pause);
 }
 
 bool Audio_Engine::GetPlaying(const int SongNum)
@@ -127,14 +98,8 @@ bool Audio_Engine::GetPlaying(const int SongNum)
 
 void Audio_Engine::Update()
 {
-  FMOD_RESULT result;
   //Updates the audio system
-  result = Audio_->update();
-  if (result != FMOD_OK)
-  {
-    std::cerr << "Audio system cannot be updated. Exception thrown!";
-    throw;
-  }
+  Audio_->update();
 }
 
 Audio_Engine::~Audio_Engine()
@@ -142,9 +107,11 @@ Audio_Engine::~Audio_Engine()
   for (unsigned i = 0; i < Playlist_.size(); ++i)
   {
     Soundlist_[i]->release();
-    ChannelGroup_->release();
   }
+  ChannelGroup_->release();
   Channel_.clear();
   Playlist_.clear();
   Audio_->release();
+  --dctor;
+  std::cerr << "dctor: " << dctor << std::endl;
 }

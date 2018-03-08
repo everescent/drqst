@@ -44,7 +44,7 @@ class Characters : public GameObject
 
 	public:
 		Characters(Sprite&& t_sprite, const int HP, Col_Comp &&t_col); // default constructor
-
+    virtual ~Characters() = default;
 		int Get_HP() const;         // get HP of mob
 		void Set_HP(int hp);       // set the hp for mob
 		void Increase_HP(const int increment);      // increase hp via power ups / status

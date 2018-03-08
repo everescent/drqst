@@ -27,7 +27,7 @@ private:
 	void AttackPlayer(const Dragon &d);
 
 	void Idle(const Dragon &d);
-	//Audio_Engine SFX;
+	static Audio_Engine SFX;
 public:
 	/******************************************************************************/
 	/*!
@@ -43,7 +43,7 @@ public:
 	*/
 	/******************************************************************************/
 	Grunt(const float posX = 0.0f, const float posY = 0.0f);
-
+  ~Grunt() = default;
 	/******************************************************************************/
 	/*!
 	\fn         Update

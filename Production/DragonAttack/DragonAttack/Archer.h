@@ -58,7 +58,7 @@ private:
   float Distance;           //Distacne travelled by Archer
   float Arrow_CD;           //Arrow cooldown timer
   float Angle;              //Arrow rotation
-  Audio_Engine Audio_;      //Audio SFX
+  static Audio_Engine Audio_;      //Audio SFX
   enum AudioState {
     HIT,
     SHOOT
