@@ -132,5 +132,5 @@ color   : Mesh color.
 Return:
 Sprite object
 ****************************************************************************************/
-Sprite CreateBG(float MultW = 1.0f, const char* texFile = nullptr, float scaleU = 1.0f, float scaleV = 1.0f,
+Sprite CreateBG(float MultW = 1.0f, float MultH = 1.0f, const char* texFile = nullptr, float scaleU = 1.0f, float scaleV = 1.0f,
                 unsigned int color = 0xFFFFFF);
