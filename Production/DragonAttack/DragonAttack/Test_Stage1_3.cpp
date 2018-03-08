@@ -97,7 +97,7 @@ namespace Test_Stage1_3
 		player->Update(*player, dt);
 		ui->UI_Update(player);
 
-		std::cout << (int)player->PosX << ", " << (int)player->PosY << std::endl;
+		//std::cout << (int)player->PosX << ", " << (int)player->PosY << std::endl;
 	}
 
 	void Draw(void)

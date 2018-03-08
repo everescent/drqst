@@ -117,7 +117,7 @@ void Grunt::Update(Dragon &d, const float dt)
 
 			if (distance >= 100.0f)
 			{
-				std::cout << distance << std::endl;
+				//std::cout << distance << std::endl;
 				Knockback = false;
 				distance = 0;
 			}

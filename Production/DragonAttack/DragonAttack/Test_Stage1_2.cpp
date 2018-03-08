@@ -191,6 +191,7 @@ namespace Test_Stage1_2
 		up2->Update(*player, dt);
 		next->Update(*player, dt);
 		player->Update(*player, dt);
+		CamFollow(player->Transform_, 200, 120, player->GetFacing());
 		ui->UI_Update(player);
 
 		w6 ->Update(*player, dt);
@@ -200,12 +201,12 @@ namespace Test_Stage1_2
 		w17->Update(*player, dt);
 		w18->Update(*player, dt);
 
-		std::cout << (int)player->PosX <<", "<< (int)player->PosY << std::endl;
+		//std::cout << (int)player->PosX <<", "<< (int)player->PosY << std::endl;
 	}
 
 	void Draw(void)
 	{
-		CamFollow(player->Transform_, 200, 120, player->GetFacing());
+		
 
 		BG->Render_Object(*M_BG);
 

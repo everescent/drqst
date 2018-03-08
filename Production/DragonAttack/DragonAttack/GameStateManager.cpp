@@ -20,9 +20,9 @@ Technology is prohibited.
 namespace GSM
 {
 
-	GAME_STATE previous = GS_LEVEL1_1;
-	GAME_STATE current  = GS_LEVEL1_1;
-	GAME_STATE next     = GS_LEVEL1_1;
+	GAME_STATE previous = GS_MAIN;
+	GAME_STATE current  = GS_MAIN;
+	GAME_STATE next     = GS_MAIN;
 
 	GameStateFunctions GSF[GS_QUIT] = { 0 };
 

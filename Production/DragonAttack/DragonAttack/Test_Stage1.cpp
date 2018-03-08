@@ -265,15 +265,16 @@ namespace Test_Stage1_1
 		coin3->Update(*player, dt);
 		//power1->Update(*player, dt);
 		power2->Update(*player, dt);
+		CamFollow(player->Transform_, 200, 120, player->GetFacing());
 		next->Update(*player, dt);
 		ui->UI_Update(player);
 
-		std::cout << (int)player->PosX << ", " << (int)player->PosY << std::endl;
+		//std::cout << (int)player->PosX << ", " << (int)player->PosY << std::endl;
 	}
 
 	void Draw(void)
 	{
-		CamFollow(player->Transform_, 200, 120, player->GetFacing());
+		
 
 		BG->Render_Object(*M_BG);
 
