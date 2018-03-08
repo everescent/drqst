@@ -1,6 +1,7 @@
 #include "Lancelot.h"
 #include "Boss_States.h"
 #include "Collision.h"
+#include "Audio_Engine.h"
 #include <iostream>
 #include <cmath>
 #include <vector>
@@ -19,7 +20,13 @@ namespace
 	std::vector<Boss_Attack> lancelot; // array to store lancelot attack
 
 	Boss_Action_State current_action = IDLE; // lancelot current action
-
+	Audio_Engine music{ 1, 
+	[](std::vector<std::string>& s)->void
+	{
+		s.push_back(".//Audio/Hit_02.mp3");
+	} };
+	
+	
 	const int HEALTH           = 800;   // health that lancelot start with
 	const int PHASE2_HP        = 400;    // phase 2 trigger
 	const float LANCELOT_SCALE = 60.0f;
@@ -29,7 +36,7 @@ namespace
 	float idle_time          = 1.0f; // idling time for lancelot
 	const float ATTACK_RANGE = 150.0f;
 	const float ATTACK_SCALE = 20.0f;
-	static Lancelot_Moveset currAttk = STAB;
+	Lancelot_Moveset currAttk = STAB;
 
 	// variables for slash and arondight
 	const AEVec2 ATK_START_POINT {-100.0f, -130.0f}; 
@@ -172,6 +179,7 @@ void Lancelot::Update(Dragon &d, float dt)
 				//Reset the distance of the fireball and set false
 				d.GetFireball()[i].Projectile::ResetDist();
 				d.GetFireball()[i].SetActive(false);
+				music.Play(0);
 			}
 
 	// mega fire ball hit lancelot
@@ -183,6 +191,8 @@ void Lancelot::Update(Dragon &d, float dt)
 			Decrease_HP(d.GetMDamage());
 			d.GetMfireball().Projectile::ResetDist();
 			d.GetMfireball().SetActive(false);
+			music.Play(0);
+			d.PlayImpact();
 		}
 	}
 
@@ -325,6 +335,7 @@ void Lancelot::Stab(Dragon& d, const float dt)
 		{
 			lancelot[STAB].SetCollided(true);
 			d.Decrease_HP();
+			d.PlayHit();
 		}
 	}
 
@@ -367,6 +378,7 @@ void Lancelot::Slash(Dragon& d, const float dt)
 		{
 			lancelot[SLASH].SetCollided(true);
 			d.Decrease_HP();
+			d.PlayHit();
 		}
 	}
 
@@ -484,6 +496,7 @@ void Lancelot::Arondight(Dragon& d, const float dt)
 		{
 			d.Decrease_HP();
 			lancelot[ARONDIGHT].SetCollided(true);
+			d.PlayHit();
 		}
 	}
 

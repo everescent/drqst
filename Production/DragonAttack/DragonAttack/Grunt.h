@@ -28,6 +28,16 @@ private:
 
 	void Idle(const Dragon &d);
 	static Audio_Engine SFX;
+
+	bool  PlayerSeen;
+	bool  PlayerInRange;
+	float MovementX;
+	float MovementY;
+	float moveSpd;
+	int   EstIdleX;
+	bool Knockback = false;
+	float posit_tmp = 0.0f;
+	float distance = 0.0f;
 public:
 	/******************************************************************************/
 	/*!

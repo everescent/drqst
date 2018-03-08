@@ -20,12 +20,6 @@ Technology is prohibited.
 namespace // global variables just for THIS file
 {
 	const int grunt_hp = 20;
-	bool  PlayerSeen = false;
-	bool  PlayerInRange = false;
-	float MovementX = 0.5f;
-	float MovementY = 0.5f;
-	float moveSpd = 3.0f;
-	int EstIdleX;
 	const float GRUNT_SCALE = 70.0F;
 }
 
@@ -36,8 +30,14 @@ Audio_Engine Grunt::SFX{ 1, [](std::vector<std::string> &playlist)
 Grunt::Grunt(const float posX, const float posY)
 	: Characters(S_CreateSquare(GRUNT_SCALE, ".//Textures/grunt.png"),
 		grunt_hp,
-		Col_Comp{ posX - GRUNT_SCALE, posY - GRUNT_SCALE , 
-				  posX + GRUNT_SCALE - 60.0f , posY + GRUNT_SCALE, Rect })
+		Col_Comp{ posX - GRUNT_SCALE, posY - GRUNT_SCALE ,
+				  posX + GRUNT_SCALE - 60.0f , posY + GRUNT_SCALE - 100.0f, Rect }),
+	PlayerSeen{ false },
+	PlayerInRange{ false },
+	MovementX{ 0.5f },
+	MovementY{ 0.5f },
+	moveSpd{ 3.0f },
+	EstIdleX{ 0 }
 {
 	SetActive(true);
 	Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
@@ -47,6 +47,7 @@ Grunt::Grunt(const float posX, const float posY)
 
 void Grunt::Update(Dragon &d, const float dt)
 {
+
 	if (this->IsActive() == true)
 	{
 		LineOfSight(d);
@@ -69,10 +70,10 @@ void Grunt::Update(Dragon &d, const float dt)
 		this->Transform_.Concat();
 
 		PosY -= 10.0f; //testing gravity
-
+		//std::cout << PosX << " " << d.PosX<<std::endl;
 		// update the collision box of grunt
 		this->Collision_.Update_Col_Pos(this->PosX - GRUNT_SCALE, this->PosY - GRUNT_SCALE,  // min point
-		this->PosX + GRUNT_SCALE - 60.0f, this->PosY + GRUNT_SCALE); // max point
+										this->PosX + GRUNT_SCALE - 60.0f, this->PosY + GRUNT_SCALE - 100.0f); // max point
 
 		/*if (Collision_.Dy_Rect_Rect(d.Collision_, GetVelocity(), d.GetVelocity(), dt))
 		{
@@ -87,20 +88,40 @@ void Grunt::Update(Dragon &d, const float dt)
 		}*/
 
 		//collision with player, player loses health
-		if (Collision_.Dy_Rect_Rect(d.Collision_, GetVelocity(), d.GetVelocity(), dt))
-		{
-			d.Decrease_HP();
-      d.PlayHit();
-			/*if (d.PosX > this->PosX)
+		if(!Knockback)
+			if (Collision_.Dy_Rect_Rect(d.Collision_, GetVelocity(), d.GetVelocity(), dt))
 			{
-				d.PosX = PosX + 200.0f;
+				d.Decrease_HP();
+				d.PlayHit();
+				Knockback = true;
+				posit_tmp = d.PosX;
+				/*if (d.PosX > this->PosX)
+				{
+					d.PosX = PosX + 200.0f;
+				}
+				else if (d.PosX < this->PosX)
+				{
+					d.PosX = PosX - 200.0f;
+				}*/
 			}
-			else if (d.PosX < this->PosX)
-			{
-				d.PosX = PosX - 200.0f;
-			}*/
-		}
 
+		if (Knockback)
+		{
+			if (d.PosX > PosX)
+				posit_tmp += 1000.0f * dt;
+			else
+				posit_tmp -= 1000.0f * dt;
+
+			d.PosX = posit_tmp;
+			distance += 1000.0f * dt;
+
+			if (distance >= 100.0f)
+			{
+				std::cout << distance << std::endl;
+				Knockback = false;
+				distance = 0;
+			}
+		}
 		for (char i = 0; i < Bullet_Buffer; ++i)
 		{
 			if (d.GetFireball()[i].IsActive())
@@ -178,12 +199,10 @@ void Grunt::LineOfSight(const Dragon &d)
 	
 }
 
-void Grunt::AttackPlayer(const Dragon &d)
+void Grunt::AttackPlayer(const Dragon &/*d*/)
 {
-	UNREFERENCED_PARAMETER(d);
+	//
 	//std::cout << "Attacking" << std::endl;
-	//MovementX = (this->PosX) - d.PosX;
-	//MovementY = (this->PosY) - d.PosY;
 	//MovementX = d.PosX - (this->PosX);
 	//MovementY = d.PosY - (this->PosY);
 	//// if player moves out of range
