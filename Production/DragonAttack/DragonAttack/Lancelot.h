@@ -33,7 +33,7 @@ private:
 	void Set_Face_Dir(const Dragon &);
 	void Set_Attk_Dir(void); // set the attack direction of lancelot
 
-	void Lancelot_Phase2(void);
+	void Lancelot_Phase2(const float dt);
 
 	void Stab(Dragon&, const float dt); // first basic attack of lancelot
 	void Slash(Dragon&, const float dt); // second basic attack of lancelot

@@ -71,21 +71,19 @@ Lancelot::Lancelot(void)
 void Lancelot::Init()
 {
 	//initialize lancelot attacks here
-	const char* stab = ".//Textures/arondight.png";
-	const char* slash = ".//Textures/lancelot_slash.png";
-	const char* tex = ".//Textures/arondight.png";
+	const char* sword = ".//Textures/arondight.png";
 
 	lancelot.reserve(limit);
 
-	lancelot.emplace_back(Boss_Attack(S_CreateSquare(ATTACK_SCALE, slash), // for stab
+	lancelot.emplace_back(Boss_Attack(S_CreateSquare(ATTACK_SCALE, sword), // for stab
 		Col_Comp(0.0f, 0.0f, 5.0f, 5.0f, Rect))); 
 
-	lancelot.emplace_back(Boss_Attack(S_CreateSquare(ATTACK_SCALE, stab), // for slash
+	lancelot.emplace_back(Boss_Attack(S_CreateSquare(ATTACK_SCALE, sword), // for slash
 		Col_Comp(0.0f, 0.0f, 5.0f, 5.0f, Rect)));
 
 	lancelot.emplace_back(Boss_Attack());                                // mad enhancement
 
-	lancelot.emplace_back(Boss_Attack(S_CreateSquare(ATTACK_SCALE, tex), // arondight
+	lancelot.emplace_back(Boss_Attack(S_CreateSquare(ATTACK_SCALE, sword), // arondight
 		Col_Comp(0.0f, 400.0f, Point))); 
 
 	Init_Stab();
@@ -147,7 +145,7 @@ void Lancelot::Update(Dragon &d, float dt)
 
 	if (this->Get_HP() < PHASE2_HP && phase & PHASE_1)
 	{
-		Lancelot_Phase2(); // change to phase 2
+		Lancelot_Phase2(dt); // change to phase 2
 	}
 	else if (this->Get_HP() <= 0)
 	{
@@ -283,6 +281,15 @@ void Lancelot::Attack(Dragon &d, const float dt)
 		{
 			currAttk = STAB;
 			lancelot[STAB].Start_Attack(this->PosX, this->PosY);
+
+			if (Get_Direction() == RIGHT)
+			{
+				lancelot[STAB].Transform_.SetScale(-3.0f, 2.0f);
+			}
+			else
+			{
+				lancelot[STAB].Transform_.SetScale(3.0f, 2.0f);
+			}
 		}
 	}
 
@@ -300,17 +307,17 @@ void Lancelot::Attack(Dragon &d, const float dt)
 
 }
 
-void Lancelot::Lancelot_Phase2(void)
+void Lancelot::Lancelot_Phase2(const float dt)
 {
 	phase = PHASE_2;
-	M_E = false;
+	Mad_Enhancement(dt);
 }
 
 void Lancelot::Stab(Dragon& d, const float dt)
 {
-	lancelot[STAB].Projectile::Update(ATTACK_SCALE); // move the stab projectile
-	Collision_.Update_Col_Pos(PosX - ATTACK_SCALE, PosY - ATTACK_SCALE,
-							  PosX + ATTACK_SCALE, PosY + ATTACK_SCALE);
+	lancelot[STAB].Projectile::Update(ATTACK_SCALE, false, 0.0f); // move the stab projectile
+	//Collision_.Update_Col_Pos(PosX - ATTACK_SCALE, PosY - ATTACK_SCALE,
+	//						  PosX + ATTACK_SCALE, PosY + ATTACK_SCALE);
 
 	if (!lancelot[STAB].GetCollided()) // check for collision
 	{
@@ -563,6 +570,7 @@ void Lancelot::Dead(void)
 	{
 		i.SetActive(false);
 	}
+	SetActive(false);
 }
 
 Lancelot::~Lancelot()
