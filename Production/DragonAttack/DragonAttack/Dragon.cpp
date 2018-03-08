@@ -110,12 +110,14 @@ void Dragon::Update(Dragon& dummy, const float dt)
   {
     PosX -= GetVelocity().x * dt;
     Facing = -1.0f;
+    Set_Direction(LEFT);
     Transform_.SetScale(Facing, 1.0f);
   }
   else if (Dir.R)
   {
     PosX += GetVelocity().x * dt;
     Facing = 1.0f;
+    Set_Direction(RIGHT);
     Transform_.SetScale(Facing, 1.0f);
   }
   if (Dir.UP)

@@ -48,17 +48,17 @@ public:
 
 private:
 
-  Projectile Arrow;         //Arrow to shoot
+  Projectile Arrow;           //Arrow to shoot
   //Pointer to current state function
   void(Archer::*Archer_State)(Dragon &player, const float dt);
-  Boss_Action_State A_Curr; //Current state
-  Boss_Action_State A_Next; //Next state
-  bool  Dragon_Seen;        //Flag to check if dragon is seen
-  bool  Attack_;            //Check if attack on cooldown
-  float Distance;           //Distacne travelled by Archer
-  float Arrow_CD;           //Arrow cooldown timer
-  float Angle;              //Arrow rotation
-  static Audio_Engine Audio_;      //Audio SFX
+  Boss_Action_State A_Curr;   //Current state
+  Boss_Action_State A_Next;   //Next state
+  bool  Dragon_Seen;          //Flag to check if dragon is seen
+  bool  Attack_;              //Check if attack on cooldown
+  float Distance;             //Distacne travelled by Archer
+  float Arrow_CD;             //Arrow cooldown timer
+  float Angle;                //Arrow rotation
+  static Audio_Engine Audio_; //Audio SFX
   enum AudioState {
     HIT,
     SHOOT
