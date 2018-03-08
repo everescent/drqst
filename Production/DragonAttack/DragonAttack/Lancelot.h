@@ -40,7 +40,7 @@ private:
 	void Mad_Enhancement(const float dt); // makes lancelot move faster, shorter cooldown
 	void Arondight(Dragon&, const float dt); // phase 2 mechanism, long range attack
 
-	BOSS_PHASE phase = PHASE_2;  // flag for lancelot second phase
+	BOSS_PHASE phase = PHASE_1;  // flag for lancelot second phase
 
 	bool M_E; // lancelot berserk state
 
