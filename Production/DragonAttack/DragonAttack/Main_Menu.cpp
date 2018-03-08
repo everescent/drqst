@@ -38,7 +38,7 @@ namespace Main_Menu
 		AEToogleFullScreen(false);
 		AEGfxSetCamPosition(0.0f, 0.0f);
 		// BG constructed by using Move constructor 
-		MM_Background = new Sprite{ CreateBG(1.0f, "../../Illustrations/Main_Menu/Main_Menu_BG.png" ) };
+		MM_Background = new Sprite{ CreateBG(1.0f, 2.0f, "../../Illustrations/Main_Menu/Main_Menu_BG.png" ) };
 		M_BG = new Transform{};
 
 		Audio = new Audio_Engine{ 1, [](std::vector <std::string> &playlist)->void{playlist.push_back(".//Audio/MainMenu_BGM.mp3"); } };
