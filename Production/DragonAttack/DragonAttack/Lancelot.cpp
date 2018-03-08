@@ -17,10 +17,10 @@ namespace
 		ARONDIGHT
 	};
 	
-	std::vector<Boss_Attack> lancelot; // array to store lancelot attack
+	std::vector<Boss_Attack> lancelot;       // array to store lancelot attack
 
 	Boss_Action_State current_action = IDLE; // lancelot current action
-	Audio_Engine music{ 1, 
+	Audio_Engine music{ 1,					 // sound for lance lot
 	[](std::vector<std::string>& s)->void
 	{
 		s.push_back(".//Audio/Hit_02.mp3");
@@ -28,15 +28,15 @@ namespace
 	
 	
 	const int HEALTH           = 800;   // health that lancelot start with
-	const int PHASE2_HP        = 400;    // phase 2 trigger
-	const float LANCELOT_SCALE = 60.0f;
+	const int PHASE2_HP        = 400;   // phase 2 trigger
+	const float LANCELOT_SCALE = 60.0f; // lancelot size
 
-	const char limit = 4; // num of lancelot attacks
+	const char limit = 4;				// num of lancelot attacks
 
-	float idle_time          = 1.0f; // idling time for lancelot
-	const float ATTACK_RANGE = 150.0f;
-	const float ATTACK_SCALE = 20.0f;
-	Lancelot_Moveset currAttk = STAB;
+	float idle_time          = 1.0f;    // idling time for lancelot
+	const float ATTACK_RANGE = 150.0f;	// range of attack of lancelot
+	const float ATTACK_SCALE = 20.0f;   // scale of attacks
+	Lancelot_Moveset currAttk = STAB;   // currnet attack lancelot is using
 
 	// variables for slash and arondight
 	const AEVec2 ATK_START_POINT {-100.0f, -130.0f}; 
@@ -165,37 +165,40 @@ void Lancelot::Update(Dragon &d, float dt)
 			this->Mad_Enhancement(dt);         
 	}
 
-	// fireball hit lancelot
-	for (char i = 0; i < Bullet_Buffer; ++i)
-		if (d.GetFireball()[i].IsActive())
-			if (Collision_.Dy_Rect_Rect(d.GetFireball()[i].Collision_, GetVelocity(),
-				d.GetFireball()[i].GetVelocity(), dt))
-			{
-				//Decrease HP by player's damage
-				Decrease_HP(d.GetDamage());
-				//Add mega fireball charge
-				d.AddCharge();
-				d.PlayImpact();
-				//Reset the distance of the fireball and set false
-				d.GetFireball()[i].Projectile::ResetDist();
-				d.GetFireball()[i].SetActive(false);
-				music.Play(0);
-			}
-
-	// mega fire ball hit lancelot
-	if (d.GetMfireball().IsActive())
+	// checks if lancelot is alive
+	if (IsActive())
 	{
-		if (Collision_.Dy_Rect_Rect(d.GetMfireball().Collision_, GetVelocity(),
-			d.GetMfireball().GetVelocity(), dt))
+		// fireball hit lancelot
+		for (char i = 0; i < Bullet_Buffer; ++i)
+			if (d.GetFireball()[i].IsActive())
+				if (Collision_.Dy_Rect_Rect(d.GetFireball()[i].Collision_, GetVelocity(),
+					d.GetFireball()[i].GetVelocity(), dt))
+				{
+					//Decrease HP by player's damage
+					Decrease_HP(d.GetDamage());
+					//Add mega fireball charge
+					d.AddCharge();
+					d.PlayImpact();
+					//Reset the distance of the fireball and set false
+					d.GetFireball()[i].Projectile::ResetDist();
+					d.GetFireball()[i].SetActive(false);
+					music.Play(0);
+				}
+
+		// mega fire ball hit lancelot
+		if (d.GetMfireball().IsActive())
 		{
-			Decrease_HP(d.GetMDamage());
-			d.GetMfireball().Projectile::ResetDist();
-			d.GetMfireball().SetActive(false);
-			music.Play(0);
-			d.PlayImpact();
+			if (Collision_.Dy_Rect_Rect(d.GetMfireball().Collision_, GetVelocity(),
+				d.GetMfireball().GetVelocity(), dt))
+			{
+				Decrease_HP(d.GetMDamage());
+				d.GetMfireball().Projectile::ResetDist();
+				d.GetMfireball().SetActive(false);
+				music.Play(0);
+				d.PlayImpact();
+			}
 		}
 	}
-
 	// switch between boss states
 	switch (current_action)
 	{
@@ -235,10 +238,11 @@ void Lancelot::Attack(Dragon &d, const float dt)
 			this->Transform_.SetTranslate(PosX, PosY);
 			this->Transform_.Concat();
 			
-			charge_time = 2.0f;
-			Set_Vulnerable(false);
-			currAttk = MAD_ENHANCEMENT;
+			charge_time = 2.0f;				// freeze lancelot in the middle of the screen
+			Set_Vulnerable(false);		    // make him immune to attacks 
+			currAttk = MAD_ENHANCEMENT;     
 
+			// attack is currently ongoing
 			lancelot[MAD_ENHANCEMENT].ongoing_attack = true;
 
 			// update the collision box of lancelot
@@ -248,18 +252,19 @@ void Lancelot::Attack(Dragon &d, const float dt)
 
 		else if (phase & PHASE_2 && !lancelot[ARONDIGHT].cooldown)
 		{				
-			angle = 0.0f;
-			angle_offset = 3.0f;
-			charge_time = 2.0f;
+			angle = 0.0f;         // used for setting range the sword can go
+			angle_offset = 3.0f;  // add to the angle every frame
+			charge_time = 2.0f;   // freeze lancelot for 2 seconds so player can prepare
 			currAttk = ARONDIGHT;
 
+			// teleport lancelot to the middle of the screen
 			this->PosX = 0.0f;
 			this->Transform_.SetTranslate(PosX, PosY);
 			this->Transform_.Concat();
 
 			lancelot[ARONDIGHT].Start_Attack(20.0f, ATK_START_POINT.y + 200); // starting position of arondight
 			lancelot[ARONDIGHT].Collision_.Update_Col_Pos(0.0f, 400.0f);	  // starting point of collision point
-			lancelot[ARONDIGHT].Transform_.SetRotation(-90.0f);
+			lancelot[ARONDIGHT].Transform_.SetRotation(-90.0f);				  // rotate texture
 			lancelot[ARONDIGHT].Transform_.SetTranslate(lancelot[ARONDIGHT].PosX, lancelot[ARONDIGHT].PosY);
 			lancelot[ARONDIGHT].Transform_.Concat();
 
@@ -271,7 +276,9 @@ void Lancelot::Attack(Dragon &d, const float dt)
 		else if (!lancelot[SLASH].cooldown)
 		{
 			currAttk = SLASH;
-			charge_time = 1.0f;
+			charge_time = 0.5f; // charge time for player to prepare themselves
+
+			// player is on the right hand side
 			if (this->Get_Direction())
 			{
 				lancelot[SLASH].Start_Attack(this->PosX + -ATK_START_POINT.x, ATK_START_POINT.y);
@@ -279,7 +286,7 @@ void Lancelot::Attack(Dragon &d, const float dt)
 				angle = -200.0f;
 				angle_offset = 2.0f;
 			}
-			else
+			else // player on the left hand side
 			{
 				lancelot[SLASH].Start_Attack(this->PosX + ATK_START_POINT.x, ATK_START_POINT.y);
 				angle = 25.0f;
@@ -292,6 +299,7 @@ void Lancelot::Attack(Dragon &d, const float dt)
 			currAttk = STAB;
 			lancelot[STAB].Start_Attack(this->PosX, this->PosY);
 
+			// rotate the texture to the right direction
 			if (Get_Direction() == RIGHT)
 			{
 				lancelot[STAB].Transform_.SetScale(-3.0f, 2.0f);
@@ -303,6 +311,7 @@ void Lancelot::Attack(Dragon &d, const float dt)
 		}
 	}
 
+	// state machine for boss
 	switch (currAttk)
 	{
 	case STAB: Stab(d, dt);
@@ -320,7 +329,9 @@ void Lancelot::Attack(Dragon &d, const float dt)
 void Lancelot::Lancelot_Phase2(const float dt)
 {
 	phase = PHASE_2;
-	Mad_Enhancement(dt);
+
+	if(M_E) // turns off mad enhancement if its activated
+		Mad_Enhancement(dt); 
 }
 
 void Lancelot::Stab(Dragon& d, const float dt)
@@ -359,19 +370,20 @@ void Lancelot::Stab(Dragon& d, const float dt)
 
 void Lancelot::Slash(Dragon& d, const float dt)
 {
-	UNREFERENCED_PARAMETER(dt);
-	static float slash_interval = 0.5f;
-	static bool second_slash = false;
+	static bool second_slash = false;	 // checks if its the first or second slash
 	
+	// freeze lancelot for player to prepare
 	while (charge_time > 0)
 	{
 		charge_time -= dt;
 		return;
 	}
 
+
 	lancelot[SLASH].SetActive(true);
 	lancelot[SLASH].Projectile::Update(ATTACK_SCALE,false , angle += angle_offset);
 
+	// checks for collision with player. Only collide once
 	if (!lancelot[SLASH].GetCollided())
 	{
 		if (lancelot[SLASH].Collision_.Dy_Rect_Rect(d.Collision_, lancelot[SLASH].GetVelocity(), d.GetVelocity(), dt))
@@ -387,14 +399,14 @@ void Lancelot::Slash(Dragon& d, const float dt)
 
 		if (second_slash)
 		{
-			lancelot[SLASH].cooldown_timer = M_E ? 2.0f : 4.0f; // shorter cooldown when berserked.
-			lancelot[SLASH].End_Attack();
-			lancelot[SLASH].SetVelocity(SLASH_VELOCITY);
-			current_action = IDLE;          // set behavior to idle
-			second_slash = false;
+			lancelot[SLASH].cooldown_timer = M_E ? 2.0f : 4.0f;  // shorter cooldown when berserked.
+			lancelot[SLASH].End_Attack();						 // set active to false and reset variable
+			lancelot[SLASH].SetVelocity(SLASH_VELOCITY);         // reset velocity of slash
+			current_action = IDLE;                               // set behavior to idle
+			second_slash = false;							     // reset second slash flag
 			angle_offset = -angle_offset;
 		}
-		else
+		else  // reverse the velocity to make slash move backwards
 		{
 			AEVec2 reverse = {SLASH_VELOCITY.x, SLASH_VELOCITY.y};
 			reverse.x = -reverse.x;
@@ -500,9 +512,10 @@ void Lancelot::Arondight(Dragon& d, const float dt)
 		}
 	}
 
-
+	// stop sword from rotating more than 140 degrees
 	if (angle > 140.0f)
 	{
+		// start cooldown of attack and set active to false
 		lancelot[ARONDIGHT].End_Attack();
 		lancelot[ARONDIGHT].cooldown_timer = 10.0f;
 		lancelot[ARONDIGHT].cooldown = true;
@@ -591,7 +604,8 @@ Lancelot::~Lancelot()
 	lancelot.clear();
 }
 
-namespace{
+namespace
+{
 
 bool Player_Facing_Me(Lancelot& l, Dragon& d)
 {
