@@ -118,20 +118,20 @@ Sprite CreateFloor(float MultW, const char* texFile, float scalex, float scaley,
 }
 
 //This function returns a sprite object with a BG mesh
-Sprite CreateBG(float MultW, const char* texFile, float scalex, float scaley, unsigned int color)
+Sprite CreateBG(float MultW, float MultH, const char* texFile, float scalex, float scaley, unsigned int color)
 {
   if (texFile)
   {
     Sprite tmp_Rectangle(
-      CreateRectangle(BG_WIDTH * MultW, BG_HEIGHT, scalex, scaley, color),
-      texFile, BG_WIDTH * MultW, BG_HEIGHT);
+      CreateRectangle(BG_WIDTH * MultW, BG_HEIGHT * MultH, scalex, scaley, color),
+      texFile, BG_WIDTH * MultW, BG_HEIGHT * MultH);
     return tmp_Rectangle;
   }
   else
   {
     Sprite tmp_Rectangle(CreateRectangle(
-      BG_WIDTH * MultW, BG_HEIGHT, scalex, scaley, color),
-      BG_WIDTH * MultW, BG_HEIGHT);
+      BG_WIDTH * MultW, BG_HEIGHT * MultH, scalex, scaley, color),
+      BG_WIDTH * MultW, BG_HEIGHT * MultH);
     return tmp_Rectangle;
   }
 }
