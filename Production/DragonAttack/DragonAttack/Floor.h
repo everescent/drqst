@@ -29,5 +29,4 @@ public:
   //(Jacob) Changed to take in player and dt
 	//void Update(Dragon &player, const float &dt);
 	void Update(Characters &obj, const float &dt);
-	int Flag = 0x00000000;
 };

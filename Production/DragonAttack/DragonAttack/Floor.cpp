@@ -27,7 +27,7 @@ void Floor::Update(Characters &obj, const float &dt)
 			//std::cout << "top " << std::endl;
 		}
 		 	
-		else if ((obj.PosY + obj.Sprite_.Get_Height())  < (this->PosY) - (this->Sprite_.Get_Height()))
+		else if ((obj.PosY + obj.Sprite_.Get_Height())  < (this->PosY) )
 		{
 			
 			obj.PosY = PosY - this->Sprite_.Get_Height() - obj.Sprite_.Get_Height();
