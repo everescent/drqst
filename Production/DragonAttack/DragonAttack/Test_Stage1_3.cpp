@@ -102,7 +102,7 @@ namespace Test_Stage1_3
 
 	void Draw(void)
 	{
-		CamFollow(player->Transform_, 200, 120, player->GetFacing());
+		//CamFollow(player->Transform_, 200, 120, player->GetFacing());
 
 		BG->Render_Object(*M_BG);
 
