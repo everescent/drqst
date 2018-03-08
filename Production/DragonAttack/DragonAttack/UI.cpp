@@ -76,9 +76,9 @@ UI::UI(Dragon* dragon)
 		hp_icon2.Transform_.Concat();
 		hp_icon3.Transform_.Concat();
 		if ( dragon->Get_Direction() == RIGHT )
-		charge_icon.Transform_.SetTranslate(dragon->PosX -60 , dragon->PosY + 5 );
+		charge_icon.Transform_.SetTranslate(dragon->PosX -60 , dragon->PosY + 30 );
 		if (dragon->Get_Direction() == LEFT)
-			charge_icon.Transform_.SetTranslate(dragon->PosX + 60, dragon->PosY + 5);
+			charge_icon.Transform_.SetTranslate(dragon->PosX + 60, dragon->PosY + 30);
 		charge_icon.Transform_.Concat();
 	}
 
