@@ -16,7 +16,6 @@ Technology is prohibited.
 #include "Merlin.h"
 #include <ctime>
 #include <cstdlib>
-#include <iostream>
 
 Merlin::Merlin()
   //Initialize characters class
@@ -132,14 +131,12 @@ void Merlin::Attack(Dragon &player)
 void Merlin::Melee(Dragon &player)
 {
   UNREFERENCED_PARAMETER(player);
-  std::cout << "Melee\n";
   M_Melee.cooldown = true;
   M_Melee.cooldown_timer = Melee_CD_Time;
 }
 
 void Merlin::S_Eball(Dragon &player)
 {
-  std::cout << "Single Shot Energy Ball\n";
   //Get the displacement betwwen player and Merlin
   AEVec2 Displacement{ (player.PosX - PosX ),
                        (player.PosY - PosY) };
@@ -155,8 +152,6 @@ void Merlin::S_Eball(Dragon &player)
 
 void Merlin::Sp_Eball(Dragon &player)
 {
-  UNREFERENCED_PARAMETER(player);
-  std::cout << "Spread Shot Energy Ball\n";
   //First vector points towards player
   AEVec2 Displacement0{ (player.PosX - PosX),
                        (player.PosY - PosY) };
@@ -190,7 +185,6 @@ void Merlin::A_Rain(Dragon &player)
   UNREFERENCED_PARAMETER(player);
   //Seed rand based on time
   srand((unsigned int)time(nullptr));
-  std::cout << "Arrow Rain\n";
   //Only shoot when cast time completed
   if (castime == 0)
   {
@@ -210,11 +204,14 @@ void Merlin::A_Rain(Dragon &player)
 }
 void Merlin::Melee_Update()
 {
+  //Check if melee is used
   if (M_Melee.cooldown)
   {
+    //Update cooldown
     --M_Melee.cooldown_timer;
     if (M_Melee.cooldown_timer <= 0.0f)
     {
+      //Reset melee 
       M_Melee.cooldown = false;
       M_Melee.cooldown_timer = Melee_CD_Time;
     }
@@ -222,6 +219,7 @@ void Merlin::Melee_Update()
 }
 void Merlin::S_Eball_Update()
 {
+  //Check if single shot is dead
   if (Eball.cooldown)
   {
     if (Eball.IsActive())
@@ -234,9 +232,11 @@ void Merlin::S_Eball_Update()
     }
     else
     {
+      //Update cooldown
       Eball.Update(0.016f);
     }
   }
+  //Update position and collision
   Eball.Projectile::Pos(PosX, PosY);
   Eball.Projectile::Update(50.0f);
 }
@@ -246,6 +246,7 @@ void Merlin::Sp_Eball_Update()
   bool SS_cd    { false };
   //Check if any bullets for spread shot are active
   bool SS_active{ false };
+  //Check if Spread Shot died
   for (Boss_Attack& SS : Spread_Eball)
   {
     SS_cd = SS_cd || SS.cooldown;
@@ -260,6 +261,7 @@ void Merlin::Sp_Eball_Update()
     {
       for(Boss_Attack& SS : Spread_Eball)
       {
+        //Then kill it if dead
         if (SS.GetDist() >= Spread_Death)
         {
           SS.ResetDist();
@@ -267,11 +269,13 @@ void Merlin::Sp_Eball_Update()
         }
       }
     }
+    //Update Cooldown
     else for (Boss_Attack& SS : Spread_Eball)
     {
       SS.Update(0.016f);
     }
   }
+  //Update position and collision
   for (Boss_Attack& SS : Spread_Eball)
   {
     SS.Projectile::Pos(PosX, PosY);
@@ -281,6 +285,7 @@ void Merlin::Sp_Eball_Update()
 
 void Merlin::A_Rain_Update(Dragon &player)
 {
+  //Check if last arrow died
   if (Arrow[A_Rain_Buffer - 1].cooldown)
   {
     if (Arrow[A_Rain_Buffer - 1].IsActive())
@@ -295,11 +300,13 @@ void Merlin::A_Rain_Update(Dragon &player)
         }
       }
     }
+    //Ifn o update cooldown
     else for (int i = 0; i < A_Rain_Buffer; ++i)
     {
       Arrow[i].Update(0.016f);
     }
   }
+  //Activate magic circle
   if (!Arrow[A_Rain_Buffer - 1].IsActive())
   {
     MC_Pos.SetTranslate(player.PosX, 260.0f);
@@ -309,6 +316,7 @@ void Merlin::A_Rain_Update(Dragon &player)
     --castime;
   if (castime <= 0)
     castime = 0;
+  //Arrow rain position and collision updates
   for (int i = 0; i < A_Rain_Buffer; ++i)
   {
     if (i == 0)
@@ -497,7 +505,7 @@ bool Merlin::CheckAttack(Dragon &player)
   return CanAttack;
 }
 
-void Merlin::Update(Dragon &player, const float dt = 0.016f)
+void Merlin::Update(Dragon &player, const float dt)
 {
   UNREFERENCED_PARAMETER(dt);
   //Determine Merlin's state
@@ -505,7 +513,7 @@ void Merlin::Update(Dragon &player, const float dt = 0.016f)
   //Execute state
   (this->*Merlin_State)(player);
   //Update attack interval
-  Attack_Interval -= 0.016f;
+  Attack_Interval -= dt;
   if (Attack_Interval <= 0)
     Attack_Interval = 0;
   //Update Blink
@@ -523,8 +531,7 @@ void Merlin::Update(Dragon &player, const float dt = 0.016f)
     if(player.GetFireball()[i].IsActive())
       if (Collision_.Dy_Rect_Rect(player.GetFireball()[i].Collision_,
                                   GetVelocity(),
-                                  player.GetFireball()[i].GetVelocity(), 
-                                  0.016f))//Remember to replace with dt
+                                  player.GetFireball()[i].GetVelocity(), dt))
       {
         //Decrease HP by player's damage
         Decrease_HP(player.GetDamage());
