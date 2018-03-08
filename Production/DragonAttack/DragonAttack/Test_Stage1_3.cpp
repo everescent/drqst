@@ -23,7 +23,7 @@ namespace Test_Stage1_3
 {
 	void Load(void)
 	{
-		BG = new Sprite{ CreateBG(22.0f, 2.0f, "../../Illustrations/BG/BG_Stage1.png", 1.0f, 15.0f) };
+		BG = new Sprite{ CreateBG(22.0f, 2.0f, "Textures/BG/BG_Stage1.png", 1.0f, 15.0f) };
 		M_BG = new Transform{};
 		player = new Dragon{};
 		Audio = new Audio_Engine{ 1, [](std::vector <std::string> &playlist)->void {playlist.push_back(".//Audio/Lancelot_BGM.mp3"); } };

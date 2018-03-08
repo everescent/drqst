@@ -43,7 +43,7 @@ namespace AI_Test_Stage
 
 	void Load(void)
 	{
-		BG = new Sprite{ CreateBG(1.0f, 2.0f, "../../Illustrations/Environment/Cobblestone.png") };
+		BG = new Sprite{ CreateBG(1.0f, 2.0f, "Textures/Cobblestone.png") };
 		floor1 = new Floor{ -200.0f, -350.0f }; //ok
 		M_BG = new Transform;
 		d = new Dragon;

@@ -38,18 +38,18 @@ namespace Main_Menu
 		AEToogleFullScreen(true);
 		AEGfxSetCamPosition(0.0f, 0.0f);
 		// BG constructed by using Move constructor 
-		MM_Background = new Sprite{ CreateBG(1.0f, 1.0f, "../../Illustrations/Main_Menu/Main_Menu_BG.png" ) };
+		MM_Background = new Sprite{ CreateBG(1.0f, 1.0f, "Textures/Main_Menu_BG.png" ) };
 		M_BG = new Transform{};
 
 		Audio = new Audio_Engine{ 1, [](std::vector <std::string> &playlist)->void{playlist.push_back(".//Audio/MainMenu_BGM.mp3"); } };
 
 		// Construct Play Button 
-		Play_Button = new GameObject{ S_CreateRectangle(Button_Width,Button_Height,"../../Illustrations/Main_Menu/Play_Button.png"),
+		Play_Button = new GameObject{ S_CreateRectangle(Button_Width,Button_Height,"Textures/Play_Button.png"),
 			Col_Comp(0.0f -( Button_Width ), 0.0f - (Button_Height),
 											0.0f + (Button_Width* 0.5),0.0f + (Button_Height * 0.5), Rect) };
 
 		// Construct Quit Button 
-		Quit_Button = new GameObject{ S_CreateRectangle(Button_Width,Button_Height,"../../Illustrations/Main_Menu/Quit_Button.png"),
+		Quit_Button = new GameObject{ S_CreateRectangle(Button_Width,Button_Height,"Textures/Quit_Button.png"),
 			Col_Comp(0.0f - (Button_Width ), -100.0f - (Button_Height),
 				0.0f + (Button_Width), -100.0f + (Button_Height ), Rect) };
 
