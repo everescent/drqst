@@ -61,21 +61,24 @@ UI::UI(Dragon* dragon)
 		else 
 			charge_icon.SetActive(false);
 
-		//f32 testX, testY;
-		//AEGfxGetCamPosition(&testX, &testY);
+		f32 testX, testY;
+		AEGfxGetCamPosition(&testX, &testY);
 		//std::cout << testX << " " << testY << std::endl;
 		//update the icons to follow the dragon , Translate it first
-		hp_icon1.Transform_.SetTranslate(dragon->PosX - 50, dragon->PosY + 90);
+		/*hp_icon1.Transform_.SetTranslate(dragon->PosX - 50, dragon->PosY + 90);
 		hp_icon2.Transform_.SetTranslate(dragon->PosX, dragon->PosY + 90);
-		hp_icon3.Transform_.SetTranslate(dragon->PosX + 50, dragon->PosY + 90);
-		//hp_icon1.Transform_.SetTranslate(testX - 550 , testY + 300);
-		//hp_icon2.Transform_.SetTranslate(testX - 500, testY + 300);
-		//hp_icon3.Transform_.SetTranslate(testX - 450, testY + 300);
+		hp_icon3.Transform_.SetTranslate(dragon->PosX + 50, dragon->PosY + 90);*/
+		hp_icon1.Transform_.SetTranslate(testX - 550 , testY + 300);
+		hp_icon2.Transform_.SetTranslate(testX - 500, testY + 300);
+		hp_icon3.Transform_.SetTranslate(testX - 450, testY + 300);
 		//Concat the matrix for the icons
 		hp_icon1.Transform_.Concat();
 		hp_icon2.Transform_.Concat();
 		hp_icon3.Transform_.Concat();
-		charge_icon.Transform_.SetTranslate(dragon->PosX , dragon->PosY + 140);
+		if ( dragon->Get_Direction() == RIGHT )
+		charge_icon.Transform_.SetTranslate(dragon->PosX -60 , dragon->PosY + 30 );
+		if (dragon->Get_Direction() == LEFT)
+			charge_icon.Transform_.SetTranslate(dragon->PosX + 60, dragon->PosY + 30);
 		charge_icon.Transform_.Concat();
 	}
 

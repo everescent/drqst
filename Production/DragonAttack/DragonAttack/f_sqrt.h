@@ -15,4 +15,5 @@ Technology is prohibited.
 
 #pragma once
 
+//Faster square root
 float f_sqrt(const float &x);

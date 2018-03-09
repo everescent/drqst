@@ -95,8 +95,9 @@ private:
   std::vector<Boss_Attack> Arrow;        //Projectiles for arrow rain
   //Blink attack struct
   struct Blink {
-    float CD_Time  { Blink_CD_Time }; //Cooldown time
-    bool  Cooldown {     true      }; //Check if cooldown is active
+    float CD_Time;  //Cooldown time
+    bool  Cooldown; //Check if cooldown is active
+    Blink() :CD_Time{ Blink_CD_Time }, Cooldown{ true } {}
     //Update Blink
     void Update()
     {

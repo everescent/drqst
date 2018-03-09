@@ -64,12 +64,12 @@ namespace GSM
 		GSF[AI_TEST_STAGE].Free   = AI_Test_Stage::Free;
 		GSF[AI_TEST_STAGE].Unload = AI_Test_Stage::Unload;
 
-		GSF[GS_LEVEL_IMPORT].Init   = Test_Stage_Import::Init;
-		GSF[GS_LEVEL_IMPORT].Load   = Test_Stage_Import::Load;
-		GSF[GS_LEVEL_IMPORT].Update = Test_Stage_Import::Update;
-		GSF[GS_LEVEL_IMPORT].Draw   = Test_Stage_Import::Draw;
-		GSF[GS_LEVEL_IMPORT].Free   = Test_Stage_Import::Free;
-		GSF[GS_LEVEL_IMPORT].Unload = Test_Stage_Import::Unload;
+		//GSF[GS_LEVEL_IMPORT].Init   = Test_Stage_Import::Init;
+		//GSF[GS_LEVEL_IMPORT].Load   = Test_Stage_Import::Load;
+		//GSF[GS_LEVEL_IMPORT].Update = Test_Stage_Import::Update;
+		//GSF[GS_LEVEL_IMPORT].Draw   = Test_Stage_Import::Draw;
+		//GSF[GS_LEVEL_IMPORT].Free   = Test_Stage_Import::Free;
+		//GSF[GS_LEVEL_IMPORT].Unload = Test_Stage_Import::Unload;
 		
 		SM::StageManagerInit();
 	}

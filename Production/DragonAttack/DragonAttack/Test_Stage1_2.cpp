@@ -15,31 +15,37 @@ namespace
 	std::vector<Floor> floors;
 	std::vector<Wall> walls;
 	std::vector<Barrier> barriers;
-	//std::vector<Scarecrow> scarecrows;
 
 	LevelChangePlatform *next;
-	//Tower *archerTower;
 	PickUp *coin1, *coin2, *coin3, *hp, *invul;
 	Platform *up1, *up2;
 	//PickUp *power1, *power2;
 	std::vector<Characters*> c;
+
+	Wall *w6, *w12, *w13, *w16, *w17, *w18;
 }
 
 namespace Test_Stage1_2
 {
 	void Load(void)
 	{
-		BG = new Sprite{ CreateBG(15.0f, "../../Illustrations/BG/BG_Stage1.png", 1.0f, 15.0f) };
+		BG = new Sprite{ CreateBG(22.0f, 2.0f, "Textures/BG/BG_Stage1.png", 1.0f, 15.0f) };
 		M_BG = new Transform{};
 		player = new Dragon{};
 		Audio = new Audio_Engine{ 1, [](std::vector <std::string> &playlist)->void {playlist.push_back(".//Audio/Stage_1_BGM.mp3"); } };
 		ui = new UI(player);
 		if (!Import_MapData("level1-2.txt", MapData, Map_Width, Map_Height)) { AEGfxExit(); }
 
-		//archerTower = new Tower        { 7000.0f,  170.0f };
 		up1 = new Platform             { 6000.0f,  -30.0f };
 		up2 = new Platform             { 6000.0f, -120.0f };
 		next = new LevelChangePlatform { 7500.0f,  150.0f };
+
+		w6  = new Wall{ 2240.0f,-165.0f };//?
+		w12 = new Wall{ 3850.0f,-385.0f };//
+		w13 = new Wall{ 3850.0f,-290.0f };
+		w16 = new Wall{ 6230.0f,-165.0f };
+		w17 = new Wall{ 6230.0f,-100.0f };
+		w18 = new Wall{ 6230.0f,0.0f };
 
 		coin1 = new PickUp{ S_CreateSquare(50.0f, "Textures/coin.png",1.0f),
 			Col_Comp{ 0.0f - 25.0f, 0.0f - 25.0f, 0.0f + 25.0f, 0.0f + 25.0f, Rect },
@@ -63,8 +69,8 @@ namespace Test_Stage1_2
 		c.push_back(Create_Basic_AI(GRUNT , AEVec2{ 4500.0f , -345.0f }));
 		c.push_back(Create_Basic_AI(ARCHER, AEVec2{ 4700.0f , -345.0f }));
 		c.push_back(Create_Basic_AI(GRUNT , AEVec2{ 4900.0f , -345.0f }));
-		c.push_back(Create_Basic_AI(GRUNT , AEVec2{ 5550.0f ,  195.0f }));
-		c.push_back(Create_Basic_AI(GRUNT , AEVec2{ 5300.0f ,  195.0f }));
+		c.push_back(Create_Basic_AI(GRUNT , AEVec2{ 5500.0f ,  195.0f }));
+		//c.push_back(Create_Basic_AI(GRUNT , AEVec2{ 5800.0f ,  195.0f }));
 		c.push_back(Create_Basic_AI(GRUNT , AEVec2{ 6450.0f ,  195.0f }));
 		c.push_back(Create_Basic_AI(ARCHER, AEVec2{ 6950.0f ,  300.0f }));
 	}
@@ -143,7 +149,15 @@ namespace Test_Stage1_2
 		Audio->Update();
 
 		for (size_t i = 0; i < c.size(); ++i)
+		{
 			c[i]->Update(*player, dt);
+			w6-> Update(*(c[i]), dt);
+			w12->Update(*(c[i]), dt);
+			w13->Update(*(c[i]), dt);
+			w16->Update(*(c[i]), dt);
+			w17->Update(*(c[i]), dt);
+			w18->Update(*(c[i]), dt);
+		}
 
 		for (Platform& elem : platforms)
 		{
@@ -173,22 +187,29 @@ namespace Test_Stage1_2
 		coin1->Update(*player, dt);
 		coin2->Update(*player, dt);
 		coin3->Update(*player, dt);
-		//archerTower->Update(*player, dt);
 		up1->Update(*player, dt);
 		up2->Update(*player, dt);
 		next->Update(*player, dt);
 		player->Update(*player, dt);
+		CamFollow(player->Transform_, 200, 120, player->GetFacing());
 		ui->UI_Update(player);
-		std::cout << (int)player->PosX <<", "<< (int)player->PosY << std::endl;
+
+		w6 ->Update(*player, dt);
+		w12->Update(*player, dt);
+		w13->Update(*player, dt);
+		w16->Update(*player, dt);
+		w17->Update(*player, dt);
+		w18->Update(*player, dt);
+
+		//std::cout << (int)player->PosX <<", "<< (int)player->PosY << std::endl;
 	}
 
 	void Draw(void)
 	{
-		CamFollow(player->Transform_, 200, 120, player->GetFacing());
+		
 
 		BG->Render_Object(*M_BG);
 
-		//archerTower->Render();
 		up1->Render();
 		up2->Render();
 
@@ -211,7 +232,6 @@ namespace Test_Stage1_2
 		coin1->Render();
 		coin2->Render();
 		coin3->Render();
-
 		next->Render();
 
 		player->Render();
@@ -227,7 +247,13 @@ namespace Test_Stage1_2
 		delete player;
 		delete Audio;
 
-		//delete archerTower;
+		delete w6;
+		delete w12;
+		delete w13;
+		delete w16;
+		delete w17;
+		delete w18;
+		
 		delete up1;
 		delete up2;
 		delete coin1;

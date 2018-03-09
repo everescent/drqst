@@ -34,31 +34,33 @@ namespace ArcherMacros {
   //Global Read-Only Variables END/////////////////////////////////////////////////////////
 }
 
+Sprite *Archer::Arrow_Sprite{ nullptr };
+
 class Archer : public Characters {
 
 public: 
   //Constructs Archer with desired position
-  Archer(const float posX = 0.0f, const float posY = 0.0f);
+  Archer(Sprite *p_Sprite, const float posX = 0.0f, const float posY = 0.0f);
   //Clears arrow vector memory
-  ~Archer() = default;
+  ~Archer();
   //Updates the Archer
   void Update(Dragon& player, const float dt);
   //Renders Archer and attacks
   void Render();
 
 private:
-
-  Projectile Arrow;         //Arrow to shoot
+  static Sprite* Arrow_Sprite;
+  Projectile Arrow;           //Arrow to shoot
   //Pointer to current state function
   void(Archer::*Archer_State)(Dragon &player, const float dt);
-  Boss_Action_State A_Curr; //Current state
-  Boss_Action_State A_Next; //Next state
-  bool  Dragon_Seen;        //Flag to check if dragon is seen
-  bool  Attack_;            //Check if attack on cooldown
-  float Distance;           //Distacne travelled by Archer
-  float Arrow_CD;           //Arrow cooldown timer
-  float Angle;              //Arrow rotation
-  static Audio_Engine Audio_;      //Audio SFX
+  Boss_Action_State A_Curr;   //Current state
+  Boss_Action_State A_Next;   //Next state
+  bool  Dragon_Seen;          //Flag to check if dragon is seen
+  bool  Attack_;              //Check if attack on cooldown
+  float Distance;             //Distacne travelled by Archer
+  float Arrow_CD;             //Arrow cooldown timer
+  float Angle;                //Arrow rotation
+  static Audio_Engine Audio_; //Audio SFX
   enum AudioState {
     HIT,
     SHOOT

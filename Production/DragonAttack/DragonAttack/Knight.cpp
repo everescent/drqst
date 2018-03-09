@@ -4,6 +4,7 @@
 namespace  // global variables for KNIGHT
 {
 	const int HEALTH = 100;
+	const float GRAVITY = 10.0f;
 
 	const float ATTACK_RANGE = 120.0f;
 	const float STAB_ACCELRATOR = 100.0f;
@@ -38,6 +39,9 @@ Knight::Knight(const AEVec2 & spawn_location)
 
 void Knight::Idle(const Dragon& d, const float dt)
 {
+	if (!Line_Of_Sight(d))
+		return;
+
 	if (Get_Idle_Time() < 0) // finish idling
 	{
 		Reset_Idle_Time(2.0f); // reset idle duration
@@ -102,8 +106,7 @@ void Knight::Attack(Dragon& d, const float dt)
 		stab.Start_Attack(PosX, PosY);
 	}
 	
-	// update positon
-	
+	// update positon	
 	if (Get_Direction() == RIGHT)
 		stab.Projectile::Update(STAB_SCALE, false, 180);    // rotate texture to look right
 	else
@@ -204,6 +207,12 @@ void Knight::Update(Dragon &d, const float dt)
 			}
 		}
 	}
+
+	PosY -= GRAVITY;
+	Collision_.Update_Col_Pos(PosX - KNIGHT_SCALE, PosY - KNIGHT_SCALE,
+		PosX + KNIGHT_SCALE, PosY + KNIGHT_SCALE);
+	Transform_.SetTranslate(PosX, PosY);
+	Transform_.Concat();
 
 	switch (current_action) // state machine for knight
 	{

@@ -30,10 +30,10 @@ const float Bullet_Speed    { 1200.0f }; //How fast a bullet travels
 const int   Fireball_Damage { 10      };
 const int   MFireball_Damage{ 15      };
 
-const float Jump_Height    { 300.0f  }; //Maximum height player can jump
+const float Jump_Height    { 400.0f  }; //Maximum height player can jump
 const float Jump_Mult      { 3.2f    }; //How fast player can jump
 const float Start_Pos_X    { -320.0f }; //Player stating position X
-const float Start_Pos_Y    { -120.0f }; //Player starting position Y
+const float Start_Pos_Y    { -100.0f }; //Player starting position Y
 const AEVec2 Player_Speed  { 480.0f, 480.0f * Jump_Mult };
 const float Cam_Offset_X   { 320.0f  }; //Camera offset X
 const float Cam_Offset_Y   { 120.0f  }; //Camera offset Y
@@ -131,16 +131,17 @@ private:
   float Facing;    //Direction of player is facing
   //Determines direction 
   struct Direction {
-    bool L { false }; //Check for left
-    bool R { false }; //Check for right
-    bool UP{ false }; //Check for jump
-    Direction() = default;
+    bool L;  //Check for left
+    bool R;  //Check for right
+    bool UP; //Check for jump
+    Direction() :L{ false }, R{ false }, UP{ false } {};
   };
+  //Determines what kind of pickup is activated
   struct Pickup {
-    bool DMG  { false };
-    bool SPD  { false };
-    bool INVUL{ false };
-    Pickup() =  default;
+    bool DMG;   //Damage
+    bool SPD;   //Speed
+    bool INVUL; //Invulnerability
+    Pickup() :DMG{ false }, SPD{ false }, INVUL{ false } {};
   };
   enum AudioState {
     HIT,    //Dragon get hit SFX

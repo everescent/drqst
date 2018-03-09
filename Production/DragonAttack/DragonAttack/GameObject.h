@@ -44,20 +44,15 @@ public:
   AEVec2 GetVelocity() const { return Velocity; }
   //Default constructor; Initializes to zero
   GameObject();
-  //Constructs sprite with a mesh, but no texture
-  GameObject(AEGfxVertexList *mesh, const float &ObjectW, const float &ObjectH);
-  //Constructs sprite with a mesh and texture
-  GameObject(AEGfxVertexList * mesh, const char* TexFile,
-             float ObjectW, const float &ObjectH);
   //Move constructor for sprite
-  GameObject(Sprite&& t_Sprite, Col_Comp &&t_Col, float x = 0.0f, float y = 0.0f);
+  GameObject(Sprite* p_Sprite, Col_Comp &&t_Col, float x = 0.0f, float y = 0.0f);
   Transform Transform_; //Transform holds the object's position, scale and rotation
-  Sprite Sprite_;       //Sprite handles mesh, texture and rendering
+  Sprite *Sprite_;      //Sprite handles mesh, texture and rendering
   Col_Comp Collision_;  //Collision handles object collision
-  float PosX{ 0.0f };   //Position X
-  float PosY{ 0.0f };   //Position Y
+  float PosX;           //Position X
+  float PosY;           //Position Y
 
 private:
-  bool active; //Active or Inactive
-  AEVec2 Velocity{ 0.0f, 0.0f };
+  bool   active;   //Active or Inactive
+  AEVec2 Velocity; //Object Velocity
 };
