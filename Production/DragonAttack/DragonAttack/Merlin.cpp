@@ -38,13 +38,13 @@ Merlin::Merlin()
   PosY = Merlin_Start_Y;
   Transform_.SetTranslate(PosX, PosY);
   Transform_.Concat();
-  Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+  Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
   //Initialize Magic Circle
   MagicCircle.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
   //Melee has no special render so always active
   M_Melee.SetActive(true);
   //Initialize Single Energy Ball
-  Eball.Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+  Eball.Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
   Eball.cooldown_timer = Eball_CD_Time;
   //Initialize Spread Shot
   Spread_Eball.reserve(3);
@@ -54,7 +54,7 @@ Merlin::Merlin()
                            Merlin_Start_X + 30.0f, Merlin_Start_Y + 30.0f, Rect } });
   for (Boss_Attack& SS : Spread_Eball)
   {
-    SS.Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+    SS.Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
     SS.cooldown_timer = Spread_CD_Time;
   }
   //Initialize Arrow Rain
@@ -65,7 +65,7 @@ Merlin::Merlin()
                     Merlin_Start_X + 2.0f, Merlin_Start_Y + 30.0f, Rect } });
   for (int i = 0; i < A_Rain_Buffer; ++i)
   {
-    Arrow[i].Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+    Arrow[i].Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
     Arrow[i].SetVelocity(AEVec2{ 0.0f, -520.0f });
     Arrow[i].cooldown_timer = A_Rain_CD_Time;
   }

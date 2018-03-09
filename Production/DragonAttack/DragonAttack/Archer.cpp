@@ -16,18 +16,20 @@ Technology is prohibited.
 #include "Archer.h"
 
 using namespace ArcherMacros;
+
+
 Audio_Engine Archer::Audio_{ 1, [](std::vector<std::string> &playlist) ->void {
   playlist.push_back(".//Audio/Hit_01.mp3");
   //playlist.push_back(".//Audio/Arrow_Swoosh.mp3"); 
 } };
 
-Archer::Archer(const float posX, const float posY)
+Archer::Archer(Sprite *p_Sprite, const float posX, const float posY)
   //Initialize characters class
-  :Characters{ S_CreateSquare(Archer_Scale, ".//Textures/Archer.png"), Archer_HP,
+  :Characters{ p_Sprite, Archer_HP,
              Col_Comp{ posX - Archer_Scale, posY - Archer_Scale,
              posX + Archer_Scale, posY + Archer_Scale, Rect } },
   //Initialize Arrow
-  Arrow{ S_CreateSquare(Arrow_Scale, ".//Textures/Arrow.png"),
+  Arrow{ Arrow_Sprite,
           Col_Comp{ posX - Arrow_Scale, posY - Arrow_Scale,
           posX + Arrow_Scale, posY + Arrow_Scale, Rect } }, 
   //Initialize other members
@@ -35,11 +37,24 @@ Archer::Archer(const float posX, const float posY)
   Dragon_Seen{ false }, Attack_{ false }, Distance{ 0.0f }, Arrow_CD{ 0.0f }
 {
   SetActive(true);
-  GameObject::Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
-  Arrow.Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+  GameObject::Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+  //Only create new sprite if Arrow_Sprite is not already created
+  if(Arrow_Sprite == nullptr)
+   Arrow_Sprite = new Sprite{ S_CreateSquare(Arrow_Scale, ".//Textures/Arrow.png") };
+  Arrow.Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
   //Initialize position of Archer
   PosX = posX;
   PosY = posY;
+}
+
+Archer::~Archer()
+{
+  //Only delete the sprite once
+  if (Arrow_Sprite != nullptr)
+  {
+    delete Arrow_Sprite;
+    Arrow_Sprite = nullptr;
+  }
 }
 
 void Archer::Attack_Update(Dragon &/*player*/, const float dt)
