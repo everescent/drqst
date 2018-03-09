@@ -19,9 +19,9 @@ Technology is prohibited.
 
 Merlin::Merlin()
   //Initialize characters class
-  :Characters{ S_CreateSquare(100.0f, ".//Textures/Merlin.png"), Merlin_HP,
-  Col_Comp{ Merlin_Start_X - 100.0f, Merlin_Start_Y - 100.0f,
-  Merlin_Start_X + 100.0f, Merlin_Start_Y + 100.0f, Rect } },
+  :Characters{ Merlin_Texture, Merlin_HP,
+  Col_Comp{ Merlin_Start_X - Merlin_Scale, Merlin_Start_Y - Merlin_Scale,
+  Merlin_Start_X + Merlin_Scale, Merlin_Start_Y + Merlin_Scale, Rect } },
   //Initialize Merlin State Machine
   Merlin_Attack{ &Merlin::Melee }, Merlin_State{ &Merlin::Idle },
   M_Curr{ IDLE }, M_Next{ IDLE }, M_Att_Curr{ MELEE },
@@ -31,12 +31,14 @@ Merlin::Merlin()
          Col_Comp{ Merlin_Start_X - 50.0f, Merlin_Start_Y - 50.0f,
                    Merlin_Start_X + 50.0f, Merlin_Start_Y + 50.0f, Rect } },
   Spread_Eball{}, Arrow{}, Blink_{}, Attack_Interval{ 0 },
-  MagicCircle{ S_CreateSquare(150.0f, ".//Textures/Magic_Circle.png") }
+  MagicCircle{ S_CreateSquare(150.0f, ".//Textures/Magic_Circle.png") }, 
+  Merlin_Texture{ new Sprite { S_CreateSquare(0.5f, ".//Textures/Merlin.png") } }
 {
   //Set spawn position
   PosX = Merlin_Start_X;
   PosY = Merlin_Start_Y;
   Transform_.SetTranslate(PosX, PosY);
+  Transform_.SetScale(Merlin_Scale, Merlin_Scale);
   Transform_.Concat();
   Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
   //Initialize Magic Circle
@@ -77,14 +79,16 @@ Merlin::~Merlin()
   Spread_Eball.clear();
 }
 //STATE FUNCTIONS START//////////////////////////////////////////////////////////////////
-void Merlin::Idle(Dragon &player)
+void Merlin::Idle(Dragon &player, const float dt)
 {
+  UNREFERENCED_PARAMETER(dt);
   UNREFERENCED_PARAMETER(player);
   /*Do some idle animation or something idk yet*/
 }
 
-void Merlin::Move(Dragon &player)
+void Merlin::Move(Dragon &player, const float dt)
 {
+  UNREFERENCED_PARAMETER(dt);
   UNREFERENCED_PARAMETER(player);
   //This will move merlin to the 3 different spots
   srand((unsigned int)time(nullptr));
@@ -119,24 +123,26 @@ void Merlin::Move(Dragon &player)
   Blink_.CD_Time = Blink_CD_Time;
 }
 
-void Merlin::Attack(Dragon &player)
+void Merlin::Attack(Dragon &player, const float dt)
 {
   //This will execute the attacks
-  (this->*Merlin_Attack)(player);
+  (this->*Merlin_Attack)(player, dt);
   Attack_Interval = Merlin_Att_Inter;
 }
 //STATE FUNCTIONS END////////////////////////////////////////////////////////////////////
 
 //ATTACK FUNCTIONS START/////////////////////////////////////////////////////////////////
-void Merlin::Melee(Dragon &player)
+void Merlin::Melee(Dragon &player, const float dt)
 {
   UNREFERENCED_PARAMETER(player);
+  UNREFERENCED_PARAMETER(dt);
   M_Melee.cooldown = true;
   M_Melee.cooldown_timer = Melee_CD_Time;
 }
 
-void Merlin::S_Eball(Dragon &player)
+void Merlin::S_Eball(Dragon &player, const float dt)
 {
+  UNREFERENCED_PARAMETER(dt);
   //Get the displacement betwwen player and Merlin
   AEVec2 Displacement{ (player.PosX - PosX ),
                        (player.PosY - PosY) };
@@ -150,8 +156,9 @@ void Merlin::S_Eball(Dragon &player)
   Eball.cooldown_timer = Eball_CD_Time;
 }
 
-void Merlin::Sp_Eball(Dragon &player)
+void Merlin::Sp_Eball(Dragon &player, const float dt)
 {
+  UNREFERENCED_PARAMETER(dt);
   //First vector points towards player
   AEVec2 Displacement0{ (player.PosX - PosX),
                        (player.PosY - PosY) };
@@ -180,7 +187,7 @@ void Merlin::Sp_Eball(Dragon &player)
   }
 }
 
-void Merlin::A_Rain(Dragon &player)
+void Merlin::A_Rain(Dragon &player, const float dt)
 {
   UNREFERENCED_PARAMETER(player);
   //Seed rand based on time
@@ -198,17 +205,17 @@ void Merlin::A_Rain(Dragon &player)
       Arrow[i].SetActive(true);
       Arrow[i].cooldown = true;
       Arrow[i].cooldown_timer = A_Rain_CD_Time;
-      Arrow[i].Projectile::Update();
+      Arrow[i].Projectile::Update(dt);
     }
   }
 }
-void Merlin::Melee_Update()
+void Merlin::Melee_Update(const float dt)
 {
   //Check if melee is used
   if (M_Melee.cooldown)
   {
     //Update cooldown
-    --M_Melee.cooldown_timer;
+    M_Melee.cooldown_timer -= dt;
     if (M_Melee.cooldown_timer <= 0.0f)
     {
       //Reset melee 
@@ -217,7 +224,7 @@ void Merlin::Melee_Update()
     }
   }
 }
-void Merlin::S_Eball_Update()
+void Merlin::S_Eball_Update(const float dt)
 {
   //Check if single shot is dead
   if (Eball.cooldown)
@@ -233,14 +240,14 @@ void Merlin::S_Eball_Update()
     else
     {
       //Update cooldown
-      Eball.Update(0.016f);
+      Eball.Update(dt);
     }
   }
   //Update position and collision
   Eball.Projectile::Pos(PosX, PosY);
-  Eball.Projectile::Update(50.0f);
+  Eball.Projectile::Update(dt, Eball_Scale);
 }
-void Merlin::Sp_Eball_Update()
+void Merlin::Sp_Eball_Update(const float dt)
 {
   //Check if any bullets for spread shot are on cooldown
   bool SS_cd    { false };
@@ -272,18 +279,18 @@ void Merlin::Sp_Eball_Update()
     //Update Cooldown
     else for (Boss_Attack& SS : Spread_Eball)
     {
-      SS.Update(0.016f);
+      SS.Update(dt);
     }
   }
   //Update position and collision
   for (Boss_Attack& SS : Spread_Eball)
   {
     SS.Projectile::Pos(PosX, PosY);
-    SS.Projectile::Update(30.0f);
+    SS.Projectile::Update(dt, Spread_Scale);
   }
 }
 
-void Merlin::A_Rain_Update(Dragon &player)
+void Merlin::A_Rain_Update(Dragon &player, const float dt)
 {
   //Check if last arrow died
   if (Arrow[A_Rain_Buffer - 1].cooldown)
@@ -303,7 +310,7 @@ void Merlin::A_Rain_Update(Dragon &player)
     //Ifn o update cooldown
     else for (int i = 0; i < A_Rain_Buffer; ++i)
     {
-      Arrow[i].Update(0.016f);
+      Arrow[i].Update(dt);
     }
   }
   //Activate magic circle
@@ -322,30 +329,24 @@ void Merlin::A_Rain_Update(Dragon &player)
     if (i == 0)
     {
       Arrow[i].Projectile::Pos(player.PosX, 460.0f);
-      Arrow[i].Projectile::Update();
-      Arrow[i].Collision_.Update_Col_Pos
-      (Arrow[i].PosX - 2.0f, Arrow[i].PosY - 30.0f,
-       Arrow[i].PosX + 2.0f, Arrow[i].PosY + 30.0f);
+      Arrow[i].Projectile::Update(dt, A_Rain_Scale);
     }
     else if (Arrow[i - 1].GetDist() < 100.0f)
     {
       Arrow[i].Projectile::Pos(player.PosX, 460.0f);
       Arrow[i].Collision_.Update_Col_Pos
-      (Arrow[i].PosX - 2.0f, Arrow[i].PosY - 30.0f,
-       Arrow[i].PosX + 2.0f, Arrow[i].PosY + 30.0f);
+      (Arrow[i].PosX - A_Rain_Scale, Arrow[i].PosY - A_Rain_Scale,
+       Arrow[i].PosX + A_Rain_Scale, Arrow[i].PosY + A_Rain_Scale);
     }
     else
     {
       Arrow[i].Projectile::Pos(player.PosX, 460.0f);
-      Arrow[i].Projectile::Update();
-      Arrow[i].Collision_.Update_Col_Pos
-      (Arrow[i].PosX - 2.0f, Arrow[i].PosY - 30.0f,
-       Arrow[i].PosX + 2.0f, Arrow[i].PosY + 30.0f);
+      Arrow[i].Projectile::Update(dt, A_Rain_Scale);
     }
   }
 }
 
-void Merlin::Colision_Check(Dragon &player)
+void Merlin::Colision_Check(Dragon &player, const float dt)
 {
   //Arrow rain collision check
   if (Arrow[A_Rain_Buffer - 1].cooldown)
@@ -356,7 +357,7 @@ void Merlin::Colision_Check(Dragon &player)
         if (Arrow[i].IsActive())
         {
           if (player.Collision_.Dy_Rect_Rect(Arrow[i].Collision_, 
-              Arrow[i].GetVelocity(), player.GetVelocity(), 0.016f))
+              Arrow[i].GetVelocity(), player.GetVelocity(), dt))
           {
             player.Decrease_HP();
             Arrow[i].SetActive(false);
@@ -374,7 +375,7 @@ void Merlin::Colision_Check(Dragon &player)
         {
           if (player.Collision_.Dy_Rect_Rect(Spread_Eball[i].Collision_,
                                              Spread_Eball[i].GetVelocity(),
-                                             player.GetVelocity(), 0.016f))
+                                             player.GetVelocity(), dt))
           {
             player.Decrease_HP();
             Spread_Eball[i].ResetDist();
@@ -389,7 +390,7 @@ void Merlin::Colision_Check(Dragon &player)
     if (Eball.IsActive())
     {
       if (player.Collision_.Dy_Rect_Rect(Eball.Collision_, Eball.GetVelocity(),
-                                         player.GetVelocity(), 0.016f))
+                                         player.GetVelocity(), dt))
       {
         player.Decrease_HP();
         Eball.ResetDist();
@@ -455,8 +456,8 @@ bool Merlin::CheckAttack(Dragon &player)
   if (Attack_Interval > 0)
     return CanAttack;
   //Check if payer within melee range
-  if (player.PosY >= PosY - 50.0f && player.PosY <= PosY + 50.0f
-    && player.PosX <= PosX + 50.0f && player.PosX >= PosX - 50.0f
+  if (player.PosY >= PosY - Merlin_Scale && player.PosY <= PosY + Merlin_Scale
+    && player.PosX <= PosX + Merlin_Scale && player.PosX >= PosX - Merlin_Scale
     && !M_Melee.cooldown)
   {
     CanAttack = true;
@@ -507,7 +508,6 @@ bool Merlin::CheckAttack(Dragon &player)
 
 void Merlin::Update(Dragon &player, const float dt)
 {
-  UNREFERENCED_PARAMETER(dt);
   //Determine Merlin's state
   CheckState(player);  
   //Execute state
@@ -519,13 +519,13 @@ void Merlin::Update(Dragon &player, const float dt)
   //Update Blink
   Blink_.Update();
   //Attack updates here
-  A_Rain_Update(player);
-  Sp_Eball_Update();
-  S_Eball_Update();
-  Melee_Update();
+  A_Rain_Update(player, dt);
+  Sp_Eball_Update(dt);
+  S_Eball_Update(dt);
+  Melee_Update(dt);
   //Merlin collision update
-  GameObject::Collision_.Update_Col_Pos(PosX - 100.0f * 0.6f, PosY - 100.0f * 0.6f, 
-                                        PosX + 100.0f * 0.6f, PosY + 100.0f * 0.6f);
+  GameObject::Collision_.Update_Col_Pos(PosX - Merlin_Scale * 0.6f, PosY - Merlin_Scale * 0.6f,
+                                        PosX + Merlin_Scale * 0.6f, PosY + Merlin_Scale * 0.6f);
   //If Merlin gets hit, decrease HP
   for(char i = 0; i < Bullet_Buffer; ++i)
     if(player.GetFireball()[i].IsActive())
@@ -540,7 +540,7 @@ void Merlin::Update(Dragon &player, const float dt)
         player.GetFireball()[i].SetActive(false);
       }
   //Check for attack colision with player
-  Colision_Check(player);
+  Colision_Check(player, dt);
 }
 
 void Merlin::Render()

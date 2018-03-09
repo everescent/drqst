@@ -38,13 +38,18 @@ Archer::Archer(Sprite *p_Sprite, const float posX, const float posY)
 {
   SetActive(true);
   GameObject::Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
-  //Only create new sprite if Arrow_Sprite is not already created
-  if(Arrow_Sprite == nullptr)
-   Arrow_Sprite = new Sprite{ S_CreateSquare(Arrow_Scale, ".//Textures/Arrow.png") };
-  Arrow.Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+  Transform_.SetScale(Archer_Scale, Archer_Scale);
   //Initialize position of Archer
   PosX = posX;
   PosY = posY;
+  Transform_.SetTranslate(PosX, PosY);
+  Transform_.Concat();
+  //Only create new sprite if Arrow_Sprite is not already created
+  if(Arrow_Sprite == nullptr)
+   Arrow_Sprite = new Sprite{ S_CreateSquare(0.5f, ".//Textures/Arrow.png") };
+  Arrow.Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+  Arrow.Transform_.SetScale(Arrow_Scale, Arrow_Scale);
+  Arrow.Transform_.Concat();
 }
 
 Archer::~Archer()
@@ -77,7 +82,7 @@ void Archer::Attack_Update(Dragon &/*player*/, const float dt)
     }
   }
   Arrow.Pos(PosX, PosY);
-  Arrow.Update(50.0f, false, Angle);
+  Arrow.Update(Arrow_Scale, false, Angle);
 }
 
 void Archer::Colision_Check(Dragon &player, const float dt)
@@ -235,11 +240,11 @@ void Archer::Update(Dragon& player, const float dt)
     }
     if (player.PosX < PosX)
     {
-      Transform_.SetScale(-1.0f, 1.0f);
+      Transform_.SetScale(-Archer_Scale, Archer_Scale);
     }
     else
     {
-      Transform_.SetScale(1.0f, 1.0f);
+      Transform_.SetScale(Archer_Scale, Archer_Scale);
     }
     PosY -= Gravity;
     //Assign state

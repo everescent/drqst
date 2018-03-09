@@ -22,21 +22,21 @@ class Projectile : public GameObject {
 
 public:
   //Updates the projectile, if active
-  void Update(const float scale = 0.0f, const bool circle = false, const float angle = 90.0f) 
+  void Update(const float dt, const float scale = 0.0f, const bool circle = false, const float angle = 90.0f)
   {
     //Update distance travelled and resultant matrix
     if (IsActive())
     {
       if (GetDir())
       {
-        PosX += GetVelocity().x * 0.016f;
-        PosY += GetVelocity().y * 0.016f;
+        PosX += GetVelocity().x * dt;
+        PosY += GetVelocity().y * dt;
         Transform_.SetRotation(angle);
       }
       else
       {
-        PosX -= GetVelocity().x * 0.016f;
-        PosY -= GetVelocity().y * 0.016f;
+        PosX -= GetVelocity().x * dt;
+        PosY -= GetVelocity().y * dt;
         Transform_.SetRotation(-angle);
       }
       Transform_.SetTranslate(PosX, PosY);
@@ -49,9 +49,9 @@ public:
                                   PosX + scale, PosY + scale);
       //Pythagoras distance equation
       AddDist(
-       f_sqrt( (GetVelocity().x) * 0.016f * (GetVelocity().x * 0.016f)
+       f_sqrt( (GetVelocity().x) * dt * (GetVelocity().x * dt)
                                        +
-              (GetVelocity().y) * 0.016f * (GetVelocity().y) * 0.016f)
+              (GetVelocity().y) * dt * (GetVelocity().y) * dt)
       );
       Transform_.Concat();
     }

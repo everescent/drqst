@@ -109,16 +109,16 @@ void Dragon::Update(Dragon& dummy, const float dt)
   if (Dir.L)
   {
     PosX -= GetVelocity().x * dt;
-    Facing = -1.0f;
+    Facing = -Dragon_Scale;
     Set_Direction(LEFT);
-    Transform_.SetScale(Facing, 1.0f);
+    Transform_.SetScale(Facing, Dragon_Scale);
   }
   else if (Dir.R)
   {
     PosX += GetVelocity().x * dt;
-    Facing = 1.0f;
+    Facing = Dragon_Scale;
     Set_Direction(RIGHT);
-    Transform_.SetScale(Facing, 1.0f);
+    Transform_.SetScale(Facing, Dragon_Scale);
   }
   if (Dir.UP)
   {
@@ -130,7 +130,8 @@ void Dragon::Update(Dragon& dummy, const float dt)
   //Update position of player
   Transform_.SetTranslate(PosX, PosY);
   Transform_.Concat();
-  Collision_.Update_Col_Pos(PosX - 70.0f, PosY - 70.0f, PosX + 70.0f, PosY + 70.0f);
+  Collision_.Update_Col_Pos(PosX - Dragon_Scale, PosY - Dragon_Scale, 
+                            PosX + Dragon_Scale, PosY + Dragon_Scale);
   ApplyPowerUP();
   //Check if attack has been made
   if (Attack)
@@ -163,11 +164,11 @@ void Dragon::Update(Dragon& dummy, const float dt)
   for (int i = 0; i < Bullet_Buffer; ++i)
   {
     Fireball[i].Pos(PosX, PosY);
-    Fireball[i].Update(50.0f);
+    Fireball[i].Update(Fireball_Scale);
   }
   //Update Mega Fireball
   Mfireball.Pos(PosX, PosY);
-  Mfireball.Update(70.0f);
+  Mfireball.Update(Fireball_Scale);
   //Check for distance limit (Fireball)
   for (int i = 0; i < Bullet_Buffer; ++i)
     if (Fireball[i].IsActive())

@@ -29,14 +29,18 @@ const float Bullet_Death    { 900.0f  }; //Distance when bullet dies
 const float Bullet_Speed    { 1200.0f }; //How fast a bullet travels
 const int   Fireball_Damage { 10      };
 const int   MFireball_Damage{ 15      };
+const float Fireball_Scale  { 50.0f   };
+const float MFireball_Scale { 70.0f   };
 
-const float Jump_Height    { 400.0f  }; //Maximum height player can jump
-const float Jump_Mult      { 3.2f    }; //How fast player can jump
-const float Start_Pos_X    { -320.0f }; //Player stating position X
-const float Start_Pos_Y    { -100.0f }; //Player starting position Y
-const AEVec2 Player_Speed  { 480.0f, 480.0f * Jump_Mult };
-const float Cam_Offset_X   { 320.0f  }; //Camera offset X
-const float Cam_Offset_Y   { 120.0f  }; //Camera offset Y
+const float Dragon_Scale    { 70.0f   };
+const float Jump_Height     { 400.0f  }; //Maximum height player can jump
+const float Jump_Mult       { 3.2f    }; //How fast player can jump
+const float Start_Pos_X     { -320.0f }; //Player stating position X
+const float Start_Pos_Y     { -100.0f }; //Player starting position Y
+//Player velocity
+const AEVec2 Player_Speed   { 480.0f, 480.0f * Jump_Mult };
+const float Cam_Offset_X    { 320.0f  }; //Camera offset X
+const float Cam_Offset_Y    { 120.0f  }; //Camera offset Y
 
 class Dragon : public Characters{
 
@@ -76,16 +80,18 @@ public:
 
   Dragon()
     //Initialize Characters class
-    :Characters{ S_CreateSquare(70.0f, ".//Textures/Bob.png"), 3,
-    Col_Comp{ Start_Pos_X - 70.0f, Start_Pos_Y - 70.0f,
-              Start_Pos_X + 70.0f, Start_Pos_Y + 70.0f, Rect} },
+    :Characters{ Dragon_Sprite, 3,
+    Col_Comp{ Start_Pos_X - Dragon_Scale, Start_Pos_Y - Dragon_Scale,
+              Start_Pos_X + Dragon_Scale, Start_Pos_Y + Dragon_Scale, Rect} },
     //Initialize data members
     Attack{ false }, Pwr_Up{ false }, Falling{ false }, Damage { Fireball_Damage },
-    M_Damage{ MFireball_Damage }, Charge{ 0 }, Gravity{ 10.0f }, Dir{}, Pickup_{}, Fireball{},
+    M_Damage{ MFireball_Damage }, Charge{ 0 }, Gravity{ 10.0f }, 
+    Fireball_Sprite{ new Sprite {S_CreateSquare(0.5f, ".//Textures/Fireball.png")} }, 
+    Dragon_Sprite{ new Sprite { S_CreateSquare(0.5f, ".//Textures/Bob.png") } },
+    Dir{}, Pickup_{}, Fireball{},
     //Initialize Mega Fireball
-    Mfireball{ S_CreateSquare(70.0f, ".//Textures/Fireball.png"), 
-    Col_Comp{ Start_Pos_X - 50.0f, Start_Pos_Y - 50.0f,
-    Start_Pos_X + 50.0f, Start_Pos_Y + 50.0f, Rect } }, Air_Dist{ 0.0f }, Facing{ 1.0f },
+    Mfireball{ Fireball_Sprite, Col_Comp{ Start_Pos_X - MFireball_Scale, Start_Pos_Y - MFireball_Scale,
+    Start_Pos_X + MFireball_Scale, Start_Pos_Y + MFireball_Scale, Rect } }, Air_Dist{ 0.0f }, Facing{ 1.0f },
     //Initialize Audio Engine
     SFX_{ 3, [](std::vector<std::string> &playlist) ->void {
       playlist.push_back(".//Audio/Dragon_Hit.mp3");
@@ -97,24 +103,33 @@ public:
     PosY = Start_Pos_Y;
     //Set velocity
     SetVelocity(Player_Speed);
+    //Set Scale
+    Transform_.SetScale(Dragon_Scale, Dragon_Scale);
+    Transform_.Concat();
     //Reserve a bloack of memory per number of bullets 
     Fireball.reserve(Bullet_Buffer);
     //Initialize all the fireballs
     for (int i = 0; i < Bullet_Buffer; ++i)
-      Fireball.push_back(Projectile{ S_CreateSquare(50.0f, ".//Textures/Fireball.png"),
-                                     Col_Comp{ Start_Pos_X - 50.0f, Start_Pos_Y - 50.0f,
-                                     Start_Pos_X + 50.0f, Start_Pos_Y + 50.0f, Rect } });
+      Fireball.push_back(Projectile{ Fireball_Sprite,
+                                     Col_Comp{ Start_Pos_X - Fireball_Scale, Start_Pos_Y - Fireball_Scale,
+                                               Start_Pos_X + Fireball_Scale, Start_Pos_Y + Fireball_Scale, Rect } });
     for (int i = 0; i < Bullet_Buffer; ++i)
     {
       Fireball[i].SetVelocity(AEVec2{ Bullet_Speed, 0.0f });
-      Fireball[i].Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+      Fireball[i].Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+      Fireball[i].Transform_.SetScale(Fireball_Scale, Fireball_Scale);
+      Fireball[i].Transform_.Concat();
     }
     //Initialize Mega Fireball
     Mfireball.SetVelocity(AEVec2{ Bullet_Speed / 2, 0.0f });
-    Mfireball.Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+    Mfireball.Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+    Mfireball.Transform_.SetScale(MFireball_Scale, MFireball_Scale);
+    Mfireball.Transform_.Concat();
   }
   ~Dragon()
   {
+    delete Fireball_Sprite;
+    delete Dragon_Sprite;
     Fireball.clear();
   }
 private:
@@ -148,6 +163,8 @@ private:
     IMPACT, //Fireball impact SFX
     SHOOT   //Fireball shot SFX
   };
+  Sprite *Fireball_Sprite;
+  Sprite *Dragon_Sprite;
   Direction               Dir;       //Direction variable
   Pickup                  Pickup_;   //Type of power up
   std::vector<Projectile> Fireball;  //Array of Fireball projectile

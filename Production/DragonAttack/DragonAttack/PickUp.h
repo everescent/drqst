@@ -40,7 +40,7 @@ class PickUp : public GameObject{
 
 public:
   //Initialize with sprite, collision, type of power up and position
-  PickUp(Sprite &&t_sprite, Col_Comp && t_col, const PUT type, const float posX, const float posY);
+  PickUp(Sprite* p_sprite, Col_Comp && t_col, const PUT type, const float posX, const float posY);
   //Updates collition and cooldown
   void Update(Dragon &player, const float dt);
   //Returns the number of coins collected

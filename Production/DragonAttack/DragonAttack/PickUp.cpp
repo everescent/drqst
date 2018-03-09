@@ -14,17 +14,17 @@ Technology is prohibited.
 /* End Header **************************************************************************/
 
 #include "PickUp.h"
-#include <utility>
+#include <utility> //move
 
 //Counts the number of coins collected
 int PickUp::Coin_Counter = 0;
 
-PickUp::PickUp(Sprite &&t_sprite, Col_Comp && t_col, const PUT type, const float posX, const float posY)
-  :GameObject{std::move(t_sprite), std::move(t_col)}, 
+PickUp::PickUp(Sprite* p_sprite, Col_Comp && t_col, const PUT type, const float posX, const float posY)
+  :GameObject{ p_sprite, std::move(t_col)},
   Type_{ type }, Active_{ false }, Cooldown_{ 0 }
 {
   SetActive(true);
-  Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+  Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
   PosX = posX;
   PosY = posY;
   Transform_.SetTranslate(PosX, PosY);
