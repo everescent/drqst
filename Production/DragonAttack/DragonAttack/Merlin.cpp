@@ -511,7 +511,7 @@ void Merlin::Update(Dragon &player, const float dt)
   //Determine Merlin's state
   CheckState(player);  
   //Execute state
-  (this->*Merlin_State)(player);
+  (this->*Merlin_State)(player, dt);
   //Update attack interval
   Attack_Interval -= dt;
   if (Attack_Interval <= 0)

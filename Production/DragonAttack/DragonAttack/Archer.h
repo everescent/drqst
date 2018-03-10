@@ -34,8 +34,6 @@ namespace ArcherMacros {
   //Global Read-Only Variables END/////////////////////////////////////////////////////////
 }
 
-Sprite *Archer::Arrow_Sprite{ nullptr };
-
 class Archer : public Characters {
 
 public: 

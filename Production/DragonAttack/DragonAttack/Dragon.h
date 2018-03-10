@@ -24,7 +24,7 @@ Technology is prohibited.
 
 const char  Max_Charge      { 10      }; //Maximum charge for mega fireball
 const int   Bullet_Buffer   { 10      }; //Amount of fireballs at any one time
-const float Bullet_Interval { 400.0f  }; //Minimum distance between each fireball
+const float Bullet_Interval { 600.0f  }; //Minimum distance between each fireball
 const float Bullet_Death    { 900.0f  }; //Distance when bullet dies
 const float Bullet_Speed    { 1200.0f }; //How fast a bullet travels
 const int   Fireball_Damage { 10      };
@@ -32,6 +32,7 @@ const int   MFireball_Damage{ 15      };
 const float Fireball_Scale  { 50.0f   };
 const float MFireball_Scale { 70.0f   };
 
+const float Invul_Time      { 1.5f    };
 const float Dragon_Scale    { 70.0f   };
 const float Jump_Height     { 400.0f  }; //Maximum height player can jump
 const float Jump_Mult       { 3.2f    }; //How fast player can jump
@@ -55,6 +56,8 @@ public:
   void ResetCharge() { Charge = 0; }
   //Set pickup type
   void SetPickup(const int type, const bool status);
+  //Set Invul Flag when hit
+  void SetInvul(const bool state) { Invul_FLAG = state; }
   //Play this when firebal made contact
   void PlayImpact() { SFX_.Play(IMPACT); }
   //Play this when dragon gets hit
@@ -73,6 +76,8 @@ public:
   Projectile &GetMfireball() { return Mfireball; }
   //Get the direction the player is facing
   float GetFacing() const { return Facing; }
+  //Returns the Invul_FLAG value
+  bool GetInvulFlag() const { return Invul_FLAG; }
   //Returns this pos
   const Dragon &Get_this() const { return *this; }
   //Gets current charge
@@ -84,8 +89,8 @@ public:
     Col_Comp{ Start_Pos_X - Dragon_Scale, Start_Pos_Y - Dragon_Scale,
               Start_Pos_X + Dragon_Scale, Start_Pos_Y + Dragon_Scale, Rect} },
     //Initialize data members
-    Attack{ false }, Pwr_Up{ false }, Falling{ false }, Damage { Fireball_Damage },
-    M_Damage{ MFireball_Damage }, Charge{ 0 }, Gravity{ 10.0f }, 
+    Attack{ false }, Pwr_Up{ false }, Falling{ false }, Invul_FLAG{ false }, 
+    Damage { Fireball_Damage }, M_Damage{ MFireball_Damage }, Charge{ 0 }, Gravity{ 10.0f }, 
     Fireball_Sprite{ new Sprite {S_CreateSquare(0.5f, ".//Textures/Fireball.png")} }, 
     Dragon_Sprite{ new Sprite { S_CreateSquare(0.5f, ".//Textures/Bob.png") } },
     Dir{}, Pickup_{}, Fireball{},
@@ -106,7 +111,7 @@ public:
     //Set Scale
     Transform_.SetScale(Dragon_Scale, Dragon_Scale);
     Transform_.Concat();
-    //Reserve a bloack of memory per number of bullets 
+    //Reserve a block of memory per number of bullets 
     Fireball.reserve(Bullet_Buffer);
     //Initialize all the fireballs
     for (int i = 0; i < Bullet_Buffer; ++i)
@@ -138,6 +143,7 @@ private:
   bool  MAttack;   //Check if player is mega attacking
   bool  Pwr_Up;    //Check if power up is in effect
   bool  Falling;   //Check if player is falling
+  bool  Invul_FLAG;
   char  Damage;    //Amount of damage each fireball does
   char  M_Damage;  //Amount of damage each mega fireball does
   int   Charge;    //Charge for Mega Fireball
@@ -172,5 +178,7 @@ private:
   Audio_Engine            SFX_;      //Dragon Sounds
   //Private Functions START//////////////////////////////////////////////////////////////
   void ApplyPowerUP();
+  //Makes dragon invulnerable for a short time after getting hit
+  void HitInvul(const float dt);
   //Private Functions END////////////////////////////////////////////////////////////////
 };

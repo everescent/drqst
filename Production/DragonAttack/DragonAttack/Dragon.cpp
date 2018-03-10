@@ -65,6 +65,28 @@ void Dragon::ApplyPowerUP()
   }
 }
 
+void Dragon::HitInvul(const float dt)
+{
+  static float    Invul_CD = Invul_Time;
+  static unsigned frame_count = 0;
+  Set_Vulnerable(false);
+  if (Invul_FLAG)
+  {
+    Invul_CD -= dt;
+    if (frame_count & 1)
+      Sprite_->SetAlphaTransBM(0.5f, 0.5f, AE_GFX_BM_BLEND);
+    else
+      Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+  }
+  if (Invul_CD <= 0.0f)
+  {
+    Invul_CD = Invul_Time;
+    frame_count = 0;
+    Set_Vulnerable(true);
+    Invul_FLAG = false;
+  }
+}
+
 void Dragon::Input()
 {
   const std::vector <int> &Input = Input::Get_User_Input();
@@ -84,7 +106,8 @@ void Dragon::Input()
           Dir.UP = true;
         break;
       case Input::fire:
-        SFX_.Play(SHOOT);
+        if(!SFX_.GetPlaying(0))
+          SFX_.Play(SHOOT);
         Attack = true;
         break;
       case Input::special:
@@ -133,6 +156,7 @@ void Dragon::Update(Dragon& dummy, const float dt)
   Collision_.Update_Col_Pos(PosX - Dragon_Scale, PosY - Dragon_Scale, 
                             PosX + Dragon_Scale, PosY + Dragon_Scale);
   ApplyPowerUP();
+  HitInvul(dt);
   //Check if attack has been made
   if (Attack)
   {

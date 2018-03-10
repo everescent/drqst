@@ -16,7 +16,7 @@ Technology is prohibited.
 #include "Archer.h"
 
 using namespace ArcherMacros;
-
+Sprite *Archer::Arrow_Sprite{ nullptr };
 
 Audio_Engine Archer::Audio_{ 1, [](std::vector<std::string> &playlist) ->void {
   playlist.push_back(".//Audio/Hit_01.mp3");
@@ -82,7 +82,7 @@ void Archer::Attack_Update(Dragon &/*player*/, const float dt)
     }
   }
   Arrow.Pos(PosX, PosY);
-  Arrow.Update(Arrow_Scale, false, Angle);
+  Arrow.Update(dt, Arrow_Scale, false, Angle);
 }
 
 void Archer::Colision_Check(Dragon &player, const float dt)
