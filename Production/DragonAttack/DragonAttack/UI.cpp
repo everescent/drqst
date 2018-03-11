@@ -15,18 +15,16 @@ Technology is prohibited.
 #include "UI.h"
 
 //ANDREW'S QUICK FIX FOR INSTANCING - please change to suit ur code
-namespace
-{
-	Sprite HP_SPRITE = S_CreateSquare(20.0f, "Textures/hp.png");
-	Sprite CHARGE_SPRITE = S_CreateSquare(20.0f, "Textures/Fireball.png");
-}
+
 
 UI::UI(Dragon* dragon)
-	:icon_w{ 20.0f },
-	hp_icon1{ &HP_SPRITE, Col_Comp() },
-	hp_icon2{ &HP_SPRITE, Col_Comp() },
-	hp_icon3{ &HP_SPRITE, Col_Comp() },
-	charge_icon{ &CHARGE_SPRITE, Col_Comp() },
+	:HP_Sprite{ S_CreateSquare(20.0f, "Textures/hp.png") },
+	Charge_Sprite{ S_CreateSquare(20.0f, "Textures/Fireball.png") },
+	icon_w{ 20.0f },
+	hp_icon1{ &HP_Sprite, Col_Comp() },
+	hp_icon2{ &HP_Sprite, Col_Comp() },
+	hp_icon3{ &HP_Sprite, Col_Comp() },
+	charge_icon{ &Charge_Sprite, Col_Comp() },
 	Dragon_hp{ dragon->Get_HP() }, Fireball_charge{ dragon->Get_Charge() }
 	{
 		

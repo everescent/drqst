@@ -31,6 +31,9 @@ public:
 	void Render();
 
 private:
+
+	Sprite  HP_Sprite;
+	Sprite Charge_Sprite;
 	const float icon_w;
 	GameObject hp_icon1;
 	GameObject hp_icon2;
