@@ -6,7 +6,9 @@ enum ATTACK_SPRITE
 {
 	EBALL_SPRITE,
 	STAB_SPRITE,
-	ARROW_SPRITE
+	ARROW_SPRITE,
+
+	FIREBALL_SPRITE
 };
 
 void Attack_Sprite_Init(void);

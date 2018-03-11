@@ -18,7 +18,8 @@ Technology is prohibited.
 
 namespace
 {
-	
+	Sprite D_SPRITE;
+
 	Sprite A_SPRITE;
 	Sprite G_SPRITE;
 	Sprite MA_SPRITE;
@@ -35,6 +36,7 @@ void AI_Sprite_Init(void)
 	G_SPRITE    = S_CreateSquare(70.0f, ".//Textures/grunt.png");
 	K_SPRITE    = S_CreateSquare(30.0f, ".//Textures/Knight.png");
 	MA_SPRITE   = S_CreateSquare(30.0f, ".//Textures/mage.png");
+	D_SPRITE    = S_CreateSquare(0.5f, ".//Textures/Bob.png");
 
 	L_SPRITE    = S_CreateSquare(60.0f, ".//Textures/Lancelot.png");
 	//ME_SPRITE = NULL;
@@ -61,6 +63,8 @@ Characters *Create_Basic_AI(const BASIC_AI mob, const AEVec2& position)
 	    break;
 	case KNIGHT: return new Knight(position, &K_SPRITE);
 		break;
+	case DRAGON: return new Dragon(&D_SPRITE, Get_Attack_Sprite(FIREBALL_SPRITE));
+		break;
 	default: break;
 	}
 	
@@ -74,7 +78,7 @@ Characters *Create_Boss_AI(const BOSS_AI boss)
 	{
 	case LANCELOT:    return new Lancelot(&L_SPRITE);
 		break;
-	case MERLIN:      return nullptr; //new Merlin;
+	case MERLIN:      return new Merlin(Get_Attack_Sprite(EBALL_SPRITE), Get_Attack_Sprite(ARROW_SPRITE));
 		break;
 	case KING_ARTHUR: return nullptr;// new King_Arthur(&KA_SPRITE);
 		break;
