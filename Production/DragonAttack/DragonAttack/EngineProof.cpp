@@ -75,7 +75,7 @@ namespace EngineProof
     }};
 	player = new Dragon    { };
 	//enemy  = new Merlin    { };
-	grunt  = new Grunt     { 400.0f, -160.0f };
+	//grunt  = new Grunt     { 400.0f, -160.0f };
   }
 
   void Update(float dt)
@@ -95,7 +95,7 @@ namespace EngineProof
     player->Update(*player, dt);
     //enemy->SetActive(true);
     //enemy->Update(*player);
-	grunt->Update(*player, dt);
+	//grunt->Update(*player, dt);
 
 	if (AEInputCheckCurr(AEVK_0))
 	{
@@ -125,11 +125,11 @@ namespace EngineProof
 	plat5->Render();
 	plat6->Render();
     
-    player->Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+    player->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 	player->Render();
     //enemy->Render();
-	grunt->Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
-	grunt->Render();
+	//grunt->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+	//grunt->Render();
   }
 
   void Free(void)
@@ -141,7 +141,7 @@ namespace EngineProof
 
 	//delete enemy;
 	delete player;
-	delete grunt;
+	//delete grunt;
   }
 
   void Unload(void)

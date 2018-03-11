@@ -36,7 +36,7 @@ namespace AI_Test_Stage
 	void Init(void)
 	{
 		d->SetActive(true);
-		d->Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+		d->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 		
 		floor1->Collision_.Update_Col_Pos(-600.0f, -360.0f, 600.0f, -300.0f);
 	}

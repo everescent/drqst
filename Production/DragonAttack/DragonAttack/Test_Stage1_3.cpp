@@ -122,7 +122,7 @@ namespace Test_Stage1_3
 		}
 
 		player->Render();
-		player->Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+		player->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 		ui->Render();
 	}
 

@@ -1,14 +1,19 @@
 #include "Barrier.h"
 #include <iostream>
+
+namespace
+{
+	Sprite BARRIER_SPRITE = S_CreateSquare(130.0f, ".//Textures/box.png");
+}
+
 Barrier::Barrier(float x, float y)
-	:// GameObject{ S_CreateRectangle(120.0f, 100.0f, ".//Textures/box.png"),
-	GameObject{S_CreateSquare(130.0f, ".//Textures/box.png" ),
+	:GameObject{&BARRIER_SPRITE,
 	Col_Comp{ x - 100.0f, y - 100.0f,
 		      x + 100.0f, y + 100.0f, Rect },
 		      x, y }
 {
 	SetActive(true);
-	Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+	Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 	PosX = x;
 	PosY = y;
 }

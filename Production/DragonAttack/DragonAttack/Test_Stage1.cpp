@@ -50,23 +50,30 @@ namespace Test_Stage1_1
 
 		next = new LevelChangePlatform{ 6550.0f, -120.0f };
 
-		coin1 = new PickUp{ S_CreateSquare(50.0f, "Textures/coin.png",1.0f),
+		Sprite COIN_SPRITE = S_CreateSquare(50.0f, "Textures/coin.png", 1.0f);
+		Sprite HP_SPRITE = S_CreateSquare(50.0f, "Textures/hp.png", 1.0f);
+		Sprite DMG_SPRITE = S_CreateSquare(50.0f, "Textures/Fireball.png", 1.0f);
+		Sprite SPD_SPRITE = S_CreateSquare(50.0f, "Textures/spd.png", 1.0f);
+		Sprite TUT1_SPRITE = S_CreateRectangle(150.0f, 50.0f,"Textures/Shoot_Tutorial_MSG.png");
+		Sprite TUT2_SPRITE = S_CreateRectangle(230.0f, 80.0f, "Textures/Boxes_Tutorial_MSG.png");
+		Sprite TUT3_SPRITE = S_CreateRectangle(250.0f, 100.0f, "Textures/Enemy_Tutorial_MSG.png");
+		Sprite TUT4_SPRITE = S_CreateRectangle(300.0f, 100.0f, "Textures/Platforming_Tutorial_MSG.png");
+		Sprite TUT5_SPRITE = S_CreateRectangle(300.0f, 100.0f, "Textures/MegaFireball_Tutorial_MSG.png");
+		Sprite TUT6_SPRITE = S_CreateRectangle(200.0f, 80.0f, "Textures/PowerUp_Tutorial_MSG.png");
+
+		coin1 = new PickUp{ &COIN_SPRITE,
 			Col_Comp{ 0.0f - 25.0f, 0.0f - 25.0f, 0.0f + 25.0f, 0.0f + 25.0f, Rect },
 			COIN, 1500.0f, -210.0f };
 
-		coin2 = new PickUp{ S_CreateSquare(50.0f, "Textures/coin.png",1.0f),
+		coin2 = new PickUp{ &COIN_SPRITE,
 			Col_Comp{ 0.0f - 25.0f, 0.0f - 25.0f, 0.0f + 25.0f, 0.0f + 25.0f, Rect },
 			COIN, 3550.0f, -350.0f };
 
-		coin3 = new PickUp{ S_CreateSquare(50.0f, "Textures/coin.png",1.0f),
+		coin3 = new PickUp{ &COIN_SPRITE,
 			Col_Comp{ 0.0f - 25.0f, 0.0f - 25.0f, 0.0f + 25.0f, 0.0f + 25.0f, Rect },
 			COIN, 6300.0f, -220.0f };
 
-		//power1 = new PickUp{ S_CreateSquare(50.0f, "Textures/spd.png",1.0f),
-		//	Col_Comp{ 0.0f - 25.0f, 0.0f - 25.0f, 0.0f + 25.0f, 0.0f + 25.0f, Rect },
-		//	SPD, 0.0f, -220.0f };
-
-		power2 = new PickUp{ S_CreateSquare(50.0f, "Textures/spd.png",1.0f),
+		power2 = new PickUp{ &HP_SPRITE,
 			Col_Comp{ 0.0f - 25.0f, 0.0f - 25.0f, 0.0f + 25.0f, 0.0f + 25.0f, Rect },
 			HP, 5300.0f, -80.0f };
 
@@ -81,17 +88,17 @@ namespace Test_Stage1_1
 		c.push_back(Create_Basic_AI(ARCHER, AEVec2  { 6200.0f , -220.0f }));
 
 		  s1 = new Sign{ 400.0f, -255.0f };
-		tut1 = new GameObject{ S_CreateRectangle(150.0f, 50.0f,"Textures/Shoot_Tutorial_MSG.png"),	Col_Comp()};
+		tut1 = new GameObject{ &TUT1_SPRITE, Col_Comp()};
 		  s2 = new Sign{ 1270.0f, -255.0f };
-		tut2 = new GameObject{ S_CreateRectangle(230.0f, 80.0f,"Textures/Boxes_Tutorial_MSG.png"),	Col_Comp() };
+		tut2 = new GameObject{ &TUT2_SPRITE, Col_Comp() };
 		  s3 = new Sign{ 1650.0f, -255.0f };
-		tut3 = new GameObject{ S_CreateRectangle(250.0f, 100.0f,"Textures/Enemy_Tutorial_MSG.png"),	Col_Comp() };
+		tut3 = new GameObject{ &TUT3_SPRITE, Col_Comp() };
 		  s4 = new Sign{ 2600.0f, -255.0f };
-		tut4 = new GameObject{ S_CreateRectangle(300.0f, 100.0f,"Textures/Platforming_Tutorial_MSG.png"),	Col_Comp() };
+		tut4 = new GameObject{ &TUT4_SPRITE, Col_Comp() };
 		  s5 = new Sign{ 4200.0f, -75.0f };
-		tut5 = new GameObject{ S_CreateRectangle(300.0f, 100.0f,"Textures/MegaFireball_Tutorial_MSG.png"),	Col_Comp() };
+		tut5 = new GameObject{ &TUT5_SPRITE, Col_Comp() };
 		  s6 = new Sign{ 5200.0f, -75.0f };
-		tut6 = new GameObject{ S_CreateRectangle(200.0f, 80.0f,"Textures/PowerUp_Tutorial_MSG.png"),	Col_Comp() };
+		tut6 = new GameObject{ &TUT6_SPRITE, Col_Comp() };
 	}
 
 	void Init(void)
@@ -143,7 +150,7 @@ namespace Test_Stage1_1
 					float f_y = (float)y;
 					barriers.push_back(Barrier{ Convert_X(f_x) , Convert_Y(f_y) });
 				}
-				if (MapData[y][x] == OBJ_SPD)
+				/*if (MapData[y][x] == OBJ_SPD)
 				{
 					float f_x = (float)x;
 					float f_y = (float)y;
@@ -166,7 +173,7 @@ namespace Test_Stage1_1
 					powerups.push_back(PickUp{ S_CreateSquare(50.0f, "Textures/coin.png",1.0f),
 						Col_Comp{ 0.0f - 25.0f, 0.0f - 25.0f, 0.0f + 25.0f, 0.0f + 25.0f, Rect },
 						HP, Convert_X(f_x) , Convert_Y(f_y) });
-				}
+				}*/
 			}
 		}
 	}
@@ -245,7 +252,7 @@ namespace Test_Stage1_1
 		for (Barrier& elem : barriers)
 		{
 			elem.Update(*player, dt);
-			elem.Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+			elem.Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 		}
 		/*for (Scarecrow& elem : scarecrows)
 		{
@@ -282,37 +289,37 @@ namespace Test_Stage1_1
 		if (s1->ShowTutorial)
 		{
 			tut1->Render();
-			tut1->Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+			tut1->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 		}
 		s2->Render();
 		if (s2->ShowTutorial)
 		{
 			tut2->Render();
-			tut2->Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+			tut2->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 		}
 		s3->Render();
 		if (s3->ShowTutorial)
 		{
 			tut3->Render();
-			tut3->Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+			tut3->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 		}
 		s4->Render();
 		if (s4->ShowTutorial)
 		{
 			tut4->Render();
-			tut4->Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+			tut4->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 		}
 		s5->Render();
 		if (s5->ShowTutorial)
 		{
 			tut5->Render();
-			tut5->Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+			tut5->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 		}
 		s6->Render();
 		if (s6->ShowTutorial)
 		{
 			tut6->Render();
-			tut6->Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+			tut6->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 		}
 
 
@@ -349,7 +356,7 @@ namespace Test_Stage1_1
 
 		box1->Render();
 		player->Render();
-		player->Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+		player->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 		next->Render();
 		ui->Render();
 	}

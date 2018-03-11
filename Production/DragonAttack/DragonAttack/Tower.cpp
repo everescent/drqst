@@ -1,13 +1,18 @@
 #include "Tower.h"
 
+namespace
+{
+	Sprite TOWER_SPRITE = S_CreateRectangle(300.0f, 300.0f, ".//Textures/tower.png");
+}
+
 Tower::Tower(float x, float y)
-	: GameObject{ S_CreateRectangle(300.0f, 300.0f, ".//Textures/tower.png"),
+	: GameObject{ &TOWER_SPRITE,
 	Col_Comp{ x - 100.0f, y - 300.0f,
 			  x + 100.0f, y + 190.0f, Rect },
 			  x, y }
 {
 	SetActive(true);
-	Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+	Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 	PosX = x;
 	PosY = y;
 }
@@ -23,11 +28,11 @@ void Tower::Update(Dragon &player, const float &dt)
 		{
 			if (player.PosX > this->PosX)
 			{
-				player.PosX = PosX + (Sprite_.Get_Width() - 200.0f) + player.Sprite_.Get_Width();
+				player.PosX = PosX + (Sprite_->Get_Width() - 200.0f) + player.Sprite_->Get_Width();
 			}
 			else if (player.PosX < this->PosX)
 			{
-				player.PosX = PosX - (Sprite_.Get_Width() - 200.0f) - player.Sprite_.Get_Width();
+				player.PosX = PosX - (Sprite_->Get_Width() - 200.0f) - player.Sprite_->Get_Width();
 			}
 		}
 
@@ -65,7 +70,7 @@ void Tower::Update(Characters &obj, const float &dt)
 		{
 			if (obj.PosY > this->PosY)
 			{
-				obj.PosY = PosY + (Sprite_.Get_Height() - 110.0f) + obj.Sprite_.Get_Height();
+				obj.PosY = PosY + (Sprite_->Get_Height() - 110.0f) + obj.Sprite_->Get_Height();
 			}
 		}
 

@@ -45,7 +45,7 @@ public:
   //Default constructor; Initializes to zero
   GameObject();
   //Move constructor for sprite
-  GameObject(Sprite* p_Sprite, Col_Comp &&t_Col, float x = 0.0f, float y = 0.0f);
+  GameObject(const Sprite* p_Sprite, Col_Comp &&t_Col, float x = 0.0f, float y = 0.0f);
   Transform Transform_; //Transform holds the object's position, scale and rotation
   Sprite *Sprite_;      //Sprite handles mesh, texture and rendering
   Col_Comp Collision_;  //Collision handles object collision
