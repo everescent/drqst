@@ -10,7 +10,7 @@ class Tower : public GameObject
 private:
 
 public:
-	Tower(float x, float y); // default constructor
+	Tower(Sprite* const p_Sprite, float x, float y); // default constructor
 
 	void Update(Dragon &player, const float &dt);
 	void Update(Characters &obj, const float &dt);

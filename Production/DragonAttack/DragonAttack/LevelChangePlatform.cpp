@@ -1,14 +1,8 @@
 #include "LevelChangePlatform.h"
 #include <iostream>
 
-namespace
-{
-	Sprite LCPLAT_SPRITE = CreatePlatform(2.0f, 3.0f, ".//Textures/Win_Platform.png");
-}
-
-
-LevelChangePlatform::LevelChangePlatform(float x, float y)
-	: GameObject{ &LCPLAT_SPRITE,
+LevelChangePlatform::LevelChangePlatform(Sprite* const p_Sprite, float x, float y)
+	: GameObject{ p_Sprite,
 	Col_Comp{ x - 10.0f, y - 10.0f,
 			  x + 100.0f, y + 10.0f, Rect },
 			  x, y }

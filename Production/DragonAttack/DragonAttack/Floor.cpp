@@ -1,13 +1,8 @@
 #include "Floor.h"
 #include <iostream>
 
-namespace
-{
-	Sprite FLOOR_SPRITE = CreateFloor(1.0f, "Textures/Cobblestone.png", 1.0f, 1.0f);
-}
-
-Floor::Floor(float x, float y)
-	: GameObject{ &FLOOR_SPRITE,
+Floor::Floor(Sprite* const p_Sprite, float x, float y)
+	: GameObject{ p_Sprite,
 	Col_Comp{ x - FLOOR_WIDTH, y - FLOOR_HEIGHT,
 	x + FLOOR_WIDTH, y + FLOOR_HEIGHT, Rect },
 	x, y }

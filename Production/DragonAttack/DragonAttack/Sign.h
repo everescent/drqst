@@ -24,7 +24,7 @@ class Sign : public GameObject
 {
 private:
 public:
-	Sign(float x, float y); // default constructor
+	Sign(Sprite* const p_Sprite, float x, float y); // default constructor
 	bool ShowTutorial;
 	void Update(Dragon &player, const float &dt);
 };

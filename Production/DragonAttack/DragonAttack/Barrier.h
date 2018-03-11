@@ -25,7 +25,7 @@ class Barrier : public GameObject
 private:
 
 public:
-	Barrier(float x, float y); // default constructor
+	Barrier(Sprite* const p_Sprite, float x, float y); // default constructor
 
 	void Update(Dragon &player, const float &dt);
 };

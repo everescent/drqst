@@ -6,7 +6,7 @@ namespace
 	Sprite *BG;
 	Transform *M_BG;
 	Audio_Engine* Audio;
-	UI* ui;
+	//UI* ui;
 
 	int** MapData;
 	int Map_Width;
@@ -30,54 +30,80 @@ namespace
 	Wall *w2, *w22, *w5, *w6;
 
 	std::vector<Characters*> c;
+
+	Sprite* TUT1_SPRITE;
+	Sprite* TUT2_SPRITE;
+	Sprite* TUT3_SPRITE;
+	Sprite* TUT4_SPRITE;
+	Sprite* TUT5_SPRITE;
+	Sprite* TUT6_SPRITE;
+	Sprite* COIN_SPRITE;//pickups
+	Sprite* HP_SPRITE;
+	Sprite* DMG_SPRITE;
+	Sprite* SPD_SPRITE;
+	Sprite* BARRIER_SPRITE;//objs
+	Sprite* WALL_SPRITE;
+	Sprite* PLAT_SPRITE;
+	Sprite* LCPLAT_SPRITE;
+	Sprite* FLOOR_SPRITE;
+	Sprite* TOWER_SPRITE;
+	Sprite* SIGN_SPRITE;
 }
 
 namespace Test_Stage1_1
 {
 	void Load(void)
 	{
+		TUT1_SPRITE = new Sprite{ S_CreateRectangle(150.0f, 50.0f,"Textures/Shoot_Tutorial_MSG.png") };
+		TUT2_SPRITE = new Sprite{ S_CreateRectangle(230.0f, 80.0f, "Textures/Boxes_Tutorial_MSG.png") };
+		TUT3_SPRITE = new Sprite{ S_CreateRectangle(250.0f, 100.0f, "Textures/Enemy_Tutorial_MSG.png") };
+		TUT4_SPRITE = new Sprite{ S_CreateRectangle(300.0f, 100.0f, "Textures/Platforming_Tutorial_MSG.png") };
+		TUT5_SPRITE = new Sprite{ S_CreateRectangle(300.0f, 100.0f, "Textures/MegaFireball_Tutorial_MSG.png") };
+		TUT6_SPRITE = new Sprite{ S_CreateRectangle(200.0f, 80.0f, "Textures/PowerUp_Tutorial_MSG.png") };
+		COIN_SPRITE = new Sprite{ S_CreateSquare(50.0f, "Textures/coin.png", 1.0f) };
+		HP_SPRITE = new Sprite{ S_CreateSquare(50.0f, "Textures/hp.png", 1.0f) };
+		DMG_SPRITE = new Sprite{ S_CreateSquare(50.0f, "Textures/Fireball.png", 1.0f) };
+		SPD_SPRITE = new Sprite{ S_CreateSquare(50.0f, "Textures/spd.png", 1.0f) };
+		BARRIER_SPRITE = new Sprite{ S_CreateSquare(130.0f, ".//Textures/box.png") };
+		WALL_SPRITE = new Sprite{ S_CreateRectangle(50.0f, 50.0f, ".//Textures/download.jpg") };
+		PLAT_SPRITE = new Sprite{ CreatePlatform(1.0f, 1.0f, "Textures/Cobblestone.png") };
+		LCPLAT_SPRITE = new Sprite{ CreatePlatform(2.0f, 3.0f, ".//Textures/Win_Platform.png") };
+		FLOOR_SPRITE = new Sprite{ CreateFloor(1.0f, "Textures/Cobblestone.png", 1.0f, 1.0f) };
+		TOWER_SPRITE = new Sprite{ S_CreateRectangle(300.0f, 300.0f, ".//Textures/tower.png") };
+		SIGN_SPRITE = new Sprite{ S_CreateSquare(70.0f, ".//Textures/sign.png") };
+
 		BG = new Sprite{ CreateBG(22.0f, 2.0f, "Textures/BG_Stage1.png", 1.0f, 15.0f) };
 		M_BG = new Transform{};
 		player = new Dragon{};
 		Audio = new Audio_Engine{ 1, [](std::vector <std::string> &playlist)->void {playlist.push_back(".//Audio/Stage_1_BGM.mp3"); } };
-		archerTower = new Tower{ 4800.0f, 0.0f };
-		ui = new UI{ player };
+		archerTower = new Tower{ TOWER_SPRITE, 4800.0f, 0.0f };
+		//ui = new UI{ player };
 
-		w2 = new Wall{ 3750.0f, -345.0f };
-		w22 = new Wall{ 3750.0f, -230.0f };
-		w5 = new Wall{ 6480.0f, -180.0f };
-		w6 = new Wall{ 6480.0f, -200.0f };
+		w2 = new Wall{ WALL_SPRITE, 3750.0f, -345.0f };
+		w22 = new Wall{ WALL_SPRITE,3750.0f, -230.0f };
+		w5 = new Wall{ WALL_SPRITE,6480.0f, -180.0f };
+		w6 = new Wall{ WALL_SPRITE,6480.0f, -200.0f };
 
-		next = new LevelChangePlatform{ 6550.0f, -120.0f };
+		next = new LevelChangePlatform{ LCPLAT_SPRITE,6550.0f, -120.0f };
 
-		Sprite COIN_SPRITE = S_CreateSquare(50.0f, "Textures/coin.png", 1.0f);
-		Sprite HP_SPRITE = S_CreateSquare(50.0f, "Textures/hp.png", 1.0f);
-		Sprite DMG_SPRITE = S_CreateSquare(50.0f, "Textures/Fireball.png", 1.0f);
-		Sprite SPD_SPRITE = S_CreateSquare(50.0f, "Textures/spd.png", 1.0f);
-		Sprite TUT1_SPRITE = S_CreateRectangle(150.0f, 50.0f,"Textures/Shoot_Tutorial_MSG.png");
-		Sprite TUT2_SPRITE = S_CreateRectangle(230.0f, 80.0f, "Textures/Boxes_Tutorial_MSG.png");
-		Sprite TUT3_SPRITE = S_CreateRectangle(250.0f, 100.0f, "Textures/Enemy_Tutorial_MSG.png");
-		Sprite TUT4_SPRITE = S_CreateRectangle(300.0f, 100.0f, "Textures/Platforming_Tutorial_MSG.png");
-		Sprite TUT5_SPRITE = S_CreateRectangle(300.0f, 100.0f, "Textures/MegaFireball_Tutorial_MSG.png");
-		Sprite TUT6_SPRITE = S_CreateRectangle(200.0f, 80.0f, "Textures/PowerUp_Tutorial_MSG.png");
 
-		coin1 = new PickUp{ &COIN_SPRITE,
+		coin1 = new PickUp{ COIN_SPRITE,
 			Col_Comp{ 0.0f - 25.0f, 0.0f - 25.0f, 0.0f + 25.0f, 0.0f + 25.0f, Rect },
 			COIN, 1500.0f, -210.0f };
 
-		coin2 = new PickUp{ &COIN_SPRITE,
+		coin2 = new PickUp{ COIN_SPRITE,
 			Col_Comp{ 0.0f - 25.0f, 0.0f - 25.0f, 0.0f + 25.0f, 0.0f + 25.0f, Rect },
 			COIN, 3550.0f, -350.0f };
 
-		coin3 = new PickUp{ &COIN_SPRITE,
+		coin3 = new PickUp{ COIN_SPRITE,
 			Col_Comp{ 0.0f - 25.0f, 0.0f - 25.0f, 0.0f + 25.0f, 0.0f + 25.0f, Rect },
 			COIN, 6300.0f, -220.0f };
 
-		power2 = new PickUp{ &HP_SPRITE,
+		power2 = new PickUp{ HP_SPRITE,
 			Col_Comp{ 0.0f - 25.0f, 0.0f - 25.0f, 0.0f + 25.0f, 0.0f + 25.0f, Rect },
 			HP, 5300.0f, -80.0f };
 
-		box1 = new Barrier{ 1500.0f, -235.0f };
+		box1 = new Barrier{ BARRIER_SPRITE, 1500.0f, -235.0f };
 
 		if (!Import_MapData("level1-1.txt", MapData, Map_Width, Map_Height)) { AEGfxExit(); }
 
@@ -87,18 +113,18 @@ namespace Test_Stage1_1
 		c.push_back(Create_Basic_AI(ARCHER, AEVec2  { 4750.0f ,  140.0f }));
 		c.push_back(Create_Basic_AI(ARCHER, AEVec2  { 6200.0f , -220.0f }));
 
-		  s1 = new Sign{ 400.0f, -255.0f };
-		tut1 = new GameObject{ &TUT1_SPRITE, Col_Comp()};
-		  s2 = new Sign{ 1270.0f, -255.0f };
-		tut2 = new GameObject{ &TUT2_SPRITE, Col_Comp() };
-		  s3 = new Sign{ 1650.0f, -255.0f };
-		tut3 = new GameObject{ &TUT3_SPRITE, Col_Comp() };
-		  s4 = new Sign{ 2600.0f, -255.0f };
-		tut4 = new GameObject{ &TUT4_SPRITE, Col_Comp() };
-		  s5 = new Sign{ 4200.0f, -75.0f };
-		tut5 = new GameObject{ &TUT5_SPRITE, Col_Comp() };
-		  s6 = new Sign{ 5200.0f, -75.0f };
-		tut6 = new GameObject{ &TUT6_SPRITE, Col_Comp() };
+		  s1 = new Sign{ SIGN_SPRITE, 400.0f, -255.0f };
+		tut1 = new GameObject{ TUT1_SPRITE, Col_Comp()};
+		  s2 = new Sign{ SIGN_SPRITE, 1270.0f, -255.0f };
+		tut2 = new GameObject{ TUT2_SPRITE, Col_Comp() };
+		  s3 = new Sign{ SIGN_SPRITE, 1650.0f, -255.0f };
+		tut3 = new GameObject{ TUT3_SPRITE, Col_Comp() };
+		  s4 = new Sign{ SIGN_SPRITE, 2600.0f, -255.0f };
+		tut4 = new GameObject{ TUT4_SPRITE, Col_Comp() };
+		  s5 = new Sign{ SIGN_SPRITE, 4200.0f, -75.0f };
+		tut5 = new GameObject{ TUT5_SPRITE, Col_Comp() };
+		  s6 = new Sign{ SIGN_SPRITE, 5200.0f, -75.0f };
+		tut6 = new GameObject{ TUT6_SPRITE, Col_Comp() };
 	}
 
 	void Init(void)
@@ -124,13 +150,13 @@ namespace Test_Stage1_1
 				{
 					float f_x = (float)x;
 					float f_y = (float)y;
-					platforms.push_back(Platform{ Convert_X(f_x) , Convert_Y(f_y) });
+					platforms.push_back(Platform{ PLAT_SPRITE,Convert_X(f_x) , Convert_Y(f_y) });
 				}
 				if (MapData[y][x] == OBJ_FLOOR)
 				{
 					float f_x = (float)x;
 					float f_y = (float)y;
-					floors.push_back(Floor{ Convert_X(f_x) , Convert_Y(f_y) });
+					floors.push_back(Floor{ FLOOR_SPRITE,(f_x) , Convert_Y(f_y) });
 				}
 				/*if (MapData[y][x] == OBJ_SC)
 				{
@@ -142,13 +168,13 @@ namespace Test_Stage1_1
 				{
 					float f_x = (float)x;
 					float f_y = (float)y;
-					walls.push_back(Wall{ Convert_X(f_x) , Convert_Y(f_y) });
+					walls.push_back(Wall{ WALL_SPRITE,(f_x) , Convert_Y(f_y) });
 				}
 				if (MapData[y][x] == OBJ_BARRIER)
 				{
 					float f_x = (float)x;
 					float f_y = (float)y;
-					barriers.push_back(Barrier{ Convert_X(f_x) , Convert_Y(f_y) });
+					barriers.push_back(Barrier{ BARRIER_SPRITE,(f_x) , Convert_Y(f_y) });
 				}
 				/*if (MapData[y][x] == OBJ_SPD)
 				{
@@ -274,7 +300,7 @@ namespace Test_Stage1_1
 		power2->Update(*player, dt);
 		CamFollow(player->Transform_, 200, 120, player->GetFacing());
 		next->Update(*player, dt);
-		ui->UI_Update(player);
+		//ui->UI_Update(player);
 
 		//std::cout << (int)player->PosX << ", " << (int)player->PosY << std::endl;
 	}
@@ -358,7 +384,7 @@ namespace Test_Stage1_1
 		player->Render();
 		player->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 		next->Render();
-		ui->Render();
+		//ui->Render();
 	}
 
 	void Free(void)
@@ -387,9 +413,27 @@ namespace Test_Stage1_1
 		//delete power1;
 		delete power2;
 		delete next;
-		delete ui;
+		//delete ui;
 
 		delete w2, w22, w5, w6;
+
+		delete TUT1_SPRITE;
+		delete TUT2_SPRITE;
+		delete TUT3_SPRITE;
+		delete TUT4_SPRITE;
+		delete TUT5_SPRITE;
+		delete TUT6_SPRITE;
+		delete COIN_SPRITE;//pickups
+		delete HP_SPRITE;
+		delete DMG_SPRITE;
+		delete SPD_SPRITE;
+		delete BARRIER_SPRITE;//objs
+		delete WALL_SPRITE;
+		delete PLAT_SPRITE;
+		delete LCPLAT_SPRITE;
+		delete FLOOR_SPRITE;
+		delete TOWER_SPRITE;
+		delete SIGN_SPRITE;
 
 		platforms.clear();
 		floors.clear();

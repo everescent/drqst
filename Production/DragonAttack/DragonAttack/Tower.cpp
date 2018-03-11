@@ -1,12 +1,7 @@
 #include "Tower.h"
 
-namespace
-{
-	Sprite TOWER_SPRITE = S_CreateRectangle(300.0f, 300.0f, ".//Textures/tower.png");
-}
-
-Tower::Tower(float x, float y)
-	: GameObject{ &TOWER_SPRITE,
+Tower::Tower(Sprite* const p_Sprite, float x, float y)
+	: GameObject{ p_Sprite,
 	Col_Comp{ x - 100.0f, y - 300.0f,
 			  x + 100.0f, y + 190.0f, Rect },
 			  x, y }

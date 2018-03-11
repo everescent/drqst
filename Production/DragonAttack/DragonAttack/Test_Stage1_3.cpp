@@ -6,7 +6,7 @@ namespace
 	Sprite *BG;
 	Transform *M_BG;
 	Audio_Engine* Audio;
-	UI* ui;
+	//UI* ui;
 
 	int** MapData;
 	int Map_Width;
@@ -17,20 +17,36 @@ namespace
 
 	LevelChangePlatform *next;
 	std::vector<Characters*> c;
+
+	Sprite* COIN_SPRITE;//pickups
+	Sprite* HP_SPRITE;
+	Sprite* DMG_SPRITE;
+	Sprite* SPD_SPRITE;
+	Sprite* WALL_SPRITE;
+	Sprite* LCPLAT_SPRITE;
+	Sprite* FLOOR_SPRITE;
 }
 
 namespace Test_Stage1_3
 {
 	void Load(void)
 	{
+		COIN_SPRITE = new Sprite{ S_CreateSquare(50.0f, "Textures/coin.png", 1.0f) };
+		HP_SPRITE = new Sprite{ S_CreateSquare(50.0f, "Textures/hp.png", 1.0f) };
+		DMG_SPRITE = new Sprite{ S_CreateSquare(50.0f, "Textures/Fireball.png", 1.0f) };
+		SPD_SPRITE = new Sprite{ S_CreateSquare(50.0f, "Textures/spd.png", 1.0f) };
+		WALL_SPRITE = new Sprite{ S_CreateRectangle(50.0f, 50.0f, ".//Textures/download.jpg") };
+		LCPLAT_SPRITE = new Sprite{ CreatePlatform(2.0f, 3.0f, ".//Textures/Win_Platform.png") };
+		FLOOR_SPRITE = new Sprite{ CreateFloor(1.0f, "Textures/Cobblestone.png", 1.0f, 1.0f) };
+
 		BG = new Sprite{ CreateBG(22.0f, 2.0f, "Textures/BG/BG_Stage1.png", 1.0f, 15.0f) };
 		M_BG = new Transform{};
 		player = new Dragon{};
 		Audio = new Audio_Engine{ 1, [](std::vector <std::string> &playlist)->void {playlist.push_back(".//Audio/Lancelot_BGM.mp3"); } };
-		ui = new UI{ player };
+		//ui = new UI{ player };
 		if (!Import_MapData("level1-3.txt", MapData, Map_Width, Map_Height)) { AEGfxExit(); }
 
-		next = new LevelChangePlatform{ 500.0f,  -300.0f };
+		next = new LevelChangePlatform{LCPLAT_SPRITE, 500.0f,  -300.0f };
 		c.push_back(Create_Boss_AI(LANCELOT));
 	}
 
@@ -51,13 +67,13 @@ namespace Test_Stage1_3
 				{
 					float f_x = (float)x;
 					float f_y = (float)y;
-					floors.push_back(Floor{ Convert_X(f_x) , Convert_Y(f_y) });
+					floors.push_back(Floor{ FLOOR_SPRITE, Convert_X(f_x) , Convert_Y(f_y) });
 				}
 				if (MapData[y][x] == OBJ_WALL)
 				{
 					float f_x = (float)x;
 					float f_y = (float)y;
-					walls.push_back(Wall{ Convert_X(f_x) , Convert_Y(f_y) });
+					walls.push_back(Wall{ WALL_SPRITE, Convert_X(f_x) , Convert_Y(f_y) });
 				}
 			}
 		}
@@ -95,7 +111,7 @@ namespace Test_Stage1_3
 
 		//next->Update(*player, dt);
 		player->Update(*player, dt);
-		ui->UI_Update(player);
+		//ui->UI_Update(player);
 
 		//std::cout << (int)player->PosX << ", " << (int)player->PosY << std::endl;
 	}
@@ -123,7 +139,7 @@ namespace Test_Stage1_3
 
 		player->Render();
 		player->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
-		ui->Render();
+		//ui->Render();
 	}
 
 	void Free(void)
@@ -133,7 +149,15 @@ namespace Test_Stage1_3
 		delete player;
 		delete Audio;
 		delete next;
-		delete ui;
+		//delete ui;
+
+		delete COIN_SPRITE;//pickups
+		delete HP_SPRITE;
+		delete DMG_SPRITE;
+		delete SPD_SPRITE;
+		delete WALL_SPRITE;
+		delete LCPLAT_SPRITE;
+		delete FLOOR_SPRITE;
 
 		floors.clear();
 		walls.clear();

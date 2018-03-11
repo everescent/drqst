@@ -43,7 +43,7 @@ Archer::Archer(Sprite *p_Sprite, Sprite *Arrow_Sprite, const float posX, const f
   PosY = posY;
   Transform_.SetTranslate(PosX, PosY);
   Transform_.Concat();
-  Arrow.Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+  //Arrow.Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
   Arrow.Transform_.SetScale(Arrow_Scale, Arrow_Scale);
   Arrow.Transform_.Concat();
 }

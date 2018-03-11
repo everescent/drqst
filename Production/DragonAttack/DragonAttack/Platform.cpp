@@ -1,13 +1,8 @@
 #include "Platform.h"
 #include <iostream>
 
-namespace
-{
-	Sprite PLAT_SPRITE = CreatePlatform(1.0f, 1.0f, ".//Textures/Cobblestone.png");
-}
-
-Platform::Platform(float x, float y)
-	: GameObject{ &PLAT_SPRITE,
+Platform::Platform(Sprite* const p_Sprite, float x, float y)
+	: GameObject{ p_Sprite,
 	Col_Comp{ x - PLAT_WIDTH, y - PLAT_HEIGHT,
 	x + PLAT_WIDTH, y + PLAT_HEIGHT, Rect },
 	x, y }

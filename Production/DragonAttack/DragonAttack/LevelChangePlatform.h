@@ -26,6 +26,6 @@ class LevelChangePlatform : public GameObject
 private:
 
 public:
-	LevelChangePlatform(float x, float y); // default constructor
+	LevelChangePlatform(Sprite* const p_Sprite, float x, float y); // default constructor
 	void Update(Dragon &player, const float &dt);
 };

@@ -25,7 +25,7 @@ class Wall : public GameObject
 private:
 
 public:
-	Wall(float x, float y); // default constructor
+	Wall(Sprite* const p_Sprite, float x, float y); // default constructor
 
 	void Update(Characters &obj, const float &dt);
 };

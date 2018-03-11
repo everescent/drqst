@@ -3,11 +3,10 @@
 namespace 
 {
 	float SIGN_SCALE = 70.0f;
-	Sprite SIGN_SPRITE = S_CreateSquare(SIGN_SCALE, ".//Textures/sign.png");
 }
 
-Sign::Sign(float x, float y)
-	:GameObject{ &SIGN_SPRITE,
+Sign::Sign(Sprite* const p_Sprite, float x, float y)
+	:GameObject{ p_Sprite,
 	Col_Comp{ x - SIGN_SCALE, y - SIGN_SCALE,
 	x + SIGN_SCALE, y + SIGN_SCALE, Rect },
 	x, y }

@@ -1,13 +1,8 @@
 #include "Wall.h"
 #include <iostream>
 
-namespace 
-{
-	Sprite WALL_SPRITE = S_CreateRectangle(50.0f, 50.0f, ".//Textures/download.jpg");
-}
-
-Wall::Wall(float x, float y)
-	: GameObject{ &WALL_SPRITE,
+Wall::Wall(Sprite* const p_Sprite, float x, float y)
+	: GameObject{ p_Sprite,
 	Col_Comp{ x - 50.0f, y - 50.0f,
 	x + 50.0f, y + 50.0f, Rect },
 	x, y }

@@ -29,13 +29,15 @@ namespace
 	s32 Store_X ,Store_Y ;
 	f32 Mouse_X, Mouse_Y ;
 
+	Sprite* PLAY_SPRITE;
+	Sprite* QUIT_SPRITE;
 }
 
 namespace Main_Menu
 {
 	void Load(void)
 	{
-		AEToogleFullScreen(true);
+		//AEToogleFullScreen(true);
 		AEGfxSetCamPosition(0.0f, 0.0f);
 		// BG constructed by using Move constructor 
 		MM_Background = new Sprite{ CreateBG(1.0f, 1.0f, "Textures/Main_Menu_BG.png" ) };
@@ -43,16 +45,16 @@ namespace Main_Menu
 
 		Audio = new Audio_Engine{ 1, [](std::vector <std::string> &playlist)->void{playlist.push_back(".//Audio/MainMenu_BGM.mp3"); } };
 
-		Sprite PLAY_SPRITE = S_CreateRectangle(Button_Width,Button_Height,"Textures/Play_Button.png");
-		Sprite QUIT_SPRITE = S_CreateRectangle(Button_Width,Button_Height,"Textures/Quit_Button.png");
+		PLAY_SPRITE = new Sprite{S_CreateRectangle(Button_Width,Button_Height,"Textures/Play_Button.png")};
+		QUIT_SPRITE = new Sprite{S_CreateRectangle(Button_Width,Button_Height,"Textures/Quit_Button.png")};
 
 		// Construct Play Button 
-		Play_Button = new GameObject{ &PLAY_SPRITE,
+		Play_Button = new GameObject{ PLAY_SPRITE,
 			Col_Comp(0.0f -( Button_Width ), 0.0f - (Button_Height),
 											0.0f + (Button_Width* 0.5),0.0f + (Button_Height * 0.5), Rect) };
 
 		// Construct Quit Button 
-		Quit_Button = new GameObject{ &QUIT_SPRITE,
+		Quit_Button = new GameObject{ QUIT_SPRITE,
 			Col_Comp(0.0f - (Button_Width ), -100.0f - (Button_Height),
 				0.0f + (Button_Width), -100.0f + (Button_Height ), Rect) };
 

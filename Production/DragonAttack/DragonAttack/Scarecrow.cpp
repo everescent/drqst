@@ -1,46 +1,46 @@
-#include "Scarecrow.h"
-#include "Transform.h"
-#include "Physics.h"
-#include <iostream>
-
-namespace // global variables just for THIS file
-{
-	const int scarecrow_hp = 1;
-	const float SC_SCALE = 120.0f;
-	Sprite SC_SPRITE = S_CreateSquare(SC_SCALE, ".//Textures/scarecrow.png");
-}
-
-Scarecrow::Scarecrow(float x, float y)
-	: Characters(&SC_SPRITE, scarecrow_hp,
-		Col_Comp{ x - SC_SCALE, y - SC_SCALE + 50.0f , x + SC_SCALE , y + SC_SCALE, Rect })
-{
-	SetActive(true);
-	Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
-	PosX = x;
-	PosY = y;
-}
-
-void Scarecrow::Update(Dragon &d, const float dt)
-{
-	if (this->IsActive() == true)
-	{
-		this->Transform_.SetTranslate(PosX, PosY);
-		this->Transform_.Concat();
-
-		this->Collision_.Update_Col_Pos(this->PosX - SC_SCALE, this->PosY - SC_SCALE + 50.0f,  // min point
-		this->PosX + SC_SCALE, this->PosY + SC_SCALE); // max point
-
-		for (char i = 0; i < Bullet_Buffer; ++i)
-			if (d.GetFireball()[i].IsActive())
-				if (Collision_.Dy_Rect_Rect(d.GetFireball()[i].Collision_, this->GetVelocity(), d.GetFireball()[i].GetVelocity(), dt))
-				{
-					//Decrease_HP(d.GetDamage());
-					d.AddCharge();
-					SetActive(false);
-					d.GetFireball()[i].Projectile::ResetDist();
-					d.GetFireball()[i].SetActive(false);
-				}
-
-	}
-}
-
+//#include "Scarecrow.h"
+//#include "Transform.h"
+//#include "Physics.h"
+//#include <iostream>
+//
+//namespace // global variables just for THIS file
+//{
+//	const int scarecrow_hp = 1;
+//	const float SC_SCALE = 120.0f;
+//	Sprite* SC_SPRITE = S_CreateSquare(SC_SCALE, ".//Textures/scarecrow.png");
+//}
+//
+//Scarecrow::Scarecrow(float x, float y)
+//	: Characters(&SC_SPRITE, scarecrow_hp,
+//		Col_Comp{ x - SC_SCALE, y - SC_SCALE + 50.0f , x + SC_SCALE , y + SC_SCALE, Rect })
+//{
+//	SetActive(true);
+//	Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+//	PosX = x;
+//	PosY = y;
+//}
+//
+//void Scarecrow::Update(Dragon &d, const float dt)
+//{
+//	if (this->IsActive() == true)
+//	{
+//		this->Transform_.SetTranslate(PosX, PosY);
+//		this->Transform_.Concat();
+//
+//		this->Collision_.Update_Col_Pos(this->PosX - SC_SCALE, this->PosY - SC_SCALE + 50.0f,  // min point
+//		this->PosX + SC_SCALE, this->PosY + SC_SCALE); // max point
+//
+//		for (char i = 0; i < Bullet_Buffer; ++i)
+//			if (d.GetFireball()[i].IsActive())
+//				if (Collision_.Dy_Rect_Rect(d.GetFireball()[i].Collision_, this->GetVelocity(), d.GetFireball()[i].GetVelocity(), dt))
+//				{
+//					//Decrease_HP(d.GetDamage());
+//					d.AddCharge();
+//					SetActive(false);
+//					d.GetFireball()[i].Projectile::ResetDist();
+//					d.GetFireball()[i].SetActive(false);
+//				}
+//
+//	}
+//}
+//

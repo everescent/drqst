@@ -1,13 +1,8 @@
 #include "Barrier.h"
 #include <iostream>
 
-namespace
-{
-	Sprite BARRIER_SPRITE = S_CreateSquare(130.0f, ".//Textures/box.png");
-}
-
-Barrier::Barrier(float x, float y)
-	:GameObject{&BARRIER_SPRITE,
+Barrier::Barrier(Sprite* const p_Sprite, float x, float y)
+	:GameObject{p_Sprite,
 	Col_Comp{ x - 100.0f, y - 100.0f,
 		      x + 100.0f, y + 100.0f, Rect },
 		      x, y }

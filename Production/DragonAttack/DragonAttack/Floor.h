@@ -25,7 +25,7 @@ class Floor : public GameObject
 private:
 
 public:
-	Floor(float x, float y); // default constructor
+	Floor(Sprite* const p_Sprite, float x, float y); // default constructor
   //(Jacob) Changed to take in player and dt
 	//void Update(Dragon &player, const float &dt);
 	void Update(Characters &obj, const float &dt);
