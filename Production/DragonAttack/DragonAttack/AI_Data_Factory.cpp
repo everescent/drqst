@@ -53,7 +53,7 @@ Characters *Create_Basic_AI(const BASIC_AI mob, const AEVec2& position)
 
 	switch (mob)
 	{
-	case GRUNT:  return new Grunt (position.x, position.y, &G_SPRITE);
+	case GRUNT:  return new Grunt (&G_SPRITE, position.x, position.y);
 		break;
 	case MAGE:   return new Mage (position, &MA_SPRITE);
 		break;
