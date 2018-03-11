@@ -16,6 +16,8 @@ Technology is prohibited.
 #pragma once
 #include "GameStateList.h"
 #include "Main_Menu.h"
+#include "AI_Data_Factory.h"
+#include "AI_Attack_Sprites.h"
 #include "Test_Stage1.h"
 #include "Level_Import.h"
 #include "Test_Stage1_2.h"

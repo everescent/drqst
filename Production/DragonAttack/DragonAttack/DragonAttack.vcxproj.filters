@@ -228,6 +228,9 @@
     <ClCompile Include="Sign.cpp">
       <Filter>Game_Object\Objects</Filter>
     </ClCompile>
+    <ClCompile Include="AI_Attack_Sprites.cpp">
+      <Filter>Characters\AI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h">
@@ -370,6 +373,9 @@
     </ClInclude>
     <ClInclude Include="Sign.h">
       <Filter>Game_Object\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="AI_Attack_Sprites.h">
+      <Filter>Characters\AI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

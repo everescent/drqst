@@ -21,7 +21,7 @@ Knight::Knight(const AEVec2 & spawn_location, const Sprite* texture)
 			      spawn_location.x + KNIGHT_SCALE , spawn_location.y + KNIGHT_SCALE, Rect }),
 	  current_action{ IDLE }, time_traveled{0},
 
-	stab{ Sprite { S_CreateSquare(STAB_SCALE, ".//Textures/arondight.png") },
+	stab{ Get_Attack_Sprite(STAB_SPRITE),
 		  Col_Comp { spawn_location.x - STAB_SCALE, spawn_location.y - STAB_SCALE,
 					 spawn_location.x + STAB_SCALE, spawn_location.y + STAB_SCALE, Rect}}
 {
@@ -31,9 +31,7 @@ Knight::Knight(const AEVec2 & spawn_location, const Sprite* texture)
 	Transform_.Concat();
 	Reset_Idle_Time(2.0f);											 // duration of idle time fot knight
 	SetVelocity(AEVec2{ 50.0f, 0.0f });								 // velocity of knight
-	//Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);			 // rendering mode of mage
 	
-	stab.Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 	stab.SetVelocity(STAB_VELOCITY);								 // velocity for stab
 }
 

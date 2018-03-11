@@ -51,7 +51,7 @@ namespace
 	// Variables for stab
 	const AEVec2 STAB_VELOCITY{ 20.0f, 0.0f };
 
-
+	Sprite attack_sprite;
 
 	bool Player_Facing_Me(Lancelot&, Dragon&);
 }
@@ -81,19 +81,11 @@ void Lancelot::Init()
 
 	lancelot.reserve(limit);
 
-	lancelot.emplace_back(Boss_Attack(S_CreateSquare(ATTACK_SCALE, sword), // for stab
-		Col_Comp(0.0f, 0.0f, 5.0f, 5.0f, Rect))); 
-
-	lancelot.emplace_back(Boss_Attack(S_CreateSquare(ATTACK_SCALE, sword), // for slash
-		Col_Comp(0.0f, 0.0f, 5.0f, 5.0f, Rect)));
-
-	lancelot.emplace_back(Boss_Attack());                                // mad enhancement
-
-	lancelot.emplace_back(Boss_Attack(S_CreateSquare(ATTACK_SCALE, sword), // arondight
-		Col_Comp(0.0f, 400.0f, Point))); 
-
+	attack_sprite = S_CreateSquare(ATTACK_SCALE, sword);
+	
 	Init_Stab();
 	Init_Slash();
+	lancelot.emplace_back(Boss_Attack()); // mad enhancement
 	Init_Arondight();
 
 	// prevent unique mechanic from activating at the start of fight
@@ -563,28 +555,31 @@ void Lancelot::Set_Attk_Dir()
 
 void Lancelot::Init_Stab(void)
 {
+	lancelot.emplace_back(&attack_sprite, Col_Comp(0.0f, 0.0f, 5.0f, 5.0f, Rect));
+	
 	lancelot[STAB].SetVelocity(STAB_VELOCITY);       // velocity for slash
 	lancelot[STAB].Transform_.SetScale(3.0f, 2.0f);  // determine the size of projectile
 	lancelot[STAB].Transform_.Concat();
-	lancelot[STAB].Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+	lancelot[STAB].Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 }
 
 void Lancelot::Init_Slash(void)
 {
+	lancelot.emplace_back(&attack_sprite, Col_Comp(0.0f, 0.0f, 5.0f, 5.0f, Rect));
 	lancelot[SLASH].SetVelocity(SLASH_VELOCITY); // velocity for slash
 	lancelot[SLASH].Transform_.SetScale(3.0f, 2.0f);       // determine the size of projectile
 	lancelot[SLASH].Transform_.Concat();
-	lancelot[SLASH].Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+	lancelot[SLASH].Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 }
 
 void Lancelot::Init_Arondight(void)
 {
+	lancelot.emplace_back(&attack_sprite, Col_Comp(0.0f, 400.0f, Point));
+	
 	lancelot[ARONDIGHT].SetVelocity(AEVec2{ 600.0f, 600.0f });                        // velocity for slash
 	lancelot[ARONDIGHT].Transform_.SetScale(ARONDIGHT_SCALE.x, ARONDIGHT_SCALE.y);    // determine the size of projectile
-	
-
 	lancelot[ARONDIGHT].Transform_.Concat();
-	lancelot[ARONDIGHT].Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+	lancelot[ARONDIGHT].Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 }
 
 void Lancelot::Dead(void)

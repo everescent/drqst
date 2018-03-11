@@ -72,6 +72,8 @@ namespace GSM
 		//GSF[GS_LEVEL_IMPORT].Unload = Test_Stage_Import::Unload;
 		
 		SM::StageManagerInit();
+		Attack_Sprite_Init();
+		AI_Sprite_Init();
 	}
 
 	void Init_and_Load(void)

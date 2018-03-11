@@ -53,13 +53,13 @@ Characters *Create_Basic_AI(const BASIC_AI mob, const AEVec2& position)
 
 	switch (mob)
 	{
-	case GRUNT:  return new Grunt (position.x, position.y);
+	case GRUNT:  return new Grunt (position.x, position.y, &G_SPRITE);
 		break;
-	case MAGE:   return new Mage (position);
+	case MAGE:   return new Mage (position, &MA_SPRITE);
 		break;
-    case ARCHER: return new Archer(position.x, position.y);
+    case ARCHER: return new Archer(&A_SPRITE, position.x, position.y);
 	    break;
-	case KNIGHT: return new Knight(position);
+	case KNIGHT: return new Knight(position, &K_SPRITE);
 		break;
 	default: break;
 	}
@@ -72,11 +72,11 @@ Characters *Create_Boss_AI(const BOSS_AI boss)
 {
 	switch (boss)
 	{
-	case LANCELOT:    return new Lancelot;
+	case LANCELOT:    return new Lancelot(&L_SPRITE);
 		break;
 	case MERLIN:      return new Merlin;
 		break;
-	case KING_ARTHUR: return new King_Arthur;
+	case KING_ARTHUR: return new King_Arthur(&KA_SPRITE);
 		break;
 
 	default: break;

@@ -34,18 +34,16 @@ Mage::Mage(const AEVec2& position, const Sprite* texture)
 				HEALTH, Col_Comp{position.x - MAGE_SCALE, position.y - MAGE_SCALE , position.x + MAGE_SCALE , position.y + MAGE_SCALE, Rect }) ,
 	current_action{ IDLE },
 
-	energy_ball{ Sprite{ S_CreateSquare(EBALL_SCALE, "energyball.png") },
+	energy_ball{Get_Attack_Sprite(EBALL_SPRITE),
 				 Col_Comp{ position.x - EBALL_SCALE, position.y - EBALL_SCALE,
 						   position.x + EBALL_SCALE, position.y + EBALL_SCALE, Rect } }
 
 {
-	this->SetActive(false);                                                // don't spawn mage
-	this->SetPos(position.x, position.y);								   // starting coordinates
-	this->Transform_.SetTranslate(position.x, position.y);				   // add to matrix
-	this->Transform_.Concat();											   // add to final matrix
-	//this->Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);			   // rendering mode of mage
-	this->Reset_Idle_Time(2.0f);										   // idling time for mage
-	energy_ball.Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);	   // rendering mode of energyball
+   SetActive(false);                                                // don't spawn mage
+   SetPos(position.x, position.y);								   // starting coordinates
+   Transform_.SetTranslate(position.x, position.y);				   // add to matrix
+   Transform_.Concat();											   // add to final matrix
+   Reset_Idle_Time(2.0f);										   // idling time for mage
 }
 
 // update function for mage, performs the behaviour of mage at current frame

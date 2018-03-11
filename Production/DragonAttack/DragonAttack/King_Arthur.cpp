@@ -52,6 +52,8 @@ namespace {
 	bool Move_KA(const float dt, King_Arthur &ka, const Dragon &d); // move king arthur towards player
 	void Set_Attack_Dir(King_Arthur &ka);							// set the attack directions
 	
+	Sprite attack_sprite;
+
 	enum 
 	{
 		TOP_LEFT,
@@ -91,14 +93,15 @@ King_Arthur::King_Arthur(const Sprite* texture)
 }
 void King_Arthur::Init_KA_Attacks(void)
 {
-	const char* tex_3s = ".//Textures/holylight.jpg";
+	const char* slash_tex = ".//Textures/holylight.jpg";
 
 	arthur.reserve(limit);
+	attack_sprite = S_CreateSquare(SLASH_SCALE, slash_tex);
 
 	for(char i = 0; i < limit-1; ++i) // add the single slash and triple slash
-		arthur.emplace_back(Boss_Attack(S_CreateSquare(SLASH_SCALE, tex_3s), 
+		arthur.emplace_back(&attack_sprite,
 						 Col_Comp(START_POINT_X - SLASH_SCALE, START_POINT_Y - SLASH_SCALE,
-								  START_POINT_Y + SLASH_SCALE, START_POINT_Y + SLASH_SCALE, Rect)));
+								  START_POINT_Y + SLASH_SCALE, START_POINT_Y + SLASH_SCALE, Rect));
 
 
 	arthur.emplace_back(Boss_Attack()); // for jump attack since it does not need textures
@@ -131,7 +134,7 @@ void King_Arthur::Init_MobArray(void)
 		mobs[i]->SetActive(false);
 
 		// set the blend mode
-		mobs[i]->Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+		mobs[i]->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 	}
 }
 
@@ -273,9 +276,8 @@ void King_Arthur::King_Arthur_Phase2(void)
 
 	arthur.pop_back(); // delete jump attack
 
-	const char* tex_ja = ".//Textures/light_texture2320.jpg";
-	arthur.emplace_back(Boss_Attack(S_CreateSquare(30.0f, tex_ja),
-		Col_Comp(0.0f, 0.0f, 5.0f, 5.0f, Rect))); // add the 2nd mechanic, still in progress
+	arthur.emplace_back(Boss_Attack(),
+		Col_Comp(0.0f, 0.0f, 5.0f, 5.0f, Rect)); // add the 2nd mechanic, still in progress
 
 	this->phase1 = false; // changed to phase 2
 

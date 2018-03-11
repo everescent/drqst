@@ -19,6 +19,7 @@ Technology is prohibited.
 #include "Transform.h"
 #include "Create_Object.h"
 #include "Animation.h"
+#include "AI_Attack_Sprites.h"
 
 enum Direction
 {
