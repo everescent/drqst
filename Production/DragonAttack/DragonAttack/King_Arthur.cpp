@@ -72,7 +72,7 @@ namespace {
 
 
 
-King_Arthur::King_Arthur(const Sprite* texture)
+King_Arthur::King_Arthur(Sprite* texture)
 	: Characters(texture, HEALTH,
 		Col_Comp{ START_POINT_X - 30.0f, START_POINT_Y - 30.0f,
 				  START_POINT_X + 30.0f, START_POINT_Y + 30.0f, Rect }),

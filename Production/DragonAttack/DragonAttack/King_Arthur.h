@@ -66,7 +66,7 @@ public:
 	No return.
 	*/
 	/******************************************************************************/
-	King_Arthur(const Sprite*);
+	King_Arthur(Sprite*);
 
 	~King_Arthur(); // destructor
 	void Update(Dragon &player, const float dt);

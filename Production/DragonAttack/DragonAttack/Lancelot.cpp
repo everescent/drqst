@@ -56,7 +56,7 @@ namespace
 	bool Player_Facing_Me(Lancelot&, Dragon&);
 }
 
-Lancelot::Lancelot(const Sprite* texture)
+Lancelot::Lancelot(Sprite* texture)
 	: Characters(texture,
 		HEALTH,  Col_Comp{STARTING_POINT.x - LANCELOT_SCALE, STARTING_POINT.y - LANCELOT_SCALE,
 						  STARTING_POINT.x + LANCELOT_SCALE, STARTING_POINT.y + LANCELOT_SCALE, Rect}),

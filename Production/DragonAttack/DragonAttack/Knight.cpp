@@ -15,7 +15,7 @@ namespace  // global variables for KNIGHT
 
 }
 
-Knight::Knight(const AEVec2 & spawn_location, const Sprite* texture)
+Knight::Knight(const AEVec2 & spawn_location, Sprite* texture)
 	: Characters(texture, HEALTH, 
 		Col_Comp{ spawn_location.x - KNIGHT_SCALE, spawn_location.y - KNIGHT_SCALE , 
 			      spawn_location.x + KNIGHT_SCALE , spawn_location.y + KNIGHT_SCALE, Rect }),

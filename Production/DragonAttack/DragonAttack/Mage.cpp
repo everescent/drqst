@@ -29,7 +29,7 @@ namespace // for global variables in this file
 }
 
 // constructor for mage, that sets its position to the parameters that were given
-Mage::Mage(const AEVec2& position, const Sprite* texture)
+Mage::Mage(const AEVec2& position, Sprite* texture)
 	:Characters(texture,
 				HEALTH, Col_Comp{position.x - MAGE_SCALE, position.y - MAGE_SCALE , position.x + MAGE_SCALE , position.y + MAGE_SCALE, Rect }) ,
 	current_action{ IDLE },
