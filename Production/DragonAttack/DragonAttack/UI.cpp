@@ -14,12 +14,19 @@ Technology is prohibited.
 /* End Header **************************************************************************/
 #include "UI.h"
 
+//ANDREW'S QUICK FIX FOR INSTANCING - please change to suit ur code
+namespace
+{
+	Sprite HP_SPRITE = S_CreateSquare(20.0f, "Textures/hp.png");
+	Sprite CHARGE_SPRITE = S_CreateSquare(20.0f, "Textures/Fireball.png");
+}
+
 UI::UI(Dragon* dragon)
 	:icon_w{ 20.0f },
-	hp_icon1{ S_CreateSquare(icon_w,"Textures/hp.png"), Col_Comp() },
-	hp_icon2{ S_CreateSquare(icon_w,"Textures/hp.png"), Col_Comp() },
-	hp_icon3{ S_CreateSquare(icon_w,"Textures/hp.png"), Col_Comp() },
-	charge_icon{ S_CreateSquare(icon_w,"Textures/Fireball.png"), Col_Comp() },
+	hp_icon1{ &HP_SPRITE, Col_Comp() },
+	hp_icon2{ &HP_SPRITE, Col_Comp() },
+	hp_icon3{ &HP_SPRITE, Col_Comp() },
+	charge_icon{ &CHARGE_SPRITE, Col_Comp() },
 	Dragon_hp{ dragon->Get_HP() }, Fireball_charge{ dragon->Get_Charge() }
 	{
 		
@@ -85,16 +92,16 @@ UI::UI(Dragon* dragon)
 	void UI::Render()
 	{
 			hp_icon1.Render();
-			hp_icon1.Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+			hp_icon1.Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 			hp_icon2.Render();
-			hp_icon2.Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+			hp_icon2.Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 			hp_icon3.Render();
-			hp_icon3.Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+			hp_icon3.Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 
 		if (Fireball_charge == Max_Charge)
 		{
 			charge_icon.Render();
-			charge_icon.Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+			charge_icon.Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 		}
 		
 	}

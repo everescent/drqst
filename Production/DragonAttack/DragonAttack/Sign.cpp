@@ -3,16 +3,17 @@
 namespace 
 {
 	float SIGN_SCALE = 70.0f;
+	Sprite SIGN_SPRITE = S_CreateSquare(SIGN_SCALE, ".//Textures/sign.png");
 }
 
 Sign::Sign(float x, float y)
-	:GameObject{ S_CreateSquare(SIGN_SCALE, ".//Textures/sign.png"),
+	:GameObject{ &SIGN_SPRITE,
 	Col_Comp{ x - SIGN_SCALE, y - SIGN_SCALE,
 	x + SIGN_SCALE, y + SIGN_SCALE, Rect },
 	x, y }
 {
 	SetActive(true);
-	Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+	Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 	PosX = x;
 	PosY = y;
 	ShowTutorial = false;

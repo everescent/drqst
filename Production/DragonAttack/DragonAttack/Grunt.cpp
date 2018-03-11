@@ -27,9 +27,8 @@ Audio_Engine Grunt::SFX{ 1, [](std::vector<std::string> &playlist)
 ->void {	playlist.push_back(".//Audio/Hit_02.mp3");
 } };
 
-Grunt::Grunt(const float posX, const float posY)
-	: Characters(S_CreateSquare(GRUNT_SCALE, ".//Textures/grunt.png"),
-		grunt_hp,
+Grunt::Grunt(Sprite *p_Sprite, const float posX, const float posY)
+	: Characters(p_Sprite, grunt_hp,
 		Col_Comp{ posX - GRUNT_SCALE, posY - GRUNT_SCALE ,
 				  posX + GRUNT_SCALE - 60.0f , posY + GRUNT_SCALE - 100.0f, Rect }),
 	PlayerSeen{ false },
@@ -40,7 +39,7 @@ Grunt::Grunt(const float posX, const float posY)
 	EstIdleX{ 0 }
 {
 	SetActive(true);
-	Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+	Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 	PosX = posX;
 	PosY = posY;
 }
@@ -70,22 +69,9 @@ void Grunt::Update(Dragon &d, const float dt)
 		this->Transform_.Concat();
 
 		PosY -= 10.0f; //testing gravity
-		//std::cout << PosX << " " << d.PosX<<std::endl;
 		// update the collision box of grunt
 		this->Collision_.Update_Col_Pos(this->PosX - GRUNT_SCALE, this->PosY - GRUNT_SCALE,  // min point
 										this->PosX + GRUNT_SCALE - 60.0f, this->PosY + GRUNT_SCALE - 100.0f); // max point
-
-		/*if (Collision_.Dy_Rect_Rect(d.Collision_, GetVelocity(), d.GetVelocity(), dt))
-		{
-		if (d.PosX > this->PosX)
-		{
-		d.PosX = PosX + Sprite_.Get_Width() + Sprite_.Get_Height();
-		}
-		else if (d.PosX < this->PosX)
-		{
-		d.PosX = PosX - Sprite_.Get_Width() - Sprite_.Get_Height();
-		}
-		}*/
 
 		//collision with player, player loses health
 		if(!Knockback)
@@ -130,7 +116,7 @@ void Grunt::Update(Dragon &d, const float dt)
 				{
 					Decrease_HP(d.GetDamage());
 					d.AddCharge();
-          d.PlayImpact();
+					d.PlayImpact();
 					SFX.Play(0);
 					d.GetFireball()[i].Projectile::ResetDist();
 					d.GetFireball()[i].SetActive(false);

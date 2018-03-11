@@ -35,7 +35,7 @@ private:
 	float MovementY;
 	float moveSpd;
 	int   EstIdleX;
-	bool Knockback = false;
+	bool  Knockback = false;
 	float posit_tmp = 0.0f;
 	float distance = 0.0f;
 public:
@@ -52,8 +52,8 @@ public:
 	No return.
 	*/
 	/******************************************************************************/
-	Grunt(const float posX = 0.0f, const float posY = 0.0f);
-  ~Grunt() = default;
+	Grunt(Sprite *p_Sprite, const float posX = 0.0f, const float posY = 0.0f);
+    ~Grunt() = default;
 	/******************************************************************************/
 	/*!
 	\fn         Update
@@ -71,6 +71,4 @@ public:
 	*/
 	/******************************************************************************/
 	void Update(Dragon &d, const float dt);
-
-	//~Grunt(); // destructor
 };
