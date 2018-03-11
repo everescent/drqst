@@ -17,7 +17,7 @@ Technology is prohibited.
 #include <ctime>
 #include <cstdlib>
 
-Merlin::Merlin(Sprite *Eball_Sprite)
+Merlin::Merlin(Sprite *Eball_Sprite, Sprite *Arrow_Sprite)
   //Initialize characters class
   :Characters{ Merlin_Texture, Merlin_HP,
   Col_Comp{ Merlin_Start_X - Merlin_Scale, Merlin_Start_Y - Merlin_Scale,
@@ -62,7 +62,7 @@ Merlin::Merlin(Sprite *Eball_Sprite)
   //Initialize Arrow Rain
   Arrow.reserve(A_Rain_Buffer);
   for (int i = 0; i < A_Rain_Buffer; ++i)
-    Arrow.push_back(Boss_Attack{ Eball_Sprite,
+    Arrow.push_back(Boss_Attack{ Arrow_Sprite,
                     Col_Comp{ Merlin_Start_X - 2.0f, Merlin_Start_Y - 30.0f,
                     Merlin_Start_X + 2.0f, Merlin_Start_Y + 30.0f, Rect } });
   for (int i = 0; i < A_Rain_Buffer; ++i)

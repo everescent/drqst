@@ -64,7 +64,7 @@ const float  Merlin_Start_Y  { -120.0f }; //Merlin default position Y
 class Merlin : public Characters {
 
 public:
-  Merlin(Sprite *Eball_Sprite);
+  Merlin(Sprite *Eball_Sprite, Sprite *Arrow_Sprite);
   //Updates Merlin
   void Update(Dragon &player, const float dt);
   //Renders Merlin and attacks

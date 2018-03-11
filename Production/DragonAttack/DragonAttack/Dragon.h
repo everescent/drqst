@@ -83,19 +83,17 @@ public:
   //Gets current charge
   int Get_Charge();
 
-  Dragon()
+  Dragon(Sprite* D_Sprite, Sprite *F_Sprite)
     //Initialize Characters class
-    :Characters{ Dragon_Sprite, 3,
+    :Characters{ D_Sprite, 3,
     Col_Comp{ Start_Pos_X - Dragon_Scale, Start_Pos_Y - Dragon_Scale,
               Start_Pos_X + Dragon_Scale, Start_Pos_Y + Dragon_Scale, Rect} },
     //Initialize data members
     Attack{ false }, Pwr_Up{ false }, Falling{ false }, Invul_FLAG{ false }, 
     Damage { Fireball_Damage }, M_Damage{ MFireball_Damage }, Charge{ 0 }, Gravity{ 10.0f }, 
-    Fireball_Sprite{ new Sprite {S_CreateSquare(0.5f, ".//Textures/Fireball.png")} }, 
-    Dragon_Sprite{ new Sprite { S_CreateSquare(0.5f, ".//Textures/Bob.png") } },
     Dir{}, Pickup_{}, Fireball{},
     //Initialize Mega Fireball
-    Mfireball{ Fireball_Sprite, Col_Comp{ Start_Pos_X - MFireball_Scale, Start_Pos_Y - MFireball_Scale,
+    Mfireball{ F_Sprite, Col_Comp{ Start_Pos_X - MFireball_Scale, Start_Pos_Y - MFireball_Scale,
     Start_Pos_X + MFireball_Scale, Start_Pos_Y + MFireball_Scale, Rect } }, Air_Dist{ 0.0f }, Facing{ 1.0f },
     //Initialize Audio Engine
     SFX_{ 3, [](std::vector<std::string> &playlist) ->void {
@@ -115,7 +113,7 @@ public:
     Fireball.reserve(Bullet_Buffer);
     //Initialize all the fireballs
     for (int i = 0; i < Bullet_Buffer; ++i)
-      Fireball.push_back(Projectile{ Fireball_Sprite,
+      Fireball.push_back(Projectile{ F_Sprite,
                                      Col_Comp{ Start_Pos_X - Fireball_Scale, Start_Pos_Y - Fireball_Scale,
                                                Start_Pos_X + Fireball_Scale, Start_Pos_Y + Fireball_Scale, Rect } });
     for (int i = 0; i < Bullet_Buffer; ++i)
@@ -133,8 +131,6 @@ public:
   }
   ~Dragon()
   {
-    delete Fireball_Sprite;
-    delete Dragon_Sprite;
     Fireball.clear();
   }
 private:
@@ -169,8 +165,6 @@ private:
     IMPACT, //Fireball impact SFX
     SHOOT   //Fireball shot SFX
   };
-  Sprite *Fireball_Sprite;
-  Sprite *Dragon_Sprite;
   Direction               Dir;       //Direction variable
   Pickup                  Pickup_;   //Type of power up
   std::vector<Projectile> Fireball;  //Array of Fireball projectile
