@@ -17,7 +17,7 @@ Technology is prohibited.
 #include <ctime>
 #include <cstdlib>
 
-Merlin::Merlin()
+Merlin::Merlin(Sprite *Eball_Sprite)
   //Initialize characters class
   :Characters{ Merlin_Texture, Merlin_HP,
   Col_Comp{ Merlin_Start_X - Merlin_Scale, Merlin_Start_Y - Merlin_Scale,
@@ -26,8 +26,8 @@ Merlin::Merlin()
   Merlin_Attack{ &Merlin::Melee }, Merlin_State{ &Merlin::Idle },
   M_Curr{ IDLE }, M_Next{ IDLE }, M_Att_Curr{ MELEE },
   //Initialize Boss Attacks
-  M_Melee{ Sprite{}, Col_Comp{} },
-  Eball{ Sprite{ S_CreateSquare(50.0f, ".//Textures/Energy_Ball_Final.png") },
+  M_Melee{ nullptr, Col_Comp{} },
+  Eball{ Eball_Sprite,
          Col_Comp{ Merlin_Start_X - 50.0f, Merlin_Start_Y - 50.0f,
                    Merlin_Start_X + 50.0f, Merlin_Start_Y + 50.0f, Rect } },
   Spread_Eball{}, Arrow{}, Blink_{}, Attack_Interval{ 0 },
@@ -51,7 +51,7 @@ Merlin::Merlin()
   //Initialize Spread Shot
   Spread_Eball.reserve(3);
   for (int i = 0; i < 3; ++i)
-    Spread_Eball.push_back(Boss_Attack{ S_CreateSquare(30.0f, ".//Textures/Energy_Ball_Final.png"), 
+    Spread_Eball.push_back(Boss_Attack{ Eball_Sprite,
                            Col_Comp{ Merlin_Start_X - 30.0f, Merlin_Start_Y - 30.0f,
                            Merlin_Start_X + 30.0f, Merlin_Start_Y + 30.0f, Rect } });
   for (Boss_Attack& SS : Spread_Eball)
@@ -62,7 +62,7 @@ Merlin::Merlin()
   //Initialize Arrow Rain
   Arrow.reserve(A_Rain_Buffer);
   for (int i = 0; i < A_Rain_Buffer; ++i)
-    Arrow.push_back(Boss_Attack{ S_CreateSquare(30.0f, ".//Textures/Arrow.png"),
+    Arrow.push_back(Boss_Attack{ Eball_Sprite,
                     Col_Comp{ Merlin_Start_X - 2.0f, Merlin_Start_Y - 30.0f,
                     Merlin_Start_X + 2.0f, Merlin_Start_Y + 30.0f, Rect } });
   for (int i = 0; i < A_Rain_Buffer; ++i)

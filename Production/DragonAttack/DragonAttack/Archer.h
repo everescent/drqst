@@ -38,16 +38,15 @@ class Archer : public Characters {
 
 public: 
   //Constructs Archer with desired position
-  Archer(Sprite *p_Sprite, const float posX = 0.0f, const float posY = 0.0f);
+  Archer(Sprite *p_Sprite, Sprite *Arrow_Sprite, const float posX = 0.0f, const float posY = 0.0f);
   //Clears arrow vector memory
-  ~Archer();
+  ~Archer() = default;
   //Updates the Archer
   void Update(Dragon& player, const float dt);
   //Renders Archer and attacks
   void Render();
 
 private:
-  static Sprite* Arrow_Sprite;
   Projectile Arrow;           //Arrow to shoot
   //Pointer to current state function
   void(Archer::*Archer_State)(Dragon &player, const float dt);

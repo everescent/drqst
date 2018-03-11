@@ -16,14 +16,13 @@ Technology is prohibited.
 #include "Archer.h"
 
 using namespace ArcherMacros;
-Sprite *Archer::Arrow_Sprite{ nullptr };
 
 Audio_Engine Archer::Audio_{ 1, [](std::vector<std::string> &playlist) ->void {
   playlist.push_back(".//Audio/Hit_01.mp3");
   //playlist.push_back(".//Audio/Arrow_Swoosh.mp3"); 
 } };
 
-Archer::Archer(Sprite *p_Sprite, const float posX, const float posY)
+Archer::Archer(Sprite *p_Sprite, Sprite *Arrow_Sprite, const float posX, const float posY)
   //Initialize characters class
   :Characters{ p_Sprite, Archer_HP,
              Col_Comp{ posX - Archer_Scale, posY - Archer_Scale,
@@ -44,22 +43,9 @@ Archer::Archer(Sprite *p_Sprite, const float posX, const float posY)
   PosY = posY;
   Transform_.SetTranslate(PosX, PosY);
   Transform_.Concat();
-  //Only create new sprite if Arrow_Sprite is not already created
-  if(Arrow_Sprite == nullptr)
-   Arrow_Sprite = new Sprite{ S_CreateSquare(0.5f, ".//Textures/Arrow.png") };
   Arrow.Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
   Arrow.Transform_.SetScale(Arrow_Scale, Arrow_Scale);
   Arrow.Transform_.Concat();
-}
-
-Archer::~Archer()
-{
-  //Only delete the sprite once
-  if (Arrow_Sprite != nullptr)
-  {
-    delete Arrow_Sprite;
-    Arrow_Sprite = nullptr;
-  }
 }
 
 void Archer::Attack_Update(Dragon &/*player*/, const float dt)
