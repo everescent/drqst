@@ -83,7 +83,7 @@ public:
   //Default contructor does nothing
   Projectile() = default;
   //Initialize projectile with mesh and collision shape
-  Projectile(Sprite *p_Sprite, Col_Comp &&t_col)
+  Projectile(const Sprite *p_Sprite, Col_Comp &&t_col)
     :GameObject{ p_Sprite, std::move(t_col) },
     Distance{ 0.0f }, Direction{ true }, Collided{ false }
   {}
