@@ -24,7 +24,7 @@ const Sprite* Get_Attack_Sprite(const ATTACK_SPRITE ATTACK)
 		break;
 	case STAB_SPRITE: return &STAB_ATTACK;
 		break;
-	case ARROW_SPRITE:
+	case ARROW_SPRITE: return nullptr;
 		break;
 	default: return nullptr;
 	}
