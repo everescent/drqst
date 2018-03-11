@@ -42,7 +42,7 @@ struct Boss_Attack : public Projectile
 	{
 	}
 
-	Boss_Attack(const Sprite* t_attack, Col_Comp &&t_col)
+	Boss_Attack(Sprite* t_attack, Col_Comp &&t_col)
 		:cooldown_timer{0}, Projectile(t_attack, std::move(t_col)), 
 		 cooldown{false}
 	{

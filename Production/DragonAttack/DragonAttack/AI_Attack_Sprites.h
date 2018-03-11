@@ -10,4 +10,4 @@ enum ATTACK_SPRITE
 };
 
 void Attack_Sprite_Init(void);
-const Sprite* Get_Attack_Sprite(const ATTACK_SPRITE);
+Sprite* Get_Attack_Sprite(const ATTACK_SPRITE);

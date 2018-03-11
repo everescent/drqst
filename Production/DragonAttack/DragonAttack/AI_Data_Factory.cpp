@@ -57,7 +57,7 @@ Characters *Create_Basic_AI(const BASIC_AI mob, const AEVec2& position)
 		break;
 	case MAGE:   return new Mage (position, &MA_SPRITE);
 		break;
-    case ARCHER: return new Archer(&A_SPRITE, position.x, position.y);
+    case ARCHER: return new Archer(&A_SPRITE, Get_Attack_Sprite(ARROW_SPRITE), position.x, position.y);
 	    break;
 	case KNIGHT: return new Knight(position, &K_SPRITE);
 		break;
@@ -74,9 +74,9 @@ Characters *Create_Boss_AI(const BOSS_AI boss)
 	{
 	case LANCELOT:    return new Lancelot(&L_SPRITE);
 		break;
-	case MERLIN:      return new Merlin;
+	case MERLIN:      return nullptr; //new Merlin;
 		break;
-	case KING_ARTHUR: return new King_Arthur(&KA_SPRITE);
+	case KING_ARTHUR: return nullptr;// new King_Arthur(&KA_SPRITE);
 		break;
 
 	default: break;

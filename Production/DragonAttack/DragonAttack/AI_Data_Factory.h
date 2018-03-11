@@ -21,6 +21,7 @@ Technology is prohibited.
 #include "King_Arthur.h"
 #include "Knight.h"
 #include "Lancelot.h"
+#include "AI_Attack_Sprites.h"
 
 
 enum BASIC_AI

@@ -20,7 +20,7 @@ Technology is prohibited.
  int Characters::score = 0;            // player score for the stage
  int Characters::enemies_killed = 0;   // number of enemies killed
 
-Characters::Characters(const Sprite* p_sprite, const int HP, Col_Comp &&t_col)
+Characters::Characters(Sprite* p_sprite, const int HP, Col_Comp &&t_col)
 	: GameObject{ p_sprite, std::move(t_col) }, hp{ HP },
 	  direction{ RIGHT }, vulnerable {true}
 {

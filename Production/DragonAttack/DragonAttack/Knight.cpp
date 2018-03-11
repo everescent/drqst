@@ -106,9 +106,9 @@ void Knight::Attack(Dragon& d, const float dt)
 	
 	// update positon	
 	if (Get_Direction() == RIGHT)
-		stab.Projectile::Update(STAB_SCALE, false, 180);    // rotate texture to look right
+		stab.Projectile::Update(dt, STAB_SCALE, false, 180);    // rotate texture to look right
 	else
-		stab.Projectile::Update(STAB_SCALE, false, 0);      // rotate texture to look left
+		stab.Projectile::Update(dt, STAB_SCALE, false, 0);      // rotate texture to look left
 	
 	
 	stab.Transform_.Concat();			 // apply rotation onto stab 

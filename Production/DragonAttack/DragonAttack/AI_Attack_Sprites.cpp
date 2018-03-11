@@ -13,10 +13,10 @@ void Attack_Sprite_Init(void)
 	STAB_ATTACK  = S_CreateSquare(40.0f, ".//Textures/arondight.png");
 
 	EBALL_ATTACK.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
-	 STAB_ATTACK.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+	STAB_ATTACK.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 }
 
-const Sprite* Get_Attack_Sprite(const ATTACK_SPRITE ATTACK)
+ Sprite* Get_Attack_Sprite(const ATTACK_SPRITE ATTACK)
 {
 	switch (ATTACK)
 	{

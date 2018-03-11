@@ -44,7 +44,7 @@ class Characters : public GameObject
 		bool vulnerable;  	       // immune to damage if true
 
 	public:
-		Characters(const Sprite* t_sprite, const int HP, Col_Comp &&t_col); // default constructor
+		Characters(Sprite* t_sprite, const int HP, Col_Comp &&t_col); // default constructor
     virtual ~Characters() = default;
 		int Get_HP() const;         // get HP of mob
 		void Set_HP(int hp);       // set the hp for mob

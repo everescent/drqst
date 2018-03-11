@@ -372,7 +372,7 @@ void Lancelot::Slash(Dragon& d, const float dt)
 
 
 	lancelot[SLASH].SetActive(true);
-	lancelot[SLASH].Projectile::Update(ATTACK_SCALE,false , angle += angle_offset);
+	lancelot[SLASH].Projectile::Update(dt, ATTACK_SCALE, false, angle += angle_offset);
 
 	// checks for collision with player. Only collide once
 	if (!lancelot[SLASH].GetCollided())
