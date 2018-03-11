@@ -29,8 +29,10 @@ enum BASIC_AI
 	GRUNT,
 	MAGE,
     ARCHER,
-	KNIGHT
+	KNIGHT,
 	// add any mobs that you have created here
+
+	DRAGON
 };
 
 enum BOSS_AI
