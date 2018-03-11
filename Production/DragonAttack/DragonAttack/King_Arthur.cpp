@@ -70,8 +70,8 @@ namespace {
 
 
 
-King_Arthur::King_Arthur(void)
-	: Characters(S_CreateSquare(100.0f, ".//Textures/King_Arthur.png"), HEALTH,
+King_Arthur::King_Arthur(const Sprite* texture)
+	: Characters(texture, HEALTH,
 		Col_Comp{ START_POINT_X - 30.0f, START_POINT_Y - 30.0f,
 				  START_POINT_X + 30.0f, START_POINT_Y + 30.0f, Rect }),
 	phase1{ true }
@@ -81,7 +81,7 @@ King_Arthur::King_Arthur(void)
 	this->SetActive(true);               // show him on screen
 	this->Set_Direction(LEFT);           // set king arthur to face left at the start
 	this->SetVelocity({ 120, 0 });       // velocity for king arthur
-	this->Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+	//this->Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 	(void)this->Transform_.SetTranslate(PosX, PosY);
 	this->Transform_.SetScale(-1.0f, 1.0f); // set king arthur to face right at the start
 	this->Transform_.Concat();           // spawn king arthur at the location set

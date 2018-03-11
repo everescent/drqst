@@ -15,6 +15,39 @@ Technology is prohibited.
 
 #include "AI_Data_Factory.h"
 
+
+namespace
+{
+	
+	Sprite A_SPRITE;
+	Sprite G_SPRITE;
+	Sprite MA_SPRITE;
+	Sprite K_SPRITE;
+
+	Sprite L_SPRITE;
+	Sprite ME_SPRITE;
+	Sprite KA_SPRITE;
+}
+
+void AI_Sprite_Init(void)
+{
+	A_SPRITE    = S_CreateSquare(70.0f, ".//Textures/Archer.png");
+	G_SPRITE    = S_CreateSquare(70.0f, ".//Textures/grunt.png");
+	K_SPRITE    = S_CreateSquare(30.0f, ".//Textures/Knight.png");
+	MA_SPRITE   = S_CreateSquare(30.0f, ".//Textures/mage.png");
+
+	L_SPRITE    = S_CreateSquare(60.0f, ".//Textures/Lancelot.png");
+	//ME_SPRITE = NULL;
+	KA_SPRITE = S_CreateSquare(100.0f, ".//Textures/King_Arthur.png");
+
+
+	MA_SPRITE.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+	K_SPRITE.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+
+	L_SPRITE.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+	KA_SPRITE.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+}
+
 Characters *Create_Basic_AI(const BASIC_AI mob, const AEVec2& position)
 {
 

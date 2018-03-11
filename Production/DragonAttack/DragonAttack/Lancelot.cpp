@@ -56,8 +56,8 @@ namespace
 	bool Player_Facing_Me(Lancelot&, Dragon&);
 }
 
-Lancelot::Lancelot(void)
-	: Characters(S_CreateSquare(LANCELOT_SCALE, ".//Textures/Lancelot.png"),
+Lancelot::Lancelot(const Sprite* texture)
+	: Characters(texture,
 		HEALTH,  Col_Comp{STARTING_POINT.x - LANCELOT_SCALE, STARTING_POINT.y - LANCELOT_SCALE,
 						  STARTING_POINT.x + LANCELOT_SCALE, STARTING_POINT.y + LANCELOT_SCALE, Rect}),
 	    M_E{ false }
@@ -70,7 +70,6 @@ Lancelot::Lancelot(void)
 	SetActive(true);					           // spawn lancelot
 	Set_Direction(LEFT);				           // face left
 	SetVelocity({ 200.0f, 0.0f });                 // velocity for lancelot
-	Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 	Reset_Idle_Time(idle_time);
 	Init();							               // initialize the attacks lancelot have
 }

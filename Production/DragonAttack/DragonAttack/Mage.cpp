@@ -29,8 +29,8 @@ namespace // for global variables in this file
 }
 
 // constructor for mage, that sets its position to the parameters that were given
-Mage::Mage(const AEVec2& position)
-	:Characters(S_CreateSquare(MAGE_SCALE, ".//Textures/mage.png"),
+Mage::Mage(const AEVec2& position, const Sprite* texture)
+	:Characters(texture,
 				HEALTH, Col_Comp{position.x - MAGE_SCALE, position.y - MAGE_SCALE , position.x + MAGE_SCALE , position.y + MAGE_SCALE, Rect }) ,
 	current_action{ IDLE },
 
@@ -43,7 +43,7 @@ Mage::Mage(const AEVec2& position)
 	this->SetPos(position.x, position.y);								   // starting coordinates
 	this->Transform_.SetTranslate(position.x, position.y);				   // add to matrix
 	this->Transform_.Concat();											   // add to final matrix
-	this->Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);			   // rendering mode of mage
+	//this->Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);			   // rendering mode of mage
 	this->Reset_Idle_Time(2.0f);										   // idling time for mage
 	energy_ball.Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);	   // rendering mode of energyball
 }

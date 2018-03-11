@@ -42,6 +42,8 @@ enum BOSS_AI
 };
 
 
+void AI_Sprite_Init(void);
+
 // creates a basic ai and return a pointer to it
 // initial position is default initialize to spawn outside screen 
 // if you don't have a fix location at the moment
