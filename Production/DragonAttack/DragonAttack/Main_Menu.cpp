@@ -43,13 +43,16 @@ namespace Main_Menu
 
 		Audio = new Audio_Engine{ 1, [](std::vector <std::string> &playlist)->void{playlist.push_back(".//Audio/MainMenu_BGM.mp3"); } };
 
+		Sprite PLAY_SPRITE = S_CreateRectangle(Button_Width,Button_Height,"Textures/Play_Button.png");
+		Sprite QUIT_SPRITE = S_CreateRectangle(Button_Width,Button_Height,"Textures/Quit_Button.png");
+
 		// Construct Play Button 
-		Play_Button = new GameObject{ S_CreateRectangle(Button_Width,Button_Height,"Textures/Play_Button.png"),
+		Play_Button = new GameObject{ &PLAY_SPRITE,
 			Col_Comp(0.0f -( Button_Width ), 0.0f - (Button_Height),
 											0.0f + (Button_Width* 0.5),0.0f + (Button_Height * 0.5), Rect) };
 
 		// Construct Quit Button 
-		Quit_Button = new GameObject{ S_CreateRectangle(Button_Width,Button_Height,"Textures/Quit_Button.png"),
+		Quit_Button = new GameObject{ &QUIT_SPRITE,
 			Col_Comp(0.0f - (Button_Width ), -100.0f - (Button_Height),
 				0.0f + (Button_Width), -100.0f + (Button_Height ), Rect) };
 
@@ -93,9 +96,9 @@ namespace Main_Menu
 	{
 		MM_Background->Render_Object(*M_BG);
 		Play_Button->Render();
-		Play_Button -> Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+		Play_Button -> Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 		Quit_Button->Render();
-		Quit_Button->Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+		Quit_Button->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 	}
 
 	void Free(void) { 

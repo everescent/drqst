@@ -19,7 +19,7 @@ private:
 	bool Line_Of_Sight(const Dragon&);
 
 public:
-	Knight(const AEVec2& );
+	Knight(const AEVec2&, const Sprite* );
 	void Update(Dragon&, const float dt);
 	void Render(void);
 

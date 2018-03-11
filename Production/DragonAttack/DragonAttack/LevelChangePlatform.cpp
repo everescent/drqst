@@ -1,14 +1,20 @@
 #include "LevelChangePlatform.h"
 #include <iostream>
 
+namespace
+{
+	Sprite LCPLAT_SPRITE = CreatePlatform(2.0f, 3.0f, ".//Textures/Win_Platform.png");
+}
+
+
 LevelChangePlatform::LevelChangePlatform(float x, float y)
-	: GameObject{ CreatePlatform(2.0f, 3.0f, ".//Textures/Win_Platform.png"),
+	: GameObject{ &LCPLAT_SPRITE,
 	Col_Comp{ x - 10.0f, y - 10.0f,
 			  x + 100.0f, y + 10.0f, Rect },
 			  x, y }
 {
 	SetActive(true);
-	Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+	Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 	PosX = x;
 	PosY = y;
 }

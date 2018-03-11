@@ -45,7 +45,7 @@ private:
 	bool M_E; // lancelot berserk state
 
 public:
-	Lancelot();  // default constructor for lancelot
+	Lancelot(const Sprite*);  // default constructor for lancelot
 	~Lancelot(); // destructor for lancelot
 	void Update(Dragon &player, const float dt);
 	void Render(void);
