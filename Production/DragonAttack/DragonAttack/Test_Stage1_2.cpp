@@ -6,7 +6,7 @@ namespace
 	Sprite *BG;
 	Transform *M_BG;
 	Audio_Engine* Audio;
-	//UI* ui;
+	UI* ui;
 	int** MapData;
 	int Map_Width;
 	int Map_Height;
@@ -55,9 +55,9 @@ namespace Test_Stage1_2
 
 		BG = new Sprite{ CreateBG(22.0f, 2.0f, "Textures/BG_Stage1.png", 1.0f, 15.0f) };
 		M_BG = new Transform{};
-		player = new Dragon{};
+		player = dynamic_cast<Dragon*>(Create_Basic_AI(DRAGON));
 		Audio = new Audio_Engine{ 1, [](std::vector <std::string> &playlist)->void {playlist.push_back(".//Audio/Stage_1_BGM.mp3"); } };
-		//ui = new UI(player);
+		ui = new UI(player);
 		if (!Import_MapData("level1-2.txt", MapData, Map_Width, Map_Height)) { AEGfxExit(); }
 
 		up1 = new Platform             {PLAT_SPRITE, 6000.0f,  -30.0f };
@@ -88,6 +88,7 @@ namespace Test_Stage1_2
 			Col_Comp{ 0.0f - 25.0f, 0.0f - 25.0f, 0.0f + 25.0f, 0.0f + 25.0f, Rect },
 			HP, 5450.0f , 200.0f };
 
+		c.push_back(Create_Basic_AI(DRAGON));
 		c.push_back(Create_Basic_AI(GRUNT , AEVec2{  727.0f ,  105.0f }));
 		c.push_back(Create_Basic_AI(GRUNT , AEVec2{ 1895.0f , -165.0f }));
 		c.push_back(Create_Basic_AI(ARCHER, AEVec2{ 2335.0f ,  195.0f }));
@@ -217,7 +218,7 @@ namespace Test_Stage1_2
 		next->Update(*player, dt);
 		player->Update(*player, dt);
 		CamFollow(player->Transform_, 200, 120, player->GetFacing());
-		//ui->UI_Update(player);
+		ui->UI_Update(player);
 
 		w6 ->Update(*player, dt);
 		w12->Update(*player, dt);
@@ -259,7 +260,7 @@ namespace Test_Stage1_2
 
 		player->Render();
 		player->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
-		//ui->Render();
+		ui->Render();
 
 	}
 
@@ -283,7 +284,7 @@ namespace Test_Stage1_2
 		delete coin2;
 		delete coin3;
 		delete next;
-		//delete ui;
+		delete ui;
 
 		delete COIN_SPRITE;//pickups
 		delete HP_SPRITE;

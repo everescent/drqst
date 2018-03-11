@@ -6,7 +6,7 @@ namespace
 	Sprite *BG;
 	Transform *M_BG;
 	Audio_Engine* Audio;
-	//UI* ui;
+	UI* ui;
 
 	int** MapData;
 	int Map_Width;
@@ -74,7 +74,8 @@ namespace Test_Stage1_1
 
 		BG = new Sprite{ CreateBG(22.0f, 2.0f, "Textures/BG_Stage1.png", 1.0f, 15.0f) };
 		M_BG = new Transform{};
-		player = new Dragon{};
+		//player = (Dragon*)(Create_Basic_AI(DRAGON));
+		player = dynamic_cast<Dragon*>(Create_Basic_AI(DRAGON));
 		Audio = new Audio_Engine{ 1, [](std::vector <std::string> &playlist)->void {playlist.push_back(".//Audio/Stage_1_BGM.mp3"); } };
 		archerTower = new Tower{ TOWER_SPRITE, 4800.0f, 0.0f };
 		//ui = new UI{ player };
@@ -136,7 +137,7 @@ namespace Test_Stage1_1
 		tut5->SetActive(true);
 		tut6->SetActive(true);
 
-		player->SetActive(true);
+		//player->SetActive(true);
 		Audio->Play(0);
 		Audio->SetLoop(0, 1);
 		for (size_t i = 0; i < c.size(); ++i)
@@ -208,33 +209,33 @@ namespace Test_Stage1_1
 	{
 		Audio->Update();
  
-		  s1->Update(*player, dt);	   
+		  //s1->Update(*player, dt);	   
 		tut1->Transform_.SetTranslate( 400.0f, -20.0f );
 		tut1->Transform_.Concat();	    
 									    
-		  s2->Update(*player, dt);	    
+		  //s2->Update(*player, dt);	    
 		tut2->Transform_.SetTranslate( 1270.0f, -20.0f );
 		tut2->Transform_.Concat();	    
 									    
-		  s3->Update(*player, dt);	    
+		  //s3->Update(*player, dt);	    
 		tut3->Transform_.SetTranslate( 1650.0f, -20.0f );
 		tut3->Transform_.Concat();	   
 									   
-		  s4->Update(*player, dt);	   
+		  //s4->Update(*player, dt);	   
 		tut4->Transform_.SetTranslate( 2600.0f, -20.0f );
 		tut4->Transform_.Concat();	    
 									    
-	      s5->Update(*player, dt);	    
+	      //s5->Update(*player, dt);	    
 		tut5->Transform_.SetTranslate( 4200.0f, 160.0f );
 		tut5->Transform_.Concat();	    
 									    
-		  s6->Update(*player, dt);	    
+		  //s6->Update(*player, dt);	    
 		tut6->Transform_.SetTranslate( 5200.0f, 160.0f );
 		tut6->Transform_.Concat();
 
 		for (size_t i = 0; i < c.size(); ++i)
 		{
-			c[i]->Update(*player, dt);
+			//c[i]->Update(*player, dt);
 			archerTower->Update(*(c[i]), dt);
 			w2->Update (*(c[i]), dt);
 			w22->Update(*(c[i]), dt);
@@ -265,7 +266,7 @@ namespace Test_Stage1_1
 
 			//elem.Update(*sc1, dt);
 			//elem.Update(*sc2, dt);
-			elem.Update(*player, dt);
+			//elem.Update(*player, dt);
 		}
 		for (Wall& elem : walls)
 		{
@@ -273,11 +274,11 @@ namespace Test_Stage1_1
 			{
 				elem.Update(*(c[i]), dt);
 			}
-			elem.Update(*player, dt);
+			//elem.Update(*player, dt);
 		}
 		for (Barrier& elem : barriers)
 		{
-			elem.Update(*player, dt);
+			//elem.Update(*player, dt);
 			elem.Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 		}
 		/*for (Scarecrow& elem : scarecrows)
@@ -286,20 +287,20 @@ namespace Test_Stage1_1
 			elem.Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 		}*/
 		
-		w2->Update(*player, dt);
-		w22->Update(*player, dt);
-		w5->Update(*player, dt);
-		w6->Update(*player, dt);
+		//w2->Update(*player, dt);
+		//w22->Update(*player, dt);
+		//w5->Update(*player, dt);
+		//w6->Update(*player, dt);
 
-		archerTower->Update(*player, dt);
-		player->Update(*player, dt);
-		box1->Update(*player, dt);
-		coin2->Update(*player, dt);
-		coin3->Update(*player, dt);
+		//archerTower->Update(*player, dt);
+		//player->Update(*player, dt);
+		//box1->Update(*player, dt);
+		//coin2->Update(*player, dt);
+		//coin3->Update(*player, dt);
 		//power1->Update(*player, dt);
-		power2->Update(*player, dt);
-		CamFollow(player->Transform_, 200, 120, player->GetFacing());
-		next->Update(*player, dt);
+		//power2->Update(*player, dt);
+		//CamFollow(player->Transform_, 200, 120, player->GetFacing());
+		//next->Update(*player, dt);
 		//ui->UI_Update(player);
 
 		//std::cout << (int)player->PosX << ", " << (int)player->PosY << std::endl;
@@ -381,8 +382,8 @@ namespace Test_Stage1_1
 		}
 
 		box1->Render();
-		player->Render();
-		player->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+		//player->Render();
+		//player->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 		next->Render();
 		//ui->Render();
 	}
@@ -391,7 +392,7 @@ namespace Test_Stage1_1
 	{
 		delete BG;
 		delete M_BG;
-		delete player;
+		//delete player;
 		delete Audio;
 		delete s1;
 		delete s2;

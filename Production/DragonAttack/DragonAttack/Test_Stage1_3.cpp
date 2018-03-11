@@ -6,7 +6,7 @@ namespace
 	Sprite *BG;
 	Transform *M_BG;
 	Audio_Engine* Audio;
-	//UI* ui;
+	UI* ui;
 
 	int** MapData;
 	int Map_Width;
@@ -41,12 +41,13 @@ namespace Test_Stage1_3
 
 		BG = new Sprite{ CreateBG(22.0f, 2.0f, "Textures/BG/BG_Stage1.png", 1.0f, 15.0f) };
 		M_BG = new Transform{};
-		player = new Dragon{};
+		player = dynamic_cast<Dragon*>(Create_Basic_AI(DRAGON));
 		Audio = new Audio_Engine{ 1, [](std::vector <std::string> &playlist)->void {playlist.push_back(".//Audio/Lancelot_BGM.mp3"); } };
-		//ui = new UI{ player };
+		ui = new UI{ player };
 		if (!Import_MapData("level1-3.txt", MapData, Map_Width, Map_Height)) { AEGfxExit(); }
 
 		next = new LevelChangePlatform{LCPLAT_SPRITE, 500.0f,  -300.0f };
+		c.push_back(Create_Basic_AI(DRAGON));
 		c.push_back(Create_Boss_AI(LANCELOT));
 	}
 
@@ -109,16 +110,16 @@ namespace Test_Stage1_3
 			elem.Update(*player, dt);
 		}
 
-		//next->Update(*player, dt);
+		next->Update(*player, dt);
 		player->Update(*player, dt);
-		//ui->UI_Update(player);
+		ui->UI_Update(player);
 
 		//std::cout << (int)player->PosX << ", " << (int)player->PosY << std::endl;
 	}
 
 	void Draw(void)
 	{
-		//CamFollow(player->Transform_, 200, 120, player->GetFacing());
+		CamFollow(player->Transform_, 200, 120, player->GetFacing());
 		CamStatic();
 		BG->Render_Object(*M_BG);
 
@@ -139,7 +140,7 @@ namespace Test_Stage1_3
 
 		player->Render();
 		player->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
-		//ui->Render();
+		ui->Render();
 	}
 
 	void Free(void)
@@ -149,7 +150,7 @@ namespace Test_Stage1_3
 		delete player;
 		delete Audio;
 		delete next;
-		//delete ui;
+		delete ui;
 
 		delete COIN_SPRITE;//pickups
 		delete HP_SPRITE;
