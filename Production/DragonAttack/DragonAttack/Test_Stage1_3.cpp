@@ -47,7 +47,6 @@ namespace Test_Stage1_3
 		if (!Import_MapData("level1-3.txt", MapData, Map_Width, Map_Height)) { AEGfxExit(); }
 
 		next = new LevelChangePlatform{LCPLAT_SPRITE, 500.0f,  -300.0f };
-		c.push_back(Create_Basic_AI(DRAGON));
 		c.push_back(Create_Boss_AI(LANCELOT));
 	}
 
@@ -128,10 +127,6 @@ namespace Test_Stage1_3
 			elem.Render();
 		}
 
-		/*for (size_t i = 0; i < c.size(); ++i)
-		{
-			c[i]->Render();
-		}*/
 		c[0]->Render();
 		if (c[0]->Get_HP() <= 0)
 		{

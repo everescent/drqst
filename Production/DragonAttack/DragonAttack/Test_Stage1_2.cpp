@@ -88,7 +88,6 @@ namespace Test_Stage1_2
 			Col_Comp{ 0.0f - 25.0f, 0.0f - 25.0f, 0.0f + 25.0f, 0.0f + 25.0f, Rect },
 			HP, 5450.0f , 200.0f };
 
-		c.push_back(Create_Basic_AI(DRAGON));
 		c.push_back(Create_Basic_AI(GRUNT , AEVec2{  727.0f ,  105.0f }));
 		c.push_back(Create_Basic_AI(GRUNT , AEVec2{ 1895.0f , -165.0f }));
 		c.push_back(Create_Basic_AI(ARCHER, AEVec2{ 2335.0f ,  195.0f }));
