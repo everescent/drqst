@@ -132,16 +132,16 @@ void Dragon::Update(Dragon& dummy, const float dt)
   if (Dir.L)
   {
     PosX -= GetVelocity().x * dt;
-    Facing = -Dragon_Scale;
+    Facing = -1.0f;
     Set_Direction(LEFT);
-    Transform_.SetScale(Facing, Dragon_Scale);
+    Transform_.SetScale(Facing, 1.0f);
   }
   else if (Dir.R)
   {
     PosX += GetVelocity().x * dt;
-    Facing = Dragon_Scale;
+    Facing = 1.0f;
     Set_Direction(RIGHT);
-    Transform_.SetScale(Facing, Dragon_Scale);
+    Transform_.SetScale(Facing, 1.0f);
   }
   if (Dir.UP)
   {
@@ -188,11 +188,11 @@ void Dragon::Update(Dragon& dummy, const float dt)
   for (int i = 0; i < Bullet_Buffer; ++i)
   {
     Fireball[i].Pos(PosX, PosY);
-    Fireball[i].Update(Fireball_Scale);
+    Fireball[i].Update(dt, Fireball_Scale);
   }
   //Update Mega Fireball
   Mfireball.Pos(PosX, PosY);
-  Mfireball.Update(Fireball_Scale);
+  Mfireball.Update(dt, Fireball_Scale);
   //Check for distance limit (Fireball)
   for (int i = 0; i < Bullet_Buffer; ++i)
     if (Fireball[i].IsActive())

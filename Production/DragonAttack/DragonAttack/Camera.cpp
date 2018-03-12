@@ -28,46 +28,14 @@ void CamFollow(Transform const &PosMatrix, float OffsetX, float OffsetY, float D
 {
   //Moves the camera left or right
   static float Offset = OffsetX;
-  static bool UP = false;
-  static bool DOWN = false;
-  static float Cam_posY = PosMatrix.GetTranslateMatrix().m[1][2] + OffsetY;
-  static float New_Y = PosMatrix.GetTranslateMatrix().m[1][2] + OffsetY;
   //To use a smooth animation curve
   float Accel = 2.0f;
-  if (PosMatrix.GetTranslateMatrix().m[1][2] + OffsetY > Cam_posY + 200.0f)
-  {
-    New_Y = PosMatrix.GetTranslateMatrix().m[1][2] + OffsetY;
-    UP = true;
-  }
-  else if (PosMatrix.GetTranslateMatrix().m[1][2] + OffsetY < Cam_posY - 200.0f)
-  {
-    New_Y = PosMatrix.GetTranslateMatrix().m[1][2] + OffsetY;
-    DOWN = true;
-  }
-  if (UP)
-  {
-    Cam_posY += Accel;
-    if (Cam_posY >= New_Y)
-    {
-      Cam_posY = New_Y;
-      UP = false;
-    }
-  }
-  else if (DOWN)
-  {
-    Cam_posY -= Accel;
-    if (Cam_posY <= New_Y)
-    {
-      Cam_posY = New_Y;
-      DOWN = false;
-    }
-  }
   if (Direction < 0.0f)
   {
     if (Offset <= -OffsetX)
       Offset = -OffsetX;
     AEGfxSetCamPosition(PosMatrix.GetTranslateMatrix().m[0][2] + Offset,
-                        Cam_posY);
+      PosMatrix.GetTranslateMatrix().m[1][2] + OffsetY);
     Accel *= Accel;
     Offset += -Accel;
   }

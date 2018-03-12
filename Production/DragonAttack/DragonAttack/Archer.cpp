@@ -37,14 +37,12 @@ Archer::Archer(Sprite *p_Sprite, Sprite *Arrow_Sprite, const float posX, const f
 {
   SetActive(true);
   GameObject::Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
-  Transform_.SetScale(Archer_Scale, Archer_Scale);
   //Initialize position of Archer
   PosX = posX;
   PosY = posY;
   Transform_.SetTranslate(PosX, PosY);
   Transform_.Concat();
-  //Arrow.Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
-  Arrow.Transform_.SetScale(Arrow_Scale, Arrow_Scale);
+  Arrow.Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
   Arrow.Transform_.Concat();
 }
 
@@ -226,11 +224,11 @@ void Archer::Update(Dragon& player, const float dt)
     }
     if (player.PosX < PosX)
     {
-      Transform_.SetScale(-Archer_Scale, Archer_Scale);
+      Transform_.SetScale(-1.0f, 1.0f);
     }
     else
     {
-      Transform_.SetScale(Archer_Scale, Archer_Scale);
+      Transform_.SetScale(1.0f, 1.0f);
     }
     PosY -= Gravity;
     //Assign state

@@ -36,7 +36,7 @@ void AI_Sprite_Init(void)
 	G_SPRITE    = S_CreateSquare(70.0f, ".//Textures/grunt.png");
 	K_SPRITE    = S_CreateSquare(30.0f, ".//Textures/Knight.png");
 	MA_SPRITE   = S_CreateSquare(30.0f, ".//Textures/mage.png");
-	D_SPRITE    = S_CreateSquare(0.5f, ".//Textures/Bob.png");
+	D_SPRITE    = S_CreateSquare(Dragon_Scale, ".//Textures/Bob.png");
 
 	L_SPRITE    = S_CreateSquare(60.0f, ".//Textures/Lancelot.png");
 	//ME_SPRITE = NULL;

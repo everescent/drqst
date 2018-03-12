@@ -37,7 +37,7 @@ const float Dragon_Scale    { 70.0f   };
 const float Jump_Height     { 400.0f  }; //Maximum height player can jump
 const float Jump_Mult       { 3.2f    }; //How fast player can jump
 const float Start_Pos_X     { -320.0f }; //Player stating position X
-const float Start_Pos_Y     { -100.0f }; //Player starting position Y
+const float Start_Pos_Y     { -80.0f }; //Player starting position Y
 //Player velocity
 const AEVec2 Player_Speed   { 480.0f, 480.0f * Jump_Mult };
 const float Cam_Offset_X    { 320.0f  }; //Camera offset X
@@ -101,14 +101,12 @@ public:
       playlist.push_back(".//Audio/Fireball_Hit.mp3"); 
       playlist.push_back(".//Audio/Fireball.mp3");     } }
   {
+    SetActive(true);
     //Initialize player start location
     PosX = Start_Pos_X;
     PosY = Start_Pos_Y;
     //Set velocity
     SetVelocity(Player_Speed);
-    //Set Scale
-    Transform_.SetScale(Dragon_Scale, Dragon_Scale);
-    Transform_.Concat();
     //Reserve a block of memory per number of bullets 
     Fireball.reserve(Bullet_Buffer);
     //Initialize all the fireballs
@@ -120,14 +118,10 @@ public:
     {
       Fireball[i].SetVelocity(AEVec2{ Bullet_Speed, 0.0f });
       Fireball[i].Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
-      Fireball[i].Transform_.SetScale(Fireball_Scale, Fireball_Scale);
-      Fireball[i].Transform_.Concat();
     }
     //Initialize Mega Fireball
     Mfireball.SetVelocity(AEVec2{ Bullet_Speed / 2, 0.0f });
     Mfireball.Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
-    Mfireball.Transform_.SetScale(MFireball_Scale, MFireball_Scale);
-    Mfireball.Transform_.Concat();
   }
   ~Dragon()
   {

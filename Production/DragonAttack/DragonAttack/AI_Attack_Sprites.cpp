@@ -13,7 +13,7 @@ void Attack_Sprite_Init(void)
 	EBALL_ATTACK = S_CreateSquare(20.0f, ".//Textures/Energy_Ball_Final.png");
 	STAB_ATTACK  = S_CreateSquare(40.0f, ".//Textures/arondight.png");
 	ARROW_ATTACK = S_CreateSquare(20.0f, ".//Textures/Arrow.png");
-	FIREBALL_ATTACK = S_CreateSquare(0.5f, ".//Textures/Fireball.png");
+	FIREBALL_ATTACK = S_CreateSquare(50.0f, ".//Textures/Fireball.png");
 
 	EBALL_ATTACK.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 	STAB_ATTACK.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
