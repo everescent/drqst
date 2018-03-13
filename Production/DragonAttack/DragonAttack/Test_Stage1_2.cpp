@@ -93,26 +93,28 @@ namespace Test_Stage1_2
 
 		coin2 = new PickUp{ COIN_SPRITE,
 			Col_Comp{ 0.0f - 25.0f, 0.0f - 25.0f, 0.0f + 25.0f, 0.0f + 25.0f, Rect },
-			COIN, 4200.0f , -325.0f };
+			COIN, 2800.0f , -600.0f };
 
 		coin3 = new PickUp{ COIN_SPRITE,
 			Col_Comp{ 0.0f - 25.0f, 0.0f - 25.0f, 0.0f + 25.0f, 0.0f + 25.0f, Rect },
-			COIN, 5450.0f , 200.0f };
+			COIN, 5750.0f , 200.0f };
 
 		hp = new PickUp{ HP_SPRITE,
 			Col_Comp{ 0.0f - 25.0f, 0.0f - 25.0f, 0.0f + 25.0f, 0.0f + 25.0f, Rect },
-			HP, 5450.0f , 200.0f };
+			HP, 4300.0f , 60.0f };
 
 		c.push_back(Create_Basic_AI(GRUNT , AEVec2{  727.0f ,  105.0f }));
 		c.push_back(Create_Basic_AI(GRUNT , AEVec2{ 1895.0f , -165.0f }));
 		c.push_back(Create_Basic_AI(ARCHER, AEVec2{ 2335.0f ,  195.0f }));
-		c.push_back(Create_Basic_AI(GRUNT , AEVec2{ 4500.0f , -345.0f }));
-		c.push_back(Create_Basic_AI(ARCHER, AEVec2{ 4700.0f , -345.0f }));
-		c.push_back(Create_Basic_AI(GRUNT , AEVec2{ 4900.0f , -345.0f }));
-		c.push_back(Create_Basic_AI(GRUNT , AEVec2{ 5500.0f ,  195.0f }));
+		c.push_back(Create_Basic_AI(GRUNT , AEVec2{ 3200.0f , -600.0f }));
+		c.push_back(Create_Basic_AI(ARCHER, AEVec2{ 3500.0f , -600.0f }));
+		c.push_back(Create_Basic_AI(GRUNT , AEVec2{ 3800.0f , -600.0f }));
+		c.push_back(Create_Basic_AI(GRUNT , AEVec2{ 5200.0f ,  210.0f }));
 		//c.push_back(Create_Basic_AI(GRUNT , AEVec2{ 5800.0f ,  195.0f }));
 		c.push_back(Create_Basic_AI(GRUNT , AEVec2{ 6450.0f ,  195.0f }));
-		c.push_back(Create_Basic_AI(ARCHER, AEVec2{ 6950.0f ,  300.0f }));
+		//c.push_back(Create_Basic_AI(ARCHER, AEVec2{ 6600.0f ,  300.0f }));
+		c.push_back(Create_Basic_AI(KNIGHT, AEVec2{ 7200.0f ,  300.0f }));
+
 	}
 
 
@@ -295,29 +297,30 @@ namespace Test_Stage1_2
 		coin1->Render();
 		coin2->Render();
 		coin3->Render();
+		hp->Render();
 		next->Render();
 
-		w1->Render();
-		w2->Render();
-		w3->Render();
-		w4->Render();
-		w5->Render();
-		w9->Render();
-		w6 ->Render();
-		w7->Render();
-		w8->Render();
-		w12->Render();
-		w13->Render();
-		w16->Render();
-		w17->Render();
-		w18->Render();
+		//w1->Render();
+		//w2->Render();
+		//w3->Render();
+		//w4->Render();
+		//w5->Render();
+		//w9->Render();
+		//w6 ->Render();
+		//w7->Render();
+		//w8->Render();
+		//w12->Render();
+		//w13->Render();
+		//w16->Render();
+		//w17->Render();
+		//w18->Render();
 
-		w21->Render();
-		w22->Render();
-		w23->Render();
-		w24->Render();
-		w25->Render();
-		w29->Render();
+		//w21->Render();
+		//w22->Render();
+		//w23->Render();
+		//w24->Render();
+		//w25->Render();
+		//w29->Render();
 
 		player->Render();
 		player->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
@@ -334,7 +337,7 @@ namespace Test_Stage1_2
 
 		delete w1,w2,w3,w4,w5,w6,w7,w8,w9,w12,w13,w16,w17,w18, w21, w22, w23, w24, w25, w29;
 		
-		delete coin1, coin2, coin3;
+		delete coin1, coin2, coin3, hp;
 		delete next;
 		delete ui;
 
