@@ -22,6 +22,22 @@ prior written consent of DigiPen Institute of Technology is prohibited.
 using std::vector;
 using std::function;
 
+// stores the values to randomize the particle variables
+// set to 0 if it is not meant to be used
+struct Particle_Range
+{
+    int              Spread_;       //Directional spread; Set to 0 for no spread
+    int              Size_Rand_;    //Size variation of each particle
+    int              Sp_Rand_;      //Range for the random generation of speed
+    int              Life_Rand_;    //Range for the random generation of lifetime
+
+    // default constructor to zero initialize the variables
+    Particle_Range()
+        : Spread_{}, Size_Rand_{}, Sp_Rand_{}, Life_Rand_{}
+    {
+    }
+};
+
 //Emitter handles the processing of the particle attributes and 
 //also emission properties.
 struct Emitter {
@@ -30,26 +46,24 @@ Emitter(AEGfxVertexList* pMesh, AEVec2 Pos);
 //Clears the vector of particles
 ~Emitter();
 
-AEGfxVertexList* pMesh_;        //Particle mesh
-AEVec2           Pos_;          //Emitter position
-int              Vol_Max;       //Maximum number of particles that can be emitted
-float            Dist_Min_;     //Minimum emission distance
-int              PPS_;          //Particle Per Second
-float            Direction_;    //Particle direction
-int              Spread_;       //Directional spread; Set to 0 for no spread
-float            Conserve_;     //Law of Conservation of Energy
-float            Size_;         //Size of each particle
-int              Size_Rand_;    //Size variation of each particle
-float            Speed_;        //Scales the speed of all particles by this value
-int              Sp_Rand_;      //Range for the random generation of speed
-                                //Set to 0 for no random speed
-float            Lifetime_;     //Lifetime of all particles
-int              Life_Rand_;    //Range for the random generation of lifetime
-                                //Set to 0 for no random lifetime
-Color            Color_;        //Color of particles
-float            Transparency_; //Transparency of particles
-float            Exposure_;     //Exposure of particles
-vector<Particle> Particles_;    //Dynamic array of particles
+AEGfxVertexList* pMesh_;               //Particle mesh
+AEVec2           Pos_;                 //Emitter position
+int              Vol_Max;              //Maximum number of particles that can be emitted
+float            Dist_Min_;            //Minimum emission distance
+
+int              PPS_;                 //Particle Per Second
+float            Conserve_;            //Law of Conservation of Energy
+
+float            Direction_;           //Particle direction
+float            Size_;                //Size of each particle
+float            Speed_;               //Scales the speed of all particles by this value
+float            Lifetime_;            //Lifetime of all particles
+
+Particle_Range  Particle_Rand_;        //sets the limit of variable if randomizing them                                    
+Color            Color_;               //Color of particles
+float            Transparency_;        //Transparency of particles
+float            Exposure_;            //Exposure of particles
+vector<Particle> Particles_;           //Dynamic array of particles
 };
 
 //Particle system takes care of the environment and
@@ -69,9 +83,13 @@ Particle_System(AEGfxVertexList* pMesh, AEVec2 Pos)
 //User specifies the equation for phase x and phase y
 void Turbulence(const float Strength, 
                 const function<float()>& PhaseX = 
-                []() ->float {return cosf((float)time(nullptr)); },
+                []() -> float {  float phaseRot = (float)(rand() % 360);
+                phaseRot = AEDegToRad(phaseRot);
+                return cosf(phaseRot); },
                 const function<float()>& PhaseY = 
-                []() ->float {return sinf((float)time(nullptr)); }
+                []() -> float {  float phaseRot = (float)(rand() % 360);
+                phaseRot = AEDegToRad(phaseRot);
+                return sinf(phaseRot); }
                );
 //Simulates speed dampening
 void Drag(const float Strength);

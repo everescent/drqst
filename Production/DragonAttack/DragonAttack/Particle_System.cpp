@@ -14,18 +14,17 @@ prior written consent of DigiPen Institute of Technology is prohibited.
 /*****************************************************************************/
 
 #include "Particle_System.h"
+#include <iostream>
 
 //Initialize mesh and position, everything else is 0
 //User should be keying in desired values
 //Doing this in a "function" style is too messy
 Emitter::Emitter(AEGfxVertexList* pMesh, AEVec2 Pos)
-:pMesh_{ pMesh }, Pos_{ Pos }, Vol_Max{ 0 },
-Dist_Min_{ 0.0f }, PPS_{ 0 }, Direction_{ 0.0f },
-Spread_{ 0 }, Conserve_{ 0.0f }, Size_{ 0.0f }, 
-Size_Rand_{ 0 }, Speed_{ 0.0f }, Sp_Rand_{ 0 },
-Lifetime_{ 0.0f }, Life_Rand_{ 0 },
-Color_{}, Transparency_{ 1.0f }, Exposure_{ 1.0f },
-Particles_{}
+:pMesh_{ pMesh },       Pos_{ Pos.x, Pos.y }, Vol_Max{ 0 },
+ Dist_Min_{ 0.0f },     PPS_{ 0 },            Direction_{ 0.0f },
+ Conserve_{ 0.0f },     Size_{ 0.0f },        Speed_{ 0.0f }, 
+ Lifetime_{ 0.0f },     Particle_Rand_{},     Color_{}, 
+ Transparency_{ 1.0f }, Exposure_{ 1.0f },    Particles_{}
 {
   //Randomize a seed for rand
   srand((unsigned int)time(nullptr));
@@ -47,32 +46,39 @@ Particle Particle_System::Create()
   float Spd_tmp  = Emitter_.Speed_;     //Final Speed
   float Life_tmp = Emitter_.Lifetime_;  //Final Lifetime
   //If there is spread
-  if (Emitter_.Spread_)
+  if (Emitter_.Particle_Rand_.Spread_)
   {
-    //50% chance of returning a positive or negative
-    Dir_tmp += (rand() % 100) < 50 ? (rand() % Emitter_.Spread_) :
-               -(rand() % Emitter_.Spread_);
+	float min = Emitter_.Direction_ - Emitter_.Particle_Rand_.Spread_;
+	float max = Emitter_.Direction_ + Emitter_.Particle_Rand_.Spread_;
+
+	// randomize a direction between min and max values
+	Dir_tmp = (min + rand() % (int)(max - min + 1));
   }
   //If there is random size
-  if (Emitter_.Size_Rand_)
+  if (Emitter_.Particle_Rand_.Size_Rand_)
   {
-    //50% chance of returning a positive or negative
-    Sz_tmp += (rand() % 100) < 50 ? (rand() % Emitter_.Size_Rand_) :
-              -(rand() % Emitter_.Size_Rand_);
+	float min = Emitter_.Size_ - Emitter_.Particle_Rand_.Size_Rand_;
+	float max = Emitter_.Size_ + Emitter_.Particle_Rand_.Size_Rand_;
+
+	// randomize a size between min and max values
+	Sz_tmp = (min + rand() % (int)(max - min + 1));
   }
   //If there is speed randomness
-  if (Emitter_.Sp_Rand_)
+  if (Emitter_.Particle_Rand_.Sp_Rand_)
   {
-    //50% chance of returning a positive or negative
-    Spd_tmp += (rand() % 100) < 50 ? (rand() % Emitter_.Sp_Rand_) :
-               -(rand() % Emitter_.Sp_Rand_);
+	float min = Emitter_.Speed_ - Emitter_.Particle_Rand_.Sp_Rand_;
+	float max = Emitter_.Speed_ + Emitter_.Particle_Rand_.Sp_Rand_;
+
+	// randomize the speed between min and max values
+	Spd_tmp = (min + rand() % (int)(max - min + 1));
   }
   //If there is life randomness
-  if (Emitter_.Life_Rand_)
+  if (Emitter_.Particle_Rand_.Life_Rand_)
   {
-    //50% chance of returning a positive or negative
-    Life_tmp += (rand() % 100) < 50 ? (rand() % Emitter_.Life_Rand_) :
-                -(rand() % Emitter_.Life_Rand_);
+	float min = Emitter_.Lifetime_ - Emitter_.Particle_Rand_.Life_Rand_;
+	float max = Emitter_.Lifetime_ + Emitter_.Particle_Rand_.Life_Rand_;
+
+	Life_tmp = (min + rand() % (int)(max - min + 1));
   }
   //Convert to radians
   Dir_tmp = AEDegToRad(Dir_tmp);

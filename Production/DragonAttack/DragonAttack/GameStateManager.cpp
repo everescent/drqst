@@ -20,9 +20,9 @@ Technology is prohibited.
 namespace GSM
 {
 
-	GAME_STATE previous = GS_MAIN;
-	GAME_STATE current  = GS_MAIN;
-	GAME_STATE next     = GS_MAIN;
+	GAME_STATE previous = AI_TEST_STAGE;
+	GAME_STATE current  = AI_TEST_STAGE;
+	GAME_STATE next     = AI_TEST_STAGE;
 
 	GameStateFunctions GSF[GS_QUIT] = { 0 };
 
@@ -57,12 +57,12 @@ namespace GSM
 		GSF[GS_LEVEL1_3].Free   = Test_Stage1_3::Free;
 		GSF[GS_LEVEL1_3].Unload = Test_Stage1_3::Unload;
 
-		//GSF[AI_TEST_STAGE].Init   = AI_Test_Stage::Init;
-		//GSF[AI_TEST_STAGE].Load   = AI_Test_Stage::Load;
-		//GSF[AI_TEST_STAGE].Update = AI_Test_Stage::Update;
-		//GSF[AI_TEST_STAGE].Draw   = AI_Test_Stage::Draw;
-		//GSF[AI_TEST_STAGE].Free   = AI_Test_Stage::Free;
-		//GSF[AI_TEST_STAGE].Unload = AI_Test_Stage::Unload;
+		GSF[AI_TEST_STAGE].Init   = AI_Test_Stage::Init;
+		GSF[AI_TEST_STAGE].Load   = AI_Test_Stage::Load;
+		GSF[AI_TEST_STAGE].Update = AI_Test_Stage::Update;
+		GSF[AI_TEST_STAGE].Draw   = AI_Test_Stage::Draw;
+		GSF[AI_TEST_STAGE].Free   = AI_Test_Stage::Free;
+		GSF[AI_TEST_STAGE].Unload = AI_Test_Stage::Unload;
 
 		//GSF[GS_LEVEL_IMPORT].Init   = Test_Stage_Import::Init;
 		//GSF[GS_LEVEL_IMPORT].Load   = Test_Stage_Import::Load;

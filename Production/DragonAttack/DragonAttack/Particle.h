@@ -87,7 +87,7 @@ void Render()
     //Set render settings
     AEGfxSetRenderMode(AE_GFX_RM_COLOR);
     //Exposure is a uniform multipler throughout RGB
-    AEGfxSetTintColor(Transparency_, Color_.R * Exposure_,
+    AEGfxSetTintColor(1.0f, Color_.R * Exposure_,
                                      Color_.G * Exposure_,
                                      Color_.B * Exposure_
     );
