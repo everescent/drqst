@@ -31,15 +31,15 @@ namespace Test_Stage1_3
 {
 	void Load(void)
 	{
-		COIN_SPRITE = new Sprite{ S_CreateSquare(50.0f, "Textures/coin.png", 1.0f) };
+		/*COIN_SPRITE = new Sprite{ S_CreateSquare(50.0f, "Textures/coin.png", 1.0f) };
 		HP_SPRITE = new Sprite{ S_CreateSquare(50.0f, "Textures/hp.png", 1.0f) };
 		DMG_SPRITE = new Sprite{ S_CreateSquare(50.0f, "Textures/Fireball.png", 1.0f) };
-		SPD_SPRITE = new Sprite{ S_CreateSquare(50.0f, "Textures/spd.png", 1.0f) };
+		SPD_SPRITE = new Sprite{ S_CreateSquare(50.0f, "Textures/spd.png", 1.0f) };*/
 		WALL_SPRITE = new Sprite{ S_CreateRectangle(50.0f, 50.0f, ".//Textures/download.jpg") };
 		LCPLAT_SPRITE = new Sprite{ CreatePlatform(2.0f, 3.0f, ".//Textures/Win_Platform.png") };
-		FLOOR_SPRITE = new Sprite{ CreateFloor(1.0f, "Textures/Cobblestone.png", 1.0f, 1.0f) };
+		FLOOR_SPRITE = new Sprite{ CreateFloor(1.0f, ".//Textures/Cobblestone.png", 1.0f, 1.0f) };
 
-		BG = new Sprite{ CreateBG(22.0f, 2.0f, "Textures/BG/BG_Stage1.png", 1.0f, 15.0f) };
+		BG = new Sprite{ CreateBG(22.0f, 2.0f, ".//Textures/BG_Stage1.png", 1.0f, 15.0f) };
 		M_BG = new Transform{};
 		player = dynamic_cast<Dragon*>(Create_Basic_AI(DRAGON));
 		Audio = new Audio_Engine{ 1, [](std::vector <std::string> &playlist)->void {playlist.push_back(".//Audio/Lancelot_BGM.mp3"); } };
@@ -109,7 +109,6 @@ namespace Test_Stage1_3
 			elem.Update(*player, dt);
 		}
 
-		next->Update(*player, dt);
 		player->Update(*player, dt);
 		ui->UI_Update(player);
 
@@ -132,7 +131,6 @@ namespace Test_Stage1_3
 		{
 			next->Render();
 		}
-
 		player->Render();
 		player->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 		ui->Render();
@@ -147,10 +145,10 @@ namespace Test_Stage1_3
 		delete next;
 		delete ui;
 
-		delete COIN_SPRITE;//pickups
-		delete HP_SPRITE;
-		delete DMG_SPRITE;
-		delete SPD_SPRITE;
+		//delete COIN_SPRITE;//pickups
+		//delete HP_SPRITE;
+		//delete DMG_SPRITE;
+		//delete SPD_SPRITE;
 		delete WALL_SPRITE;
 		delete LCPLAT_SPRITE;
 		delete FLOOR_SPRITE;
