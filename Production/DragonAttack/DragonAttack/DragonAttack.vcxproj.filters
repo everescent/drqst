@@ -91,6 +91,9 @@
     <Filter Include="Game_Object\User_Interface">
       <UniqueIdentifier>{22df9dde-bf35-49ea-bc6a-7d853199bfdd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Particle_System">
+      <UniqueIdentifier>{5412a422-8297-4941-8978-7f5d9d523e65}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -230,6 +233,9 @@
     </ClCompile>
     <ClCompile Include="AI_Attack_Sprites.cpp">
       <Filter>Characters\AI</Filter>
+    </ClCompile>
+    <ClCompile Include="Particle_System.cpp">
+      <Filter>Particle_System</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -376,6 +382,12 @@
     </ClInclude>
     <ClInclude Include="AI_Attack_Sprites.h">
       <Filter>Characters\AI</Filter>
+    </ClInclude>
+    <ClInclude Include="Particle.h">
+      <Filter>Particle_System</Filter>
+    </ClInclude>
+    <ClInclude Include="Particle_System.h">
+      <Filter>Particle_System</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

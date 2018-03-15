@@ -184,6 +184,7 @@
     <ClCompile Include="EngineProof.cpp" />
     <ClCompile Include="Main_Menu.cpp" />
     <ClCompile Include="Merlin.cpp" />
+    <ClCompile Include="Particle_System.cpp" />
     <ClCompile Include="Physics.cpp" />
     <ClCompile Include="PickUp.cpp" />
     <ClCompile Include="Platform.cpp" />
@@ -233,6 +234,8 @@
     <ClInclude Include="EngineProof.h" />
     <ClInclude Include="Main_Menu.h" />
     <ClInclude Include="Merlin.h" />
+    <ClInclude Include="Particle.h" />
+    <ClInclude Include="Particle_System.h" />
     <ClInclude Include="Physics.h" />
     <ClInclude Include="PickUp.h" />
     <ClInclude Include="Platform.h" />
