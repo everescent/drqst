@@ -20,60 +20,61 @@ Technology is prohibited.
 
 namespace Input {
 
-	std::vector <int> input;
 	
-	const std::vector <int> &Get_User_Input(void)
-	{
-		using namespace Input;
 
-		AEInputUpdate();
+    int input[NUM_OF_KEYS] {};
 
-		if (AEInputCheckCurr(go_right))
-		{
-			input.push_back(go_right);
-		}
 
-		if (AEInputCheckCurr(go_left))
-		{
-			input.push_back(go_left);
-		}
+    const int* Get_User_Input(void)
+    {
+        using namespace Input;
 
-		if (AEInputCheckCurr(go_up))
-		{
-			input.push_back(go_up);
-		}
+        memset(input, 0, sizeof(int) * NUM_OF_KEYS);
 
-		if (AEInputCheckCurr(go_down))
-		{
-			input.push_back(go_down);
-		}
+        if (AEInputCheckCurr(go_right))
+        {
+            input[0] = go_right;
+        }
 
-		if (AEInputCheckTriggered(jump_up))
-		{
-			input.push_back(jump_up);
-		}
+        if (AEInputCheckCurr(go_left))
+        {
+            input[1] = go_left;
+        }
 
-		if (AEInputCheckTriggered(fire))
-		{
-			input.push_back(fire);
-		}
+        if (AEInputCheckCurr(go_up))
+        {
+            input[2] = go_up;
+        }
 
-		if (AEInputCheckTriggered(special))
-		{
-			input.push_back(special);
-		}
+        if (AEInputCheckCurr(go_down))
+        {
+            input[3] = go_down;
+        }
 
-		// if esc key or the close button was triggered, stop the game
-		if (AEInputCheckTriggered(quit_game) || 0 == AESysDoesWindowExist())
-		{
-			GSM::next = GS_QUIT;
-		}
+        if (AEInputCheckCurr(jump_up))
+        {
+            input[4] = jump_up;
+        }
 
-		return input;
-	}
+        if (AEInputCheckTriggered(fire))
+        {
+            input[5] = fire;
+        }
 
-	void ClearBuffer(void)
-	{
-		input.clear();
-	}
+        if (AEInputCheckTriggered(special))
+        {
+            input[6] = special;
+        }
+
+        return input;
+    }
+
+    bool Quit_Triggered()
+    {
+        if (AEInputCheckTriggered(quit_game) || 0 == AESysDoesWindowExist())
+        {
+            return true;
+        }
+        return false;
+    }
 }

@@ -30,6 +30,8 @@ namespace Input
 	const int special    = AEVK_P;
 	const int quit_game  = AEVK_ESCAPE;
 
+    const int NUM_OF_KEYS = 7;
+
 
 	/******************************************************************************/
 	/*!
@@ -43,8 +45,8 @@ namespace Input
 	No return.
 	*/
 	/******************************************************************************/
-	const std::vector <int> &Get_User_Input(void);
+    const int* Get_User_Input  (void);
 
-	void ClearBuffer(void);
+    bool Quit_Triggered();
 
 }

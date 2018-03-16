@@ -34,6 +34,7 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
     while (GSM::current == GSM::next)
     {
       AESysFrameStart();
+      AEInputUpdate();
       GSM::Update_and_Draw(dt);
       AESysFrameEnd();
 
