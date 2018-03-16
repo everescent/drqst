@@ -36,7 +36,7 @@ void Characters::Decrease_HP(const char damage)
 	if (vulnerable)
 	{
 		hp -= damage;
-		//std::cout << "HP reduced! " << hp << std::endl;
+		std::cout << "HP reduced! " << hp << std::endl;
 	}
 }
 

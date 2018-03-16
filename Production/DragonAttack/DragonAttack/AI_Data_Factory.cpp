@@ -39,8 +39,8 @@ void AI_Sprite_Init(void)
 	D_SPRITE    = S_CreateSquare(Dragon_Scale, ".//Textures/Bob.png");
 
 	L_SPRITE    = S_CreateSquare(60.0f, ".//Textures/Lancelot.png");
-	//ME_SPRITE = NULL;
-	KA_SPRITE = S_CreateSquare(100.0f, ".//Textures/King_Arthur.png");
+    //ME_SPRITE   = S_CreateSquare(0.5f, ".//Textures/Merlin.png");
+	KA_SPRITE   = S_CreateSquare(100.0f, ".//Textures/King_Arthur.png");
 
 
 	MA_SPRITE.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
@@ -80,7 +80,7 @@ Characters *Create_Boss_AI(const BOSS_AI boss)
 		break;
 	case MERLIN:      return new Merlin(Get_Attack_Sprite(EBALL_SPRITE), Get_Attack_Sprite(ARROW_SPRITE));
 		break;
-	case KING_ARTHUR: return nullptr;// new King_Arthur(&KA_SPRITE);
+	case KING_ARTHUR: return  new King_Arthur(&KA_SPRITE);
 		break;
 
 	default: break;

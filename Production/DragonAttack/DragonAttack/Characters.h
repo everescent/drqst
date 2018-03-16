@@ -41,7 +41,7 @@ class Characters : public GameObject
 		static int score;          // player score for the stage
 		static int enemies_killed; // number of enemies killed
 		float idle_timing;         // idle timing for mob
-		bool vulnerable;  	       // immune to damage if true
+		bool vulnerable;  	       // immune to damage if false
 
 	public:
 		Characters(Sprite* t_sprite, const int HP, Col_Comp &&t_col); // default constructor

@@ -34,7 +34,7 @@ namespace {
 	const int range_limit = 500; // range limit for slash
 
 	const float START_POINT_X = 200.0f; // spawn point of king arthur
-	const float START_POINT_Y = -150.0f;// spawn point of king arthur
+	const float START_POINT_Y = -220.0f;// spawn point of king arthur
 
 	const float SLASH_SCALE = 20.0f;
 
@@ -333,9 +333,7 @@ void King_Arthur::Dash_Attack(Dragon &d, const float dt)
 
 void King_Arthur::Single_Slash(Dragon &d, const float dt)
 {
-	UNREFERENCED_PARAMETER(dt);
-
-	arthur[SINGLE_SLASH].Projectile::Update(SLASH_SCALE); // move the slash
+	arthur[SINGLE_SLASH].Projectile::Update(dt, SLASH_SCALE); // move the slash
 
 	if(! arthur[SINGLE_SLASH].GetCollided()) // check for collision
 	{
@@ -360,7 +358,7 @@ void King_Arthur::Single_Slash(Dragon &d, const float dt)
 
 void King_Arthur::Triple_Slash(Dragon &d, const float dt)
 {
-	UNREFERENCED_PARAMETER(dt);
+
 
 	const char ts_limit = limit - 1; // limit the loop to just the triple slashes
 	
@@ -384,7 +382,7 @@ void King_Arthur::Triple_Slash(Dragon &d, const float dt)
 			arthur[i].SetActive(true);
 		}
 
-		arthur[i].Projectile::Update(SLASH_SCALE); // update the pos of the slash
+		arthur[i].Projectile::Update(dt, SLASH_SCALE); // update the pos of the slash
 		
 		// checks if it has collided with the player
 		if (!arthur[i].GetCollided())
