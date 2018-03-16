@@ -327,19 +327,8 @@ void Lancelot::Lancelot_Phase2(const float dt)
 
 void Lancelot::Stab(Dragon& d, const float dt)
 {
-	lancelot[STAB].Projectile::Update(ATTACK_SCALE, false, 0.0f); // move the stab projectile
-	//Collision_.Update_Col_Pos(PosX - ATTACK_SCALE, PosY - ATTACK_SCALE,
-	//						  PosX + ATTACK_SCALE, PosY + ATTACK_SCALE);
-
-	if (!lancelot[STAB].GetCollided()) // check for collision
-	{
-		if (lancelot[STAB].Collision_.Dy_Rect_Rect(d.Collision_, lancelot[STAB].GetVelocity(), d.GetVelocity(), dt))
-		{
-			lancelot[STAB].SetCollided(true);
-			d.Decrease_HP();
-			d.PlayHit();
-		}
-	}
+	lancelot[STAB].Projectile::Update(dt, ATTACK_SCALE, false, 0.0f); // move the stab projectile
+	
 
 	if (lancelot[STAB].GetDist() > 10.0f) // accelerate the stab once it past 10 pixels
 	{
@@ -347,6 +336,16 @@ void Lancelot::Stab(Dragon& d, const float dt)
 		AEVec2 new_velocity = lancelot[STAB].GetVelocity();
 		new_velocity.x += stab_accel;
 		lancelot[STAB].SetVelocity(new_velocity);
+
+        if (!lancelot[STAB].GetCollided()) // check for collision
+        {
+            if (lancelot[STAB].Collision_.Dy_Rect_Rect(d.Collision_, lancelot[STAB].GetVelocity(), d.GetVelocity(), dt))
+            {
+                lancelot[STAB].SetCollided(true);
+                d.Decrease_HP();
+                d.PlayHit();
+            }
+        }
 	}
 
 	if (lancelot[STAB].GetDist() > 100.0f) // range of stab

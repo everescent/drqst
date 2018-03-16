@@ -9,7 +9,7 @@ namespace  // global variables for KNIGHT
 	const float ATTACK_RANGE = 120.0f;
 	const float STAB_ACCELRATOR = 100.0f;
 
-	const float KNIGHT_SCALE = 30.0f;
+	const float KNIGHT_SCALE = 70.0f;
 	const float STAB_SCALE = 40.0f;
 	const AEVec2 STAB_VELOCITY {20.0f, 0.0f};
 
