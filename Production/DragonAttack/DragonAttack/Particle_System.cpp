@@ -19,12 +19,13 @@ prior written consent of DigiPen Institute of Technology is prohibited.
 //Initialize mesh and position, everything else is 0
 //User should be keying in desired values
 //Doing this in a "function" style is too messy
-Emitter::Emitter(AEGfxVertexList* pMesh, AEVec2 Pos)
+Emitter::Emitter(AEGfxVertexList* pMesh, AEVec2 Pos, Emitter_Type type)
 :pMesh_{ pMesh },       Pos_{ Pos.x, Pos.y }, Vol_Max{ 0 },
  Dist_Min_{ 0.0f },     PPS_{ 0 },            Direction_{ 0.0f },
  Conserve_{ 0.0f },     Size_{ 0.0f },        Speed_{ 0.0f }, 
  Lifetime_{ 0.0f },     Particle_Rand_{},     Color_{}, 
- Transparency_{ 1.0f }, Exposure_{ 1.0f },    Particles_{}
+ Transparency_{ 1.0f }, Exposure_{ 1.0f },    Particles_{},
+ Type_{type}
 {
   //Randomize a seed for rand
   srand((unsigned int)time(nullptr));
@@ -84,9 +85,26 @@ Particle Particle_System::Create()
   Dir_tmp = AEDegToRad(Dir_tmp);
   //Give mesh
   tmp_.pMesh_ = Emitter_.pMesh_;
+
+
+
   //Initialize position of particle
-  tmp_.Pos_.x = Emitter_.Pos_.x + Emitter_.Dist_Min_;
-  tmp_.Pos_.y = Emitter_.Pos_.y + Emitter_.Dist_Min_;
+
+  switch(Emitter_.Type_)
+  {   
+  case CENTER:   
+      tmp_.Pos_.x = Emitter_.Pos_.Point.x + Emitter_.Dist_Min_;
+      tmp_.Pos_.y = Emitter_.Pos_.Point.y + Emitter_.Dist_Min_;
+      break;
+  case BOX:
+
+      tmp_.Pos_.x = (Emitter_.Pos_.Min_Max.Point_Min.x + rand() % (int)(Emitter_.Pos_.Min_Max.Point_Max.x - Emitter_.Pos_.Min_Max.Point_Min.x + 1));
+      tmp_.Pos_.y = (Emitter_.Pos_.Min_Max.Point_Min.y + rand() % (int)(Emitter_.Pos_.Min_Max.Point_Max.y - Emitter_.Pos_.Min_Max.Point_Min.y + 1));
+      break;
+  }
+
+
+
   //Initialize velocity
   tmp_.Vel_ = { cosf(Dir_tmp), sinf(Dir_tmp) };
   //Scale it by the speed
@@ -230,3 +248,26 @@ void Particle_System::TransRamp_Exp()
     elem.Transparency_ = elem.Exposure_ * 1.5f;
   }
 }
+
+void Particle_System::Newton(const AEVec2 Point, const float strength)
+{
+    AEVec2 final_displacement{}; 
+    
+    for (auto& elem : Emitter_.Particles_)
+    {
+        final_displacement.x = Point.x - elem.Pos_.x;
+        final_displacement.y = Point.y - elem.Pos_.y;
+
+        AEVec2Normalize(&final_displacement, &final_displacement);
+        AEVec2Scale(&final_displacement, &final_displacement, strength);
+
+        // vectors are not parallel
+        if (AEVec2CrossProductMag(&final_displacement, &elem.Vel_))
+        {
+            elem.Vel_.x += final_displacement.x;
+            elem.Vel_.y += final_displacement.y;
+        }
+    }
+}
+
+

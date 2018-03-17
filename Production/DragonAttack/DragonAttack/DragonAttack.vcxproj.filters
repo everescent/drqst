@@ -237,6 +237,9 @@
     <ClCompile Include="Particle_System.cpp">
       <Filter>Particle_System</Filter>
     </ClCompile>
+    <ClCompile Include="Particle_Effects.cpp">
+      <Filter>Particle_System</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h">
@@ -387,6 +390,9 @@
       <Filter>Particle_System</Filter>
     </ClInclude>
     <ClInclude Include="Particle_System.h">
+      <Filter>Particle_System</Filter>
+    </ClInclude>
+    <ClInclude Include="Particle_Effects.h">
       <Filter>Particle_System</Filter>
     </ClInclude>
   </ItemGroup>

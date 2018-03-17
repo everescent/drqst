@@ -18,6 +18,7 @@ prior written consent of DigiPen Institute of Technology is prohibited.
 #include <cmath>      //sinf, cosf
 #include <ctime>      //time
 #include <functional> //function<>
+#include <array>
 
 using std::vector;
 using std::function;
@@ -38,16 +39,37 @@ struct Particle_Range
     }
 };
 
+enum Emitter_Type
+{
+    CENTER,
+    BOX
+};
+
+
+
 //Emitter handles the processing of the particle attributes and 
 //also emission properties.
 struct Emitter {
 //Construct emitter with a mesh for particles and its position
-Emitter(AEGfxVertexList* pMesh, AEVec2 Pos);
+Emitter(AEGfxVertexList* pMesh, AEVec2 Pos, Emitter_Type type);
 //Clears the vector of particles
 ~Emitter();
 
+union Particle_Pos
+{
+    struct Box{
+        AEVec2 Point_Min;
+        AEVec2 Point_Max;
+    };
+    
+    AEVec2 Point;
+    AEVec2 Point_Min_Max[2];
+    Box Min_Max;
+
+};
+
 AEGfxVertexList* pMesh_;               //Particle mesh
-AEVec2           Pos_;                 //Emitter position
+Particle_Pos     Pos_;                 //Emitter position
 int              Vol_Max;              //Maximum number of particles that can be emitted
 float            Dist_Min_;            //Minimum emission distance
 
@@ -64,14 +86,16 @@ Color            Color_;               //Color of particles
 float            Transparency_;        //Transparency of particles
 float            Exposure_;            //Exposure of particles
 vector<Particle> Particles_;           //Dynamic array of particles
+
+Emitter_Type     Type_;                //Type of emitter
 };
 
 //Particle system takes care of the environment and
 //keeping the whole system up to date. 
 struct Particle_System {
 //Initialize emitter
-Particle_System(AEGfxVertexList* pMesh, AEVec2 Pos)
-:Emitter_{ pMesh, Pos }, p_count{ 0 }
+Particle_System(AEGfxVertexList* pMesh, AEVec2 Pos, Emitter_Type type)
+:Emitter_{ pMesh, Pos, type }, p_count{ 0 }
 {}
 //Call emitter destructor to clear vector
 ~Particle_System()
@@ -111,6 +135,8 @@ void Update(const float dt);
 void WarmUp(const float dt, const float time);
 //Renders the particles
 void Render();
+//Attract the particles to a certain point
+void Newton(const AEVec2 Point, const float strength);
 //Emitter
 Emitter Emitter_;
 //Counter for the number of particles birthed so far
