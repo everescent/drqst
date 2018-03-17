@@ -15,7 +15,7 @@ Technology is prohibited.
 
 #include "Dragon.h"
 #include "Camera.h"
-#include "Input_Handler.h"
+//#include "Input_Handler.h"
 #include <iostream>
 
 void Dragon::SetPickup(const int type, const bool status)
@@ -89,38 +89,39 @@ void Dragon::HitInvul(const float dt)
 
 void Dragon::Input()
 {
-  const std::vector <int> &Input = Input::Get_User_Input();
-
-  for (unsigned i = 0; i < Input.size(); ++i)
+  if (AEInputCheckCurr(AEVK_D))
   {
-    switch (Input[i])
-    {
-      case Input::go_left:
-        Dir.L = true;
-        break;
-      case Input::go_right:
-        Dir.R = true;
-        break;
-      case Input::jump_up:
-        if (!Falling)
-          Dir.UP = true;
-        break;
-      case Input::fire:
-        if(!SFX_.GetPlaying(0))
-          SFX_.Play(SHOOT);
-        Attack = true;
-        break;
-      case Input::special:
-        if (Charge == Max_Charge)
-        {
-          MAttack = true;
-          Mfireball.SetActive(true);
-          ResetCharge();
-          break;
-        }
-    }
+      Dir.R = true;
   }
-  Input::ClearBuffer();
+
+  if (AEInputCheckCurr(AEVK_A))
+  {
+      Dir.L = true;
+  }
+
+  if (AEInputCheckTriggered(AEVK_RETURN))
+  {
+      if (!SFX_.GetPlaying(0))
+                  SFX_.Play(SHOOT);
+                Attack = true;
+  }
+
+  if (AEInputCheckTriggered(AEVK_P))
+  {
+      if (Charge == Max_Charge)
+         {
+           MAttack = true;
+           Mfireball.SetActive(true);
+           ResetCharge();
+         }
+  }
+
+  if (AEInputCheckCurr(AEVK_SPACE))
+  {
+      if (!Falling)
+          Dir.UP = true;
+  }
+
 }
 
 void Dragon::Update(Dragon& dummy, const float dt)
