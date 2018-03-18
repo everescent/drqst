@@ -51,6 +51,8 @@ private:
 	void(King_Arthur::*ka_attacks[3])(Dragon &d, float dt);
 
 	bool phase1;
+	Particle_System *healing_effect;
+	KA_MoveSet currAttk;
 
 public:
 	/******************************************************************************/

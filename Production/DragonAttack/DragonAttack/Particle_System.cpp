@@ -93,8 +93,8 @@ Particle Particle_System::Create()
   switch(Emitter_.Type_)
   {   
   case CENTER:   
-      tmp_.Pos_.x = Emitter_.Pos_.Point.x + Emitter_.Dist_Min_;
-      tmp_.Pos_.y = Emitter_.Pos_.Point.y + Emitter_.Dist_Min_;
+      tmp_.Pos_.x = Emitter_.Pos_.Point.x;
+      tmp_.Pos_.y = Emitter_.Pos_.Point.y;
       break;
   case BOX:
 
@@ -103,7 +103,29 @@ Particle Particle_System::Create()
       break;
   }
 
-
+  switch (rand() % 8)
+  {
+  case 0: tmp_.Pos_.x += Emitter_.Dist_Min_;
+	  break;
+  case 1: tmp_.Pos_.y += Emitter_.Dist_Min_;
+	  break;
+  case 2: tmp_.Pos_.x -= Emitter_.Dist_Min_;
+	  break;
+  case 3: tmp_.Pos_.y -= Emitter_.Dist_Min_;
+	  break;
+  case 4: tmp_.Pos_.x += Emitter_.Dist_Min_;
+	      tmp_.Pos_.y += Emitter_.Dist_Min_;
+	  break;
+  case 5: tmp_.Pos_.x -= Emitter_.Dist_Min_;
+	      tmp_.Pos_.y -= Emitter_.Dist_Min_;
+	  break;
+  case 6: tmp_.Pos_.x += Emitter_.Dist_Min_;
+	      tmp_.Pos_.y -= Emitter_.Dist_Min_;
+	  break;
+  case 7: tmp_.Pos_.x -= Emitter_.Dist_Min_;
+	      tmp_.Pos_.y += Emitter_.Dist_Min_;
+	  break;
+  }
 
   //Initialize velocity
   tmp_.Vel_ = { cosf(Dir_tmp), sinf(Dir_tmp) };

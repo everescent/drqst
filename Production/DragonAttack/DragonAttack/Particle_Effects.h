@@ -6,6 +6,7 @@ enum EFFECTS
     MFIREBALL_PARTICLE,
     COIN_PARTICLE,
     ARONDIGHT_PARTICLE,
+	KA_HEALING_PARTICLE,
 };
 
 void Effects_Init(void);

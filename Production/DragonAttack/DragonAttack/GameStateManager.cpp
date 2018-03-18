@@ -74,6 +74,7 @@ namespace GSM
 		SM::StageManagerInit();
 		Attack_Sprite_Init();
 		AI_Sprite_Init();
+		Effects_Init();
 	}
 
 	void Init_and_Load(void)
@@ -128,5 +129,10 @@ namespace GSM
 	bool IsGameRunning(void)
 	{
 		return (current != GS_QUIT);
+	}
+
+	void GSM_Cleanup(void)
+	{
+		Effects_Cleanup();
 	}
 }

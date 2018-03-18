@@ -60,7 +60,7 @@ Lancelot::Lancelot(Sprite* texture)
 	: Characters(texture,
 		HEALTH,  Col_Comp{STARTING_POINT.x - LANCELOT_SCALE, STARTING_POINT.y - LANCELOT_SCALE,
 						  STARTING_POINT.x + LANCELOT_SCALE, STARTING_POINT.y + LANCELOT_SCALE, Rect}),
-	    M_E{ false }
+	    M_E{ false }, arondight_particle{Effects_Get(ARONDIGHT_PARTICLE)}
 
 {
 	Transform_.SetTranslate(STARTING_POINT.x, STARTING_POINT.y); // spawn lancelot at this location
@@ -91,6 +91,18 @@ void Lancelot::Init()
 	// prevent unique mechanic from activating at the start of fight
 	lancelot[MAD_ENHANCEMENT].cooldown_timer = 10.0f; 
 	lancelot[MAD_ENHANCEMENT].cooldown = true; 
+
+	// arondight particle variables
+	arondight_particle->Emitter_.PPS_ = 10;
+	arondight_particle->Emitter_.Vol_Max = 4096;
+	arondight_particle->Emitter_.Direction_ = 90.0f;
+	arondight_particle->Emitter_.Particle_Rand_.Spread_ = 360;
+	arondight_particle->Emitter_.Conserve_ = 0.8f;
+	arondight_particle->Emitter_.Size_ = 10.0f;
+	arondight_particle->Emitter_.Speed_ = 4.0f;
+	arondight_particle->Emitter_.Particle_Rand_.Sp_Rand_ = 3;
+	arondight_particle->Emitter_.Lifetime_ = 3.f;
+	arondight_particle->Emitter_.Particle_Rand_.Life_Rand_ = 1;
 	
 	seed_initializer(); // initializes the seed for rng purposes
 
@@ -216,6 +228,9 @@ void Lancelot::Render(void)
 {
 	GameObject::Render();
 	lancelot[currAttk].Render();
+
+	if(currAttk == ARONDIGHT && current_action == ATTACK)
+		arondight_particle->Render();
 }
 
 void Lancelot::Attack(Dragon &d, const float dt)
@@ -258,6 +273,8 @@ void Lancelot::Attack(Dragon &d, const float dt)
 			lancelot[ARONDIGHT].Transform_.SetRotation(-90.0f);				  // rotate texture
 			lancelot[ARONDIGHT].Transform_.SetTranslate(lancelot[ARONDIGHT].PosX, lancelot[ARONDIGHT].PosY);
 			lancelot[ARONDIGHT].Transform_.Concat();
+
+			arondight_particle->Emitter_.Pos_.Point_Min_Max[1].y = 300.f;
 
 			// update the collision box of lancelot
 			Collision_.Update_Col_Pos(PosX - LANCELOT_SCALE, PosY - LANCELOT_SCALE,
@@ -441,9 +458,18 @@ void Lancelot::Mad_Enhancement(const float dt)
 
 void Lancelot::Arondight(Dragon& d, const float dt)
 {
+	// play particle effects
+	arondight_particle->UpdateEmission();
+	arondight_particle->Turbulence(0.5f);
+
+	arondight_particle->TransRamp_Exp();
+	arondight_particle->Update(dt);
+
+	
 	while (charge_time > 0) // freeze lancelot for 2 seconds for player to prepare
 	{
 		charge_time -= dt;
+		arondight_particle->Gravity(0.3f);
 		return;
 	}
 
@@ -458,9 +484,9 @@ void Lancelot::Arondight(Dragon& d, const float dt)
 	new_vector.y -= PosY;		  // rotate collision point with using lancelot as the origin
 	lancelot[ARONDIGHT].Transform_.SetRotation(AERadToDeg(atan(new_vector.y / new_vector.x)));
 
-	//auto& haha = lancelot[ARONDIGHT].Collision_;
-	//(void)haha;
-
+	arondight_particle->Emitter_.Pos_.Point_Min_Max[1].y = -180.f;
+	arondight_particle->Emitter_.Pos_.Point_Min_Max[0].y = -200.f;
+	
 
 	if (Get_Direction() == RIGHT)
 	{
@@ -514,9 +540,12 @@ void Lancelot::Arondight(Dragon& d, const float dt)
 		
 		// reset the scale of ARONDIGHT
 		lancelot[ARONDIGHT].Transform_.SetScale(ARONDIGHT_SCALE.x, ARONDIGHT_SCALE.y);
+	
 	}
 
-
+	new_vector.x += 30.f;
+	new_vector.y -= 165.f;
+	arondight_particle->Newton(new_vector, 15.f);
 }
 
 void Lancelot::Set_Face_Dir(const Dragon& d)

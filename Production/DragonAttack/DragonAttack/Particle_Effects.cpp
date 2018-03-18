@@ -6,10 +6,12 @@ namespace
     Particle_System* MFireball_Effects;
     Particle_System* Coin_Effects;
     Particle_System* Arondight_Effects;
+	Particle_System* KA_Healing_Effects;
 
     AEGfxVertexList* MFireball_Mesh;
     AEGfxVertexList* Coin_Mesh;
-    AEGfxVertexList* Ardongidht_Mesh;
+    AEGfxVertexList* Arondight_Mesh;
+	AEGfxVertexList* KA_Healing_Mesh;
 
     void Particle_Mesh_Init();
     void Particle_Effects_Init();
@@ -27,12 +29,14 @@ Particle_System* Effects_Get(EFFECTS type)
 {
     switch (type)
     {
-    case MFIREBALL_PARTICLE: return MFireball_Effects;
+    case MFIREBALL_PARTICLE:  return MFireball_Effects;
         break;
-    case COIN_PARTICLE:      return Coin_Effects;
+    case COIN_PARTICLE:       return Coin_Effects;
         break;
-    case ARONDIGHT_PARTICLE: return Arondight_Effects;
+    case ARONDIGHT_PARTICLE:  return Arondight_Effects;
         break;
+	case KA_HEALING_PARTICLE: return KA_Healing_Effects;
+		break;
     default: return nullptr;
         break;
     }
@@ -42,9 +46,13 @@ void Effects_Cleanup(void)
 {
     delete MFireball_Effects;
     delete Coin_Effects;
+	delete Arondight_Effects;
+	delete KA_Healing_Effects;
 
     AEGfxMeshFree(MFireball_Mesh);
     AEGfxMeshFree(Coin_Mesh);
+	AEGfxMeshFree(Arondight_Mesh);
+	AEGfxMeshFree(KA_Healing_Mesh);
 }
 
 namespace
@@ -96,8 +104,24 @@ namespace
             -0.1f, 0.1f, 0xFFFFC0CB, 0.0f, 0.0f);
 
 
-        Ardongidht_Mesh = AEGfxMeshEnd();
-        AE_ASSERT_MESG(Ardongidht_Mesh, "fail to create object!!");
+		Arondight_Mesh = AEGfxMeshEnd();
+        AE_ASSERT_MESG(Arondight_Mesh, "fail to create object!!");
+
+		// mesh for king arthur healing effect
+		AEGfxMeshStart();
+		AEGfxTriAdd(
+			-0.1f, -0.1f, 0xFFFFF569, 0.0f, 1.0f,
+			0.1f, -0.1f,  0xFFFFF569, 1.0f, 1.0f,
+			-0.1f, 0.1f,  0xFFFFF569, 0.0f, 0.0f);
+
+		AEGfxTriAdd(
+			0.1f, -0.1f, 0xFFFFF569, 1.0f, 1.0f,
+			0.1f, 0.1f,  0xFFFFF569, 1.0f, 0.0f,
+			-0.1f, 0.1f, 0xFFFFF569, 0.0f, 0.0f);
+
+
+		KA_Healing_Mesh = AEGfxMeshEnd();
+		AE_ASSERT_MESG(KA_Healing_Mesh, "fail to create object!!");
     }
 
     void Particle_Effects_Init()
@@ -112,12 +136,19 @@ namespace
         Coin_Effects = new Particle_System(Coin_Mesh, { 0.f, 0.f }, CENTER);
         MFireball_Effects->Emitter_.Particles_.reserve(150);
 
-        Arondight_Effects = new Particle_System(Ardongidht_Mesh, {}, BOX);
-        Arondight_Effects->Emitter_.Pos_.Point_Min_Max[0].x = -3.f;
-        Arondight_Effects->Emitter_.Pos_.Point_Min_Max[0].y = -3.f;
-        Arondight_Effects->Emitter_.Pos_.Point_Min_Max[1].x = 3.f;
-        Arondight_Effects->Emitter_.Pos_.Point_Min_Max[1].y = 300.f;
+        Arondight_Effects = new Particle_System(Arondight_Mesh, {}, BOX);
+        Arondight_Effects->Emitter_.Pos_.Point_Min_Max[0].x = 12.f;
+        Arondight_Effects->Emitter_.Pos_.Point_Min_Max[0].y = -20.f;
+        Arondight_Effects->Emitter_.Pos_.Point_Min_Max[1].x = 18.f;
+        Arondight_Effects->Emitter_.Pos_.Point_Min_Max[1].y = 20.f;
         Arondight_Effects->Emitter_.Particles_.reserve(4096);
+
+		KA_Healing_Effects = new Particle_System(KA_Healing_Mesh, {}, BOX);
+		KA_Healing_Effects->Emitter_.Pos_.Point_Min_Max[0].x = -5.f;
+		KA_Healing_Effects->Emitter_.Pos_.Point_Min_Max[0].y = 0.f;
+		KA_Healing_Effects->Emitter_.Pos_.Point_Min_Max[1].x = 5.f;
+		KA_Healing_Effects->Emitter_.Pos_.Point_Min_Max[1].y = 50.f;
+		KA_Healing_Effects->Emitter_.Particles_.reserve(500);
     }
 }
 

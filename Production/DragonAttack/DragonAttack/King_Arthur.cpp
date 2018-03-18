@@ -47,7 +47,7 @@ namespace {
 
 	char behavior_swap = 0; // switch between idling and moving
 
-	bool healing = true; // determine if king arthur is healing
+	bool healing = false; // determine if king arthur is healing
 
 	bool Move_KA(const float dt, King_Arthur &ka, const Dragon &d); // move king arthur towards player
 	void Set_Attack_Dir(King_Arthur &ka);							// set the attack directions
@@ -76,20 +76,32 @@ King_Arthur::King_Arthur(Sprite* texture)
 	: Characters(texture, HEALTH,
 		Col_Comp{ START_POINT_X - 30.0f, START_POINT_Y - 30.0f,
 				  START_POINT_X + 30.0f, START_POINT_Y + 30.0f, Rect }),
-	phase1{ true }
+	phase1{ true }, healing_effect{Effects_Get(KA_HEALING_PARTICLE)}
 {
-	this->PosX = START_POINT_X;          // change king arthur coordinates to the location set
-	this->PosY = START_POINT_Y;          // change king arthur coordinates to the location set
-	this->SetActive(true);               // show him on screen
-	this->Set_Direction(LEFT);           // set king arthur to face left at the start
-	this->SetVelocity({ 120, 0 });       // velocity for king arthur
-	//this->Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
-	(void)this->Transform_.SetTranslate(PosX, PosY);
-	this->Transform_.SetScale(-1.0f, 1.0f); // set king arthur to face right at the start
-	this->Transform_.Concat();           // spawn king arthur at the location set
-	this->Reset_Idle_Time(1.0f);           // duration king arthur will idle
+	PosX = START_POINT_X;          // change king arthur coordinates to the location set
+	PosY = START_POINT_Y;          // change king arthur coordinates to the location set
+	SetActive(true);               // show him on screen
+	Set_Direction(LEFT);           // set king arthur to face left at the start
+	SetVelocity({ 120, 0 });       // velocity for king arthur
+	Transform_.SetTranslate(PosX, PosY);
+	Transform_.SetScale(-1.0f, 1.0f); // set king arthur to face right at the start
+	Transform_.Concat();           // spawn king arthur at the location set
+	Reset_Idle_Time(1.0f);           // duration king arthur will idle
 	Init_KA_Attacks();	                 // call initializer for king arthur move set
 	Init_MobArray();                     // call initializer for mob array
+
+	// intializing healing particle variables
+	healing_effect->Emitter_.PPS_ = 10;
+	healing_effect->Emitter_.Dist_Min_ = 30.f;
+	healing_effect->Emitter_.Vol_Max = 500;
+	healing_effect->Emitter_.Direction_ = 270.0f;
+	healing_effect->Emitter_.Particle_Rand_.Spread_ = 360;
+	healing_effect->Emitter_.Conserve_ = 0.8f;
+	healing_effect->Emitter_.Size_ = 10.0f;
+	healing_effect->Emitter_.Speed_ = 4.0f;
+	healing_effect->Emitter_.Particle_Rand_.Sp_Rand_ = 3;
+	healing_effect->Emitter_.Lifetime_ = 1.f;
+
 }
 void King_Arthur::Init_KA_Attacks(void)
 {
@@ -242,9 +254,7 @@ void King_Arthur::Moving(const Dragon &d, const float dt)
 }
 
 void King_Arthur::Attack(Dragon &d, const float dt)
-{
-	static KA_MoveSet currAttk;
-		
+{		
 	//unique mechanic has the highest priority 
 	if (! arthur[currAttk].ongoing_attack)
 	{
@@ -451,21 +461,32 @@ void King_Arthur::Heal_and_Spawn(Dragon &d, const float dt)
 
 		default: break;
 		}
-		this->Transform_.SetTranslate(this->PosX, this->PosY);
-		this->Transform_.Concat();
+		Transform_.SetTranslate(PosX, PosY);
+		Transform_.Concat();
 		healing = true;
 		arthur[UNIQUE_MECHANIC].ongoing_attack = true;
 		spawn_mob = true;
 
+		healing_effect->Emitter_.Pos_.Min_Max.Point_Min.x = PosX - 200.f;
+		healing_effect->Emitter_.Pos_.Min_Max.Point_Min.y = PosY - 200.f;
+		healing_effect->Emitter_.Pos_.Min_Max.Point_Max.x = PosX + 200.f;
+		healing_effect->Emitter_.Pos_.Min_Max.Point_Max.y = PosY + 200.f;
+
 		for (char i = 0; i < num_of_mobs; ++i)
 			mobs[i]->SetActive(true);
 	}
-
+	
 	if (healing && Get_HP() != HEALTH)
 	{
+		// heals every 0.5 seconds
 		static float timer = 0.5f;
-
 		timer <= 0 ? Set_HP(Get_HP() + 10), timer = 0.5f : timer -= dt;
+
+		
+		healing_effect->UpdateEmission();
+		healing_effect->Gravity(0.3f);
+		healing_effect->TransRamp_Exp();
+		healing_effect->Newton({ PosX, PosY }, 0.15f);
 
 		std::cout << Get_HP() << std::endl;
 	}
@@ -492,7 +513,10 @@ void King_Arthur::Render(void)
 			mobs[i]->Render();
 	}
 
-	this->GameObject::Render(); // render king arthur on screen
+	if (currAttk == 2 && healing)
+		healing_effect->Render();
+
+	GameObject::Render(); // render king arthur on screen
 }
 
 void King_Arthur::Dead(void)
