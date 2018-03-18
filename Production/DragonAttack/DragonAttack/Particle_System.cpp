@@ -29,6 +29,7 @@ Emitter::Emitter(AEGfxVertexList* pMesh, AEVec2 Pos, Emitter_Type type)
 {
   //Randomize a seed for rand
   srand((unsigned int)time(nullptr));
+  Pos_.Min_Max.Angle_ = PI / 2.0f;
 }
 
 //Clear the vector of particles
