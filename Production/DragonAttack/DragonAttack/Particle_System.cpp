@@ -52,7 +52,7 @@ Particle Particle_System::Create()
   float min = Emitter_.Direction_ - Emitter_.Particle_Rand_.Spread_;
   float max = Emitter_.Direction_ + Emitter_.Particle_Rand_.Spread_;
 
-  // randomize a direction between min and max values
+  //Randomize a direction between min and max values
   Dir_tmp = (min + rand() % (int)(max - min + 1));
   }
   //If there is random size
@@ -61,7 +61,7 @@ Particle Particle_System::Create()
   float min = Emitter_.Size_ - Emitter_.Particle_Rand_.Size_Rand_;
   float max = Emitter_.Size_ + Emitter_.Particle_Rand_.Size_Rand_;
 
-  // randomize a size between min and max values
+  //Randomize a size between min and max values
   Sz_tmp = (min + rand() % (int)(max - min + 1));
   }
   //If there is speed randomness
@@ -70,7 +70,7 @@ Particle Particle_System::Create()
   float min = Emitter_.Speed_ - Emitter_.Particle_Rand_.Sp_Rand_;
   float max = Emitter_.Speed_ + Emitter_.Particle_Rand_.Sp_Rand_;
 
-  // randomize the speed between min and max values
+  //Randomize the speed between min and max values
   Spd_tmp = (min + rand() % (int)(max - min + 1));
   }
   //If there is life randomness
