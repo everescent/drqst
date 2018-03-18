@@ -22,29 +22,26 @@ prior written consent of DigiPen Institute of Technology is prohibited.
 using std::vector;
 using std::function;
 
-// stores the values to randomize the particle variables
-// set to 0 if it is not meant to be used
+//Stores the values to randomize the particle variables
+//Set to 0 if it is not meant to be used
 struct Particle_Range
 {
-    int              Spread_;       //Directional spread; Set to 0 for no spread
-    int              Size_Rand_;    //Size variation of each particle
-    int              Sp_Rand_;      //Range for the random generation of speed
-    int              Life_Rand_;    //Range for the random generation of lifetime
+  int Spread_;    //Directional spread; Set to 0 for no spread
+  int Size_Rand_; //Size variation of each particle
+  int Sp_Rand_;   //Range for the random generation of speed
+  int Life_Rand_; //Range for the random generation of lifetime
 
-    // default constructor to zero initialize the variables
-    Particle_Range()
-        : Spread_{}, Size_Rand_{}, Sp_Rand_{}, Life_Rand_{}
-    {
-    }
+  //Default constructor to zero initialize the variables
+  Particle_Range()
+  : Spread_{}, Size_Rand_{}, Sp_Rand_{}, Life_Rand_{}
+  {}
 };
 
 enum Emitter_Type
 {
-    CENTER,
-    BOX
+  CENTER,
+  BOX
 };
-
-
 
 //Emitter handles the processing of the particle attributes and 
 //also emission properties.
@@ -57,35 +54,35 @@ Emitter(AEGfxVertexList* pMesh, AEVec2 Pos, Emitter_Type type);
 union Particle_Pos
 {
   struct Box{
-      AEVec2 Point_Min;
-      AEVec2 Point_Max;
-      float  Angle_;
+      AEVec2 Point_Min; //Minimum point
+      AEVec2 Point_Max; //Maximum point
+      float  Angle_;    //Angle of orientation
   };
-  Box    Min_Max;
-  AEVec2 Point;
-  AEVec2 Point_Min_Max[2];
+  Box    Min_Max;          //For surface emission (box)
+  AEVec2 Point;            //For point emitter
+  AEVec2 Point_Min_Max[2]; //For array access
 };
 
-AEGfxVertexList* pMesh_;               //Particle mesh
-Particle_Pos     Pos_;                 //Emitter position
-int              Vol_Max;              //Maximum number of particles that can be emitted
-float            Dist_Min_;            //Minimum emission distance
+AEGfxVertexList* pMesh_;         //Particle mesh
+Particle_Pos     Pos_;           //Emitter position
+int              Vol_Max;        //Maximum number of particles that can be emitted
+float            Dist_Min_;      //Minimum emission distance
 
-int              PPS_;                 //Particle Per Second
-float            Conserve_;            //Law of Conservation of Energy
+int              PPS_;           //Particle Per Second
+float            Conserve_;      //Law of Conservation of Energy
 
-float            Direction_;           //Particle direction
-float            Size_;                //Size of each particle
-float            Speed_;               //Scales the speed of all particles by this value
-float            Lifetime_;            //Lifetime of all particles
+float            Direction_;     //Particle direction
+float            Size_;          //Size of each particle
+float            Speed_;         //Scales the speed of all particles by this value
+float            Lifetime_;      //Lifetime of all particles
 
-Particle_Range  Particle_Rand_;        //sets the limit of variable if randomizing them                                    
-Color            Color_;               //Color of particles
-float            Transparency_;        //Transparency of particles
-float            Exposure_;            //Exposure of particles
-vector<Particle> Particles_;           //Dynamic array of particles
+Particle_Range   Particle_Rand_; //Sets the limit of variable if randomizing them
+Color            Color_;         //Color of particles
+float            Transparency_;  //Transparency of particles
+float            Exposure_;      //Exposure of particles
+vector<Particle> Particles_;     //Dynamic array of particles
 
-Emitter_Type     Type_;                //Type of emitter
+Emitter_Type     Type_;          //Type of emitter
 };
 
 //Particle system takes care of the environment and
@@ -102,7 +99,7 @@ Particle_System(AEGfxVertexList* pMesh, AEVec2 Pos, Emitter_Type type)
   Emitter_.~Emitter();
 }
 //Simulates Brownian Motion
-//User specifies the equation for phase x and phase y
+//User can specify the equation for phase x and phase y
 void Turbulence(const float Strength, 
                 const function<float()>& PhaseX = 
                 []() -> float {  float phaseRot = (float)(rand() % 360);
@@ -119,6 +116,8 @@ void Drag(const float Strength);
 void Force(const float Strength, const bool X, const bool Y);
 //Gravity
 void Gravity(const float Strength);
+//Attract the particles to a certain point
+void Newton(const AEVec2 Point, const float strength);
 //Enables exposure to be a factor of each particle's lifetime
 void ColorRamp_Life();
 //Enables transparency to be a factor of each particle's exposure
@@ -133,10 +132,10 @@ void Update(const float dt);
 void WarmUp(const float dt, const float time);
 //Renders the particles
 void Render();
-//Attract the particles to a certain point
-void Newton(const AEVec2 Point, const float strength);
 //Emitter
 Emitter Emitter_;
+
+private:
 //Counter for the number of particles birthed so far
 int p_count;
 };

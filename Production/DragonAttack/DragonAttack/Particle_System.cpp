@@ -14,7 +14,6 @@ prior written consent of DigiPen Institute of Technology is prohibited.
 /*****************************************************************************/
 
 #include "Particle_System.h"
-#include <iostream>
 
 //Initialize mesh and position, everything else is 0
 //User should be keying in desired values
@@ -50,91 +49,106 @@ Particle Particle_System::Create()
   //If there is spread
   if (Emitter_.Particle_Rand_.Spread_)
   {
-	float min = Emitter_.Direction_ - Emitter_.Particle_Rand_.Spread_;
-	float max = Emitter_.Direction_ + Emitter_.Particle_Rand_.Spread_;
+  float min = Emitter_.Direction_ - Emitter_.Particle_Rand_.Spread_;
+  float max = Emitter_.Direction_ + Emitter_.Particle_Rand_.Spread_;
 
-	// randomize a direction between min and max values
-	Dir_tmp = (min + rand() % (int)(max - min + 1));
+  // randomize a direction between min and max values
+  Dir_tmp = (min + rand() % (int)(max - min + 1));
   }
   //If there is random size
   if (Emitter_.Particle_Rand_.Size_Rand_)
   {
-	float min = Emitter_.Size_ - Emitter_.Particle_Rand_.Size_Rand_;
-	float max = Emitter_.Size_ + Emitter_.Particle_Rand_.Size_Rand_;
+  float min = Emitter_.Size_ - Emitter_.Particle_Rand_.Size_Rand_;
+  float max = Emitter_.Size_ + Emitter_.Particle_Rand_.Size_Rand_;
 
-	// randomize a size between min and max values
-	Sz_tmp = (min + rand() % (int)(max - min + 1));
+  // randomize a size between min and max values
+  Sz_tmp = (min + rand() % (int)(max - min + 1));
   }
   //If there is speed randomness
   if (Emitter_.Particle_Rand_.Sp_Rand_)
   {
-	float min = Emitter_.Speed_ - Emitter_.Particle_Rand_.Sp_Rand_;
-	float max = Emitter_.Speed_ + Emitter_.Particle_Rand_.Sp_Rand_;
+  float min = Emitter_.Speed_ - Emitter_.Particle_Rand_.Sp_Rand_;
+  float max = Emitter_.Speed_ + Emitter_.Particle_Rand_.Sp_Rand_;
 
-	// randomize the speed between min and max values
-	Spd_tmp = (min + rand() % (int)(max - min + 1));
+  // randomize the speed between min and max values
+  Spd_tmp = (min + rand() % (int)(max - min + 1));
   }
   //If there is life randomness
   if (Emitter_.Particle_Rand_.Life_Rand_)
   {
-	float min = Emitter_.Lifetime_ - Emitter_.Particle_Rand_.Life_Rand_;
-	float max = Emitter_.Lifetime_ + Emitter_.Particle_Rand_.Life_Rand_;
+  float min = Emitter_.Lifetime_ - Emitter_.Particle_Rand_.Life_Rand_;
+  float max = Emitter_.Lifetime_ + Emitter_.Particle_Rand_.Life_Rand_;
 
-	Life_tmp = (min + rand() % (int)(max - min + 1));
+  Life_tmp = (min + rand() % (int)(max - min + 1));
   }
   //Convert to radians
   Dir_tmp = AEDegToRad(Dir_tmp);
   //Give mesh
   tmp_.pMesh_ = Emitter_.pMesh_;
 
-
-
   //Initialize position of particle
-
   switch(Emitter_.Type_)
   {   
-  case CENTER:   
-    tmp_.Pos_.x = Emitter_.Pos_.Point.x;
-    tmp_.Pos_.y = Emitter_.Pos_.Point.y;
-    break;
-  case BOX:
-    float MagnitudeW = Emitter_.Pos_.Min_Max.Point_Max.x - Emitter_.Pos_.Min_Max.Point_Min.x;
-    float MagnitudeH = Emitter_.Pos_.Min_Max.Point_Max.y - Emitter_.Pos_.Min_Max.Point_Min.y;
-    AEVec2 a1{ cosf(Emitter_.Pos_.Min_Max.Angle_), sinf(Emitter_.Pos_.Min_Max.Angle_) }; //Direction Up
-    AEVec2 a2{ cosf(Emitter_.Pos_.Min_Max.Angle_ - (PI / 2.0f)), sinf(Emitter_.Pos_.Min_Max.Angle_ - (PI / 2.0f)) }; //Direction Right
-    int Mag_RandW = rand() % (int)MagnitudeW;
-    int Mag_RandH = rand() % (int)MagnitudeH;
-    AEVec2Scale(&a1, &a1, (float)Mag_RandH);
-    AEVec2Scale(&a2, &a2, (float)Mag_RandW);
-    AEVec2Add(&tmp_.Pos_, &Emitter_.Pos_.Min_Max.Point_Min, &a1);
-    AEVec2Add(&tmp_.Pos_, &tmp_.Pos_, &a2);
-    break;
+    case CENTER:   
+      tmp_.Pos_.x = Emitter_.Pos_.Point.x;
+      tmp_.Pos_.y = Emitter_.Pos_.Point.y;
+      break;
+    case BOX:
+      //Determines the maximum magnitude in the x direction
+      float MagnitudeW = Emitter_.Pos_.Min_Max.Point_Max.x - 
+                         Emitter_.Pos_.Min_Max.Point_Min.x;
+      //Determines the maximum magnitude in the y direction
+      float MagnitudeH = Emitter_.Pos_.Min_Max.Point_Max.y - 
+                         Emitter_.Pos_.Min_Max.Point_Min.y;
+      //Direction Up
+      AEVec2 a1{ cosf(Emitter_.Pos_.Min_Max.Angle_), 
+                 sinf(Emitter_.Pos_.Min_Max.Angle_) };
+      //Direction Right
+      AEVec2 a2{ cosf(Emitter_.Pos_.Min_Max.Angle_ - (PI / 2.0f)), 
+                 sinf(Emitter_.Pos_.Min_Max.Angle_ - (PI / 2.0f)) };
+      //Get random position anywhere on the x-axis
+      int Mag_RandW = rand() % (int)MagnitudeW;
+      //Get random position anywhere on the y-axis
+      int Mag_RandH = rand() % (int)MagnitudeH;
+      //Scale both axis by final magitude
+      AEVec2Scale(&a1, &a1, (float)Mag_RandH);
+      AEVec2Scale(&a2, &a2, (float)Mag_RandW);
+      //Move in the y-axis then in the x-axis
+      AEVec2Add(&tmp_.Pos_, &Emitter_.Pos_.Min_Max.Point_Min, &a1);
+      AEVec2Add(&tmp_.Pos_, &tmp_.Pos_, &a2);
+      break;
   }
-
   switch (rand() % 8)
   {
-  case 0: tmp_.Pos_.x += Emitter_.Dist_Min_;
-	  break;
-  case 1: tmp_.Pos_.y += Emitter_.Dist_Min_;
-	  break;
-  case 2: tmp_.Pos_.x -= Emitter_.Dist_Min_;
-	  break;
-  case 3: tmp_.Pos_.y -= Emitter_.Dist_Min_;
-	  break;
-  case 4: tmp_.Pos_.x += Emitter_.Dist_Min_;
-	      tmp_.Pos_.y += Emitter_.Dist_Min_;
-	  break;
-  case 5: tmp_.Pos_.x -= Emitter_.Dist_Min_;
-	      tmp_.Pos_.y -= Emitter_.Dist_Min_;
-	  break;
-  case 6: tmp_.Pos_.x += Emitter_.Dist_Min_;
-	      tmp_.Pos_.y -= Emitter_.Dist_Min_;
-	  break;
-  case 7: tmp_.Pos_.x -= Emitter_.Dist_Min_;
-	      tmp_.Pos_.y += Emitter_.Dist_Min_;
-	  break;
+    case 0: 
+      tmp_.Pos_.x += Emitter_.Dist_Min_;
+      break;
+    case 1: 
+      tmp_.Pos_.y += Emitter_.Dist_Min_;
+      break;
+    case 2: 
+      tmp_.Pos_.x -= Emitter_.Dist_Min_;
+      break;
+    case 3: 
+      tmp_.Pos_.y -= Emitter_.Dist_Min_;
+      break;
+    case 4: 
+      tmp_.Pos_.x += Emitter_.Dist_Min_;
+      tmp_.Pos_.y += Emitter_.Dist_Min_;
+      break;
+    case 5: 
+      tmp_.Pos_.x -= Emitter_.Dist_Min_;
+      tmp_.Pos_.y -= Emitter_.Dist_Min_;
+      break;
+    case 6: 
+      tmp_.Pos_.x += Emitter_.Dist_Min_;
+      tmp_.Pos_.y -= Emitter_.Dist_Min_;
+      break;
+    case 7: 
+      tmp_.Pos_.x -= Emitter_.Dist_Min_;
+      tmp_.Pos_.y += Emitter_.Dist_Min_;
+      break;
   }
-
   //Initialize velocity
   tmp_.Vel_ = { cosf(Dir_tmp), sinf(Dir_tmp) };
   //Scale it by the speed
@@ -279,25 +293,27 @@ void Particle_System::TransRamp_Exp()
   }
 }
 
+//Attract the particles to a certain point
 void Particle_System::Newton(const AEVec2 Point, const float strength)
 {
-    AEVec2 final_displacement{}; 
-    
-    for (auto& elem : Emitter_.Particles_)
+  //Displacement between Newton point and particles
+  AEVec2 final_displacement{}; 
+  
+  for (auto& elem : Emitter_.Particles_)
+  {
+    //Calculate displacement
+    final_displacement.x = Point.x - elem.Pos_.x;
+    final_displacement.y = Point.y - elem.Pos_.y;
+    //Normalize and scale according to strength
+    AEVec2Normalize(&final_displacement, &final_displacement);
+    AEVec2Scale(&final_displacement, &final_displacement, strength);
+
+    //Check if vectors are not parallel
+    if (AEVec2CrossProductMag(&final_displacement, &elem.Vel_))
     {
-        final_displacement.x = Point.x - elem.Pos_.x;
-        final_displacement.y = Point.y - elem.Pos_.y;
-
-        AEVec2Normalize(&final_displacement, &final_displacement);
-        AEVec2Scale(&final_displacement, &final_displacement, strength);
-
-        // vectors are not parallel
-        if (AEVec2CrossProductMag(&final_displacement, &elem.Vel_))
-        {
-            elem.Vel_.x += final_displacement.x;
-            elem.Vel_.y += final_displacement.y;
-        }
+      //Apply the "Attraction"
+      elem.Vel_.x += final_displacement.x;
+      elem.Vel_.y += final_displacement.y;
     }
+  }
 }
-
-
