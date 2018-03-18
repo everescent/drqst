@@ -18,7 +18,6 @@ prior written consent of DigiPen Institute of Technology is prohibited.
 #include <cmath>      //sinf, cosf
 #include <ctime>      //time
 #include <functional> //function<>
-#include <array>
 
 using std::vector;
 using std::function;
@@ -57,15 +56,14 @@ Emitter(AEGfxVertexList* pMesh, AEVec2 Pos, Emitter_Type type);
 
 union Particle_Pos
 {
-    struct Box{
-        AEVec2 Point_Min;
-        AEVec2 Point_Max;
-    };
-    
-    AEVec2 Point;
-    AEVec2 Point_Min_Max[2];
-    Box Min_Max;
-
+  struct Box{
+      AEVec2 Point_Min;
+      AEVec2 Point_Max;
+      float  Angle_;
+  };
+  Box    Min_Max;
+  AEVec2 Point;
+  AEVec2 Point_Min_Max[2];
 };
 
 AEGfxVertexList* pMesh_;               //Particle mesh

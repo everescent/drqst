@@ -93,14 +93,21 @@ Particle Particle_System::Create()
   switch(Emitter_.Type_)
   {   
   case CENTER:   
-      tmp_.Pos_.x = Emitter_.Pos_.Point.x;
-      tmp_.Pos_.y = Emitter_.Pos_.Point.y;
-      break;
+    tmp_.Pos_.x = Emitter_.Pos_.Point.x;
+    tmp_.Pos_.y = Emitter_.Pos_.Point.y;
+    break;
   case BOX:
-
-      tmp_.Pos_.x = (Emitter_.Pos_.Min_Max.Point_Min.x + rand() % (int)(Emitter_.Pos_.Min_Max.Point_Max.x - Emitter_.Pos_.Min_Max.Point_Min.x + 1));
-      tmp_.Pos_.y = (Emitter_.Pos_.Min_Max.Point_Min.y + rand() % (int)(Emitter_.Pos_.Min_Max.Point_Max.y - Emitter_.Pos_.Min_Max.Point_Min.y + 1));
-      break;
+    float MagnitudeW = Emitter_.Pos_.Min_Max.Point_Max.x - Emitter_.Pos_.Min_Max.Point_Min.x;
+    float MagnitudeH = Emitter_.Pos_.Min_Max.Point_Max.y - Emitter_.Pos_.Min_Max.Point_Min.y;
+    AEVec2 a1{ cosf(Emitter_.Pos_.Min_Max.Angle_), sinf(Emitter_.Pos_.Min_Max.Angle_) }; //Direction Up
+    AEVec2 a2{ cosf(Emitter_.Pos_.Min_Max.Angle_ - (PI / 2.0f)), sinf(Emitter_.Pos_.Min_Max.Angle_ - (PI / 2.0f)) }; //Direction Right
+    int Mag_RandW = rand() % (int)MagnitudeW;
+    int Mag_RandH = rand() % (int)MagnitudeH;
+    AEVec2Scale(&a1, &a1, (float)Mag_RandH);
+    AEVec2Scale(&a2, &a2, (float)Mag_RandW);
+    AEVec2Add(&tmp_.Pos_, &Emitter_.Pos_.Min_Max.Point_Min, &a1);
+    AEVec2Add(&tmp_.Pos_, &tmp_.Pos_, &a2);
+    break;
   }
 
   switch (rand() % 8)
