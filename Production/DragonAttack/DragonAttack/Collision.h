@@ -112,6 +112,8 @@ public:
 	//William Edit START//////////////////////////////////////////////////////////////////////////
 	bool Line_Point(Col_Comp &A, Col_Comp &B, AEVec2 & A_Pos, HalfPlane);
 
+	bool Point_Rect(Col_Comp &A, Col_Comp &B);
+
 	AEVec2 Get_Point(void) const;
 	//William Edit END////////////////////////////////////////////////////////////////////////////
 private:

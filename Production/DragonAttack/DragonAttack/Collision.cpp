@@ -220,6 +220,13 @@ bool Col_Comp::Line_Point(Col_Comp &A, Col_Comp &B,  AEVec2 & A_Pos, HalfPlane s
 		return false;
 }
 
+//A will be the box, b will be the point
+bool Col_Comp::Point_Rect(Col_Comp &a, Col_Comp &b)
+{
+	return b.mid.x < a.max.x && b.mid.x > a.min.x &&
+		   b.mid.y < a.max.y && b.mid.y > a.min.y;
+}
+
 AEVec2 Col_Comp::Get_Point(void) const
 {
 	return mid;

@@ -103,7 +103,8 @@ void Lancelot::Init()
 	arondight_particle->Emitter_.Particle_Rand_.Sp_Rand_ = 3;
 	arondight_particle->Emitter_.Lifetime_ = 3.f;
 	arondight_particle->Emitter_.Particle_Rand_.Life_Rand_ = 1;
-	
+	arondight_particle->Emitter_.Pos_.Min_Max.Angle_ = PI / 2.f;
+
 	seed_initializer(); // initializes the seed for rng purposes
 
 }
@@ -484,8 +485,6 @@ void Lancelot::Arondight(Dragon& d, const float dt)
 	new_vector.y -= PosY;		  // rotate collision point with using lancelot as the origin
 	lancelot[ARONDIGHT].Transform_.SetRotation(AERadToDeg(atan(new_vector.y / new_vector.x)));
 
-	arondight_particle->Emitter_.Pos_.Point_Min_Max[1].y = -180.f;
-	arondight_particle->Emitter_.Pos_.Point_Min_Max[0].y = -200.f;
 	
 
 	if (Get_Direction() == RIGHT)
@@ -501,6 +500,8 @@ void Lancelot::Arondight(Dragon& d, const float dt)
 		radians = AEDegToRad(angle_offset); // rotate the sword by 3 degrees
 		side = INSIDE;					    // check the inside half plane
 	}
+
+	//arondight_particle->Emitter_.Pos_.Min_Max.Angle_ = radians;
 
 	s = sin(radians);		  
 	c = cos(radians);		  
@@ -543,9 +544,7 @@ void Lancelot::Arondight(Dragon& d, const float dt)
 	
 	}
 
-	new_vector.x += 30.f;
-	new_vector.y -= 165.f;
-	arondight_particle->Newton(new_vector, 15.f);
+	//arondight_particle->Newton(new_vector, 15.f);
 }
 
 void Lancelot::Set_Face_Dir(const Dragon& d)
