@@ -232,3 +232,13 @@ AEVec2 Col_Comp::Get_Point(void) const
 	return mid;
 }
 
+AEVec2 Col_Comp::Get_MaxPoint(void)const
+{
+    return max;
+}
+
+AEVec2 Col_Comp::Get_MinPoint(void)const
+{
+    return min;
+}
+

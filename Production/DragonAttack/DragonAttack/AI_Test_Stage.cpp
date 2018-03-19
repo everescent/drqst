@@ -114,6 +114,5 @@ namespace AI_Test_Stage
 
 	void Unload(void)
 	{
-        Effects_Cleanup();
 	}
 }

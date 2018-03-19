@@ -15,6 +15,7 @@ Technology is prohibited.
 #pragma once
 
 #include "Characters.h"
+#include "Boss_Phase.h"
 #include "Dragon.h"
 
 class King_Arthur : public Characters
@@ -28,10 +29,11 @@ private:
 	};
 
 	void King_Arthur_Phase2(void); // changes mechanics for phase 2
+	void King_Arthur_Phase3(void);
 	void Init_KA_Attacks(void);    // initialize king arthur attacks
 	void Init_MobArray(void);      // initialize the mob array for phase 2
 	void Set_Forward_Dir(const Dragon&);
-
+    
 	
 	// boss behaviours /////////////////////////////////////////////////
 	void Idle(const Dragon &d, const float dt);
@@ -42,15 +44,16 @@ private:
 	// boss behaviours end /////////////////////////////////////////////
 
 	// attack functions /////////////////////////////////////////////////
-	void Dash_Attack(Dragon &d, const float dt); // jump attack
-	void Single_Slash(Dragon &d, const float dt); // single slash + wave
-	void Triple_Slash(Dragon &d, const float dt); // single slash 3 times
-	void Heal_and_Spawn(Dragon &d, const float dt); // phase 2, heal and spawm mobs
-    // attack functions /////////////////////////////////////////////////
+	void Dash_Attack(Dragon &d, const float dt);     // jump attack
+	void Single_Slash(Dragon &d, const float dt);    // single slash + wave
+	void Triple_Slash(Dragon &d, const float dt);    // single slash 3 times
+	void Heal_and_Spawn(Dragon &d, const float dt);  // phase 2, heal and spawm mobs
+    void Spinning_Blades(Dragon &d, const float dt); // rotating swords that attacks player
+	// attack functions /////////////////////////////////////////////////
 
 	void(King_Arthur::*ka_attacks[3])(Dragon &d, float dt);
 
-	bool phase1;
+	BOSS_PHASE ka_phase;
 	Particle_System *healing_effect;
 	KA_MoveSet currAttk;
 

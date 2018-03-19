@@ -161,7 +161,7 @@ void Mage::Attack(const float dt, Dragon &d)
 	}
 
 	// move the energy ball base on its velocity
-	energy_ball.Projectile::Update(EBALL_SCALE);
+	energy_ball.Projectile::Update(dt, EBALL_SCALE);
 
 	// check for collision between energyball and player
 	if (energy_ball.Collision_.Dy_Rect_Rect(d.Collision_, energy_ball.GetVelocity(), d.GetVelocity(), dt))

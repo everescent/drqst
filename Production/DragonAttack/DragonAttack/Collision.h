@@ -115,6 +115,8 @@ public:
 	bool Point_Rect(Col_Comp &A, Col_Comp &B);
 
 	AEVec2 Get_Point(void) const;
+    AEVec2 Get_MaxPoint(void) const;
+    AEVec2 Get_MinPoint(void) const;
 	//William Edit END////////////////////////////////////////////////////////////////////////////
 private:
 

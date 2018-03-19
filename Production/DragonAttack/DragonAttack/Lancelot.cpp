@@ -265,9 +265,9 @@ void Lancelot::Attack(Dragon &d, const float dt)
 			currAttk = ARONDIGHT;
 
 			// teleport lancelot to the middle of the screen
-			this->PosX = 0.0f;
-			this->Transform_.SetTranslate(PosX, PosY);
-			this->Transform_.Concat();
+			PosX = 0.0f;
+			Transform_.SetTranslate(PosX, PosY);
+			Transform_.Concat();
 
 			lancelot[ARONDIGHT].Start_Attack(20.0f, ATK_START_POINT.y + 200); // starting position of arondight
 			lancelot[ARONDIGHT].Collision_.Update_Col_Pos(0.0f, 400.0f);	  // starting point of collision point

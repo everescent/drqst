@@ -27,8 +27,9 @@ namespace {
 
 	Boss_Action_State current_action = IDLE; // different states of boss arthur
 
-	const int HEALTH    = 300; // initial hp for king arthur
-	const int PHASE2_HP = 200; //phase 2 trigger
+	const int HEALTH    = 220; // initial hp for king arthur
+	const int PHASE2_HP = 00; // phase 2 trigger
+	const int PHASE3_HP = 200; // phase 3 trigger
 
 	const int interval    = 80;  // interval for triple slash
 	const int range_limit = 500; // range limit for slash
@@ -36,7 +37,7 @@ namespace {
 	const float START_POINT_X = 200.0f; // spawn point of king arthur
 	const float START_POINT_Y = -220.0f;// spawn point of king arthur
 
-	const float SLASH_SCALE = 20.0f;
+	const float SLASH_SCALE = 40.0f;
 
     float left_boundary = -600; // boundaries of charge attack
     float right_boundary = 600; // boundaries of charge attack
@@ -52,7 +53,8 @@ namespace {
 	bool Move_KA(const float dt, King_Arthur &ka, const Dragon &d); // move king arthur towards player
 	void Set_Attack_Dir(King_Arthur &ka);							// set the attack directions
 	
-	Sprite attack_sprite;
+	Sprite attack_sprite; // texture for slash
+	Sprite sword_sprite;  // texture for sword
 
 	enum 
 	{
@@ -76,19 +78,19 @@ King_Arthur::King_Arthur(Sprite* texture)
 	: Characters(texture, HEALTH,
 		Col_Comp{ START_POINT_X - 30.0f, START_POINT_Y - 30.0f,
 				  START_POINT_X + 30.0f, START_POINT_Y + 30.0f, Rect }),
-	phase1{ true }, healing_effect{Effects_Get(KA_HEALING_PARTICLE)}
+	ka_phase{ PHASE_2 }, healing_effect{Effects_Get(KA_HEALING_PARTICLE)}
 {
-	PosX = START_POINT_X;          // change king arthur coordinates to the location set
-	PosY = START_POINT_Y;          // change king arthur coordinates to the location set
-	SetActive(true);               // show him on screen
-	Set_Direction(LEFT);           // set king arthur to face left at the start
-	SetVelocity({ 120, 0 });       // velocity for king arthur
+	PosX = START_POINT_X;                 // change king arthur coordinates to the location set
+	PosY = START_POINT_Y;                 // change king arthur coordinates to the location set
+	SetActive(true);                      // show him on screen
+	Set_Direction(LEFT);                  // set king arthur to face left at the start
+	SetVelocity({ 120, 0 });              // velocity for king arthur
 	Transform_.SetTranslate(PosX, PosY);
-	Transform_.SetScale(-1.0f, 1.0f); // set king arthur to face right at the start
-	Transform_.Concat();           // spawn king arthur at the location set
-	Reset_Idle_Time(1.0f);           // duration king arthur will idle
-	Init_KA_Attacks();	                 // call initializer for king arthur move set
-	Init_MobArray();                     // call initializer for mob array
+	Transform_.SetScale(-1.0f, 1.0f);     // set king arthur to face right at the start
+	Transform_.Concat();                  // spawn king arthur at the location set
+	Reset_Idle_Time(1.0f);                // duration king arthur will idle
+	Init_KA_Attacks();	                  // call initializer for king arthur move set
+	Init_MobArray();                      // call initializer for mob array
 
 	// intializing healing particle variables
 	healing_effect->Emitter_.PPS_ = 10;
@@ -105,10 +107,11 @@ King_Arthur::King_Arthur(Sprite* texture)
 }
 void King_Arthur::Init_KA_Attacks(void)
 {
-	const char* slash_tex = ".//Textures/holylight.jpg";
+	const char* slash_tex = ".//Textures/KA_Slash.png";
 
 	arthur.reserve(limit);
 	attack_sprite = S_CreateSquare(SLASH_SCALE, slash_tex);
+	attack_sprite.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 
 	for(char i = 0; i < limit-1; ++i) // add the single slash and triple slash
 		arthur.emplace_back(&attack_sprite,
@@ -118,7 +121,7 @@ void King_Arthur::Init_KA_Attacks(void)
 
 	arthur.emplace_back(Boss_Attack()); // for jump attack since it does not need textures
 
-	for (char i = 0; i < limit - 1; ++i) // initializing other variables in slash
+	for (char i = 0; i < limit - 1; ++i) // initializing other variables in slash attacks
 	{
         arthur[i].SetVelocity(AEVec2{ 200.0f, 0.0f }); // velocity for slash
         arthur[i].Transform_.SetScale(1.5f, 1.5f); // determine the size of projectile
@@ -139,8 +142,8 @@ void King_Arthur::Init_MobArray(void)
 	for (char i = 0; i < num_of_mobs; ++i)
 	{
 		// spawn the mobs at the left/right of the screen
-		i % 2 ? mobs.push_back(Create_Basic_AI(GRUNT, { -700.0f, START_POINT_Y }))
-			  : mobs.push_back(Create_Basic_AI(GRUNT, { 701.0f, START_POINT_Y }));
+		i % 2 ? mobs.push_back(Create_Basic_AI(MAGE, { -0.0f, START_POINT_Y }))
+			  : mobs.push_back(Create_Basic_AI(MAGE, {  0.0f, START_POINT_Y }));
 
 		// do not render on screen yet
 		mobs[i]->SetActive(false);
@@ -152,10 +155,15 @@ void King_Arthur::Init_MobArray(void)
 
 void King_Arthur::Update(Dragon &d, const float dt)
 {
-	if (this->Get_HP() < PHASE2_HP && phase1) // activate phase 2 once hp drops is 50%
+	// activate phase 2 once hp drops is 50%
+	if (Get_HP() < PHASE2_HP && ka_phase & PHASE_1)
 	{
-		King_Arthur_Phase2();
+        King_Arthur_Phase2();
 	}
+    else if (Get_HP() < PHASE3_HP && ka_phase & PHASE_2)
+    {
+        King_Arthur_Phase3();
+    }
 
 	if (behavior_swap == 3)
 	{
@@ -184,14 +192,41 @@ void King_Arthur::Update(Dragon &d, const float dt)
 			spawn_mob = false;
 	}
 
-	for (char i = 0; i < Bullet_Buffer; ++i) // check for collision with fire balls
-		if (d.GetFireball()[i].IsActive())
-			if (Collision_.Dy_Rect_Rect(d.GetFireball()[i].Collision_, this->GetVelocity(), d.GetFireball()[i].GetVelocity(), dt))
+	if (IsActive())
+	{
+		// fireball hit KA
+		for (char i = 0; i < Bullet_Buffer; ++i)
+			if (d.GetFireball()[i].IsActive())
+				if (Collision_.Dy_Rect_Rect(d.GetFireball()[i].Collision_, GetVelocity(),
+					d.GetFireball()[i].GetVelocity(), dt))
+				{
+					//Decrease HP by player's damage
+					Decrease_HP(d.GetDamage());
+					//Add mega fireball charge
+					d.AddCharge();
+					d.PlayImpact();
+					//Reset the distance of the fireball and set false
+					d.GetFireball()[i].Projectile::ResetDist();
+					d.GetFireball()[i].SetActive(false);
+					//music.Play(0);
+				}
+
+		// mega fire ball hit KA
+		if (d.GetMfireball().IsActive())
+		{
+			if (Collision_.Dy_Rect_Rect(d.GetMfireball().Collision_, GetVelocity(),
+				d.GetMfireball().GetVelocity(), dt))
 			{
-				Decrease_HP(d.GetDamage());
-				d.GetFireball()[i].SetActive(false);
-				healing = false;
+				Decrease_HP(d.GetMDamage());
+				d.GetMfireball().Projectile::ResetDist();
+				d.GetMfireball().SetActive(false);
+				//music.Play(0);
+				d.PlayImpact();
 			}
+		}
+
+		healing = false;
+	}
 
 	// switch between the boss states
 	switch (current_action)
@@ -258,8 +293,20 @@ void King_Arthur::Attack(Dragon &d, const float dt)
 	//unique mechanic has the highest priority 
 	if (! arthur[currAttk].ongoing_attack)
 	{
-		if (!(arthur[UNIQUE_MECHANIC].cooldown))
-			currAttk = (KA_MoveSet) (UNIQUE_MECHANIC - 2);
+        if (!(arthur[UNIQUE_MECHANIC].cooldown))
+        {
+            if (ka_phase & PHASE_3)
+            {
+                arthur[UNIQUE_MECHANIC].Start_Attack(-100.f, 200.f);
+                arthur[UNIQUE_MECHANIC].Collision_.Update_Col_Pos(-100.f, 250.f);
+                arthur[UNIQUE_MECHANIC].Transform_.SetRotation(0.0f);
+                arthur[UNIQUE_MECHANIC].Transform_.SetTranslate(arthur[UNIQUE_MECHANIC].PosX, arthur[UNIQUE_MECHANIC].PosY);
+                arthur[UNIQUE_MECHANIC].Transform_.Concat();
+                arthur[2].ongoing_attack = true;
+            }
+
+            currAttk = (KA_MoveSet)(UNIQUE_MECHANIC - 2);
+        }
 
 		//followed by triple slash
 		else if (!(arthur[TRIPLE_SLASH].cooldown))
@@ -284,11 +331,11 @@ void King_Arthur::AvoidingObstacle(void)
 void King_Arthur::King_Arthur_Phase2(void)
 {
 
-	arthur.pop_back(); // delete jump attack
+	arthur.pop_back(); // delete dash attack
 
-	arthur.emplace_back(Boss_Attack()); // add the 2nd mechanic, still in progress
+	arthur.emplace_back(Boss_Attack()); // add the 2nd mechanic
 
-	this->phase1 = false; // changed to phase 2
+	ka_phase = PHASE_2; // change to phase 2
 
 	// change unique mechanism pointer to heal and spawn for phase 2
 	ka_attacks[UNIQUE_MECHANIC - 2] = &King_Arthur::Heal_and_Spawn; 
@@ -302,6 +349,19 @@ void King_Arthur::King_Arthur_Phase2(void)
 
 	teleport_location[TOP_LEFT].max.x  = -200.0f;
 	teleport_location[TOP_LEFT].max.y  = 150.0f;
+}
+
+void King_Arthur::King_Arthur_Phase3(void)
+{
+	sword_sprite = S_CreateSquare(SLASH_SCALE, ".//Textures/lancelot_slash.png");
+	sword_sprite.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+	
+	arthur.pop_back(); // delete healing mechanism
+	arthur.emplace_back(Boss_Attack(&sword_sprite, { 0.f, 0.f, Point }));
+
+    ka_attacks[UNIQUE_MECHANIC - 2] = &King_Arthur::Spinning_Blades;
+
+	ka_phase = PHASE_3;
 }
 
 void King_Arthur::Dash_Attack(Dragon &d, const float dt)
@@ -343,7 +403,7 @@ void King_Arthur::Dash_Attack(Dragon &d, const float dt)
 
 void King_Arthur::Single_Slash(Dragon &d, const float dt)
 {
-	arthur[SINGLE_SLASH].Projectile::Update(dt, SLASH_SCALE); // move the slash
+	arthur[SINGLE_SLASH].Projectile::Update(dt, SLASH_SCALE, false, 0.f); // move the slash
 
 	if(! arthur[SINGLE_SLASH].GetCollided()) // check for collision
 	{
@@ -392,7 +452,7 @@ void King_Arthur::Triple_Slash(Dragon &d, const float dt)
 			arthur[i].SetActive(true);
 		}
 
-		arthur[i].Projectile::Update(dt, SLASH_SCALE); // update the pos of the slash
+		arthur[i].Projectile::Update(dt, SLASH_SCALE, false, 0.f); // update the pos of the slash
 		
 		// checks if it has collided with the player
 		if (!arthur[i].GetCollided())
@@ -499,6 +559,69 @@ void King_Arthur::Heal_and_Spawn(Dragon &d, const float dt)
 
 }
 
+void King_Arthur::Spinning_Blades(Dragon &d, const float dt)
+{    
+    static float angle = 0.f;
+    static bool  stationary = true;
+    AEVec2 min         = d.Collision_.Get_MinPoint();
+    AEVec2 max         = d.Collision_.Get_MaxPoint();
+    int i              = (int)UNIQUE_MECHANIC;
+    
+    //for(char i = 4; i < 8; ++i)
+    AEVec2 vector = {arthur[i].Collision_.Get_Point().x - arthur[i].PosX, arthur[i].Collision_.Get_Point().y - arthur[i].PosY };
+    AEVec2 normal = { vector.y, -vector.x };
+    AEVec2 sword_to_min = { min.x - arthur[i].PosX , max.y - arthur[i].PosY };
+    AEVec2 sword_to_max = { max.x - arthur[i].PosX , max.y - arthur[i].PosY };
+    float to_line = AEVec2DotProduct(&sword_to_min, &normal) * AEVec2DotProduct(&sword_to_max, &normal);
+
+    // rotate the sword until it is facing the player
+    if (arthur[i].IsActive() && to_line > 0 && stationary)
+    {
+        AEVec2 affine = { arthur[i].Collision_.Get_Point().x - arthur[i].PosX, 
+                          arthur[i].Collision_.Get_Point().y - arthur[i].PosY };
+        float s, c, radians, tempX;
+        
+        std::cout << arthur[i].Collision_.Get_Point().x  << " " << arthur[i].Collision_.Get_Point().y << std::endl;
+       // std::cout << arthur[i].PosX << " " << arthur[i].PosY << std::endl;
+
+        radians = AEDegToRad(angle);
+        s = sin(radians);
+        c = cos(radians);
+        tempX = affine.x;
+        
+        affine.x = affine.x * c - affine.y * s + arthur[i].PosX;
+        affine.y = tempX * s +    affine.y * c + arthur[i].PosY;
+
+        arthur[i].Transform_.SetRotation(angle);
+        arthur[i].Transform_.Concat();
+        arthur[i].Collision_.Update_Col_Pos(affine.x, affine.y);
+
+        angle -= 2.f;
+        return;
+    }
+
+    stationary = false;
+    arthur[i].SetVelocity(vector);
+ 
+    arthur[i].PosX += arthur[i].GetVelocity().x * dt;
+    arthur[i].PosY += arthur[i].GetVelocity().y * dt;
+    arthur[i].Transform_.SetTranslate(arthur[i].PosX, arthur[i].PosY);
+    arthur[i].Transform_.Concat();
+    arthur[i].Collision_.Update_Col_Pos(arthur[i].GetVelocity().x * dt, arthur[i].GetVelocity().y * dt);
+ /*   
+    if (! arthur[i].GetCollided() && arthur[i].Collision_.Point_Rect(arthur[i].Collision_, d.Collision_))
+    {
+        d.Decrease_HP();
+        arthur[i].SetCollided(true);
+    }
+
+   if (arthur[i].PosY == START_POINT_Y)
+    {
+        arthur[i].End_Attack();
+        arthur[i].cooldown_timer = 10.0f;
+    }*/
+}
+
 void King_Arthur::Render(void)
 {
 	for (char i = 0; i < limit; ++i)
@@ -599,6 +722,8 @@ namespace
 			for (int i = 0; i < limit; ++i)
 			{
 				arthur[i].SetDir(true);
+				arthur[i].Transform_.SetScale(-1.f, 1.f);
+				arthur[i].Transform_.Concat();
 			}
 		}
 		else if (ka.Get_Direction() == LEFT) // set all attacks to go left
@@ -606,6 +731,8 @@ namespace
 			for (int i = 0; i < limit; ++i)
 			{
 				arthur[i].SetDir(false);
+				arthur[i].Transform_.SetScale(1.f, 1.f);
+				arthur[i].Transform_.Concat();
 			}
 		}
 	}
