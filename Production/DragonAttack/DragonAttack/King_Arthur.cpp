@@ -13,6 +13,7 @@ Technology is prohibited.
 */
 /* End Header **************************************************************************/
 #include <iostream>
+#include <iomanip>
 #include "King_Arthur.h"
 #include "Boss_States.h"
 #include "AI_Data_Factory.h"
@@ -561,27 +562,32 @@ void King_Arthur::Heal_and_Spawn(Dragon &d, const float dt)
 
 void King_Arthur::Spinning_Blades(Dragon &d, const float dt)
 {    
+	UNREFERENCED_PARAMETER(d);
+	UNREFERENCED_PARAMETER(dt);
+
     static float angle = 0.f;
     static bool  stationary = true;
-    AEVec2 min         = d.Collision_.Get_MinPoint();
-    AEVec2 max         = d.Collision_.Get_MaxPoint();
+    //AEVec2 min         = d.Collision_.Get_MinPoint();
+    //AEVec2 max         = d.Collision_.Get_MaxPoint();
     int i              = (int)UNIQUE_MECHANIC;
     
     //for(char i = 4; i < 8; ++i)
     AEVec2 vector = {arthur[i].Collision_.Get_Point().x - arthur[i].PosX, arthur[i].Collision_.Get_Point().y - arthur[i].PosY };
-    AEVec2 normal = { vector.y, -vector.x };
-    AEVec2 sword_to_min = { min.x - arthur[i].PosX , max.y - arthur[i].PosY };
-    AEVec2 sword_to_max = { max.x - arthur[i].PosX , max.y - arthur[i].PosY };
-    float to_line = AEVec2DotProduct(&sword_to_min, &normal) * AEVec2DotProduct(&sword_to_max, &normal);
+    //AEVec2 normal = { -vector.y, vector.x };
+    //AEVec2 sword_to_min = { min.x - arthur[i].PosX , max.y - arthur[i].PosY };
+    //AEVec2 sword_to_max = { max.x - arthur[i].PosX , max.y - arthur[i].PosY };
+    //float to_line = AEVec2DotProduct(&sword_to_min, &normal) * AEVec2DotProduct(&sword_to_max, &normal);
+	//std::cout << vector.x << " " << vector.y << std::endl;
+	//std::cout << AEVec2Length(&vector)<< std::endl;
 
     // rotate the sword until it is facing the player
-    if (arthur[i].IsActive() && to_line > 0 && stationary)
+    if (stationary)
     {
         AEVec2 affine = { arthur[i].Collision_.Get_Point().x - arthur[i].PosX, 
                           arthur[i].Collision_.Get_Point().y - arthur[i].PosY };
         float s, c, radians, tempX;
         
-        std::cout << arthur[i].Collision_.Get_Point().x  << " " << arthur[i].Collision_.Get_Point().y << std::endl;
+       // std::cout << arthur[i].Collision_.Get_Point().x  << " " << arthur[i].Collision_.Get_Point().y << std::endl;
        // std::cout << arthur[i].PosX << " " << arthur[i].PosY << std::endl;
 
         radians = AEDegToRad(angle);
@@ -589,26 +595,33 @@ void King_Arthur::Spinning_Blades(Dragon &d, const float dt)
         c = cos(radians);
         tempX = affine.x;
         
-        affine.x = affine.x * c - affine.y * s + arthur[i].PosX;
-        affine.y = tempX * s +    affine.y * c + arthur[i].PosY;
+        affine.x = affine.x * c -    affine.y * s + arthur[i].PosX;
+        affine.y = tempX    * s +    affine.y * c + arthur[i].PosY;
 
-        arthur[i].Transform_.SetRotation(angle);
+        arthur[i].Transform_.SetRotation(AERadToDeg(atan(affine.y / affine.x)));
         arthur[i].Transform_.Concat();
         arthur[i].Collision_.Update_Col_Pos(affine.x, affine.y);
 
-        angle -= 2.f;
+        angle -= 10.f;
         return;
     }
+ 
+	std::cout << vector.x << " " << vector.y << std::endl;
 
-    stationary = false;
+
+
+
+
+
+	//stationary = false;
     arthur[i].SetVelocity(vector);
  
     arthur[i].PosX += arthur[i].GetVelocity().x * dt;
     arthur[i].PosY += arthur[i].GetVelocity().y * dt;
-    arthur[i].Transform_.SetTranslate(arthur[i].PosX, arthur[i].PosY);
+   /*  arthur[i].Transform_.SetTranslate(arthur[i].PosX, arthur[i].PosY);
     arthur[i].Transform_.Concat();
     arthur[i].Collision_.Update_Col_Pos(arthur[i].GetVelocity().x * dt, arthur[i].GetVelocity().y * dt);
- /*   
+
     if (! arthur[i].GetCollided() && arthur[i].Collision_.Point_Rect(arthur[i].Collision_, d.Collision_))
     {
         d.Decrease_HP();
