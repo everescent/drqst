@@ -299,10 +299,10 @@ void King_Arthur::Attack(Dragon &d, const float dt)
             if (ka_phase & PHASE_3)
             {
                 arthur[UNIQUE_MECHANIC].Start_Attack(-100.f, 200.f);
-                arthur[UNIQUE_MECHANIC].Collision_.Update_Col_Pos(-100.f, 250.f);
                 arthur[UNIQUE_MECHANIC].Transform_.SetRotation(0.0f);
                 arthur[UNIQUE_MECHANIC].Transform_.SetTranslate(arthur[UNIQUE_MECHANIC].PosX, arthur[UNIQUE_MECHANIC].PosY);
                 arthur[UNIQUE_MECHANIC].Transform_.Concat();
+				arthur[UNIQUE_MECHANIC].ongoing_attack = false;
                 arthur[2].ongoing_attack = true;
             }
 
@@ -565,66 +565,49 @@ void King_Arthur::Spinning_Blades(Dragon &d, const float dt)
 	UNREFERENCED_PARAMETER(d);
 	UNREFERENCED_PARAMETER(dt);
 
-    static float angle = 0.f;
-    static bool  stationary = true;
-    //AEVec2 min         = d.Collision_.Get_MinPoint();
-    //AEVec2 max         = d.Collision_.Get_MaxPoint();
-    int i              = (int)UNIQUE_MECHANIC;
-    
-    //for(char i = 4; i < 8; ++i)
-    AEVec2 vector = {arthur[i].Collision_.Get_Point().x - arthur[i].PosX, arthur[i].Collision_.Get_Point().y - arthur[i].PosY };
-    //AEVec2 normal = { -vector.y, vector.x };
-    //AEVec2 sword_to_min = { min.x - arthur[i].PosX , max.y - arthur[i].PosY };
-    //AEVec2 sword_to_max = { max.x - arthur[i].PosX , max.y - arthur[i].PosY };
-    //float to_line = AEVec2DotProduct(&sword_to_min, &normal) * AEVec2DotProduct(&sword_to_max, &normal);
-	//std::cout << vector.x << " " << vector.y << std::endl;
-	//std::cout << AEVec2Length(&vector)<< std::endl;
+	int i = (int)UNIQUE_MECHANIC;
+	float x, y;
+	static float angle, angle_end;
 
     // rotate the sword until it is facing the player
-    if (stationary)
-    {
-        AEVec2 affine = { arthur[i].Collision_.Get_Point().x - arthur[i].PosX, 
-                          arthur[i].Collision_.Get_Point().y - arthur[i].PosY };
-        float s, c, radians, tempX;
-        
-       // std::cout << arthur[i].Collision_.Get_Point().x  << " " << arthur[i].Collision_.Get_Point().y << std::endl;
-       // std::cout << arthur[i].PosX << " " << arthur[i].PosY << std::endl;
+	if (!arthur[i].ongoing_attack)
+	{
+		x = arthur[i].PosX - d.PosX;
+		y = arthur[i].PosY - d.PosY;
+		angle_end = 210 - AERadToDeg(atan(y / x));
+		
+		arthur[i].ongoing_attack = true;
+		angle = 0;
+	}
 
-        radians = AEDegToRad(angle);
-        s = sin(radians);
-        c = cos(radians);
-        tempX = affine.x;
-        
-        affine.x = affine.x * c -    affine.y * s + arthur[i].PosX;
-        affine.y = tempX    * s +    affine.y * c + arthur[i].PosY;
-
-        arthur[i].Transform_.SetRotation(AERadToDeg(atan(affine.y / affine.x)));
-        arthur[i].Transform_.Concat();
-        arthur[i].Collision_.Update_Col_Pos(affine.x, affine.y);
-
-        angle -= 10.f;
-        return;
-    }
+	if (angle != angle_end)
+	{
+		// offset
+		if (angle_end - angle < 10)
+		{
+			angle = angle_end;
+			arthur[i].SetVelocity({ d.PosX - arthur[i].PosX, d.PosY - arthur[i].PosY });
+		}
+		else
+		{
+			arthur[i].Transform_.SetRotation(angle += 15);
+			arthur[i].Transform_.Concat();
+		}
+	}
  
-	std::cout << vector.x << " " << vector.y << std::endl;
+	//std::cout << vector.x << " " << vector.y << std::endl;
 
 
-
-
-
-
-	//stationary = false;
-    arthur[i].SetVelocity(vector);
- 
     arthur[i].PosX += arthur[i].GetVelocity().x * dt;
     arthur[i].PosY += arthur[i].GetVelocity().y * dt;
-   /*  arthur[i].Transform_.SetTranslate(arthur[i].PosX, arthur[i].PosY);
+    arthur[i].Transform_.SetTranslate(arthur[i].PosX, arthur[i].PosY);
     arthur[i].Transform_.Concat();
-    arthur[i].Collision_.Update_Col_Pos(arthur[i].GetVelocity().x * dt, arthur[i].GetVelocity().y * dt);
-
-    if (! arthur[i].GetCollided() && arthur[i].Collision_.Point_Rect(arthur[i].Collision_, d.Collision_))
+    arthur[i].Collision_.Update_Col_Pos(arthur[i].PosX, arthur[i].PosY);
+  
+    if (! arthur[i].GetCollided() && arthur[i].Collision_.Point_Rect(d.Collision_, arthur[i].Collision_))
     {
-        d.Decrease_HP();
+		d.Set_Vulnerable(true);
+		d.Decrease_HP();
         arthur[i].SetCollided(true);
     }
 
@@ -632,7 +615,7 @@ void King_Arthur::Spinning_Blades(Dragon &d, const float dt)
     {
         arthur[i].End_Attack();
         arthur[i].cooldown_timer = 10.0f;
-    }*/
+    }
 }
 
 void King_Arthur::Render(void)
