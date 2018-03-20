@@ -38,9 +38,9 @@ class Animation
 public:
   //Initializes the Animation module
   //Takes in the required number of states, and a function to initialize it
-  Animation(unsigned stateNum, const float &width, const float &height, 
+  Animation(unsigned stateNum, const float&width, const float &height, 
             const float &row, const float &col,
-            //const function wrapper to take in lambda functions
+            //Const function to take in lambda functions
             const std::function <void (std::vector <Range>&)>& Init);
   //Copy assignment
   Animation(const Animation& rhs);
