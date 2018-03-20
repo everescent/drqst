@@ -20,6 +20,8 @@ Technology is prohibited.
 #include "GameStateManager.h"
 #include <vector>
 
+#define NUM_OF_SWORD 2
+
 namespace {
 
 	std::vector <Boss_Attack> arthur; //an array of boss attacks
@@ -71,6 +73,7 @@ namespace {
 	};
 
 	LOCATION teleport_location[3];
+	AEVec2 sword_pos[NUM_OF_SWORD] = {};
 }
 
 
@@ -79,7 +82,7 @@ King_Arthur::King_Arthur(Sprite* texture)
 	: Characters(texture, HEALTH,
 		Col_Comp{ START_POINT_X - 30.0f, START_POINT_Y - 30.0f,
 				  START_POINT_X + 30.0f, START_POINT_Y + 30.0f, Rect }),
-	ka_phase{ PHASE_2 }, healing_effect{Effects_Get(KA_HEALING_PARTICLE)}
+	ka_phase{ PHASE_3 }, healing_effect{Effects_Get(KA_HEALING_PARTICLE)}
 {
 	PosX = START_POINT_X;                 // change king arthur coordinates to the location set
 	PosY = START_POINT_Y;                 // change king arthur coordinates to the location set
@@ -113,6 +116,9 @@ void King_Arthur::Init_KA_Attacks(void)
 	arthur.reserve(limit);
 	attack_sprite = S_CreateSquare(SLASH_SCALE, slash_tex);
 	attack_sprite.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+	sword_sprite = S_CreateSquare(SLASH_SCALE, ".//Textures/lancelot_slash.png");
+	sword_sprite.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+
 
 	for(char i = 0; i < limit-1; ++i) // add the single slash and triple slash
 		arthur.emplace_back(&attack_sprite,
@@ -121,7 +127,13 @@ void King_Arthur::Init_KA_Attacks(void)
 
 
 	arthur.emplace_back(Boss_Attack()); // for jump attack since it does not need textures
+	arthur.emplace_back(Boss_Attack()); // add the 2nd mechanic
 
+	for (char i = 0; i < NUM_OF_SWORD; ++i)
+	{
+		arthur.emplace_back(Boss_Attack(&sword_sprite, { 0.f, 0.f, Point })); // spin sword
+		sword_pos[i].y = 200.f;
+	}
 	for (char i = 0; i < limit - 1; ++i) // initializing other variables in slash attacks
 	{
         arthur[i].SetVelocity(AEVec2{ 200.0f, 0.0f }); // velocity for slash
@@ -130,9 +142,9 @@ void King_Arthur::Init_KA_Attacks(void)
  		arthur[i].Transform_.Concat();
 	}
 
-	ka_attacks[SINGLE_SLASH]        = &King_Arthur::Single_Slash;
-	ka_attacks[TRIPLE_SLASH]        = &King_Arthur::Triple_Slash;
-	ka_attacks[UNIQUE_MECHANIC - 2] = &King_Arthur::Dash_Attack;
+	sword_pos[0].x = -100.f;
+	sword_pos[1].x =  100.f;
+
 
 	seed_initializer();// remove once we finish
 
@@ -238,9 +250,6 @@ void King_Arthur::Update(Dragon &d, const float dt)
 	case MOVING:   this->Moving(d,dt);
 		break;
 
-	case OBSTACLE: this->AvoidingObstacle();
-		break;
-
 	case ATTACK:   this->Attack(d, dt);
 		break;
 
@@ -250,7 +259,7 @@ void King_Arthur::Update(Dragon &d, const float dt)
 	default: break;
 	}
 
-	for (char i = 0; i < limit; ++i) // update cooldowns on attacks
+	for (unsigned char i = 0; i < arthur.size(); ++i) // update cooldowns on attacks
 			arthur[i].Update(dt);
 
 
@@ -294,21 +303,28 @@ void King_Arthur::Attack(Dragon &d, const float dt)
 	//unique mechanic has the highest priority 
 	if (! arthur[currAttk].ongoing_attack)
 	{
-        if (!(arthur[UNIQUE_MECHANIC].cooldown))
+        if (!(arthur[DASH].cooldown) && ka_phase & PHASE_1)
         {
-            if (ka_phase & PHASE_3)
-            {
-                arthur[UNIQUE_MECHANIC].Start_Attack(-100.f, 200.f);
-                arthur[UNIQUE_MECHANIC].Transform_.SetRotation(0.0f);
-                arthur[UNIQUE_MECHANIC].Transform_.SetTranslate(arthur[UNIQUE_MECHANIC].PosX, arthur[UNIQUE_MECHANIC].PosY);
-                arthur[UNIQUE_MECHANIC].Transform_.Concat();
-				arthur[UNIQUE_MECHANIC].ongoing_attack = false;
-                arthur[2].ongoing_attack = true;
-            }
-
-            currAttk = (KA_MoveSet)(UNIQUE_MECHANIC - 2);
+            currAttk = DASH;
         }
+		else if (!(arthur[HEAL].cooldown) && ka_phase & PHASE_2)
+		{
+			currAttk = HEAL;
+		}
 
+		else if (!(arthur[SPIN_SWORD].cooldown) && ka_phase & PHASE_3)
+		{
+			for (char i = 0; i < NUM_OF_SWORD; ++i)
+			{
+				arthur[SPIN_SWORD + i].Start_Attack(sword_pos[i].x, sword_pos[i].y);
+				arthur[SPIN_SWORD + i].Transform_.SetRotation(0.0f);
+				arthur[SPIN_SWORD + i].Transform_.SetTranslate(arthur[SPIN_SWORD + i].PosX, arthur[SPIN_SWORD + i].PosY);
+				arthur[SPIN_SWORD + i].Transform_.Concat();
+				arthur[SPIN_SWORD + i].ongoing_attack = false;
+			}
+			
+			currAttk = SPIN_SWORD;
+		}
 		//followed by triple slash
 		else if (!(arthur[TRIPLE_SLASH].cooldown))
 			currAttk = TRIPLE_SLASH;
@@ -320,26 +336,29 @@ void King_Arthur::Attack(Dragon &d, const float dt)
 
 	}
 
-	(this->*ka_attacks[currAttk])(d, dt); // call the coresponding attack function
-}
+	switch (currAttk)
+	{
+	case SINGLE_SLASH: Single_Slash(d, dt);
+		break;
+	case TRIPLE_SLASH: Triple_Slash(d, dt);
+		break;
+	case DASH: Dash_Attack(d, dt);
+		break;
+	case HEAL: Heal_and_Spawn(d, dt);
+		break;
+	case SPIN_SWORD: Spinning_Blades(d, dt);
+		break;
+	default: break;
+	}
 
-void King_Arthur::AvoidingObstacle(void)
-{
-	//move to player in phase 2 with platforms
-	//path finding i guess?
+
+
+	// (this->*ka_attacks[currAttk])(d, dt); call the coresponding attack function
 }
 
 void King_Arthur::King_Arthur_Phase2(void)
 {
-
-	arthur.pop_back(); // delete dash attack
-
-	arthur.emplace_back(Boss_Attack()); // add the 2nd mechanic
-
 	ka_phase = PHASE_2; // change to phase 2
-
-	// change unique mechanism pointer to heal and spawn for phase 2
-	ka_attacks[UNIQUE_MECHANIC - 2] = &King_Arthur::Heal_and_Spawn; 
 
 	// platform coordinates to teleport to
 	teleport_location[TOP_RIGHT].max.x = 200.0f;
@@ -354,28 +373,17 @@ void King_Arthur::King_Arthur_Phase2(void)
 
 void King_Arthur::King_Arthur_Phase3(void)
 {
-	sword_sprite = S_CreateSquare(SLASH_SCALE, ".//Textures/lancelot_slash.png");
-	sword_sprite.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
-	
-	arthur.pop_back(); // delete healing mechanism
-	arthur.emplace_back(Boss_Attack(&sword_sprite, { 0.f, 0.f, Point }));
-
-    ka_attacks[UNIQUE_MECHANIC - 2] = &King_Arthur::Spinning_Blades;
-
 	ka_phase = PHASE_3;
 }
 
 void King_Arthur::Dash_Attack(Dragon &d, const float dt)
 {	
-	if (arthur[UNIQUE_MECHANIC].cooldown) // skill still on cooldown
-		return;
-
 	static Direction dash;           // direction KA should dash in
 
-	if (!(arthur[UNIQUE_MECHANIC].ongoing_attack)) // called once to fix dash direction
+	if (!(arthur[DASH].ongoing_attack)) // called once to fix dash direction
 	{
 		dash = this->Get_Direction();
-		arthur[UNIQUE_MECHANIC].ongoing_attack = true;
+		arthur[DASH].ongoing_attack = true;
 	}
 
 	this->Set_Direction(dash);       // change back the dash direction
@@ -387,11 +395,11 @@ void King_Arthur::Dash_Attack(Dragon &d, const float dt)
 	if(this->Get_Direction() == STAY)
 	{
 		current_action = IDLE;           // switch current state to idle
-		arthur[UNIQUE_MECHANIC].cooldown = true;       // start the cooldown of dash attk
+		arthur[DASH].cooldown = true;       // start the cooldown of dash attk
 		this->SetVelocity({ 120, 0 });   // reset the velocity of king arthur
 		++behavior_swap;    
-		arthur[UNIQUE_MECHANIC].ongoing_attack = false;
-		arthur[UNIQUE_MECHANIC].cooldown_timer = 10.0f; // cooldown of jump attack
+		arthur[DASH].ongoing_attack = false;
+		arthur[DASH].cooldown_timer = 10.0f; // cooldown of jump attack
 
 		if(hit)
 			d.Decrease_HP();
@@ -494,7 +502,7 @@ void King_Arthur::Heal_and_Spawn(Dragon &d, const float dt)
 	UNREFERENCED_PARAMETER(d);
 	//teleport to a platform, heal and spawn mobs
 
-	if (!arthur[UNIQUE_MECHANIC].ongoing_attack) // teleport once
+	if (!arthur[HEAL].ongoing_attack) // teleport once
 	{
 		//get a random number and teleport to the coresponding platform
 		switch (Get_Random_Num(2))
@@ -525,7 +533,7 @@ void King_Arthur::Heal_and_Spawn(Dragon &d, const float dt)
 		Transform_.SetTranslate(PosX, PosY);
 		Transform_.Concat();
 		healing = true;
-		arthur[UNIQUE_MECHANIC].ongoing_attack = true;
+		arthur[HEAL].ongoing_attack = true;
 		spawn_mob = true;
 
 		healing_effect->Emitter_.Pos_.Min_Max.Point_Min.x = PosX - 200.f;
@@ -553,79 +561,91 @@ void King_Arthur::Heal_and_Spawn(Dragon &d, const float dt)
 	}
 	else
 	{
-		arthur[UNIQUE_MECHANIC].cooldown       = true;
-		arthur[UNIQUE_MECHANIC].ongoing_attack = false;		
-		arthur[UNIQUE_MECHANIC].cooldown_timer = 20.0f;
+		arthur[HEAL].cooldown       = true;
+		arthur[HEAL].ongoing_attack = false;		
+		arthur[HEAL].cooldown_timer = 20.0f;
 	}
 
 }
 
 void King_Arthur::Spinning_Blades(Dragon &d, const float dt)
 {    
-	UNREFERENCED_PARAMETER(d);
-	UNREFERENCED_PARAMETER(dt);
-
-	int i = (int)UNIQUE_MECHANIC;
+	int i = 0;
 	float x, y;
 	static float angle, angle_end;
 
-    // rotate the sword until it is facing the player
-	if (!arthur[i].ongoing_attack)
+	for (; i < NUM_OF_SWORD; ++i)
 	{
-		x = arthur[i].PosX - d.PosX;
-		y = arthur[i].PosY - d.PosY;
-		angle_end = 210 - AERadToDeg(atan(y / x));
-		
-		arthur[i].ongoing_attack = true;
-		angle = 0;
-	}
+		if (arthur[SPIN_SWORD + i].IsActive())
+		{   //rotate the sword until it is facing the player
+			if (!arthur[SPIN_SWORD + i].ongoing_attack)
+			{
+				x = arthur[SPIN_SWORD + i].PosX - d.PosX;
+				y = arthur[SPIN_SWORD + i].PosY - d.PosY;
+				angle_end = 210 - AERadToDeg(atan(y / x));
 
-	if (angle != angle_end)
-	{
-		// offset
-		if (angle_end - angle < 10)
-		{
-			angle = angle_end;
-			arthur[i].SetVelocity({ d.PosX - arthur[i].PosX, d.PosY - arthur[i].PosY });
+				arthur[SPIN_SWORD + i].ongoing_attack = true;
+				angle = 0;
+			}
+
+			if (angle != angle_end)
+			{
+				// offset
+				if (angle_end - angle < 10)
+				{
+					angle = angle_end;
+					arthur[i].SetVelocity({ d.PosX - arthur[SPIN_SWORD + i].PosX, d.PosY - arthur[SPIN_SWORD + i].PosY });
+				}
+				else
+				{
+					arthur[SPIN_SWORD + i].Transform_.SetRotation(angle += 15);
+					arthur[SPIN_SWORD + i].Transform_.Concat();
+					return;
+				}
+			}
+
+			arthur[SPIN_SWORD + i].PosX += arthur[i].GetVelocity().x * dt;
+			arthur[SPIN_SWORD + i].PosY += arthur[i].GetVelocity().y * dt;
+			arthur[SPIN_SWORD + i].Transform_.SetTranslate(arthur[SPIN_SWORD + i].PosX, arthur[SPIN_SWORD + i].PosY);
+			arthur[SPIN_SWORD + i].Transform_.Concat();
+			arthur[SPIN_SWORD + i].Collision_.Update_Col_Pos(arthur[SPIN_SWORD + i].PosX, arthur[SPIN_SWORD + i].PosY);
+
+			if (!arthur[SPIN_SWORD + i].GetCollided() && arthur[SPIN_SWORD + i].Collision_.Point_Rect(d.Collision_, arthur[SPIN_SWORD + i].Collision_))
+			{
+				d.Set_Vulnerable(true);
+				d.Decrease_HP();
+				arthur[SPIN_SWORD + i].SetCollided(true);
+			}
+
+			if (arthur[SPIN_SWORD + i].PosY < -250.f)
+			{
+				arthur[SPIN_SWORD + i].SetActive(false);       // make stab disappaer
+				arthur[SPIN_SWORD + i].ResetDist();            // reset distance traveled back to 0
+				arthur[SPIN_SWORD + i].SetCollided(false);     // reset collided flag
+
+
+				if (i == NUM_OF_SWORD - 1)
+				{
+					current_action = MOVING;
+					arthur[SPIN_SWORD].cooldown_timer = 10.0f;
+					arthur[SPIN_SWORD].cooldown = true;        // start cooldown
+					arthur[SPIN_SWORD].ongoing_attack = false; // attack animation has concluded
+					arthur[SPIN_SWORD + 1].ongoing_attack = false; // attack animation has concluded
+				}
+			}
+
+			return;
 		}
-		else
-		{
-			arthur[i].Transform_.SetRotation(angle += 15);
-			arthur[i].Transform_.Concat();
-		}
 	}
- 
-	//std::cout << vector.x << " " << vector.y << std::endl;
-
-
-    arthur[i].PosX += arthur[i].GetVelocity().x * dt;
-    arthur[i].PosY += arthur[i].GetVelocity().y * dt;
-    arthur[i].Transform_.SetTranslate(arthur[i].PosX, arthur[i].PosY);
-    arthur[i].Transform_.Concat();
-    arthur[i].Collision_.Update_Col_Pos(arthur[i].PosX, arthur[i].PosY);
-  
-    if (! arthur[i].GetCollided() && arthur[i].Collision_.Point_Rect(d.Collision_, arthur[i].Collision_))
-    {
-		d.Set_Vulnerable(true);
-		d.Decrease_HP();
-        arthur[i].SetCollided(true);
-    }
-
-   if (arthur[i].PosY == START_POINT_Y)
-    {
-        arthur[i].End_Attack();
-        arthur[i].cooldown_timer = 10.0f;
-    }
 }
 
 void King_Arthur::Render(void)
 {
-	for (char i = 0; i < limit; ++i)
+	for (unsigned char i = 0; i < arthur.size(); ++i)
 	{
 		if (arthur[i].IsActive())
 			arthur[i].Render();
 	}
-
 	for (char i = 0; i < num_of_mobs; ++i)
 	{
 		if (mobs[i]->IsActive())

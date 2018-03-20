@@ -25,7 +25,10 @@ private:
 	{
 		SINGLE_SLASH = 0,
 		TRIPLE_SLASH,
-		UNIQUE_MECHANIC = 4
+		DASH = 4,
+		HEAL,
+		SPIN_SWORD,
+		NONE
 	};
 
 	void King_Arthur_Phase2(void); // changes mechanics for phase 2
@@ -38,7 +41,6 @@ private:
 	// boss behaviours /////////////////////////////////////////////////
 	void Idle(const Dragon &d, const float dt);
 	void Moving(const Dragon &d, const float dt);
-	void AvoidingObstacle();
 	void Attack(Dragon &d, const float dt);
 	void Dead(void);
 	// boss behaviours end /////////////////////////////////////////////
@@ -50,8 +52,6 @@ private:
 	void Heal_and_Spawn(Dragon &d, const float dt);  // phase 2, heal and spawm mobs
     void Spinning_Blades(Dragon &d, const float dt); // rotating swords that attacks player
 	// attack functions /////////////////////////////////////////////////
-
-	void(King_Arthur::*ka_attacks[3])(Dragon &d, float dt);
 
 	BOSS_PHASE ka_phase;
 	Particle_System *healing_effect;
