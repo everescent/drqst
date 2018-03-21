@@ -21,6 +21,7 @@ Technology is prohibited.
 #include <vector>
 
 #define NUM_OF_SWORD 2
+#define ACCEL        40.f
 
 namespace {
 
@@ -116,7 +117,7 @@ void King_Arthur::Init_KA_Attacks(void)
 	arthur.reserve(limit);
 	attack_sprite = S_CreateSquare(SLASH_SCALE, slash_tex);
 	attack_sprite.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
-	sword_sprite = S_CreateSquare(SLASH_SCALE, ".//Textures/lancelot_slash.png");
+	sword_sprite = S_CreateSquare(SLASH_SCALE, ".//Textures/Excalibur.png");
 	sword_sprite.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 
 
@@ -571,7 +572,7 @@ void King_Arthur::Heal_and_Spawn(Dragon &d, const float dt)
 void King_Arthur::Spinning_Blades(Dragon &d, const float dt)
 {    
 	int i = 0;
-	float x, y;
+	//float x, y;
 	static float angle, angle_end;
 
 	for (; i < NUM_OF_SWORD; ++i)
@@ -580,9 +581,14 @@ void King_Arthur::Spinning_Blades(Dragon &d, const float dt)
 		{   //rotate the sword until it is facing the player
 			if (!arthur[SPIN_SWORD + i].ongoing_attack)
 			{
-				x = arthur[SPIN_SWORD + i].PosX - d.PosX;
-				y = arthur[SPIN_SWORD + i].PosY - d.PosY;
-				angle_end = 210 - AERadToDeg(atan(y / x));
+				AEVec2 pos{ d.PosX - arthur[SPIN_SWORD + i].PosX, d.PosY - arthur[SPIN_SWORD + i].PosY };
+				AEVec2 nrm;
+				AEVec2Normalize(&nrm, &pos);
+
+				// Hack that works :D
+				angle_end = std::asin(nrm.x);
+				angle_end = AERadToDeg(angle_end);
+				angle_end = angle_end + 180.0f;
 
 				arthur[SPIN_SWORD + i].ongoing_attack = true;
 				angle = 0;
@@ -594,18 +600,21 @@ void King_Arthur::Spinning_Blades(Dragon &d, const float dt)
 				if (angle_end - angle < 10)
 				{
 					angle = angle_end;
-					arthur[i].SetVelocity({ d.PosX - arthur[SPIN_SWORD + i].PosX, d.PosY - arthur[SPIN_SWORD + i].PosY });
+					arthur[SPIN_SWORD + i].SetVelocity({ d.PosX - arthur[SPIN_SWORD + i].PosX, d.PosY - arthur[SPIN_SWORD + i].PosY });
+					arthur[SPIN_SWORD + i].Transform_.SetRotation(angle);
+					arthur[SPIN_SWORD + i].Transform_.Concat();
 				}
 				else
 				{
-					arthur[SPIN_SWORD + i].Transform_.SetRotation(angle += 15);
+					arthur[SPIN_SWORD + i].Transform_.SetRotation(angle += 10);
 					arthur[SPIN_SWORD + i].Transform_.Concat();
 					return;
 				}
 			}
 
-			arthur[SPIN_SWORD + i].PosX += arthur[i].GetVelocity().x * dt;
-			arthur[SPIN_SWORD + i].PosY += arthur[i].GetVelocity().y * dt;
+			arthur[SPIN_SWORD + i].PosX += arthur[SPIN_SWORD + i].GetVelocity().x * dt;
+			arthur[SPIN_SWORD + i].PosY += arthur[SPIN_SWORD + i].GetVelocity().y * dt;
+			arthur[SPIN_SWORD + i].SetVelocity({ arthur[SPIN_SWORD + i].GetVelocity().x + ACCEL * dt, arthur[SPIN_SWORD + i].GetVelocity().y + ACCEL * dt });
 			arthur[SPIN_SWORD + i].Transform_.SetTranslate(arthur[SPIN_SWORD + i].PosX, arthur[SPIN_SWORD + i].PosY);
 			arthur[SPIN_SWORD + i].Transform_.Concat();
 			arthur[SPIN_SWORD + i].Collision_.Update_Col_Pos(arthur[SPIN_SWORD + i].PosX, arthur[SPIN_SWORD + i].PosY);
