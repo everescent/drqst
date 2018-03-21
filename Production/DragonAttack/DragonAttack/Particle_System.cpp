@@ -89,7 +89,7 @@ Particle Particle_System::Create()
   //Initialize position of particle
   switch(Emitter_.Type_)
   {   
-    case CENTER:   
+    case CENTER:
       tmp_.Pos_.x = Emitter_.Pos_.Point.x;
       tmp_.Pos_.y = Emitter_.Pos_.Point.y;
       break;

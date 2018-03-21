@@ -30,7 +30,7 @@ const float Bullet_Speed    { 1200.0f }; //How fast a bullet travels
 const int   Fireball_Damage { 10      };
 const int   MFireball_Damage{ 15      };
 const float Fireball_Scale  { 50.0f   };
-const float MFireball_Scale { 70.0f   };
+const float MFireball_Scale { Fireball_Scale * 1.5f   };
 
 const float Invul_Time      { 1.5f    };
 const float Dragon_Scale    { 70.0f   };
@@ -121,6 +121,8 @@ public:
     }
     //Initialize Mega Fireball
     Mfireball.SetVelocity(AEVec2{ Bullet_Speed / 2, 0.0f });
+    Mfireball.Transform_.SetScale(1.5f, 1.5f);
+    Mfireball.Transform_.Concat();
     Mfireball.Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
   }
   ~Dragon()
