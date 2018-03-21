@@ -240,6 +240,15 @@
     <ClCompile Include="Particle_Effects.cpp">
       <Filter>Particle_System</Filter>
     </ClCompile>
+    <ClCompile Include="Stage2_1.cpp">
+      <Filter>Game_States\Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="Stage2_2.cpp">
+      <Filter>Game_States\Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="Stage2_3.cpp">
+      <Filter>Game_States\Stage</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h">
@@ -395,6 +404,15 @@
     <ClInclude Include="Particle_Effects.h">
       <Filter>Particle_System</Filter>
     </ClInclude>
+    <ClInclude Include="Stage2_1.h">
+      <Filter>Game_States\Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="Stage2_2.h">
+      <Filter>Game_States\Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="Stage2_3.h">
+      <Filter>Game_States\Stage</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="level1-1.txt">
@@ -404,6 +422,15 @@
       <Filter>Resource Files</Filter>
     </Text>
     <Text Include="level1-3.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="level2-1.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="level2-2.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="level2-3.txt">
       <Filter>Resource Files</Filter>
     </Text>
   </ItemGroup>

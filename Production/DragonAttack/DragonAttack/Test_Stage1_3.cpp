@@ -18,10 +18,10 @@ namespace
 	LevelChangePlatform *next;
 	std::vector<Characters*> c;
 
-	Sprite* COIN_SPRITE;//pickups
-	Sprite* HP_SPRITE;
-	Sprite* DMG_SPRITE;
-	Sprite* SPD_SPRITE;
+	//Sprite* COIN_SPRITE;//pickups
+	//Sprite* HP_SPRITE;
+	//Sprite* DMG_SPRITE;
+	//Sprite* SPD_SPRITE;
 	Sprite* WALL_SPRITE;
 	Sprite* LCPLAT_SPRITE;
 	Sprite* FLOOR_SPRITE;

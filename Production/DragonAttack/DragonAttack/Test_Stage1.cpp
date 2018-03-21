@@ -54,6 +54,7 @@ namespace Test_Stage1_1
 {
 	void Load(void)
 	{
+		/* Sprite Creation Start */
 		TUT1_SPRITE = new Sprite{ S_CreateRectangle(150.0f, 50.0f,"Textures/Shoot_Tutorial_MSG.png") };
 		TUT2_SPRITE = new Sprite{ S_CreateRectangle(230.0f, 80.0f, "Textures/Boxes_Tutorial_MSG.png") };
 		TUT3_SPRITE = new Sprite{ S_CreateRectangle(250.0f, 100.0f, "Textures/Enemy_Tutorial_MSG.png") };
@@ -71,60 +72,57 @@ namespace Test_Stage1_1
 		FLOOR_SPRITE = new Sprite{ CreateFloor(1.0f, "Textures/Cobblestone.png", 1.0f, 1.0f) };
 		TOWER_SPRITE = new Sprite{ S_CreateRectangle(300.0f, 300.0f, ".//Textures/tower.png") };
 		SIGN_SPRITE = new Sprite{ S_CreateSquare(70.0f, ".//Textures/sign.png") };
-
 		BG = new Sprite{ CreateBG(22.0f, 2.0f, "Textures/BG_Stage1.png", 1.0f, 15.0f) };
+		/* Sprite Creation End */
+
+		/* Static Object Placement Start */
 		M_BG = new Transform{};
 		player = dynamic_cast<Dragon*>(Create_Basic_AI(DRAGON));
 		Audio = new Audio_Engine{ 1, [](std::vector <std::string> &playlist)->void {playlist.push_back(".//Audio/Stage_1_BGM.mp3"); } };
 		archerTower = new Tower{ TOWER_SPRITE, 4800.0f, 0.0f };
-		//ui = new UI{ player };
-
+		ui = new UI{ player };
+		box1 = new Barrier{ BARRIER_SPRITE, 1500.0f, -235.0f };
 		w2 = new Wall{ WALL_SPRITE, 3750.0f, -345.0f };
 		w22 = new Wall{ WALL_SPRITE,3750.0f, -230.0f };
 		w5 = new Wall{ WALL_SPRITE,6480.0f, -180.0f };
 		w6 = new Wall{ WALL_SPRITE,6480.0f, -200.0f };
 
 		next = new LevelChangePlatform{ LCPLAT_SPRITE,6550.0f, -120.0f };
-
-
 		coin1 = new PickUp{ COIN_SPRITE,
 			Col_Comp{ 0.0f - 25.0f, 0.0f - 25.0f, 0.0f + 25.0f, 0.0f + 25.0f, Rect },
 			COIN, 1500.0f, -210.0f };
-
 		coin2 = new PickUp{ COIN_SPRITE,
 			Col_Comp{ 0.0f - 25.0f, 0.0f - 25.0f, 0.0f + 25.0f, 0.0f + 25.0f, Rect },
 			COIN, 3550.0f, -350.0f };
-
 		coin3 = new PickUp{ COIN_SPRITE,
 			Col_Comp{ 0.0f - 25.0f, 0.0f - 25.0f, 0.0f + 25.0f, 0.0f + 25.0f, Rect },
 			COIN, 6300.0f, -220.0f };
-
 		power2 = new PickUp{ HP_SPRITE,
 			Col_Comp{ 0.0f - 25.0f, 0.0f - 25.0f, 0.0f + 25.0f, 0.0f + 25.0f, Rect },
 			HP, 5300.0f, -80.0f };
-
-		box1 = new Barrier{ BARRIER_SPRITE, 1500.0f, -235.0f };
+		s1 = new Sign{ SIGN_SPRITE, 400.0f, -255.0f };
+		tut1 = new GameObject{ TUT1_SPRITE, Col_Comp() };
+		s2 = new Sign{ SIGN_SPRITE, 1270.0f, -255.0f };
+		tut2 = new GameObject{ TUT2_SPRITE, Col_Comp() };
+		s3 = new Sign{ SIGN_SPRITE, 1650.0f, -255.0f };
+		tut3 = new GameObject{ TUT3_SPRITE, Col_Comp() };
+		s4 = new Sign{ SIGN_SPRITE, 2600.0f, -255.0f };
+		tut4 = new GameObject{ TUT4_SPRITE, Col_Comp() };
+		s5 = new Sign{ SIGN_SPRITE, 4200.0f, -75.0f };
+		tut5 = new GameObject{ TUT5_SPRITE, Col_Comp() };
+		s6 = new Sign{ SIGN_SPRITE, 5200.0f, -75.0f };
+		tut6 = new GameObject{ TUT6_SPRITE, Col_Comp() };
+		/* Static Object Placement End */
 
 		if (!Import_MapData("level1-1.txt", MapData, Map_Width, Map_Height)) { AEGfxExit(); }
 
+		/* Enemy Placement Start */
 		c.push_back(Create_Basic_AI(GRUNT,  AEVec2  { 2320.0f , -180.0f }));
 		c.push_back(Create_Basic_AI(GRUNT,  AEVec2  { 2480.0f , -180.0f }));
 		c.push_back(Create_Basic_AI(GRUNT,  AEVec2  { 4000.0f ,  -90.0f }));
 		c.push_back(Create_Basic_AI(ARCHER, AEVec2  { 4750.0f ,  140.0f }));
 		c.push_back(Create_Basic_AI(ARCHER, AEVec2  { 6200.0f , -220.0f }));
-
-		  s1 = new Sign{ SIGN_SPRITE, 400.0f, -255.0f };
-		tut1 = new GameObject{ TUT1_SPRITE, Col_Comp()};
-		  s2 = new Sign{ SIGN_SPRITE, 1270.0f, -255.0f };
-		tut2 = new GameObject{ TUT2_SPRITE, Col_Comp() };
-		  s3 = new Sign{ SIGN_SPRITE, 1650.0f, -255.0f };
-		tut3 = new GameObject{ TUT3_SPRITE, Col_Comp() };
-		  s4 = new Sign{ SIGN_SPRITE, 2600.0f, -255.0f };
-		tut4 = new GameObject{ TUT4_SPRITE, Col_Comp() };
-		  s5 = new Sign{ SIGN_SPRITE, 4200.0f, -75.0f };
-		tut5 = new GameObject{ TUT5_SPRITE, Col_Comp() };
-		  s6 = new Sign{ SIGN_SPRITE, 5200.0f, -75.0f };
-		tut6 = new GameObject{ TUT6_SPRITE, Col_Comp() };
+		/* Enemy Placement End */
 	}
 
 	void Init(void)
@@ -158,12 +156,6 @@ namespace Test_Stage1_1
 					float f_y = (float)y;
 					floors.push_back(Floor{ FLOOR_SPRITE,Convert_X(f_x) , Convert_Y(f_y) });
 				}
-				/*if (MapData[y][x] == OBJ_SC)
-				{
-					float f_x = (float)x;
-					float f_y = (float)y;
-					scarecrows.push_back(Scarecrow{ Convert_X(f_x) , Convert_Y(f_y) });
-				}*/
 				if (MapData[y][x] == OBJ_WALL)
 				{
 					float f_x = (float)x;
@@ -176,30 +168,6 @@ namespace Test_Stage1_1
 					float f_y = (float)y;
 					barriers.push_back(Barrier{ BARRIER_SPRITE,Convert_X(f_x) , Convert_Y(f_y) });
 				}
-				/*if (MapData[y][x] == OBJ_SPD)
-				{
-					float f_x = (float)x;
-					float f_y = (float)y;
-					powerups.push_back(PickUp{ S_CreateSquare(50.0f, "Textures/spd.png",1.0f),
-						Col_Comp{ 0.0f - 25.0f, 0.0f - 25.0f, 0.0f + 25.0f, 0.0f + 25.0f, Rect },
-						HP, Convert_X(f_x) , Convert_Y(f_y) });
-				}
-				if (MapData[y][x] == OBJ_HP)
-				{
-					float f_x = (float)x;
-					float f_y = (float)y;
-					powerups.push_back(PickUp{ S_CreateSquare(50.0f, "Textures/hp.png",1.0f),
-						Col_Comp{ 0.0f - 25.0f, 0.0f - 25.0f, 0.0f + 25.0f, 0.0f + 25.0f, Rect },
-						HP, Convert_X(f_x) , Convert_Y(f_y) });
-				}
-				if (MapData[y][x] == OBJ_COIN)
-				{
-					float f_x = (float)x;
-					float f_y = (float)y;
-					powerups.push_back(PickUp{ S_CreateSquare(50.0f, "Textures/coin.png",1.0f),
-						Col_Comp{ 0.0f - 25.0f, 0.0f - 25.0f, 0.0f + 25.0f, 0.0f + 25.0f, Rect },
-						HP, Convert_X(f_x) , Convert_Y(f_y) });
-				}*/
 			}
 		}
 	}
@@ -257,14 +225,6 @@ namespace Test_Stage1_1
 			{
 				elem.Update(*(c[i]), dt);
 			}
-
-			/*for (Scarecrow& elem3 : scarecrows)
-			{
-				elem.Update(elem3, dt);
-			}*/
-
-			//elem.Update(*sc1, dt);
-			//elem.Update(*sc2, dt);
 			elem.Update(*player, dt);
 		}
 		for (Wall& elem : walls)
@@ -279,13 +239,7 @@ namespace Test_Stage1_1
 		{
 			elem.Update(*player, dt);
 			elem.Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
-		}
-		/*for (Scarecrow& elem : scarecrows)
-		{
-			elem.Update(*player, dt);
-			elem.Sprite_.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
-		}*/
-		
+		}		
 		w2->Update(*player, dt);
 		w22->Update(*player, dt);
 		w5->Update(*player, dt);
@@ -299,15 +253,13 @@ namespace Test_Stage1_1
 		power2->Update(*player, dt);
 		CamFollow(player->Transform_, 200, 120, player->GetFacing());
 		next->Update(*player, dt);
-		//ui->UI_Update(player);
+		ui->UI_Update(player);
 
 		//std::cout << (int)player->PosX << ", " << (int)player->PosY << std::endl;
 	}
 
 	void Draw(void)
 	{
-		
-
 		BG->Render_Object(*M_BG);
 
 		s1->Render();
@@ -347,7 +299,6 @@ namespace Test_Stage1_1
 			tut6->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 		}
 
-
 		if (!(box1->IsActive()))
 		{
 			coin1->Render();
@@ -369,10 +320,6 @@ namespace Test_Stage1_1
 		{
 			elem.Render();
 		}
-		/*for (Scarecrow& elem : scarecrows)
-		{
-			elem.Render();
-		}*/
 		for (Barrier& elem : barriers)
 		{
 			elem.Render();
@@ -382,7 +329,7 @@ namespace Test_Stage1_1
 		player->Render();
 		player->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 		next->Render();
-		//ui->Render();
+		ui->Render();
 	}
 
 	void Free(void)
@@ -410,10 +357,11 @@ namespace Test_Stage1_1
 		delete coin3;
 		delete power2;
 		delete next;
-		//delete ui;
+		delete ui;
 
 		delete w2, w22, w5, w6;
 
+		/* Delete Sprites */
 		delete TUT1_SPRITE;
 		delete TUT2_SPRITE;
 		delete TUT3_SPRITE;
@@ -436,15 +384,16 @@ namespace Test_Stage1_1
 		floors.clear();
 		walls.clear();
 		barriers.clear();
-		//scarecrows.clear();
 		powerups.clear();
 
+		 /* Delete enemies */
 		for (size_t i = 0; i < c.size(); ++i)
 		{
 			delete c[i];
 		}
 		c.clear();
 
+		/* Delete map */
 		for (int y = 0; y < Map_Height; ++y)
 		{
 			delete[] MapData[y];

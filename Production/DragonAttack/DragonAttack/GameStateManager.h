@@ -22,6 +22,9 @@ Technology is prohibited.
 #include "Level_Import.h"
 #include "Test_Stage1_2.h"
 #include "Test_Stage1_3.h"
+//#include "Stage2_1.h"
+//#include "Stage2_2.h"
+//#include "Stage2_3.h"
 #include "Particle_Effects.h"
 #include "test_level_import.h"
 

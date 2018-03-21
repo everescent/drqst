@@ -193,6 +193,9 @@
     <ClCompile Include="Sign.cpp" />
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="Render.cpp" />
+    <ClCompile Include="Stage2_1.cpp" />
+    <ClCompile Include="Stage2_2.cpp" />
+    <ClCompile Include="Stage2_3.cpp" />
     <ClCompile Include="StageManager.cpp" />
     <ClCompile Include="test_level_import.cpp" />
     <ClCompile Include="Test_Stage1.cpp" />
@@ -246,6 +249,9 @@
     <ClInclude Include="Sign.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="Render.h" />
+    <ClInclude Include="Stage2_1.h" />
+    <ClInclude Include="Stage2_2.h" />
+    <ClInclude Include="Stage2_3.h" />
     <ClInclude Include="StageManager.h" />
     <ClInclude Include="test_level_import.h" />
     <ClInclude Include="Test_Stage1.h" />
@@ -260,6 +266,9 @@
     <Text Include="level1-1.txt" />
     <Text Include="level1-2.txt" />
     <Text Include="level1-3.txt" />
+    <Text Include="level2-1.txt" />
+    <Text Include="level2-2.txt" />
+    <Text Include="level2-3.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
