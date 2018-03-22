@@ -1,0 +1,54 @@
+Adobe After Effects v11.0 (Windows 64) render log for project “Lancelot_Anim.aep”
+
+Rendering started on 3/22/2018 at 5:45:36 PM
+
+
+  3/22/2018 5:45:36 PM: Starting composition “Lancelot_Hit”.
+
+
+  Output To: Y:\GAM150\drqst\Production\Illustrations\Lancelot\Lancelot_Hit\Lancelot_Hit_[#].png
+  
+  3/22/2018 5:45:36 PM: Finished composition “Lancelot_Hit”.
+
+
+
+  3/22/2018 5:45:36 PM: Starting composition “Lancelot_Idle”.
+
+
+  Output To: Y:\GAM150\drqst\Production\Illustrations\Lancelot\Lancelot_Idle\Lancelot_Idle_[#].png
+  
+  3/22/2018 5:45:37 PM: Finished composition “Lancelot_Idle”.
+
+
+
+  3/22/2018 5:45:37 PM: Starting composition “Lancelot_PostDash”.
+
+
+  Output To: Y:\GAM150\drqst\Production\Illustrations\Lancelot\Lancelot_PostDash\Lancelot_PostDash_[#].png
+  
+  3/22/2018 5:45:37 PM: Finished composition “Lancelot_PostDash”.
+
+
+
+  3/22/2018 5:45:37 PM: Starting composition “Lancelot_PreDash”.
+
+
+  Output To: Y:\GAM150\drqst\Production\Illustrations\Lancelot\Lancelot_PreDash\Lancelot_PreDash_[#].png
+  
+  3/22/2018 5:45:38 PM: Finished composition “Lancelot_PreDash”.
+
+
+
+  3/22/2018 5:45:38 PM: Starting composition “Lancelot_Walk”.
+
+
+  Output To: Y:\GAM150\drqst\Production\Illustrations\Lancelot\Lancelot_Walk\Lancelot_Walk_[#].png
+  
+  3/22/2018 5:45:38 PM: Finished composition “Lancelot_Walk”.
+
+
+
+  Total Time Elapsed: 2 Seconds
+
+Log closed on 3/22/2018 at 5:45:38 PM
+
