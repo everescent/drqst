@@ -48,6 +48,13 @@ namespace
 	Sprite* FLOOR_SPRITE;
 	Sprite* TOWER_SPRITE;
 	Sprite* SIGN_SPRITE;
+
+
+	////////Particle System////////////
+	AEGfxVertexList *pMesh; // the mesh the particles will use
+
+	Particle_System *fireball;// (nullptr, { 0.f, 0.f }, CENTER);
+	////////Particle System////////////
 }
 
 namespace Test_Stage1_1
@@ -123,6 +130,8 @@ namespace Test_Stage1_1
 		c.push_back(Create_Basic_AI(ARCHER, AEVec2  { 4750.0f ,  140.0f }));
 		c.push_back(Create_Basic_AI(ARCHER, AEVec2  { 6200.0f , -220.0f }));
 		/* Enemy Placement End */
+
+		
 	}
 
 	void Init(void)
@@ -177,6 +186,21 @@ namespace Test_Stage1_1
 				}*/
 			}
 		}
+
+		////////Particle System////////////
+		Effects_Init();
+		fireball = Effects_Get(MFIREBALL_PARTICLE);
+		fireball->Emitter_.PPS_ = 8;
+		fireball->Emitter_.Dist_Min_ = 10.f;
+		fireball->Emitter_.Vol_Max = 4096;
+		fireball->Emitter_.Direction_ = 90.0f;
+		fireball->Emitter_.Particle_Rand_.Spread_ = 360;
+		fireball->Emitter_.Conserve_ = 0.8f;
+		fireball->Emitter_.Size_ = 10.0f;
+		fireball->Emitter_.Speed_ = 4.0f;
+		fireball->Emitter_.Particle_Rand_.Sp_Rand_ = 3;
+		fireball->Emitter_.Lifetime_ = 3.f;
+		////////Particle System////////////
 	}
 
 	void Update(float dt)
@@ -263,6 +287,25 @@ namespace Test_Stage1_1
 		ui->UI_Update(player);
 
 		//std::cout << (int)player->PosX << ", " << (int)player->PosY << std::endl;
+
+		////////Particle System////////////
+		//Create the particles for emission
+		fireball->UpdateEmission();
+		//Turbulence simulates brownian motion
+		//Passing in equations for phase x and y
+		fireball->Turbulence(0.2f);
+		//Simulate an upward force
+		//test->Force(0.2f, false, true);
+		//Add gravity
+		//test->Gravity(0.5f);
+		//Set exposure as a factor of lifetime
+		fireball->ColorRamp_Life();
+		//Set transparency as a factor of Exposure
+		fireball->TransRamp_Exp();
+		//Updates all particles
+		//test->Newton({0.f, 0.0f}, 0.3f);
+		fireball->Update(dt);
+		////////Particle System////////////
 	}
 
 	void Draw(void)
@@ -336,6 +379,11 @@ namespace Test_Stage1_1
 		player->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 		next->Render();
 		ui->Render();
+
+
+		////////Particle System////////////
+		fireball->Render();
+		////////Particle System////////////
 	}
 
 	void Free(void)

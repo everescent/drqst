@@ -103,18 +103,18 @@ namespace Stage2_1
 */
 		// Enemy placements (12)
 		// Grunts
-		c.push_back(Create_Basic_AI(GRUNT, AEVec2{  2615.0f ,  -1065.0f }));
-		c.push_back(Create_Basic_AI(GRUNT, AEVec2{ 5875.0f ,  -255.0f }));
-		c.push_back(Create_Basic_AI(GRUNT, AEVec2{ 5095.0f ,  -1155.0f }));
-		c.push_back(Create_Basic_AI(GRUNT, AEVec2{ 5000.0f ,  -3405.0f }));
-		// Archers
-		//c.push_back(Create_Basic_AI(ARCHER, AEVec2{ -85.0f ,  -75.0f }));
-		c.push_back(Create_Basic_AI(ARCHER, AEVec2{ 500.0f ,  -885.0f }));
-		c.push_back(Create_Basic_AI(ARCHER, AEVec2{ 2930.0f ,  -2325.0f }));
-		// Mages
-		c.push_back(Create_Basic_AI(MAGE, AEVec2{ 1000.0f ,  -615.0f }));
-		c.push_back(Create_Basic_AI(MAGE, AEVec2{ 3100.0f ,  -75.0f }));
-		c.push_back(Create_Basic_AI(MAGE, AEVec2{ 4780.0f ,  -2325.0f }));
+		//c.push_back(Create_Basic_AI(GRUNT, AEVec2{  2615.0f ,  -1065.0f }));
+		//c.push_back(Create_Basic_AI(GRUNT, AEVec2{ 5875.0f ,  -255.0f }));
+		//c.push_back(Create_Basic_AI(GRUNT, AEVec2{ 5095.0f ,  -1155.0f }));
+		//c.push_back(Create_Basic_AI(GRUNT, AEVec2{ 5000.0f ,  -3405.0f }));
+		//// Archers
+		////c.push_back(Create_Basic_AI(ARCHER, AEVec2{ -85.0f ,  -75.0f }));
+		//c.push_back(Create_Basic_AI(ARCHER, AEVec2{ 500.0f ,  -885.0f }));
+		//c.push_back(Create_Basic_AI(ARCHER, AEVec2{ 2930.0f ,  -2325.0f }));
+		//// Mages
+		//c.push_back(Create_Basic_AI(MAGE, AEVec2{ 1000.0f ,  -615.0f }));
+		//c.push_back(Create_Basic_AI(MAGE, AEVec2{ 3100.0f ,  -75.0f }));
+		//c.push_back(Create_Basic_AI(MAGE, AEVec2{ 4780.0f ,  -2325.0f }));
 		// Knights
 		//c.push_back(Create_Basic_AI(KNIGHT, AEVec2{ 7200.0f ,  300.0f }));
 		
@@ -153,12 +153,24 @@ namespace Stage2_1
 					float f_y = (float)y;
 					walls.push_back(Wall{ WALL_SPRITE,Convert_X(f_x) , Convert_Y(f_y) });
 				}
-				/*if (MapData[y][x] == OBJ_BARRIER)
+				if (MapData[y][x] == OBJ_GRUNT)
 				{
 					float f_x = (float)x;
 					float f_y = (float)y;
-					barriers.push_back(Barrier{ BARRIER_SPRITE,Convert_X(f_x) , Convert_Y(f_y) });
-				}*/
+					c.push_back(Create_Basic_AI(GRUNT, AEVec2{ Convert_X(f_x) ,  Convert_Y(f_y) }));
+				}
+				if (MapData[y][x] == OBJ_ARCHER)
+				{
+					float f_x = (float)x;
+					float f_y = (float)y;
+					c.push_back(Create_Basic_AI(ARCHER, AEVec2{ Convert_X(f_x) ,  Convert_Y(f_y) }));
+				}
+				if (MapData[y][x] == OBJ_MAGE)
+				{
+					float f_x = (float)x;
+					float f_y = (float)y;
+					c.push_back(Create_Basic_AI(MAGE, AEVec2{ Convert_X(f_x) ,  Convert_Y(f_y) }));
+				}
 			}
 		}
 	}
