@@ -20,10 +20,11 @@
 #include "Level_Import.h"
 #include "LevelChangePlatform.h"
 #include "UI.h"
+#include "Boss_Phase.h"
 #include <utility>
 #include <iostream>
 
-namespace Stage3_1
+namespace Stage3_3
 {
 	void Init(void);
 

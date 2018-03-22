@@ -28,6 +28,8 @@ enum GAME_STATE
 	//GS_LEVEL2_3,
 	GS_LEVEL_IMPORT,
 	AI_TEST_STAGE,  // to be removed before submitting
+    
+    GS_LEVELS,
 
 	// do not touch this bottom area
 	GS_CREDITS,
@@ -40,7 +42,7 @@ enum STAGE_LIST
 {
 	SUB_STAGE1 = 0,
 
-
+    STAGE_3_3,
 	// don't touch the bottom area, add from top
 	SS_QUIT,
 	SS_RESTART

@@ -169,6 +169,8 @@ void Archer::Dead()
 {
   SetActive(false);
   Arrow.SetActive(false);
+  Set_HP(Archer_HP);
+  A_Curr = IDLE;
 }
 
 void Archer::CheckState(Dragon &player, const float /*dt*/)
