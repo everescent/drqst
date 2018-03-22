@@ -28,25 +28,94 @@ void CamFollow(Transform const &PosMatrix, float OffsetX, float OffsetY, float D
 {
   //Moves the camera left or right
   static float Offset = OffsetX;
+  static float PosYold = PosMatrix.GetTranslateMatrix().m[1][2] + OffsetY;
+  static bool GoUp = false;
+  static bool GoDown = false;
+  static bool Moving = false;
+  float PosYCurr = PosMatrix.GetTranslateMatrix().m[1][2];
   //To use a smooth animation curve
   float Accel = 2.0f;
   if (Direction < 0.0f)
   {
+    if (PosYCurr - PosYold > OffsetY + 100.0f && !Moving && PosYCurr != PosYold)
+    {
+      GoUp = true;
+      GoDown = false;
+      Moving = true;
+    }
+    else if (PosYCurr - PosYold < -OffsetY - 100.0f && !Moving && PosYCurr != PosYold)
+    {
+      GoUp = false;
+      GoDown = true;
+      Moving = true;
+    }
+    if (Moving && GoUp)
+    {
+      PosYold += Accel;
+    }
+    else if (Moving && GoDown)
+    {
+      PosYold -= Accel;
+    }
     if (Offset <= -OffsetX)
       Offset = -OffsetX;
+    if (GoUp && PosYold >= PosYCurr + OffsetY)
+    {
+      PosYold = PosYCurr + OffsetY;
+      GoUp = false;
+      Moving = false;
+    }
+    else if (GoDown && PosYold <= PosYCurr + OffsetY)
+    {
+      PosYold = PosYCurr + OffsetY;
+      GoDown = false;
+      Moving = false;
+    }
     AEGfxSetCamPosition(PosMatrix.GetTranslateMatrix().m[0][2] + Offset,
-      PosMatrix.GetTranslateMatrix().m[1][2] + OffsetY);
+      PosYold);
     Accel *= Accel;
     Offset += -Accel;
   }
   else
   {
+    if (PosYCurr - PosYold > OffsetY + 100.0f && !Moving && PosYCurr != PosYold)
+    {
+      GoUp = true;
+      GoDown = false;
+      Moving = true;
+    }
+    else if (PosYCurr - PosYold < -OffsetY - 100.0f && !Moving && PosYCurr != PosYold)
+    {
+      GoUp = false;
+      GoDown = true;
+      Moving = true;
+    }
+    if (Moving && GoUp)
+    {
+      PosYold += Accel;
+    }
+    else if (Moving && GoDown)
+    {
+      PosYold -= Accel;
+    }
     if (Offset >= OffsetX)
       Offset = OffsetX;
-      AEGfxSetCamPosition(PosMatrix.GetTranslateMatrix().m[0][2] + Offset,
-        PosMatrix.GetTranslateMatrix().m[1][2] + OffsetY);
-      Accel *= Accel;
-      Offset += Accel;
+    if (GoUp && PosYold >= PosYCurr + OffsetY)
+    {
+      PosYold = PosYCurr + OffsetY;
+      GoUp = false;
+      Moving = false;
+    }
+    else if (GoDown && PosYold <= PosYCurr + OffsetY)
+    {
+      PosYold = PosYCurr + OffsetY;
+      GoDown = false;
+      Moving = false;
+    }
+    AEGfxSetCamPosition(PosMatrix.GetTranslateMatrix().m[0][2] + Offset,
+      PosYold);
+    Accel *= Accel;
+    Offset += Accel;
   }
 }
 

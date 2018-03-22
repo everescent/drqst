@@ -18,6 +18,13 @@ Technology is prohibited.
 //Using babylonian method of square root
 float f_sqrt(const float &x)
 {
+  //Throw anything less than 0
+  assert(x >= 0.0f);
+  //Return zero is value is small
+  if (x <= FLT_EPSILON)
+  {
+    return 0.0f;
+  }
   float result = x;
   float tmp = x / 2.0f;
   for (char i = 0; i < 5; ++i)

@@ -192,7 +192,7 @@ void Archer::CheckState(Dragon &player, const float /*dt*/)
   if(A_Curr == ATTACK)
     A_Next = IDLE;
   //Only move if dragon was seen and my distance has not reached max
-  if (abs(player.PosX - PosX) > Archer_LOS && 
+  if ((abs(player.PosX - PosX) > Archer_LOS || abs(player.PosY - PosY) < Archer_LOS) &&
       Distance < Archer_Max_Dist && Dragon_Seen)
   {
     A_Next = MOVING;
@@ -218,7 +218,8 @@ void Archer::Update(Dragon& player, const float dt)
   else
   {
     //Check if Dragon within Line Of Sight
-    if (abs(player.PosX - PosX) < Archer_LOS)
+    if (abs(player.PosX - PosX) < Archer_LOS && 
+        abs(player.PosY - PosY) < Archer_LOS)
     {
       Dragon_Seen = true;
     }

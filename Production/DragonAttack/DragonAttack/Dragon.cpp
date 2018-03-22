@@ -91,35 +91,35 @@ void Dragon::Input()
 {
   if (AEInputCheckCurr(AEVK_D))
   {
-      Dir.R = true;
+    Dir.R = true;
   }
 
   if (AEInputCheckCurr(AEVK_A))
   {
-      Dir.L = true;
+    Dir.L = true;
   }
 
   if (AEInputCheckTriggered(AEVK_RETURN))
   {
-      if (!SFX_.GetPlaying(0))
-                  SFX_.Play(SHOOT);
-                Attack = true;
+    if (!SFX_.GetPlaying(0))
+      SFX_.Play(SHOOT);
+    Attack = true;
   }
 
   if (AEInputCheckTriggered(AEVK_P))
   {
-      if (Charge == Max_Charge)
-         {
-           MAttack = true;
-           Mfireball.SetActive(true);
-           ResetCharge();
-         }
+    if (Charge == Max_Charge)
+     {
+       MAttack = true;
+       Mfireball.SetActive(true);
+       ResetCharge();
+     }
   }
 
   if (AEInputCheckCurr(AEVK_SPACE))
   {
-      if (!Falling)
-          Dir.UP = true;
+    if (!Falling)
+        Dir.UP = true;
   }
 
 }

@@ -14,6 +14,8 @@ Technology is prohibited.
 /* End Header **************************************************************************/
 
 #pragma once
+#include <cfloat>  //FLT_EPSILON
+#include <cassert> //assert
 
 //Faster square root
 float f_sqrt(const float &x);
