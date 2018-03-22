@@ -90,17 +90,17 @@ void Archer::Colision_Check(Dragon &player, const float dt)
         player.GetFireball()[i].SetActive(false);
       }
   if(player.GetMfireball().IsActive())
-	  if (Collision_.Dy_Rect_Rect(player.GetMfireball().Collision_, GetVelocity(),
-		  player.GetMfireball().GetVelocity(), dt))
-	  {
-		  //Decrease HP by player's damage
-		  Decrease_HP(player.GetMDamage());
-		  player.PlayImpact();
-		  Audio_.Play(HIT);
-		  //Reset the distance of the fireball and set false
-		  player.GetMfireball().Projectile::ResetDist();
-		  player.GetMfireball().SetActive(false);
-	  }
+      if (Collision_.Dy_Rect_Rect(player.GetMfireball().Collision_, GetVelocity(),
+          player.GetMfireball().GetVelocity(), dt))
+      {
+          //Decrease HP by player's damage
+          Decrease_HP(player.GetMDamage());
+          player.PlayImpact();
+          Audio_.Play(HIT);
+          //Reset the distance of the fireball and set false
+          player.GetMfireball().Projectile::ResetDist();
+          player.GetMfireball().SetActive(false);
+      }
   //Arrow collision check
   if (Attack_)
   {
@@ -195,7 +195,8 @@ void Archer::CheckState(Dragon &player, const float /*dt*/)
     A_Next = IDLE;
   //Only move if dragon was seen and my distance has not reached max
   if ((abs(player.PosX - PosX) > Archer_LOS || abs(player.PosY - PosY) < Archer_LOS) &&
-      Distance < Archer_Max_Dist && Dragon_Seen)
+      Distance < Archer_Max_Dist && Dragon_Seen && 
+      (abs(player.PosX - PosX) > Archer_LOS * 0.5f))
   {
     A_Next = MOVING;
   }

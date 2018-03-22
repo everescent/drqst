@@ -34,7 +34,7 @@ void CamFollow(Transform const &PosMatrix, float OffsetX, float OffsetY, float D
   static bool Moving = false;
   float PosYCurr = PosMatrix.GetTranslateMatrix().m[1][2];
   //To use a smooth animation curve
-  float Accel = 2.0f;
+  float Accel = 4.0f;
   if (Direction < 0.0f)
   {
     if (PosYCurr - PosYold > OffsetY + 100.0f && !Moving && PosYCurr != PosYold)
@@ -73,7 +73,6 @@ void CamFollow(Transform const &PosMatrix, float OffsetX, float OffsetY, float D
     }
     AEGfxSetCamPosition(PosMatrix.GetTranslateMatrix().m[0][2] + Offset,
       PosYold);
-    Accel *= Accel;
     Offset += -Accel;
   }
   else
@@ -114,7 +113,6 @@ void CamFollow(Transform const &PosMatrix, float OffsetX, float OffsetY, float D
     }
     AEGfxSetCamPosition(PosMatrix.GetTranslateMatrix().m[0][2] + Offset,
       PosYold);
-    Accel *= Accel;
     Offset += Accel;
   }
 }

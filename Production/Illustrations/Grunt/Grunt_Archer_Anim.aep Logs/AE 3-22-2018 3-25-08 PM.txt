@@ -1,0 +1,63 @@
+Adobe After Effects v11.0 (Windows 64) render log for project “Grunt_Archer_Anim.aep”
+
+Rendering started on 3/22/2018 at 3:25:08 PM
+
+
+  3/22/2018 3:25:08 PM: Starting composition “Archer_Hit”.
+
+
+  Output To: Y:\GAM150\drqst\Production\Illustrations\Grunt\Archer_Hit_Cycle\Archer_Hit_[#].png
+  
+  3/22/2018 3:25:09 PM: Finished composition “Archer_Hit”.
+
+
+
+  3/22/2018 3:25:10 PM: Starting composition “Archer_Idle”.
+
+
+  Output To: Y:\GAM150\drqst\Production\Illustrations\Grunt\Archer_Idle_Cycle\Archer_Idle_[#].png
+  
+  3/22/2018 3:25:12 PM: Finished composition “Archer_Idle”.
+
+
+
+  3/22/2018 3:25:12 PM: Starting composition “Archer_Walk”.
+
+
+  Output To: Y:\GAM150\drqst\Production\Illustrations\Grunt\Archer_Walk_Cycle\Archer_Walk_[#].png
+  
+  3/22/2018 3:25:14 PM: Finished composition “Archer_Walk”.
+
+
+
+  3/22/2018 3:25:14 PM: Starting composition “Grunt_Hit”.
+
+
+  Output To: Y:\GAM150\drqst\Production\Illustrations\Grunt\Grunt_Hit_Cycle\Grunt_Hit_[#].png
+  
+  3/22/2018 3:25:15 PM: Finished composition “Grunt_Hit”.
+
+
+
+  3/22/2018 3:25:15 PM: Starting composition “Grunt_Idle”.
+
+
+  Output To: Y:\GAM150\drqst\Production\Illustrations\Grunt\Grunt_Idle_Cycle\Grunt_Idle_[#].png
+  
+  3/22/2018 3:25:16 PM: Finished composition “Grunt_Idle”.
+
+
+
+  3/22/2018 3:25:16 PM: Starting composition “Grunt_Walk”.
+
+
+  Output To: Y:\GAM150\drqst\Production\Illustrations\Grunt\Grunt_Walk_Cycle\Grunt_Walk_[#].png
+  
+  3/22/2018 3:25:18 PM: Finished composition “Grunt_Walk”.
+
+
+
+  Total Time Elapsed: 10 Seconds
+
+Log closed on 3/22/2018 at 3:25:18 PM
+

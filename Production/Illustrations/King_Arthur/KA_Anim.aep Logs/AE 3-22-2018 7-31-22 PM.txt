@@ -1,0 +1,36 @@
+Adobe After Effects v11.0 (Windows 64) render log for project “KA_Anim.aep”
+
+Rendering started on 3/22/2018 at 7:31:22 PM
+
+
+  3/22/2018 7:31:22 PM: Starting composition “KA_Hit”.
+
+
+  Output To: Y:\GAM150\drqst\Production\Illustrations\King_Arthur\KA_Hit\KA_Hit_[#].png
+  
+  3/22/2018 7:31:23 PM: Finished composition “KA_Hit”.
+
+
+
+  3/22/2018 7:31:23 PM: Starting composition “KA_Idle”.
+
+
+  Output To: Y:\GAM150\drqst\Production\Illustrations\King_Arthur\KA_Idle\KA_Idle_[#].png
+  
+  3/22/2018 7:31:23 PM: Finished composition “KA_Idle”.
+
+
+
+  3/22/2018 7:31:23 PM: Starting composition “KA_Walk”.
+
+
+  Output To: Y:\GAM150\drqst\Production\Illustrations\King_Arthur\KA_Walk\KA_Walk_[#].png
+  
+  3/22/2018 7:31:24 PM: Finished composition “KA_Walk”.
+
+
+
+  Total Time Elapsed: 2 Seconds
+
+Log closed on 3/22/2018 at 7:31:24 PM
+
