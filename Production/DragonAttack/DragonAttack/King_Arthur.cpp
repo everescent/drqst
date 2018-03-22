@@ -20,8 +20,8 @@ Technology is prohibited.
 #include "GameStateManager.h"
 #include <vector>
 
-#define NUM_OF_SWORD 2
-#define ACCEL        40.f
+#define NUM_OF_SWORD 4
+#define ACCEL        63.f
 
 namespace {
 
@@ -143,9 +143,10 @@ void King_Arthur::Init_KA_Attacks(void)
  		arthur[i].Transform_.Concat();
 	}
 
-	sword_pos[0].x = -100.f;
-	sword_pos[1].x =  100.f;
-
+	sword_pos[0].x = -200.f;
+	sword_pos[1].x =  200.f;
+	sword_pos[2].x =  300.f;
+	sword_pos[3].x = -300.f;
 
 	seed_initializer();// remove once we finish
 
@@ -611,10 +612,13 @@ void King_Arthur::Spinning_Blades(Dragon &d, const float dt)
 					return;
 				}
 			}
+			AEVec2 new_velocity = arthur[SPIN_SWORD + i].GetVelocity();
 
 			arthur[SPIN_SWORD + i].PosX += arthur[SPIN_SWORD + i].GetVelocity().x * dt;
 			arthur[SPIN_SWORD + i].PosY += arthur[SPIN_SWORD + i].GetVelocity().y * dt;
-			arthur[SPIN_SWORD + i].SetVelocity({ arthur[SPIN_SWORD + i].GetVelocity().x + ACCEL * dt, arthur[SPIN_SWORD + i].GetVelocity().y + ACCEL * dt });
+			AEVec2Scale(&new_velocity, &new_velocity, ACCEL);
+			AEVec2Scale(&new_velocity, &new_velocity, dt);
+			arthur[SPIN_SWORD + i].SetVelocity(new_velocity);
 			arthur[SPIN_SWORD + i].Transform_.SetTranslate(arthur[SPIN_SWORD + i].PosX, arthur[SPIN_SWORD + i].PosY);
 			arthur[SPIN_SWORD + i].Transform_.Concat();
 			arthur[SPIN_SWORD + i].Collision_.Update_Col_Pos(arthur[SPIN_SWORD + i].PosX, arthur[SPIN_SWORD + i].PosY);
