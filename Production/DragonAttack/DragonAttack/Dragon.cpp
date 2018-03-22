@@ -14,9 +14,6 @@ Technology is prohibited.
 /* End Header **************************************************************************/
 
 #include "Dragon.h"
-#include "Camera.h"
-//#include "Input_Handler.h"
-#include <iostream>
 
 void Dragon::SetPickup(const int type, const bool status)
 {

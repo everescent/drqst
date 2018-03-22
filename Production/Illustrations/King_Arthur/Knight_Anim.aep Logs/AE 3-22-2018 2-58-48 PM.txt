@@ -1,0 +1,36 @@
+Adobe After Effects v11.0 (Windows 64) render log for project “Knight_Anim.aep”
+
+Rendering started on 3/22/2018 at 2:58:48 PM
+
+
+  3/22/2018 2:58:48 PM: Starting composition “Knight_Hit”.
+
+
+  Output To: Y:\GAM150\drqst\Production\Illustrations\Knight\Knight_Hit_Cycle\Knight_Hit_[#].png
+  
+  3/22/2018 2:58:49 PM: Finished composition “Knight_Hit”.
+
+
+
+  3/22/2018 2:58:49 PM: Starting composition “Knight_Idle”.
+
+
+  Output To: Y:\GAM150\drqst\Production\Illustrations\Knight\Knight_Idle_Cycle\Knight_Idle_[#].png
+  
+  3/22/2018 2:58:49 PM: Finished composition “Knight_Idle”.
+
+
+
+  3/22/2018 2:58:49 PM: Starting composition “Knight_Walk”.
+
+
+  Output To: Y:\GAM150\drqst\Production\Illustrations\Knight\Knight_Walk_Cycle\Knight_Walk_[#].png
+  
+  3/22/2018 2:58:50 PM: Finished composition “Knight_Walk”.
+
+
+
+  Total Time Elapsed: 2 Seconds
+
+Log closed on 3/22/2018 at 2:58:50 PM
+
