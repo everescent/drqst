@@ -1,4 +1,5 @@
 #include "StageManager.h"
+#include "Stage3_3.h"
 
 
 static STAGE_LIST s_previous, s_current, s_next;
@@ -16,11 +17,16 @@ namespace SM
 		StageManager[SUB_STAGE1].Free     = nullptr;
 		StageManager[SUB_STAGE1].Unload   = nullptr;
 
+        StageManager[STAGE_3_3].Init      = Stage3_3::Init;
+        StageManager[STAGE_3_3].Load      = Stage3_3::Load;
+        StageManager[STAGE_3_3].Update    = Stage3_3::Update;
+        StageManager[STAGE_3_3].Draw      = Stage3_3::Draw;
+        StageManager[STAGE_3_3].Free      = Stage3_3::Free;
+        StageManager[STAGE_3_3].Unload    = Stage3_3::Unload;
 
-
-		s_previous = SUB_STAGE1;
-		s_current  = SUB_STAGE1;
-		s_next     = SUB_STAGE1;
+		s_previous = STAGE_3_3;
+		s_current  = STAGE_3_3;
+		s_next     = STAGE_3_3;
 	}
 	
 	void SM_Load(void)
@@ -63,9 +69,14 @@ namespace SM
 		s_next = next;
 	}
 
+    STAGE_LIST Get_Next()
+    {
+        return s_next;
+    }
+
 	bool SubStage_Finished(void)
 	{
-		return s_current == s_next;
+		return s_current != s_next;
 	}
 
 	bool Stage_Finished(void)

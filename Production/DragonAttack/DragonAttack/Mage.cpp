@@ -147,13 +147,13 @@ void Mage::Attack(const float dt, Dragon &d)
 	// this is only called once before the firing of energy ball
 	if (!energy_ball.ongoing_attack)
 	{
-		AEVec2 Displacement = { d.PosX - this->PosX, d.PosY - this->PosY };
+		AEVec2 Displacement = { d.PosX - PosX, d.PosY - PosY };
 		AEVec2Normalize(&Displacement, &Displacement);
 		AEVec2Scale(&Displacement, &Displacement, 360.0f);
 		energy_ball.SetVelocity(Displacement);
 		
 		// set the energy ball position to the mage current location
-		energy_ball.SetPos(this->PosX, this->PosY);
+		energy_ball.SetPos(PosX, PosY);
 		
 		
 		energy_ball.SetActive(true);       // set energyball to active
@@ -174,7 +174,7 @@ void Mage::Attack(const float dt, Dragon &d)
 	if (energy_ball.GetDist() > RANGE_LIMIT || energy_ball.GetCollided())
 	{
 		energy_ball.End_Attack();
-		this->current_action = IDLE;         // change behaviour
+		current_action = IDLE;         // change behaviour
 	}
 
 }
@@ -184,29 +184,29 @@ void Mage::Move(const Dragon &d)
 {
 	// for now, teleport behind player
 
-	const float location = d.PosX - this->PosX; // get the distance between dragon and mage
+	const float location = d.PosX - PosX; // get the distance between dragon and mage
 	const float teleport_distance = 100.0f;     // how far the mage teleports away from player
 
 	if (location > 0) // dragon is on the right of mage
 	{
-		this->PosX = d.PosX + teleport_distance > RIGHT_BOUNDARY ? RIGHT_BOUNDARY
+		PosX = d.PosX + teleport_distance > RIGHT_BOUNDARY ? RIGHT_BOUNDARY
 														  : d.PosX + teleport_distance;
 	}
 	else			 // dragon is on the left of mage
 	{
-		this->PosX = d.PosX - teleport_distance < LEFT_BOUNDARY ? LEFT_BOUNDARY
+		PosX = d.PosX - teleport_distance < LEFT_BOUNDARY ? LEFT_BOUNDARY
 			                                             : d.PosX - teleport_distance;
 
 	}
 
 	// update the collision box of mage
-	this->Collision_.Update_Col_Pos(this->PosX - MAGE_SCALE, this->PosY - MAGE_SCALE,  // min point
-									this->PosX + MAGE_SCALE, this->PosY + MAGE_SCALE);	// max point
+	Collision_.Update_Col_Pos(PosX - MAGE_SCALE, PosY - MAGE_SCALE,  // min point
+							  PosX + MAGE_SCALE, PosY + MAGE_SCALE);	// max point
 
-	this->Transform_.SetTranslate(this->PosX, this->PosY);   // update coordinates of mage
-	this->Transform_.Concat();								 // update coordinates of mage
-	this->teleport = false;									 // mage can only teleport once
-	this->current_action = IDLE;							 // change behaviour
+	Transform_.SetTranslate(PosX, PosY);   // update coordinates of mage
+	Transform_.Concat();								 // update coordinates of mage
+	teleport = false;									 // mage can only teleport once
+	current_action = IDLE;							 // change behaviour
 
 }
 
@@ -215,6 +215,7 @@ void Mage::Dead(void)
 {
 	SetActive(false); // set active to false
 	Set_HP(HEALTH);   // reset the hp of mage
+    current_action = IDLE;
 }
 
 // checks if the player is within sight

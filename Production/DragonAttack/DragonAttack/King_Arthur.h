@@ -36,7 +36,7 @@ private:
 	void Init_KA_Attacks(void);    // initialize king arthur attacks
 	void Init_MobArray(void);      // initialize the mob array for phase 2
 	void Set_Forward_Dir(const Dragon&);
-    
+
 	
 	// boss behaviours /////////////////////////////////////////////////
 	void Idle(const Dragon &d, const float dt);
@@ -56,6 +56,7 @@ private:
 	BOSS_PHASE ka_phase;
 	Particle_System *healing_effect;
 	KA_MoveSet currAttk;
+    std::vector <Characters*> mobs; //an array to store the mobs to be spawn
 
 public:
 	/******************************************************************************/
@@ -76,6 +77,7 @@ public:
 	~King_Arthur(); // destructor
 	void Update(Dragon &player, const float dt);
 	void Render();
-
+	BOSS_PHASE Get_Phase(void) const;
+    std::vector <Characters*>& Get_Mobs(void);
 };
 

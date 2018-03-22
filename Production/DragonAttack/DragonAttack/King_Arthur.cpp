@@ -27,13 +27,11 @@ namespace {
 
 	std::vector <Boss_Attack> arthur; //an array of boss attacks
 
-	std::vector <Characters*> mobs; //an array to store the mobs to be spawn
-
 	Boss_Action_State current_action = IDLE; // different states of boss arthur
 
-	const int HEALTH    = 220; // initial hp for king arthur
-	const int PHASE2_HP = 00; // phase 2 trigger
-	const int PHASE3_HP = 200; // phase 3 trigger
+	const int HEALTH    = 800; // initial hp for king arthur
+	const int PHASE2_HP = 790; // phase 2 trigger
+	const int PHASE3_HP = 300; // phase 3 trigger
 
 	const int interval    = 80;  // interval for triple slash
 	const int range_limit = 500; // range limit for slash
@@ -47,7 +45,7 @@ namespace {
     float right_boundary = 600; // boundaries of charge attack
 
 	const char limit = 5; // num of king arthur attacks
-	const char num_of_mobs = 2; // number of mobs to spawn
+	const char num_of_mobs = 4; // number of mobs to spawn
 	bool spawn_mob = false;
 
 	char behavior_swap = 0; // switch between idling and moving
@@ -75,6 +73,7 @@ namespace {
 
 	LOCATION teleport_location[3];
 	AEVec2 sword_pos[NUM_OF_SWORD] = {};
+    AEVec2 ai_spawn_pos[num_of_mobs];
 }
 
 
@@ -83,7 +82,7 @@ King_Arthur::King_Arthur(Sprite* texture)
 	: Characters(texture, HEALTH,
 		Col_Comp{ START_POINT_X - 30.0f, START_POINT_Y - 30.0f,
 				  START_POINT_X + 30.0f, START_POINT_Y + 30.0f, Rect }),
-	ka_phase{ PHASE_3 }, healing_effect{Effects_Get(KA_HEALING_PARTICLE)}
+	ka_phase{ PHASE_1 }, healing_effect{Effects_Get(KA_HEALING_PARTICLE)}
 {
 	PosX = START_POINT_X;                 // change king arthur coordinates to the location set
 	PosY = START_POINT_Y;                 // change king arthur coordinates to the location set
@@ -105,7 +104,7 @@ King_Arthur::King_Arthur(Sprite* texture)
 	healing_effect->Emitter_.Particle_Rand_.Spread_ = 360;
 	healing_effect->Emitter_.Conserve_ = 0.8f;
 	healing_effect->Emitter_.Size_ = 10.0f;
-	healing_effect->Emitter_.Speed_ = 4.0f;
+	healing_effect->Emitter_.Speed_ = 5.0f;
 	healing_effect->Emitter_.Particle_Rand_.Sp_Rand_ = 3;
 	healing_effect->Emitter_.Lifetime_ = 1.f;
 
@@ -156,9 +155,25 @@ void King_Arthur::Init_MobArray(void)
 {
 	for (char i = 0; i < num_of_mobs; ++i)
 	{
-		// spawn the mobs at the left/right of the screen
-		i % 2 ? mobs.push_back(Create_Basic_AI(MAGE, { -0.0f, START_POINT_Y }))
-			  : mobs.push_back(Create_Basic_AI(MAGE, {  0.0f, START_POINT_Y }));
+        if (i < 2)
+        {
+            // spawn the mobs at the left/right of the screen
+            if (i % 2)
+            {
+                mobs.push_back(Create_Basic_AI(MAGE, { 356.f, 180.f }));
+                mobs.push_back(Create_Basic_AI(ARCHER, { 200.f, -200 }));
+            }
+            else
+            {
+                mobs.push_back(Create_Basic_AI(MAGE, { -356.0f, 180.f }));
+                mobs.push_back(Create_Basic_AI(ARCHER, { -200.f, -200.f }));
+            }
+        }
+
+        ai_spawn_pos[0] = { 356.f,  180.f };
+        ai_spawn_pos[1] = { 200.f, -200.f };
+        ai_spawn_pos[2] = { -356.0f, 180.f };
+        ai_spawn_pos[3] = { -200.f, -200.f };
 
 		// do not render on screen yet
 		mobs[i]->SetActive(false);
@@ -224,6 +239,8 @@ void King_Arthur::Update(Dragon &d, const float dt)
 					d.GetFireball()[i].Projectile::ResetDist();
 					d.GetFireball()[i].SetActive(false);
 					//music.Play(0);
+
+                    healing = false;
 				}
 
 		// mega fire ball hit KA
@@ -237,10 +254,12 @@ void King_Arthur::Update(Dragon &d, const float dt)
 				d.GetMfireball().SetActive(false);
 				//music.Play(0);
 				d.PlayImpact();
+
+                healing = false;
 			}
 		}
 
-		healing = false;
+	
 	}
 
 	// switch between the boss states
@@ -363,14 +382,14 @@ void King_Arthur::King_Arthur_Phase2(void)
 	ka_phase = PHASE_2; // change to phase 2
 
 	// platform coordinates to teleport to
-	teleport_location[TOP_RIGHT].max.x = 200.0f;
-	teleport_location[TOP_RIGHT].max.y = 150.0f;
+	teleport_location[TOP_RIGHT].max.x =  256.0f;
+	teleport_location[TOP_RIGHT].max.y =  200.0f;
 	
-	teleport_location[MIDDLE].max.x    = 00.0f;
-	teleport_location[MIDDLE].max.y    = 50.0f;
+	teleport_location[MIDDLE].max.x    = -32.0f;
+	teleport_location[MIDDLE].max.y    =  20.0f;
 
-	teleport_location[TOP_LEFT].max.x  = -200.0f;
-	teleport_location[TOP_LEFT].max.y  = 150.0f;
+	teleport_location[TOP_LEFT].max.x  = -344.0f;
+	teleport_location[TOP_LEFT].max.y  =  200.0f;
 }
 
 void King_Arthur::King_Arthur_Phase3(void)
@@ -439,8 +458,6 @@ void King_Arthur::Single_Slash(Dragon &d, const float dt)
 
 void King_Arthur::Triple_Slash(Dragon &d, const float dt)
 {
-
-
 	const char ts_limit = limit - 1; // limit the loop to just the triple slashes
 	
 	if (!(arthur[TRIPLE_SLASH].ongoing_attack)) // sets the attack to start from KA
@@ -509,42 +526,48 @@ void King_Arthur::Heal_and_Spawn(Dragon &d, const float dt)
 		//get a random number and teleport to the coresponding platform
 		switch (Get_Random_Num(2))
 		{
-		case TOP_RIGHT: this->PosX = teleport_location[TOP_RIGHT].max.x;
-						this->PosY = teleport_location[TOP_RIGHT].max.y;
+		case TOP_RIGHT: PosX            = teleport_location[TOP_RIGHT].max.x;
+						PosY            = teleport_location[TOP_RIGHT].max.y;
 						
-						left_boundary  = teleport_location[TOP_RIGHT].max.x - 100.0f;
-						right_boundary = teleport_location[TOP_RIGHT].max.x + 100.0f;
+						left_boundary   = teleport_location[TOP_RIGHT].max.x - 90.0f;
+						right_boundary  = teleport_location[TOP_RIGHT].max.x + 140.0f;
 			break;
 
-		case MIDDLE: this->PosX = teleport_location[MIDDLE].max.x;
-					 this->PosY = teleport_location[MIDDLE].max.y;
-
-					 left_boundary  = teleport_location[MIDDLE].max.x - 100.0f;
-					 right_boundary = teleport_location[MIDDLE].max.x + 100.0f;
+		case MIDDLE:    PosX            = teleport_location[MIDDLE].max.x;
+					    PosY            = teleport_location[MIDDLE].max.y;
+                                        
+					    left_boundary   = teleport_location[MIDDLE].max.x - 130.0f;
+					    right_boundary  = teleport_location[MIDDLE].max.x + 130.0f;
 			break;
 
-		case TOP_LEFT: this->PosX = teleport_location[TOP_LEFT].max.x;
-					   this->PosY = teleport_location[TOP_LEFT].max.y;
-
-					   left_boundary  = teleport_location[TOP_LEFT].max.x - 100.0f;
-					   right_boundary = teleport_location[TOP_LEFT].max.x + 100.0f;
+		case TOP_LEFT: PosX             = teleport_location[TOP_LEFT].max.x;
+					   PosY             = teleport_location[TOP_LEFT].max.y;
+                                       
+					   left_boundary    = teleport_location[TOP_LEFT].max.x - 40.0f;
+					   right_boundary   = teleport_location[TOP_LEFT].max.x + 110.0f;
 			break;
 
 		default: break;
 		}
 		Transform_.SetTranslate(PosX, PosY);
 		Transform_.Concat();
+        Collision_.Update_Col_Pos(PosX - 30.0f, PosY - 30.0f,  // min point
+                                  PosX + 30.0f, PosY + 30.0f);	// max point
 		healing = true;
 		arthur[HEAL].ongoing_attack = true;
 		spawn_mob = true;
 
-		healing_effect->Emitter_.Pos_.Min_Max.Point_Min.x = PosX - 200.f;
-		healing_effect->Emitter_.Pos_.Min_Max.Point_Min.y = PosY - 200.f;
-		healing_effect->Emitter_.Pos_.Min_Max.Point_Max.x = PosX + 200.f;
-		healing_effect->Emitter_.Pos_.Min_Max.Point_Max.y = PosY + 200.f;
+		healing_effect->Emitter_.Pos_.Min_Max.Point_Min.x = PosX - 50.f;
+		healing_effect->Emitter_.Pos_.Min_Max.Point_Min.y = PosY - 50.f;
+		healing_effect->Emitter_.Pos_.Min_Max.Point_Max.x = PosX + 50.f;
+		healing_effect->Emitter_.Pos_.Min_Max.Point_Max.y = PosY + 50.f;
 
-		for (char i = 0; i < num_of_mobs; ++i)
-			mobs[i]->SetActive(true);
+        for (char i = 0; i < num_of_mobs; ++i)
+        {
+            mobs[i]->SetActive(true);
+            mobs[i]->PosX = ai_spawn_pos[i].x;
+            mobs[i]->PosY = ai_spawn_pos[i].y;
+        }
 	}
 	
 	if (healing && Get_HP() != HEALTH)
@@ -558,7 +581,7 @@ void King_Arthur::Heal_and_Spawn(Dragon &d, const float dt)
 		healing_effect->Gravity(0.3f);
 		healing_effect->TransRamp_Exp();
 		healing_effect->Newton({ PosX, PosY }, 0.15f);
-
+        healing_effect->Update(dt);
 		std::cout << Get_HP() << std::endl;
 	}
 	else
@@ -665,10 +688,11 @@ void King_Arthur::Render(void)
 			mobs[i]->Render();
 	}
 
-	if (currAttk == 2 && healing)
-		healing_effect->Render();
+
 
 	GameObject::Render(); // render king arthur on screen
+    if (currAttk == HEAL && healing)
+        healing_effect->Render();
 }
 
 void King_Arthur::Dead(void)
@@ -695,6 +719,17 @@ void King_Arthur::Set_Forward_Dir(const Dragon& d)
 		this->Transform_.SetScale(-1.0f, 1.0f); // reflect the texture to face player
 	}
 	this->Transform_.Concat();
+}
+
+// return the current phase
+BOSS_PHASE King_Arthur::Get_Phase(void) const
+{
+	return ka_phase;
+}
+
+std::vector <Characters*>& King_Arthur::Get_Mobs(void)
+{
+    return mobs;
 }
 
 King_Arthur::~King_Arthur(void)

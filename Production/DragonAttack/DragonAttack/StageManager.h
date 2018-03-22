@@ -2,6 +2,7 @@
 #include "GameStateList.h"
 
 
+
 namespace SM
 {
 	void StageManagerInit(void);
@@ -13,7 +14,8 @@ namespace SM
 	void SM_Unload (void);
 	void SM_Free   (void);
 
-	void Set_Next(STAGE_LIST);
-	bool SubStage_Finished(void);
-	bool Stage_Finished(void);
+	void       Set_Next(STAGE_LIST);
+    STAGE_LIST Get_Next();
+	bool       SubStage_Finished(void);
+	bool       Stage_Finished(void);
 }
