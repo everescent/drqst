@@ -94,6 +94,15 @@
     <Filter Include="Particle_System">
       <UniqueIdentifier>{5412a422-8297-4941-8978-7f5d9d523e65}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game_States\Stage\Stage 1">
+      <UniqueIdentifier>{a9de926f-51db-4459-ac52-e19a5f06b675}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game_States\Stage\Stage 2">
+      <UniqueIdentifier>{b04c59e5-bc34-49b4-8dc7-45b6f028889c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game_States\Stage\Stage 3">
+      <UniqueIdentifier>{a797db57-4c80-434f-989e-22d7baabb09d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -165,9 +174,6 @@
     <ClCompile Include="Platform.cpp">
       <Filter>Game_Object\Objects</Filter>
     </ClCompile>
-    <ClCompile Include="Test_Stage1.cpp">
-      <Filter>Game_States\Stage</Filter>
-    </ClCompile>
     <ClCompile Include="StageManager.cpp">
       <Filter>Stage_Manager</Filter>
     </ClCompile>
@@ -198,9 +204,6 @@
     <ClCompile Include="Scarecrow.cpp">
       <Filter>Characters\AI\Basic_Mobs</Filter>
     </ClCompile>
-    <ClCompile Include="Test_Stage1_2.cpp">
-      <Filter>Game_States\Stage</Filter>
-    </ClCompile>
     <ClCompile Include="Archer.cpp">
       <Filter>Characters\AI\Basic_Mobs</Filter>
     </ClCompile>
@@ -225,9 +228,6 @@
     <ClCompile Include="LevelChangePlatform.cpp">
       <Filter>Game_Object\Objects</Filter>
     </ClCompile>
-    <ClCompile Include="Test_Stage1_3.cpp">
-      <Filter>Game_States\Stage</Filter>
-    </ClCompile>
     <ClCompile Include="Sign.cpp">
       <Filter>Game_Object\Objects</Filter>
     </ClCompile>
@@ -241,13 +241,25 @@
       <Filter>Particle_System</Filter>
     </ClCompile>
     <ClCompile Include="Stage2_1.cpp">
-      <Filter>Game_States\Stage</Filter>
+      <Filter>Game_States\Stage\Stage 2</Filter>
     </ClCompile>
     <ClCompile Include="Stage2_2.cpp">
-      <Filter>Game_States\Stage</Filter>
+      <Filter>Game_States\Stage\Stage 2</Filter>
     </ClCompile>
     <ClCompile Include="Stage2_3.cpp">
-      <Filter>Game_States\Stage</Filter>
+      <Filter>Game_States\Stage\Stage 2</Filter>
+    </ClCompile>
+    <ClCompile Include="Test_Stage1.cpp">
+      <Filter>Game_States\Stage\Stage 1</Filter>
+    </ClCompile>
+    <ClCompile Include="Test_Stage1_2.cpp">
+      <Filter>Game_States\Stage\Stage 1</Filter>
+    </ClCompile>
+    <ClCompile Include="Test_Stage1_3.cpp">
+      <Filter>Game_States\Stage\Stage 1</Filter>
+    </ClCompile>
+    <ClCompile Include="Stage3_3cpp.cpp">
+      <Filter>Game_States\Stage\Stage 3</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -323,9 +335,6 @@
     <ClInclude Include="Wall.h">
       <Filter>Game_Object\Objects</Filter>
     </ClInclude>
-    <ClInclude Include="Test_Stage1.h">
-      <Filter>Game_States\Stage</Filter>
-    </ClInclude>
     <ClInclude Include="StageManager.h">
       <Filter>Stage_Manager</Filter>
     </ClInclude>
@@ -359,9 +368,6 @@
     <ClInclude Include="Scarecrow.h">
       <Filter>Characters\AI\Basic_Mobs</Filter>
     </ClInclude>
-    <ClInclude Include="Test_Stage1_2.h">
-      <Filter>Game_States\Stage</Filter>
-    </ClInclude>
     <ClInclude Include="Archer.h">
       <Filter>Characters\AI\Basic_Mobs</Filter>
     </ClInclude>
@@ -386,9 +392,6 @@
     <ClInclude Include="LevelChangePlatform.h">
       <Filter>Game_Object\Objects</Filter>
     </ClInclude>
-    <ClInclude Include="Test_Stage1_3.h">
-      <Filter>Game_States\Stage</Filter>
-    </ClInclude>
     <ClInclude Include="Sign.h">
       <Filter>Game_Object\Objects</Filter>
     </ClInclude>
@@ -404,14 +407,26 @@
     <ClInclude Include="Particle_Effects.h">
       <Filter>Particle_System</Filter>
     </ClInclude>
+    <ClInclude Include="Stage2_3.h">
+      <Filter>Game_States\Stage\Stage 2</Filter>
+    </ClInclude>
     <ClInclude Include="Stage2_1.h">
-      <Filter>Game_States\Stage</Filter>
+      <Filter>Game_States\Stage\Stage 2</Filter>
     </ClInclude>
     <ClInclude Include="Stage2_2.h">
-      <Filter>Game_States\Stage</Filter>
+      <Filter>Game_States\Stage\Stage 2</Filter>
     </ClInclude>
-    <ClInclude Include="Stage2_3.h">
-      <Filter>Game_States\Stage</Filter>
+    <ClInclude Include="Test_Stage1.h">
+      <Filter>Game_States\Stage\Stage 1</Filter>
+    </ClInclude>
+    <ClInclude Include="Test_Stage1_2.h">
+      <Filter>Game_States\Stage\Stage 1</Filter>
+    </ClInclude>
+    <ClInclude Include="Test_Stage1_3.h">
+      <Filter>Game_States\Stage\Stage 1</Filter>
+    </ClInclude>
+    <ClInclude Include="Stage3_3.h">
+      <Filter>Game_States\Stage\Stage 3</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
