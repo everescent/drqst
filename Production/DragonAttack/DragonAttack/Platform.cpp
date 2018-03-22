@@ -24,6 +24,7 @@ void Platform::Update(Dragon &player, const float &dt)
 	//(Jacob) Make sure player is on the platform if colide
 	if (Colide && !player.GetJump())
 	{
+    player.SetTouchBottom(true);
 		if (player.PosY - player.Sprite_->Get_Height() < PosY)
 			return;
 		if (player.PosY <= PosY + Sprite_->Get_Height() + player.Sprite_->Get_Height())

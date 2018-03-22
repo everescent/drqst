@@ -116,7 +116,10 @@ void Dragon::Input()
   if (AEInputCheckCurr(AEVK_SPACE))
   {
     if (!Falling)
-        Dir.UP = true;
+    {
+      Dir.UP = true;
+      TouchBottom = false;
+    }
   }
 
 }
@@ -225,8 +228,11 @@ void Dragon::Update(Dragon& dummy, const float dt)
   if (Falling)
   {
     Air_Dist -= Gravity;
-    if(Air_Dist <= 0.0f)
+    if (Air_Dist <= 0.0f && TouchBottom)
+    {
       Falling = false;
+      TouchBottom = false;
+    }
   }
 
 }
@@ -241,5 +247,5 @@ void Dragon::Render()
 
 int Dragon::Get_Charge()
 {
-	return Charge;
+  return Charge;
 }

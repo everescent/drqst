@@ -58,6 +58,7 @@ public:
   void SetPickup(const int type, const bool status);
   //Set Invul Flag when hit
   void SetInvul(const bool state) { Invul_FLAG = state; }
+  void SetTouchBottom(const bool state) { TouchBottom = state; }
   //Play this when firebal made contact
   void PlayImpact() { SFX_.Play(IMPACT); }
   //Play this when dragon gets hit
@@ -89,7 +90,7 @@ public:
     Col_Comp{ Start_Pos_X - Dragon_Scale, Start_Pos_Y - Dragon_Scale,
               Start_Pos_X + Dragon_Scale, Start_Pos_Y + Dragon_Scale, Rect} },
     //Initialize data members
-    Attack{ false }, Pwr_Up{ false }, Falling{ false }, Invul_FLAG{ false }, 
+    Attack{ false }, Pwr_Up{ false }, Falling{ false }, TouchBottom{ true }, Invul_FLAG{ false },
     Damage { Fireball_Damage }, M_Damage{ MFireball_Damage }, Charge{ 0 }, Gravity{ 10.0f }, 
     Dir{}, Pickup_{}, Fireball{},
     //Initialize Mega Fireball
@@ -135,6 +136,7 @@ private:
   bool  MAttack;   //Check if player is mega attacking
   bool  Pwr_Up;    //Check if power up is in effect
   bool  Falling;   //Check if player is falling
+  bool TouchBottom;
   bool  Invul_FLAG;
   char  Damage;    //Amount of damage each fireball does
   char  M_Damage;  //Amount of damage each mega fireball does
