@@ -87,7 +87,7 @@ namespace Test_Stage1_1
 		w5 = new Wall{ WALL_SPRITE,6480.0f, -180.0f };
 		w6 = new Wall{ WALL_SPRITE,6480.0f, -200.0f };
 
-		next = new LevelChangePlatform{ LCPLAT_SPRITE,6550.0f, -120.0f };
+		next = new LevelChangePlatform{ LCPLAT_SPRITE,6550.0f, -50.0f };
 		coin1 = new PickUp{ COIN_SPRITE,
 			Col_Comp{ 0.0f - 25.0f, 0.0f - 25.0f, 0.0f + 25.0f, 0.0f + 25.0f, Rect },
 			COIN, 1500.0f, -210.0f };
@@ -117,9 +117,9 @@ namespace Test_Stage1_1
 		if (!Import_MapData("level1-1.txt", MapData, Map_Width, Map_Height)) { AEGfxExit(); }
 
 		/* Enemy Placement Start */
-		c.push_back(Create_Basic_AI(GRUNT,  AEVec2  { 2320.0f , -180.0f }));
-		c.push_back(Create_Basic_AI(GRUNT,  AEVec2  { 2480.0f , -180.0f }));
-		c.push_back(Create_Basic_AI(GRUNT,  AEVec2  { 4000.0f ,  -90.0f }));
+		//c.push_back(Create_Basic_AI(GRUNT,  AEVec2  { 2320.0f , -180.0f }));
+		//c.push_back(Create_Basic_AI(GRUNT,  AEVec2  { 2480.0f , -180.0f }));
+		//c.push_back(Create_Basic_AI(GRUNT,  AEVec2  { 4000.0f ,  -90.0f }));
 		c.push_back(Create_Basic_AI(ARCHER, AEVec2  { 4750.0f ,  140.0f }));
 		c.push_back(Create_Basic_AI(ARCHER, AEVec2  { 6200.0f , -220.0f }));
 		/* Enemy Placement End */
@@ -133,7 +133,8 @@ namespace Test_Stage1_1
 		tut4->SetActive(true);
 		tut5->SetActive(true);
 		tut6->SetActive(true);
-
+		//place all alpha stuff here
+		tut4->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 		player->SetActive(true);
 		Audio->Play(0);
 		Audio->SetLoop(0, 1);
@@ -162,12 +163,18 @@ namespace Test_Stage1_1
 					float f_y = (float)y;
 					walls.push_back(Wall{ WALL_SPRITE,Convert_X(f_x) , Convert_Y(f_y) });
 				}
-				if (MapData[y][x] == OBJ_BARRIER)
+				if (MapData[y][x] == OBJ_GRUNT)
 				{
 					float f_x = (float)x;
 					float f_y = (float)y;
-					barriers.push_back(Barrier{ BARRIER_SPRITE,Convert_X(f_x) , Convert_Y(f_y) });
+					c.push_back(Create_Basic_AI(GRUNT, AEVec2{ Convert_X(f_x) , Convert_Y(f_y) }));
 				}
+				/*if (MapData[y][x] == OBJ_ARCHER)
+				{
+					float f_x = (float)x;
+					float f_y = (float)y;
+					c.push_back(Create_Basic_AI(ARCHER, AEVec2{ Convert_X(f_x) , Convert_Y(f_y) }));
+				}*/
 			}
 		}
 	}
@@ -284,7 +291,6 @@ namespace Test_Stage1_1
 		if (s4->ShowTutorial)
 		{
 			tut4->Render();
-			tut4->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 		}
 		s5->Render();
 		if (s5->ShowTutorial)

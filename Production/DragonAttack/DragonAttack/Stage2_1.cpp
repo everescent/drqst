@@ -20,7 +20,7 @@ namespace
 	PickUp *coin1, *coin2, *coin3, *hp, *invul;
 	std::vector<Characters*> c;
 
-	Wall *w6, *w7, *w8, *w12, *w13, *w16, *w17, *w18, *w1, *w2, *w3, *w4, *w5, *w9, *w21, *w22, *w23, *w24, *w25, *w29;
+	Wall *w1, *w2, *w3, *w4, *w5, *w6, *w7, *w8, *w9, *w10, *w11, *w12, *w13, *w14, *w15, *w16, *w17, *w18, *w19, *w20;
 	Sprite* COIN_SPRITE;//pickups					 							   
 	Sprite* HP_SPRITE;
 	Sprite* DMG_SPRITE;
@@ -58,33 +58,33 @@ namespace Stage2_1
 		if (!Import_MapData("level2-1.txt", MapData, Map_Width, Map_Height)) { AEGfxExit(); }
 		/*
 		next = new LevelChangePlatform{ LCPLAT_SPRITE, 7500.0f,  240.0f };
+		*/
+		w1  = new Wall{ WALL_SPRITE, 2240.0f, -690.0f };
+		w2  = new Wall{ WALL_SPRITE, 2240.0f, -630.0f };
+		w3  = new Wall{ WALL_SPRITE, 2240.0f, -570.0f };
+		 
+		w4  = new Wall{ WALL_SPRITE, 2650.0f, -560.0f };
+		w5  = new Wall{ WALL_SPRITE, 2650.0f, -630.0f };
+		    
+		w6  = new Wall{ WALL_SPRITE, 4955.0f, -330.0f };
+		w7  = new Wall{ WALL_SPRITE, 4955.0f, -400.0f };
+		w8  = new Wall{ WALL_SPRITE, 4955.0f, -440.0f };
+		 
+		w9  = new Wall{ WALL_SPRITE, 6460.0f, -170.0f };
+		w10 = new Wall{ WALL_SPRITE, 6460.0f, -230.0f };
+		w11 = new Wall{ WALL_SPRITE, 6460.0f, -280.0f };
+		w12 = new Wall{ WALL_SPRITE, 6460.0f, -330.0f };
+		w13 = new Wall{ WALL_SPRITE, 6460.0f, -400.0f };
+		w14 = new Wall{ WALL_SPRITE, 6460.0f, -440.0f };
+		 
+		w15 = new Wall{ WALL_SPRITE, 6460.0f,  130.0f };
+		w16 = new Wall{ WALL_SPRITE, 6460.0f,   80.0f };
+		w17 = new Wall{ WALL_SPRITE, 6460.0f,   30.0f };
+		w18 = new Wall{ WALL_SPRITE, 6460.0f,  -20.0f };
+		w19 = new Wall{ WALL_SPRITE, 6460.0f,  -70.0f };
+		w20 = new Wall{ WALL_SPRITE, 6460.0f, -120.0f };
 
-		w6 = new Wall{ WALL_SPRITE, 2240.0f, -690.0f };
-		w7 = new Wall{ WALL_SPRITE, 2240.0f, -630.0f };
-		w8 = new Wall{ WALL_SPRITE, 2240.0f, -570.0f };
-
-		w12 = new Wall{ WALL_SPRITE, 2650.0f, -560.0f };
-		w13 = new Wall{ WALL_SPRITE, 2650.0f, -630.0f };
-
-		w16 = new Wall{ WALL_SPRITE, 4955.0f, -330.0f };
-		w17 = new Wall{ WALL_SPRITE, 4955.0f, -400.0f };
-		w18 = new Wall{ WALL_SPRITE, 4955.0f, -440.0f };
-
-		w1 = new Wall{ WALL_SPRITE, 6460.0f, -170.0f };
-		w2 = new Wall{ WALL_SPRITE, 6460.0f, -230.0f };
-		w3 = new Wall{ WALL_SPRITE, 6460.0f, -280.0f };
-		w4 = new Wall{ WALL_SPRITE, 6460.0f, -330.0f };
-		w5 = new Wall{ WALL_SPRITE, 6460.0f, -400.0f };
-		w9 = new Wall{ WALL_SPRITE, 6460.0f, -440.0f };
-
-		w21 = new Wall{ WALL_SPRITE, 6460.0f,  130.0f };
-		w22 = new Wall{ WALL_SPRITE, 6460.0f,   80.0f };
-		w23 = new Wall{ WALL_SPRITE, 6460.0f,   30.0f };
-		w24 = new Wall{ WALL_SPRITE, 6460.0f,  -20.0f };
-		w25 = new Wall{ WALL_SPRITE, 6460.0f,  -70.0f };
-		w29 = new Wall{ WALL_SPRITE, 6460.0f, -120.0f };
-
-
+		/*
 		coin1 = new PickUp{ COIN_SPRITE,
 			Col_Comp{ 0.0f - 25.0f, 0.0f - 25.0f, 0.0f + 25.0f, 0.0f + 25.0f, Rect },
 			COIN, 2080.0f , -680.0f };
@@ -100,19 +100,24 @@ namespace Stage2_1
 		hp = new PickUp{ HP_SPRITE,
 			Col_Comp{ 0.0f - 25.0f, 0.0f - 25.0f, 0.0f + 25.0f, 0.0f + 25.0f, Rect },
 			HP, 4300.0f , 60.0f };
-
-		c.push_back(Create_Basic_AI(GRUNT, AEVec2{ 727.0f ,  105.0f }));
-		c.push_back(Create_Basic_AI(GRUNT, AEVec2{ 1895.0f , -165.0f }));
-		c.push_back(Create_Basic_AI(ARCHER, AEVec2{ 2335.0f ,  195.0f }));
-		c.push_back(Create_Basic_AI(GRUNT, AEVec2{ 3200.0f , -600.0f }));
-		c.push_back(Create_Basic_AI(ARCHER, AEVec2{ 3500.0f , -600.0f }));
-		c.push_back(Create_Basic_AI(GRUNT, AEVec2{ 3800.0f , -600.0f }));
-		c.push_back(Create_Basic_AI(GRUNT, AEVec2{ 5200.0f ,  210.0f }));
-		//c.push_back(Create_Basic_AI(GRUNT , AEVec2{ 5800.0f ,  195.0f }));
-		c.push_back(Create_Basic_AI(GRUNT, AEVec2{ 6450.0f ,  195.0f }));
-		//c.push_back(Create_Basic_AI(ARCHER, AEVec2{ 6600.0f ,  300.0f }));
-		c.push_back(Create_Basic_AI(KNIGHT, AEVec2{ 7200.0f ,  300.0f }));
-		*/
+*/
+		// Enemy placements (12)
+		// Grunts
+		c.push_back(Create_Basic_AI(GRUNT, AEVec2{  2615.0f ,  -1065.0f }));
+		c.push_back(Create_Basic_AI(GRUNT, AEVec2{ 5875.0f ,  -255.0f }));
+		c.push_back(Create_Basic_AI(GRUNT, AEVec2{ 5095.0f ,  -1155.0f }));
+		c.push_back(Create_Basic_AI(GRUNT, AEVec2{ 5000.0f ,  -3405.0f }));
+		// Archers
+		//c.push_back(Create_Basic_AI(ARCHER, AEVec2{ -85.0f ,  -75.0f }));
+		c.push_back(Create_Basic_AI(ARCHER, AEVec2{ 500.0f ,  -885.0f }));
+		c.push_back(Create_Basic_AI(ARCHER, AEVec2{ 2930.0f ,  -2325.0f }));
+		// Mages
+		c.push_back(Create_Basic_AI(MAGE, AEVec2{ 1000.0f ,  -615.0f }));
+		c.push_back(Create_Basic_AI(MAGE, AEVec2{ 3100.0f ,  -75.0f }));
+		c.push_back(Create_Basic_AI(MAGE, AEVec2{ 4780.0f ,  -2325.0f }));
+		// Knights
+		//c.push_back(Create_Basic_AI(KNIGHT, AEVec2{ 7200.0f ,  300.0f }));
+		
 	}
 
 
@@ -148,12 +153,12 @@ namespace Stage2_1
 					float f_y = (float)y;
 					walls.push_back(Wall{ WALL_SPRITE,Convert_X(f_x) , Convert_Y(f_y) });
 				}
-				if (MapData[y][x] == OBJ_BARRIER)
+				/*if (MapData[y][x] == OBJ_BARRIER)
 				{
 					float f_x = (float)x;
 					float f_y = (float)y;
 					barriers.push_back(Barrier{ BARRIER_SPRITE,Convert_X(f_x) , Convert_Y(f_y) });
-				}
+				}*/
 			}
 		}
 	}
@@ -163,7 +168,7 @@ namespace Stage2_1
 	void Update(float dt)
 	{
 		Audio->Update();
-		/*
+		
 		for (size_t i = 0; i < c.size(); ++i)
 		{
 			c[i]->Update(*player, dt);
@@ -172,22 +177,22 @@ namespace Stage2_1
 			w3->Update(*(c[i]), dt);
 			w4->Update(*(c[i]), dt);
 			w5->Update(*(c[i]), dt);
-			w9->Update(*(c[i]), dt);
 			w6->Update(*(c[i]), dt);
 			w7->Update(*(c[i]), dt);
 			w8->Update(*(c[i]), dt);
+			w9->Update(*(c[i]), dt);
+			w10->Update(*(c[i]), dt);
+			w11->Update(*(c[i]), dt);
 			w12->Update(*(c[i]), dt);
 			w13->Update(*(c[i]), dt);
+			w14->Update(*(c[i]), dt);
+			w15->Update(*(c[i]), dt);
 			w16->Update(*(c[i]), dt);
 			w17->Update(*(c[i]), dt);
 			w18->Update(*(c[i]), dt);
-			w21->Update(*(c[i]), dt);
-			w22->Update(*(c[i]), dt);
-			w23->Update(*(c[i]), dt);
-			w24->Update(*(c[i]), dt);
-			w25->Update(*(c[i]), dt);
-			w29->Update(*(c[i]), dt);
-		}*/
+			w19->Update(*(c[i]), dt);
+			w20->Update(*(c[i]), dt);
+		}
 
 		for (Platform& elem : platforms)
 		{
@@ -222,28 +227,28 @@ namespace Stage2_1
 		CamFollow(player->Transform_, 200, 120, player->GetFacing());
 		ui->UI_Update(player);
 
-		/*w1->Update(*player, dt);
+		w1->Update(*player, dt);
 		w2->Update(*player, dt);
 		w3->Update(*player, dt);
 		w4->Update(*player, dt);
 		w5->Update(*player, dt);
-		w9->Update(*player, dt);
 
 		w6->Update(*player, dt);
 		w7->Update(*player, dt);
 		w8->Update(*player, dt);
+		w9->Update(*player, dt);
+		w10->Update(*player, dt);
+		w11->Update(*player, dt);
 		w12->Update(*player, dt);
 		w13->Update(*player, dt);
+		w14->Update(*player, dt);
+
+		w15->Update(*player, dt);
 		w16->Update(*player, dt);
 		w17->Update(*player, dt);
 		w18->Update(*player, dt);
-
-		w21->Update(*player, dt);
-		w22->Update(*player, dt);
-		w23->Update(*player, dt);
-		w24->Update(*player, dt);
-		w25->Update(*player, dt);
-		w29->Update(*player, dt);*/
+		w19->Update(*player, dt);
+		w20->Update(*player, dt);
 
 		std::cout << (int)player->PosX << ", " << (int)player->PosY << std::endl;
 	}
@@ -273,28 +278,28 @@ namespace Stage2_1
 		coin3->Render();
 		hp->Render();
 		next->Render();
-		
+		*/
 		w1->Render();
 		w2->Render();
 		w3->Render();
 		w4->Render();
 		w5->Render();
-		w9->Render();
 		w6 ->Render();
 		w7->Render();
 		w8->Render();
+		w9->Render();
+		w10->Render();
+		w11->Render();
 		w12->Render();
 		w13->Render();
+		w14->Render();
+		w15->Render();
 		w16->Render();
 		w17->Render();
 		w18->Render();
-		w21->Render();
-		w22->Render();
-		w23->Render();
-		w24->Render();
-		w25->Render();
-		w29->Render();
-		*/
+		w19->Render();
+		w20->Render();
+		
 		player->Render();
 		player->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 		ui->Render();
@@ -308,8 +313,8 @@ namespace Stage2_1
 		delete player;
 		delete Audio;
 
-		/*delete w1, w2, w3, w4, w5, w6, w7, w8, w9, w12, w13, w16, w17, w18, w21, w22, w23, w24, w25, w29;
-
+		delete w1, w2, w3, w4, w5, w6, w7, w8, w9, w10, w11, w12, w13, w14, w15, w16, w17, w18, w19, w20;
+/*
 		delete coin1, coin2, coin3, hp;
 		delete next;*/
 		delete ui;

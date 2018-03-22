@@ -91,12 +91,12 @@ namespace Stage2_3
 					float f_y = (float)y;
 					walls.push_back(Wall{ WALL_SPRITE,Convert_X(f_x) , Convert_Y(f_y) });
 				}
-				if (MapData[y][x] == OBJ_BARRIER)
+				/*if (MapData[y][x] == OBJ_BARRIER)
 				{
 					float f_x = (float)x;
 					float f_y = (float)y;
 					barriers.push_back(Barrier{ BARRIER_SPRITE,Convert_X(f_x) , Convert_Y(f_y) });
-				}
+				}*/
 			}
 		}
 	}
