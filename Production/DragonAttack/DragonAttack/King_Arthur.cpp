@@ -420,6 +420,7 @@ void King_Arthur::King_Arthur_Phase3(const float dt)
     }
     
     ka_phase = PHASE_3;
+    Set_Vulnerable(true);
 
     for (auto& elem : mobs)
         elem->Set_HP(0);
