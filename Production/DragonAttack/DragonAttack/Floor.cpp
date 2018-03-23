@@ -35,16 +35,16 @@ void Floor::Update(Dragon &obj, const float &dt)
 			if (obj.PosX > ((PosX - Sprite_->Get_Width())))
 			{				
 				//if the dragon is on the right of platform
-				//obj.PosX = PosX + Sprite_->Get_Width() + obj.Sprite_->Get_Width();
-				obj.PosX = PosX + Sprite_->Get_Width() + ( obj.Collision_.Get_MaxPoint().x - obj.Collision_.Get_MinPoint().x);
+				obj.PosX = PosX + Sprite_->Get_Width() + obj.Sprite_->Get_Width();
+				//obj.PosX = PosX + Sprite_->Get_Width() + ( obj.Collision_.Get_MaxPoint().x - obj.Collision_.Get_MinPoint().x);
 				//std::cout << "right" << std::endl;
 			}
 
 			if (obj.PosX < ((PosX - Sprite_->Get_Width())))
 			{				
 				//if the dragon is on the left of platform
-				//obj.PosX = PosX - Sprite_->Get_Width() - obj.Sprite_->Get_Width();
-				obj.PosX = PosX + Sprite_->Get_Width() - ( obj.Collision_.Get_MaxPoint().x - obj.Collision_.Get_MinPoint().x);
+				obj.PosX = PosX - Sprite_->Get_Width() - obj.Sprite_->Get_Width();
+				//obj.PosX = PosX + Sprite_->Get_Width() - ( obj.Collision_.Get_MaxPoint().x - obj.Collision_.Get_MinPoint().x);
 				//std::cout << "left" << std::endl;
 			}
 		}
