@@ -3,8 +3,8 @@
 
 Wall::Wall(Sprite* const p_Sprite, float x, float y)
 	: GameObject{ p_Sprite,
-	Col_Comp{ x - 50.0f, y - 50.0f,
-	x + 50.0f, y + 50.0f, Rect },
+	Col_Comp{ x - 40.0f, y - 45.0f,
+	x + 40.0f, y + 45.0f, Rect },
 	x, y }
 {
 	SetActive(true);
