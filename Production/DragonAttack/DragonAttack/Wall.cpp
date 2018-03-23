@@ -3,8 +3,8 @@
 
 Wall::Wall(Sprite* const p_Sprite, float x, float y)
 	: GameObject{ p_Sprite,
-	Col_Comp{ x - 50.0f, y - 50.0f,
-	x + 50.0f, y + 50.0f, Rect },
+	Col_Comp{ x - 40.0f, y - 45.0f,
+	x + 40.0f, y + 45.0f, Rect },
 	x, y }
 {
 	SetActive(true);
@@ -22,11 +22,11 @@ void Wall::Update(Characters &obj, const float &dt)
 	{
 		if (obj.PosX > this->PosX)
 		{
-			obj.PosX = PosX + Sprite_->Get_Width() + obj.Sprite_->Get_Width();
+			obj.PosX = PosX + Sprite_->Get_Width() + obj.Sprite_->Get_Width() * 0.5f;
 		}
 		else if (obj.PosX < this->PosX)
 		{
-			obj.PosX = PosX - Sprite_->Get_Width() - obj.Sprite_->Get_Width();
+			obj.PosX = PosX - Sprite_->Get_Width() - obj.Sprite_->Get_Width()* 0.5f;
 		}
 	}
 
