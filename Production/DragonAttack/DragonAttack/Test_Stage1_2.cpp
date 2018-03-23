@@ -43,7 +43,8 @@ namespace Test_Stage1_2
 		DMG_SPRITE = new Sprite{ S_CreateSquare(50.0f, "Textures/Fireball.png", 1.0f) };
 		SPD_SPRITE = new Sprite{ S_CreateSquare(50.0f, "Textures/spd.png", 1.0f) };
 		BARRIER_SPRITE = new Sprite{ S_CreateSquare(130.0f, ".//Textures/box.png") };
-		WALL_SPRITE = new Sprite{ S_CreateRectangle(50.0f, 50.0f, ".//Textures/download.jpg") };
+		//WALL_SPRITE = new Sprite{ S_CreateRectangle(50.0f, 50.0f, ".//Textures/download.jpg") };
+		WALL_SPRITE = new Sprite{ CreateFloor(1.0f, "Textures/Cobblestone.png", 1.0f, 1.0f) };
 		PLAT_SPRITE = new Sprite{ CreatePlatform(1.0f, 1.0f, "Textures/Cobblestone.png") };
 		LCPLAT_SPRITE = new Sprite{ CreatePlatform(2.0f, 3.0f, ".//Textures/Win_Platform.png") };
 		FLOOR_SPRITE = new Sprite{ CreateFloor(1.0f, "Textures/Cobblestone.png", 1.0f, 1.0f) };
@@ -120,11 +121,6 @@ namespace Test_Stage1_2
 		Audio->Play(0);
 		Audio->SetLoop(0, 1);
 
-		for(size_t i = 0; i < c.size(); ++i)
-			c[i]->SetActive(true);
-
-		player->SetActive(true);
-
 		for (int y = 0; y < Map_Height; ++y)
 		{
 			for (int x = 0; x < Map_Width; ++x)
@@ -153,8 +149,26 @@ namespace Test_Stage1_2
 					float f_y = (float)y;
 					c.push_back(Create_Basic_AI(GRUNT, AEVec2{ Convert_X(f_x) , Convert_Y(f_y) }));
 				}
+				if (MapData[y][x] == OBJ_ARCHER)
+				{
+					float f_x = (float)x;
+					float f_y = (float)y;
+					c.push_back(Create_Basic_AI(ARCHER, AEVec2{ Convert_X(f_x) , Convert_Y(f_y) }));
+				}
+				if (MapData[y][x] == OBJ_MAGE)
+				{
+					float f_x = (float)x;
+					float f_y = (float)y;
+					c.push_back(Create_Basic_AI(MAGE, AEVec2{ Convert_X(f_x) , Convert_Y(f_y) }));
+				}
 			}
 		}
+
+		for (size_t i = 0; i < c.size(); ++i)
+			c[i]->SetActive(true);
+
+		player->SetActive(true);
+
 	}
 
 
@@ -166,7 +180,7 @@ namespace Test_Stage1_2
 		for (size_t i = 0; i < c.size(); ++i)
 		{
 			c[i]->Update(*player, dt);
-			w1->  Update(*(c[i]), dt);
+			/*w1->  Update(*(c[i]), dt);
 			w2->  Update(*(c[i]), dt);
 			w3->  Update(*(c[i]), dt);
 			w4->  Update(*(c[i]), dt);
@@ -185,7 +199,7 @@ namespace Test_Stage1_2
 			w23-> Update(*(c[i]), dt);
 			w24-> Update(*(c[i]), dt);
 			w25-> Update(*(c[i]), dt);
-			w29-> Update(*(c[i]), dt);
+			w29-> Update(*(c[i]), dt);*/
 		}
 
 		for (Platform& elem : platforms)
@@ -260,6 +274,10 @@ namespace Test_Stage1_2
 			elem.Render();
 		}
 		for (Barrier& elem : barriers)
+		{
+			elem.Render();
+		}
+		for (Wall& elem : walls)
 		{
 			elem.Render();
 		}

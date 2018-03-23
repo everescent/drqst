@@ -73,7 +73,8 @@ namespace Test_Stage1_1
 		DMG_SPRITE = new Sprite{ S_CreateSquare(50.0f, "Textures/Fireball.png", 1.0f) };
 		SPD_SPRITE = new Sprite{ S_CreateSquare(50.0f, "Textures/spd.png", 1.0f) };
 		BARRIER_SPRITE = new Sprite{ S_CreateSquare(130.0f, ".//Textures/box.png") };
-		WALL_SPRITE = new Sprite{ S_CreateRectangle(50.0f, 50.0f, ".//Textures/download.jpg") };
+		//WALL_SPRITE = new Sprite{ S_CreateRectangle(50.0f, 50.0f, ".//Textures/download.jpg") };
+		WALL_SPRITE = new Sprite{ CreateFloor(1.0f, "Textures/Cobblestone.png", 1.0f, 1.0f) };
 		PLAT_SPRITE = new Sprite{ CreatePlatform(1.0f, 1.0f, "Textures/Cobblestone.png") };
 		LCPLAT_SPRITE = new Sprite{ CreatePlatform(2.0f, 3.0f, ".//Textures/Win_Platform.png") };
 		FLOOR_SPRITE = new Sprite{ CreateFloor(1.0f, "Textures/Cobblestone.png", 1.0f, 1.0f) };
@@ -147,8 +148,6 @@ namespace Test_Stage1_1
 		player->SetActive(true);
 		Audio->Play(0);
 		Audio->SetLoop(0, 1);
-		for (size_t i = 0; i < c.size(); ++i)
-			c[i]->SetActive(true);
 
 		for (int y = 0; y < Map_Height; ++y)
 		{
@@ -186,6 +185,10 @@ namespace Test_Stage1_1
 				}*/
 			}
 		}
+
+
+		for (size_t i = 0; i < c.size(); ++i)
+			c[i]->SetActive(true);
 
 		////////Particle System////////////
 		Effects_Init();
@@ -270,11 +273,11 @@ namespace Test_Stage1_1
 		{
 			elem.Update(*player, dt);
 			elem.Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
-		}		
-		w2->Update(*player, dt);
+		}
+		/*w2->Update(*player, dt);
 		w22->Update(*player, dt);
 		w5->Update(*player, dt);
-		w6->Update(*player, dt);
+		w6->Update(*player, dt);*/
 
 		archerTower->Update(*player, dt);
 		player->Update(*player, dt);
@@ -373,13 +376,16 @@ namespace Test_Stage1_1
 		{
 			elem.Render();
 		}
+		for (Wall& elem : walls)
+		{
+			elem.Render();
+		}
 
 		box1->Render();
 		player->Render();
 		player->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 		next->Render();
 		ui->Render();
-
 
 		////////Particle System////////////
 		fireball->Render();

@@ -43,7 +43,8 @@ namespace Stage2_1
 		DMG_SPRITE = new Sprite{ S_CreateSquare(50.0f, "Textures/Fireball.png", 1.0f) };
 		SPD_SPRITE = new Sprite{ S_CreateSquare(50.0f, "Textures/spd.png", 1.0f) };
 		BARRIER_SPRITE = new Sprite{ S_CreateSquare(130.0f, ".//Textures/box.png") };
-		WALL_SPRITE = new Sprite{ S_CreateRectangle(50.0f, 50.0f, ".//Textures/download.jpg") };
+		//WALL_SPRITE = new Sprite{ S_CreateRectangle(50.0f, 50.0f, ".//Textures/download.jpg") };
+		WALL_SPRITE = new Sprite{ CreateFloor(1.0f, "Textures/Cobblestone.png", 1.0f, 1.0f) };
 		PLAT_SPRITE = new Sprite{ CreatePlatform(1.0f, 1.0f, "Textures/Cobblestone.png") };
 		LCPLAT_SPRITE = new Sprite{ CreatePlatform(2.0f, 3.0f, ".//Textures/Win_Platform.png") };
 		FLOOR_SPRITE = new Sprite{ CreateFloor(1.0f, "Textures/Cobblestone.png", 1.0f, 1.0f) };
@@ -58,7 +59,7 @@ namespace Stage2_1
 		if (!Import_MapData("level2-1.txt", MapData, Map_Width, Map_Height)) { AEGfxExit(); }
 		/*
 		next = new LevelChangePlatform{ LCPLAT_SPRITE, 7500.0f,  240.0f };
-		*/
+		
 		w1  = new Wall{ WALL_SPRITE, 2240.0f, -690.0f };
 		w2  = new Wall{ WALL_SPRITE, 2240.0f, -630.0f };
 		w3  = new Wall{ WALL_SPRITE, 2240.0f, -570.0f };
@@ -83,7 +84,7 @@ namespace Stage2_1
 		w18 = new Wall{ WALL_SPRITE, 6460.0f,  -20.0f };
 		w19 = new Wall{ WALL_SPRITE, 6460.0f,  -70.0f };
 		w20 = new Wall{ WALL_SPRITE, 6460.0f, -120.0f };
-
+*/
 		/*
 		coin1 = new PickUp{ COIN_SPRITE,
 			Col_Comp{ 0.0f - 25.0f, 0.0f - 25.0f, 0.0f + 25.0f, 0.0f + 25.0f, Rect },
@@ -125,11 +126,6 @@ namespace Stage2_1
 	{
 		Audio->Play(0);
 		Audio->SetLoop(0, 1);
-
-		for (size_t i = 0; i < c.size(); ++i)
-			c[i]->SetActive(true);
-
-		player->SetActive(true);
 
 		for (int y = 0; y < Map_Height; ++y)
 		{
@@ -173,6 +169,11 @@ namespace Stage2_1
 				}
 			}
 		}
+
+		for (size_t i = 0; i < c.size(); ++i)
+			c[i]->SetActive(true);
+
+		player->SetActive(true);
 	}
 
 
@@ -184,26 +185,6 @@ namespace Stage2_1
 		for (size_t i = 0; i < c.size(); ++i)
 		{
 			c[i]->Update(*player, dt);
-			w1->Update(*(c[i]), dt);
-			w2->Update(*(c[i]), dt);
-			w3->Update(*(c[i]), dt);
-			w4->Update(*(c[i]), dt);
-			w5->Update(*(c[i]), dt);
-			w6->Update(*(c[i]), dt);
-			w7->Update(*(c[i]), dt);
-			w8->Update(*(c[i]), dt);
-			w9->Update(*(c[i]), dt);
-			w10->Update(*(c[i]), dt);
-			w11->Update(*(c[i]), dt);
-			w12->Update(*(c[i]), dt);
-			w13->Update(*(c[i]), dt);
-			w14->Update(*(c[i]), dt);
-			w15->Update(*(c[i]), dt);
-			w16->Update(*(c[i]), dt);
-			w17->Update(*(c[i]), dt);
-			w18->Update(*(c[i]), dt);
-			w19->Update(*(c[i]), dt);
-			w20->Update(*(c[i]), dt);
 		}
 
 		for (Platform& elem : platforms)
@@ -239,29 +220,6 @@ namespace Stage2_1
 		CamFollow(player->Transform_, 200, 120, player->GetFacing());
 		ui->UI_Update(player);
 
-		w1->Update(*player, dt);
-		w2->Update(*player, dt);
-		w3->Update(*player, dt);
-		w4->Update(*player, dt);
-		w5->Update(*player, dt);
-
-		w6->Update(*player, dt);
-		w7->Update(*player, dt);
-		w8->Update(*player, dt);
-		w9->Update(*player, dt);
-		w10->Update(*player, dt);
-		w11->Update(*player, dt);
-		w12->Update(*player, dt);
-		w13->Update(*player, dt);
-		w14->Update(*player, dt);
-
-		w15->Update(*player, dt);
-		w16->Update(*player, dt);
-		w17->Update(*player, dt);
-		w18->Update(*player, dt);
-		w19->Update(*player, dt);
-		w20->Update(*player, dt);
-
 		std::cout << (int)player->PosX << ", " << (int)player->PosY << std::endl;
 	}
 
@@ -281,6 +239,10 @@ namespace Stage2_1
 		{
 			elem.Render();
 		}
+		for (Wall& elem : walls)
+		{
+			elem.Render();
+		}
 		for (size_t i = 0; i < c.size(); ++i)
 		{
 			c[i]->Render();
@@ -291,26 +253,7 @@ namespace Stage2_1
 		hp->Render();
 		next->Render();
 		*/
-		w1->Render();
-		w2->Render();
-		w3->Render();
-		w4->Render();
-		w5->Render();
-		w6 ->Render();
-		w7->Render();
-		w8->Render();
-		w9->Render();
-		w10->Render();
-		w11->Render();
-		w12->Render();
-		w13->Render();
-		w14->Render();
-		w15->Render();
-		w16->Render();
-		w17->Render();
-		w18->Render();
-		w19->Render();
-		w20->Render();
+
 		
 		player->Render();
 		player->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);

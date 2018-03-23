@@ -32,6 +32,8 @@ namespace
 	Sprite* FLOOR_SPRITE;
 	Sprite* TOWER_SPRITE;
 	Sprite* SIGN_SPRITE;
+
+	float Camdown = 0;
 }
 
 namespace Stage2_2
@@ -43,7 +45,8 @@ namespace Stage2_2
 		DMG_SPRITE = new Sprite{ S_CreateSquare(50.0f, "Textures/Fireball.png", 1.0f) };
 		SPD_SPRITE = new Sprite{ S_CreateSquare(50.0f, "Textures/spd.png", 1.0f) };
 		BARRIER_SPRITE = new Sprite{ S_CreateSquare(130.0f, ".//Textures/box.png") };
-		WALL_SPRITE = new Sprite{ S_CreateRectangle(50.0f, 50.0f, ".//Textures/download.jpg") };
+		//WALL_SPRITE = new Sprite{ S_CreateRectangle(50.0f, 50.0f, ".//Textures/download.jpg") };
+		WALL_SPRITE = new Sprite{ CreateFloor(1.0f, "Textures/Cobblestone.png", 1.0f, 1.0f) };
 		PLAT_SPRITE = new Sprite{ CreatePlatform(1.0f, 1.0f, "Textures/Cobblestone.png") };
 		LCPLAT_SPRITE = new Sprite{ CreatePlatform(2.0f, 3.0f, ".//Textures/Win_Platform.png") };
 		FLOOR_SPRITE = new Sprite{ CreateFloor(1.0f, "Textures/Cobblestone.png", 1.0f, 1.0f) };
@@ -56,9 +59,9 @@ namespace Stage2_2
 		Audio = new Audio_Engine{ 1, [](std::vector <std::string> &playlist)->void {playlist.push_back(".//Audio/Stage_1_BGM.mp3"); } };
 		ui = new UI(player);
 		if (!Import_MapData("level2-2.txt", MapData, Map_Width, Map_Height)) { AEGfxExit(); }
-		/*
-		next = new LevelChangePlatform{ LCPLAT_SPRITE, 7500.0f,  240.0f };
-
+		
+		next = new LevelChangePlatform{ LCPLAT_SPRITE, 1750.0f,  -2200.0f };
+/*
 		w6 = new Wall{ WALL_SPRITE, 2240.0f, -690.0f };
 		w7 = new Wall{ WALL_SPRITE, 2240.0f, -630.0f };
 		w8 = new Wall{ WALL_SPRITE, 2240.0f, -570.0f };
@@ -178,27 +181,7 @@ namespace Stage2_2
 		
 		for (size_t i = 0; i < c.size(); ++i)
 		{
-		c[i]->Update(*player, dt);
-		w1->Update(*(c[i]), dt);
-		w2->Update(*(c[i]), dt);
-		w3->Update(*(c[i]), dt);
-		w4->Update(*(c[i]), dt);
-		w5->Update(*(c[i]), dt);
-		w9->Update(*(c[i]), dt);
-		w6->Update(*(c[i]), dt);
-		w7->Update(*(c[i]), dt);
-		w8->Update(*(c[i]), dt);
-		w12->Update(*(c[i]), dt);
-		w13->Update(*(c[i]), dt);
-		w16->Update(*(c[i]), dt);
-		w17->Update(*(c[i]), dt);
-		w18->Update(*(c[i]), dt);
-		w21->Update(*(c[i]), dt);
-		w22->Update(*(c[i]), dt);
-		w23->Update(*(c[i]), dt);
-		w24->Update(*(c[i]), dt);
-		w25->Update(*(c[i]), dt);
-		w29->Update(*(c[i]), dt);
+			c[i]->Update(*player, dt);
 		}
 
 		for (Platform& elem : platforms)
@@ -228,34 +211,24 @@ namespace Stage2_2
 
 		/*coin1->Update(*player, dt);
 		coin2->Update(*player, dt);
-		coin3->Update(*player, dt);
-		next->Update(*player, dt);*/
+		coin3->Update(*player, dt);*/
+		next->Update(*player, dt);
 		player->Update(*player, dt);
 		CamFollow(player->Transform_, 200, 120, player->GetFacing());
+		if (AEInputCheckCurr(AEVK_S))
+		{
+			if (Camdown > -250)
+				Camdown -= 4;
+			
+			CamFollow(player->Transform_, 200, Camdown, player->GetFacing());
+		}
+		else
+		{
+			if (Camdown < 0)
+				Camdown += 4;
+		}
 		ui->UI_Update(player);
 
-		/*w1->Update(*player, dt);
-		w2->Update(*player, dt);
-		w3->Update(*player, dt);
-		w4->Update(*player, dt);
-		w5->Update(*player, dt);
-		w9->Update(*player, dt);
-
-		w6->Update(*player, dt);
-		w7->Update(*player, dt);
-		w8->Update(*player, dt);
-		w12->Update(*player, dt);
-		w13->Update(*player, dt);
-		w16->Update(*player, dt);
-		w17->Update(*player, dt);
-		w18->Update(*player, dt);
-
-		w21->Update(*player, dt);
-		w22->Update(*player, dt);
-		w23->Update(*player, dt);
-		w24->Update(*player, dt);
-		w25->Update(*player, dt);
-		w29->Update(*player, dt);*/
 
 		std::cout << (int)player->PosX << ", " << (int)player->PosY << std::endl;
 	}
@@ -272,6 +245,10 @@ namespace Stage2_2
 		{
 			elem.Render();
 		}
+		for (Wall& elem : walls)
+		{
+			elem.Render();
+		}
 		for (Barrier& elem : barriers)
 		{
 			elem.Render();
@@ -283,30 +260,10 @@ namespace Stage2_2
 		/*coin1->Render();
 		coin2->Render();
 		coin3->Render();
-		hp->Render();
+		hp->Render();*/
 		next->Render();
 
-		w1->Render();
-		w2->Render();
-		w3->Render();
-		w4->Render();
-		w5->Render();
-		w9->Render();
-		w6 ->Render();
-		w7->Render();
-		w8->Render();
-		w12->Render();
-		w13->Render();
-		w16->Render();
-		w17->Render();
-		w18->Render();
-		w21->Render();
-		w22->Render();
-		w23->Render();
-		w24->Render();
-		w25->Render();
-		w29->Render();
-		*/
+		
 		player->Render();
 		player->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 		ui->Render();
@@ -322,8 +279,8 @@ namespace Stage2_2
 
 		/*delete w1, w2, w3, w4, w5, w6, w7, w8, w9, w12, w13, w16, w17, w18, w21, w22, w23, w24, w25, w29;
 
-		delete coin1, coin2, coin3, hp;
-		delete next;*/
+		delete coin1, coin2, coin3, hp;*/
+		delete next;
 		delete ui;
 
 		//delete COIN_SPRITE;//pickups
