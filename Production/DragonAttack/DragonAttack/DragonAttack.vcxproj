@@ -167,6 +167,7 @@
     <ClCompile Include="Collision.cpp" />
     <ClCompile Include="Collision_update.cpp" />
     <ClCompile Include="Create_Object.cpp" />
+    <ClCompile Include="Credits.cpp" />
     <ClCompile Include="Dragon.cpp" />
     <ClCompile Include="Floor.cpp" />
     <ClCompile Include="f_sqrt.cpp" />
@@ -186,6 +187,7 @@
     <ClCompile Include="Merlin.cpp" />
     <ClCompile Include="Particle_Effects.cpp" />
     <ClCompile Include="Particle_System.cpp" />
+    <ClCompile Include="Pause.cpp" />
     <ClCompile Include="Physics.cpp" />
     <ClCompile Include="PickUp.cpp" />
     <ClCompile Include="Platform.cpp" />
@@ -222,6 +224,7 @@
     <ClInclude Include="Collision.h" />
     <ClInclude Include="Collision_update.h" />
     <ClInclude Include="Create_Object.h" />
+    <ClInclude Include="Credits.h" />
     <ClInclude Include="Dragon.h" />
     <ClInclude Include="Floor.h" />
     <ClInclude Include="f_sqrt.h" />
@@ -242,6 +245,7 @@
     <ClInclude Include="Particle.h" />
     <ClInclude Include="Particle_Effects.h" />
     <ClInclude Include="Particle_System.h" />
+    <ClInclude Include="Pause.h" />
     <ClInclude Include="Physics.h" />
     <ClInclude Include="PickUp.h" />
     <ClInclude Include="Platform.h" />

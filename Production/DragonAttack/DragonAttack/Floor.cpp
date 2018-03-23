@@ -35,14 +35,16 @@ void Floor::Update(Dragon &obj, const float &dt)
 			if (obj.PosX > ((PosX - Sprite_->Get_Width())))
 			{				
 				//if the dragon is on the right of platform
-				obj.PosX = PosX + Sprite_->Get_Width() + obj.Sprite_->Get_Width();
+				//obj.PosX = PosX + Sprite_->Get_Width() + obj.Sprite_->Get_Width();
+				obj.PosX = PosX + Sprite_->Get_Width() + ( obj.Collision_.Get_MaxPoint().x - obj.Collision_.Get_MinPoint().x);
 				//std::cout << "right" << std::endl;
 			}
 
 			if (obj.PosX < ((PosX - Sprite_->Get_Width())))
 			{				
 				//if the dragon is on the left of platform
-				obj.PosX = PosX - Sprite_->Get_Width() - obj.Sprite_->Get_Width();
+				//obj.PosX = PosX - Sprite_->Get_Width() - obj.Sprite_->Get_Width();
+				obj.PosX = PosX + Sprite_->Get_Width() - ( obj.Collision_.Get_MaxPoint().x - obj.Collision_.Get_MinPoint().x);
 				//std::cout << "left" << std::endl;
 			}
 		}
@@ -57,17 +59,17 @@ void Floor::Update(Characters &obj, const float &dt)
 	//need to convert to dt based
 	if (Collision_.Dy_Rect_Rect(obj.Collision_, GetVelocity(), obj.GetVelocity(), dt))
 	{
-		if ((obj.PosY - obj.Sprite_->Get_Height())  > this->PosY)
+		if ((obj.PosY - obj.Sprite_->Get_Height())  > PosY)
 		{
 			obj.PosY = PosY + Sprite_->Get_Height() + obj.Sprite_->Get_Height();
 			//std::cout << "top " << std::endl;
 		}
 
-		else if ((obj.PosY + obj.Sprite_->Get_Height())  < (this->PosY))
-		{
-			obj.PosY = PosY - Sprite_->Get_Height() - obj.Sprite_->Get_Height();
-			//std::cout << "down" << std::endl;
-		}
+		//else if ((obj.PosY + obj.Sprite_->Get_Height())  < (PosY))
+		//{
+		//	obj.PosY = PosY - Sprite_->Get_Height() - obj.Sprite_->Get_Height();
+		//	//std::cout << "down" << std::endl;
+		//}
 
 		else {
 			if (obj.PosX > ((PosX - Sprite_->Get_Width())))

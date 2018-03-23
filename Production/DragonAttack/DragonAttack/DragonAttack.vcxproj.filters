@@ -103,6 +103,15 @@
     <Filter Include="Game_States\Stage\Stage 3">
       <UniqueIdentifier>{a797db57-4c80-434f-989e-22d7baabb09d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game_Object\Pause_Interface">
+      <UniqueIdentifier>{1872b256-b2e4-45e8-a4d8-4ed326c31616}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game_States\Stage\Main_Menu">
+      <UniqueIdentifier>{6b13e358-0eff-4a1f-9504-090b44bf1a7e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game_States\Stage\Credits">
+      <UniqueIdentifier>{f979b263-9bfe-48a4-9f1d-6173342a9424}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -116,9 +125,6 @@
     </ClCompile>
     <ClCompile Include="GameStateManager.cpp">
       <Filter>GSM</Filter>
-    </ClCompile>
-    <ClCompile Include="Main_Menu.cpp">
-      <Filter>Game_States</Filter>
     </ClCompile>
     <ClCompile Include="Characters.cpp">
       <Filter>Characters</Filter>
@@ -261,6 +267,15 @@
     <ClCompile Include="Stage3_3cpp.cpp">
       <Filter>Game_States\Stage\Stage 3</Filter>
     </ClCompile>
+    <ClCompile Include="Pause.cpp">
+      <Filter>Game_Object\Pause_Interface</Filter>
+    </ClCompile>
+    <ClCompile Include="Main_Menu.cpp">
+      <Filter>Game_States\Stage\Main_Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="Credits.cpp">
+      <Filter>Game_States\Stage\Credits</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h">
@@ -274,9 +289,6 @@
     </ClInclude>
     <ClInclude Include="GameStateManager.h">
       <Filter>GSM</Filter>
-    </ClInclude>
-    <ClInclude Include="Main_Menu.h">
-      <Filter>Game_States</Filter>
     </ClInclude>
     <ClInclude Include="Characters.h">
       <Filter>Characters</Filter>
@@ -427,6 +439,15 @@
     </ClInclude>
     <ClInclude Include="Stage3_3.h">
       <Filter>Game_States\Stage\Stage 3</Filter>
+    </ClInclude>
+    <ClInclude Include="Pause.h">
+      <Filter>Game_Object\Pause_Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="Main_Menu.h">
+      <Filter>Game_States\Stage\Main_Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="Credits.h">
+      <Filter>Game_States\Stage\Credits</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

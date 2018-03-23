@@ -99,11 +99,12 @@ void Grunt::Update(Dragon &d, const float dt)
 				posit_tmp -= 1000.0f * dt;
 
 			d.PosX = posit_tmp;
+
 			distance += 1000.0f * dt;
 
-			if (distance >= 100.0f)
+			if (distance >= 20.0f)
 			{
-				//std::cout << distance << std::endl;
+				std::cout << "dpos" << d.PosX <<"postmp"<< posit_tmp<< std::endl;
 				Knockback = false;
 				distance = 0;
 			}
