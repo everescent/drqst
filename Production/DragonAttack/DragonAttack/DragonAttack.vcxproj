@@ -161,6 +161,7 @@
     <ClCompile Include="Archer.cpp" />
     <ClCompile Include="Audio_Engine.cpp" />
     <ClCompile Include="Barrier.cpp" />
+    <ClCompile Include="Block.cpp" />
     <ClCompile Include="Boss_States.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Characters.cpp" />
@@ -217,6 +218,7 @@
     <ClInclude Include="Archer.h" />
     <ClInclude Include="Audio_Engine.h" />
     <ClInclude Include="Barrier.h" />
+    <ClInclude Include="Block.h" />
     <ClInclude Include="Boss_Phase.h" />
     <ClInclude Include="Boss_States.h" />
     <ClInclude Include="Camera.h" />

@@ -276,6 +276,9 @@
     <ClCompile Include="Credits.cpp">
       <Filter>Game_States\Stage\Credits</Filter>
     </ClCompile>
+    <ClCompile Include="Block.cpp">
+      <Filter>Game_Object\Objects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h">
@@ -448,6 +451,9 @@
     </ClInclude>
     <ClInclude Include="Credits.h">
       <Filter>Game_States\Stage\Credits</Filter>
+    </ClInclude>
+    <ClInclude Include="Block.h">
+      <Filter>Game_Object\Objects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
