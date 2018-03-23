@@ -117,7 +117,9 @@ void Force(const float Strength, const bool X, const bool Y);
 //Gravity
 void Gravity(const float Strength);
 //Attract the particles to a certain point
-void Newton(const AEVec2 Point, const float strength);
+//Modelled after a Schwarzchild black hole
+//Set Attentuation to 0 for infinite range
+void Newton(const AEVec2 Point, const float strength, const float Attenuation = 0.0f);
 //Enables exposure to be a factor of each particle's lifetime
 void ColorRamp_Life();
 //Enables transparency to be a factor of each particle's exposure

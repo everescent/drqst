@@ -294,16 +294,23 @@ void Particle_System::TransRamp_Exp()
 }
 
 //Attract the particles to a certain point
-void Particle_System::Newton(const AEVec2 Point, const float strength)
+void Particle_System::Newton(const AEVec2 Point, const float strength, const float Attenuation)
 {
   //Displacement between Newton point and particles
   AEVec2 final_displacement{}; 
-  
+  static float angle = 0.0f;
+  float Angular_Vel = PI / 10.0f;
+  angle += Angular_Vel;
   for (auto& elem : Emitter_.Particles_)
   {
     //Calculate displacement
-    final_displacement.x = Point.x - elem.Pos_.x;
-    final_displacement.y = Point.y - elem.Pos_.y;
+    final_displacement.x = elem.Pos_.x - Point.x;
+    final_displacement.y = elem.Pos_.y - Point.y;
+    if (Attenuation)
+    {
+      if (AEVec2SquareLength(&final_displacement) > Attenuation * Attenuation)
+        continue;
+    }
     //Normalize and scale according to strength
     AEVec2Normalize(&final_displacement, &final_displacement);
     AEVec2Scale(&final_displacement, &final_displacement, strength);
@@ -315,5 +322,6 @@ void Particle_System::Newton(const AEVec2 Point, const float strength)
       elem.Vel_.x += final_displacement.x;
       elem.Vel_.y += final_displacement.y;
     }
+    
   }
 }

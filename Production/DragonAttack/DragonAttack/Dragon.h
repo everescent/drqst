@@ -84,7 +84,7 @@ public:
   //Gets current charge
   int Get_Charge();
 
-  Dragon(Sprite* D_Sprite, Sprite *F_Sprite)
+  Dragon(Sprite* D_Sprite, Sprite *F_Sprite/*, AEVec2 Pos_*/)
     //Initialize Characters class
     :Characters{ D_Sprite, 3,
     Col_Comp{ Start_Pos_X - Dragon_Scale, Start_Pos_Y - Dragon_Scale,
@@ -105,7 +105,12 @@ public:
     SetActive(true);
     //Initialize player start location
     PosX = Start_Pos_X;
-    PosY = Start_Pos_Y;
+    PosY = Start_Pos_X;
+    /*Uncomment this for custom position
+    //Update position of player
+    Transform_.SetTranslate(PosX, PosY);
+    Transform_.Concat();
+    */
     //Set velocity
     SetVelocity(Player_Speed);
     //Reserve a block of memory per number of bullets 
