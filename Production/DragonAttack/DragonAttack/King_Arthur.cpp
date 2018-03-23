@@ -30,19 +30,19 @@ namespace {
 	Boss_Action_State current_action = IDLE; // different states of boss arthur
 
 	const int HEALTH    = 800; // initial hp for king arthur
-	const int PHASE2_HP = 790; // phase 2 trigger
+	const int PHASE2_HP = 500; // phase 2 trigger
 	const int PHASE3_HP = 300; // phase 3 trigger
 
 	const int interval    = 80;  // interval for triple slash
-	const int range_limit = 500; // range limit for slash
+	const int range_limit = 1250; // range limit for slash
 
 	const float START_POINT_X = 200.0f; // spawn point of king arthur
 	const float START_POINT_Y = -220.0f;// spawn point of king arthur
 
 	const float SLASH_SCALE = 40.0f;
 
-    float left_boundary = -600; // boundaries of charge attack
-    float right_boundary = 600; // boundaries of charge attack
+    float left_boundary = -400; // boundaries of charge attack
+    float right_boundary = 400; // boundaries of charge attack
 
 	const char limit = 5; // num of king arthur attacks
 	const char num_of_mobs = 4; // number of mobs to spawn
@@ -136,7 +136,7 @@ void King_Arthur::Init_KA_Attacks(void)
 	}
 	for (char i = 0; i < limit - 1; ++i) // initializing other variables in slash attacks
 	{
-        arthur[i].SetVelocity(AEVec2{ 200.0f, 0.0f }); // velocity for slash
+        arthur[i].SetVelocity(AEVec2{ 350.0f, 0.0f }); // velocity for slash
         arthur[i].Transform_.SetScale(1.5f, 1.5f); // determine the size of projectile
       	arthur[i].Transform_.SetTranslate( START_POINT_X, START_POINT_Y );
  		arthur[i].Transform_.Concat();
@@ -192,7 +192,7 @@ void King_Arthur::Update(Dragon &d, const float dt)
 	}
     else if (Get_HP() < PHASE3_HP && ka_phase & PHASE_2)
     {
-        King_Arthur_Phase3();
+        King_Arthur_Phase3(dt);
     }
 
 	if (behavior_swap == 3)
@@ -342,6 +342,14 @@ void King_Arthur::Attack(Dragon &d, const float dt)
 				arthur[SPIN_SWORD + i].Transform_.SetTranslate(arthur[SPIN_SWORD + i].PosX, arthur[SPIN_SWORD + i].PosY);
 				arthur[SPIN_SWORD + i].Transform_.Concat();
 				arthur[SPIN_SWORD + i].ongoing_attack = false;
+
+                PosX = 0.0f;
+                PosY = sword_pos[0].y;
+                Transform_.SetTranslate(PosX, PosY);
+                Transform_.Concat();
+                Collision_.Update_Col_Pos(PosX - 30.0f, PosY - 30.0f,  // min point
+                                          PosX + 30.0f, PosY + 30.0f);	// max point
+
 			}
 			
 			currAttk = SPIN_SWORD;
@@ -392,9 +400,29 @@ void King_Arthur::King_Arthur_Phase2(void)
 	teleport_location[TOP_LEFT].max.y  =  200.0f;
 }
 
-void King_Arthur::King_Arthur_Phase3(void)
+void King_Arthur::King_Arthur_Phase3(const float dt)
 {
-	ka_phase = PHASE_3;
+    static float timer = 2.0f;
+
+    if (timer > 0)
+    {
+        timer -= dt;
+
+        Set_Vulnerable(false);
+
+        PosX = 0.0f;
+        PosY = START_POINT_Y;
+        Transform_.SetTranslate(0.0f, START_POINT_Y);
+        Transform_.Concat();
+        Collision_.Update_Col_Pos(PosX - 30.0f, PosY - 30.0f,  // min point
+                                  PosX + 30.0f, PosY + 30.0f);	// max point
+
+    }
+    
+    ka_phase = PHASE_3;
+
+    for (auto& elem : mobs)
+        elem->Set_HP(0);
 }
 
 void King_Arthur::Dash_Attack(Dragon &d, const float dt)
@@ -445,7 +473,8 @@ void King_Arthur::Single_Slash(Dragon &d, const float dt)
 	}
 
 	//disappears once it flys 500 unit away
-	if (arthur[SINGLE_SLASH].GetDist() > range_limit) 
+	if (arthur[SINGLE_SLASH].GetDist() > range_limit || arthur[SINGLE_SLASH].PosX < -600 ||
+        arthur[SINGLE_SLASH].PosX > 600)      
 	{
 		arthur[SINGLE_SLASH].End_Attack();
 
@@ -493,7 +522,9 @@ void King_Arthur::Triple_Slash(Dragon &d, const float dt)
 			}
 		}
 
-		if (arthur[i].GetDist() > range_limit) // makes projectiles disappear
+        // makes projectiles disappear
+		if (arthur[i].GetDist() > range_limit || arthur[i].PosX < -600 ||
+            arthur[i].PosX > 600) 
 		{
 			arthur[i].SetActive(false); // disappears from screen
 			arthur[i].ResetDist();      // reset the projectile distance traveled
@@ -565,12 +596,21 @@ void King_Arthur::Heal_and_Spawn(Dragon &d, const float dt)
         for (char i = 0; i < num_of_mobs; ++i)
         {
             mobs[i]->SetActive(true);
-            mobs[i]->PosX = ai_spawn_pos[i].x;
-            mobs[i]->PosY = ai_spawn_pos[i].y;
+
+            if (! (i %2))
+            {
+                auto* temp = static_cast <Mage*> (mobs[i]);
+                temp->Renew_Mage({ai_spawn_pos[i].x, ai_spawn_pos[i].y});
+            }
+            else
+            {
+                mobs[i]->PosX = ai_spawn_pos[i].x;
+                mobs[i]->PosY = ai_spawn_pos[i].y;
+            }
         }
 	}
 	
-	if (healing && Get_HP() != HEALTH)
+	if (healing && Get_HP() <= HEALTH)
 	{
 		// heals every 0.5 seconds
 		static float timer = 0.5f;
@@ -582,7 +622,6 @@ void King_Arthur::Heal_and_Spawn(Dragon &d, const float dt)
 		healing_effect->TransRamp_Exp();
 		healing_effect->Newton({ PosX, PosY }, 0.15f);
         healing_effect->Update(dt);
-		std::cout << Get_HP() << std::endl;
 	}
 	else
 	{
@@ -662,11 +701,19 @@ void King_Arthur::Spinning_Blades(Dragon &d, const float dt)
 
 				if (i == NUM_OF_SWORD - 1)
 				{
-					current_action = MOVING;
+					current_action = IDLE;
 					arthur[SPIN_SWORD].cooldown_timer = 10.0f;
 					arthur[SPIN_SWORD].cooldown = true;        // start cooldown
 					arthur[SPIN_SWORD].ongoing_attack = false; // attack animation has concluded
 					arthur[SPIN_SWORD + 1].ongoing_attack = false; // attack animation has concluded
+
+                    PosX = 0.0f;
+                    PosY = START_POINT_Y;
+                    Transform_.SetTranslate(PosX, PosY);
+                    Transform_.Concat();
+                    Collision_.Update_Col_Pos(PosX - 30.0f, PosY - 30.0f,  // min point
+                                              PosX + 30.0f, PosY + 30.0f);	// max point
+
 				}
 			}
 

@@ -24,6 +24,8 @@ namespace
 	Sprite* wall_sprite;
 	Sprite* floor_sprite;
 	Sprite* plat_sprite;
+
+    BOSS_PHASE curr_phase;
 }
 
 namespace Stage3_3
@@ -51,6 +53,8 @@ namespace Stage3_3
 	{
 		audio->Play(0);
 		audio->SetLoop(0, 1);
+
+        BG->SetRGB(0.5f, 0.5f, 0.5f);
 		
 		player->SetActive(true);
 
@@ -84,7 +88,7 @@ namespace Stage3_3
 	{
 	    audio->Update();
 
-        BOSS_PHASE curr_phase = last_boss->Get_Phase();
+       curr_phase = last_boss->Get_Phase();
 
         last_boss->Update(*player, dt);
 
@@ -109,12 +113,25 @@ namespace Stage3_3
             elem.Update(*player, dt);
         }
 
-        if (curr_phase & PHASE_2)
+        if (curr_phase & PHASE_1 || curr_phase & PHASE_2)
         {
             for (Platform& elem : platforms)
             {
-                elem.Update(*player, dt);
+                switch (curr_phase)
+                {
+                case PHASE_1:
+
+                    if (elem.Collision_.Get_MinPoint().y == -200)
+                        elem.Update(*player, dt);
+                    break;
+                case PHASE_2:
+                    if(elem.Collision_.Get_MinPoint().y != -200)
+                        elem.Update(*player, dt);
+                    break;
+                default: break;
+                }
             }
+
         }
 
         player->Update(*player, dt);
@@ -133,12 +150,25 @@ namespace Stage3_3
             elem.Render();
         }
 
-        if (last_boss->Get_Phase() & PHASE_2)
+        if (curr_phase & PHASE_1 || curr_phase & PHASE_2)
         {
             for (Platform& elem : platforms)
             {
-                elem.Render();
+                switch (curr_phase)
+                {
+                case PHASE_1:
+
+                    if (elem.Collision_.Get_MinPoint().y == -200)
+                        elem.Render();
+                    break;
+                case PHASE_2:
+                    if (elem.Collision_.Get_MinPoint().y != -200)
+                        elem.Render();
+                    break;
+                default: break;
+                }
             }
+
         }
 
 

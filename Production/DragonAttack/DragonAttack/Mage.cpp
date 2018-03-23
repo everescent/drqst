@@ -103,7 +103,6 @@ void Mage::Update(Dragon &d, const float dt)
 		break;
     default: break;
 	}
-
 }
 
 // render function for mage
@@ -159,7 +158,7 @@ void Mage::Attack(const float dt, Dragon &d)
 		energy_ball.SetActive(true);       // set energyball to active
 		energy_ball.ongoing_attack = true; // attack ongoing flag to true
 	}
-
+  
 	// move the energy ball base on its velocity
 	energy_ball.Projectile::Update(dt, EBALL_SCALE);
 
@@ -210,11 +209,25 @@ void Mage::Move(const Dragon &d)
 
 }
 
+void Mage::Renew_Mage(const AEVec2& newPos)
+{
+    PosX = newPos.x;
+    PosY = newPos.y;
+
+    Transform_.SetTranslate(PosX, PosY);
+    Transform_.Concat();
+    
+    Collision_.Update_Col_Pos(PosX - MAGE_SCALE, PosY - MAGE_SCALE,  // min point
+                              PosX + MAGE_SCALE, PosY + MAGE_SCALE);	// max point
+
+}
+
 // dead function of mage
 void Mage::Dead(void)
 {
 	SetActive(false); // set active to false
 	Set_HP(HEALTH);   // reset the hp of mage
+    teleport = true;
     current_action = IDLE;
 }
 
