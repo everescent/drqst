@@ -60,7 +60,8 @@ Lancelot::Lancelot(Sprite* texture)
 	: Characters(texture,
 		HEALTH,  Col_Comp{STARTING_POINT.x - LANCELOT_SCALE, STARTING_POINT.y - LANCELOT_SCALE,
 						  STARTING_POINT.x + LANCELOT_SCALE, STARTING_POINT.y + LANCELOT_SCALE, Rect}),
-	    M_E{ false }, arondight_particle{Effects_Get(ARONDIGHT_PARTICLE)}
+    M_E{ false }, arondight_particle{ Effects_Get(ARONDIGHT_PARTICLE) }, me_particle{Effects_Get(ME_PARTICLE)},
+    phase {PHASE_1}
 
 {
 	Transform_.SetTranslate(STARTING_POINT.x, STARTING_POINT.y); // spawn lancelot at this location
@@ -89,24 +90,39 @@ void Lancelot::Init()
 	Init_Arondight();
 
 	// prevent unique mechanic from activating at the start of fight
-	lancelot[MAD_ENHANCEMENT].cooldown_timer = 10.0f; 
+	lancelot[MAD_ENHANCEMENT].cooldown_timer = 0.0f; 
 	lancelot[MAD_ENHANCEMENT].cooldown = true; 
 
-	// arondight particle variables
-	arondight_particle->Emitter_.PPS_ = 10;
-	arondight_particle->Emitter_.Vol_Max = 4096;
-	arondight_particle->Emitter_.Direction_ = 90.0f;
-	arondight_particle->Emitter_.Particle_Rand_.Spread_ = 360;
-	arondight_particle->Emitter_.Conserve_ = 0.8f;
-	arondight_particle->Emitter_.Size_ = 10.0f;
-	arondight_particle->Emitter_.Speed_ = 4.0f;
-	arondight_particle->Emitter_.Particle_Rand_.Sp_Rand_ = 3;
-	arondight_particle->Emitter_.Lifetime_ = 3.f;
-	arondight_particle->Emitter_.Particle_Rand_.Life_Rand_ = 1;
-	arondight_particle->Emitter_.Pos_.Min_Max.Angle_ = PI / 2.f;
 
+    Init_Particles();
 	seed_initializer(); // initializes the seed for rng purposes
 
+}
+
+void Lancelot::Init_Particles(void)
+{
+   // mad enhancement particle variables
+    me_particle->Emitter_.PPS_ = 8;
+    me_particle->Emitter_.Vol_Max = 2048;
+    me_particle->Emitter_.Direction_ = 90.0f;
+    me_particle->Emitter_.Particle_Rand_.Spread_ = 180;
+    me_particle->Emitter_.Conserve_ = 0.8f;
+    me_particle->Emitter_.Size_ = 15.0f;
+    me_particle->Emitter_.Speed_ = 10.0f;
+    me_particle->Emitter_.Lifetime_ = 2.f;
+    
+    // arondight particle variables
+    arondight_particle->Emitter_.PPS_ = 10;
+    arondight_particle->Emitter_.Vol_Max = 4096;
+    arondight_particle->Emitter_.Direction_ = 90.0f;
+    arondight_particle->Emitter_.Particle_Rand_.Spread_ = 360;
+    arondight_particle->Emitter_.Conserve_ = 0.8f;
+    arondight_particle->Emitter_.Size_ = 10.0f;
+    arondight_particle->Emitter_.Speed_ = 4.0f;
+    arondight_particle->Emitter_.Particle_Rand_.Sp_Rand_ = 3;
+    arondight_particle->Emitter_.Lifetime_ = 3.f;
+    arondight_particle->Emitter_.Particle_Rand_.Life_Rand_ = 1;
+    arondight_particle->Emitter_.Pos_.Min_Max.Angle_ = PI / 2.f;
 }
 
 void Lancelot::Idle(const Dragon& d, const float dt)
@@ -166,7 +182,17 @@ void Lancelot::Update(Dragon &d, float dt)
 	if (M_E) // off mad enhancement state
 	{
 		if (lancelot[MAD_ENHANCEMENT].cooldown_timer < 10)
-			this->Mad_Enhancement(dt);         
+			this->Mad_Enhancement(dt);  
+
+        me_particle->Emitter_.Pos_.Min_Max.Point_Max = Collision_.Get_MaxPoint();
+        me_particle->Emitter_.Pos_.Min_Max.Point_Min = Collision_.Get_MinPoint();
+
+        me_particle->Emitter_.Pos_.Min_Max.Point_Max.x -= 10.f;
+        me_particle->Emitter_.Pos_.Min_Max.Point_Max.y -= 10.f;
+        me_particle->Emitter_.Pos_.Min_Max.Point_Min.x += 10.f;
+        me_particle->Emitter_.Pos_.Min_Max.Point_Min.y += 10.f;
+
+        me_particle->UpdateEmission();
 	}
 
 	// checks if lancelot is alive
@@ -223,6 +249,33 @@ void Lancelot::Update(Dragon &d, float dt)
 
 	for (char i = 0; i < limit; ++i) // update the skill cooldowns
 		lancelot[i].Update(dt);
+
+    Update_Particles(dt);
+}
+
+void Lancelot::Update_Particles(const float dt)
+{
+    switch (phase)
+    {
+    case PHASE_1:
+        if(current_action == MOVING)
+            me_particle->Drag(0.5f);
+
+        me_particle->Turbulence(0.6f);
+        me_particle->Force(0.8f, false, true);
+        me_particle->ColorRamp_Life();
+        me_particle->TransRamp_Exp();
+        me_particle->Update(dt);
+        break;
+    case PHASE_2:
+        arondight_particle->Turbulence(0.5f);
+        arondight_particle->TransRamp_Exp();
+        arondight_particle->Update(dt);
+        break;
+    default: break;
+    }
+    
+
 }
 
 void Lancelot::Render(void)
@@ -230,8 +283,8 @@ void Lancelot::Render(void)
 	GameObject::Render();
 	lancelot[currAttk].Render();
 
-	if(currAttk == ARONDIGHT && current_action == ATTACK)
-		arondight_particle->Render();
+    me_particle->Render();
+	arondight_particle->Render();
 }
 
 void Lancelot::Attack(Dragon &d, const float dt)
@@ -387,7 +440,6 @@ void Lancelot::Slash(Dragon& d, const float dt)
 		return;
 	}
 
-
 	lancelot[SLASH].SetActive(true);
 	lancelot[SLASH].Projectile::Update(dt, ATTACK_SCALE, false, angle += angle_offset);
 
@@ -461,11 +513,6 @@ void Lancelot::Arondight(Dragon& d, const float dt)
 {
 	// play particle effects
 	arondight_particle->UpdateEmission();
-	arondight_particle->Turbulence(0.5f);
-
-	arondight_particle->TransRamp_Exp();
-	arondight_particle->Update(dt);
-
 	
 	while (charge_time > 0) // freeze lancelot for 2 seconds for player to prepare
 	{

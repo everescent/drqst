@@ -1,3 +1,17 @@
+/* Start Header ************************************************************************/
+/*!
+\file       Particle_Effects.cpp
+\author     William Yoong
+\par email: william.yoong\@digipen.edu
+\brief
+This file stores the different particle effects for the game
+
+Copyright (C) 2018 DigiPen Institute of Technology.
+Reproduction or disclosure of this file or its contents
+without the prior written consent of DigiPen Institute of
+Technology is prohibited.
+*/
+/* End Header **************************************************************************/
 #include "Particle_Effects.h"
 
 
@@ -5,19 +19,23 @@ namespace
 {
     Particle_System* MFireball_Effects;
     Particle_System* Coin_Effects;
+    Particle_System* ME_Effects;
     Particle_System* Arondight_Effects;
 	Particle_System* KA_Healing_Effects;
+    Particle_System* KA_Sword_Effects;
+    Particle_System* KA_Slash_Effects;
 
     AEGfxVertexList* MFireball_Mesh;
     AEGfxVertexList* Coin_Mesh;
+    AEGfxVertexList* ME_Mesh;
     AEGfxVertexList* Arondight_Mesh;
 	AEGfxVertexList* KA_Healing_Mesh;
+    AEGfxVertexList* KA_Sword_Mesh;
+    AEGfxVertexList* KA_Slash_Mesh;
 
     void Particle_Mesh_Init();
     void Particle_Effects_Init();
 }
-
-
 
 void Effects_Init(void)
 {
@@ -33,10 +51,16 @@ Particle_System* Effects_Get(EFFECTS type)
         break;
     case COIN_PARTICLE:       return Coin_Effects;
         break;
+    case ME_PARTICLE:         return ME_Effects;
+        break;
     case ARONDIGHT_PARTICLE:  return Arondight_Effects;
+        break;
+    case KA_SLASH_PARTICLE:   return KA_Slash_Effects;
         break;
 	case KA_HEALING_PARTICLE: return KA_Healing_Effects;
 		break;
+    case KA_SWORD_PARTICLE:   return KA_Sword_Effects;
+        break;
     default: return nullptr;
         break;
     }
@@ -44,15 +68,21 @@ Particle_System* Effects_Get(EFFECTS type)
 
 void Effects_Cleanup(void)
 {
-    delete MFireball_Effects;
-    delete Coin_Effects;
-	delete Arondight_Effects;
-	delete KA_Healing_Effects;
+    delete   MFireball_Effects;
+    delete   Coin_Effects;
+    delete   ME_Effects;
+	delete   Arondight_Effects;
+	delete   KA_Healing_Effects;
+    delete   KA_Sword_Effects;
+    delete   KA_Slash_Effects;
 
     AEGfxMeshFree(MFireball_Mesh);
     AEGfxMeshFree(Coin_Mesh);
+    AEGfxMeshFree(ME_Mesh);
 	AEGfxMeshFree(Arondight_Mesh);
 	AEGfxMeshFree(KA_Healing_Mesh);
+    AEGfxMeshFree(KA_Sword_Mesh);
+    AEGfxMeshFree(KA_Slash_Mesh);
 }
 
 namespace
@@ -91,6 +121,22 @@ namespace
         Coin_Mesh = AEGfxMeshEnd();
         AE_ASSERT_MESG(Coin_Mesh, "fail to create object!!");
 
+        // mesh for mad enhancement particle
+        AEGfxMeshStart();
+        AEGfxTriAdd(
+            -0.1f, -0.1f, 0xFFFFB7C5, 0.0f, 1.0f,
+            0.1f, -0.1f,  0xFFFFB7C5, 1.0f, 1.0f,
+            -0.1f, 0.1f,  0xFFFFB7C5, 0.0f, 0.0f);
+
+        AEGfxTriAdd(
+            0.1f, -0.1f, 0xFFFFB7C5, 1.0f, 1.0f,
+            0.1f, 0.1f,  0xFFFFB7C5, 1.0f, 0.0f,
+            -0.1f, 0.1f, 0xFFFFB7C5, 0.0f, 0.0f);
+
+
+        ME_Mesh = AEGfxMeshEnd();
+        AE_ASSERT_MESG(ME_Mesh, "fail to create object!!");
+
         // mesh for arondight particle
         AEGfxMeshStart();
         AEGfxTriAdd(
@@ -107,6 +153,22 @@ namespace
 		Arondight_Mesh = AEGfxMeshEnd();
         AE_ASSERT_MESG(Arondight_Mesh, "fail to create object!!");
 
+        // mesh for king arthur slash 
+        AEGfxMeshStart();
+        AEGfxTriAdd(
+            -0.1f, -0.1f, 0xFFFFFF00, 0.0f, 1.0f,
+            0.1f, -0.1f,  0xFFFFFF00, 1.0f, 1.0f,
+            -0.1f, 0.1f,  0xFFFFFF00, 0.0f, 0.0f);
+
+        AEGfxTriAdd(
+            0.1f, -0.1f, 0xFFFFFF00, 1.0f, 1.0f,
+            0.1f, 0.1f,  0xFFFFFF00, 1.0f, 0.0f,
+            -0.1f, 0.1f, 0xFFFFFF00, 0.0f, 0.0f);
+
+
+        KA_Slash_Mesh = AEGfxMeshEnd();
+        AE_ASSERT_MESG(KA_Slash_Mesh, "fail to create object!!");
+
 		// mesh for king arthur healing effect
 		AEGfxMeshStart();
 		AEGfxTriAdd(
@@ -122,7 +184,24 @@ namespace
 
 		KA_Healing_Mesh = AEGfxMeshEnd();
 		AE_ASSERT_MESG(KA_Healing_Mesh, "fail to create object!!");
-    }
+
+        // mesh for king arthur sword in phase 3
+        AEGfxMeshStart();
+        AEGfxTriAdd(
+            -0.1f, -0.1f,0xFF00FF7F, 0.0f, 1.0f,
+            0.1f, -0.1f, 0xFF00FF7F, 1.0f, 1.0f,
+            -0.1f, 0.1f, 0xFF00FF7F, 0.0f, 0.0f);
+
+        AEGfxTriAdd(
+            0.1f, -0.1f, 0xFF00FF7F, 1.0f, 1.0f,
+            0.1f, 0.1f,  0xFF00FF7F, 1.0f, 0.0f,
+            -0.1f, 0.1f, 0xFF00FF7F, 0.0f, 0.0f);
+
+
+        KA_Sword_Mesh = AEGfxMeshEnd();
+        AE_ASSERT_MESG(KA_Sword_Mesh, "fail to create object!!")
+        
+}
 
     void Particle_Effects_Init()
     {
@@ -134,7 +213,10 @@ namespace
         MFireball_Effects->Emitter_.Particles_.reserve(500);
 
         Coin_Effects = new Particle_System(Coin_Mesh, { 0.f, 0.f }, CENTER);
-        MFireball_Effects->Emitter_.Particles_.reserve(150);
+        Coin_Effects->Emitter_.Particles_.reserve(150);
+
+        ME_Effects = new Particle_System(ME_Mesh, {}, BOX);
+        ME_Effects->Emitter_.Particles_.reserve(150);
 
         Arondight_Effects = new Particle_System(Arondight_Mesh, {}, BOX);
         Arondight_Effects->Emitter_.Pos_.Point_Min_Max[0].x = 12.f;
@@ -144,11 +226,14 @@ namespace
         Arondight_Effects->Emitter_.Particles_.reserve(4096);
 
 		KA_Healing_Effects = new Particle_System(KA_Healing_Mesh, {}, BOX);
-		KA_Healing_Effects->Emitter_.Pos_.Point_Min_Max[0].x = -5.f;
-		KA_Healing_Effects->Emitter_.Pos_.Point_Min_Max[0].y = 0.f;
-		KA_Healing_Effects->Emitter_.Pos_.Point_Min_Max[1].x = 5.f;
-		KA_Healing_Effects->Emitter_.Pos_.Point_Min_Max[1].y = 50.f;
 		KA_Healing_Effects->Emitter_.Particles_.reserve(500);
+
+        KA_Sword_Effects = new Particle_System(KA_Sword_Mesh, {}, CENTER);
+        KA_Sword_Effects->Emitter_.Particles_.reserve(2000);
+
+        KA_Slash_Effects = new Particle_System(KA_Slash_Mesh, {}, BOX);
+        KA_Slash_Effects->Emitter_.Particles_.reserve(2048);
+        
     }
 }
 

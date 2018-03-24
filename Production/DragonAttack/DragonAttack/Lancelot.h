@@ -30,6 +30,8 @@ private:
 	void Init_Stab(void);
 	void Init_Slash(void);
 	void Init_Arondight(void);
+    void Init_Particles(void);
+    void Update_Particles(const float dt);
 	void Set_Face_Dir(const Dragon &);
 	void Set_Attk_Dir(void); // set the attack direction of lancelot
 
@@ -40,11 +42,12 @@ private:
 	void Mad_Enhancement(const float dt); // makes lancelot move faster, shorter cooldown
 	void Arondight(Dragon&, const float dt); // phase 2 mechanism, long range attack
 
-	BOSS_PHASE phase = PHASE_2;  // flag for lancelot second phase
+	BOSS_PHASE phase;  // flag for lancelot phase
 
 	bool M_E; // lancelot berserk state
 
 	Particle_System *arondight_particle;
+    Particle_System *me_particle;
 
 public:
 	Lancelot(Sprite*);  // default constructor for lancelot

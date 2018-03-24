@@ -16,6 +16,7 @@ namespace SM
 
 	void       Set_Next(STAGE_LIST);
     STAGE_LIST Get_Next();
+    STAGE_LIST Get_Curr();
 	bool       SubStage_Finished(void);
 	bool       Stage_Finished(void);
 }

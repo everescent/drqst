@@ -21,7 +21,7 @@ Technology is prohibited.
 #include <vector>
 
 #define NUM_OF_SWORD 4
-#define ACCEL        63.f
+#define ACCEL        62.f
 
 namespace {
 
@@ -29,7 +29,7 @@ namespace {
 
 	Boss_Action_State current_action = IDLE; // different states of boss arthur
 
-	const int HEALTH    = 800; // initial hp for king arthur
+	const int HEALTH    = 500; // initial hp for king arthur
 	const int PHASE2_HP = 500; // phase 2 trigger
 	const int PHASE3_HP = 300; // phase 3 trigger
 
@@ -82,7 +82,8 @@ King_Arthur::King_Arthur(Sprite* texture)
 	: Characters(texture, HEALTH,
 		Col_Comp{ START_POINT_X - 30.0f, START_POINT_Y - 30.0f,
 				  START_POINT_X + 30.0f, START_POINT_Y + 30.0f, Rect }),
-	ka_phase{ PHASE_1 }, healing_effect{Effects_Get(KA_HEALING_PARTICLE)}
+	ka_phase{ PHASE_1 }, healing_effect{Effects_Get(KA_HEALING_PARTICLE)},
+    sword_effect{ Effects_Get(KA_SWORD_PARTICLE) }, slash_effect{Effects_Get(KA_SLASH_PARTICLE)}
 {
 	PosX = START_POINT_X;                 // change king arthur coordinates to the location set
 	PosY = START_POINT_Y;                 // change king arthur coordinates to the location set
@@ -95,18 +96,7 @@ King_Arthur::King_Arthur(Sprite* texture)
 	Reset_Idle_Time(1.0f);                // duration king arthur will idle
 	Init_KA_Attacks();	                  // call initializer for king arthur move set
 	Init_MobArray();                      // call initializer for mob array
-
-	// intializing healing particle variables
-	healing_effect->Emitter_.PPS_ = 10;
-	healing_effect->Emitter_.Dist_Min_ = 30.f;
-	healing_effect->Emitter_.Vol_Max = 500;
-	healing_effect->Emitter_.Direction_ = 270.0f;
-	healing_effect->Emitter_.Particle_Rand_.Spread_ = 360;
-	healing_effect->Emitter_.Conserve_ = 0.8f;
-	healing_effect->Emitter_.Size_ = 10.0f;
-	healing_effect->Emitter_.Speed_ = 5.0f;
-	healing_effect->Emitter_.Particle_Rand_.Sp_Rand_ = 3;
-	healing_effect->Emitter_.Lifetime_ = 1.f;
+    Init_Particle();                      // initializes the particle effects for KA
 
 }
 void King_Arthur::Init_KA_Attacks(void)
@@ -181,6 +171,34 @@ void King_Arthur::Init_MobArray(void)
 		// set the blend mode
 		mobs[i]->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 	}
+}
+
+void King_Arthur::Init_Particle(void)
+{
+    // intializing healing particle variables
+    healing_effect->Emitter_.PPS_ = 10;
+    healing_effect->Emitter_.Dist_Min_ = 30.f;
+    healing_effect->Emitter_.Vol_Max = 500;
+    healing_effect->Emitter_.Direction_ = 270.0f;
+    healing_effect->Emitter_.Particle_Rand_.Spread_ = 360;
+    healing_effect->Emitter_.Conserve_ = 0.8f;
+    healing_effect->Emitter_.Size_ = 10.0f;
+    healing_effect->Emitter_.Speed_ = 5.0f;
+    healing_effect->Emitter_.Particle_Rand_.Sp_Rand_ = 3;
+    healing_effect->Emitter_.Lifetime_ = 1.f;
+
+    // initializing the sword particle for phase 3
+    sword_effect->Emitter_.PPS_ = 8;
+    sword_effect->Emitter_.Dist_Min_ = 0.f;
+    sword_effect->Emitter_.Vol_Max = 2000;
+    sword_effect->Emitter_.Direction_ = 90.0f;
+    sword_effect->Emitter_.Conserve_ = 0.8f;
+    sword_effect->Emitter_.Size_ = 10.0f;
+    sword_effect->Emitter_.Speed_ = 3.0f;
+    sword_effect->Emitter_.Lifetime_ = 4.f;
+
+    // initializing the slash particle for slash
+    slash_effect[2] = slash_effect[1] = slash_effect[0];
 }
 
 void King_Arthur::Update(Dragon &d, const float dt)
@@ -261,20 +279,20 @@ void King_Arthur::Update(Dragon &d, const float dt)
 
 	
 	}
-
+   
 	// switch between the boss states
 	switch (current_action)
 	{
-	case IDLE:     this->Idle(d, dt);
+	case IDLE:     Idle(d, dt);
 		break;
 
-	case MOVING:   this->Moving(d,dt);
+	case MOVING:   Moving(d,dt);
 		break;
 
-	case ATTACK:   this->Attack(d, dt);
+	case ATTACK:   Attack(d, dt);
 		break;
 
-	case DEAD:    this->Dead();
+	case DEAD:     Dead();
 		break;
 
 	default: break;
@@ -283,8 +301,7 @@ void King_Arthur::Update(Dragon &d, const float dt)
 	for (unsigned char i = 0; i < arthur.size(); ++i) // update cooldowns on attacks
 			arthur[i].Update(dt);
 
-
-	
+    Update_Particle(dt);
 }
 
 void King_Arthur::Idle(const Dragon& d, const float dt)
@@ -364,7 +381,6 @@ void King_Arthur::Attack(Dragon &d, const float dt)
 		}
 
 	}
-
 	switch (currAttk)
 	{
 	case SINGLE_SLASH: Single_Slash(d, dt);
@@ -381,8 +397,6 @@ void King_Arthur::Attack(Dragon &d, const float dt)
 	}
 
 
-
-	// (this->*ka_attacks[currAttk])(d, dt); call the coresponding attack function
 }
 
 void King_Arthur::King_Arthur_Phase2(void)
@@ -462,7 +476,13 @@ void King_Arthur::Dash_Attack(Dragon &d, const float dt)
 
 void King_Arthur::Single_Slash(Dragon &d, const float dt)
 {
-	arthur[SINGLE_SLASH].Projectile::Update(dt, SLASH_SCALE, false, 0.f); // move the slash
+    slash_effect[0]->Emitter_.Pos_.Min_Max.Point_Max.x = arthur[SINGLE_SLASH].PosX + 10.f;
+    slash_effect[0]->Emitter_.Pos_.Min_Max.Point_Min.x = arthur[SINGLE_SLASH].PosX - 10.f;
+    slash_effect[0]->Emitter_.Pos_.Min_Max.Point_Max.y = arthur[SINGLE_SLASH].PosY + 10.f;
+    slash_effect[0]->Emitter_.Pos_.Min_Max.Point_Min.y = arthur[SINGLE_SLASH].PosY - 10.f;
+    slash_effect[0]->UpdateEmission();
+
+    arthur[SINGLE_SLASH].Projectile::Update(dt, SLASH_SCALE, false, 0.f); // move the slash
 
 	if(! arthur[SINGLE_SLASH].GetCollided()) // check for collision
 	{
@@ -616,13 +636,8 @@ void King_Arthur::Heal_and_Spawn(Dragon &d, const float dt)
 		// heals every 0.5 seconds
 		static float timer = 0.5f;
 		timer <= 0 ? Set_HP(Get_HP() + 10), timer = 0.5f : timer -= dt;
-
-		
+	
 		healing_effect->UpdateEmission();
-		healing_effect->Gravity(0.3f);
-		healing_effect->TransRamp_Exp();
-		healing_effect->Newton({ PosX, PosY }, 0.15f);
-        healing_effect->Update(dt);
 	}
 	else
 	{
@@ -656,7 +671,15 @@ void King_Arthur::Spinning_Blades(Dragon &d, const float dt)
 
 				arthur[SPIN_SWORD + i].ongoing_attack = true;
 				angle = 0;
+
+
+
 			}
+
+            // update the particle effects and emiter position
+            sword_effect->Emitter_.Pos_.Point.x = arthur[SPIN_SWORD + i].PosX;
+            sword_effect->Emitter_.Pos_.Point.y = arthur[SPIN_SWORD + i].PosY;
+            sword_effect->UpdateEmission();
 
 			if (angle != angle_end)
 			{
@@ -693,7 +716,9 @@ void King_Arthur::Spinning_Blades(Dragon &d, const float dt)
 				arthur[SPIN_SWORD + i].SetCollided(true);
 			}
 
-			if (arthur[SPIN_SWORD + i].PosY < -250.f)
+            // checks if the sword reaches the ground, or fly out of screen
+			if (arthur[SPIN_SWORD + i].PosY < -250.f || arthur[SPIN_SWORD + i].PosX < -600 ||
+                arthur[SPIN_SWORD + i].PosX > 600)
 			{
 				arthur[SPIN_SWORD + i].SetActive(false);       // make stab disappaer
 				arthur[SPIN_SWORD + i].ResetDist();            // reset distance traveled back to 0
@@ -736,11 +761,55 @@ void King_Arthur::Render(void)
 			mobs[i]->Render();
 	}
 
-
+    for (auto& i : slash_effect )
+    {
+        i->Render();
+    }
 
 	GameObject::Render(); // render king arthur on screen
-    if (currAttk == HEAL && healing)
-        healing_effect->Render();
+    
+    // rendering the particle systems
+    switch (ka_phase)
+    {
+    case PHASE_2: healing_effect->Render();
+        break;
+    case PHASE_3: sword_effect->Render();
+        break;
+    default: break;
+    }
+}
+
+void King_Arthur::Update_Particle(const float dt)
+{
+    // update particle behaviour
+    for (auto& i : slash_effect)
+    {
+        i->Turbulence(0.4f);
+        i->Drag(0.5f);
+        i->ColorRamp_Life();
+        i->TransRamp_Exp();
+    }
+
+
+    switch (ka_phase)
+    {
+    case PHASE_2:
+        healing_effect->Turbulence(0.4f);
+        sword_effect->ColorRamp_Life();
+        healing_effect->TransRamp_Exp();
+        healing_effect->Newton({ PosX, PosY }, 0.3f);
+        healing_effect->Update(dt);
+        break;
+
+    case PHASE_3:
+        sword_effect->Turbulence(0.4f);
+        sword_effect->Force(0.1f, false, true);
+        sword_effect->ColorRamp_Life();
+        sword_effect->TransRamp_Exp();
+        sword_effect->Update(dt);
+        break;
+    default: break;
+    }
 }
 
 void King_Arthur::Dead(void)

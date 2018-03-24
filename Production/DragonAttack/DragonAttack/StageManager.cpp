@@ -74,6 +74,11 @@ namespace SM
         return s_next;
     }
 
+    STAGE_LIST Get_Curr()
+    {
+        return s_current;
+    }
+
 	bool SubStage_Finished(void)
 	{
 		return s_current != s_next;

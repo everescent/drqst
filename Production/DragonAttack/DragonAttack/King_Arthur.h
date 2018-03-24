@@ -33,8 +33,12 @@ private:
 
 	void King_Arthur_Phase2(void); // changes mechanics for phase 2
 	void King_Arthur_Phase3(const float dt);
+
 	void Init_KA_Attacks(void);    // initialize king arthur attacks
 	void Init_MobArray(void);      // initialize the mob array for phase 2
+    void Init_Particle(void);      // initializes the various particle effects ka will have
+    void Update_Particle(const float dt);
+
 	void Set_Forward_Dir(const Dragon&);
 
 	
@@ -55,6 +59,8 @@ private:
 
 	BOSS_PHASE ka_phase;
 	Particle_System *healing_effect;
+    Particle_System *sword_effect;
+    Particle_System *slash_effect[3];
 	KA_MoveSet currAttk;
     std::vector <Characters*> mobs; //an array to store the mobs to be spawn
 
