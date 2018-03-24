@@ -105,7 +105,7 @@ public:
     SetActive(true);
     //Initialize player start location
     PosX = Start_Pos_X;
-    PosY = Start_Pos_X;
+    PosY = Start_Pos_Y;
     /*Uncomment this for custom position
     //Update position of player
     Transform_.SetTranslate(PosX, PosY);

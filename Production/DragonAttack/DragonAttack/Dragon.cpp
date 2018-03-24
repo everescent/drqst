@@ -154,8 +154,12 @@ void Dragon::Update(Dragon& dummy, const float dt)
   //Update position of player
   Transform_.SetTranslate(PosX, PosY);
   Transform_.Concat();
-  Collision_.Update_Col_Pos(PosX - Dragon_Scale * 0.5f, PosY - Dragon_Scale, 
-                            PosX + Dragon_Scale * 0.5f, PosY + Dragon_Scale);
+  if(Facing < 0.0f)
+    Collision_.Update_Col_Pos(PosX - Dragon_Scale * 0.6f, PosY - Dragon_Scale,
+                              PosX + Dragon_Scale, PosY + Dragon_Scale);
+  else
+    Collision_.Update_Col_Pos(PosX - Dragon_Scale, PosY - Dragon_Scale,
+                              PosX + Dragon_Scale * 0.6f, PosY + Dragon_Scale);
   ApplyPowerUP();
   HitInvul(dt);
   //Check if attack has been made
