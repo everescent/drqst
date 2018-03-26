@@ -21,16 +21,17 @@ Technology is prohibited.
 
 struct Range {
   //Constructs Range with start and end range for row and column
-  Range(const float &stX, const float &edX, const float &stY, const float &edY)
-  :startRow{ stY }, endRow{ edY }, startCol{ stX }, endCol{ edX }
+  Range(const float stX, const float edX, const float stY, const float edY)
+  :startRow{ stY }, endRow{ edY }, startCol{ stX }, endCol{ edX }, 
+   Rowcurr{ startRow }, Colcurr{ startCol }, Complete{ false }
   {}
-  const float startRow{ 0.0f     }; //Animation start frame
-  const float endRow  { 0.0f     }; //Animation end frame
-  const float startCol{ 0.0f     }; //Animation start frame
-  const float endCol  { 0.0f     }; //Animation end frame
-  float Rowcurr       { startRow }; //Current row
-  float Colcurr       { startCol }; //Current colum
-  bool  Complete      { false    }; //Checks if animation cycle is complete
+  const float startRow; //Animation start frame
+  const float endRow;   //Animation end frame
+  const float startCol; //Animation start frame
+  const float endCol;   //Animation end frame
+  float       Rowcurr;  //Current row
+  float       Colcurr;  //Current colum
+  bool        Complete; //Checks if animation cycle is complete
 };
 
 class Animation
@@ -38,8 +39,8 @@ class Animation
 public:
   //Initializes the Animation module
   //Takes in the required number of states, and a function to initialize it
-  Animation(unsigned stateNum, const float&width, const float &height, 
-            const float &row, const float &col,
+  Animation(unsigned stateNum, 
+            const float row, const float col,
             //Const function to take in lambda functions
             const std::function <void (std::vector <Range>&)>& Init);
   //Copy assignment
@@ -57,8 +58,6 @@ public:
   ~Animation();
 
 private:
-  float       Tex_Width;  //Texture width
-  float       Tex_Height; //Texture height
   float       Tex_Row;    //Number of rows
   float       Tex_Col;    //Number of columns
   const float offsetX;    //Value to increment column

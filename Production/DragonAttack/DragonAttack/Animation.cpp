@@ -15,11 +15,11 @@ Technology is prohibited.
 
 #include "Animation.h"
 
-Animation::Animation(unsigned stateNum, const float &width, const float &height, 
-                     const float &row, const float &col,
+Animation::Animation(unsigned stateNum, 
+                     const float row, const float col,
                      const std::function <void(std::vector <Range>&)>& Init)
-  :Tex_Width{ width }, Tex_Height{ height }, Tex_Row{ row }, Tex_Col{ col }, 
-  offsetX{ 1.0f / Tex_Col }, offsetY{ 1.0f / Tex_Row }, State{ 0 }, FrameCount{ 1 },
+  :Tex_Row{ row }, Tex_Col{ col }, 
+   offsetX{ 1.0f / Tex_Col }, offsetY{ 1.0f / Tex_Row }, State{ 0 }, FrameCount{ 1 },
    Animation_State {}
 {
   Animation_State.reserve(stateNum);
@@ -27,8 +27,7 @@ Animation::Animation(unsigned stateNum, const float &width, const float &height,
 }
 
 Animation::Animation(const Animation& rhs)
-  :Tex_Width{ rhs.Tex_Width }, Tex_Height{ rhs.Tex_Height }, 
-   Tex_Row{ rhs.Tex_Row }, Tex_Col{ rhs.Tex_Col },
+  :Tex_Row{ rhs.Tex_Row }, Tex_Col{ rhs.Tex_Col },
    offsetX{ 1.0f / Tex_Col }, offsetY{ 1.0f / Tex_Row }, State{ rhs.State }, 
    FrameCount{ rhs.FrameCount },
    Animation_State{ rhs.Animation_State }
@@ -52,13 +51,27 @@ void Animation::Update(Sprite &t_Sprite)
   if (FrameCount != 12)
   {
     //Check if texture state has reached the end column
-    if (Animation_State[State].Colcurr >= Animation_State[State].endCol)
+    if (Animation_State[State].Colcurr > Animation_State[State].endCol)
     {
       //Reset startX position
       Animation_State[State].Colcurr = Animation_State[State].startCol;
       //Increment the row
       Animation_State[State].Rowcurr += offsetY;
       //If both row and column reached the end
+      if (Animation_State[State].Rowcurr >= Animation_State[State].endRow)
+        //Reset both, column reset should have been done above
+        Animation_State[State].Rowcurr = Animation_State[State].startRow;
+    }
+    else if (Animation_State[State].Colcurr == Animation_State[State].endCol)
+    {
+      if (Animation_State[State].Rowcurr != Animation_State[State].endRow &&
+          Animation_State[State].Colcurr >= Animation_State[State].startCol + 1.0f)
+      {
+        //Reset startX position
+        Animation_State[State].Colcurr = Animation_State[State].startCol;
+        //Increment the row
+        Animation_State[State].Rowcurr += offsetY;
+      }
       if (Animation_State[State].Rowcurr >= Animation_State[State].endRow)
         //Reset both, column reset should have been done above
         Animation_State[State].Rowcurr = Animation_State[State].startRow;

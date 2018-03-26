@@ -18,6 +18,7 @@ Technology is prohibited.
 #include "Projectile.h"
 #include "Characters.h"
 #include "Collision.h"
+#include "Animation.h"
 #include "PickUp.h"
 #include "Audio_Engine.h"
 #include <vector>
@@ -42,6 +43,15 @@ const float Start_Pos_Y     { -80.0f  }; //Player starting position Y
 const AEVec2 Player_Speed   { 480.0f, 480.0f * Jump_Mult };
 const float Cam_Offset_X    { 320.0f  }; //Camera offset X
 const float Cam_Offset_Y    { 120.0f  }; //Camera offset Y
+
+namespace Dragon_ANIM{
+  typedef enum Dragon_Animation_States {
+    HIT,  //0
+    IDLE, //1
+    JUMP, //2
+    WALK  //3
+  }DAS;
+}
 
 class Dragon : public Characters{
 
@@ -100,7 +110,13 @@ public:
     SFX_{ 3, [](std::vector<std::string> &playlist) ->void {
       playlist.push_back(".//Audio/Dragon_Hit.mp3");
       playlist.push_back(".//Audio/Fireball_Hit.mp3"); 
-      playlist.push_back(".//Audio/Fireball.mp3");     } }
+      playlist.push_back(".//Audio/Fireball.mp3");     } }, 
+    Anim_{ Dragon_ANIM::WALK + 1, 5, 4, [](std::vector <Range>& Init) -> void {
+      Init.push_back(Range{ 0.0f, 0.0f, 0.0f, 0.2f });
+      Init.push_back(Range{ 0.25f, 0.25f, 0.2f, 0.4f });
+      Init.push_back(Range{ 0.50f, 0.50f, 0.4f, 0.6f });
+      Init.push_back(Range{ 0.75f, 0.75f, 0.6f, 0.8f });
+      } }
   {
     SetActive(true);
     //Initialize player start location
@@ -173,6 +189,7 @@ private:
   std::vector<Projectile> Fireball;  //Array of Fireball projectile
   Projectile              Mfireball; //Mega Fireball projectile
   Audio_Engine            SFX_;      //Dragon Sounds
+  Animation               Anim_;     //For Dragon animation
   //Private Functions START//////////////////////////////////////////////////////////////
   void ApplyPowerUP();
   //Makes dragon invulnerable for a short time after getting hit

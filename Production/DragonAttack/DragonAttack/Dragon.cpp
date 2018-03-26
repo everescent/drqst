@@ -89,11 +89,13 @@ void Dragon::Input()
   if (AEInputCheckCurr(AEVK_D))
   {
     Dir.R = true;
+    Anim_.SetState(Dragon_ANIM::WALK);
   }
 
   if (AEInputCheckCurr(AEVK_A))
   {
     Dir.L = true;
+    Anim_.SetState(Dragon_ANIM::WALK);
   }
 
   if (AEInputCheckTriggered(AEVK_RETURN))
@@ -119,9 +121,10 @@ void Dragon::Input()
     {
       Dir.UP = true;
       TouchBottom = false;
+      Anim_.SetState(Dragon_ANIM::JUMP);
     }
   }
-
+  Anim_.SetState(Dragon_ANIM::IDLE);
 }
 
 void Dragon::Update(Dragon& dummy, const float dt)
@@ -219,7 +222,7 @@ void Dragon::Update(Dragon& dummy, const float dt)
       Mfireball.SetActive(false);
     }
   }
-
+  Anim_.Update(*Sprite_);
   //Reset direction and attack
   Attack = false;
   MAttack = false;
