@@ -112,7 +112,7 @@ void Lancelot::Init_Particles(void)
     me_particle->Emitter_.Lifetime_ = 2.f;
     
     // arondight particle variables
-    arondight_particle->Emitter_.PPS_ = 10;
+    arondight_particle->Emitter_.PPS_ = 15;
     arondight_particle->Emitter_.Vol_Max = 4096;
     arondight_particle->Emitter_.Direction_ = 90.0f;
     arondight_particle->Emitter_.Particle_Rand_.Spread_ = 360;
@@ -120,9 +120,8 @@ void Lancelot::Init_Particles(void)
     arondight_particle->Emitter_.Size_ = 10.0f;
     arondight_particle->Emitter_.Speed_ = 4.0f;
     arondight_particle->Emitter_.Particle_Rand_.Sp_Rand_ = 3;
-    arondight_particle->Emitter_.Lifetime_ = 3.f;
-    arondight_particle->Emitter_.Particle_Rand_.Life_Rand_ = 1;
-    arondight_particle->Emitter_.Pos_.Min_Max.Angle_ = PI / 2.f;
+    arondight_particle->Emitter_.Lifetime_ = 1.f;
+
 }
 
 void Lancelot::Idle(const Dragon& d, const float dt)
@@ -328,7 +327,12 @@ void Lancelot::Attack(Dragon &d, const float dt)
 			lancelot[ARONDIGHT].Transform_.SetTranslate(lancelot[ARONDIGHT].PosX, lancelot[ARONDIGHT].PosY);
 			lancelot[ARONDIGHT].Transform_.Concat();
 
-			arondight_particle->Emitter_.Pos_.Point_Min_Max[1].y = 300.f;
+            // reset emiter position and angle
+            arondight_particle->Emitter_.Pos_.Point_Min_Max[0].x = 12.f;
+            arondight_particle->Emitter_.Pos_.Point_Min_Max[0].y = -15.f;
+            arondight_particle->Emitter_.Pos_.Point_Min_Max[1].x = 18.f;
+            arondight_particle->Emitter_.Pos_.Point_Min_Max[1].y = 300.f;
+            arondight_particle->Emitter_.Pos_.Min_Max.Angle_ = PI * 0.5f;
 
 			// update the collision box of lancelot
 			Collision_.Update_Col_Pos(PosX - LANCELOT_SCALE, PosY - LANCELOT_SCALE,
@@ -541,20 +545,32 @@ void Lancelot::Arondight(Dragon& d, const float dt)
 
 		// reflect the texture
 		lancelot[ARONDIGHT].Transform_.SetScale(-ARONDIGHT_SCALE.x, ARONDIGHT_SCALE.y); 
+
+        // moving the emiter box to the right
+        arondight_particle->Emitter_.Pos_.Point_Min_Max[0].x += 10.f;
+        arondight_particle->Emitter_.Pos_.Point_Min_Max[1].x += 10.f;
 	}
 	else
 	{
 		radians = AEDegToRad(angle_offset); // rotate the sword by 3 degrees
 		side = INSIDE;					    // check the inside half plane
+
+        // moving the emitter box to the left
+        arondight_particle->Emitter_.Pos_.Point_Min_Max[0].x -= 10.f;
+        arondight_particle->Emitter_.Pos_.Point_Min_Max[1].x -= 10.f;
 	}
 
-	//arondight_particle->Emitter_.Pos_.Min_Max.Angle_ = radians;
+    // moving the y coordinates of the emiter box, updating the angle as well
+    arondight_particle->Emitter_.Pos_.Min_Max.Angle_ +=  radians;
+    arondight_particle->Emitter_.Pos_.Point_Min_Max[0].y -= 15.f;
+    arondight_particle->Emitter_.Pos_.Point_Min_Max[1].y -= 15.f;
 
 	s = sin(radians);		  
 	c = cos(radians);		  
 
 	new_vector.x = new_vector.x * c - new_vector.y * s + PosX; // collision new point after rotation
 	new_vector.y = tempX * s + new_vector.y * c + PosY;		   // collision new point after rotation
+
 
 
 	lancelot[ARONDIGHT].PosX = new_vector.x * 0.5f + PosX * 0.5f; // new position of sword
@@ -591,7 +607,6 @@ void Lancelot::Arondight(Dragon& d, const float dt)
 	
 	}
 
-	//arondight_particle->Newton(new_vector, 15.f);
 }
 
 void Lancelot::Set_Face_Dir(const Dragon& d)

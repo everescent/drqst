@@ -42,6 +42,7 @@ namespace Stage3_3
 
         last_boss = dynamic_cast<King_Arthur*>(Create_Boss_AI(KING_ARTHUR));
         player = dynamic_cast<Dragon*>(Create_Basic_AI(DRAGON));
+        player->PosY = last_boss->PosY;
         player->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 
 		audio = new Audio_Engine{ 1, [](std::vector <std::string> &playlist)->void {playlist.push_back(".//Audio/KingArthur_BGM.mp3"); } };
@@ -113,26 +114,24 @@ namespace Stage3_3
             elem.Update(*player, dt);
         }
 
-        if (curr_phase & PHASE_1 || curr_phase & PHASE_2)
+        for (Platform& elem : platforms)
         {
-            for (Platform& elem : platforms)
+            switch (curr_phase)
             {
-                switch (curr_phase)
-                {
-                case PHASE_1:
+            case PHASE_1: case PHASE_3:
 
-                    if (elem.Collision_.Get_MinPoint().y == -200)
-                        elem.Update(*player, dt);
-                    break;
-                case PHASE_2:
-                    if(elem.Collision_.Get_MinPoint().y != -200)
-                        elem.Update(*player, dt);
-                    break;
-                default: break;
-                }
+                if (elem.Collision_.Get_MinPoint().y == -200)
+                    elem.Update(*player, dt);
+                break;
+            case PHASE_2:
+                if(elem.Collision_.Get_MinPoint().y != -200)
+                    elem.Update(*player, dt);
+                break;
+            default: break;
             }
-
         }
+
+        
 
         player->Update(*player, dt);
         ui->UI_Update(player);
@@ -150,26 +149,25 @@ namespace Stage3_3
             elem.Render();
         }
 
-        if (curr_phase & PHASE_1 || curr_phase & PHASE_2)
+
+        for (Platform& elem : platforms)
         {
-            for (Platform& elem : platforms)
+            switch (curr_phase)
             {
-                switch (curr_phase)
-                {
-                case PHASE_1:
+            case PHASE_1: case PHASE_3:
 
-                    if (elem.Collision_.Get_MinPoint().y == -200)
-                        elem.Render();
-                    break;
-                case PHASE_2:
-                    if (elem.Collision_.Get_MinPoint().y != -200)
-                        elem.Render();
-                    break;
-                default: break;
-                }
+                if (elem.Collision_.Get_MinPoint().y == -200)
+                    elem.Render();
+                break;
+            case PHASE_2:
+                if (elem.Collision_.Get_MinPoint().y != -200)
+                    elem.Render();
+                break;
+            default: break;
             }
-
         }
+
+        
 
 
         last_boss->Render();
