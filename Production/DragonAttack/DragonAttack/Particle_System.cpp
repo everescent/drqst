@@ -206,12 +206,13 @@ void Particle_System::Update(const float dt)
 }
 
 //Warm up the system
-void Particle_System::WarmUp(const float dt, const float time)
+void Particle_System::WarmUp(const float dt, const float time, const function<void()> &Fields)
 {
   float tmp = time;
   while (tmp > 0.0f)
   {
     UpdateEmission();
+    Fields();
     Update(dt);
     tmp -= dt;
   }

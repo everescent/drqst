@@ -131,7 +131,7 @@ void UpdateEmission();
 //Updates the whole system
 void Update(const float dt);
 //Warm up time
-void WarmUp(const float dt, const float time);
+void WarmUp(const float dt, const float time, const function<void()> &Fields);
 //Renders the particles
 void Render();
 //Emitter
