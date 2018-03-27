@@ -33,7 +33,12 @@ Archer::Archer(Sprite *p_Sprite, Sprite *Arrow_Sprite, const float posX, const f
           posX + Arrow_Scale, posY + Arrow_Scale, Rect } }, 
   //Initialize other members
   Archer_State{ &Archer::Idle }, A_Curr{ IDLE }, A_Next{ IDLE },
-  Dragon_Seen{ false }, Attack_{ false }, Distance{ 0.0f }, Arrow_CD{ 0.0f }
+  Dragon_Seen{ false }, Attack_{ false }, Distance{ 0.0f }, Arrow_CD{ 0.0f },
+  Anim_{ WALK_ANIM + 1, 3.0f, 5.0f, [](std::vector <Range>& Init)->void {
+  Init.push_back(Range{ 0.0f, 1.0f, 0.00f, 0.00f }); //Hit
+  Init.push_back(Range{ 0.0f, 1.0f, 0.33f, 0.33f }); //Idle
+  Init.push_back(Range{ 0.0f, 1.0f, 0.66f, 0.66f }); //Walk
+  } }
 {
   SetActive(true);
   GameObject::Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
@@ -79,6 +84,7 @@ void Archer::Colision_Check(Dragon &player, const float dt)
       if (Collision_.Dy_Rect_Rect(player.GetFireball()[i].Collision_, GetVelocity(),
           player.GetFireball()[i].GetVelocity(), dt))
       {
+        Anim_.SetState(HIT_ANIM);
         //Decrease HP by player's damage
         Decrease_HP(player.GetDamage());
         //Add mega fireball charge
@@ -89,18 +95,19 @@ void Archer::Colision_Check(Dragon &player, const float dt)
         player.GetFireball()[i].Projectile::ResetDist();
         player.GetFireball()[i].SetActive(false);
       }
-  if(player.GetMfireball().IsActive())
-      if (Collision_.Dy_Rect_Rect(player.GetMfireball().Collision_, GetVelocity(),
-          player.GetMfireball().GetVelocity(), dt))
-      {
-          //Decrease HP by player's damage
-          Decrease_HP(player.GetMDamage());
-          player.PlayImpact();
-          Audio_.Play(HIT);
-          //Reset the distance of the fireball and set false
-          player.GetMfireball().Projectile::ResetDist();
-          player.GetMfireball().SetActive(false);
-      }
+  //if(player.GetMfireball().IsActive())
+  //  if (Collision_.Dy_Rect_Rect(player.GetMfireball().Collision_, GetVelocity(),
+  //      player.GetMfireball().GetVelocity(), dt))
+  //  {
+  //    Anim_.SetState(HIT_ANIM);
+  //    //Decrease HP by player's damage
+  //    Decrease_HP(player.GetMDamage());
+  //    player.PlayImpact();
+  //    Audio_.Play(HIT);
+  //    //Reset the distance of the fireball and set false
+  //    player.GetMfireball().Projectile::ResetDist();
+  //    player.GetMfireball().SetActive(false);
+  //  }
   //Arrow collision check
   if (Attack_)
   {
@@ -122,12 +129,14 @@ void Archer::Idle(Dragon &/*player*/, const float /*dt*/)
 {
   //Do some idle animation
   Distance = 0.0f;
+  Anim_.SetState(IDLE_ANIM);
 }
 
 void Archer::Move(Dragon &player, const float dt)
 {
   //Move the Archer away from player if too near
   //Archer can only move for a max distance of 100m or something
+  Anim_.SetState(WALK_ANIM);
   float Displacement = player.PosX - PosX;
   if (Displacement < 0.0f)
   {
@@ -248,6 +257,7 @@ void Archer::Update(Dragon& player, const float dt)
     Transform_.SetTranslate(PosX, PosY);
     Transform_.Concat();
   }
+  Anim_.Update(*Sprite_);
 }
 
 //Renders Archer and attacks

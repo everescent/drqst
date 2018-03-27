@@ -112,7 +112,7 @@ public:
       playlist.push_back(".//Audio/Fireball_Hit.mp3"); 
       playlist.push_back(".//Audio/Fireball.mp3");     } }, 
     Anim_{ Dragon_ANIM::WALK + 1, 4, 5, [](std::vector <Range>& Init) -> void {
-      Init.push_back(Range{ 0.0f, 1.0f, 0.0f, 0.0f }); //Hit
+      Init.push_back(Range{ 0.0f, 1.0f, 0.00f, 0.00f }); //Hit
       Init.push_back(Range{ 0.0f, 1.0f, 0.25f, 0.25f }); //Idle
       Init.push_back(Range{ 0.0f, 1.0f, 0.50f, 0.50f }); //Jump
       Init.push_back(Range{ 0.0f, 1.0f, 0.75f, 0.75f }); //Walk

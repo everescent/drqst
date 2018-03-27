@@ -52,6 +52,7 @@ AEGfxVertexList* CreateRectangle(float width, float height, float scalex, float 
 //This function returns a sprite object with a square mesh
 Sprite S_CreateSquare(float size, const char* texFile, float scaleU, float scaleV, unsigned int color)
 {
+  color = 0xFFFFFF;
   if (texFile)
   {
     Sprite tmp_Square(CreateSquare(size, scaleU, scaleV, color), texFile, size, size);

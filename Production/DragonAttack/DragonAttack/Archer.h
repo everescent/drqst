@@ -17,6 +17,7 @@ Technology is prohibited.
 #include "Characters.h"
 #include "Projectile.h"
 #include "Boss_States.h"
+#include "Animation.h"
 #include "Dragon.h"
 #include <cmath>
 
@@ -58,11 +59,16 @@ private:
   float Arrow_CD;             //Arrow cooldown timer
   float Angle;                //Arrow rotation
   static Audio_Engine Audio_; //Audio SFX
+  Animation Anim_;            //Animation for Archer
   enum AudioState {
     HIT,
     SHOOT
   };
-
+  enum Anim_State {
+    HIT_ANIM,
+    IDLE_ANIM,
+    WALK_ANIM
+  };
 //Attack Functions START///////////////////////////////////////////////////////////////
   void Attack_Update(Dragon &player, const float dt);  //Arrow rain update
   void Colision_Check(Dragon &player, const float dt); //Checks if attacks hit
