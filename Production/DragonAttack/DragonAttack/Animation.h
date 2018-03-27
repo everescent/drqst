@@ -63,7 +63,7 @@ private:
   const float offsetX;    //Value to increment column
   const float offsetY;    //Value to increment row
   int         State;      //Current state to update
-  float         FrameCount; //Counts the number of frames so far, starts from frame 1
+  float       FrameCount; //Counts the number of frames so far, starts from frame 1
   //This holds different ranges to suit each sprite
   std::vector <Range> Animation_State;
 };
