@@ -210,14 +210,14 @@ namespace
 		// mesh for credits screen
 		AEGfxMeshStart();
 		AEGfxTriAdd(
-			-0.1f, -0.1f, 0xFFFFFFF, 0.0f, 1.0f,
-			0.1f, -0.1f,  0xFFFFFFF, 1.0f, 1.0f,
-			-0.1f, 0.1f,  0xFFFFFFF, 0.0f, 0.0f);
+			-0.1f, -0.1f, 0xFFFFFFFF, 0.0f, 1.0f,
+			0.1f, -0.1f,  0xFFFFFFFF, 1.0f, 1.0f,
+			-0.1f, 0.1f,  0xFFFFFFFF, 0.0f, 0.0f);
 
 		AEGfxTriAdd(
-			0.1f, -0.1f, 0xFFFFFFF, 1.0f, 1.0f,
-			0.1f, 0.1f,  0xFFFFFFF, 1.0f, 0.0f,
-			-0.1f, 0.1f, 0xFFFFFFF, 0.0f, 0.0f);
+			0.1f, -0.1f, 0xFFFFFFFF, 1.0f, 1.0f,
+			0.1f, 0.1f,  0xFFFFFFFF, 1.0f, 0.0f,
+			-0.1f, 0.1f, 0xFFFFFFFF, 0.0f, 0.0f);
 
 
 		Credit_Mesh = AEGfxMeshEnd();

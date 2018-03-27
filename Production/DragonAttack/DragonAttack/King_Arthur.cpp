@@ -29,7 +29,7 @@ namespace {
 
 	Boss_Action_State current_action = IDLE; // different states of boss arthur
 
-	const int HEALTH    = 500; // initial hp for king arthur
+	const int HEALTH    = 800; // initial hp for king arthur
 	const int PHASE2_HP = 500; // phase 2 trigger
 	const int PHASE3_HP = 300; // phase 3 trigger
 
@@ -539,6 +539,16 @@ void King_Arthur::Triple_Slash(Dragon &d, const float dt)
 		}
 
 		arthur[i].Projectile::Update(dt, SLASH_SCALE, false, 0.f); // update the pos of the slash
+
+        // create particles if slash is active
+        if (arthur[i].IsActive())
+        {
+            slash_effect[i - 1]->Emitter_.Pos_.Min_Max.Point_Max.x = arthur[i].PosX + 8.f;
+            slash_effect[i - 1]->Emitter_.Pos_.Min_Max.Point_Min.x = arthur[i].PosX - 8.f;
+            slash_effect[i - 1]->Emitter_.Pos_.Min_Max.Point_Max.y = arthur[i].PosY + 35.f;
+            slash_effect[i - 1]->Emitter_.Pos_.Min_Max.Point_Min.y = arthur[i].PosY - 35.f;
+            slash_effect[i - 1]->UpdateEmission();
+        }
 		
 		// checks if it has collided with the player
 		if (!arthur[i].GetCollided())

@@ -26,6 +26,7 @@ Technology is prohibited.
 #include "Stage2_2.h"
 //#include "Stage2_3.h"
 #include "Particle_Effects.h"
+#include "Credits.h"
 #include "test_level_import.h"
 
 namespace GSM
