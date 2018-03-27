@@ -18,16 +18,16 @@ Technology is prohibited.
 #include "Sprite.h"
 
 //This function creates a custom square
-AEGfxVertexList* CreateSquare(float size, float scale, unsigned int color)
+AEGfxVertexList* CreateSquare(float size, float scaleU, float scaleV, unsigned int color)
 {
   AEGfxMeshStart();
   AEGfxTriAdd(
-    -size, -size, color, 0.0f, scale,
-    size, -size, color, scale, scale,
+    -size, -size, color, 0.0f, scaleV,
+    size, -size, color, scaleU, scaleV,
     -size, size, color, 0.0f, 0.0f);
   AEGfxTriAdd(
-    size, -size, color, scale, scale,
-    size, size, color, scale, 0.0f,
+    size, -size, color, scaleU, scaleV,
+    size, size, color, scaleU, 0.0f,
     -size, size, color, 0.0f, 0.0f);
 
   return AEGfxMeshEnd();
@@ -50,16 +50,16 @@ AEGfxVertexList* CreateRectangle(float width, float height, float scalex, float 
 }
 
 //This function returns a sprite object with a square mesh
-Sprite S_CreateSquare(float size, const char* texFile, float scale, unsigned int color)
+Sprite S_CreateSquare(float size, const char* texFile, float scaleU, float scaleV, unsigned int color)
 {
   if (texFile)
   {
-    Sprite tmp_Square(CreateSquare(size, scale, color), texFile, size, size);
+    Sprite tmp_Square(CreateSquare(size, scaleU, scaleV, color), texFile, size, size);
     return tmp_Square;
   }
   else
   {
-    Sprite tmp_Square(CreateSquare(size, scale, color), size, size);
+    Sprite tmp_Square(CreateSquare(size, scaleU, scaleV, color), size, size);
     return tmp_Square;
   }
 }

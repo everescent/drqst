@@ -89,13 +89,18 @@ void Dragon::Input()
   if (AEInputCheckCurr(AEVK_D))
   {
     Dir.R = true;
-    Anim_.SetState(Dragon_ANIM::WALK);
+    if(Anim_.GetComplete(Dragon_ANIM::HIT))
+      Anim_.SetState(Dragon_ANIM::WALK);
   }
-
-  if (AEInputCheckCurr(AEVK_A))
+  else if (AEInputCheckCurr(AEVK_A))
   {
     Dir.L = true;
-    Anim_.SetState(Dragon_ANIM::WALK);
+    if (Anim_.GetComplete(Dragon_ANIM::HIT))
+      Anim_.SetState(Dragon_ANIM::WALK);
+  }
+  else
+  {
+    Anim_.SetState(Dragon_ANIM::IDLE);
   }
 
   if (AEInputCheckTriggered(AEVK_RETURN))
@@ -121,10 +126,13 @@ void Dragon::Input()
     {
       Dir.UP = true;
       TouchBottom = false;
-      Anim_.SetState(Dragon_ANIM::JUMP);
+      if (Anim_.GetComplete(Dragon_ANIM::HIT))
+        Anim_.SetState(Dragon_ANIM::JUMP);
     }
   }
-  Anim_.SetState(Dragon_ANIM::IDLE);
+  if(!Dir.L && !Dir.R && !Dir.UP && Anim_.GetComplete(Dragon_ANIM::HIT) && 
+      Anim_.GetComplete(Dragon_ANIM::JUMP))
+    Anim_.SetState(Dragon_ANIM::IDLE);
 }
 
 void Dragon::Update(Dragon& dummy, const float dt)
@@ -239,9 +247,9 @@ void Dragon::Update(Dragon& dummy, const float dt)
     {
       Falling = false;
       TouchBottom = false;
+      Anim_.SetState(Dragon_ANIM::IDLE);
     }
   }
-
 }
 
 void Dragon::Render()
