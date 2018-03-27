@@ -198,6 +198,14 @@ void King_Arthur::Init_Particle(void)
     sword_effect->Emitter_.Lifetime_ = 4.f;
 
     // initializing the slash particle for slash
+	slash_effect[0]->Emitter_.PPS_ = 10;
+	slash_effect[0]->Emitter_.Vol_Max = 1000;
+	slash_effect[0]->Emitter_.Direction_ = 90.0f;
+	slash_effect[0]->Emitter_.Conserve_ = 0.8f;
+	slash_effect[0]->Emitter_.Size_ = 10.0f;
+	slash_effect[0]->Emitter_.Speed_ = 3.0f;
+	slash_effect[0]->Emitter_.Lifetime_ = 2.f;
+
     slash_effect[2] = slash_effect[1] = slash_effect[0];
 }
 
@@ -476,10 +484,10 @@ void King_Arthur::Dash_Attack(Dragon &d, const float dt)
 
 void King_Arthur::Single_Slash(Dragon &d, const float dt)
 {
-    slash_effect[0]->Emitter_.Pos_.Min_Max.Point_Max.x = arthur[SINGLE_SLASH].PosX + 10.f;
-    slash_effect[0]->Emitter_.Pos_.Min_Max.Point_Min.x = arthur[SINGLE_SLASH].PosX - 10.f;
-    slash_effect[0]->Emitter_.Pos_.Min_Max.Point_Max.y = arthur[SINGLE_SLASH].PosY + 10.f;
-    slash_effect[0]->Emitter_.Pos_.Min_Max.Point_Min.y = arthur[SINGLE_SLASH].PosY - 10.f;
+    slash_effect[0]->Emitter_.Pos_.Min_Max.Point_Max.x = arthur[SINGLE_SLASH].PosX + 8.f;
+    slash_effect[0]->Emitter_.Pos_.Min_Max.Point_Min.x = arthur[SINGLE_SLASH].PosX - 8.f;
+    slash_effect[0]->Emitter_.Pos_.Min_Max.Point_Max.y = arthur[SINGLE_SLASH].PosY + 35.f;
+    slash_effect[0]->Emitter_.Pos_.Min_Max.Point_Min.y = arthur[SINGLE_SLASH].PosY - 35.f;
     slash_effect[0]->UpdateEmission();
 
     arthur[SINGLE_SLASH].Projectile::Update(dt, SLASH_SCALE, false, 0.f); // move the slash
@@ -788,6 +796,7 @@ void King_Arthur::Update_Particle(const float dt)
         i->Drag(0.5f);
         i->ColorRamp_Life();
         i->TransRamp_Exp();
+		i->Update(dt);
     }
 
 

@@ -24,6 +24,7 @@ namespace
 	Particle_System* KA_Healing_Effects;
     Particle_System* KA_Sword_Effects;
     Particle_System* KA_Slash_Effects;
+	Particle_System* Credit_Effects;
 
     AEGfxVertexList* MFireball_Mesh;
     AEGfxVertexList* Coin_Mesh;
@@ -32,6 +33,7 @@ namespace
 	AEGfxVertexList* KA_Healing_Mesh;
     AEGfxVertexList* KA_Sword_Mesh;
     AEGfxVertexList* KA_Slash_Mesh;
+	AEGfxVertexList* Credit_Mesh;
 
     void Particle_Mesh_Init();
     void Particle_Effects_Init();
@@ -61,6 +63,8 @@ Particle_System* Effects_Get(EFFECTS type)
 		break;
     case KA_SWORD_PARTICLE:   return KA_Sword_Effects;
         break;
+	case CREDIT_PARTICLE:     return Credit_Effects;
+		break;
     default: return nullptr;
         break;
     }
@@ -75,6 +79,7 @@ void Effects_Cleanup(void)
 	delete   KA_Healing_Effects;
     delete   KA_Sword_Effects;
     delete   KA_Slash_Effects;
+	delete   Credit_Effects;
 
     AEGfxMeshFree(MFireball_Mesh);
     AEGfxMeshFree(Coin_Mesh);
@@ -83,6 +88,7 @@ void Effects_Cleanup(void)
 	AEGfxMeshFree(KA_Healing_Mesh);
     AEGfxMeshFree(KA_Sword_Mesh);
     AEGfxMeshFree(KA_Slash_Mesh);
+	AEGfxMeshFree(Credit_Mesh);
 }
 
 namespace
@@ -200,6 +206,22 @@ namespace
 
         KA_Sword_Mesh = AEGfxMeshEnd();
         AE_ASSERT_MESG(KA_Sword_Mesh, "fail to create object!!")
+
+		// mesh for credits screen
+		AEGfxMeshStart();
+		AEGfxTriAdd(
+			-0.1f, -0.1f, 0xFFFFFFF, 0.0f, 1.0f,
+			0.1f, -0.1f,  0xFFFFFFF, 1.0f, 1.0f,
+			-0.1f, 0.1f,  0xFFFFFFF, 0.0f, 0.0f);
+
+		AEGfxTriAdd(
+			0.1f, -0.1f, 0xFFFFFFF, 1.0f, 1.0f,
+			0.1f, 0.1f,  0xFFFFFFF, 1.0f, 0.0f,
+			-0.1f, 0.1f, 0xFFFFFFF, 0.0f, 0.0f);
+
+
+		Credit_Mesh = AEGfxMeshEnd();
+		AE_ASSERT_MESG(Credit_Mesh, "fail to create object!!")
         
 }
 
@@ -233,6 +255,8 @@ namespace
 
         KA_Slash_Effects = new Particle_System(KA_Slash_Mesh, {}, BOX);
         KA_Slash_Effects->Emitter_.Particles_.reserve(2048);
+
+		Credit_Effects = new Particle_System(Credit_Mesh, {}, BOX);
         
     }
 }

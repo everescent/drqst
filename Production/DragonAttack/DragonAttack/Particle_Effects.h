@@ -29,6 +29,9 @@ enum EFFECTS
 	KA_HEALING_PARTICLE,
     KA_SWORD_PARTICLE,
 
+	// Miscellaneous
+	CREDIT_PARTICLE,
+
 };
 
 void Effects_Init(void);
