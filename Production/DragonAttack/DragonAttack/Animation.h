@@ -23,7 +23,7 @@ struct Range {
   //Constructs Range with start and end range for row and column
   Range(const float stX, const float edX, const float stY, const float edY)
   :startRow{ stY }, endRow{ edY }, startCol{ stX }, endCol{ edX }, 
-   Rowcurr{ startRow }, Colcurr{ startCol }, Complete{ false }
+   Rowcurr{ startRow }, Colcurr{ startCol }, Complete{ true }
   {}
   const float startRow; //Animation start frame
   const float endRow;   //Animation end frame
@@ -63,7 +63,7 @@ private:
   const float offsetX;    //Value to increment column
   const float offsetY;    //Value to increment row
   int         State;      //Current state to update
-  int         FrameCount; //Counts the number of frames so far, starts from frame 1
+  float         FrameCount; //Counts the number of frames so far, starts from frame 1
   //This holds different ranges to suit each sprite
   std::vector <Range> Animation_State;
 };

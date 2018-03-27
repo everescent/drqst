@@ -19,7 +19,7 @@ Animation::Animation(unsigned stateNum,
                      const float row, const float col,
                      const std::function <void(std::vector <Range>&)>& Init)
   :Tex_Row{ row }, Tex_Col{ col }, 
-   offsetX{ 1.0f / Tex_Col }, offsetY{ 1.0f / Tex_Row }, State{ 0 }, FrameCount{ 1 },
+   offsetX{ 1.0f / Tex_Col }, offsetY{ 1.0f / Tex_Row }, State{ 0 }, FrameCount{ 0.083f },
    Animation_State {}
 {
   Animation_State.reserve(stateNum);
@@ -43,15 +43,16 @@ void Animation::ResetState(int t_state)
 void Animation::SetState(int t_state)
 {
   State = t_state;
+  Animation_State[t_state].Complete = false;
 }
 
 void Animation::Update(Sprite &t_Sprite)
 {
   //Update every 5 frames
-  if (FrameCount != 12)
+  if (FrameCount <= 0.0f)
   {
     //Check if texture state has reached the end column
-    if (Animation_State[State].Colcurr > Animation_State[State].endCol)
+    if (Animation_State[State].Colcurr >= Animation_State[State].endCol)
     {
       //Reset startX position
       Animation_State[State].Colcurr = Animation_State[State].startCol;
@@ -62,20 +63,20 @@ void Animation::Update(Sprite &t_Sprite)
         //Reset both, column reset should have been done above
         Animation_State[State].Rowcurr = Animation_State[State].startRow;
     }
-    else if (Animation_State[State].Colcurr == Animation_State[State].endCol)
-    {
-      if (Animation_State[State].Rowcurr != Animation_State[State].endRow &&
-          Animation_State[State].Colcurr >= Animation_State[State].startCol + 1.0f)
-      {
-        //Reset startX position
-        Animation_State[State].Colcurr = Animation_State[State].startCol;
-        //Increment the row
-        Animation_State[State].Rowcurr += offsetY;
-      }
-      if (Animation_State[State].Rowcurr >= Animation_State[State].endRow)
-        //Reset both, column reset should have been done above
-        Animation_State[State].Rowcurr = Animation_State[State].startRow;
-    }
+    //else if (Animation_State[State].startCol == Animation_State[State].endCol)
+    //{
+    //  if (Animation_State[State].Rowcurr != Animation_State[State].endRow &&
+    //      Animation_State[State].Colcurr >= Animation_State[State].startCol + 1.0f)
+    //  {
+    //    //Reset startX position
+    //    Animation_State[State].Colcurr = Animation_State[State].startCol;
+    //    //Increment the row
+    //    Animation_State[State].Rowcurr += offsetY;
+    //  }
+    //  if (Animation_State[State].Rowcurr >= Animation_State[State].endRow)
+    //    //Reset both, column reset should have been done above
+    //    Animation_State[State].Rowcurr = Animation_State[State].startRow;
+    //}
     //Check if animation cycle is complete
     if (Animation_State[State].Rowcurr >= Animation_State[State].endRow &&
       Animation_State[State].Colcurr >= Animation_State[State].endCol)
@@ -84,12 +85,12 @@ void Animation::Update(Sprite &t_Sprite)
       Animation_State[State].Complete = false;
     //Increment the column
     Animation_State[State].Colcurr += offsetX;
-    FrameCount = 1;
+    FrameCount = 0.083f;
   }
   //Set texture position first, so that first frame renders
-  t_Sprite.SetTexPos(Animation_State[State].Rowcurr, Animation_State[State].Colcurr);
+  t_Sprite.SetTexPos(Animation_State[State].Colcurr, Animation_State[State].Rowcurr);
   //Increment frame counter
-  ++FrameCount;
+  FrameCount -= 0.016f;
 }
 
 Animation::~Animation()

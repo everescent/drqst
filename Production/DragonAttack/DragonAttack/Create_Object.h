@@ -29,7 +29,7 @@ color  : Mesh color.
 Return:
 A pointer to a mesh.
 ****************************************************************************************/
-AEGfxVertexList* CreateSquare(float size, float scale = 1.0f, unsigned int color = 0xFFFFFF);
+AEGfxVertexList* CreateSquare(float size, float scaleU = 1.0f, float scaleV = 1.0f, unsigned int color = 0xFFFFFF);
 
 /****************************************************************************************
 Description:
@@ -61,7 +61,7 @@ color   : Mesh color.
 Return:
 Sprite object.
 ****************************************************************************************/
-Sprite S_CreateSquare(float size, const char* texFile = nullptr, float scale = 1.0f,
+Sprite S_CreateSquare(float size, const char* texFile = nullptr, float scaleU = 1.0f, float scaleV = 1.0f,
                       unsigned int color = 0xFFFFFF);
 
 /****************************************************************************************
