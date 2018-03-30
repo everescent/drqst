@@ -51,15 +51,18 @@ namespace Stage2_1
 		TOWER_SPRITE = new Sprite{ S_CreateRectangle(300.0f, 300.0f, ".//Textures/tower.png") };
 		SIGN_SPRITE = new Sprite{ S_CreateSquare(70.0f, ".//Textures/sign.png") };
 
-		BG = new Sprite{ CreateBG(22.0f, 2.0f, "Textures/BG_Stage1.png", 1.0f, 15.0f) };
+		BG = new Sprite{ CreateBG(22.0f, 2.0f, "Textures/BG_Stage2.png", 1.0f, 15.0f) };
 		M_BG = new Transform{};
-		player = dynamic_cast<Dragon*>(Create_Basic_AI(DRAGON));
-		Audio = new Audio_Engine{ 1, [](std::vector <std::string> &playlist)->void {playlist.push_back(".//Audio/Stage_1_BGM.mp3"); } };
+
+		AEVec2 startpos = {-440, -885};
+		player = dynamic_cast<Dragon*>(Create_Basic_AI(DRAGON, startpos));
+
+		Audio = new Audio_Engine{ 1, [](std::vector <std::string> &playlist)->void {playlist.push_back(".//Audio/Stage_2_BGM.mp3"); } };
 		ui = new UI(player);
 		if (!Import_MapData("level2-1.txt", MapData, Map_Width, Map_Height)) { AEGfxExit(); }
-		/*
-		next = new LevelChangePlatform{ LCPLAT_SPRITE, 7500.0f,  240.0f };
 		
+		next = new LevelChangePlatform{ LCPLAT_SPRITE, 1180.0f,  -2685.0f };
+		/*
 		w1  = new Wall{ WALL_SPRITE, 2240.0f, -690.0f };
 		w2  = new Wall{ WALL_SPRITE, 2240.0f, -630.0f };
 		w3  = new Wall{ WALL_SPRITE, 2240.0f, -570.0f };
@@ -84,8 +87,6 @@ namespace Stage2_1
 		w18 = new Wall{ WALL_SPRITE, 6460.0f,  -20.0f };
 		w19 = new Wall{ WALL_SPRITE, 6460.0f,  -70.0f };
 		w20 = new Wall{ WALL_SPRITE, 6460.0f, -120.0f };
-*/
-		/*
 		coin1 = new PickUp{ COIN_SPRITE,
 			Col_Comp{ 0.0f - 25.0f, 0.0f - 25.0f, 0.0f + 25.0f, 0.0f + 25.0f, Rect },
 			COIN, 2080.0f , -680.0f };
@@ -102,6 +103,8 @@ namespace Stage2_1
 			Col_Comp{ 0.0f - 25.0f, 0.0f - 25.0f, 0.0f + 25.0f, 0.0f + 25.0f, Rect },
 			HP, 4300.0f , 60.0f };
 */
+		
+		/*
 		// Enemy placements (12)
 		// Grunts
 		//c.push_back(Create_Basic_AI(GRUNT, AEVec2{  2615.0f ,  -1065.0f }));
@@ -118,7 +121,7 @@ namespace Stage2_1
 		//c.push_back(Create_Basic_AI(MAGE, AEVec2{ 4780.0f ,  -2325.0f }));
 		// Knights
 		//c.push_back(Create_Basic_AI(KNIGHT, AEVec2{ 7200.0f ,  300.0f }));
-		
+		*/
 	}
 
 
@@ -184,7 +187,10 @@ namespace Stage2_1
 		
 		for (size_t i = 0; i < c.size(); ++i)
 		{
-			c[i]->Update(*player, dt);
+			if (c[i]->IsActive())
+			{
+				c[i]->Update(*player, dt);
+			}
 		}
 
 		for (Platform& elem : platforms)
@@ -214,8 +220,8 @@ namespace Stage2_1
 
 		/*coin1->Update(*player, dt);
 		coin2->Update(*player, dt);
-		coin3->Update(*player, dt);
-		next->Update(*player, dt);*/
+		coin3->Update(*player, dt);*/
+		next->Update(*player, dt);
 		player->Update(*player, dt);
 		CamFollow(player->Transform_, 200, 120, player->GetFacing());
 		ui->UI_Update(player);
@@ -250,9 +256,9 @@ namespace Stage2_1
 		/*coin1->Render();
 		coin2->Render();
 		coin3->Render();
-		hp->Render();
+		hp->Render();*/
 		next->Render();
-		*/
+		
 
 		
 		player->Render();
@@ -269,22 +275,22 @@ namespace Stage2_1
 		delete Audio;
 
 		delete w1, w2, w3, w4, w5, w6, w7, w8, w9, w10, w11, w12, w13, w14, w15, w16, w17, w18, w19, w20;
-/*
-		delete coin1, coin2, coin3, hp;
-		delete next;*/
+
+		//delete coin1, coin2, coin3, hp;
+		delete next;
 		delete ui;
 
-		//delete COIN_SPRITE;//pickups
-		//delete HP_SPRITE;
-		//delete DMG_SPRITE;
-		//delete SPD_SPRITE;
-		//delete BARRIER_SPRITE;//objs
-		//delete WALL_SPRITE;
-		//delete PLAT_SPRITE;
-		//delete LCPLAT_SPRITE;
-		//delete FLOOR_SPRITE;
-		//delete TOWER_SPRITE;
-		//delete SIGN_SPRITE;
+		delete COIN_SPRITE;//pickups
+		delete HP_SPRITE;
+		delete DMG_SPRITE;
+		delete SPD_SPRITE;
+		delete BARRIER_SPRITE;//objs
+		delete WALL_SPRITE;
+		delete PLAT_SPRITE;
+		delete LCPLAT_SPRITE;
+		delete FLOOR_SPRITE;
+		delete TOWER_SPRITE;
+		delete SIGN_SPRITE;
 
 		platforms.clear();
 		floors.clear();

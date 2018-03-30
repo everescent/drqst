@@ -64,6 +64,8 @@ Characters *Create_Basic_AI(const BASIC_AI mob, const AEVec2& position)
 	case KNIGHT: return new Knight(position, &K_SPRITE);
 		break;
 	case DRAGON: return new Dragon(&D_SPRITE, Get_Attack_Sprite(FIREBALL_SPRITE));
+	//waiting for jacob to edit in his dragon.h things
+	//case DRAGON: return new Dragon(&D_SPRITE, Get_Attack_Sprite(FIREBALL_SPRITE), position);
 		break;
 	default: break;
 	}

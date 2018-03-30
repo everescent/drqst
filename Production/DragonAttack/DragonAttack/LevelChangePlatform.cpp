@@ -35,23 +35,20 @@ void LevelChangePlatform::Update(Dragon &player, const float &dt)
 				GSM::next = GS_LEVEL2_1;
 				break;
 			case GS_LEVEL2_1:
-				GSM::next = GS_MAIN;
+				GSM::next = GS_LEVEL2_2;
 				break;
-			/*case GS_LEVEL2_2:
-				GSM::next = GS_MAIN;
+			case GS_LEVEL2_2:
+				GSM::next = GS_LEVEL2_3;
 				break;
 			case GS_LEVEL2_3:
-				GSM::next = GS_MAIN;
+				GSM::next = GS_LEVEL3_1;
 				break;
 			case GS_LEVEL3_1:
-				GSM::next = GS_MAIN;
+				GSM::next = GS_LEVEL3_2;
 				break;
 			case GS_LEVEL3_2:
 				GSM::next = GS_MAIN;
 				break;
-			case GS_LEVEL3_3:
-				GSM::next = GS_MAIN;
-				break;*/
 			default:
 				break;
 		}

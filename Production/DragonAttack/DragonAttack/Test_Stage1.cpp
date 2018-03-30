@@ -85,7 +85,10 @@ namespace Test_Stage1_1
 
 		/* Static Object Placement Start */
 		M_BG = new Transform{};
-		player = dynamic_cast<Dragon*>(Create_Basic_AI(DRAGON));
+
+		AEVec2 startpos = { -320, -255 };
+		player = dynamic_cast<Dragon*>(Create_Basic_AI(DRAGON, startpos));
+
 		Audio = new Audio_Engine{ 1, [](std::vector <std::string> &playlist)->void {playlist.push_back(".//Audio/Stage_1_BGM.mp3"); } };
 		archerTower = new Tower{ TOWER_SPRITE, 4800.0f, 0.0f };
 		ui = new UI{ player };
@@ -236,7 +239,10 @@ namespace Test_Stage1_1
 
 		for (size_t i = 0; i < c.size(); ++i)
 		{
-			c[i]->Update(*player, dt);
+			if (c[i]->IsActive())
+			{
+				c[i]->Update(*player, dt);
+			}
 			archerTower->Update(*(c[i]), dt);
 			w2->Update (*(c[i]), dt);
 			w22->Update(*(c[i]), dt);
@@ -289,7 +295,7 @@ namespace Test_Stage1_1
 		next->Update(*player, dt);
 		ui->UI_Update(player);
 
-		//std::cout << (int)player->PosX << ", " << (int)player->PosY << std::endl;
+		std::cout << (int)player->PosX << ", " << (int)player->PosY << std::endl;
 
 		////////Particle System////////////
 		//Create the particles for emission

@@ -1,4 +1,4 @@
-#include "Stage2_2.h"
+#include "Stage3_1.h"
 
 namespace
 {
@@ -36,7 +36,7 @@ namespace
 	float Camdown = 0;
 }
 
-namespace Stage2_2
+namespace Stage3_1
 {
 	void Load(void)
 	{
@@ -53,18 +53,18 @@ namespace Stage2_2
 		TOWER_SPRITE = new Sprite{ S_CreateRectangle(300.0f, 300.0f, ".//Textures/tower.png") };
 		SIGN_SPRITE = new Sprite{ S_CreateSquare(70.0f, ".//Textures/sign.png") };
 
-		BG = new Sprite{ CreateBG(22.0f, 2.0f, "Textures/BG_Stage2.png", 1.0f, 15.0f) };
-		M_BG = new Transform{}; 
+		BG = new Sprite{ CreateBG(22.0f, 2.0f, "Textures/BG_Stage1.png", 1.0f, 15.0f) };
+		M_BG = new Transform{};
 
-		AEVec2 startpos = { 4050, -2775 };
+		AEVec2 startpos = { -320, -975 };
 		player = dynamic_cast<Dragon*>(Create_Basic_AI(DRAGON, startpos));
 
-		Audio = new Audio_Engine{ 1, [](std::vector <std::string> &playlist)->void {playlist.push_back(".//Audio/Stage_2_BGM.mp3"); } };
+		Audio = new Audio_Engine{ 1, [](std::vector <std::string> &playlist)->void {playlist.push_back(".//Audio/Stage_3_BGM.mp3"); } };
 		ui = new UI(player);
-		if (!Import_MapData("level2-2.txt", MapData, Map_Width, Map_Height)) { AEGfxExit(); }
-		
-		next = new LevelChangePlatform{ LCPLAT_SPRITE, 1750.0f,  -2200.0f };
-/*
+		if (!Import_MapData("level3-1.txt", MapData, Map_Width, Map_Height)) { AEGfxExit(); }
+
+		next = new LevelChangePlatform{ LCPLAT_SPRITE, 7450.0f, -1380.0f };
+		/*
 		w6 = new Wall{ WALL_SPRITE, 2240.0f, -690.0f };
 		w7 = new Wall{ WALL_SPRITE, 2240.0f, -630.0f };
 		w8 = new Wall{ WALL_SPRITE, 2240.0f, -570.0f };
@@ -181,7 +181,7 @@ namespace Stage2_2
 	void Update(float dt)
 	{
 		Audio->Update();
-		
+
 		for (size_t i = 0; i < c.size(); ++i)
 		{
 			if (c[i]->IsActive())
@@ -225,7 +225,7 @@ namespace Stage2_2
 		{
 			if (Camdown > -250)
 				Camdown -= 4;
-			
+
 			CamFollow(player->Transform_, 200, Camdown, player->GetFacing());
 		}
 		else
@@ -269,7 +269,7 @@ namespace Stage2_2
 		hp->Render();*/
 		next->Render();
 
-		
+
 		player->Render();
 		player->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 		ui->Render();

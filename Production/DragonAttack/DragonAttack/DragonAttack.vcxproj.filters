@@ -267,9 +267,6 @@
     <ClCompile Include="Test_Stage1_3.cpp">
       <Filter>Game_States\Stage\Stage 1</Filter>
     </ClCompile>
-    <ClCompile Include="Stage3_3cpp.cpp">
-      <Filter>Game_States\Stage\Stage 3</Filter>
-    </ClCompile>
     <ClCompile Include="Pause.cpp">
       <Filter>Game_Object\Pause_Interface</Filter>
     </ClCompile>
@@ -284,6 +281,15 @@
     </ClCompile>
     <ClCompile Include="Score_Page.cpp">
       <Filter>Game_States\Stage\Score_Page</Filter>
+    </ClCompile>
+    <ClCompile Include="Stage3_1.cpp">
+      <Filter>Game_States\Stage\Stage 3</Filter>
+    </ClCompile>
+    <ClCompile Include="Stage3_2.cpp">
+      <Filter>Game_States\Stage\Stage 3</Filter>
+    </ClCompile>
+    <ClCompile Include="Stage3_3.cpp">
+      <Filter>Game_States\Stage\Stage 3</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -463,6 +469,12 @@
     </ClInclude>
     <ClInclude Include="Score_Page.h">
       <Filter>Game_States\Stage\Score_Page</Filter>
+    </ClInclude>
+    <ClInclude Include="Stage3_1.h">
+      <Filter>Game_States\Stage\Stage 3</Filter>
+    </ClInclude>
+    <ClInclude Include="Stage3_2.h">
+      <Filter>Game_States\Stage\Stage 3</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

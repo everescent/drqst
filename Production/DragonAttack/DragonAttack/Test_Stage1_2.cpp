@@ -53,7 +53,10 @@ namespace Test_Stage1_2
 
 		BG = new Sprite{ CreateBG(22.0f, 2.0f, "Textures/BG_Stage1.png", 1.0f, 15.0f) };
 		M_BG = new Transform{};
-		player = dynamic_cast<Dragon*>(Create_Basic_AI(DRAGON));
+
+		AEVec2 startpos = { -310, -615 };
+		player = dynamic_cast<Dragon*>(Create_Basic_AI(DRAGON, startpos));
+
 		Audio = new Audio_Engine{ 1, [](std::vector <std::string> &playlist)->void {playlist.push_back(".//Audio/Stage_1_BGM.mp3"); } };
 		ui = new UI(player);
 		if (!Import_MapData("level1-2.txt", MapData, Map_Width, Map_Height)) { AEGfxExit(); }
@@ -179,7 +182,10 @@ namespace Test_Stage1_2
 
 		for (size_t i = 0; i < c.size(); ++i)
 		{
-			c[i]->Update(*player, dt);
+			if (c[i]->IsActive())
+			{
+				c[i]->Update(*player, dt);
+			}
 			/*w1->  Update(*(c[i]), dt);
 			w2->  Update(*(c[i]), dt);
 			w3->  Update(*(c[i]), dt);
