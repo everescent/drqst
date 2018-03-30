@@ -37,8 +37,8 @@ const float Invul_Time      { 1.5f    };
 const float Dragon_Scale    { 70.0f   };
 const float Jump_Height     { 400.0f  }; //Maximum height player can jump
 const float Jump_Mult       { 3.2f    }; //How fast player can jump
-const float Start_Pos_X     { -320.0f }; //Player stating position X
-const float Start_Pos_Y     { -80.0f  }; //Player starting position Y
+//const float Start_Pos_X     { -320.0f }; //Player stating position X
+//const float Start_Pos_Y     { -80.0f  }; //Player starting position Y
 //Player velocity
 const AEVec2 Player_Speed   { 480.0f, 480.0f * Jump_Mult };
 const float Cam_Offset_X    { 320.0f  }; //Camera offset X
@@ -94,18 +94,18 @@ public:
   //Gets current charge
   int Get_Charge();
 
-  Dragon(Sprite* D_Sprite, Sprite *F_Sprite/*, AEVec2 Pos_*/)
+  Dragon(Sprite* D_Sprite, Sprite *F_Sprite, AEVec2 Pos_)
     //Initialize Characters class
     :Characters{ D_Sprite, 3,
-    Col_Comp{ Start_Pos_X - Dragon_Scale, Start_Pos_Y - Dragon_Scale,
-              Start_Pos_X + Dragon_Scale, Start_Pos_Y + Dragon_Scale, Rect} },
+    Col_Comp{ Pos_.x - Dragon_Scale, Pos_.y - Dragon_Scale,
+    Pos_.x + Dragon_Scale, Pos_.y + Dragon_Scale, Rect} },
     //Initialize data members
     Attack{ false }, Pwr_Up{ false }, Falling{ false }, TouchBottom{ true }, Invul_FLAG{ false },
     Damage { Fireball_Damage }, M_Damage{ MFireball_Damage }, Charge{ 0 }, Gravity{ 10.0f }, 
     Dir{}, Pickup_{}, Fireball{},
     //Initialize Mega Fireball
-    Mfireball{ F_Sprite, Col_Comp{ Start_Pos_X - MFireball_Scale, Start_Pos_Y - MFireball_Scale,
-    Start_Pos_X + MFireball_Scale, Start_Pos_Y + MFireball_Scale, Rect } }, Air_Dist{ 0.0f }, Facing{ 1.0f },
+    Mfireball{ F_Sprite, Col_Comp{ Pos_.x - MFireball_Scale, Pos_.y - MFireball_Scale,
+    Pos_.x + MFireball_Scale, Pos_.y + MFireball_Scale, Rect } }, Air_Dist{ 0.0f }, Facing{ 1.0f },
     //Initialize Audio Engine
     SFX_{ 3, [](std::vector<std::string> &playlist) ->void {
       playlist.push_back(".//Audio/Dragon_Hit.mp3");
@@ -120,13 +120,11 @@ public:
   {
     SetActive(true);
     //Initialize player start location
-    PosX = Start_Pos_X;
-    PosY = Start_Pos_Y;
-    /*Uncomment this for custom position
+    PosX = Pos_.x;
+    PosY = Pos_.y;
     //Update position of player
     Transform_.SetTranslate(PosX, PosY);
     Transform_.Concat();
-    */
     //Set velocity
     SetVelocity(Player_Speed);
     //Reserve a block of memory per number of bullets 
@@ -134,8 +132,8 @@ public:
     //Initialize all the fireballs
     for (int i = 0; i < Bullet_Buffer; ++i)
       Fireball.push_back(Projectile{ F_Sprite,
-                                     Col_Comp{ Start_Pos_X - Fireball_Scale, Start_Pos_Y - Fireball_Scale,
-                                               Start_Pos_X + Fireball_Scale, Start_Pos_Y + Fireball_Scale, Rect } });
+                                     Col_Comp{ Pos_.x - Fireball_Scale, Pos_.y - Fireball_Scale,
+        Pos_.x + Fireball_Scale, Pos_.y + Fireball_Scale, Rect } });
     for (int i = 0; i < Bullet_Buffer; ++i)
     {
       Fireball[i].SetVelocity(AEVec2{ Bullet_Speed, 0.0f });

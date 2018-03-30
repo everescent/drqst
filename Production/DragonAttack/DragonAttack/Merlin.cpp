@@ -17,7 +17,7 @@ Technology is prohibited.
 #include <ctime>
 #include <cstdlib>
 
-Merlin::Merlin(Sprite *Eball_Sprite, Sprite *Arrow_Sprite)
+Merlin::Merlin(Sprite *Merlin_Texture, Sprite *Eball_Sprite, Sprite *Arrow_Sprite)
   //Initialize characters class
   :Characters{ Merlin_Texture, Merlin_HP,
   Col_Comp{ Merlin_Start_X - Merlin_Scale, Merlin_Start_Y - Merlin_Scale,
@@ -31,8 +31,7 @@ Merlin::Merlin(Sprite *Eball_Sprite, Sprite *Arrow_Sprite)
          Col_Comp{ Merlin_Start_X - 50.0f, Merlin_Start_Y - 50.0f,
                    Merlin_Start_X + 50.0f, Merlin_Start_Y + 50.0f, Rect } },
   Spread_Eball{}, Arrow{}, Blink_{}, Attack_Interval{ 0 },
-  MagicCircle{ S_CreateSquare(150.0f, ".//Textures/Magic_Circle.png") }, 
-  Merlin_Texture{ new Sprite { S_CreateSquare(0.5f, ".//Textures/Merlin.png") } }
+  MagicCircle{ S_CreateSquare(150.0f, ".//Textures/Magic_Circle.png") }
 {
   //Set spawn position
   PosX = Merlin_Start_X;

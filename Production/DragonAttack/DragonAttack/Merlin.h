@@ -64,7 +64,7 @@ const float  Merlin_Start_Y  { -120.0f }; //Merlin default position Y
 class Merlin : public Characters {
 
 public:
-  Merlin(Sprite *Eball_Sprite, Sprite *Arrow_Sprite);
+  Merlin(Sprite *Merlin_Texture, Sprite *Eball_Sprite, Sprite *Arrow_Sprite);
   //Updates Merlin
   void Update(Dragon &player, const float dt);
   //Renders Merlin and attacks
@@ -118,7 +118,6 @@ private:
   };
   Blink     Blink_;         //Blink utilities
   Sprite    MagicCircle;    //Magic circle sprite
-  Sprite*   Merlin_Texture; //Merlin's texture
   Transform MC_Pos;         //Magic circle transform
   
   //Attack Functions START///////////////////////////////////////////////////////////////
