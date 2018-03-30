@@ -204,10 +204,10 @@ void Reset_Effects(const int num)
 void Transit_Fireworks(const int num)
 {
 	score_effects[num]->Emitter_.PPS_ = 5;
-	score_effects[num]->Emitter_.Dist_Min_ = 10.f;
+	score_effects[num]->Emitter_.Dist_Min_ = 20.f;
 	score_effects[num]->Emitter_.Particle_Rand_.Spread_ = 360;
 	score_effects[num]->Emitter_.Size_ = 15.0f;
-	score_effects[num]->Emitter_.Speed_ = 8.0f;
+	score_effects[num]->Emitter_.Speed_ = 12.0f;
 	score_effects[num]->Emitter_.Lifetime_ = 1.f;
 
 	fireworks[num].transit = true;
