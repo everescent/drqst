@@ -294,6 +294,15 @@ void Particle_System::TransRamp_Exp()
   }
 }
 
+//Scales particles as time passes
+void Particle_System::ScaleRamp(const float strength)
+{
+	for (auto& elem : Emitter_.Particles_)
+	{
+		elem.Size_ *= strength;
+	}
+}
+
 //Attract the particles to a certain point
 void Particle_System::Newton(const AEVec2 Point, const float strength, const float Attenuation)
 {

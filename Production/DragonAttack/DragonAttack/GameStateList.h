@@ -44,6 +44,7 @@ enum STAGE_LIST
 
     STAGE_3_3,
 	// don't touch the bottom area, add from top
+	SS_SCORE,
 	SS_QUIT,
 	SS_RESTART
 };

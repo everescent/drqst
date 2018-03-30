@@ -31,6 +31,7 @@ enum EFFECTS
 
 	// Miscellaneous
 	CREDIT_PARTICLE,
+	SCORE_PARTICLE,
 
 };
 

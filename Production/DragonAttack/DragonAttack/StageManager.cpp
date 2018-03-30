@@ -1,5 +1,6 @@
 #include "StageManager.h"
 #include "Stage3_3.h"
+#include "Score_Page.h"
 
 
 static STAGE_LIST s_previous, s_current, s_next;
@@ -24,9 +25,18 @@ namespace SM
         StageManager[STAGE_3_3].Free      = Stage3_3::Free;
         StageManager[STAGE_3_3].Unload    = Stage3_3::Unload;
 
-		s_previous = STAGE_3_3;
-		s_current  = STAGE_3_3;
-		s_next     = STAGE_3_3;
+		StageManager[SS_SCORE].Init       = Init_Score_Page;
+		StageManager[SS_SCORE].Load       = Load_Score_Page;
+		StageManager[SS_SCORE].Update     = Print_Score_Page;
+		StageManager[SS_SCORE].Draw       = Render_Score_Page;
+		StageManager[SS_SCORE].Free       = Free_Score_Page;
+		StageManager[SS_SCORE].Unload     = Unload_Score_Page;
+
+		s_previous = SS_SCORE;
+		s_current  = SS_SCORE;
+		s_next     = SS_SCORE;
+
+		Init_Score_Page();
 	}
 	
 	void SM_Load(void)

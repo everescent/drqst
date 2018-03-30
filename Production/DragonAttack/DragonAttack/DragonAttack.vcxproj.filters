@@ -112,6 +112,9 @@
     <Filter Include="Game_States\Stage\Credits">
       <UniqueIdentifier>{f979b263-9bfe-48a4-9f1d-6173342a9424}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game_States\Stage\Score_Page">
+      <UniqueIdentifier>{f6fa3ce7-52bf-4cd8-b8cc-7ea4da1ec179}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -278,6 +281,9 @@
     </ClCompile>
     <ClCompile Include="Block.cpp">
       <Filter>Game_Object\Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Score_Page.cpp">
+      <Filter>Game_States\Stage\Score_Page</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -454,6 +460,9 @@
     </ClInclude>
     <ClInclude Include="Block.h">
       <Filter>Game_Object\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Score_Page.h">
+      <Filter>Game_States\Stage\Score_Page</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

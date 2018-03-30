@@ -132,6 +132,8 @@ void UpdateEmission();
 void Update(const float dt);
 //Warm up time
 void WarmUp(const float dt, const float time, const function<void()> &Fields);
+//scale the particle as time passes
+void ScaleRamp(const float Strength);
 //Renders the particles
 void Render();
 //Emitter
