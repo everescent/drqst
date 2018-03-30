@@ -166,11 +166,11 @@ void Dragon::Update(Dragon& dummy, const float dt)
   Transform_.SetTranslate(PosX, PosY);
   Transform_.Concat();
   if(Facing < 0.0f)
-    Collision_.Update_Col_Pos(PosX - Dragon_Scale * 0.6f, PosY - Dragon_Scale,
+    Collision_.Update_Col_Pos(PosX - Dragon_Scale * 0.9f, PosY - Dragon_Scale,
                               PosX + Dragon_Scale, PosY + Dragon_Scale);
   else
     Collision_.Update_Col_Pos(PosX - Dragon_Scale, PosY - Dragon_Scale,
-                              PosX + Dragon_Scale * 0.6f, PosY + Dragon_Scale);
+                              PosX + Dragon_Scale * 0.9f, PosY + Dragon_Scale);
   ApplyPowerUP();
   HitInvul(dt);
   //Check if attack has been made
