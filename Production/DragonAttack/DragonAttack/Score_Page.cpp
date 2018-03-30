@@ -1,6 +1,7 @@
 #include "Score_Page.h"
 #include "AEEngine.h"
 #include "Characters.h"
+#include "PickUp.h"
 
 #define EFFECT_NUM 8
 
@@ -23,6 +24,8 @@ namespace
 	Fireworks fireworks[EFFECT_NUM];
 
 }
+
+// function declarations for this file
 static float RNG(const float min, const float max);
 static void  Reset_Effects(const int num);
 static void  Transit_Fireworks(const int num);
@@ -53,7 +56,8 @@ void Init_Score_Page(void)
 	// shallow copy over
 	for (char i = 1; i < EFFECT_NUM; ++i)
 	{
-		score_effects[i] = score_effects[0];
+		score_effects[i] = new Particle_System(score_effects[0]->Emitter_.pMesh_, {}, BOX);
+		score_effects[i]->Emitter_ = score_effects[0]->Emitter_;
 	}
 }
 
@@ -83,9 +87,9 @@ void Print_Score_Page(const float dt)
 			score_effects[i]->Emitter_.Pos_.Min_Max.Point_Max.x = minX + offset;
 			score_effects[i]->Emitter_.Pos_.Min_Max.Point_Max.y	= minY + offset;
 
-			// randomize the end position between 60-80
-			fireworks[i].distEnd = RNG(60.f, 80.f);
-			fireworks[i].lifeTime = 1.5f;
+			
+			fireworks[i].distEnd = RNG(60.f, 80.f);  // randomize the end position between 60-80
+			fireworks[i].lifeTime = 1.5f;            // lifetime of the fireworks
 			++fireworks[i].dist;
 		}
 		// move the emitter to its final destination
@@ -113,6 +117,7 @@ void Print_Score_Page(const float dt)
 				Transit_Fireworks(i);
 			}
 
+			// apply particle behaviour for fireworks
 			score_effects[i]->Gravity(0.5f);
 			score_effects[i]->Force(0.2f, false, true);
 			fireworks[i].lifeTime -= dt;
@@ -131,11 +136,13 @@ void Print_Score_Page(const float dt)
 
 void Render_Score_Page(void)
 {
-	char score[50]          = {};
-	char enemies_killed[50] = {};
+	char score[50]           = {};
+	char enemies_killed[50]  = {};
+	char coins_collected[50] = {};
 
-	sprintf_s(score, "Score: %d", Characters::Get_Score());
-	sprintf_s(score, "Enemies Killed: %d", Characters::Get_Enemies_Killed());
+	sprintf_s(score,           "Score: %d",           Characters::Get_Score());
+	sprintf_s(enemies_killed,  "Enemies Killed: %d",  Characters::Get_Enemies_Killed());
+	sprintf_s(coins_collected, "Coins Collected: %d", PickUp::GetCoin());
 
 	// render particle effects
 	for (auto& elem : score_effects)
@@ -146,25 +153,33 @@ void Render_Score_Page(void)
 	AEGfxSetTransparency(1.0f);
 
 	// print text on screen
-	AEGfxPrint(fontID, score,          -60, 215, 1.0f, 1.0f, 1.0f);
-	AEGfxPrint(fontID, enemies_killed, -60, 188, 1.0f, 1.0f, 1.0f);
-	AEGfxPrint(fontID, "Press Enter ", -60, 158, 1.0f, 1.0f, 1.0f);
+	AEGfxPrint(fontID, score,           -60, 215, 1.0f, 1.0f, 1.0f);
+	AEGfxPrint(fontID, enemies_killed,  -60, 188, 1.0f, 1.0f, 1.0f);
+	AEGfxPrint(fontID, coins_collected, -60, 158, 1.0f, 1.0f, 1.0f);
+	AEGfxPrint(fontID, "Press Enter ",  -60, 128, 1.0f, 1.0f, 1.0f);
 
 }
 
 void Free_Score_Page(void)
 {
-	// does nothing
 
-	Transit_Fireworks(0);
-	Reset_Effects(0);
+	//Transit_Fireworks(0);
+	//Reset_Effects(0);
+
 }
 
 void Unload_Score_Page(void)
 {
 	Characters::Reset_Score();
 	Characters::Reset_Enemy_Killed();
+	PickUp::ResetCoin();
 	AEGfxDestroyFont(fontID);
+
+
+	for (char i = 1; i < EFFECT_NUM; ++i)
+	{
+		delete score_effects[i];
+	}
 }
 
 float RNG(const float min, const float max)

@@ -36,7 +36,6 @@ namespace SM
 		s_current  = SS_SCORE;
 		s_next     = SS_SCORE;
 
-		Init_Score_Page();
 	}
 	
 	void SM_Load(void)
