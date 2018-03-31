@@ -9,6 +9,7 @@ private:
 	Boss_Action_State current_action;
 	Boss_Attack stab;
 	float time_traveled;
+	Animation anim;
 
 	void Idle(const Dragon&, const float dt);
 	void Moving(const Dragon&, const float dt);

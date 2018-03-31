@@ -22,7 +22,7 @@ Block::Block(Sprite* const p_Sprite, float x, float y)
 	PosX = x;
 	PosY = y;
 
-	std::cout << "Position of BLOCK:" << PosX << "," << PosY << std::endl;
+	//std::cout << "Position of BLOCK:" << PosX << "," << PosY << std::endl;
 }
 
 
@@ -45,7 +45,7 @@ void Block::Update(Dragon& obj, const float &dt)
 		//If dragon collided from the bottom 
 		else if ((obj.Collision_.St_Rect_Point(Bottom_HS1.x, Bottom_HS1.y)) || (obj.Collision_.St_Rect_Point(Bottom_HS2.x, Bottom_HS2.y)))
 		{
-			std::cout << "THERE IS btm COLLISION" << std::endl;
+			//std::cout << "THERE IS btm COLLISION" << std::endl;
 			//snap back the Dragon up to the bottom of the block
 			//obj.SetPos(obj.PosX, (PosY - half_block_height));
 			obj.PosY = PosY - Block_Macro::half_block_height - obj.Sprite_->Get_Height();
@@ -54,7 +54,7 @@ void Block::Update(Dragon& obj, const float &dt)
 		//If dragon collided from the left 
 		else if ((obj.Collision_.St_Rect_Point(Left_HS1.x, Left_HS1.y)) || (obj.Collision_.St_Rect_Point(Left_HS2.x, Left_HS2.y)))
 		{
-			std::cout << "THERE IS left COLLISION" << std::endl;
+			//std::cout << "THERE IS left COLLISION" << std::endl;
 			//snap back the Dragon up to the bottom of the block
 			//obj.SetPos((PosX - half_block_width), obj.PosY);
 			obj.PosX = PosX - Sprite_->Get_Width() - obj.Sprite_->Get_Width();
@@ -64,7 +64,7 @@ void Block::Update(Dragon& obj, const float &dt)
 		//If dragon collided from the right  
 		else if ((obj.Collision_.St_Rect_Point(Right_HS1.x, Right_HS1.y)) || (obj.Collision_.St_Rect_Point(Right_HS2.x, Right_HS2.y)))
 		{
-			std::cout << "THERE IS right COLLISION" << std::endl;
+			//std::cout << "THERE IS right COLLISION" << std::endl;
 			//snap back the Dragon up to the bottom of the block
 			//obj.SetPos((PosX + half_block_width), obj.PosY);
 			obj.PosX = PosX + Sprite_->Get_Width() + obj.Sprite_->Get_Width();
@@ -94,7 +94,7 @@ void Block::Update(Characters& obj, const float &dt)
 		//If dragon collided from the bottom 
 		else if ((obj.Collision_.St_Rect_Point(Bottom_HS1.x, Bottom_HS1.y)) || (obj.Collision_.St_Rect_Point(Bottom_HS2.x, Bottom_HS2.y)))
 		{
-			std::cout << "THERE IS btm COLLISION" << std::endl;
+			//std::cout << "THERE IS btm COLLISION" << std::endl;
 			//snap back the Dragon up to the bottom of the block
 			//obj.SetPos(obj.PosX, (PosY - half_block_height));
 			obj.PosY = PosY - Block_Macro::half_block_height - obj.Sprite_->Get_Height();
@@ -103,7 +103,7 @@ void Block::Update(Characters& obj, const float &dt)
 		//If dragon collided from the left 
 		else if ((obj.Collision_.St_Rect_Point(Left_HS1.x, Left_HS1.y)) || (obj.Collision_.St_Rect_Point(Left_HS2.x, Left_HS2.y)))
 		{
-			std::cout << "THERE IS left COLLISION" << std::endl;
+			//std::cout << "THERE IS left COLLISION" << std::endl;
 			//snap back the Dragon up to the bottom of the block
 			//obj.SetPos((PosX - half_block_width), obj.PosY);
 			obj.PosX = PosX - Sprite_->Get_Width() - obj.Sprite_->Get_Width();
@@ -113,7 +113,7 @@ void Block::Update(Characters& obj, const float &dt)
 		//If dragon collided from the right  
 		else if ((obj.Collision_.St_Rect_Point(Right_HS1.x, Right_HS1.y)) || (obj.Collision_.St_Rect_Point(Right_HS2.x, Right_HS2.y)))
 		{
-			std::cout << "THERE IS right COLLISION" << std::endl;
+			//std::cout << "THERE IS right COLLISION" << std::endl;
 			//snap back the Dragon up to the bottom of the block
 			//obj.SetPos((PosX + half_block_width), obj.PosY);
 			obj.PosX = PosX + Sprite_->Get_Width() + obj.Sprite_->Get_Width();

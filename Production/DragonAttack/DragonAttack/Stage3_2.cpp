@@ -62,7 +62,7 @@ namespace Stage3_2
 		ui = new UI(player);
 		if (!Import_MapData(".//Levels/level3-2.txt", MapData, Map_Width, Map_Height)) { AEGfxExit(); }
 
-		next = new LevelChangePlatform{ LCPLAT_SPRITE, 5000.0f,  60.0f };
+		next = new LevelChangePlatform{ LCPLAT_SPRITE, 5000.0f,  100.0f };
 		/*
 		w6 = new Wall{ WALL_SPRITE, 2240.0f, -690.0f };
 		w7 = new Wall{ WALL_SPRITE, 2240.0f, -630.0f };

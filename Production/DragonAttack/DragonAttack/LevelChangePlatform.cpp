@@ -23,34 +23,35 @@ void LevelChangePlatform::Update(Dragon &player, const float &dt)
 	
 	if (Collide)
 	{
-		switch (GSM::current) 
+		switch (SM::Get_Curr()) 
 		{
-			case GS_LEVEL1_1:
-				GSM::next = GS_LEVEL1_2;
+			case STAGE_1_1:
+				SM::Set_After_Score(STAGE_1_2);
 				break;
-			case GS_LEVEL1_2:
-				GSM::next = GS_LEVEL1_3;
+			case STAGE_1_2:
+				SM::Set_After_Score(STAGE_1_3);
 				break;
-			case GS_LEVEL1_3:
-				GSM::next = GS_LEVEL2_1;
+			case STAGE_1_3:
+				SM::Set_After_Score(STAGE_2_1);
 				break;
-			case GS_LEVEL2_1:
-				GSM::next = GS_LEVEL2_2;
+			case STAGE_2_1:
+				SM::Set_After_Score(STAGE_2_2);
 				break;
-			case GS_LEVEL2_2:
-				GSM::next = GS_LEVEL2_3;
+			case STAGE_2_2:
+				SM::Set_After_Score(STAGE_2_3);
 				break;
-			case GS_LEVEL2_3:
-				GSM::next = GS_LEVEL3_1;
+			case STAGE_2_3:
+				SM::Set_After_Score(STAGE_3_1);
 				break;
-			case GS_LEVEL3_1:
-				GSM::next = GS_LEVEL3_2;
+			case STAGE_3_1:
+				SM::Set_After_Score(STAGE_3_2);
 				break;
-			case GS_LEVEL3_2:
-				GSM::next = GS_MAIN;
+			case STAGE_3_2:
+				SM::Set_After_Score(STAGE_3_3);
 				break;
 			default:
 				break;
 		}
+		SM::Set_Next(SS_SCORE);
 	}
 }

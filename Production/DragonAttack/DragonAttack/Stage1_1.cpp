@@ -17,18 +17,14 @@ namespace
 	//std::vector<Wall> walls;
 	std::vector<Block> blocks;
 	std::vector<Barrier> barriers;
-	//std::vector<Scarecrow> scarecrows;
-	std::vector<PickUp> powerups;
+	std::vector<PickUp> PU;
 
 	LevelChangePlatform *next;
 	Tower *archerTower;
-	PickUp *coin1, *coin2, *coin3;
-	PickUp *power1, *power2;
+	PickUp *coin1;
 	Barrier *box1;
 	Sign *s1, *s2, *s3, *s4, *s5, *s6;
 	GameObject *tut1, *tut2, *tut3, *tut4, *tut5, *tut6;
-
-	//Wall *w2, *w22, *w5, *w6;
 
 	std::vector<Characters*> c;
 
@@ -38,10 +34,13 @@ namespace
 	Sprite* TUT4_SPRITE;
 	Sprite* TUT5_SPRITE;
 	Sprite* TUT6_SPRITE;
+
 	Sprite* COIN_SPRITE;//pickups
 	Sprite* HP_SPRITE;
 	Sprite* DMG_SPRITE;
 	Sprite* SPD_SPRITE;
+	Sprite* INVUL_SPRITE;
+
 	Sprite* BARRIER_SPRITE;//objs
 	Sprite* WALL_SPRITE;
 	Sprite* PLAT_SPRITE;
@@ -50,8 +49,6 @@ namespace
 	Sprite* TOWER_SPRITE;
 	Sprite* SIGN_SPRITE;
 
-
-
 }
 
 namespace Stage1_1
@@ -59,24 +56,26 @@ namespace Stage1_1
 	void Load(void)
 	{
 		/* Sprite Creation Start */
-		TUT1_SPRITE = new Sprite{ S_CreateRectangle(150.0f, 50.0f,"Textures/Shoot_Tutorial_MSG.png") };
-		TUT2_SPRITE = new Sprite{ S_CreateRectangle(230.0f, 80.0f, "Textures/Boxes_Tutorial_MSG.png") };
-		TUT3_SPRITE = new Sprite{ S_CreateRectangle(250.0f, 100.0f, "Textures/Enemy_Tutorial_MSG.png") };
-		TUT4_SPRITE = new Sprite{ S_CreateRectangle(300.0f, 100.0f, "Textures/Platforming_Tutorial_MSG.png") };
-		TUT5_SPRITE = new Sprite{ S_CreateRectangle(300.0f, 100.0f, "Textures/MegaFireball_Tutorial_MSG.png") };
-		TUT6_SPRITE = new Sprite{ S_CreateRectangle(200.0f, 80.0f, "Textures/PowerUp_Tutorial_MSG.png") };
-		COIN_SPRITE = new Sprite{ S_CreateSquare(50.0f, "Textures/coin.png", 1.0f) };
-		HP_SPRITE = new Sprite{ S_CreateSquare(50.0f, "Textures/hp.png", 1.0f) };
-		DMG_SPRITE = new Sprite{ S_CreateSquare(50.0f, "Textures/Fireball.png", 1.0f) };
-		SPD_SPRITE = new Sprite{ S_CreateSquare(50.0f, "Textures/spd.png", 1.0f) };
-		BARRIER_SPRITE = new Sprite{ S_CreateSquare(130.0f, ".//Textures/box.png") };
-		WALL_SPRITE = new Sprite{ CreateFloor(1.0f, "Textures/Cobblestone.png", 1.0f, 1.0f) };
-		PLAT_SPRITE = new Sprite{ CreatePlatform(1.0f, 1.0f, "Textures/Cobblestone.png") };
-		LCPLAT_SPRITE = new Sprite{ CreatePlatform(2.0f, 3.0f, ".//Textures/Win_Platform.png") };
-		FLOOR_SPRITE = new Sprite{ CreateFloor(1.0f, "Textures/Cobblestone.png", 1.0f, 1.0f) };
-		TOWER_SPRITE = new Sprite{ S_CreateRectangle(300.0f, 300.0f, ".//Textures/tower.png") };
-		SIGN_SPRITE = new Sprite{ S_CreateSquare(70.0f, ".//Textures/sign.png") };
-		BG = new Sprite{ CreateBG(22.0f, 2.0f, "Textures/BG_Stage1.png", 1.0f, 15.0f) };
+		TUT1_SPRITE    = new Sprite { S_CreateRectangle(150.0f, 50.0f, ".//Textures/Shoot_Tutorial_MSG.png") };
+		TUT2_SPRITE    = new Sprite { S_CreateRectangle(230.0f, 80.0f, ".//Textures/Boxes_Tutorial_MSG.png") };
+		TUT3_SPRITE    = new Sprite { S_CreateRectangle(250.0f, 100.0f,".//Textures/Enemy_Tutorial_MSG.png") };
+		TUT4_SPRITE    = new Sprite { S_CreateRectangle(300.0f, 100.0f,".//Textures/Platforming_Tutorial_MSG.png") };
+		TUT5_SPRITE    = new Sprite { S_CreateRectangle(300.0f, 100.0f,".//Textures/MegaFireball_Tutorial_MSG.png") };
+		TUT6_SPRITE    = new Sprite { S_CreateRectangle(200.0f, 80.0f, ".//Textures/PowerUp_Tutorial_MSG.png") };
+		COIN_SPRITE    = new Sprite { S_CreateSquare   (35.0f, ".//Textures/coin.png", 1.0f) };
+		HP_SPRITE      = new Sprite { S_CreateSquare   (50.0f, ".//Textures/hp.png", 1.0f) };
+		DMG_SPRITE     = new Sprite { S_CreateSquare   (50.0f, ".//Textures/Fireball.png", 1.0f) };
+		SPD_SPRITE     = new Sprite { S_CreateSquare   (50.0f, ".//Textures/spd.png", 1.0f) };
+		INVUL_SPRITE   = new Sprite { S_CreateSquare   (50.0f, ".//Textures/invul.png", 1.0f) };
+		BARRIER_SPRITE = new Sprite { S_CreateSquare   (130.0f, ".//Textures/box.png") };
+		WALL_SPRITE    = new Sprite { CreateFloor      (1.0f, ".//Textures/Cobblestone.png", 1.0f, 1.0f) };
+		PLAT_SPRITE    = new Sprite { CreatePlatform   (1.0f, 1.0f, ".//Textures/Cobblestone.png") };
+		LCPLAT_SPRITE  = new Sprite { CreatePlatform   (2.0f, 3.0f, ".//Textures/Win_Platform.png") };
+		FLOOR_SPRITE   = new Sprite { CreateFloor      (1.0f, ".//Textures/Cobblestone.png", 1.0f, 1.0f) };
+		TOWER_SPRITE   = new Sprite { S_CreateRectangle(300.0f, 300.0f, ".//Textures/tower.png") };
+		SIGN_SPRITE    = new Sprite { S_CreateSquare   (70.0f, ".//Textures/sign.png") };
+
+		BG = new Sprite{ CreateBG(22.0f, 2.0f, ".//Textures/BG_Stage1.png", 1.0f, 15.0f) };
 		/* Sprite Creation End */
 
 		/* Static Object Placement Start */
@@ -88,25 +87,15 @@ namespace Stage1_1
 		Audio = new Audio_Engine{ 1, [](std::vector <std::string> &playlist)->void {playlist.push_back(".//Audio/Stage_1_BGM.mp3"); } };
 		archerTower = new Tower{ TOWER_SPRITE, 4800.0f, 0.0f };
 		ui = new UI{ player };
-		box1 = new Barrier{ BARRIER_SPRITE, 1500.0f, -235.0f };
-		/*w2 = new Wall{ WALL_SPRITE, 3750.0f, -345.0f };
-		w22 = new Wall{ WALL_SPRITE,3750.0f, -230.0f };
-		w5 = new Wall{ WALL_SPRITE,6480.0f, -180.0f };
-		w6 = new Wall{ WALL_SPRITE,6480.0f, -200.0f };*/
 
-		next = new LevelChangePlatform{ LCPLAT_SPRITE,6550.0f, -50.0f };
+		box1 = new Barrier{ BARRIER_SPRITE, 1500.0f, -235.0f };
 		coin1 = new PickUp{ COIN_SPRITE,
 			Col_Comp{ 0.0f - 25.0f, 0.0f - 25.0f, 0.0f + 25.0f, 0.0f + 25.0f, Rect },
 			COIN, 1500.0f, -210.0f };
-		coin2 = new PickUp{ COIN_SPRITE,
-			Col_Comp{ 0.0f - 25.0f, 0.0f - 25.0f, 0.0f + 25.0f, 0.0f + 25.0f, Rect },
-			COIN, 3550.0f, -350.0f };
-		coin3 = new PickUp{ COIN_SPRITE,
-			Col_Comp{ 0.0f - 25.0f, 0.0f - 25.0f, 0.0f + 25.0f, 0.0f + 25.0f, Rect },
-			COIN, 6300.0f, -220.0f };
-		power2 = new PickUp{ HP_SPRITE,
-			Col_Comp{ 0.0f - 25.0f, 0.0f - 25.0f, 0.0f + 25.0f, 0.0f + 25.0f, Rect },
-			HP, 5300.0f, -80.0f };
+
+		next = new LevelChangePlatform{ LCPLAT_SPRITE, 6550.0f, -50.0f };
+
+		/* Tutorial Signs */
 		s1 = new Sign{ SIGN_SPRITE, 400.0f, -255.0f };
 		tut1 = new GameObject{ TUT1_SPRITE, Col_Comp() };
 		s2 = new Sign{ SIGN_SPRITE, 1270.0f, -255.0f };
@@ -122,16 +111,6 @@ namespace Stage1_1
 		/* Static Object Placement End */
 
 		if (!Import_MapData(".//Levels/level1-1.txt", MapData, Map_Width, Map_Height)) { AEGfxExit(); }
-
-		/* Enemy Placement Start */
-		//c.push_back(Create_Basic_AI(GRUNT,  AEVec2  { 2320.0f , -180.0f }));
-		//c.push_back(Create_Basic_AI(GRUNT,  AEVec2  { 2480.0f , -180.0f }));
-		//c.push_back(Create_Basic_AI(GRUNT,  AEVec2  { 4000.0f ,  -90.0f }));
-		c.push_back(Create_Basic_AI(ARCHER, AEVec2  { 4750.0f ,  140.0f }));
-		c.push_back(Create_Basic_AI(ARCHER, AEVec2  { 6200.0f , -220.0f }));
-		/* Enemy Placement End */
-
-		
 	}
 
 	void Init(void)
@@ -143,7 +122,12 @@ namespace Stage1_1
 		tut5->SetActive(true);
 		tut6->SetActive(true);
 		//place all alpha stuff here
+		tut1->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+		tut2->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+		tut3->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 		tut4->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+		tut5->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+		tut6->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 		player->SetActive(true);
 		Audio->Play(0);
 		Audio->SetLoop(0, 1);
@@ -176,19 +160,59 @@ namespace Stage1_1
 					float f_y = (float)y;
 					c.push_back(Create_Basic_AI(GRUNT, AEVec2{ Convert_X(f_x) , Convert_Y(f_y) }));
 				}
-				/*if (MapData[y][x] == OBJ_ARCHER)
+				if (MapData[y][x] == OBJ_ARCHER)
 				{
 					float f_x = (float)x;
 					float f_y = (float)y;
 					c.push_back(Create_Basic_AI(ARCHER, AEVec2{ Convert_X(f_x) , Convert_Y(f_y) }));
-				}*/
+				}
+				//pick ups
+				if (MapData[y][x] == OBJ_COIN)
+				{
+					float f_x = (float)x;
+					float f_y = (float)y;
+					PU.push_back(PickUp{ COIN_SPRITE,
+						Col_Comp{ 0.0f - 25.0f, 0.0f - 25.0f, 0.0f + 25.0f, 0.0f + 25.0f, Rect },
+						COIN, Convert_X(f_x) , Convert_Y(f_y) });
+				}
+				if (MapData[y][x] == OBJ_HP)
+				{
+					float f_x = (float)x;
+					float f_y = (float)y;
+					PU.push_back(PickUp{ HP_SPRITE,
+						Col_Comp{ 0.0f - 25.0f, 0.0f - 25.0f, 0.0f + 25.0f, 0.0f + 25.0f, Rect },
+						HP, Convert_X(f_x) , Convert_Y(f_y) });
+				}
+				if (MapData[y][x] == OBJ_SPD)
+				{
+					float f_x = (float)x;
+					float f_y = (float)y;
+					PU.push_back(PickUp{ SPD_SPRITE,
+						Col_Comp{ 0.0f - 25.0f, 0.0f - 25.0f, 0.0f + 25.0f, 0.0f + 25.0f, Rect },
+						SPD, Convert_X(f_x) , Convert_Y(f_y) });
+				}
+				if (MapData[y][x] == OBJ_DMG)
+				{
+					float f_x = (float)x;
+					float f_y = (float)y;
+					PU.push_back(PickUp{ DMG_SPRITE,
+						Col_Comp{ 0.0f - 25.0f, 0.0f - 25.0f, 0.0f + 25.0f, 0.0f + 25.0f, Rect },
+						DMG, Convert_X(f_x) , Convert_Y(f_y) });
+				}
+				if (MapData[y][x] == OBJ_INVUL)
+				{
+					float f_x = (float)x;
+					float f_y = (float)y;
+					PU.push_back(PickUp{ INVUL_SPRITE,
+						Col_Comp{ 0.0f - 25.0f, 0.0f - 25.0f, 0.0f + 25.0f, 0.0f + 25.0f, Rect },
+						INVUL, Convert_X(f_x) , Convert_Y(f_y) });
+				}
 			}
 		}
 
 
 		for (size_t i = 0; i < c.size(); ++i)
 			c[i]->SetActive(true);
-
 	}
 
 	void Update(float dt)
@@ -270,17 +294,17 @@ namespace Stage1_1
 			elem.Update(*player, dt);
 			elem.Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 		}
-		/*w2->Update(*player, dt);
-		w22->Update(*player, dt);
-		w5->Update(*player, dt);
-		w6->Update(*player, dt);*/
+		for (PickUp& elem : PU)
+		{
+			elem.Update(*player, dt);
+		}
 
 		archerTower->Update(*player, dt);
 		player->Update(*player, dt);
 		box1->Update(*player, dt);
-		coin2->Update(*player, dt);
-		coin3->Update(*player, dt);
-		power2->Update(*player, dt);
+		//coin2->Update(*player, dt);
+		//coin3->Update(*player, dt);
+		//power2->Update(*player, dt);
 		CamFollow(player->Transform_, 200, 120, player->GetFacing());
 		next->Update(*player, dt);
 		ui->UI_Update(player);
@@ -291,24 +315,22 @@ namespace Stage1_1
 	void Draw(void)
 	{
 		BG->Render_Object(*M_BG);
-
+		
+		// Tutorial Message Pop Ups
 		s1->Render();
 		if (s1->ShowTutorial)
 		{
 			tut1->Render();
-			tut1->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 		}
 		s2->Render();
 		if (s2->ShowTutorial)
 		{
 			tut2->Render();
-			tut2->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 		}
 		s3->Render();
 		if (s3->ShowTutorial)
 		{
 			tut3->Render();
-			tut3->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 		}
 		s4->Render();
 		if (s4->ShowTutorial)
@@ -319,22 +341,18 @@ namespace Stage1_1
 		if (s5->ShowTutorial)
 		{
 			tut5->Render();
-			tut5->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 		}
 		s6->Render();
 		if (s6->ShowTutorial)
 		{
 			tut6->Render();
-			tut6->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 		}
 
 		if (!(box1->IsActive()))
 		{
 			coin1->Render();
 		}
-		coin2->Render();
-		coin3->Render();
-		power2->Render();
+
 
 		for (size_t i = 0; i < c.size(); ++i)
 		{
@@ -361,12 +379,19 @@ namespace Stage1_1
 		{
 			elem.Render();
 		}
+		for (PickUp& elem : PU)
+		{
+			elem.Render();
+		}
 
 		box1->Render();
 		player->Render();
 		player->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 		next->Render();
 		ui->Render();
+
+		// Particle Effects
+		PickUp::coin_particles->Render();
 	}
 
 	void Free(void)
@@ -390,9 +415,9 @@ namespace Stage1_1
 		delete box1;
 		delete archerTower;
 		delete coin1;
-		delete coin2;
-		delete coin3;
-		delete power2;
+		//delete coin2;
+		//delete coin3;
+		//delete power2;
 		delete next;
 		delete ui;
 
@@ -409,6 +434,7 @@ namespace Stage1_1
 		delete HP_SPRITE;
 		delete DMG_SPRITE;
 		delete SPD_SPRITE;
+		delete INVUL_SPRITE;
 		delete BARRIER_SPRITE;//objs
 		delete WALL_SPRITE;
 		delete PLAT_SPRITE;
@@ -422,7 +448,7 @@ namespace Stage1_1
 		walls.clear();*/
 		blocks.clear();
 		barriers.clear();
-		powerups.clear();
+		PU.clear();
 
 		 /* Delete enemies */
 		for (size_t i = 0; i < c.size(); ++i)

@@ -57,11 +57,12 @@ private:
     void Spinning_Blades(Dragon &d, const float dt); // rotating swords that attacks player
 	// attack functions /////////////////////////////////////////////////
 
-	BOSS_PHASE ka_phase;
+	BOSS_PHASE       ka_phase;
 	Particle_System *healing_effect;
     Particle_System *sword_effect;
     Particle_System *slash_effect[3];
-	KA_MoveSet currAttk;
+	KA_MoveSet       currAttk;
+	Animation		 anim;
     std::vector <Characters*> mobs; //an array to store the mobs to be spawn
 
 public:

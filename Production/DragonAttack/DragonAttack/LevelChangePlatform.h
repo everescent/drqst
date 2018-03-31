@@ -19,6 +19,7 @@ Technology is prohibited.
 #include "Dragon.h"
 #include "Create_Object.h"
 #include "GameStateManager.h"
+#include "StageManager.h"
 
 // A class that creates a basic character
 class LevelChangePlatform : public GameObject

@@ -7,6 +7,7 @@ namespace
 	Transform *M_BG;
 	Audio_Engine* Audio;
 	UI* ui;
+
 	int** MapData;
 	int Map_Width;
 	int Map_Height;
@@ -16,15 +17,17 @@ namespace
 	//std::vector<Wall> walls;
 	std::vector<Barrier> barriers;
 	std::vector<Block> blocks;
+	std::vector<PickUp> PU;
+
 	LevelChangePlatform *next;
-	PickUp *coin1, *coin2, *coin3, *hp, *invul;
 	std::vector<Characters*> c;
 
-	Wall *w6, *w7, *w8, *w12, *w13, *w16, *w17, *w18, *w1, *w2, *w3, *w4, *w5, *w9, *w21, *w22, *w23, *w24, *w25, *w29;
 	Sprite* COIN_SPRITE;//pickups					 							   
 	Sprite* HP_SPRITE;
 	Sprite* DMG_SPRITE;
 	Sprite* SPD_SPRITE;
+	Sprite* INVUL_SPRITE;
+
 	Sprite* BARRIER_SPRITE;//objs												   
 	Sprite* WALL_SPRITE;
 	Sprite* PLAT_SPRITE;
@@ -44,6 +47,8 @@ namespace Stage2_2
 		HP_SPRITE = new Sprite{ S_CreateSquare(50.0f,   ".//Textures/hp.png", 1.0f) };
 		DMG_SPRITE = new Sprite{ S_CreateSquare(50.0f,  ".//Textures/Fireball.png", 1.0f) };
 		SPD_SPRITE = new Sprite{ S_CreateSquare(50.0f,  ".//Textures/spd.png", 1.0f) };
+		INVUL_SPRITE = new Sprite{ S_CreateSquare(50.0f, ".//Textures/invul.png", 1.0f) };
+
 		BARRIER_SPRITE = new Sprite{ S_CreateSquare(130.0f, ".//Textures/box.png") };
 		WALL_SPRITE = new Sprite{ CreateFloor(1.0f, ".//Textures/Cobblestone.png", 1.0f, 1.0f) };
 		PLAT_SPRITE = new Sprite{ CreatePlatform(1.0f, 1.0f, ".//Textures/Cobblestone.png") };
@@ -171,6 +176,53 @@ namespace Stage2_2
 					float f_y = (float)y;
 					c.push_back(Create_Basic_AI(MAGE, AEVec2{ Convert_X(f_x) ,  Convert_Y(f_y) }));
 				}
+				if (MapData[y][x] == OBJ_KNIGHT)
+				{
+					float f_x = (float)x;
+					float f_y = (float)y;
+					c.push_back(Create_Basic_AI(KNIGHT, AEVec2{ Convert_X(f_x) ,  Convert_Y(f_y) }));
+				}
+				//pick ups
+				if (MapData[y][x] == OBJ_COIN)
+				{
+					float f_x = (float)x;
+					float f_y = (float)y;
+					PU.push_back(PickUp{ COIN_SPRITE,
+						Col_Comp{ 0.0f - 25.0f, 0.0f - 25.0f, 0.0f + 25.0f, 0.0f + 25.0f, Rect },
+						COIN, Convert_X(f_x) , Convert_Y(f_y) });
+				}
+				if (MapData[y][x] == OBJ_HP)
+				{
+					float f_x = (float)x;
+					float f_y = (float)y;
+					PU.push_back(PickUp{ HP_SPRITE,
+						Col_Comp{ 0.0f - 25.0f, 0.0f - 25.0f, 0.0f + 25.0f, 0.0f + 25.0f, Rect },
+						HP, Convert_X(f_x) , Convert_Y(f_y) });
+				}
+				if (MapData[y][x] == OBJ_SPD)
+				{
+					float f_x = (float)x;
+					float f_y = (float)y;
+					PU.push_back(PickUp{ SPD_SPRITE,
+						Col_Comp{ 0.0f - 25.0f, 0.0f - 25.0f, 0.0f + 25.0f, 0.0f + 25.0f, Rect },
+						SPD, Convert_X(f_x) , Convert_Y(f_y) });
+				}
+				if (MapData[y][x] == OBJ_DMG)
+				{
+					float f_x = (float)x;
+					float f_y = (float)y;
+					PU.push_back(PickUp{ DMG_SPRITE,
+						Col_Comp{ 0.0f - 25.0f, 0.0f - 25.0f, 0.0f + 25.0f, 0.0f + 25.0f, Rect },
+						DMG, Convert_X(f_x) , Convert_Y(f_y) });
+				}
+				if (MapData[y][x] == OBJ_INVUL)
+				{
+					float f_x = (float)x;
+					float f_y = (float)y;
+					PU.push_back(PickUp{ INVUL_SPRITE,
+						Col_Comp{ 0.0f - 25.0f, 0.0f - 25.0f, 0.0f + 25.0f, 0.0f + 25.0f, Rect },
+						INVUL, Convert_X(f_x) , Convert_Y(f_y) });
+				}
 			}
 		}
 	}
@@ -218,6 +270,10 @@ namespace Stage2_2
 			elem.Update(*player, dt);
 		}
 		for (Barrier& elem : barriers)
+		{
+			elem.Update(*player, dt);
+		}
+		for (PickUp& elem : PU)
 		{
 			elem.Update(*player, dt);
 		}
@@ -274,6 +330,10 @@ namespace Stage2_2
 		{
 			c[i]->Render();
 		}
+		for (PickUp& elem : PU)
+		{
+			elem.Render();
+		}
 		/*coin1->Render();
 		coin2->Render();
 		coin3->Render();
@@ -285,6 +345,8 @@ namespace Stage2_2
 		player->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 		ui->Render();
 
+		// Particle Effects
+		PickUp::coin_particles->Render();
 	}
 
 	void Free(void)
@@ -315,6 +377,7 @@ namespace Stage2_2
 		//walls.clear();
 		blocks.clear();
 		barriers.clear();
+		PU.clear();
 
 		for (size_t i = 0; i < c.size(); ++i)
 		{

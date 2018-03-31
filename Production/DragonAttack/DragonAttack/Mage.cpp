@@ -31,12 +31,16 @@ namespace // for global variables in this file
 // constructor for mage, that sets its position to the parameters that were given
 Mage::Mage(const AEVec2& position, Sprite* texture)
 	:Characters(texture,
-				HEALTH, Col_Comp{position.x - MAGE_SCALE, position.y - MAGE_SCALE , position.x + MAGE_SCALE , position.y + MAGE_SCALE, Rect }) ,
-	current_action{ IDLE },
+		HEALTH, Col_Comp{ position.x - MAGE_SCALE, position.y - MAGE_SCALE , position.x + MAGE_SCALE , position.y + MAGE_SCALE, Rect }),
+	current_action{ IDLE }, teleport{ true },
 
-	energy_ball{Get_Attack_Sprite(EBALL_SPRITE),
+	energy_ball{ Get_Attack_Sprite(EBALL_SPRITE),
 				 Col_Comp{ position.x - EBALL_SCALE, position.y - EBALL_SCALE,
-						   position.x + EBALL_SCALE, position.y + EBALL_SCALE, Rect } }
+						   position.x + EBALL_SCALE, position.y + EBALL_SCALE, Rect } },
+	anim { IDLE_ANIM + 1, 2, 5, [](std::vector <Range>& Init) -> void {
+		                        Init.push_back(Range{ 0.0f, 1.0f, 0.0f, 0.0f }); //Hit
+		                        Init.push_back(Range{ 0.0f, 1.0f, 0.5f, 0.5f }); //Idle
+	    }}
 
 {
    SetActive(false);                                                // don't spawn mage
@@ -49,14 +53,14 @@ Mage::Mage(const AEVec2& position, Sprite* texture)
 // update function for mage, performs the behaviour of mage at current frame
 void Mage::Update(Dragon &d, const float dt)
 {	
-	// changes state to dead when hp is 0 and there is no ongoing attack at the moment
-	if (this->Get_HP() <= 0 && ! energy_ball.ongoing_attack)
-		this->current_action = DEAD;
+	// changes state to dead when hp is 0
+	if (Get_HP() <= 0)
+		current_action = DEAD;
 
 	// teleport the mage to the back of the player once hp falls below a certain threshold
-	if (this->Get_HP() < TELEPORT_FLAG && this->teleport && !energy_ball.ongoing_attack)
+	if (Get_HP() < TELEPORT_FLAG && teleport && !energy_ball.ongoing_attack)
 	{
-		this->current_action = MOVING;
+		current_action = MOVING;
 	}
 	
 	// checks for collision with fireball if mage is active
@@ -75,6 +79,8 @@ void Mage::Update(Dragon &d, const float dt)
 					//Reset the distance of the fireball and set false
 					d.GetFireball()[i].Projectile::ResetDist();
 					d.GetFireball()[i].SetActive(false);
+
+					anim.SetState(HIT_ANIM);
 				}
 
 		// mega fire ball hit lancelot
@@ -86,6 +92,8 @@ void Mage::Update(Dragon &d, const float dt)
 				Decrease_HP(d.GetMDamage());
 				d.GetMfireball().Projectile::ResetDist();
 				d.GetMfireball().SetActive(false);
+
+				anim.SetState(HIT_ANIM);
 			}
 		}
 	}
@@ -103,6 +111,12 @@ void Mage::Update(Dragon &d, const float dt)
 		break;
     default: break;
 	}
+
+	// mage default animation other than hit
+	if(anim.GetComplete(HIT_ANIM))
+		anim.SetState(IDLE_ANIM);
+
+	anim.Update(*Sprite_);
 }
 
 // render function for mage
@@ -203,9 +217,9 @@ void Mage::Move(const Dragon &d)
 							  PosX + MAGE_SCALE, PosY + MAGE_SCALE);	// max point
 
 	Transform_.SetTranslate(PosX, PosY);   // update coordinates of mage
-	Transform_.Concat();								 // update coordinates of mage
-	teleport = false;									 // mage can only teleport once
-	current_action = IDLE;							 // change behaviour
+	Transform_.Concat();				   // update coordinates of mage
+	teleport = false;					   // mage can only teleport once
+	current_action = IDLE;				   // change behaviour
 
 }
 
@@ -225,10 +239,13 @@ void Mage::Renew_Mage(const AEVec2& newPos)
 // dead function of mage
 void Mage::Dead(void)
 {
-	SetActive(false); // set active to false
-	Set_HP(HEALTH);   // reset the hp of mage
-    teleport = true;
-    current_action = IDLE;
+	SetActive(false);             // set active to false
+	energy_ball.SetActive(false); // set energyball to false
+	Set_HP(HEALTH);               // reset the hp of mage
+    teleport = true;              // reset teleport flag
+    current_action = IDLE;        // reset state
+	Add_Kill_count();             // add kill count
+	Add_Score(30);                // add score
 }
 
 // checks if the player is within sight

@@ -34,9 +34,10 @@ private:
 
 	bool Line_Of_Sight(const Dragon &);
 
-	Boss_Action_State current_action; // mage behaviour
-	bool teleport = true;			  // check if mage teleported 
-	Boss_Attack energy_ball;		  // mage's attack
+	Boss_Action_State current_action;     // mage behaviour
+	bool              teleport;	          // check if mage teleported 
+	Boss_Attack       energy_ball;		  // mage's attack
+	Animation         anim;               // animations for the mage
 	
 public:
 	//------------------------------------------------------------------

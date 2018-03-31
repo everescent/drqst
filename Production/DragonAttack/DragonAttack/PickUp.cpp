@@ -14,10 +14,12 @@ Technology is prohibited.
 /* End Header **************************************************************************/
 
 #include "PickUp.h"
+#include "Particle_Effects.h"
 #include <utility> //move
 
 //Counts the number of coins collected
 int PickUp::Coin_Counter = 0;
+Particle_System* PickUp::coin_particles = nullptr;
 
 PickUp::PickUp(Sprite* p_sprite, Col_Comp && t_col, const PUT type, const float posX, const float posY)
   :GameObject{ p_sprite, std::move(t_col)},
@@ -29,6 +31,20 @@ PickUp::PickUp(Sprite* p_sprite, Col_Comp && t_col, const PUT type, const float 
   PosY = posY;
   Transform_.SetTranslate(PosX, PosY);
   Transform_.Concat();
+
+  PickUp::coin_particles = Effects_Get(COIN_PARTICLE);
+
+  //BEHAVIOUR FOR COIN
+  coin_particles->Emitter_.PPS_ = 150;
+  coin_particles->Emitter_.Dist_Min_ = 10.f;
+  coin_particles->Emitter_.Vol_Max = 150;
+  coin_particles->Emitter_.Direction_ = 90.0f;
+  coin_particles->Emitter_.Particle_Rand_.Spread_ = 360;
+  coin_particles->Emitter_.Conserve_ = 0.9f;
+  coin_particles->Emitter_.Size_ = 20.0f;
+  coin_particles->Emitter_.Speed_ = 50.0f;
+  coin_particles->Emitter_.Particle_Rand_.Sp_Rand_ = 3;
+  coin_particles->Emitter_.Lifetime_ = 1.f;
   //Initialize cooldown
   switch (Type_)
   {
@@ -54,7 +70,7 @@ void PickUp::Update(Dragon &player, const float dt)
                               PosX + PickUp_Scale, PosY + PickUp_Scale);
     //Check for collision with player
     if (player.Collision_.Dy_Rect_Rect(Collision_, GetVelocity(),
-      player.GetVelocity(), 0.016f))
+      player.GetVelocity(), dt))
     {
       //If collide, activate the power up
       player.SetPickup(Type_, true);
@@ -62,6 +78,11 @@ void PickUp::Update(Dragon &player, const float dt)
       SetActive(false);
       if (Type_ == COIN)
       {
+
+	    coin_particles->Emitter_.Pos_.Point = {PosX, PosY};
+		coin_particles->TransRamp_Exp();
+		coin_particles->ColorRamp_Life();
+		coin_particles->UpdateEmission();
         //Adds score if coin is picked up
         player.Add_Score(10);
         ++Coin_Counter;
@@ -89,5 +110,10 @@ void PickUp::Update(Dragon &player, const float dt)
       player.SetPickup(Type_, false);
       Active_ = false;
     }
+  }
+
+  if (coin_particles->GetParticleCount())
+  {
+	  coin_particles->Update(dt);
   }
 }
