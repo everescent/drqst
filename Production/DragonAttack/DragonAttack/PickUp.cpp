@@ -19,7 +19,7 @@ Technology is prohibited.
 
 //Counts the number of coins collected
 int PickUp::Coin_Counter = 0;
-Particle_System* PickUp::test = nullptr;
+Particle_System* PickUp::coin_particles = nullptr;
 
 PickUp::PickUp(Sprite* p_sprite, Col_Comp && t_col, const PUT type, const float posX, const float posY)
   :GameObject{ p_sprite, std::move(t_col)},
@@ -32,19 +32,19 @@ PickUp::PickUp(Sprite* p_sprite, Col_Comp && t_col, const PUT type, const float 
   Transform_.SetTranslate(PosX, PosY);
   Transform_.Concat();
 
-  PickUp::test = Effects_Get(COIN_PARTICLE);
+  PickUp::coin_particles = Effects_Get(COIN_PARTICLE);
 
   //BEHAVIOUR FOR COIN
-  test->Emitter_.PPS_ = 150;
-  test->Emitter_.Dist_Min_ = 10.f;
-  test->Emitter_.Vol_Max = 150;
-  test->Emitter_.Direction_ = 90.0f;
-  test->Emitter_.Particle_Rand_.Spread_ = 360;
-  test->Emitter_.Conserve_ = 0.9f;
-  test->Emitter_.Size_ = 20.0f;
-  test->Emitter_.Speed_ = 50.0f;
-  test->Emitter_.Particle_Rand_.Sp_Rand_ = 3;
-  test->Emitter_.Lifetime_ = 1.f;
+  coin_particles->Emitter_.PPS_ = 150;
+  coin_particles->Emitter_.Dist_Min_ = 10.f;
+  coin_particles->Emitter_.Vol_Max = 150;
+  coin_particles->Emitter_.Direction_ = 90.0f;
+  coin_particles->Emitter_.Particle_Rand_.Spread_ = 360;
+  coin_particles->Emitter_.Conserve_ = 0.9f;
+  coin_particles->Emitter_.Size_ = 20.0f;
+  coin_particles->Emitter_.Speed_ = 50.0f;
+  coin_particles->Emitter_.Particle_Rand_.Sp_Rand_ = 3;
+  coin_particles->Emitter_.Lifetime_ = 1.f;
   //Initialize cooldown
   switch (Type_)
   {
@@ -79,10 +79,10 @@ void PickUp::Update(Dragon &player, const float dt)
       if (Type_ == COIN)
       {
 
-	    test->Emitter_.Pos_.Point = {PosX, PosY};
-		test->TransRamp_Exp();
-		test->ColorRamp_Life();
-		test->UpdateEmission();
+	    coin_particles->Emitter_.Pos_.Point = {PosX, PosY};
+		coin_particles->TransRamp_Exp();
+		coin_particles->ColorRamp_Life();
+		coin_particles->UpdateEmission();
         //Adds score if coin is picked up
         player.Add_Score(10);
         ++Coin_Counter;
@@ -112,8 +112,8 @@ void PickUp::Update(Dragon &player, const float dt)
     }
   }
 
-  if (test->GetParticleCount())
+  if (coin_particles->GetParticleCount())
   {
-	  test->Update(dt);
+	  coin_particles->Update(dt);
   }
 }

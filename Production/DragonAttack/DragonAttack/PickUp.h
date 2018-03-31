@@ -48,7 +48,7 @@ public:
   //Resets teh number of coins collected
   static void ResetCoin() { Coin_Counter = 0; }
 
-  static Particle_System *test;//testing
+  static Particle_System *coin_particles;
 
 private:
   PUT        Type_;        //Type of power up
