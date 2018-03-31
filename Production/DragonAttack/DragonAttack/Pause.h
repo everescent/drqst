@@ -20,26 +20,32 @@ Technology is prohibited.
 #include "AEEngine.h"
 #include "Transform.h"
 #include "PickUp.h"
+#define PAUSE_MACRO
+
+#ifdef PAUSE_MACRO
+namespace pause_ns
+{
+	const unsigned NUM_BUTTONS = 4; 
+}
+#endif
+
+
+
 class Pause
 {
 public:
-	//Default constructor for User interface that takes in a ptr to Dragon as a parameter 
 	Pause();
-	//Updates the UI
-	void Pause_update(Dragon* dragon);
-	//Renders the UI
-	void Pause_Render();
+	//pause
+	//This function checks if the pause button is triggered, if it is it changes the boolian to true
+	void Update(bool &pause_bool);
+	void Render();
+	////Renders the UI
+	//void Pause_Render();
+	~Pause();
+	//Used to store the position of the camera 
+	f32 cameraX, cameraY;
 
 private:
-
-	Sprite  HP_Sprite;
-	Sprite Charge_Sprite;
-	const float icon_w;
-	GameObject hp_icon1;
-	GameObject hp_icon2;
-	GameObject hp_icon3;
-	GameObject charge_icon;
-	int Dragon_hp;
-	int Fireball_charge;
-	//AEVec2 offset1;
+	u32 fontID;
+	char* buttons[pause_ns::NUM_BUTTONS ] = { "Resume  : Escape",	" Turn Audio On/Off: M", "Quit : Q", "Fullscreen : F" }; // array count from 0
 };
