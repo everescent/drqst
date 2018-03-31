@@ -12,10 +12,10 @@ namespace
 	int Map_Width;
 	int Map_Height;
 
-	std::vector<Floor> floors;
-	std::vector<Wall> walls;
+	//std::vector<Floor> floors;
+	//std::vector<Wall> walls;
 	std::vector<Platform> platforms;
-
+	std::vector<Block> blocks;
 	LevelChangePlatform *next;
 	std::vector<Characters*> c;
 
@@ -70,14 +70,14 @@ namespace Stage2_3
 				{
 					float f_x = (float)x;
 					float f_y = (float)y;
-					floors.push_back(Floor{ FLOOR_SPRITE, Convert_X(f_x) , Convert_Y(f_y) });
+					blocks.push_back(Block{ FLOOR_SPRITE, Convert_X(f_x) , Convert_Y(f_y) });
 				}
-				if (MapData[y][x] == OBJ_WALL)
+				/*if (MapData[y][x] == OBJ_WALL)
 				{
 					float f_x = (float)x;
 					float f_y = (float)y;
 					walls.push_back(Wall{ WALL_SPRITE, Convert_X(f_x) , Convert_Y(f_y) });
-				}
+				}*/
 				if (MapData[y][x] == OBJ_PLATFORM)
 				{
 					float f_x = (float)x;
@@ -110,7 +110,7 @@ namespace Stage2_3
 		{
 			elem.Update(*player, dt);
 		}
-		for (Floor& elem : floors)
+		/*for (Floor& elem : floors)
 		{
 			for (size_t i = 0; i < c.size(); ++i)
 			{
@@ -126,8 +126,15 @@ namespace Stage2_3
 				elem.Update(*(c[i]), dt);
 			}
 			elem.Update(*player, dt);
+		}*/
+		for (Block& elem : blocks)
+		{
+			for (size_t i = 0; i < c.size(); ++i)
+			{
+				elem.Update(*(c[i]), dt);
+			}
+			elem.Update(*player, dt);
 		}
-
 		player->Update(*player, dt);
 		ui->UI_Update(player);
 
@@ -140,7 +147,11 @@ namespace Stage2_3
 		CamStatic();
 		BG->Render_Object(*M_BG);
 
-		for (Floor& elem : floors)
+		/*for (Floor& elem : floors)
+		{
+			elem.Render();
+		}*/
+		for (Block& elem : blocks)
 		{
 			elem.Render();
 		}
@@ -177,8 +188,9 @@ namespace Stage2_3
 		delete FLOOR_SPRITE;
 		delete PLAT_SPRITE;
 
-		floors.clear();
-		walls.clear();
+		//floors.clear();
+		//walls.clear();
+		blocks.clear();
 
 		for (size_t i = 0; i < c.size(); ++i)
 		{

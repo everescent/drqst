@@ -12,10 +12,10 @@ namespace
 	int Map_Width;
 	int Map_Height;
 
-	std::vector<Floor> floors;
-	std::vector<Wall> walls;
+	//std::vector<Floor> floors;
+	//std::vector<Wall> walls;
 	std::vector<Platform> platforms;
-
+	std::vector<Block> blocks;
 	King_Arthur* last_boss;
 
 	//Sprite* HP_SPRITE;
@@ -75,14 +75,14 @@ namespace Stage3_3
 				{
 					float f_x = (float)x;
 					float f_y = (float)y;
-					floors.push_back(Floor{ floor_sprite, Convert_X(f_x) , Convert_Y(f_y) });
+					blocks.push_back(Block{ floor_sprite, Convert_X(f_x) , Convert_Y(f_y) });
 				}
-				if (MapData[y][x] == OBJ_WALL)
+				/*if (MapData[y][x] == OBJ_WALL)
 				{
 					float f_x = (float)x;
 					float f_y = (float)y;
 					walls.push_back(Wall{ wall_sprite, Convert_X(f_x) , Convert_Y(f_y) });
-				}
+				}*/
 			}
 		}
 	}
@@ -95,7 +95,7 @@ namespace Stage3_3
 
         last_boss->Update(*player, dt);
 
-        for (Floor& elem : floors)
+        for (Block& elem : blocks)
         {
             elem.Update(*player, dt);
 
@@ -111,10 +111,10 @@ namespace Stage3_3
             }
         }
 
-        for (Wall& elem : walls)
+        /*for (Wall& elem : walls)
         {
             elem.Update(*player, dt);
-        }
+        }*/
 
         for (Platform& elem : platforms)
         {
@@ -144,11 +144,15 @@ namespace Stage3_3
         CamStatic();
         BG->Render_Object(*M_BG);
 
-        for (Floor& elem : floors)
+        /*for (Floor& elem : floors)
         {
             elem.Render();
-        }
+        }*/
 
+		for (Block& elem : blocks)
+		{
+			elem.Render();
+		}
         for (Platform& elem : platforms)
         {
             switch (curr_phase)
@@ -187,8 +191,9 @@ namespace Stage3_3
 		}
 		delete[] MapData;
 
-		floors.clear();
-		walls.clear();
+		//floors.clear();
+		//walls.clear();
+		blocks.clear();
 		platforms.clear();
 
 		delete last_boss;

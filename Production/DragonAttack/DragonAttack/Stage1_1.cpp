@@ -13,8 +13,9 @@ namespace
 	int Map_Height;
 
 	std::vector<Platform> platforms;
-	std::vector<Floor> floors;
-	std::vector<Wall> walls;
+	//std::vector<Floor> floors;
+	//std::vector<Wall> walls;
+	std::vector<Block> blocks;
 	std::vector<Barrier> barriers;
 	//std::vector<Scarecrow> scarecrows;
 	std::vector<PickUp> powerups;
@@ -161,14 +162,14 @@ namespace Stage1_1
 				{
 					float f_x = (float)x;
 					float f_y = (float)y;
-					floors.push_back(Floor{ FLOOR_SPRITE,Convert_X(f_x) , Convert_Y(f_y) });
+					blocks.push_back(Block{ FLOOR_SPRITE,Convert_X(f_x) , Convert_Y(f_y) });
 				}
-				if (MapData[y][x] == OBJ_WALL)
+				/*if (MapData[y][x] == OBJ_WALL)
 				{
 					float f_x = (float)x;
 					float f_y = (float)y;
 					walls.push_back(Wall{ WALL_SPRITE,Convert_X(f_x) , Convert_Y(f_y) });
-				}
+				}*/
 				if (MapData[y][x] == OBJ_GRUNT)
 				{
 					float f_x = (float)x;
@@ -240,7 +241,7 @@ namespace Stage1_1
 		{
 			elem.Update(*player, dt);
 		}
-		for (Floor& elem : floors)
+		/*for (Floor& elem : floors)
 		{
 			for (size_t i = 0; i < c.size(); ++i)
 			{
@@ -249,6 +250,14 @@ namespace Stage1_1
 			elem.Update(*player, dt);
 		}
 		for (Wall& elem : walls)
+		{
+			for (size_t i = 0; i < c.size(); ++i)
+			{
+				elem.Update(*(c[i]), dt);
+			}
+			elem.Update(*player, dt);
+		}*/
+		for (Block& elem : blocks)
 		{
 			for (size_t i = 0; i < c.size(); ++i)
 			{
@@ -336,15 +345,19 @@ namespace Stage1_1
 		{
 			elem.Render();
 		}
-		for (Floor& elem : floors)
-		{
-			elem.Render();
-		}
-		for (Barrier& elem : barriers)
+		/*for (Floor& elem : floors)
 		{
 			elem.Render();
 		}
 		for (Wall& elem : walls)
+		{
+			elem.Render();
+		}*/
+		for (Block& elem : blocks)
+		{
+			elem.Render();
+		}
+		for (Barrier& elem : barriers)
 		{
 			elem.Render();
 		}
@@ -405,8 +418,9 @@ namespace Stage1_1
 		delete SIGN_SPRITE;
 
 		platforms.clear();
-		floors.clear();
-		walls.clear();
+		/*floors.clear();
+		walls.clear();*/
+		blocks.clear();
 		barriers.clear();
 		powerups.clear();
 
