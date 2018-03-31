@@ -104,6 +104,7 @@ namespace Main_Menu
 		if (Play_Button->Collision_.St_Rect_Point((float)Mouse_X, (float)Mouse_Y))
 		{
 			PLAY_SPRITE->SetRGB(1.0f, 1.0f, 1.0f);
+			//Will add in particle effects later 
 		}
 
 		else if (Quit_Button->Collision_.St_Rect_Point((float)Mouse_X, (float)Mouse_Y))
@@ -165,6 +166,10 @@ namespace Main_Menu
 	}
 
 	void Free(void) { 
+		delete PLAY_SPRITE;
+		delete QUIT_SPRITE;
+		delete CREDITS_SPRITE;
+		delete M_BG;
 		delete MM_Background;
 		delete Play_Button;
 		delete Quit_Button;
