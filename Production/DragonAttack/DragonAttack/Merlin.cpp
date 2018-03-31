@@ -507,55 +507,63 @@ bool Merlin::CheckAttack(Dragon &player)
 
 void Merlin::Update(Dragon &player, const float dt)
 {
-  //Determine Merlin's state
-  CheckState(player);  
-  //Execute state
-  (this->*Merlin_State)(player, dt);
-  //Update attack interval
-  Attack_Interval -= dt;
-  if (Attack_Interval <= 0)
-    Attack_Interval = 0;
-  //Update Blink
-  Blink_.Update();
-  //Attack updates here
-  A_Rain_Update(player, dt);
-  Sp_Eball_Update(dt);
-  S_Eball_Update(dt);
-  Melee_Update(dt);
-  //Merlin collision update
-  GameObject::Collision_.Update_Col_Pos(PosX - Merlin_Scale * 0.6f, PosY - Merlin_Scale * 0.6f,
-                                        PosX + Merlin_Scale * 0.6f, PosY + Merlin_Scale * 0.6f);
-  //If Merlin gets hit, decrease HP
-  for(char i = 0; i < Bullet_Buffer; ++i)
-    if(player.GetFireball()[i].IsActive())
-      if (Collision_.Dy_Rect_Rect(player.GetFireball()[i].Collision_,
-                                  GetVelocity(),
-                                  player.GetFireball()[i].GetVelocity(), dt))
-      {
-        //Decrease HP by player's damage
-        Decrease_HP(player.GetDamage());
-        //Reset the distance of the fireball and set false
-        player.GetFireball()[i].Projectile::ResetDist();
-        player.GetFireball()[i].SetActive(false);
-      }
-  //Check for attack colision with player
-  Colision_Check(player, dt);
+  //Check if Merlin is dead
+  if (Get_HP() > 0)
+  {
+    //Determine Merlin's state
+    CheckState(player);
+    //Execute state
+    (this->*Merlin_State)(player, dt);
+    //Update attack interval
+    Attack_Interval -= dt;
+    if (Attack_Interval <= 0)
+      Attack_Interval = 0;
+    //Update Blink
+    Blink_.Update();
+    //Attack updates here
+    A_Rain_Update(player, dt);
+    Sp_Eball_Update(dt);
+    S_Eball_Update(dt);
+    Melee_Update(dt);
+    //Merlin collision update
+    GameObject::Collision_.Update_Col_Pos(PosX - Merlin_Scale * 0.6f, PosY - Merlin_Scale * 0.6f,
+      PosX + Merlin_Scale * 0.6f, PosY + Merlin_Scale * 0.6f);
+    //If Merlin gets hit, decrease HP
+    for (char i = 0; i < Bullet_Buffer; ++i)
+      if (player.GetFireball()[i].IsActive())
+        if (Collision_.Dy_Rect_Rect(player.GetFireball()[i].Collision_,
+          GetVelocity(),
+          player.GetFireball()[i].GetVelocity(), dt))
+        {
+          //Decrease HP by player's damage
+          Decrease_HP(player.GetDamage());
+          //Reset the distance of the fireball and set false
+          player.GetFireball()[i].Projectile::ResetDist();
+          player.GetFireball()[i].SetActive(false);
+        }
+    //Check for attack colision with player
+    Colision_Check(player, dt);
+  }
 }
 
 void Merlin::Render()
 {
-  //Renders respective attack, the function checks if the attack should be rendered
-  Eball.Render();
-  for (Boss_Attack& SS : Spread_Eball)
+  //Check if Merlin is dead
+  if (Get_HP() > 0)
   {
-    SS.Render();
+    //Renders respective attack, the function checks if the attack should be rendered
+    Eball.Render();
+    for (Boss_Attack& SS : Spread_Eball)
+    {
+      SS.Render();
+    }
+    for (int i = 0; i < A_Rain_Buffer - 1; ++i)
+    {
+      if (M_Att_Curr == ARROW_RAIN)
+        MagicCircle.Render_Object(MC_Pos);
+      Arrow[i].Render();
+    }
+    //Renders Merlin
+    GameObject::Render();
   }
-  for (int i = 0; i < A_Rain_Buffer - 1; ++i)
-  {
-    if(M_Att_Curr == ARROW_RAIN)
-      MagicCircle.Render_Object(MC_Pos);
-    Arrow[i].Render();
-  }
-  //Renders Merlin
-  GameObject::Render();
 }
