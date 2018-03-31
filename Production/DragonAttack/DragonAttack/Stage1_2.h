@@ -19,6 +19,7 @@
 #include "Level_Import.h"
 #include "LevelChangePlatform.h"
 #include "UI.h"
+#include "Block.h"
 #include <utility>
 #include <iostream>
 

@@ -14,6 +14,8 @@ namespace
 	std::vector<Platform> platforms;
 	std::vector<Floor> floors;
 	std::vector<Wall> walls;
+	///////Replace vector of floor and wall and add in vector for blocks
+	//std::vector<Block> blocks;
 	std::vector<Barrier> barriers;
 
 	LevelChangePlatform *next;
@@ -111,6 +113,12 @@ namespace Stage1_2
 					float f_y = (float)y;
 					floors.push_back(Floor{ FLOOR_SPRITE, Convert_X(f_x) , Convert_Y(f_y) });
 				}
+				/*if (MapData[y][x] == OBJ_BLOCK)
+				{
+					float f_x = (float)x;
+					float f_y = (float)y;
+					blocks.push_back(Block{ FLOOR_SPRITE, Convert_X(f_x) , Convert_Y(f_y) });
+				}*/
 				if (MapData[y][x] == OBJ_WALL)
 				{
 					float f_x = (float)x;
@@ -170,6 +178,14 @@ namespace Stage1_2
 			}
 			elem.Update(*player, dt);
 		}
+		/*for (Block& elem : blocks)
+		{
+			for (size_t i = 0; i < c.size(); ++i)
+			{
+				elem.Update(*(c[i]), dt);
+			}
+			elem.Update(*player, dt);
+		}*/
 		for (Barrier& elem : barriers)
 		{
 			elem.Update(*player, dt);
@@ -198,6 +214,10 @@ namespace Stage1_2
 		{
 			elem.Render();
 		}
+		/*for (Block& elem : blocks)
+		{
+			elem.Render();
+		}*/
 		for (Barrier& elem : barriers)
 		{
 			elem.Render();
@@ -240,6 +260,7 @@ namespace Stage1_2
 		platforms.clear();
 		floors.clear();
 		walls.clear();
+		//blocks.clear();
 		barriers.clear();
 
 		delete coin1;
