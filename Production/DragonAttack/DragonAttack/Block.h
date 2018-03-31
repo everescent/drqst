@@ -20,6 +20,12 @@ Technology is prohibited.
 #include "Dragon.h"
 #include "Create_Object.h"
 
+#ifdef USE_BLOCK_MACRO
+namespace Block_Macro{
+	const float half_block_width = 40.0f; // This is HALF the block's width 
+	const float half_block_height = 45.0f; // This is HALF the block's height
+}
+#endif
 // A class that creates a basic character
 class Block : public GameObject
 {
@@ -28,10 +34,10 @@ public:
 
 	void Update(Dragon& obj, const float &dt);
 
+	void Update(Characters& obj, const float &dt);
 
 private:
-	const float half_block_width; // This is HALF the block's width 
-	const float half_block_height; // This is HALF the block's height
+	
 	AEVec2 Top_HS1;
 	AEVec2 Top_HS2;
 	AEVec2 Bottom_HS1;

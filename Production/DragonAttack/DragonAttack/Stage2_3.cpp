@@ -14,6 +14,7 @@ namespace
 
 	std::vector<Floor> floors;
 	std::vector<Wall> walls;
+	std::vector<Platform> platforms;
 
 	LevelChangePlatform *next;
 	std::vector<Characters*> c;
@@ -25,6 +26,7 @@ namespace
 	Sprite* WALL_SPRITE;
 	Sprite* LCPLAT_SPRITE;
 	Sprite* FLOOR_SPRITE;
+	Sprite* PLAT_SPRITE;
 }
 
 namespace Stage2_3
@@ -35,10 +37,10 @@ namespace Stage2_3
 		HP_SPRITE = new Sprite{ S_CreateSquare(50.0f, "Textures/hp.png", 1.0f) };
 		DMG_SPRITE = new Sprite{ S_CreateSquare(50.0f, "Textures/Fireball.png", 1.0f) };
 		SPD_SPRITE = new Sprite{ S_CreateSquare(50.0f, "Textures/spd.png", 1.0f) };*/
-		//WALL_SPRITE = new Sprite{ S_CreateRectangle(50.0f, 50.0f, ".//Textures/download.jpg") };
-		WALL_SPRITE = new Sprite{ CreateFloor(1.0f, "Textures/Cobblestone.png", 1.0f, 1.0f) };
+		WALL_SPRITE = new Sprite{ CreateFloor(1.0f, ".//Textures/Cobblestone.png", 1.0f, 1.0f) };
 		LCPLAT_SPRITE = new Sprite{ CreatePlatform(2.0f, 3.0f, ".//Textures/Win_Platform.png") };
 		FLOOR_SPRITE = new Sprite{ CreateFloor(1.0f, ".//Textures/Cobblestone.png", 1.0f, 1.0f) };
+		PLAT_SPRITE = new Sprite{ CreatePlatform(1.0f, 1.0f, ".//Textures/Cobblestone.png") };
 
 		BG = new Sprite{ CreateBG(22.0f, 2.0f, ".//Textures/BG_Stage2.png", 1.0f, 15.0f) };
 		M_BG = new Transform{};
@@ -48,7 +50,7 @@ namespace Stage2_3
 
 		Audio = new Audio_Engine{ 1, [](std::vector <std::string> &playlist)->void {playlist.push_back(".//Audio/Merlin_BGM.mp3"); } };
 		ui = new UI{ player };
-		if (!Import_MapData("level2-3.txt", MapData, Map_Width, Map_Height)) { AEGfxExit(); }
+		if (!Import_MapData(".//Levels/level2-3.txt", MapData, Map_Width, Map_Height)) { AEGfxExit(); }
 
 		next = new LevelChangePlatform{ LCPLAT_SPRITE, 500.0f,  -300.0f };
 		c.push_back(Create_Boss_AI(MERLIN));
@@ -76,6 +78,12 @@ namespace Stage2_3
 					float f_y = (float)y;
 					walls.push_back(Wall{ WALL_SPRITE, Convert_X(f_x) , Convert_Y(f_y) });
 				}
+				if (MapData[y][x] == OBJ_PLATFORM)
+				{
+					float f_x = (float)x;
+					float f_y = (float)y;
+					platforms.push_back(Platform{ PLAT_SPRITE, Convert_X(f_x) , Convert_Y(f_y) });
+				}
 			}
 		}
 
@@ -89,12 +97,19 @@ namespace Stage2_3
 	{
 		Audio->Update();
 
-		c[0]->Update(*player, dt);
+		if (c[0]->IsActive()) 
+		{
+			c[0]->Update(*player, dt);
+		}
 		if (c[0]->Get_HP() <= 0)
 		{
 			next->Update(*player, dt);
 		}
 
+		for (Platform& elem : platforms)
+		{
+			elem.Update(*player, dt);
+		}
 		for (Floor& elem : floors)
 		{
 			for (size_t i = 0; i < c.size(); ++i)
@@ -116,7 +131,7 @@ namespace Stage2_3
 		player->Update(*player, dt);
 		ui->UI_Update(player);
 
-		std::cout << (int)player->PosX << ", " << (int)player->PosY << std::endl;
+		//std::cout << (int)player->PosX << ", " << (int)player->PosY << std::endl;
 	}
 
 	void Draw(void)
@@ -126,6 +141,10 @@ namespace Stage2_3
 		BG->Render_Object(*M_BG);
 
 		for (Floor& elem : floors)
+		{
+			elem.Render();
+		}
+		for (Platform& elem : platforms)
 		{
 			elem.Render();
 		}
@@ -156,9 +175,15 @@ namespace Stage2_3
 		delete WALL_SPRITE;
 		delete LCPLAT_SPRITE;
 		delete FLOOR_SPRITE;
+		delete PLAT_SPRITE;
 
 		floors.clear();
 		walls.clear();
+
+		for (size_t i = 0; i < c.size(); ++i)
+		{
+			delete c[i];
+		}
 		c.clear();
 
 		for (int y = 0; y < Map_Height; ++y)

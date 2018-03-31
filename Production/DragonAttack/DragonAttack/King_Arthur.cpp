@@ -871,6 +871,11 @@ std::vector <Characters*>& King_Arthur::Get_Mobs(void)
 King_Arthur::~King_Arthur(void)
 {
 	arthur.clear();
+
+	for (size_t i = 0; i < mobs.size(); ++i)
+	{
+		delete mobs[i];
+	}
 	mobs.clear();
 }
 

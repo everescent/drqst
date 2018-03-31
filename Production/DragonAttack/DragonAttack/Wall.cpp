@@ -22,11 +22,11 @@ void Wall::Update(Characters &obj, const float &dt)
 	{
 		if (obj.PosX > this->PosX)
 		{
-			obj.PosX = PosX + Sprite_->Get_Width() + obj.Sprite_->Get_Width() * 0.5f;
+			obj.PosX = PosX + Sprite_->Get_Width() + obj.Sprite_->Get_Width() ;
 		}
 		if (obj.PosX < this->PosX)
 		{
-			obj.PosX = PosX - Sprite_->Get_Width() - obj.Sprite_->Get_Width() * 0.5f;
+			obj.PosX = PosX - Sprite_->Get_Width() - obj.Sprite_->Get_Width() ;
 		}
 	}
 

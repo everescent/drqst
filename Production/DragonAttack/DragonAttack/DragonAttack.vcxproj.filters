@@ -258,15 +258,6 @@
     <ClCompile Include="Stage2_3.cpp">
       <Filter>Game_States\Stage\Stage 2</Filter>
     </ClCompile>
-    <ClCompile Include="Test_Stage1.cpp">
-      <Filter>Game_States\Stage\Stage 1</Filter>
-    </ClCompile>
-    <ClCompile Include="Test_Stage1_2.cpp">
-      <Filter>Game_States\Stage\Stage 1</Filter>
-    </ClCompile>
-    <ClCompile Include="Test_Stage1_3.cpp">
-      <Filter>Game_States\Stage\Stage 1</Filter>
-    </ClCompile>
     <ClCompile Include="Pause.cpp">
       <Filter>Game_Object\Pause_Interface</Filter>
     </ClCompile>
@@ -290,6 +281,15 @@
     </ClCompile>
     <ClCompile Include="Stage3_3.cpp">
       <Filter>Game_States\Stage\Stage 3</Filter>
+    </ClCompile>
+    <ClCompile Include="Stage1_1.cpp">
+      <Filter>Game_States\Stage\Stage 1</Filter>
+    </ClCompile>
+    <ClCompile Include="Stage1_2.cpp">
+      <Filter>Game_States\Stage\Stage 1</Filter>
+    </ClCompile>
+    <ClCompile Include="Stage1_3.cpp">
+      <Filter>Game_States\Stage\Stage 1</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -443,15 +443,6 @@
     <ClInclude Include="Stage2_2.h">
       <Filter>Game_States\Stage\Stage 2</Filter>
     </ClInclude>
-    <ClInclude Include="Test_Stage1.h">
-      <Filter>Game_States\Stage\Stage 1</Filter>
-    </ClInclude>
-    <ClInclude Include="Test_Stage1_2.h">
-      <Filter>Game_States\Stage\Stage 1</Filter>
-    </ClInclude>
-    <ClInclude Include="Test_Stage1_3.h">
-      <Filter>Game_States\Stage\Stage 1</Filter>
-    </ClInclude>
     <ClInclude Include="Stage3_3.h">
       <Filter>Game_States\Stage\Stage 3</Filter>
     </ClInclude>
@@ -475,6 +466,15 @@
     </ClInclude>
     <ClInclude Include="Stage3_2.h">
       <Filter>Game_States\Stage\Stage 3</Filter>
+    </ClInclude>
+    <ClInclude Include="Stage1_1.h">
+      <Filter>Game_States\Stage\Stage 1</Filter>
+    </ClInclude>
+    <ClInclude Include="Stage1_2.h">
+      <Filter>Game_States\Stage\Stage 1</Filter>
+    </ClInclude>
+    <ClInclude Include="Stage1_3.h">
+      <Filter>Game_States\Stage\Stage 1</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

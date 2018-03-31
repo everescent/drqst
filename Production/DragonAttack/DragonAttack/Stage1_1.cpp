@@ -1,4 +1,4 @@
-#include "Test_Stage1.h"
+#include "Stage1_1.h"
 
 namespace
 {
@@ -27,7 +27,7 @@ namespace
 	Sign *s1, *s2, *s3, *s4, *s5, *s6;
 	GameObject *tut1, *tut2, *tut3, *tut4, *tut5, *tut6;
 
-	Wall *w2, *w22, *w5, *w6;
+	//Wall *w2, *w22, *w5, *w6;
 
 	std::vector<Characters*> c;
 
@@ -50,14 +50,10 @@ namespace
 	Sprite* SIGN_SPRITE;
 
 
-	////////Particle System////////////
-	AEGfxVertexList *pMesh; // the mesh the particles will use
 
-	Particle_System *fireball;// (nullptr, { 0.f, 0.f }, CENTER);
-	////////Particle System////////////
 }
 
-namespace Test_Stage1_1
+namespace Stage1_1
 {
 	void Load(void)
 	{
@@ -73,7 +69,6 @@ namespace Test_Stage1_1
 		DMG_SPRITE = new Sprite{ S_CreateSquare(50.0f, "Textures/Fireball.png", 1.0f) };
 		SPD_SPRITE = new Sprite{ S_CreateSquare(50.0f, "Textures/spd.png", 1.0f) };
 		BARRIER_SPRITE = new Sprite{ S_CreateSquare(130.0f, ".//Textures/box.png") };
-		//WALL_SPRITE = new Sprite{ S_CreateRectangle(50.0f, 50.0f, ".//Textures/download.jpg") };
 		WALL_SPRITE = new Sprite{ CreateFloor(1.0f, "Textures/Cobblestone.png", 1.0f, 1.0f) };
 		PLAT_SPRITE = new Sprite{ CreatePlatform(1.0f, 1.0f, "Textures/Cobblestone.png") };
 		LCPLAT_SPRITE = new Sprite{ CreatePlatform(2.0f, 3.0f, ".//Textures/Win_Platform.png") };
@@ -93,10 +88,10 @@ namespace Test_Stage1_1
 		archerTower = new Tower{ TOWER_SPRITE, 4800.0f, 0.0f };
 		ui = new UI{ player };
 		box1 = new Barrier{ BARRIER_SPRITE, 1500.0f, -235.0f };
-		w2 = new Wall{ WALL_SPRITE, 3750.0f, -345.0f };
+		/*w2 = new Wall{ WALL_SPRITE, 3750.0f, -345.0f };
 		w22 = new Wall{ WALL_SPRITE,3750.0f, -230.0f };
 		w5 = new Wall{ WALL_SPRITE,6480.0f, -180.0f };
-		w6 = new Wall{ WALL_SPRITE,6480.0f, -200.0f };
+		w6 = new Wall{ WALL_SPRITE,6480.0f, -200.0f };*/
 
 		next = new LevelChangePlatform{ LCPLAT_SPRITE,6550.0f, -50.0f };
 		coin1 = new PickUp{ COIN_SPRITE,
@@ -125,7 +120,7 @@ namespace Test_Stage1_1
 		tut6 = new GameObject{ TUT6_SPRITE, Col_Comp() };
 		/* Static Object Placement End */
 
-		if (!Import_MapData("level1-1.txt", MapData, Map_Width, Map_Height)) { AEGfxExit(); }
+		if (!Import_MapData(".//Levels/level1-1.txt", MapData, Map_Width, Map_Height)) { AEGfxExit(); }
 
 		/* Enemy Placement Start */
 		//c.push_back(Create_Basic_AI(GRUNT,  AEVec2  { 2320.0f , -180.0f }));
@@ -193,20 +188,6 @@ namespace Test_Stage1_1
 		for (size_t i = 0; i < c.size(); ++i)
 			c[i]->SetActive(true);
 
-		////////Particle System////////////
-		Effects_Init();
-		fireball = Effects_Get(MFIREBALL_PARTICLE);
-		fireball->Emitter_.PPS_ = 8;
-		fireball->Emitter_.Dist_Min_ = 10.f;
-		fireball->Emitter_.Vol_Max = 4096;
-		fireball->Emitter_.Direction_ = 90.0f;
-		fireball->Emitter_.Particle_Rand_.Spread_ = 360;
-		fireball->Emitter_.Conserve_ = 0.8f;
-		fireball->Emitter_.Size_ = 10.0f;
-		fireball->Emitter_.Speed_ = 4.0f;
-		fireball->Emitter_.Particle_Rand_.Sp_Rand_ = 3;
-		fireball->Emitter_.Lifetime_ = 3.f;
-		////////Particle System////////////
 	}
 
 	void Update(float dt)
@@ -244,10 +225,10 @@ namespace Test_Stage1_1
 				c[i]->Update(*player, dt);
 			}
 			archerTower->Update(*(c[i]), dt);
-			w2->Update (*(c[i]), dt);
+			/*w2->Update (*(c[i]), dt);
 			w22->Update(*(c[i]), dt);
 			w5->Update (*(c[i]), dt);
-			w6->Update(*(c[i]), dt);
+			w6->Update(*(c[i]), dt);*/
 		}
 
 		if (!(box1->IsActive()))
@@ -296,25 +277,6 @@ namespace Test_Stage1_1
 		ui->UI_Update(player);
 
 		std::cout << (int)player->PosX << ", " << (int)player->PosY << std::endl;
-
-		////////Particle System////////////
-		//Create the particles for emission
-		fireball->UpdateEmission();
-		//Turbulence simulates brownian motion
-		//Passing in equations for phase x and y
-		fireball->Turbulence(0.2f);
-		//Simulate an upward force
-		//test->Force(0.2f, false, true);
-		//Add gravity
-		//test->Gravity(0.5f);
-		//Set exposure as a factor of lifetime
-		fireball->ColorRamp_Life();
-		//Set transparency as a factor of Exposure
-		fireball->TransRamp_Exp();
-		//Updates all particles
-		//test->Newton({0.f, 0.0f}, 0.3f);
-		fireball->Update(dt);
-		////////Particle System////////////
 	}
 
 	void Draw(void)
@@ -392,10 +354,6 @@ namespace Test_Stage1_1
 		player->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 		next->Render();
 		ui->Render();
-
-		////////Particle System////////////
-		fireball->Render();
-		////////Particle System////////////
 	}
 
 	void Free(void)
@@ -425,9 +383,9 @@ namespace Test_Stage1_1
 		delete next;
 		delete ui;
 
-		delete w2, w22, w5, w6;
+		//delete w2, w22, w5, w6;
 
-		/* Delete Sprites */
+		/* Delete Sprites (17) */
 		delete TUT1_SPRITE;
 		delete TUT2_SPRITE;
 		delete TUT3_SPRITE;

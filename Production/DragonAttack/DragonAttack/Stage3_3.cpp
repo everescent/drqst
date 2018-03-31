@@ -35,7 +35,7 @@ namespace Stage3_3
 		if (!Import_MapData(".//Levels/level3-3.txt", MapData, Map_Width, Map_Height)) { GSM::next = GS_QUIT; }
 		wall_sprite  = new Sprite{ S_CreateRectangle(50.0f, 50.0f, ".//Textures/download.jpg") };
 		floor_sprite = new Sprite{ CreateFloor(1.0f, ".//Textures/Cobblestone.png", 1.0f, 1.0f) };
-		plat_sprite  = new Sprite{ CreatePlatform(1.0f, 1.0f, "Textures/Cobblestone.png") };
+		plat_sprite  = new Sprite{ CreatePlatform(1.0f, 1.0f, ".//Textures/Cobblestone.png") };
 
 		BG   = new Sprite{ CreateBG(22.0f, 2.0f, ".//Textures/BG_Stage1.png", 1.0f, 15.0f) };
 		M_BG = new Transform{};
@@ -52,7 +52,6 @@ namespace Stage3_3
 		ui    = new UI{ player };
 	}
 
-    
 	void Init(void)
 	{
 		audio->Play(0);
@@ -134,8 +133,6 @@ namespace Stage3_3
             }
         }
 
-        
-
         player->Update(*player, dt);
         ui->UI_Update(player);
 
@@ -151,7 +148,6 @@ namespace Stage3_3
         {
             elem.Render();
         }
-
 
         for (Platform& elem : platforms)
         {
@@ -169,11 +165,8 @@ namespace Stage3_3
             default: break;
             }
         }
-
-        
-
-
-        last_boss->Render();
+		
+		last_boss->Render();
         
         player->Render();
         
@@ -182,12 +175,31 @@ namespace Stage3_3
 
 	void Free(void)
 	{
+		delete player;
+		delete BG;
+		delete M_BG;
+		delete audio;
+		delete ui;
 
+		for (int y = 0; y < Map_Height; ++y)
+		{
+			delete[] MapData[y];
+		}
+		delete[] MapData;
+
+		floors.clear();
+		walls.clear();
+		platforms.clear();
+
+		delete last_boss;
+		delete wall_sprite;
+		delete floor_sprite;
+		delete plat_sprite;
 	}
 
 	void Unload(void)
 	{
-		delete wall_sprite;
+		/*delete wall_sprite;
 		delete floor_sprite;
 		delete plat_sprite;
 		delete last_boss;
@@ -200,6 +212,6 @@ namespace Stage3_3
         {
             delete[] MapData[y];
         }
-        delete[] MapData;
+        delete[] MapData;*/
 	}
 }

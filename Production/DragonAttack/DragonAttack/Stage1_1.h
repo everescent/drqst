@@ -23,7 +23,7 @@
 #include <utility>
 #include <iostream>
 
-namespace Test_Stage1_1
+namespace Stage1_1
 {
 	void Init(void);
 

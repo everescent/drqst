@@ -1,4 +1,12 @@
 #include "StageManager.h"
+#include "Stage1_1.h"
+#include "Stage1_2.h"
+#include "Stage1_3.h"
+#include "Stage2_1.h"
+#include "Stage2_2.h"
+#include "Stage2_3.h"
+#include "Stage3_1.h"
+#include "Stage3_2.h"
 #include "Stage3_3.h"
 #include "Score_Page.h"
 
@@ -17,6 +25,62 @@ namespace SM
 		StageManager[SUB_STAGE1].Draw     = nullptr;
 		StageManager[SUB_STAGE1].Free     = nullptr;
 		StageManager[SUB_STAGE1].Unload   = nullptr;
+
+		StageManager[STAGE_1_1].Init      = Stage1_1::Init;
+		StageManager[STAGE_1_1].Load      = Stage1_1::Load;
+		StageManager[STAGE_1_1].Update    = Stage1_1::Update;
+		StageManager[STAGE_1_1].Draw      = Stage1_1::Draw;
+		StageManager[STAGE_1_1].Free      = Stage1_1::Free;
+		StageManager[STAGE_1_1].Unload    = Stage1_1::Unload;
+
+		StageManager[STAGE_1_2].Init      = Stage1_2::Init;
+		StageManager[STAGE_1_2].Load      = Stage1_2::Load;
+		StageManager[STAGE_1_2].Update    = Stage1_2::Update;
+		StageManager[STAGE_1_2].Draw      = Stage1_2::Draw;
+		StageManager[STAGE_1_2].Free      = Stage1_2::Free;
+		StageManager[STAGE_1_2].Unload    = Stage1_2::Unload;
+									      
+		StageManager[STAGE_1_3].Init      = Stage1_3::Init;
+		StageManager[STAGE_1_3].Load      = Stage1_3::Load;
+		StageManager[STAGE_1_3].Update    = Stage1_3::Update;
+		StageManager[STAGE_1_3].Draw      = Stage1_3::Draw;
+		StageManager[STAGE_1_3].Free      = Stage1_3::Free;
+		StageManager[STAGE_1_3].Unload    = Stage1_3::Unload;
+									      
+		StageManager[STAGE_2_1].Init      = Stage2_1::Init;
+		StageManager[STAGE_2_1].Load      = Stage2_1::Load;
+		StageManager[STAGE_2_1].Update    = Stage2_1::Update;
+		StageManager[STAGE_2_1].Draw      = Stage2_1::Draw;
+		StageManager[STAGE_2_1].Free      = Stage2_1::Free;
+		StageManager[STAGE_2_1].Unload    = Stage2_1::Unload;
+									      
+		StageManager[STAGE_2_2].Init      = Stage2_2::Init;
+		StageManager[STAGE_2_2].Load      = Stage2_2::Load;
+		StageManager[STAGE_2_2].Update    = Stage2_2::Update;
+		StageManager[STAGE_2_2].Draw      = Stage2_2::Draw;
+		StageManager[STAGE_2_2].Free      = Stage2_2::Free;
+		StageManager[STAGE_2_2].Unload    = Stage2_2::Unload;
+									      
+		StageManager[STAGE_2_3].Init      = Stage2_3::Init;
+		StageManager[STAGE_2_3].Load      = Stage2_3::Load;
+		StageManager[STAGE_2_3].Update    = Stage2_3::Update;
+		StageManager[STAGE_2_3].Draw      = Stage2_3::Draw;
+		StageManager[STAGE_2_3].Free      = Stage2_3::Free;
+		StageManager[STAGE_2_3].Unload    = Stage2_3::Unload;
+									      
+		StageManager[STAGE_3_1].Init      = Stage3_1::Init;
+		StageManager[STAGE_3_1].Load      = Stage3_1::Load;
+		StageManager[STAGE_3_1].Update    = Stage3_1::Update;
+		StageManager[STAGE_3_1].Draw      = Stage3_1::Draw;
+		StageManager[STAGE_3_1].Free      = Stage3_1::Free;
+		StageManager[STAGE_3_1].Unload    = Stage3_1::Unload;
+									      
+		StageManager[STAGE_3_2].Init      = Stage3_2::Init;
+		StageManager[STAGE_3_2].Load      = Stage3_2::Load;
+		StageManager[STAGE_3_2].Update    = Stage3_2::Update;
+		StageManager[STAGE_3_2].Draw      = Stage3_2::Draw;
+		StageManager[STAGE_3_2].Free      = Stage3_2::Free;
+		StageManager[STAGE_3_2].Unload    = Stage3_2::Unload;
 
         StageManager[STAGE_3_3].Init      = Stage3_3::Init;
         StageManager[STAGE_3_3].Load      = Stage3_3::Load;
