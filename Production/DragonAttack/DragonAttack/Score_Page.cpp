@@ -1,6 +1,7 @@
 #include "Score_Page.h"
 #include "AEEngine.h"
 #include "Characters.h"
+#include "StageManager.h"
 #include "PickUp.h"
 
 #define EFFECT_NUM 8
@@ -8,11 +9,11 @@
 // for global variables
 namespace
 {
-	u32 fontID;
-	Particle_System* score_effects[EFFECT_NUM];
+	u32 fontID;									 // stores the font type
+	Particle_System* score_effects[EFFECT_NUM];	 // stores the fireworks
+	const float offset = 2.f;					 // offset for emitter box
 
-	const float offset = 2.f;
-
+	// type to keep track on where the fireworks explode and how long they last
 	struct Fireworks
 	{
 		float dist;
@@ -49,7 +50,7 @@ void Init_Score_Page(void)
 	score_effects[0]->Emitter_.Size_ = 25.0f;
 	score_effects[0]->Emitter_.Speed_ = 4.0f;
 	score_effects[0]->Emitter_.Particle_Rand_.Sp_Rand_ = 3;
-	score_effects[0]->Emitter_.Lifetime_ = 4.f;
+	score_effects[0]->Emitter_.Lifetime_ = 1.f;
 	score_effects[0]->Emitter_.Pos_.Min_Max.Point_Max = {};
 	score_effects[0]->Emitter_.Pos_.Min_Max.Point_Min = {};
 
@@ -61,7 +62,7 @@ void Init_Score_Page(void)
 	}
 }
 
-void Print_Score_Page(const float dt)
+void Update_Score_Page(const float dt)
 {
 	// reset camera position
 	AEGfxSetCamPosition(0.0f, 0.0f);
@@ -89,18 +90,21 @@ void Print_Score_Page(const float dt)
 
 			
 			fireworks[i].distEnd = RNG(60.f, 80.f);  // randomize the end position between 60-80
-			fireworks[i].lifeTime = 1.5f;            // lifetime of the fireworks
+			fireworks[i].lifeTime = 3.f;            // lifetime of the fireworks
 			++fireworks[i].dist;
 		}
 		// move the emitter to its final destination
 		else if (fireworks[i].dist < fireworks[i].distEnd)
 		{
+			// shoots the fireworks/emitter up
 			score_effects[i]->Emitter_.Pos_.Min_Max.Point_Min.y += 1.f;
 			score_effects[i]->Emitter_.Pos_.Min_Max.Point_Max.y += 1.f;
 			++fireworks[i].dist;
 
 			// cause the particles to become smaller as time passes
 			score_effects[i]->ScaleRamp(0.99f);
+			score_effects[i]->Turbulence(0.3f);
+			score_effects[i]->UpdateEmission();
 		}
 
 		// Reset the emitter
@@ -115,22 +119,27 @@ void Print_Score_Page(const float dt)
 			if (!fireworks[i].transit)
 			{
 				Transit_Fireworks(i);
+				score_effects[i]->UpdateEmission();
 			}
 
 			// apply particle behaviour for fireworks
-			score_effects[i]->Gravity(0.5f);
+			score_effects[i]->Turbulence(0.2f);
+			score_effects[i]->Gravity(1.f);
 			score_effects[i]->Force(0.2f, false, true);
+			score_effects[i]->ColorRamp_Life();
+			score_effects[i]->TransRamp_Exp();
 			fireworks[i].lifeTime -= dt;
 		}
 
 		// particle behaviours
-		score_effects[i]->Turbulence(0.3f);
 		score_effects[i]->TransRamp_Exp();
-		score_effects[i]->UpdateEmission();
 		score_effects[i]->Update(dt);
 	}
 
-
+	if (AEInputCheckTriggered(AEVK_RETURN))
+	{
+		SM::Set_Next(SM::Get_After_Score());
+	}
 
 }
 
@@ -151,6 +160,7 @@ void Render_Score_Page(void)
 	AEGfxSetRenderMode(AE_GFX_RM_COLOR); // render with color
 	AEGfxTextureSet(NULL, 0, 0);		 // no texture needed
 	AEGfxSetTransparency(1.0f);
+	AEGfxSetTintColor(1.0f, 1.0f, 1.0f, 1.0f);
 
 	// print text on screen
 	AEGfxPrint(fontID, score,           -60, 215, 1.0f, 1.0f, 1.0f);
@@ -162,10 +172,7 @@ void Render_Score_Page(void)
 
 void Free_Score_Page(void)
 {
-
-	//Transit_Fireworks(0);
-	//Reset_Effects(0);
-
+	// does nothing
 }
 
 void Unload_Score_Page(void)
@@ -190,6 +197,7 @@ float RNG(const float min, const float max)
 void Reset_Effects(const int num)
 {
 	score_effects[num]->Emitter_.PPS_ = 2;
+	score_effects[0]->Emitter_.Conserve_ = 0.8f;
 	score_effects[num]->Emitter_.Dist_Min_ = 0.f;
 	score_effects[num]->Emitter_.Particle_Rand_.Spread_ = 0;
 	score_effects[num]->Emitter_.Size_ = 25.0f;
@@ -203,12 +211,14 @@ void Reset_Effects(const int num)
 
 void Transit_Fireworks(const int num)
 {
-	score_effects[num]->Emitter_.PPS_ = 5;
-	score_effects[num]->Emitter_.Dist_Min_ = 20.f;
+	score_effects[num]->Emitter_.PPS_ = 300;
+	score_effects[0]->Emitter_.Conserve_ = 0.85f;
+	score_effects[num]->Emitter_.Dist_Min_ = 0.f;
 	score_effects[num]->Emitter_.Particle_Rand_.Spread_ = 360;
-	score_effects[num]->Emitter_.Size_ = 15.0f;
-	score_effects[num]->Emitter_.Speed_ = 12.0f;
-	score_effects[num]->Emitter_.Lifetime_ = 1.f;
+	score_effects[num]->Emitter_.Size_ = 20.0f;
+	score_effects[num]->Emitter_.Speed_ = 25.0f;
+	score_effects[num]->Emitter_.Particle_Rand_.Sp_Rand_ = 20;
+	score_effects[num]->Emitter_.Lifetime_ = 3.f;
 
 	fireworks[num].transit = true;
 }
