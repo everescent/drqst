@@ -205,9 +205,9 @@
     <ClCompile Include="Stage3_3.cpp" />
     <ClCompile Include="StageManager.cpp" />
     <ClCompile Include="test_level_import.cpp" />
-    <ClCompile Include="Test_Stage1.cpp" />
-    <ClCompile Include="Test_Stage1_2.cpp" />
-    <ClCompile Include="Test_Stage1_3.cpp" />
+    <ClCompile Include="Stage1_1.cpp" />
+    <ClCompile Include="Stage1_2.cpp" />
+    <ClCompile Include="Stage1_3.cpp" />
     <ClCompile Include="Tower.cpp" />
     <ClCompile Include="Transform.cpp" />
     <ClCompile Include="UI.cpp" />
@@ -268,9 +268,9 @@
     <ClInclude Include="Stage3_3.h" />
     <ClInclude Include="StageManager.h" />
     <ClInclude Include="test_level_import.h" />
-    <ClInclude Include="Test_Stage1.h" />
-    <ClInclude Include="Test_Stage1_2.h" />
-    <ClInclude Include="Test_Stage1_3.h" />
+    <ClInclude Include="Stage1_1.h" />
+    <ClInclude Include="Stage1_2.h" />
+    <ClInclude Include="Stage1_3.h" />
     <ClInclude Include="Tower.h" />
     <ClInclude Include="Transform.h" />
     <ClInclude Include="UI.h" />

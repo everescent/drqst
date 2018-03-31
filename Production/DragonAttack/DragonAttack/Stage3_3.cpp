@@ -134,8 +134,6 @@ namespace Stage3_3
             }
         }
 
-        
-
         player->Update(*player, dt);
         ui->UI_Update(player);
 
@@ -169,11 +167,8 @@ namespace Stage3_3
             default: break;
             }
         }
-
-        
-
-
-        last_boss->Render();
+		
+		last_boss->Render();
         
         player->Render();
         
@@ -182,12 +177,25 @@ namespace Stage3_3
 
 	void Free(void)
 	{
+		delete wall_sprite;
+		delete floor_sprite;
+		delete plat_sprite;
+		delete last_boss;
+		delete BG;
+		delete M_BG;
+		delete audio;
+		delete ui;
 
+		for (int y = 0; y < Map_Height; ++y)
+		{
+			delete[] MapData[y];
+		}
+		delete[] MapData;
 	}
 
 	void Unload(void)
 	{
-		delete wall_sprite;
+		/*delete wall_sprite;
 		delete floor_sprite;
 		delete plat_sprite;
 		delete last_boss;
@@ -200,6 +208,6 @@ namespace Stage3_3
         {
             delete[] MapData[y];
         }
-        delete[] MapData;
+        delete[] MapData;*/
 	}
 }

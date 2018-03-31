@@ -1,4 +1,4 @@
-#include "Test_Stage1_2.h"
+#include "Stage1_2.h"
 
 namespace
 {
@@ -34,7 +34,7 @@ namespace
 	Sprite* SIGN_SPRITE;
 }
 
-namespace Test_Stage1_2
+namespace Stage1_2
 {
 	void Load(void)
 	{		
@@ -43,7 +43,6 @@ namespace Test_Stage1_2
 		DMG_SPRITE = new Sprite{ S_CreateSquare(50.0f, "Textures/Fireball.png", 1.0f) };
 		SPD_SPRITE = new Sprite{ S_CreateSquare(50.0f, "Textures/spd.png", 1.0f) };
 		BARRIER_SPRITE = new Sprite{ S_CreateSquare(130.0f, ".//Textures/box.png") };
-		//WALL_SPRITE = new Sprite{ S_CreateRectangle(50.0f, 50.0f, ".//Textures/download.jpg") };
 		WALL_SPRITE = new Sprite{ CreateFloor(1.0f, "Textures/Cobblestone.png", 1.0f, 1.0f) };
 		PLAT_SPRITE = new Sprite{ CreatePlatform(1.0f, 1.0f, "Textures/Cobblestone.png") };
 		LCPLAT_SPRITE = new Sprite{ CreatePlatform(2.0f, 3.0f, ".//Textures/Win_Platform.png") };
@@ -171,7 +170,6 @@ namespace Test_Stage1_2
 			c[i]->SetActive(true);
 
 		player->SetActive(true);
-
 	}
 
 
@@ -186,26 +184,6 @@ namespace Test_Stage1_2
 			{
 				c[i]->Update(*player, dt);
 			}
-			/*w1->  Update(*(c[i]), dt);
-			w2->  Update(*(c[i]), dt);
-			w3->  Update(*(c[i]), dt);
-			w4->  Update(*(c[i]), dt);
-			w5->  Update(*(c[i]), dt);
-			w9->  Update(*(c[i]), dt);
-			w6->  Update(*(c[i]), dt);
-			w7->  Update(*(c[i]), dt);
-			w8->  Update(*(c[i]), dt);
-			w12-> Update(*(c[i]), dt);
-			w13-> Update(*(c[i]), dt);
-			w16-> Update(*(c[i]), dt);
-			w17-> Update(*(c[i]), dt);
-			w18-> Update(*(c[i]), dt);
-			w21-> Update(*(c[i]), dt);
-			w22-> Update(*(c[i]), dt);
-			w23-> Update(*(c[i]), dt);
-			w24-> Update(*(c[i]), dt);
-			w25-> Update(*(c[i]), dt);
-			w29-> Update(*(c[i]), dt);*/
 		}
 
 		for (Platform& elem : platforms)
@@ -296,28 +274,7 @@ namespace Test_Stage1_2
 		coin3->Render();
 		hp->Render();
 		next->Render();
-		/*
-		w1->Render();
-		w2->Render();
-		w3->Render();
-		w4->Render();
-		w5->Render();
-		w9->Render();
-		w6 ->Render();
-		w7->Render();
-		w8->Render();
-		w12->Render();
-		w13->Render();
-		w16->Render();
-		w17->Render();
-		w18->Render();
-		w21->Render();
-		w22->Render();
-		w23->Render();
-		w24->Render();
-		w25->Render();
-		w29->Render();
-		*/
+
 		player->Render();
 		player->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 		ui->Render();

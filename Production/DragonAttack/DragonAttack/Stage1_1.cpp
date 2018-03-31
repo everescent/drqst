@@ -1,4 +1,4 @@
-#include "Test_Stage1.h"
+#include "Stage1_1.h"
 
 namespace
 {
@@ -57,7 +57,7 @@ namespace
 	////////Particle System////////////
 }
 
-namespace Test_Stage1_1
+namespace Stage1_1
 {
 	void Load(void)
 	{

@@ -1,4 +1,4 @@
-#include "Test_Stage1_3.h"
+#include "Stage1_3.h"
 
 namespace
 {
@@ -27,7 +27,7 @@ namespace
 	Sprite* FLOOR_SPRITE;
 }
 
-namespace Test_Stage1_3
+namespace Stage1_3
 {
 	void Load(void)
 	{
@@ -35,7 +35,6 @@ namespace Test_Stage1_3
 		HP_SPRITE = new Sprite{ S_CreateSquare(50.0f, "Textures/hp.png", 1.0f) };
 		DMG_SPRITE = new Sprite{ S_CreateSquare(50.0f, "Textures/Fireball.png", 1.0f) };
 		SPD_SPRITE = new Sprite{ S_CreateSquare(50.0f, "Textures/spd.png", 1.0f) };*/
-		//WALL_SPRITE = new Sprite{ S_CreateRectangle(50.0f, 50.0f, ".//Textures/download.jpg") };
 		WALL_SPRITE = new Sprite{ CreateFloor(1.0f, "Textures/Cobblestone.png", 1.0f, 1.0f) };
 		LCPLAT_SPRITE = new Sprite{ CreatePlatform(2.0f, 3.0f, ".//Textures/Win_Platform.png") };
 		FLOOR_SPRITE = new Sprite{ CreateFloor(1.0f, ".//Textures/Cobblestone.png", 1.0f, 1.0f) };
@@ -53,7 +52,6 @@ namespace Test_Stage1_3
 		next = new LevelChangePlatform{LCPLAT_SPRITE, 500.0f,  -300.0f };
 		c.push_back(Create_Boss_AI(LANCELOT));
 	}
-
 
 	void Init(void)
 	{
@@ -78,12 +76,9 @@ namespace Test_Stage1_3
 				}
 			}
 		}
-
 		c[0]->SetActive(true);
 		player->SetActive(true);
 	}
-
-
 
 	void Update(float dt)
 	{
@@ -116,7 +111,7 @@ namespace Test_Stage1_3
 		player->Update(*player, dt);
 		ui->UI_Update(player);
 
-		std::cout << (int)player->PosX << ", " << (int)player->PosY << std::endl;
+		//std::cout << (int)player->PosX << ", " << (int)player->PosY << std::endl;
 	}
 
 	void Draw(void)
@@ -142,30 +137,33 @@ namespace Test_Stage1_3
 
 	void Free(void)
 	{
+		delete player;
 		delete BG;
 		delete M_BG;
-		delete player;
 		delete Audio;
-		delete next;
 		delete ui;
-
-		//delete COIN_SPRITE;//pickups
-		//delete HP_SPRITE;
-		//delete DMG_SPRITE;
-		//delete SPD_SPRITE;
-		delete WALL_SPRITE;
-		delete LCPLAT_SPRITE;
-		delete FLOOR_SPRITE;
-
-		floors.clear();
-		walls.clear();
-		c.clear();
 
 		for (int y = 0; y < Map_Height; ++y)
 		{
 			delete[] MapData[y];
 		}
 		delete[] MapData;
+		
+		floors.clear();
+		walls.clear();
+
+		delete next;
+
+		c.clear();
+		
+		//delete COIN_SPRITE;//pickups
+		//delete HP_SPRITE;
+		//delete DMG_SPRITE;
+		//delete SPD_SPRITE;
+		
+		delete WALL_SPRITE;
+		delete LCPLAT_SPRITE;
+		delete FLOOR_SPRITE;
 	}
 
 	void Unload(void)

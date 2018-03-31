@@ -45,6 +45,14 @@ enum STAGE_LIST
 {
 	SUB_STAGE1 = 0,
 
+	STAGE_1_1,
+	STAGE_1_2,
+	STAGE_1_3,
+	STAGE_2_1,
+	STAGE_2_2,
+	STAGE_2_3,
+	STAGE_3_1,
+	STAGE_3_2,
     STAGE_3_3,
 	// don't touch the bottom area, add from top
 	SS_SCORE,

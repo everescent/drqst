@@ -282,24 +282,22 @@ namespace Stage2_2
 		delete M_BG;
 		delete player;
 		delete Audio;
-
-		/*delete w1, w2, w3, w4, w5, w6, w7, w8, w9, w12, w13, w16, w17, w18, w21, w22, w23, w24, w25, w29;
-
-		delete coin1, coin2, coin3, hp;*/
+		
+		/*delete coin1, coin2, coin3, hp;*/
 		delete next;
 		delete ui;
 
-		//delete COIN_SPRITE;//pickups
-		//delete HP_SPRITE;
-		//delete DMG_SPRITE;
-		//delete SPD_SPRITE;
-		//delete BARRIER_SPRITE;//objs
-		//delete WALL_SPRITE;
-		//delete PLAT_SPRITE;
-		//delete LCPLAT_SPRITE;
-		//delete FLOOR_SPRITE;
-		//delete TOWER_SPRITE;
-		//delete SIGN_SPRITE;
+		delete COIN_SPRITE;//pickups
+		delete HP_SPRITE;
+		delete DMG_SPRITE;
+		delete SPD_SPRITE;
+		delete BARRIER_SPRITE;//objs
+		delete WALL_SPRITE;
+		delete PLAT_SPRITE;
+		delete LCPLAT_SPRITE;
+		delete FLOOR_SPRITE;
+		delete TOWER_SPRITE;
+		delete SIGN_SPRITE;
 
 		platforms.clear();
 		floors.clear();

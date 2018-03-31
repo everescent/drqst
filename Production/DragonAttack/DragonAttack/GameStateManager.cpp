@@ -20,9 +20,9 @@ Technology is prohibited.
 namespace GSM
 {
 
-	GAME_STATE previous = GS_LEVEL3_3;
-	GAME_STATE current  = GS_LEVEL3_3;
-	GAME_STATE next     = GS_LEVEL3_3;
+	GAME_STATE previous = GS_LEVEL1_3;
+	GAME_STATE current  = GS_LEVEL1_3;
+	GAME_STATE next     = GS_LEVEL1_3;
 
 	GameStateFunctions GSF[GS_QUIT] = { 0 };
 
@@ -36,26 +36,26 @@ namespace GSM
 		GSF[GS_MAIN].Free         = Main_Menu::Free;
 		GSF[GS_MAIN].Unload       = Main_Menu::Unload;
 
-		GSF[GS_LEVEL1_1].Init	  = Test_Stage1_1::Init;
-		GSF[GS_LEVEL1_1].Load	  = Test_Stage1_1::Load;
-		GSF[GS_LEVEL1_1].Update   = Test_Stage1_1::Update;
-		GSF[GS_LEVEL1_1].Draw	  = Test_Stage1_1::Draw;
-		GSF[GS_LEVEL1_1].Free	  = Test_Stage1_1::Free;
-		GSF[GS_LEVEL1_1].Unload   = Test_Stage1_1::Unload;
+		GSF[GS_LEVEL1_1].Init	  = Stage1_1::Init;
+		GSF[GS_LEVEL1_1].Load	  = Stage1_1::Load;
+		GSF[GS_LEVEL1_1].Update   = Stage1_1::Update;
+		GSF[GS_LEVEL1_1].Draw	  = Stage1_1::Draw;
+		GSF[GS_LEVEL1_1].Free	  = Stage1_1::Free;
+		GSF[GS_LEVEL1_1].Unload   = Stage1_1::Unload;
 
-		GSF[GS_LEVEL1_2].Init     = Test_Stage1_2::Init;
-		GSF[GS_LEVEL1_2].Load     = Test_Stage1_2::Load;
-		GSF[GS_LEVEL1_2].Update   = Test_Stage1_2::Update;
-		GSF[GS_LEVEL1_2].Draw     = Test_Stage1_2::Draw;
-		GSF[GS_LEVEL1_2].Free     = Test_Stage1_2::Free;
-		GSF[GS_LEVEL1_2].Unload   = Test_Stage1_2::Unload;
+		GSF[GS_LEVEL1_2].Init     = Stage1_2::Init;
+		GSF[GS_LEVEL1_2].Load     = Stage1_2::Load;
+		GSF[GS_LEVEL1_2].Update   = Stage1_2::Update;
+		GSF[GS_LEVEL1_2].Draw     = Stage1_2::Draw;
+		GSF[GS_LEVEL1_2].Free     = Stage1_2::Free;
+		GSF[GS_LEVEL1_2].Unload   = Stage1_2::Unload;
 								  
-		GSF[GS_LEVEL1_3].Init     = Test_Stage1_3::Init;
-		GSF[GS_LEVEL1_3].Load     = Test_Stage1_3::Load;
-		GSF[GS_LEVEL1_3].Update   = Test_Stage1_3::Update;
-		GSF[GS_LEVEL1_3].Draw     = Test_Stage1_3::Draw;
-		GSF[GS_LEVEL1_3].Free     = Test_Stage1_3::Free;
-		GSF[GS_LEVEL1_3].Unload   = Test_Stage1_3::Unload;
+		GSF[GS_LEVEL1_3].Init     = Stage1_3::Init;
+		GSF[GS_LEVEL1_3].Load     = Stage1_3::Load;
+		GSF[GS_LEVEL1_3].Update   = Stage1_3::Update;
+		GSF[GS_LEVEL1_3].Draw     = Stage1_3::Draw;
+		GSF[GS_LEVEL1_3].Free     = Stage1_3::Free;
+		GSF[GS_LEVEL1_3].Unload   = Stage1_3::Unload;
 
 		GSF[GS_LEVEL2_1].Init     = Stage2_1::Init;
 		GSF[GS_LEVEL2_1].Load     = Stage2_1::Load;
