@@ -11,7 +11,7 @@
 #include "Score_Page.h"
 
 
-static STAGE_LIST s_previous, s_current, s_next;
+static STAGE_LIST s_previous, s_current, s_next, s_after_score;
 
 namespace SM
 {
@@ -91,14 +91,15 @@ namespace SM
 
 		StageManager[SS_SCORE].Init       = Init_Score_Page;
 		StageManager[SS_SCORE].Load       = Load_Score_Page;
-		StageManager[SS_SCORE].Update     = Print_Score_Page;
+		StageManager[SS_SCORE].Update     = Update_Score_Page;
 		StageManager[SS_SCORE].Draw       = Render_Score_Page;
 		StageManager[SS_SCORE].Free       = Free_Score_Page;
 		StageManager[SS_SCORE].Unload     = Unload_Score_Page;
 
-		s_previous = SS_SCORE;
-		s_current  = SS_SCORE;
-		s_next     = SS_SCORE;
+		s_previous    = SS_SCORE;
+		s_current     = SS_SCORE;
+		s_next        = SS_SCORE;
+		s_after_score = STAGE_3_3;
 
 	}
 	
@@ -106,6 +107,8 @@ namespace SM
 	{
 		if (s_current != SS_RESTART)
 			StageManager[s_current].Load();
+		else
+			s_current = s_next = s_previous;
 	}
 
 	void SM_Init(void)
@@ -115,7 +118,7 @@ namespace SM
 
 	void SM_Update(float dt)
 	{
-		StageManager[s_current].Update(dt);
+		SubStage_Finished() ? SM_Unload(), SM_Free() : StageManager[s_current].Update(dt);
 	}
 
 	void SM_Draw(void)
@@ -135,6 +138,12 @@ namespace SM
 
 		s_previous = s_current;
 		s_current = s_next;
+
+		if (GSM::next != GS_QUIT && s_next != SS_QUIT)
+		{
+			SM_Load();
+			SM_Init();
+		}
 	}
 
 	void Set_Next(STAGE_LIST next)
@@ -152,13 +161,20 @@ namespace SM
         return s_current;
     }
 
+	void Set_After_Score(STAGE_LIST after_score)
+	{
+		s_after_score = after_score;
+	}
+
+	STAGE_LIST Get_After_Score(void)
+	{
+		return s_after_score;
+	}
+
 	bool SubStage_Finished(void)
 	{
 		return s_current != s_next;
 	}
 
-	bool Stage_Finished(void)
-	{
-		return s_current == SS_QUIT;
-	}
+
 }

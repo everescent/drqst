@@ -15,8 +15,9 @@ namespace SM
 	void SM_Free   (void);
 
 	void       Set_Next(STAGE_LIST);
-    STAGE_LIST Get_Next();
-    STAGE_LIST Get_Curr();
+    STAGE_LIST Get_Next(void);
+    STAGE_LIST Get_Curr(void);
+	void	   Set_After_Score(STAGE_LIST);
+	STAGE_LIST Get_After_Score(void);
 	bool       SubStage_Finished(void);
-	bool       Stage_Finished(void);
 }
