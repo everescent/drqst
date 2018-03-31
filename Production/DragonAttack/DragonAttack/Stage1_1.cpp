@@ -49,8 +49,6 @@ namespace
 	Sprite* TOWER_SPRITE;
 	Sprite* SIGN_SPRITE;
 
-
-
 }
 
 namespace Stage1_1
