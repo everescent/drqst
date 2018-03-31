@@ -211,9 +211,12 @@ void King_Arthur::Init_Particle(void)
 	slash_effect[0]->Emitter_.Conserve_ = 0.8f;
 	slash_effect[0]->Emitter_.Size_ = 10.0f;
 	slash_effect[0]->Emitter_.Speed_ = 3.0f;
-	slash_effect[0]->Emitter_.Lifetime_ = 2.f;
+	slash_effect[0]->Emitter_.Lifetime_ = 0.5f;
 
-    slash_effect[2] = slash_effect[1] = slash_effect[0];
+	slash_effect[2] = new Particle_System(slash_effect[0]->Emitter_.pMesh_, {}, BOX);
+	slash_effect[1] = new Particle_System(slash_effect[0]->Emitter_.pMesh_, {}, BOX);
+
+	slash_effect[2]->Emitter_ = slash_effect[1]->Emitter_ = slash_effect[0]->Emitter_;
 }
 
 void King_Arthur::Update(Dragon &d, const float dt)
@@ -818,11 +821,15 @@ void King_Arthur::Update_Particle(const float dt)
     // update particle behaviour
     for (auto& i : slash_effect)
     {
-        i->Turbulence(0.4f);
-        i->Drag(0.5f);
-        i->ColorRamp_Life();
-        i->TransRamp_Exp();
-		i->Update(dt);
+		// only update if there are active particles
+		if (i->GetParticleCount())
+		{
+			i->Turbulence(0.4f);
+			i->Drag(0.5f);
+			i->ColorRamp_Life();
+			i->TransRamp_Exp();
+			i->Update(dt);
+		}
     }
 
 	// updates healing effects if there are active particles
@@ -893,6 +900,9 @@ King_Arthur::~King_Arthur(void)
 {
 	for (auto &elem : mobs)
 		delete elem;
+
+	delete slash_effect[1];
+	delete slash_effect[2];
 }
 
 
