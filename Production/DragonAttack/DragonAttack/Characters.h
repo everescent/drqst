@@ -22,6 +22,7 @@ Technology is prohibited.
 #include "AI_Attack_Sprites.h"
 #include "Particle_Effects.h"
 
+// direction the ai is facing
 enum Direction
 {
 	LEFT = 0,
@@ -29,6 +30,14 @@ enum Direction
 	TOP,
 	DOWN,
 	STAY
+};
+
+// animation for ai
+enum
+{
+	HIT_ANIM,
+	IDLE_ANIM,
+	WALK_ANIM,
 };
 
 class Dragon; //forward declaration
@@ -46,11 +55,11 @@ class Characters : public GameObject
 
 	public:
 		Characters(Sprite* t_sprite, const int HP, Col_Comp &&t_col); // default constructor
-    virtual ~Characters() = default;
-		int Get_HP() const;         // get HP of mob
-		void Set_HP(int hp);       // set the hp for mob
-		void Increase_HP(const int increment);      // increase hp via power ups / status
-		void Decrease_HP(const char damage = 1);    // decrease the hp of the character
+    virtual ~Characters() = default;                                  // virtual destructor
+		int Get_HP() const;                                           // get HP of mob
+		void Set_HP(int hp);                                          // set the hp for mob
+		void Increase_HP(const int increment);                        // increase hp via power ups / status
+		void Decrease_HP(const char damage = 1);                      // decrease the hp of the character
 
 		Direction Get_Direction() const; // get the direction of mob
 		void Set_Direction(Direction direction);// set the direction of mob

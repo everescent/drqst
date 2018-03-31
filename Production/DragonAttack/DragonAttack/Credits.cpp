@@ -13,6 +13,8 @@ namespace
                              "Producer"       , "Jacob Lim"     , "Product Manager"         , "William Yoong" };
     Particle_System* credit_effects;
     void Update_Particle();
+
+	auto& g_dt = AEFrameRateControllerGetFrameTime;
 }
 
 namespace Credits
@@ -45,19 +47,20 @@ namespace Credits
     
     void Init(void)
 	{
-        credit_effects->WarmUp((float)AEFrameRateControllerGetFrameTime(), 2, Update_Particle);
+        // warm up the particle systme before showing it
+		credit_effects->WarmUp((float)g_dt(), 2, Update_Particle);
 	}
 
 	void Update(float dt)
 	{
-		static float time = 15.f;
+		static float time = 5.f;
 
 		time > 0.f ? time -= dt : GSM::next = GS_QUIT;
 
 		Update_Particle();
 		credit_effects->UpdateEmission();
 		credit_effects->Update(dt);
-
+		
 	}
 
 	void Draw(void)

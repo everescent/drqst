@@ -16,14 +16,19 @@ namespace  // global variables for KNIGHT
 }
 
 Knight::Knight(const AEVec2 & spawn_location, Sprite* texture)
-	: Characters(texture, HEALTH, 
-		Col_Comp{ spawn_location.x - KNIGHT_SCALE, spawn_location.y - KNIGHT_SCALE , 
-			      spawn_location.x + KNIGHT_SCALE , spawn_location.y + KNIGHT_SCALE, Rect }),
-	  current_action{ IDLE }, time_traveled{0},
+	: Characters(texture, HEALTH,
+		Col_Comp{ spawn_location.x - KNIGHT_SCALE, spawn_location.y - KNIGHT_SCALE ,
+				  spawn_location.x + KNIGHT_SCALE , spawn_location.y + KNIGHT_SCALE, Rect }),
+	current_action{ IDLE }, time_traveled{ 0 },
 
 	stab{ Get_Attack_Sprite(STAB_SPRITE),
 		  Col_Comp { spawn_location.x - STAB_SCALE, spawn_location.y - STAB_SCALE,
-					 spawn_location.x + STAB_SCALE, spawn_location.y + STAB_SCALE, Rect}}
+					 spawn_location.x + STAB_SCALE, spawn_location.y + STAB_SCALE, Rect} },
+	anim{ WALK_ANIM + 1, 3, 5, [](std::vector <Range>& Init) -> void {
+							   Init.push_back(Range{ 0.0f, 1.0f, 0.00f, 0.00f }); //Hit
+							   Init.push_back(Range{ 0.0f, 1.0f, 0.33f, 0.33f }); //Idle
+							   Init.push_back(Range{ 0.0f, 1.0f, 0.66f, 0.66f }); //Walk
+         } }
 {
 	SetPos(spawn_location.x, spawn_location.y);						 // spawn location of knight
 	SetActive(false);												 // don't render on screen yet
@@ -143,6 +148,9 @@ void Knight::Dead(void)
 	SetActive(false);	    // set active back to false
 	Set_HP(HEALTH);			// set HP to original state for future usage
 	stab.SetActive(false);  // set stab to false also
+	Add_Kill_count();      // add kill count
+	Add_Score(30);         // add score
+
 }
 
 bool Knight::Line_Of_Sight(const Dragon& d)
@@ -215,15 +223,21 @@ void Knight::Update(Dragon &d, const float dt)
 	switch (current_action) // state machine for knight
 	{
 	case IDLE:   Idle(d, dt);
+		         anim.SetState(IDLE_ANIM);
 		break;
 	case MOVING: Moving(d, dt);
+				 anim.SetState(WALK_ANIM);
 		break;
 	case ATTACK: Attack(d, dt);
+		         anim.SetState(IDLE_ANIM);
 		break;
 	case DEAD:   Dead();
 		break;
 	default: break;
 	}
+
+	// update animation
+	anim.Update(*Sprite_);
 }
 
 void Knight::Render() // render both knight and his attack on screen

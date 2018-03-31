@@ -18,6 +18,7 @@ Technology is prohibited.
 #include "Boss_States.h"
 #include "AI_Data_Factory.h"
 #include "GameStateManager.h"
+#include "StageManager.h"
 #include <vector>
 
 #define NUM_OF_SWORD 4
@@ -58,6 +59,7 @@ namespace {
 	Sprite attack_sprite; // texture for slash
 	Sprite sword_sprite;  // texture for sword
 
+	// platform locations for phase2
 	enum 
 	{
 		TOP_LEFT,
@@ -82,6 +84,11 @@ King_Arthur::King_Arthur(Sprite* texture)
 	: Characters(texture, HEALTH,
 		Col_Comp{ START_POINT_X - 30.0f, START_POINT_Y - 30.0f,
 				  START_POINT_X + 30.0f, START_POINT_Y + 30.0f, Rect }),
+	  anim{WALK_ANIM + 1, 3, 5, [](std::vector <Range>& Init) -> void {
+							    Init.push_back(Range{ 0.0f, 1.0f, 0.00f, 0.00f }); //Hit
+							    Init.push_back(Range{ 0.0f, 1.0f, 0.33f, 0.33f }); //Idle
+							    Init.push_back(Range{ 0.0f, 1.0f, 0.66f, 0.66f }); //Walk
+    }},
 	ka_phase{ PHASE_1 }, healing_effect{Effects_Get(KA_HEALING_PARTICLE)},
     sword_effect{ Effects_Get(KA_SWORD_PARTICLE) }, slash_effect{Effects_Get(KA_SLASH_PARTICLE)}
 {
@@ -292,12 +299,15 @@ void King_Arthur::Update(Dragon &d, const float dt)
 	switch (current_action)
 	{
 	case IDLE:     Idle(d, dt);
+				   anim.SetState(IDLE_ANIM);
 		break;
 
 	case MOVING:   Moving(d,dt);
+		           anim.SetState(WALK_ANIM);
 		break;
 
 	case ATTACK:   Attack(d, dt);
+		           anim.SetState(IDLE_ANIM);
 		break;
 
 	case DEAD:     Dead();
@@ -309,7 +319,8 @@ void King_Arthur::Update(Dragon &d, const float dt)
 	for (unsigned char i = 0; i < arthur.size(); ++i) // update cooldowns on attacks
 			arthur[i].Update(dt);
 
-    Update_Particle(dt);
+    Update_Particle(dt);    // update particle effects for king arthur
+	anim.Update(*Sprite_);  // update animation effects
 }
 
 void King_Arthur::Idle(const Dragon& d, const float dt)
@@ -420,30 +431,33 @@ void King_Arthur::King_Arthur_Phase2(void)
 
 	teleport_location[TOP_LEFT].max.x  = -344.0f;
 	teleport_location[TOP_LEFT].max.y  =  200.0f;
+
+	current_action = ATTACK;
 }
 
 void King_Arthur::King_Arthur_Phase3(const float dt)
 {
-    static float timer = 2.0f;
+	UNREFERENCED_PARAMETER(dt);
+	
+	Set_Vulnerable(false);
 
-    if (timer > 0)
-    {
-        timer -= dt;
+	// move king arthur to the middle of the screen
+    PosX = 0.0f;
+    PosY = START_POINT_Y;
+    Transform_.SetTranslate(0.0f, START_POINT_Y);
+    Transform_.Concat();
+    Collision_.Update_Col_Pos(PosX - 30.0f, PosY - 30.0f,  // min point
+                              PosX + 30.0f, PosY + 30.0f);	// max point
 
-        Set_Vulnerable(false);
-
-        PosX = 0.0f;
-        PosY = START_POINT_Y;
-        Transform_.SetTranslate(0.0f, START_POINT_Y);
-        Transform_.Concat();
-        Collision_.Update_Col_Pos(PosX - 30.0f, PosY - 30.0f,  // min point
-                                  PosX + 30.0f, PosY + 30.0f);	// max point
-
-    }
-    
     ka_phase = PHASE_3;
+	current_action = ATTACK;
     Set_Vulnerable(true);
 
+	// resettings the boundaries of king arthur
+	left_boundary = -400; 
+	right_boundary = 400; 
+
+	//despawns all the mob
     for (auto& elem : mobs)
         elem->Set_HP(0);
 }
@@ -662,6 +676,7 @@ void King_Arthur::Heal_and_Spawn(Dragon &d, const float dt)
 		arthur[HEAL].cooldown       = true;
 		arthur[HEAL].ongoing_attack = false;		
 		arthur[HEAL].cooldown_timer = 20.0f;
+		++behavior_swap;
 	}
 
 }
@@ -682,7 +697,7 @@ void King_Arthur::Spinning_Blades(Dragon &d, const float dt)
 				AEVec2 nrm;
 				AEVec2Normalize(&nrm, &pos);
 
-				// Hack that works :D
+				// rotate the sword till the tip faces the player
 				angle_end = std::asin(nrm.x);
 				angle_end = AERadToDeg(angle_end);
 				angle_end = angle_end + 180.0f;
@@ -757,6 +772,7 @@ void King_Arthur::Spinning_Blades(Dragon &d, const float dt)
                     Transform_.Concat();
                     Collision_.Update_Col_Pos(PosX - 30.0f, PosY - 30.0f,  // min point
                                               PosX + 30.0f, PosY + 30.0f);	// max point
+					++behavior_swap;
 
 				}
 			}
@@ -809,26 +825,25 @@ void King_Arthur::Update_Particle(const float dt)
 		i->Update(dt);
     }
 
+	// updates healing effects if there are active particles
+	if (healing_effect->GetParticleCount())
+	{
+		healing_effect->Turbulence(0.4f);
+		sword_effect->ColorRamp_Life();
+		healing_effect->TransRamp_Exp();
+		healing_effect->Newton({ PosX, PosY }, 0.3f);
+		healing_effect->Update(dt);
+	}
 
-    switch (ka_phase)
-    {
-    case PHASE_2:
-        healing_effect->Turbulence(0.4f);
-        sword_effect->ColorRamp_Life();
-        healing_effect->TransRamp_Exp();
-        healing_effect->Newton({ PosX, PosY }, 0.3f);
-        healing_effect->Update(dt);
-        break;
-
-    case PHASE_3:
-        sword_effect->Turbulence(0.4f);
-        sword_effect->Force(0.1f, false, true);
-        sword_effect->ColorRamp_Life();
-        sword_effect->TransRamp_Exp();
-        sword_effect->Update(dt);
-        break;
-    default: break;
-    }
+	// update rotating sword effects if there are active particles
+	if (sword_effect->GetParticleCount())
+	{
+		sword_effect->Turbulence(0.4f);
+		sword_effect->Force(0.1f, false, true);
+		sword_effect->ColorRamp_Life();
+		sword_effect->TransRamp_Exp();
+		sword_effect->Update(dt);
+	}
 }
 
 void King_Arthur::Dead(void)
@@ -839,7 +854,13 @@ void King_Arthur::Dead(void)
 	for (char i = 0; i < num_of_mobs; ++i)
 		mobs[i]->SetActive(false);
 
-	//GSM::next = GS_CREDITS;
+	for (auto& elem : arthur)
+	{
+		elem.SetActive(false);
+	}
+
+	SM::Set_Next(SS_QUIT);
+	GSM::next = GS_CREDITS;
 }
 
 void King_Arthur::Set_Forward_Dir(const Dragon& d)
@@ -870,13 +891,8 @@ std::vector <Characters*>& King_Arthur::Get_Mobs(void)
 
 King_Arthur::~King_Arthur(void)
 {
-	arthur.clear();
-
-	for (size_t i = 0; i < mobs.size(); ++i)
-	{
-		delete mobs[i];
-	}
-	mobs.clear();
+	for (auto &elem : mobs)
+		delete elem;
 }
 
 

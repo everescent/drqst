@@ -42,12 +42,13 @@ private:
 	void Mad_Enhancement(const float dt); // makes lancelot move faster, shorter cooldown
 	void Arondight(Dragon&, const float dt); // phase 2 mechanism, long range attack
 
-	BOSS_PHASE phase;  // flag for lancelot phase
 
-	bool M_E; // lancelot berserk state
-
-	Particle_System *arondight_particle;
-    Particle_System *me_particle;
+	// variables use for lancelot
+	BOSS_PHASE       phase;                   // flag for lancelot phase
+	bool             M_E;                     // lancelot berserk state
+	Particle_System *arondight_particle;      // particle system for arondight
+    Particle_System *me_particle;			  // particle system for mad enhancement
+	Animation        anim;	                  // lancelot animation
 
 public:
 	Lancelot(Sprite*);  // default constructor for lancelot

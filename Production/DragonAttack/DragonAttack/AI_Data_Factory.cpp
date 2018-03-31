@@ -32,15 +32,15 @@ namespace
 
 void AI_Sprite_Init(void)
 {
-	A_SPRITE    = S_CreateSquare(70.0f, ".//Textures/Archer_SpriteSheet.png", 0.20f, 0.33f);
-	G_SPRITE    = S_CreateSquare(70.0f, ".//Textures/grunt.png");
-	K_SPRITE    = S_CreateSquare(70.0f, ".//Textures/Knight.png");
-	MA_SPRITE   = S_CreateSquare(30.0f, ".//Textures/Mage.png");
-	D_SPRITE    = S_CreateSquare(Dragon_Scale, ".//Textures/Bob_SpriteSheet.png", 0.20f, 0.25f);
+	A_SPRITE    = S_CreateSquare(70.0f, ".//Textures/Archer_SpriteSheet.png",     0.2f, 0.33f);
+	G_SPRITE    = S_CreateSquare(70.0f, ".//Textures/grunt.png");  
+	K_SPRITE    = S_CreateSquare(70.0f, ".//Textures/Knight_SpriteSheet.png",     0.2f, 0.33f);
+	MA_SPRITE   = S_CreateSquare(30.0f, ".//Textures/Mage_SpriteSheet.png",       0.2f, 0.5f);
+	D_SPRITE    = S_CreateSquare(Dragon_Scale, ".//Textures/Bob_SpriteSheet.png", 0.2f, 0.25f);
 
-	L_SPRITE    = S_CreateSquare(60.0f, ".//Textures/Lancelot.png");
+	L_SPRITE    = S_CreateSquare(60.0f, ".//Textures/Lancelot_SpriteSheet.png",   0.2f, 0.2f);
     ME_SPRITE   = S_CreateSquare(1.5f, ".//Textures/Merlin.png");
-	KA_SPRITE   = S_CreateSquare(100.0f, ".//Textures/King_Arthur.png");
+	KA_SPRITE   = S_CreateSquare(100.0f, ".//Textures/KA_SpriteSheet.png",        0.2f, 0.33f);
 
 
 	MA_SPRITE.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
