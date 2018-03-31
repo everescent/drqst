@@ -179,6 +179,11 @@ namespace Stage2_3
 
 		floors.clear();
 		walls.clear();
+
+		for (size_t i = 0; i < c.size(); ++i)
+		{
+			delete c[i];
+		}
 		c.clear();
 
 		for (int y = 0; y < Map_Height; ++y)

@@ -17,10 +17,9 @@ namespace
 	std::vector<Barrier> barriers;
 
 	LevelChangePlatform *next;
-	PickUp *coin1, *coin2, *coin3, *hp, *invul;
+	PickUp *coin1, *coin2, *coin3, *hp;
 	std::vector<Characters*> c;
 
-	Wall *w6, *w7, *w8, *w12, *w13, *w16, *w17, *w18, *w1, *w2, *w3, *w4, *w5, *w9, *w21, *w22, *w23, *w24, *w25, *w29;
 	Sprite* COIN_SPRITE;//pickups					 							   
 	Sprite* HP_SPRITE;								 							   
 	Sprite* DMG_SPRITE;															   
@@ -62,32 +61,6 @@ namespace Stage1_2
 
 		next = new LevelChangePlatform {LCPLAT_SPRITE, 7500.0f,  240.0f };
 
-		w6  = new Wall{ WALL_SPRITE, 2240.0f, -690.0f };
-		w7  = new Wall{ WALL_SPRITE, 2240.0f, -630.0f };
-		w8  = new Wall{ WALL_SPRITE, 2240.0f, -570.0f };
-
-		w12 = new Wall{ WALL_SPRITE, 2650.0f, -560.0f };
-		w13 = new Wall{ WALL_SPRITE, 2650.0f, -630.0f };
-					    
-		w16 = new Wall{ WALL_SPRITE, 4955.0f, -330.0f };
-		w17 = new Wall{ WALL_SPRITE, 4955.0f, -400.0f };
-		w18 = new Wall{ WALL_SPRITE, 4955.0f, -440.0f };
-
-		w1  = new Wall{ WALL_SPRITE, 6460.0f, -170.0f };
-		w2  = new Wall{ WALL_SPRITE, 6460.0f, -230.0f };
-		w3  = new Wall{ WALL_SPRITE, 6460.0f, -280.0f };
-		w4  = new Wall{ WALL_SPRITE, 6460.0f, -330.0f };
-		w5  = new Wall{ WALL_SPRITE, 6460.0f, -400.0f };
-		w9  = new Wall{ WALL_SPRITE, 6460.0f, -440.0f };
-
-		w21 = new Wall{ WALL_SPRITE, 6460.0f,  130.0f };
-		w22 = new Wall{ WALL_SPRITE, 6460.0f,   80.0f };
-		w23 = new Wall{ WALL_SPRITE, 6460.0f,   30.0f };
-		w24 = new Wall{ WALL_SPRITE, 6460.0f,  -20.0f };
-		w25 = new Wall{ WALL_SPRITE, 6460.0f,  -70.0f };
-		w29 = new Wall{ WALL_SPRITE, 6460.0f, -120.0f };
-
-
 		coin1 = new PickUp{ COIN_SPRITE,
 			Col_Comp{ 0.0f - 25.0f, 0.0f - 25.0f, 0.0f + 25.0f, 0.0f + 25.0f, Rect },
 			COIN, 2080.0f , -680.0f };
@@ -116,7 +89,6 @@ namespace Stage1_2
 		//c.push_back(Create_Basic_AI(ARCHER, AEVec2{ 6600.0f ,  300.0f }));
 		c.push_back(Create_Basic_AI(KNIGHT, AEVec2{ 7200.0f ,  300.0f }));
 	}
-
 
 	void Init(void)
 	{
@@ -157,12 +129,6 @@ namespace Stage1_2
 					float f_y = (float)y;
 					c.push_back(Create_Basic_AI(ARCHER, AEVec2{ Convert_X(f_x) , Convert_Y(f_y) }));
 				}
-				if (MapData[y][x] == OBJ_MAGE)
-				{
-					float f_x = (float)x;
-					float f_y = (float)y;
-					c.push_back(Create_Basic_AI(MAGE, AEVec2{ Convert_X(f_x) , Convert_Y(f_y) }));
-				}
 			}
 		}
 
@@ -171,8 +137,6 @@ namespace Stage1_2
 
 		player->SetActive(true);
 	}
-
-
 
 	void Update(float dt)
 	{
@@ -219,29 +183,6 @@ namespace Stage1_2
 		CamFollow(player->Transform_, 200, 120, player->GetFacing());
 		ui->UI_Update(player);
 
-		w1->Update(*player, dt);
-		w2->Update(*player, dt);
-		w3->Update(*player, dt);
-		w4->Update(*player, dt);
-		w5->Update(*player, dt);
-		w9->Update(*player, dt);
-
-		w6 ->Update(*player, dt);
-		w7 ->Update(*player, dt);
-		w8 ->Update(*player, dt);
-		w12->Update(*player, dt);
-		w13->Update(*player, dt);
-		w16->Update(*player, dt);
-		w17->Update(*player, dt);
-		w18->Update(*player, dt);
-
-		w21->Update(*player, dt);
-		w22->Update(*player, dt);
-		w23->Update(*player, dt);
-		w24->Update(*player, dt);
-		w25->Update(*player, dt);
-		w29->Update(*player, dt);
-
 		std::cout << (int)player->PosX <<", "<< (int)player->PosY << std::endl;
 	}
 
@@ -283,17 +224,37 @@ namespace Stage1_2
 
 	void Free(void)
 	{
+		delete player;
 		delete BG;
 		delete M_BG;
-		delete player;
 		delete Audio;
 
-		delete w1,w2,w3,w4,w5,w6,w7,w8,w9,w12,w13,w16,w17,w18, w21, w22, w23, w24, w25, w29;
-		
-		delete coin1, coin2, coin3, hp;
-		delete next;
 		delete ui;
 
+		for (int y = 0; y < Map_Height; ++y)
+		{
+			delete[] MapData[y];
+		}
+		delete[] MapData;
+
+		platforms.clear();
+		floors.clear();
+		walls.clear();
+		barriers.clear();
+
+		delete coin1;
+		delete coin2;
+		delete coin3;
+		delete hp;
+		delete next;
+
+		for (size_t i = 0; i < c.size(); ++i)
+		{
+			delete c[i];
+		}
+		c.clear();
+		
+		// 11 sprites
 		delete COIN_SPRITE;//pickups
 		delete HP_SPRITE;
 		delete DMG_SPRITE;
@@ -305,18 +266,6 @@ namespace Stage1_2
 		delete FLOOR_SPRITE;
 		delete TOWER_SPRITE;
 		delete SIGN_SPRITE;
-
-		platforms.clear();
-		floors.clear();
-		walls.clear();
-		barriers.clear();
-		c.clear();
-
-		for (int y = 0; y < Map_Height; ++y)
-		{
-			delete[] MapData[y];
-		}
-		delete[] MapData;
 	}
 
 	void Unload(void)

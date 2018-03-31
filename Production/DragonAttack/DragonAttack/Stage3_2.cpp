@@ -20,7 +20,7 @@ namespace
 	PickUp *coin1, *coin2, *coin3, *hp, *invul;
 	std::vector<Characters*> c;
 
-	Wall *w6, *w7, *w8, *w12, *w13, *w16, *w17, *w18, *w1, *w2, *w3, *w4, *w5, *w9, *w21, *w22, *w23, *w24, *w25, *w29;
+	//Wall *w6, *w7, *w8, *w12, *w13, *w16, *w17, *w18, *w1, *w2, *w3, *w4, *w5, *w9, *w21, *w22, *w23, *w24, *w25, *w29;
 	Sprite* COIN_SPRITE;//pickups					 							   
 	Sprite* HP_SPRITE;
 	Sprite* DMG_SPRITE;
@@ -304,6 +304,11 @@ namespace Stage3_2
 		floors.clear();
 		walls.clear();
 		barriers.clear();
+
+		for (size_t i = 0; i < c.size(); ++i)
+		{
+			delete c[i];
+		}
 		c.clear();
 
 		for (int y = 0; y < Map_Height; ++y)

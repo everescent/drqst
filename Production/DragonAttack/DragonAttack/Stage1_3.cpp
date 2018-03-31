@@ -154,7 +154,11 @@ namespace Stage1_3
 		walls.clear();
 
 		delete next;
-
+		
+		for (size_t i = 0; i < c.size(); ++i)
+		{
+			delete c[i];
+		}
 		c.clear();
 		
 		//delete COIN_SPRITE;//pickups

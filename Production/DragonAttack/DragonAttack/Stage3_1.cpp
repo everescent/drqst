@@ -288,22 +288,27 @@ namespace Stage3_1
 		delete next;
 		delete ui;
 
-		//delete COIN_SPRITE;//pickups
-		//delete HP_SPRITE;
-		//delete DMG_SPRITE;
-		//delete SPD_SPRITE;
-		//delete BARRIER_SPRITE;//objs
-		//delete WALL_SPRITE;
-		//delete PLAT_SPRITE;
-		//delete LCPLAT_SPRITE;
-		//delete FLOOR_SPRITE;
-		//delete TOWER_SPRITE;
-		//delete SIGN_SPRITE;
+		delete COIN_SPRITE;//pickups
+		delete HP_SPRITE;
+		delete DMG_SPRITE;
+		delete SPD_SPRITE;
+		delete BARRIER_SPRITE;//objs
+		delete WALL_SPRITE;
+		delete PLAT_SPRITE;
+		delete LCPLAT_SPRITE;
+		delete FLOOR_SPRITE;
+		delete TOWER_SPRITE;
+		delete SIGN_SPRITE;
 
 		platforms.clear();
 		floors.clear();
 		walls.clear();
 		barriers.clear();
+
+		for (size_t i = 0; i < c.size(); ++i)
+		{
+			delete c[i];
+		}
 		c.clear();
 
 		for (int y = 0; y < Map_Height; ++y)
