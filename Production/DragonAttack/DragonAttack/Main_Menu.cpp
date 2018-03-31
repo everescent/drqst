@@ -131,7 +131,7 @@ namespace Main_Menu
 			//Repeat this for all buttons 
 			if (Play_Button->Collision_.St_Rect_Point((float)Mouse_X, (float)Mouse_Y))
 			{
-				GSM::next = GS_LEVEL1_1;
+				GSM::next = GS_LEVELS;
 			}
 
 			if (Quit_Button->Collision_.St_Rect_Point((float)Mouse_X, (float)Mouse_Y))

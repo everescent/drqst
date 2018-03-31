@@ -18,12 +18,12 @@ namespace
 	std::vector<Block> blocks;
 	std::vector<Barrier> barriers;
 	//std::vector<Scarecrow> scarecrows;
-	std::vector<PickUp> powerups;
+	std::vector<PickUp> PU;
 
 	LevelChangePlatform *next;
 	Tower *archerTower;
-	PickUp *coin1, *coin2, *coin3;
-	PickUp *power1, *power2;
+	PickUp *coin1;// *coin2, *coin3;
+	//PickUp *power1, *power2;
 	Barrier *box1;
 	Sign *s1, *s2, *s3, *s4, *s5, *s6;
 	GameObject *tut1, *tut2, *tut3, *tut4, *tut5, *tut6;
@@ -49,6 +49,7 @@ namespace
 	Sprite* FLOOR_SPRITE;
 	Sprite* TOWER_SPRITE;
 	Sprite* SIGN_SPRITE;
+	Sprite* INVUL_SPRITE;
 
 
 
@@ -77,6 +78,8 @@ namespace Stage1_1
 		TOWER_SPRITE = new Sprite{ S_CreateRectangle(300.0f, 300.0f, ".//Textures/tower.png") };
 		SIGN_SPRITE = new Sprite{ S_CreateSquare(70.0f, ".//Textures/sign.png") };
 		BG = new Sprite{ CreateBG(22.0f, 2.0f, "Textures/BG_Stage1.png", 1.0f, 15.0f) };
+		INVUL_SPRITE = new Sprite{ S_CreateSquare(50.0f, ".//Textures/invul.png", 1.0f) };
+
 		/* Sprite Creation End */
 
 		/* Static Object Placement Start */
@@ -98,7 +101,7 @@ namespace Stage1_1
 		coin1 = new PickUp{ COIN_SPRITE,
 			Col_Comp{ 0.0f - 25.0f, 0.0f - 25.0f, 0.0f + 25.0f, 0.0f + 25.0f, Rect },
 			COIN, 1500.0f, -210.0f };
-		coin2 = new PickUp{ COIN_SPRITE,
+		/*coin2 = new PickUp{ COIN_SPRITE,
 			Col_Comp{ 0.0f - 25.0f, 0.0f - 25.0f, 0.0f + 25.0f, 0.0f + 25.0f, Rect },
 			COIN, 3550.0f, -350.0f };
 		coin3 = new PickUp{ COIN_SPRITE,
@@ -106,7 +109,7 @@ namespace Stage1_1
 			COIN, 6300.0f, -220.0f };
 		power2 = new PickUp{ HP_SPRITE,
 			Col_Comp{ 0.0f - 25.0f, 0.0f - 25.0f, 0.0f + 25.0f, 0.0f + 25.0f, Rect },
-			HP, 5300.0f, -80.0f };
+			HP, 5300.0f, -80.0f };*/
 		s1 = new Sign{ SIGN_SPRITE, 400.0f, -255.0f };
 		tut1 = new GameObject{ TUT1_SPRITE, Col_Comp() };
 		s2 = new Sign{ SIGN_SPRITE, 1270.0f, -255.0f };
@@ -127,8 +130,8 @@ namespace Stage1_1
 		//c.push_back(Create_Basic_AI(GRUNT,  AEVec2  { 2320.0f , -180.0f }));
 		//c.push_back(Create_Basic_AI(GRUNT,  AEVec2  { 2480.0f , -180.0f }));
 		//c.push_back(Create_Basic_AI(GRUNT,  AEVec2  { 4000.0f ,  -90.0f }));
-		c.push_back(Create_Basic_AI(ARCHER, AEVec2  { 4750.0f ,  140.0f }));
-		c.push_back(Create_Basic_AI(ARCHER, AEVec2  { 6200.0f , -220.0f }));
+		//c.push_back(Create_Basic_AI(ARCHER, AEVec2  { 4750.0f ,  140.0f }));
+		//c.push_back(Create_Basic_AI(ARCHER, AEVec2  { 6200.0f , -220.0f }));
 		/* Enemy Placement End */
 
 		
@@ -176,19 +179,60 @@ namespace Stage1_1
 					float f_y = (float)y;
 					c.push_back(Create_Basic_AI(GRUNT, AEVec2{ Convert_X(f_x) , Convert_Y(f_y) }));
 				}
-				/*if (MapData[y][x] == OBJ_ARCHER)
+				if (MapData[y][x] == OBJ_ARCHER)
 				{
 					float f_x = (float)x;
 					float f_y = (float)y;
 					c.push_back(Create_Basic_AI(ARCHER, AEVec2{ Convert_X(f_x) , Convert_Y(f_y) }));
-				}*/
+				}
+				//pick ups
+				if (MapData[y][x] == OBJ_COIN)
+				{
+					float f_x = (float)x;
+					float f_y = (float)y;
+					PU.push_back(PickUp{ COIN_SPRITE,
+						Col_Comp{ 0.0f - 25.0f, 0.0f - 25.0f, 0.0f + 25.0f, 0.0f + 25.0f, Rect },
+						COIN, Convert_X(f_x) , Convert_Y(f_y) });
+				}
+				if (MapData[y][x] == OBJ_HP)
+				{
+					float f_x = (float)x;
+					float f_y = (float)y;
+					PU.push_back(PickUp{ HP_SPRITE,
+						Col_Comp{ 0.0f - 25.0f, 0.0f - 25.0f, 0.0f + 25.0f, 0.0f + 25.0f, Rect },
+						HP, Convert_X(f_x) , Convert_Y(f_y) });
+				}
+				if (MapData[y][x] == OBJ_SPD)
+				{
+					float f_x = (float)x;
+					float f_y = (float)y;
+					PU.push_back(PickUp{ SPD_SPRITE,
+						Col_Comp{ 0.0f - 25.0f, 0.0f - 25.0f, 0.0f + 25.0f, 0.0f + 25.0f, Rect },
+						SPD, Convert_X(f_x) , Convert_Y(f_y) });
+				}
+				if (MapData[y][x] == OBJ_DMG)
+				{
+					float f_x = (float)x;
+					float f_y = (float)y;
+					PU.push_back(PickUp{ DMG_SPRITE,
+						Col_Comp{ 0.0f - 25.0f, 0.0f - 25.0f, 0.0f + 25.0f, 0.0f + 25.0f, Rect },
+						DMG, Convert_X(f_x) , Convert_Y(f_y) });
+				}
+				if (MapData[y][x] == OBJ_INVUL)
+				{
+					float f_x = (float)x;
+					float f_y = (float)y;
+					PU.push_back(PickUp{ INVUL_SPRITE,
+						Col_Comp{ 0.0f - 25.0f, 0.0f - 25.0f, 0.0f + 25.0f, 0.0f + 25.0f, Rect },
+						INVUL, Convert_X(f_x) , Convert_Y(f_y) });
+				}
 			}
 		}
 
 
 		for (size_t i = 0; i < c.size(); ++i)
 			c[i]->SetActive(true);
-
+		BG->SetRGB(0.5f, 0.5f, 0.5f);
 	}
 
 	void Update(float dt)
@@ -270,17 +314,17 @@ namespace Stage1_1
 			elem.Update(*player, dt);
 			elem.Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 		}
-		/*w2->Update(*player, dt);
-		w22->Update(*player, dt);
-		w5->Update(*player, dt);
-		w6->Update(*player, dt);*/
+		for (PickUp& elem : PU)
+		{
+			elem.Update(*player, dt);
+		}
 
 		archerTower->Update(*player, dt);
 		player->Update(*player, dt);
 		box1->Update(*player, dt);
-		coin2->Update(*player, dt);
-		coin3->Update(*player, dt);
-		power2->Update(*player, dt);
+		//coin2->Update(*player, dt);
+		//coin3->Update(*player, dt);
+		//power2->Update(*player, dt);
 		CamFollow(player->Transform_, 200, 120, player->GetFacing());
 		next->Update(*player, dt);
 		ui->UI_Update(player);
@@ -332,9 +376,9 @@ namespace Stage1_1
 		{
 			coin1->Render();
 		}
-		coin2->Render();
-		coin3->Render();
-		power2->Render();
+		//coin2->Render();
+		//coin3->Render();
+		//power2->Render();
 
 		for (size_t i = 0; i < c.size(); ++i)
 		{
@@ -361,12 +405,17 @@ namespace Stage1_1
 		{
 			elem.Render();
 		}
+		for (PickUp& elem : PU)
+		{
+			elem.Render();
+		}
 
 		box1->Render();
 		player->Render();
 		player->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 		next->Render();
 		ui->Render();
+		PickUp::test->Render();
 	}
 
 	void Free(void)
@@ -390,9 +439,9 @@ namespace Stage1_1
 		delete box1;
 		delete archerTower;
 		delete coin1;
-		delete coin2;
-		delete coin3;
-		delete power2;
+		//delete coin2;
+		//delete coin3;
+		//delete power2;
 		delete next;
 		delete ui;
 
@@ -422,7 +471,7 @@ namespace Stage1_1
 		walls.clear();*/
 		blocks.clear();
 		barriers.clear();
-		powerups.clear();
+		PU.clear();
 
 		 /* Delete enemies */
 		for (size_t i = 0; i < c.size(); ++i)

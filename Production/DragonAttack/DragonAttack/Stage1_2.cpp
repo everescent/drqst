@@ -14,8 +14,8 @@ namespace
 	std::vector<Platform> platforms;
 	//std::vector<Floor> floors;
 	//std::vector<Wall> walls;
-	///////Replace vector of floor and wall and add in vector for blocks
 	std::vector<Block> blocks;
+	std::vector<PickUp> PU;
 	std::vector<Barrier> barriers;
 
 	LevelChangePlatform *next;
@@ -25,7 +25,8 @@ namespace
 	Sprite* COIN_SPRITE;//pickups					 							   
 	Sprite* HP_SPRITE;								 							   
 	Sprite* DMG_SPRITE;															   
-	Sprite* SPD_SPRITE;															   
+	Sprite* SPD_SPRITE;
+	Sprite* INVUL_SPRITE;
 	Sprite* BARRIER_SPRITE;//objs												   
 	Sprite* WALL_SPRITE;
 	Sprite* PLAT_SPRITE;
@@ -40,9 +41,10 @@ namespace Stage1_2
 	void Load(void)
 	{		
 		COIN_SPRITE    = new Sprite{ S_CreateSquare   (50.0f, ".//Textures/coin.png", 1.0f) };
-		HP_SPRITE      = new Sprite{ S_CreateSquare   (50.0f,  ".//Textures/hp.png", 1.0f) };
-		DMG_SPRITE     = new Sprite{ S_CreateSquare   (50.0f,  ".//Textures/Fireball.png", 1.0f) };
-		SPD_SPRITE     = new Sprite{ S_CreateSquare   (50.0f,  ".//Textures/spd.png", 1.0f) };
+		HP_SPRITE      = new Sprite{ S_CreateSquare   (50.0f, ".//Textures/hp.png", 1.0f) };
+		DMG_SPRITE     = new Sprite{ S_CreateSquare   (50.0f, ".//Textures/Fireball.png", 1.0f) };
+		SPD_SPRITE     = new Sprite{ S_CreateSquare   (50.0f, ".//Textures/spd.png", 1.0f) };
+		INVUL_SPRITE     = new Sprite{ S_CreateSquare   (50.0f, ".//Textures/invul.png", 1.0f) };
 		BARRIER_SPRITE = new Sprite{ S_CreateSquare   (130.0f, ".//Textures/box.png") };
 		WALL_SPRITE    = new Sprite{ CreateFloor      (1.0f, ".//Textures/Cobblestone.png", 1.0f, 1.0f) };
 		PLAT_SPRITE    = new Sprite{ CreatePlatform   (1.0f, 1.0f, ".//Textures/Cobblestone.png") };
@@ -78,18 +80,6 @@ namespace Stage1_2
 		hp = new PickUp{ HP_SPRITE,
 			Col_Comp{ 0.0f - 25.0f, 0.0f - 25.0f, 0.0f + 25.0f, 0.0f + 25.0f, Rect },
 			HP, 4300.0f , 60.0f };
-
-		c.push_back(Create_Basic_AI(GRUNT , AEVec2{  727.0f ,  105.0f }));
-		c.push_back(Create_Basic_AI(GRUNT , AEVec2{ 1895.0f , -165.0f }));
-		c.push_back(Create_Basic_AI(ARCHER, AEVec2{ 2335.0f ,  195.0f }));
-		c.push_back(Create_Basic_AI(GRUNT , AEVec2{ 3200.0f , -600.0f }));
-		c.push_back(Create_Basic_AI(ARCHER, AEVec2{ 3500.0f , -600.0f }));
-		c.push_back(Create_Basic_AI(GRUNT , AEVec2{ 3800.0f , -600.0f }));
-		c.push_back(Create_Basic_AI(GRUNT , AEVec2{ 5200.0f ,  210.0f }));
-		//c.push_back(Create_Basic_AI(GRUNT , AEVec2{ 5800.0f ,  195.0f }));
-		c.push_back(Create_Basic_AI(GRUNT , AEVec2{ 6450.0f ,  195.0f }));
-		//c.push_back(Create_Basic_AI(ARCHER, AEVec2{ 6600.0f ,  300.0f }));
-		c.push_back(Create_Basic_AI(KNIGHT, AEVec2{ 7200.0f ,  300.0f }));
 	}
 
 	void Init(void)
@@ -136,6 +126,47 @@ namespace Stage1_2
 					float f_x = (float)x;
 					float f_y = (float)y;
 					c.push_back(Create_Basic_AI(ARCHER, AEVec2{ Convert_X(f_x) , Convert_Y(f_y) }));
+				}
+				//pick ups
+				if (MapData[y][x] == OBJ_COIN)
+				{
+					float f_x = (float)x;
+					float f_y = (float)y;
+					PU.push_back(PickUp{ COIN_SPRITE,
+						Col_Comp{ 0.0f - 25.0f, 0.0f - 25.0f, 0.0f + 25.0f, 0.0f + 25.0f, Rect },
+						COIN, Convert_X(f_x) , Convert_Y(f_y) });
+				}
+				if (MapData[y][x] == OBJ_HP)
+				{
+					float f_x = (float)x;
+					float f_y = (float)y;
+					PU.push_back(PickUp{ HP_SPRITE,
+						Col_Comp{ 0.0f - 25.0f, 0.0f - 25.0f, 0.0f + 25.0f, 0.0f + 25.0f, Rect },
+						COIN, Convert_X(f_x) , Convert_Y(f_y) });
+				}
+				if (MapData[y][x] == OBJ_SPD)
+				{
+					float f_x = (float)x;
+					float f_y = (float)y;
+					PU.push_back(PickUp{ SPD_SPRITE,
+						Col_Comp{ 0.0f - 25.0f, 0.0f - 25.0f, 0.0f + 25.0f, 0.0f + 25.0f, Rect },
+						SPD, Convert_X(f_x) , Convert_Y(f_y) });
+				}
+				if (MapData[y][x] == OBJ_DMG)
+				{
+					float f_x = (float)x;
+					float f_y = (float)y;
+					PU.push_back(PickUp{ DMG_SPRITE,
+						Col_Comp{ 0.0f - 25.0f, 0.0f - 25.0f, 0.0f + 25.0f, 0.0f + 25.0f, Rect },
+						DMG, Convert_X(f_x) , Convert_Y(f_y) });
+				}
+				if (MapData[y][x] == OBJ_INVUL)
+				{
+					float f_x = (float)x;
+					float f_y = (float)y;
+					PU.push_back(PickUp{ INVUL_SPRITE,
+						Col_Comp{ 0.0f - 25.0f, 0.0f - 25.0f, 0.0f + 25.0f, 0.0f + 25.0f, Rect },
+						INVUL, Convert_X(f_x) , Convert_Y(f_y) });
 				}
 			}
 		}
@@ -190,6 +221,10 @@ namespace Stage1_2
 		{
 			elem.Update(*player, dt);
 		}
+		for (PickUp& elem : PU)
+		{
+			elem.Update(*player, dt);
+		}
 
 		coin1->Update(*player, dt);
 		coin2->Update(*player, dt);
@@ -219,6 +254,10 @@ namespace Stage1_2
 			elem.Render();
 		}*/
 		for (Block& elem : blocks)
+		{
+			elem.Render();
+		}
+		for (PickUp& elem : PU)
 		{
 			elem.Render();
 		}
@@ -261,6 +300,7 @@ namespace Stage1_2
 		//floors.clear();
 		//walls.clear();
 		blocks.clear();
+		PU.clear();
 		barriers.clear();
 
 		delete coin1;
@@ -280,6 +320,7 @@ namespace Stage1_2
 		delete HP_SPRITE;
 		delete DMG_SPRITE;
 		delete SPD_SPRITE;
+		delete INVUL_SPRITE;
 		delete BARRIER_SPRITE;//objs
 		delete WALL_SPRITE;
 		delete PLAT_SPRITE;
