@@ -20,7 +20,7 @@ namespace // for global variables in this file
 	const char HEALTH          = 50;         // starting health of mage
 	const char TELEPORT_FLAG   = 25;		 // hp threshold for mage to teleport
 
-	const float MAGE_SCALE     = 30.0F;      // scale for mage
+	const float MAGE_SCALE     = 55.0f;      // scale for mage
 	const float EBALL_SCALE    = 20.0f;		 // scale for energyball
 
 	const float LEFT_BOUNDARY  = -600.0f;    // boundaries of screen
