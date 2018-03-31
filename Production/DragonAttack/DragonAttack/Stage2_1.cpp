@@ -17,7 +17,6 @@ namespace
 	std::vector<Barrier> barriers;
 	std::vector<Block> blocks;
 	LevelChangePlatform *next;
-	//PickUp *coin1, *coin2, *coin3, *hp, *invul;
 	std::vector<Characters*> c;
 	std::vector<PickUp> PU;
 
@@ -26,6 +25,7 @@ namespace
 	Sprite* DMG_SPRITE;
 	Sprite* SPD_SPRITE;
 	Sprite* INVUL_SPRITE;
+
 	Sprite* BARRIER_SPRITE;//objs												   
 	Sprite* WALL_SPRITE;
 	Sprite* PLAT_SPRITE;
@@ -64,42 +64,6 @@ namespace Stage2_1
 		if (!Import_MapData(".//Levels/level2-1.txt", MapData, Map_Width, Map_Height)) { AEGfxExit(); }
 		
 		next = new LevelChangePlatform{ LCPLAT_SPRITE, 1180.0f,  -2685.0f };
-		/*
-		coin1 = new PickUp{ COIN_SPRITE,
-			Col_Comp{ 0.0f - 25.0f, 0.0f - 25.0f, 0.0f + 25.0f, 0.0f + 25.0f, Rect },
-			COIN, 2080.0f , -680.0f };
-
-		coin2 = new PickUp{ COIN_SPRITE,
-			Col_Comp{ 0.0f - 25.0f, 0.0f - 25.0f, 0.0f + 25.0f, 0.0f + 25.0f, Rect },
-			COIN, 2800.0f , -600.0f };
-
-		coin3 = new PickUp{ COIN_SPRITE,
-			Col_Comp{ 0.0f - 25.0f, 0.0f - 25.0f, 0.0f + 25.0f, 0.0f + 25.0f, Rect },
-			COIN, 5750.0f , 200.0f };
-
-		hp = new PickUp{ HP_SPRITE,
-			Col_Comp{ 0.0f - 25.0f, 0.0f - 25.0f, 0.0f + 25.0f, 0.0f + 25.0f, Rect },
-			HP, 4300.0f , 60.0f };
-*/
-		
-		/*
-		// Enemy placements (12)
-		// Grunts
-		//c.push_back(Create_Basic_AI(GRUNT, AEVec2{  2615.0f ,  -1065.0f }));
-		//c.push_back(Create_Basic_AI(GRUNT, AEVec2{ 5875.0f ,  -255.0f }));
-		//c.push_back(Create_Basic_AI(GRUNT, AEVec2{ 5095.0f ,  -1155.0f }));
-		//c.push_back(Create_Basic_AI(GRUNT, AEVec2{ 5000.0f ,  -3405.0f }));
-		//// Archers
-		////c.push_back(Create_Basic_AI(ARCHER, AEVec2{ -85.0f ,  -75.0f }));
-		//c.push_back(Create_Basic_AI(ARCHER, AEVec2{ 500.0f ,  -885.0f }));
-		//c.push_back(Create_Basic_AI(ARCHER, AEVec2{ 2930.0f ,  -2325.0f }));
-		//// Mages
-		//c.push_back(Create_Basic_AI(MAGE, AEVec2{ 1000.0f ,  -615.0f }));
-		//c.push_back(Create_Basic_AI(MAGE, AEVec2{ 3100.0f ,  -75.0f }));
-		//c.push_back(Create_Basic_AI(MAGE, AEVec2{ 4780.0f ,  -2325.0f }));
-		// Knights
-		//c.push_back(Create_Basic_AI(KNIGHT, AEVec2{ 7200.0f ,  300.0f }));
-		*/
 	}
 
 
@@ -247,9 +211,6 @@ namespace Stage2_1
 			elem.Update(*player, dt);
 		}
 
-		/*coin1->Update(*player, dt);
-		coin2->Update(*player, dt);
-		coin3->Update(*player, dt);*/
 		next->Update(*player, dt);
 		player->Update(*player, dt);
 		CamFollow(player->Transform_, 200, 120, player->GetFacing());
@@ -290,10 +251,6 @@ namespace Stage2_1
 		{
 			c[i]->Render();
 		}
-		/*coin1->Render();
-		coin2->Render();
-		coin3->Render();
-		hp->Render();*/
 		next->Render();
 		
 		player->Render();
@@ -311,7 +268,6 @@ namespace Stage2_1
 		delete player;
 		delete Audio;
 
-		//delete coin1, coin2, coin3, hp;
 		delete next;
 		delete ui;
 
