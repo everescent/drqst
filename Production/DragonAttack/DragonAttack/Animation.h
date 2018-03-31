@@ -94,16 +94,16 @@ public:
   void Update    (Sprite &t_Sprite);
   /**************************************************************************************
   Description:
-  Reset state row and col current.
+    Reset state row and col current.
   t_state:
-  The state to reset.
+    The state to reset.
   **************************************************************************************/
   void ResetState(int     t_state );
   /**************************************************************************************
   Description:
-  Set state to update.
+    Set state to update.
   t_state:
-  The state to update.
+    The state to update.
   **************************************************************************************/                     
   void SetState  (int     t_state );
   /**************************************************************************************
@@ -121,6 +121,6 @@ private:
   const float offsetY   ; //Value to increment row
   int         State     ; //Current state to update
   float       FrameCount; //Timer to achieve a 5FPS animation
-  //This holds different ranges to suit each sprite
+  /*This holds different ranges to suit each sprite*/
   std::vector <Range> Animation_State;
 };

@@ -29,7 +29,8 @@ Parameters:
 Return:
   void
 *************************************************************************/
-void CamFollow(float PositionX = 0.0f, float PositionY = 0.0f, float OffsetX = 0.0f, float OffsetY = 0.0f);
+void CamFollow(float PositionX = 0.0f, float PositionY = 0.0f, 
+               float   OffsetX = 0.0f, float   OffsetY = 0.0f  );
 
 /*************************************************************************
 Description:
@@ -39,7 +40,7 @@ Parameters:
   PosMatrix : Transform matrix to follow
   OffsetX   : Camera offset in the X direction.
   OffsetY   : Camera offset in the Y direction.
-
+  dir       : Direction camera target is facing. 
 Return:
   void
 *************************************************************************/

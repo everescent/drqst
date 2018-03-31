@@ -52,7 +52,6 @@ namespace Dragon_ANIM{
     WALK  //3
   }DAS;
 }
-
 class Dragon : public Characters{
 
 public:

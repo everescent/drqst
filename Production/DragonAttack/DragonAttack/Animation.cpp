@@ -15,19 +15,22 @@ Technology is prohibited.
 
 #include "Animation.h"
 
+//The name is just too long. 
+//It looks very disgusting to put in my member initializer list.
+//So I am shortening the name here. 
+auto& g_dt = AEFrameRateControllerGetFrameTime;
+
 //Initializes the Animation module.
 //Takes in the required number of states, and a function to initialize it.
 Animation::Animation(unsigned stateNum, 
                      const float row, const float col,
                      const std::function <void(std::vector <Range>&)>& Init)
-  :Tex_Row{ row            }, Tex_Col{ col            },
+  :Tex_Row{ row            }, Tex_Col{ col                     },
    //UV is 0.0f to 1.0f so get the inverse of the column and row
    //and increment by that
-   offsetX{ 1.0f / Tex_Col }, offsetY{ 1.0f / Tex_Row },
-   /*   Start at state 0  */
-   State  { 0              }, 
-   /*Update every 5 frames*/
-   FrameCount{ (float)AEFrameRateControllerGetFrameTime() * 5.0f },
+   offsetX{ 1.0f / Tex_Col }, offsetY   { 1.0f / Tex_Row       },
+   /*   Start at state 0  */  /*     Update every 5 frames    */
+   State  { 0              }, FrameCount{ (float)g_dt() * 5.0f },
    Animation_State {}
 {
   //Reserve the memory needed
@@ -44,6 +47,7 @@ Animation::Animation(const Animation& rhs)
    Animation_State{ rhs.Animation_State }
 {}
 
+//Reset state row and col current
 void Animation::ResetState(int t_state)
 {
   //Reset animation cycle
@@ -51,12 +55,16 @@ void Animation::ResetState(int t_state)
   Animation_State[t_state].Colcurr = Animation_State[t_state].startCol;
 }
 
+//Set state to update
 void Animation::SetState(int t_state)
 {
+  //Set state to update
   State = t_state                          ;
+  //Reset Complete
   Animation_State[t_state].Complete = false;
 }
 
+//Updates the animation frame
 void Animation::Update(Sprite &t_Sprite)
 {
   //Update every 5 frames
@@ -74,23 +82,25 @@ void Animation::Update(Sprite &t_Sprite)
         //Reset both, column reset should have been done above
         Animation_State[State].Rowcurr = Animation_State[State].startRow;
     }
-    //else if (Animation_State[State].startCol == Animation_State[State].endCol)
-    //{
-    //  if (Animation_State[State].Rowcurr != Animation_State[State].endRow &&
-    //      Animation_State[State].Colcurr >= Animation_State[State].startCol + 1.0f)
-    //  {
-    //    //Reset startX position
-    //    Animation_State[State].Colcurr = Animation_State[State].startCol;
-    //    //Increment the row
-    //    Animation_State[State].Rowcurr += offsetY;
-    //  }
-    //  if (Animation_State[State].Rowcurr >= Animation_State[State].endRow)
-    //    //Reset both, column reset should have been done above
-    //    Animation_State[State].Rowcurr = Animation_State[State].startRow;
-    //}
+    #if 0
+    else if (Animation_State[State].startCol == Animation_State[State].endCol)
+    {
+      if (Animation_State[State].Rowcurr != Animation_State[State].endRow &&
+          Animation_State[State].Colcurr >= Animation_State[State].startCol + 1.0f)
+      {
+        //Reset startX position
+        Animation_State[State].Colcurr = Animation_State[State].startCol;
+        //Increment the row
+        Animation_State[State].Rowcurr += offsetY;
+      }
+      if (Animation_State[State].Rowcurr >= Animation_State[State].endRow)
+        //Reset both, column reset should have been done above
+        Animation_State[State].Rowcurr = Animation_State[State].startRow;
+    }
+    #endif
     //Check if animation cycle is complete
     if (Animation_State[State].Rowcurr >= Animation_State[State].endRow &&
-      Animation_State[State].Colcurr >= Animation_State[State].endCol)
+        Animation_State[State].Colcurr >= Animation_State[State].endCol    )
       Animation_State[State].Complete = true;
     else
       Animation_State[State].Complete = false;
@@ -104,6 +114,7 @@ void Animation::Update(Sprite &t_Sprite)
   FrameCount -= 0.016f;
 }
 
+//Clear Animation_State
 Animation::~Animation()
 {
   //Clear vector memory

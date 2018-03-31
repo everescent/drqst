@@ -31,28 +31,86 @@ Deconstructor:
 class Render {
 
 public:
-  //Set tint RGB
-  Render &SetRGB(const float &Red, const float &Green, const float &Blue)
-  { R = Red; G = Green; B = Blue; return *this; }
-  //Set tint Alpha
-  Render &SetAlpha(const float &Alpha) { A = Alpha; return *this; }
-  //Set transparency value for rendering
-  Render &SetTransparency(const float &Trans) { Transparency = Trans; return *this; }
-  //Set blend mode for rendering
-  Render &SetBlendMode(AEGfxBlendMode BlendMode) { BM = BlendMode; return *this; }
-  //Renders the object
-  void Render_Obj(const Sprite &Obj, const Transform &matrix) const;
-  //Default Constructor sets all to 1
-  Render();
-  //This Constructor sets all to user specified values
-  Render(const float &Red, const float &Green, const float &Blue, 
-         const float &Alpha, const float &Trans, AEGfxBlendMode BlendMode);
+  /**************************************************************************************
+  Description:
+    Set tint RGB.
+  Red:
+    Red value. 
+  Green:
+    Green value.
+  Blue:
+    Blue value. 
+  **************************************************************************************/
+  Render &SetRGB(const float Red, const float Green, const float Blue)
+                { R = Red; G = Green; B = Blue; return *this;        }
+
+  /**************************************************************************************
+  Description:
+    Set tint Alpha.
+  Alpha:
+    Alpha value. 
+  **************************************************************************************/
+  Render &SetAlpha(const float Alpha         )
+                  { A = Alpha; return *this; }
+
+  /**************************************************************************************
+  Description:
+    Set transparency value for rendering.
+  Trans:
+    Transparency value. 
+  **************************************************************************************/
+  Render &SetTransparency(const float Trans                    )
+                         { Transparency = Trans; return *this; }
+
+  /**************************************************************************************
+  Description:
+    Set blend mode for rendering.
+  BlendMode:
+    Blend mode. 
+  **************************************************************************************/
+  Render &SetBlendMode(AEGfxBlendMode BlendMode       )
+                      { BM = BlendMode; return *this; }
+
+  /**************************************************************************************
+  Description:
+    Renders the object.
+  Obj:
+    Sprite to render.
+  matrix:
+    Sprite's transformation matrix. 
+  **************************************************************************************/
+  void Render_Obj(const Sprite &Obj, const Transform &matrix) const     ;
+
+  /**************************************************************************************
+  Description:
+    Default Constructor sets all to 1.
+  **************************************************************************************/
+  Render()                                                              ;
+
+  /**************************************************************************************
+  Description:
+    This Constructor sets all to user specified values.
+  Red:
+   Red value.
+  Green:
+   Green value.
+  Blue:
+   Blue value.
+  Alpha:
+   Alpha value.
+  Trans:
+   Transparency value.
+  BlendMode:
+   Blend mode.
+  **************************************************************************************/
+  Render(const float   Red, const float Green, const float         Blue,
+         const float Alpha, const float Trans, AEGfxBlendMode BlendMode);
 
 private:
-  AEGfxBlendMode BM;     //Blend Mode
-  float R;               //Red tint value
-  float G;               //Green tint value
-  float B;               //Blue tint value
-  float A;               //Alpha tint value
-  float Transparency;    //Transparency value
+  AEGfxBlendMode BM          ; //Blend Mode
+  float          R           ; //Red tint value
+  float          G           ; //Green tint value
+  float          B           ; //Blue tint value
+  float          A           ; //Alpha tint value
+  float          Transparency; //Transparency value
 };
