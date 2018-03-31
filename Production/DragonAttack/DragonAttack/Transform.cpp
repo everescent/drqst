@@ -17,21 +17,20 @@ Technology is prohibited.
 #include "Transform.h"
 
 //Sets the translation matrix and applies it to the matrix
-Transform& Transform::SetTranslate(float posX, float posY)
+void Transform::SetTranslate(float posX, float posY)
 {
   AEMtx33Trans(&T_Matrix, posX, posY);
-  return *this;
 }
+
 //Sets the degrees to rotate and applies it to the matrix
-Transform& Transform::SetRotation(const float &Deg)
+void Transform::SetRotation(const float Deg)
 {
   Degree = Deg;
   AEMtx33RotDeg(&R_Matrix, Degree);
-  return *this;
 }
+
 //Sets the scale matrix and applies it to the matrix
-Transform& Transform::SetScale(float scaleX, float scaleY)
+void Transform::SetScale(float scaleX, float scaleY)
 {
   AEMtx33Scale(&S_Matrix, scaleX, scaleY);
-  return *this;
 }

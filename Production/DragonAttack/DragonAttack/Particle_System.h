@@ -132,8 +132,10 @@ void UpdateEmission();
 void Update(const float dt);
 //Warm up time
 void WarmUp(const float dt, const float time, const function<void()> &Fields);
-//scale the particle as time passes
+//Scale the particle as time passes
 void ScaleRamp(const float Strength);
+//Get the number of particles in the volume
+const int GetParticleCount() const { return p_count; }
 //Renders the particles
 void Render();
 //Emitter
