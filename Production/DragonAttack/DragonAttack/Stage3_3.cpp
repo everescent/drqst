@@ -40,8 +40,11 @@ namespace Stage3_3
 		BG   = new Sprite{ CreateBG(22.0f, 2.0f, ".//Textures/BG_Stage1.png", 1.0f, 15.0f) };
 		M_BG = new Transform{};
 
+		AEVec2 startpos = { -450, -250 };
+		player = dynamic_cast<Dragon*>(Create_Basic_AI(DRAGON, startpos));
+
+
         last_boss = dynamic_cast<King_Arthur*>(Create_Boss_AI(KING_ARTHUR));
-        player = dynamic_cast<Dragon*>(Create_Basic_AI(DRAGON));
         player->PosY = last_boss->PosY;
         player->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 

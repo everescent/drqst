@@ -28,6 +28,7 @@ enum GAME_STATE
 	GS_LEVEL2_3,
 	GS_LEVEL3_1,
 	GS_LEVEL3_2,
+	GS_LEVEL3_3,
 	GS_LEVEL_IMPORT,
 	AI_TEST_STAGE,  // to be removed before submitting
     

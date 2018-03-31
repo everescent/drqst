@@ -27,6 +27,7 @@ Technology is prohibited.
 #include "Stage2_3.h"
 #include "Stage3_1.h"
 #include "Stage3_2.h"
+#include "Stage3_3.h"
 #include "Particle_Effects.h"
 #include "Credits.h"
 #include "test_level_import.h"

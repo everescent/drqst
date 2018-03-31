@@ -20,9 +20,9 @@ Technology is prohibited.
 namespace GSM
 {
 
-	GAME_STATE previous = GS_LEVEL1_1;
-	GAME_STATE current  = GS_LEVEL1_1;
-	GAME_STATE next     = GS_LEVEL1_1;
+	GAME_STATE previous = GS_LEVEL3_3;
+	GAME_STATE current  = GS_LEVEL3_3;
+	GAME_STATE next     = GS_LEVEL3_3;
 
 	GameStateFunctions GSF[GS_QUIT] = { 0 };
 
@@ -91,6 +91,13 @@ namespace GSM
 		GSF[GS_LEVEL3_2].Draw     = Stage3_2::Draw;
 		GSF[GS_LEVEL3_2].Free     = Stage3_2::Free;
 		GSF[GS_LEVEL3_2].Unload   = Stage3_2::Unload;
+
+		GSF[GS_LEVEL3_3].Init     = Stage3_3::Init;
+		GSF[GS_LEVEL3_3].Load     = Stage3_3::Load;
+		GSF[GS_LEVEL3_3].Update   = Stage3_3::Update;
+		GSF[GS_LEVEL3_3].Draw     = Stage3_3::Draw;
+		GSF[GS_LEVEL3_3].Free     = Stage3_3::Free;
+		GSF[GS_LEVEL3_3].Unload   = Stage3_3::Unload;
 
 		GSF[AI_TEST_STAGE].Init   = AI_Test_Stage::Init;
 		GSF[AI_TEST_STAGE].Load   = AI_Test_Stage::Load;

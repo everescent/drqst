@@ -39,7 +39,7 @@ void AI_Sprite_Init(void)
 	D_SPRITE    = S_CreateSquare(Dragon_Scale, ".//Textures/Bob_SpriteSheet.png", 0.20f, 0.25f);
 
 	L_SPRITE    = S_CreateSquare(60.0f, ".//Textures/Lancelot.png");
-    //ME_SPRITE   = S_CreateSquare(0.5f, ".//Textures/Merlin.png");
+    ME_SPRITE   = S_CreateSquare(1.5f, ".//Textures/Merlin.png");
 	KA_SPRITE   = S_CreateSquare(100.0f, ".//Textures/King_Arthur.png");
 
 
@@ -63,9 +63,7 @@ Characters *Create_Basic_AI(const BASIC_AI mob, const AEVec2& position)
 	    break;
 	case KNIGHT: return new Knight(position, &K_SPRITE);
 		break;
-	case DRAGON: return new Dragon(&D_SPRITE, Get_Attack_Sprite(FIREBALL_SPRITE));
-	//waiting for jacob to edit in his dragon.h things
-	//case DRAGON: return new Dragon(&D_SPRITE, Get_Attack_Sprite(FIREBALL_SPRITE), position);
+	case DRAGON: return new Dragon(&D_SPRITE, Get_Attack_Sprite(FIREBALL_SPRITE), position);
 		break;
 	default: break;
 	}
@@ -80,7 +78,7 @@ Characters *Create_Boss_AI(const BOSS_AI boss)
 	{
 	case LANCELOT:    return new Lancelot(&L_SPRITE);
 		break;
-	case MERLIN:      return new Merlin(Get_Attack_Sprite(EBALL_SPRITE), Get_Attack_Sprite(ARROW_SPRITE));
+	case MERLIN:      return new Merlin(&ME_SPRITE, Get_Attack_Sprite(EBALL_SPRITE), Get_Attack_Sprite(ARROW_SPRITE));
 		break;
 	case KING_ARTHUR: return  new King_Arthur(&KA_SPRITE);
 		break;

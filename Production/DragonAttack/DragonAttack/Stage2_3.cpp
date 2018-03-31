@@ -43,7 +43,7 @@ namespace Stage2_3
 		BG = new Sprite{ CreateBG(22.0f, 2.0f, ".//Textures/BG_Stage2.png", 1.0f, 15.0f) };
 		M_BG = new Transform{};
 
-		AEVec2 startpos = { -320, -80 };
+		AEVec2 startpos = { -450, -250 };
 		player = dynamic_cast<Dragon*>(Create_Basic_AI(DRAGON, startpos));
 
 		Audio = new Audio_Engine{ 1, [](std::vector <std::string> &playlist)->void {playlist.push_back(".//Audio/Merlin_BGM.mp3"); } };
@@ -51,7 +51,7 @@ namespace Stage2_3
 		if (!Import_MapData("level2-3.txt", MapData, Map_Width, Map_Height)) { AEGfxExit(); }
 
 		next = new LevelChangePlatform{ LCPLAT_SPRITE, 500.0f,  -300.0f };
-		//c.push_back(Create_Boss_AI(MERLIN));
+		c.push_back(Create_Boss_AI(MERLIN));
 	}
 
 
@@ -79,7 +79,7 @@ namespace Stage2_3
 			}
 		}
 
-		//c[0]->SetActive(true);
+		c[0]->SetActive(true);
 		player->SetActive(true);
 	}
 
@@ -89,11 +89,11 @@ namespace Stage2_3
 	{
 		Audio->Update();
 
-		//c[0]->Update(*player, dt);
-		//if (c[0]->Get_HP() <= 0)
-		//{
-		//	next->Update(*player, dt);
-		//}
+		c[0]->Update(*player, dt);
+		if (c[0]->Get_HP() <= 0)
+		{
+			next->Update(*player, dt);
+		}
 
 		for (Floor& elem : floors)
 		{
@@ -116,7 +116,7 @@ namespace Stage2_3
 		player->Update(*player, dt);
 		ui->UI_Update(player);
 
-		//std::cout << (int)player->PosX << ", " << (int)player->PosY << std::endl;
+		std::cout << (int)player->PosX << ", " << (int)player->PosY << std::endl;
 	}
 
 	void Draw(void)
@@ -130,11 +130,11 @@ namespace Stage2_3
 			elem.Render();
 		}
 
-		//c[0]->Render();
-		//if (c[0]->Get_HP() <= 0)
-		//{
-		//	next->Render();
-		//}
+		c[0]->Render();
+		if (c[0]->Get_HP() <= 0)
+		{
+			next->Render();
+		}
 		player->Render();
 		player->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 		ui->Render();

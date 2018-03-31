@@ -42,7 +42,10 @@ namespace Test_Stage1_3
 
 		BG = new Sprite{ CreateBG(22.0f, 2.0f, ".//Textures/BG_Stage1.png", 1.0f, 15.0f) };
 		M_BG = new Transform{};
-		player = dynamic_cast<Dragon*>(Create_Basic_AI(DRAGON));
+
+		AEVec2 startpos = { -450, -250 };
+		player = dynamic_cast<Dragon*>(Create_Basic_AI(DRAGON, startpos));
+
 		Audio = new Audio_Engine{ 1, [](std::vector <std::string> &playlist)->void {playlist.push_back(".//Audio/Lancelot_BGM.mp3"); } };
 		ui = new UI{ player };
 		if (!Import_MapData("level1-3.txt", MapData, Map_Width, Map_Height)) { AEGfxExit(); }
@@ -113,7 +116,7 @@ namespace Test_Stage1_3
 		player->Update(*player, dt);
 		ui->UI_Update(player);
 
-		//std::cout << (int)player->PosX << ", " << (int)player->PosY << std::endl;
+		std::cout << (int)player->PosX << ", " << (int)player->PosY << std::endl;
 	}
 
 	void Draw(void)
