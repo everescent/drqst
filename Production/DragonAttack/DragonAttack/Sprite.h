@@ -36,45 +36,154 @@ Deconstructor:
 class Sprite {
 
 public:
-  //Set texture position
-  Sprite &SetTexPos(const float &posU, const float &posV);
-  //Set RGB
-  Sprite &SetRGB(const float &Red = 1.0f, const float &Green = 1.0f,
-                 const float &Blue = 1.0f);
-  //Set Alpha, Transparency, Blend Mode
-  Sprite &SetAlphaTransBM(const float &Alpha, const float &Trans,
-                          AEGfxBlendMode BlendMode);
-  //Renders the object
-  void Render_Object(const Transform &matrix) const;
-  float Get_posU() const { return U; }
-  float Get_posV() const { return V; }
-  float Get_Width() const { return Width; }
-  float Get_Height() const { return Height; }
-  AEGfxVertexList* Get_mesh() const { return Mesh; }
-  AEGfxRenderMode Get_rm() const { return RM; }
-  AEGfxTexture* Get_tex() const { return Tex; }
-  Sprite &Get_this() { return *this; }
-  //Default constructor; Sets everything to zero
-  Sprite();
-  //Move constructor
-  Sprite(Sprite&& Move_Object);
-  //Move assignment operator
-  Sprite& Sprite::operator=(Sprite&& Move_Object);
-  //Construct with a mesh, but no texture
-  Sprite(AEGfxVertexList * mesh, const float &ObjectW, const float &ObjectH);
-  //Construct with a mesh and texture
-  Sprite(AEGfxVertexList * mesh, const char* TexFile,
-         float ObjectW, const float &ObjectH);
-  //Free all resources
-  ~Sprite();
+  /**************************************************************************************
+  Description:
+    Set texture position.
+  posU:
+    Position U.
+  posV:
+    Position V.
+  **************************************************************************************/
+  Sprite& SetTexPos       (const float posU       , const float  posV        );
+
+  /**************************************************************************************
+  Description:
+    Set tint RGB.
+  Red:
+    Red value.
+  Green:
+    Green value.
+  Blue:
+    Blue value.
+  **************************************************************************************/
+  Sprite& SetRGB          (const float  Red = 1.0f, const float Green = 1.0f,
+                           const float Blue = 1.0f                           );
+
+  /**************************************************************************************
+  Description:
+    Set Alpha, Transparency, Blend Mode.
+  Alpha:
+    Alpha value.
+  Trans:
+    Transparency value.
+  BlendMode:
+    Blend mode.
+  **************************************************************************************/
+  Sprite& SetAlphaTransBM (const float  Alpha     , const float Trans       ,
+                           AEGfxBlendMode BlendMode                          );
+
+  /**************************************************************************************
+  Description:
+    Renders the object.
+  matrix:
+    Transformation matrix of object. 
+  **************************************************************************************/
+  void             Render_Object(const Transform &matrix)                const;
+  /**************************************************************************************
+  Description:
+    Returns position U of UV.
+  **************************************************************************************/
+  float            Get_posV     () const { return V     ; }
+  /**************************************************************************************
+  Description:
+    Returns position V of UV.
+  **************************************************************************************/
+  float            Get_posU     () const { return U     ; }
+  /**************************************************************************************
+  Description:
+    Returns width of object.
+  **************************************************************************************/
+  float            Get_Width    () const { return Width ; }
+  /**************************************************************************************
+  Description:
+    Returns height of object.
+  **************************************************************************************/
+  float            Get_Height   () const { return Height; }
+  /**************************************************************************************
+  Description:
+    Returns mesh of object.
+  **************************************************************************************/
+  AEGfxVertexList* Get_mesh     () const { return Mesh  ; }
+  /**************************************************************************************
+  Description:
+    Returns render mode of object.
+  **************************************************************************************/
+  AEGfxRenderMode  Get_rm       () const { return RM    ; }
+  /**************************************************************************************
+  Description:
+    Returns texture of object.
+  **************************************************************************************/
+  AEGfxTexture*    Get_tex      () const { return Tex   ; }
+  /**************************************************************************************
+  Description:
+    Returns the object.
+  **************************************************************************************/
+  Sprite&          Get_this     ()       { return *this ; }
+
+  /**************************************************************************************
+  Description:
+    Default constructor; Sets everything to zero.
+  **************************************************************************************/
+  Sprite                   (                                                 );
+
+  /**************************************************************************************
+  Description:
+    Move constructor.
+  Move_Object:
+    Object to move from.
+  **************************************************************************************/
+  Sprite                   (Sprite&& Move_Object                             );
+
+  /**************************************************************************************
+  Description:
+    Move assignment operator.
+  Move_Object:
+    Object to move from.
+  **************************************************************************************/
+  Sprite& Sprite::operator=(Sprite&& Move_Object                             );
+
+  /**************************************************************************************
+  Description:
+    Construct with a mesh, but no texture.
+  mesh:
+    Mesh of the object. 
+  ObjectW:
+    Object width.
+  ObjectH:
+    Object height.
+  **************************************************************************************/
+  Sprite                  (AEGfxVertexList * mesh,
+                           const float    ObjectW,                           
+                           const float    ObjectH                            );
+
+  /**************************************************************************************
+  Description:
+    Construct with a mesh and texture.
+  mesh:
+    Mesh of the object.
+  TexFile:
+    Texture file of the object.
+  ObjectW:
+    Object width.
+  ObjectH:
+    Object height.
+  **************************************************************************************/
+  Sprite                  (AEGfxVertexList * mesh, const char* TexFile,      
+                           const float    ObjectW, const float ObjectH       );
+
+  /**************************************************************************************
+  Description:
+    Free all resources.
+  **************************************************************************************/
+  ~Sprite                 (                                                  );
 
 private:
-  AEGfxVertexList *Mesh; //A pointer to object's mesh
-  AEGfxRenderMode RM;    //Render Mode
-  AEGfxTexture *Tex;     //Texture
-  Render Draw;           //Draw component
-  float U;               //Texture U
-  float V;               //Texture V
-  float Width;           //Width of object
-  float Height;          //Height of object
+  AEGfxVertexList* Mesh  ; //A pointer to object's mesh
+  AEGfxRenderMode  RM    ; //Render Mode
+  AEGfxTexture*    Tex   ; //Texture
+  Render           Draw  ; //Draw component
+  float            U     ; //Texture U
+  float            V     ; //Texture V
+  float            Width ; //Width of object
+  float            Height; //Height of object
 };

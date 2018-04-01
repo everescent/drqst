@@ -16,7 +16,7 @@ Technology is prohibited.
 #include "f_sqrt.h"
 
 //Using babylonian method of square root
-float f_sqrt(const float &x)
+float f_sqrt(const float x)
 {
   //Throw anything less than 0
   assert(x >= 0.0f);
@@ -25,12 +25,13 @@ float f_sqrt(const float &x)
   {
     return 0.0f;
   }
-  float result = x;
-  float tmp = x / 2.0f;
+  float result = x       ;
+  float tmp    = x * 0.5f;
+  //Averages the results of previous and current iteration
   for (char i = 0; i < 5; ++i)
   {
-    result = (tmp + (x / tmp)) / 2.0f;
-    tmp = result;
+    result = (tmp + (x / tmp)) * 0.5f;
+    tmp    = result                  ;
   }
   return result;
 }

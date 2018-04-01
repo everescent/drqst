@@ -48,7 +48,7 @@ void Pause::Render()
 	AEGfxPrint(fontID, buttons[1], (s32)cameraX, (s32)cameraY			, 1.0f, 1.0f, 1.0f);
 	AEGfxPrint(fontID, buttons[2], (s32)cameraX, (s32)cameraY -  100 , 1.0f, 1.0f, 1.0f);
 	AEGfxPrint(fontID, buttons[3], (s32)cameraX, (s32)cameraY -	 200	, 1.0f, 1.0f, 1.0f);
-	std::cout << "Pause Render called" << std::endl;
+	//std::cout << "Pause Render called" << std::endl;
 }
 
 Pause::~Pause()

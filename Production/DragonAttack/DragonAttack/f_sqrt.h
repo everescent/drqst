@@ -17,5 +17,10 @@ Technology is prohibited.
 #include <cfloat>  //FLT_EPSILON
 #include <cassert> //assert
 
-//Faster square root
-float f_sqrt(const float &x);
+/**************************************************************************************
+Description:
+  Faster square root.
+x:
+  Value to square root.
+**************************************************************************************/
+float f_sqrt(const float x);
