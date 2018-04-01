@@ -95,19 +95,19 @@ void Archer::Colision_Check(Dragon &player, const float dt)
         player.GetFireball()[i].Projectile::ResetDist();
         player.GetFireball()[i].SetActive(false);
       }
-  //if(player.GetMfireball().IsActive())
-  //  if (Collision_.Dy_Rect_Rect(player.GetMfireball().Collision_, GetVelocity(),
-  //      player.GetMfireball().GetVelocity(), dt))
-  //  {
-  //    Anim_.SetState(HIT_ANIM);
-  //    //Decrease HP by player's damage
-  //    Decrease_HP(player.GetMDamage());
-  //    player.PlayImpact();
-  //    Audio_.Play(HIT);
-  //    //Reset the distance of the fireball and set false
-  //    player.GetMfireball().Projectile::ResetDist();
-  //    player.GetMfireball().SetActive(false);
-  //  }
+  if(player.GetMfireball().IsActive())
+    if (Collision_.Dy_Rect_Rect(player.GetMfireball().Collision_, GetVelocity(),
+        player.GetMfireball().GetVelocity(), dt))
+    {
+      Anim_.SetState(HIT_ANIM);
+      //Decrease HP by player's damage
+      Decrease_HP(player.GetMDamage());
+      player.PlayImpact();
+      Audio_.Play(HIT);
+      //Reset the distance of the fireball and set false
+      player.GetMfireball().Projectile::ResetDist();
+      player.GetMfireball().SetActive(false);
+    }
   //Arrow collision check
   if (Attack_)
   {
@@ -176,6 +176,12 @@ void Archer::Attack(Dragon &player, const float /*dt*/)
 
 void Archer::Dead()
 {
+  //Add score only once
+  if (IsActive())
+  {
+    Characters::Add_Kill_count();
+    Characters::Add_Score(5);
+  }
   SetActive(false);
   Arrow.SetActive(false);
   Set_HP(Archer_HP);

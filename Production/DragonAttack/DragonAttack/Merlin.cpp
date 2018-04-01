@@ -541,6 +541,17 @@ void Merlin::Update(Dragon &player, const float dt)
           player.GetFireball()[i].Projectile::ResetDist();
           player.GetFireball()[i].SetActive(false);
         }
+    if (player.GetMfireball().IsActive())
+      if (Collision_.Dy_Rect_Rect(player.GetMfireball().Collision_, GetVelocity(),
+        player.GetMfireball().GetVelocity(), dt))
+      {
+        //Decrease HP by player's damage
+        Decrease_HP(player.GetMDamage());
+        player.PlayImpact();
+        //Reset the distance of the fireball and set false
+        player.GetMfireball().Projectile::ResetDist();
+        player.GetMfireball().SetActive(false);
+      }
     //Check for attack colision with player
     Colision_Check(player, dt);
   }
