@@ -15,13 +15,31 @@ Technology is prohibited.
 
 #pragma once
 #include "GameObject.h"
-#include "f_sqrt.h"
-#include <utility>
+#include "f_sqrt.h" //f_sqrt
+#include <utility>  //move
 
+/**************************************************************************************
+Description:
+  Creates an object that acts like any projectile. Bullets, arrows, etc. 
+Constructors:
+  Create this class with a sprite pointer and a collision part. 
+**************************************************************************************/
 class Projectile : public GameObject {
 
 public:
-  //Updates the projectile, if active
+
+  /**************************************************************************************
+  Description:
+    Updates the projectile, if active.
+  dt:
+    Delta time.
+  scale:
+    Collision scale. 
+  circle:
+    Check if circle collision type. If not, use rectangle. 
+  angle:
+    Rotation angle of the projectile. 
+  **************************************************************************************/
   void Update(const float dt            , const float scale = 0.0f,
               const bool  circle = false, const float angle = 90.0f )
   {
@@ -58,10 +76,19 @@ public:
           (GetVelocity().y * dt * GetVelocity().y * dt)
         )
       );
+      //Concatenate all matrices
       Transform_.Concat();
     }
   }
-  //Set the position of the projectile, if not active
+
+  /**************************************************************************************
+  Description:
+    Set the position of the projectile, if not active.
+  X:
+    Position X.
+  Y:
+    Position Y. 
+  **************************************************************************************/
   void Pos(const float X, const float Y)
   {
     //Check for active
@@ -71,30 +98,78 @@ public:
       PosY = Y;
     }
   }
-  //Distance travelled by the projectile
+
+  /**************************************************************************************
+  Description:
+    Add distance travelled by the projectile.
+  dist:
+    Distance to add. 
+  **************************************************************************************/
   void  AddDist    (const float dist )       { Distance += dist  ; }
-  //Returns Distance travelled by the projectile
+
+  /**************************************************************************************
+  Description:
+    Returns Distance travelled by the projectile.
+  **************************************************************************************/
   float GetDist    (                 ) const { return Distance   ; }
-  //Resets the distance travelled
+
+  /**************************************************************************************
+  Description:
+    Resets the distance travelled.
+  **************************************************************************************/
   void  ResetDist  (                 )       { Distance  = 0.0f  ; }
-  //Sets the direction of the projectile
+
+  /**************************************************************************************
+  Description:
+    Sets the direction of the projectile.
+  dir:
+    Direction of projectile. TRUE = Right; FALSE = Left;
+  **************************************************************************************/
   void  SetDir     (const bool dir   )       { Direction = dir   ; }
-  //Returns the direction of the projectile
+
+  /**************************************************************************************
+  Description:
+    Returns the direction of the projectile.
+  **************************************************************************************/
   bool  GetDir     (                 ) const { return Direction  ; }
-  //Sets Collided true or false
+
+  /**************************************************************************************
+  Description:
+    Sets Collided true or false.
+  Colide:
+    Collision status. 
+  **************************************************************************************/
   void  SetCollided(const bool Colide)       { Collided  = Colide; }
-  //Returns Collided
+
+  /**************************************************************************************
+  Description:
+    Returns Collided status. TRUE = Collided; FALSE = Not Collided;
+  **************************************************************************************/
   bool  GetCollided(                 ) const { return Collided   ; }
-  //Default contructor does nothing useful
+
+  /**************************************************************************************
+  Description:
+    Default contructor does nothing useful.
+  **************************************************************************************/
   Projectile() = default;
-  //Initialize projectile with mesh and collision shape
+
+  /**************************************************************************************
+  Description:
+    Initialize projectile with mesh and collision shape.
+  p_Sprite:
+    Pointer to sprite of projectile. 
+  t_col:
+    Collision component of the projectile. 
+  **************************************************************************************/
   Projectile(Sprite *p_Sprite, Col_Comp &&t_col)
     :GameObject{ p_Sprite, std::move(t_col) },
      Distance  { 0.0f                       }, 
      Direction { true                       }, 
      Collided  { false                      }
   {}
+
 private:
+
   bool  Collided ; //TRUE = Collided; FALSE = Not Collided
   bool  Direction; //TRUE = Right; FALSE = Left
   float Distance ; //Distance travelled

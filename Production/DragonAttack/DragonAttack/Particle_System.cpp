@@ -19,15 +19,16 @@ prior written consent of DigiPen Institute of Technology is prohibited.
 //User should be keying in desired values
 //Doing this in a "function" style is too messy
 Emitter::Emitter(AEGfxVertexList* pMesh, AEVec2 Pos, Emitter_Type type)
-:pMesh_{ pMesh },       Pos_{ Pos.x, Pos.y }, Vol_Max{ 0 },
- Dist_Min_{ 0.0f },     PPS_{ 0 },            Direction_{ 0.0f },
- Conserve_{ 0.0f },     Size_{ 0.0f },        Speed_{ 0.0f }, 
- Lifetime_{ 0.0f },     Particle_Rand_{},     Color_{}, 
- Transparency_{ 1.0f }, Exposure_{ 1.0f },    Particles_{},
- Type_{type}
+:pMesh_       { pMesh }, Pos_          { Pos.x, Pos.y }, Vol_Max   { 0    },
+ Dist_Min_    { 0.0f  }, PPS_          { 0            }, Direction_{ 0.0f },
+ Conserve_    { 0.0f  }, Size_         { 0.0f         }, Speed_    { 0.0f },
+ Lifetime_    { 0.0f  }, Particle_Rand_{              }, Color_    {      },
+ Transparency_{ 1.0f  }, Exposure_     { 1.0f         }, Particles_{      },
+ Type_        { type  }
 {
   //Randomize a seed for rand
   srand((unsigned int)time(nullptr));
+  //Default point up
   Pos_.Min_Max.Angle_ = PI / 2.0f;
 }
 
