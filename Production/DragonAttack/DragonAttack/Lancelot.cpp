@@ -107,8 +107,6 @@ void Lancelot::Init()
 
 
     Init_Particles();
-	seed_initializer(); // initializes the seed for rng purposes
-
 }
 
 void Lancelot::Init_Particles(void)

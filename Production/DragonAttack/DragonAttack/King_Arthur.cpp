@@ -143,9 +143,6 @@ void King_Arthur::Init_KA_Attacks(void)
 	sword_pos[1].x =  200.f;
 	sword_pos[2].x =  300.f;
 	sword_pos[3].x = -300.f;
-
-	seed_initializer();// remove once we finish
-
 }
 
 void King_Arthur::Init_MobArray(void)

@@ -20,7 +20,7 @@ namespace
 
 	//Floor *floor1;
 
-
+    float angle;
 }
 
 namespace AI_Test_Stage
@@ -32,24 +32,28 @@ namespace AI_Test_Stage
 		
 		//floor1->Collision_.Update_Col_Pos(-600.0f, -360.0f, 600.0f, -300.0f); 0xFFFFC0CB
 	    
-        Effects_Init();
-        test = Effects_Get(ARONDIGHT_PARTICLE);
+        //Effects_Init();
+        //test = Effects_Get(ARONDIGHT_PARTICLE);
+		//
+		//test->Emitter_.PPS_ = 5;
+        //test->Emitter_.Dist_Min_ = 10.f;
+		//test->Emitter_.Vol_Max = 2048;
+		//test->Emitter_.Direction_ = 90.0f;
+		//test->Emitter_.Particle_Rand_.Spread_ = 180;
+		//test->Emitter_.Conserve_ = 0.8f;
+		//test->Emitter_.Size_ = 10.0f;
+		//test->Emitter_.Speed_ = 5.0f;
+		////test->Emitter_.Particle_Rand_.Sp_Rand_ = 3;
+		//test->Emitter_.Lifetime_ = 4.f;
+		////test->Emitter_.Particle_Rand_.Life_Rand_ = 1;
 
 
 
-		//test.Emitter_.pMesh_ = pMesh;
-		//test->Emitter_.Pos_ = {0.0f, 0.0f};
-		test->Emitter_.PPS_ = 8;
-        test->Emitter_.Dist_Min_ = 10.f;
-		test->Emitter_.Vol_Max = 4096;
-		test->Emitter_.Direction_ = 90.0f;
-		test->Emitter_.Particle_Rand_.Spread_ = 360;
-		test->Emitter_.Conserve_ = 0.8f;
-		test->Emitter_.Size_ = 10.0f;
-		test->Emitter_.Speed_ = 4.0f;
-		test->Emitter_.Particle_Rand_.Sp_Rand_ = 3;
-		test->Emitter_.Lifetime_ = 3.f;
-		//test->Emitter_.Particle_Rand_.Life_Rand_ = 1;
+
+        //test->Emitter_.Pos_.Point_Min_Max[0].x = 0.f;
+        //test->Emitter_.Pos_.Point_Min_Max[0].y = -20.f;
+        //test->Emitter_.Pos_.Point_Min_Max[1].x = 18.f;
+        //test->Emitter_.Pos_.Point_Min_Max[1].y = -15.f;
 	}
 
 	void Load(void)
@@ -58,7 +62,8 @@ namespace AI_Test_Stage
 		//floor1 = new Floor{ -200.0f, -350.0f }; //ok
 		M_BG = new Transform;
 		d = dynamic_cast<Dragon*> (Create_Basic_AI(DRAGON));
-		c.push_back( Create_Boss_AI(LANCELOT));
+		c.push_back(Create_Basic_AI(MAGE, {}));
+		//c.push_back(Create_Boss_AI(LANCELOT));
 	}
 
 	void Update(float dt)
@@ -74,21 +79,28 @@ namespace AI_Test_Stage
 		//floor1->Update(*d, dt);
 
 		//Create the particles for emission
-		test->UpdateEmission();
+		//test->UpdateEmission();
 		//Turbulence simulates brownian motion
 		//Passing in equations for phase x and y
-		test->Turbulence(0.2f);
+		//test->Turbulence(0.4f);
 		//Simulate an upward force
-		//test->Force(0.2f, false, true);
+		//test->Force(0.5f, false, true);
 		//Add gravity
-		//test->Gravity(0.5f);
+		//test->Gravity(0.2f);
+       // test->Drag(0.5f);
 		//Set exposure as a factor of lifetime
-		test->ColorRamp_Life();
+		//test->ColorRamp_Life();
 		//Set transparency as a factor of Exposure
-		test->TransRamp_Exp();
+		//test->TransRamp_Exp();
 		//Updates all particles
-        //test->Newton({0.f, 0.0f}, 0.3f);
-		test->Update(dt);
+        //test->Newton({15.f, 50.0f}, 0.3f);
+        //test->Emitter_.Pos_.Min_Max.Point_Max.x += 1;
+        //test->Emitter_.Pos_.Min_Max.Point_Min.x += 1;
+        //test->Emitter_.Pos_.Min_Max.Point_Max.y += 1;
+        //test->Emitter_.Pos_.Min_Max.Point_Min.y += 1;
+       // test->Emitter_.Pos_.Min_Max.Angle_ += PI * 0.00002f;
+
+		//test->Update(dt);
        
         
         //PPS = true;
@@ -103,12 +115,14 @@ namespace AI_Test_Stage
 		c[0]->Render();
 
 		//Render Particles
-		test->Render();
+		//test->Render();
 	}
 
 	void Free(void)
 	{
 		delete d;
+		delete c[0];
+		delete BG;
 		c.clear();
 	}
 

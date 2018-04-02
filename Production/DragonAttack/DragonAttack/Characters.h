@@ -22,7 +22,11 @@ Technology is prohibited.
 #include "AI_Attack_Sprites.h"
 #include "Particle_Effects.h"
 
-// direction the ai is facing
+/**************************************************************************************
+//
+// enumeration for the direction the ai should face
+//
+**************************************************************************************/
 enum Direction
 {
 	LEFT = 0,
@@ -32,7 +36,11 @@ enum Direction
 	STAY
 };
 
-// animation for ai
+/**************************************************************************************
+//
+// enumeration for the basic character animations
+//
+**************************************************************************************/
 enum
 {
 	HIT_ANIM,
@@ -42,10 +50,19 @@ enum
 
 class Dragon; //forward declaration
 
-// A class that creates a basic character
+/**************************************************************************************
+//
+// An abstract class that stores variables which will be needed by AIs
+//
+**************************************************************************************/
 class Characters : public GameObject
 {
 	private:
+		//------------------------------------------------------------------
+		//
+		//  CHARACTER VARIABLES
+		//
+		//------------------------------------------------------------------
 		int hp;                    // hp the character have
 		Direction direction;       // moving in left or right, up or down?
 		static int score;          // player score for the stage
@@ -54,25 +71,54 @@ class Characters : public GameObject
 		bool vulnerable;  	       // immune to damage if false
 
 	public:
+		//------------------------------------------------------------------
+		//
+		//  FUNCTIONS FOR CHARACTERS
+		//
+		//------------------------------------------------------------------
 		Characters(Sprite* t_sprite, const int HP, Col_Comp &&t_col); // default constructor
-    virtual ~Characters() = default;                                  // virtual destructor
+        virtual ~Characters() = default;                              // virtual destructor
+		
+	    //------------------------------------------------------------------
+	    //
+	    //  FUNCTIONS THAT AFFECTS THE HP OF CHARACTERS
+	    //
+	    //------------------------------------------------------------------
 		int Get_HP() const;                                           // get HP of mob
 		void Set_HP(int hp);                                          // set the hp for mob
 		void Increase_HP(const int increment);                        // increase hp via power ups / status
 		void Decrease_HP(const char damage = 1);                      // decrease the hp of the character
 
-		Direction Get_Direction() const; // get the direction of mob
+	    //------------------------------------------------------------------
+	    //
+	    //  SETTERS AND GETTERS FOR DIRECTION
+	    //
+	    //------------------------------------------------------------------
+	    Direction Get_Direction() const;        // get the direction of mob
 		void Set_Direction(Direction direction);// set the direction of mob
 
+	 	//------------------------------------------------------------------
+	    //
+	    //  FUNCTIONS THAT AFFECTS THE IDLE DURATION
+	    //
+	    //------------------------------------------------------------------
 		float Get_Idle_Time() const;
 		void  Reset_Idle_Time(float);
 		void  Decrease_Idle_Time(float);
 
+		//------------------------------------------------------------------
+		//
+		//  GETTERS AND SETTERS FOR VULNERABILITY OF CHARACTERS
+		//
+		//------------------------------------------------------------------
 		void Set_Vulnerable(const bool status);
 		bool Get_Vulnerable(void) const;
 
-		//------------------------------------------------------------------------------------------
-		//STATIC FUNCTIONS--------------------------------------------------------------------------
+		//------------------------------------------------------------------
+		//
+		//  STATIC VARIABLES AND FUNCTION
+		//
+		//------------------------------------------------------------------
 		static int Get_Score();                 // get current score
 		static void Add_Score(const int score); // add score
 		static void Reset_Score();              // reset score
@@ -81,5 +127,6 @@ class Characters : public GameObject
 		static void Add_Kill_count();			// add enemy kill count
 		static void Reset_Enemy_Killed();		// reset enemy kill count
 
-    virtual void Update(Dragon& d, const float dt) = 0/*{ UNREFERENCED_PARAMETER(d); UNREFERENCED_PARAMETER(dt); }*/;
+		// virtual destructor of characters
+        virtual void Update(Dragon& d, const float dt) = 0;
 };

@@ -28,7 +28,12 @@ namespace // for global variables in this file
 
 }
 
-// constructor for mage, that sets its position to the parameters that were given
+/**************************************************************************************
+//
+// Constructor of Mage obj
+// Takes in the a spawn position and pointer to its texture
+//
+**************************************************************************************/
 Mage::Mage(const AEVec2& position, Sprite* texture)
 	:Characters(texture,
 		HEALTH, Col_Comp{ position.x - MAGE_SCALE, position.y - MAGE_SCALE , position.x + MAGE_SCALE , position.y + MAGE_SCALE, Rect }),
@@ -43,14 +48,19 @@ Mage::Mage(const AEVec2& position, Sprite* texture)
 	    }}
 
 {
-   SetActive(false);                                                // don't spawn mage
+   SetActive(false);                                               // don't spawn mage
    SetPos(position.x, position.y);								   // starting coordinates
    Transform_.SetTranslate(position.x, position.y);				   // add to matrix
    Transform_.Concat();											   // add to final matrix
    Reset_Idle_Time(2.0f);										   // idling time for mage
 }
 
-// update function for mage, performs the behaviour of mage at current frame
+/**************************************************************************************
+//
+// Update function of mage
+//
+**************************************************************************************/
+
 void Mage::Update(Dragon &d, const float dt)
 {	
 	// changes state to dead when hp is 0
@@ -64,7 +74,7 @@ void Mage::Update(Dragon &d, const float dt)
 	}
 	
 	// checks for collision with fireball if mage is active
-	if (this->IsActive())
+	if (IsActive())
 	{
 		for (char i = 0; i < Bullet_Buffer; ++i)
 			if (d.GetFireball()[i].IsActive())
@@ -116,10 +126,16 @@ void Mage::Update(Dragon &d, const float dt)
 	if(anim.GetComplete(HIT_ANIM))
 		anim.SetState(IDLE_ANIM);
 
+	// update the mage animation
 	anim.Update(*Sprite_);
 }
 
-// render function for mage
+/**************************************************************************************
+//
+// render both mage and his attack on screen
+//
+**************************************************************************************/
+
 void Mage::Render(void)
 {
 	GameObject::Render(); // render the mage
@@ -128,7 +144,11 @@ void Mage::Render(void)
 	energy_ball.Render(); //render the energyball
 }
 
-// idle function of mage
+/**************************************************************************************
+//
+// Idle function for mage
+//
+**************************************************************************************/
 void Mage::Idle(const float dt, const Dragon &d)
 {
 	// changes the behaviour to attack once the timer hits 0
@@ -146,13 +166,13 @@ void Mage::Idle(const float dt, const Dragon &d)
 		Decrease_Idle_Time(dt);
 	}
 }
-
-// attack function of mage
-// shoots energy balls at player
+/**************************************************************************************
+//
+// Attack function for mage
+//
+**************************************************************************************/
 void Mage::Attack(const float dt, Dragon &d)
 {
-	UNREFERENCED_PARAMETER(dt);
-
 	// range limit of mage
 	static const float RANGE_LIMIT = 600.0f;
 
@@ -191,13 +211,14 @@ void Mage::Attack(const float dt, Dragon &d)
 	}
 
 }
-
-
+/**************************************************************************************
+//
+// Move function for mage
+//
+**************************************************************************************/
 void Mage::Move(const Dragon &d)
 {
-	// for now, teleport behind player
-
-	const float location = d.PosX - PosX; // get the distance between dragon and mage
+	const float location = d.PosX - PosX;       // get the distance between dragon and mage
 	const float teleport_distance = 100.0f;     // how far the mage teleports away from player
 
 	if (location > 0) // dragon is on the right of mage
@@ -222,6 +243,11 @@ void Mage::Move(const Dragon &d)
 	current_action = IDLE;				   // change behaviour
 
 }
+/**************************************************************************************
+//
+// Reinstantiate the mage with its new position
+//
+**************************************************************************************/
 
 void Mage::Renew_Mage(const AEVec2& newPos)
 {
@@ -236,7 +262,12 @@ void Mage::Renew_Mage(const AEVec2& newPos)
 
 }
 
-// dead function of mage
+/**************************************************************************************
+//
+// Dead function for mage
+//
+**************************************************************************************/
+
 void Mage::Dead(void)
 {
 	SetActive(false);             // set active to false
@@ -248,7 +279,12 @@ void Mage::Dead(void)
 	Add_Score(30);                // add score
 }
 
-// checks if the player is within sight
+/**************************************************************************************
+//
+// Check if player is within line of sight
+//
+**************************************************************************************/
+
 bool Mage::Line_Of_Sight(const Dragon &d)
 {
 	// distance between player and mage

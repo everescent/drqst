@@ -1,10 +1,24 @@
+/* Start Header ************************************************************************/
+/*!
+\file       Score_Page.cpp
+\author     William Yoong
+\par email: william.yoong\@digipen.edu
+\brief
+score page
+
+Copyright (C) 2018 DigiPen Institute of Technology.
+Reproduction or disclosure of this file or its contents
+without the prior written consent of DigiPen Institute of
+Technology is prohibited.
+*/
+/* End Header **************************************************************************/
 #include "Score_Page.h"
 #include "AEEngine.h"
 #include "Characters.h"
 #include "StageManager.h"
 #include "PickUp.h"
 
-#define EFFECT_NUM 8
+#define EFFECT_NUM 8 // number of fireworks in the score page
 
 // for global variables
 namespace
@@ -22,6 +36,7 @@ namespace
 		bool transit;
 	};
 
+	// fireworks array to keep track of the firework effects
 	Fireworks fireworks[EFFECT_NUM];
 
 }
@@ -31,12 +46,22 @@ static float RNG(const float min, const float max);
 static void  Reset_Effects(const int num);
 static void  Transit_Fireworks(const int num);
 
+/**************************************************************************************
+//
+// Loads the variables that are needed 
+//
+**************************************************************************************/
 void Load_Score_Page(void)
 {
 	// initialize font
 	fontID = AEGfxCreateFont("calibri", 32, true, false);
 }
 
+/**************************************************************************************
+//
+// Init the variables that are needed 
+//
+**************************************************************************************/
 void Init_Score_Page(void)
 {
 	// initialize particle system
@@ -54,14 +79,20 @@ void Init_Score_Page(void)
 	score_effects[0]->Emitter_.Pos_.Min_Max.Point_Max = {};
 	score_effects[0]->Emitter_.Pos_.Min_Max.Point_Min = {};
 
-	// shallow copy over
+	// shallow copy over the emitter
 	for (char i = 1; i < EFFECT_NUM; ++i)
 	{
 		score_effects[i] = new Particle_System(score_effects[0]->Emitter_.pMesh_, {}, BOX);
 		score_effects[i]->Emitter_ = score_effects[0]->Emitter_;
 	}
-}
 
+
+}
+/**************************************************************************************
+//
+// Update the fireworks effect
+//
+**************************************************************************************/
 void Update_Score_Page(const float dt)
 {
 	// reset camera position
@@ -90,7 +121,7 @@ void Update_Score_Page(const float dt)
 
 			
 			fireworks[i].distEnd = RNG(60.f, 80.f);  // randomize the end position between 60-80
-			fireworks[i].lifeTime = 3.f;            // lifetime of the fireworks
+			fireworks[i].lifeTime = 3.f;             // lifetime of the fireworks
 			++fireworks[i].dist;
 		}
 		// move the emitter to its final destination
@@ -136,19 +167,26 @@ void Update_Score_Page(const float dt)
 		score_effects[i]->Update(dt);
 	}
 
+	// go to the next state if enter was pressed
 	if (AEInputCheckTriggered(AEVK_RETURN))
 	{
 		SM::Set_Next(SM::Get_After_Score());
 	}
 
 }
-
+/**************************************************************************************
+//
+// Render the score page
+//
+**************************************************************************************/
 void Render_Score_Page(void)
 {
+	// char array to store the things to be rendered in screen
 	char score[50]           = {};
 	char enemies_killed[50]  = {};
 	char coins_collected[50] = {};
 
+	// get the variables to render on screen
 	sprintf_s(score,           "Score: %d",           Characters::Get_Score());
 	sprintf_s(enemies_killed,  "Enemies Killed: %d",  Characters::Get_Enemies_Killed());
 	sprintf_s(coins_collected, "Coins Collected: %d", PickUp::GetCoin());
@@ -169,12 +207,20 @@ void Render_Score_Page(void)
 	AEGfxPrint(fontID, "Press Enter ",  -60, 128, 1.0f, 1.0f, 1.0f);
 
 }
-
+/**************************************************************************************
+//
+// DOES NOTHING
+//
+**************************************************************************************/
 void Free_Score_Page(void)
 {
 	// does nothing
 }
-
+/**************************************************************************************
+//
+// Unload the font, reset the scores for next state
+//
+**************************************************************************************/
 void Unload_Score_Page(void)
 {
 	Characters::Reset_Score();
@@ -182,18 +228,26 @@ void Unload_Score_Page(void)
 	PickUp::ResetCoin();
 	AEGfxDestroyFont(fontID);
 
-
+	// free the memory that was allocated for the fireworks
 	for (char i = 1; i < EFFECT_NUM; ++i)
 	{
 		delete score_effects[i];
 	}
 }
-
+/**************************************************************************************
+//
+// randomize a number between two numbers
+//
+**************************************************************************************/
 float RNG(const float min, const float max)
 {
 	return (min + rand() % (int)(max - min + 1));
 }
-
+/**************************************************************************************
+//
+// Reset the emitter to shoot fireworks
+//
+**************************************************************************************/
 void Reset_Effects(const int num)
 {
 	score_effects[num]->Emitter_.PPS_ = 2;
@@ -208,7 +262,11 @@ void Reset_Effects(const int num)
 	fireworks[num].dist = 0;
 	fireworks[num].transit = false;
 }
-
+/**************************************************************************************
+//
+// Change the emitter to explode like fireworks
+//
+**************************************************************************************/
 void Transit_Fireworks(const int num)
 {
 	score_effects[num]->Emitter_.PPS_ = 300;

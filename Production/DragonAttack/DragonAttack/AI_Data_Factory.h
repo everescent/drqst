@@ -12,7 +12,6 @@ without the prior written consent of DigiPen Institute of
 Technology is prohibited.
 */
 /* End Header **************************************************************************/
-
 #pragma once
 #include "Archer.h"
 #include "Grunt.h"
@@ -23,7 +22,11 @@ Technology is prohibited.
 #include "Lancelot.h"
 #include "AI_Attack_Sprites.h"
 
-
+/**************************************************************************************
+//
+// enumurator for the different ais we have
+//
+**************************************************************************************/
 enum BASIC_AI
 {
 	GRUNT,
@@ -35,6 +38,11 @@ enum BASIC_AI
 	DRAGON
 };
 
+/**************************************************************************************
+//
+// enumurator for the different bosses we have
+//
+**************************************************************************************/
 enum BOSS_AI
 {
 	LANCELOT,
@@ -44,13 +52,26 @@ enum BOSS_AI
 	// add any boss you create here
 };
 
-
+/**************************************************************************************
+//
+// initializes the different sprites we need for the ais
+//
+**************************************************************************************/
 void AI_Sprite_Init(void);
 
+/**************************************************************************************
+//
 // creates a basic ai and return a pointer to it
-// initial position is default initialize to spawn outside screen 
+// initial position is default initialize to spawn outside screen
 // if you don't have a fix location at the moment
+//
+**************************************************************************************/
 Characters *Create_Basic_AI(const BASIC_AI mob_name, const AEVec2 &initial_position = { -700.0f, -400.0f });
 
+
+/**************************************************************************************
+//
 // creates a boss ai and return a pointer to it
+//
+**************************************************************************************/
 Characters *Create_Boss_AI(const BOSS_AI boss_name);

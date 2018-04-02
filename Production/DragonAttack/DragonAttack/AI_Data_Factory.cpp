@@ -12,8 +12,7 @@ without the prior written consent of DigiPen Institute of
 Technology is prohibited.
 */
 /* End Header **************************************************************************/
-
-#include "AI_Data_Factory.h"
+#include "AI_Data_Factory.h" // header file
 
 
 namespace
@@ -30,6 +29,11 @@ namespace
 	Sprite KA_SPRITE;
 }
 
+/**************************************************************************************
+//
+// initializes the different sprites we need for the ais
+//
+**************************************************************************************/
 void AI_Sprite_Init(void)
 {
 	A_SPRITE    = S_CreateSquare(70.0f, ".//Textures/Archer_SpriteSheet.png",     0.2f, 0.33f);
@@ -49,10 +53,16 @@ void AI_Sprite_Init(void)
 	L_SPRITE.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 	KA_SPRITE.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 }
-
+/**************************************************************************************
+//
+// creates a basic ai and return a pointer to it
+// initial position is default initialize to spawn outside screen
+// if you don't have a fix location at the moment
+//
+**************************************************************************************/
 Characters *Create_Basic_AI(const BASIC_AI mob, const AEVec2& position)
 {
-
+	// return the corresponding ai that was given
 	switch (mob)
 	{
 	case GRUNT:  return new Grunt (&G_SPRITE, position.x, position.y);
@@ -72,8 +82,14 @@ Characters *Create_Basic_AI(const BASIC_AI mob, const AEVec2& position)
 	return nullptr;
 }
 
+/**************************************************************************************
+//
+// creates a boss ai and return a pointer to it
+//
+**************************************************************************************/
 Characters *Create_Boss_AI(const BOSS_AI boss)
 {
+	// returns the corresponding boss that was given
 	switch (boss)
 	{
 	case LANCELOT:    return new Lancelot(&L_SPRITE);

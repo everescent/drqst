@@ -1,17 +1,37 @@
-#include "Credits.h"
-#include "AEEngine.h"
-#include "GameStateManager.h"
-#include "Particle_Effects.h"
+/* Start Header ************************************************************************/
+/*!
+\file       Credits.cpp
+\author     William Yoong
+\par email: william.yoong\@digipen.edu
+\brief
+Credits page
+
+Copyright (C) 2018 DigiPen Institute of Technology.
+Reproduction or disclosure of this file or its contents
+without the prior written consent of DigiPen Institute of
+Technology is prohibited.
+*/
+/* End Header **************************************************************************/
+#include "Credits.h"            // header file
+#include "AEEngine.h"           // for font and frame time
+#include "Camera.h"             // camposition
+#include "GameStateManager.h"	// to change game states
+#include "Particle_Effects.h"	// CREDIT_PARTICLE
 
 // for global variables
 namespace
 {
-    u32 fontID[2];
+    u32 fontID[2]; // fontid that will be used
+
+	// the people that will be in the credit screen
     char* president  [2] = { "President"      , "Claude Comair"                                               };
     char* instructors[3] = { "Instructors"    , "Elie Hosry"    , "Michael David Thompson"                    };
     char* creators   [8] = { "Lead Designer"  , "Andrew Chong"  , "Technical Lead"          , "Javon Lee",
                              "Producer"       , "Jacob Lim"     , "Product Manager"         , "William Yoong" };
-    Particle_System* credit_effects;
+    // particle effects
+	Particle_System* credit_effects;
+
+	// update the particles in the system
     void Update_Particle();
 
 	auto& g_dt = AEFrameRateControllerGetFrameTime;
@@ -19,7 +39,12 @@ namespace
 
 namespace Credits
 {
-    void Load(void)
+	/**************************************************************************************
+	//
+	// Loads the variables that are needed for the credit screen
+	//
+	**************************************************************************************/
+	void Load(void)
     {
         // creating the font ids
         fontID[0] = AEGfxCreateFont("calibri", 32, true, false);
@@ -45,12 +70,22 @@ namespace Credits
         credit_effects->Emitter_.Lifetime_ = 4.f;
     }
     
+	/**************************************************************************************
+	//
+	// Init the variables that are needed for the credit screen
+	//
+	**************************************************************************************/
     void Init(void)
 	{
         // warm up the particle systme before showing it
 		credit_effects->WarmUp((float)g_dt(), 2, Update_Particle);
 	}
 
+	/**************************************************************************************
+	//
+	// Updates the timer and particle effects
+	//
+	**************************************************************************************/
 	void Update(float dt)
 	{
 		static float time = 5.f;
@@ -63,8 +98,14 @@ namespace Credits
 		
 	}
 
+	/**************************************************************************************
+	//
+	// Render the variables that are needed for the credit screen
+	//
+	**************************************************************************************/
 	void Draw(void)
 	{		
+		// render the particle system
 		credit_effects->Render();
 
 		AEGfxSetRenderMode(AE_GFX_RM_COLOR); // render with color
@@ -94,11 +135,21 @@ namespace Credits
 
 	}
 
+	/**************************************************************************************
+	//
+	// NOT USED
+	//
+	**************************************************************************************/
 	void Free(void)
 	{
-
+		// empty
 	}
 
+	/**************************************************************************************
+	//
+	// Unloads the variables that were needed for the credit screen
+	//
+	**************************************************************************************/
 	void Unload(void)
 	{
         for (u32& i : fontID)
@@ -110,9 +161,13 @@ namespace Credits
 
 namespace
 {
-    void Update_Particle(void)
+	/**************************************************************************************
+	//
+	// updates the behaviour of the particle system
+	//
+	**************************************************************************************/
+	void Update_Particle(void)
     {
-        //credit_effects->Turbulence(0.4f);
         //Simulate an right side force
         credit_effects->Force(0.4f, true, false);
         //Add gravity

@@ -14,10 +14,15 @@ Technology is prohibited.
 /* End Header **************************************************************************/
 
 #pragma once
-#include "Characters.h"
-#include "Dragon.h"
-#include "Boss_States.h"
+#include "Characters.h"   // parent class
+#include "Dragon.h"       // player class
+#include "Boss_States.h"  // ai states
 
+/**************************************************************************************
+//
+// A class that creates a mage object
+//
+**************************************************************************************/
 
 class Mage : public Characters
 {
@@ -29,11 +34,21 @@ private:
 	//------------------------------------------------------------------
 	void Idle(const float dt, const Dragon&);
 	void Attack(const float dt, Dragon &);
-	void Move(const Dragon &);     // teleport the mage
+	void Move(const Dragon &);                
 	void Dead(void);
 
+	//------------------------------------------------------------------
+	//
+	//  HELPER FUNCTIONS
+	//
+	//------------------------------------------------------------------
 	bool Line_Of_Sight(const Dragon &);
 
+	//------------------------------------------------------------------
+	//
+	//  MAGE VARIABLES
+	//
+	//------------------------------------------------------------------
 	Boss_Action_State current_action;     // mage behaviour
 	bool              teleport;	          // check if mage teleported 
 	Boss_Attack       energy_ball;		  // mage's attack

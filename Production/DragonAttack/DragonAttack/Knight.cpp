@@ -1,20 +1,40 @@
+/* Start Header ************************************************************************/
+/*!
+\file       Knight.cpp
+\author     William Yoong
+\par email: william.yoong\@digipen.edu
+\brief
+Body file for Knight class
+
+Copyright (C) 2018 DigiPen Institute of Technology.
+Reproduction or disclosure of this file or its contents
+without the prior written consent of DigiPen Institute of
+Technology is prohibited.
+*/
+/* End Header **************************************************************************/
 #include "Knight.h"
 #include "cmath"
 
 namespace  // global variables for KNIGHT
 {
-	const int HEALTH = 100;
-	const float GRAVITY = 10.0f;
+	#define HEALTH  100
+	#define GRAVITY 10.0f
 
-	const float ATTACK_RANGE = 120.0f;
-	const float STAB_ACCELRATOR = 100.0f;
+	#define ATTACK_RANGE 120.0f
+	#define STAB_ACCELRATOR  100.0f
 
-	const float KNIGHT_SCALE = 70.0f;
-	const float STAB_SCALE = 40.0f;
+	#define KNIGHT_SCALE 70.0f
+	#define STAB_SCALE  40.0f
 	const AEVec2 STAB_VELOCITY {20.0f, 0.0f};
 
 }
 
+/**************************************************************************************
+//
+// Constructor of knight obj
+// Takes in the a spawn position and pointer to its texture
+//
+**************************************************************************************/
 Knight::Knight(const AEVec2 & spawn_location, Sprite* texture)
 	: Characters(texture, HEALTH,
 		Col_Comp{ spawn_location.x - KNIGHT_SCALE, spawn_location.y - KNIGHT_SCALE ,
@@ -24,6 +44,7 @@ Knight::Knight(const AEVec2 & spawn_location, Sprite* texture)
 	stab{ Get_Attack_Sprite(STAB_SPRITE),
 		  Col_Comp { spawn_location.x - STAB_SCALE, spawn_location.y - STAB_SCALE,
 					 spawn_location.x + STAB_SCALE, spawn_location.y + STAB_SCALE, Rect} },
+
 	anim{ WALK_ANIM + 1, 3, 5, [](std::vector <Range>& Init) -> void {
 							   Init.push_back(Range{ 0.0f, 1.0f, 0.00f, 0.00f }); //Hit
 							   Init.push_back(Range{ 0.0f, 1.0f, 0.33f, 0.33f }); //Idle
@@ -34,23 +55,29 @@ Knight::Knight(const AEVec2 & spawn_location, Sprite* texture)
 	SetActive(false);												 // don't render on screen yet
 	Transform_.SetTranslate(spawn_location.x, spawn_location.y);	 // moving him to screen location
 	Transform_.Concat();
-	Reset_Idle_Time(2.0f);											 // duration of idle time fot knight
+	Reset_Idle_Time(1.0f);											 // duration of idle time fot knight
 	SetVelocity(AEVec2{ 50.0f, 0.0f });								 // velocity of knight
 	
 	stab.SetVelocity(STAB_VELOCITY);								 // velocity for stab
 }
-
+/**************************************************************************************
+//
+// Idle function for knight
+//
+**************************************************************************************/
 void Knight::Idle(const Dragon& d, const float dt)
 {
+	// return if player not within line of sight
 	if (!Line_Of_Sight(d))
 		return;
 
 	if (Get_Idle_Time() < 0) // finish idling
 	{
-		Reset_Idle_Time(2.0f); // reset idle duration
+		Reset_Idle_Time(1.0f); // reset idle duration
 		
 		// if knight is within attack range, attack player, else continue moving
 		abs(d.PosX - PosX) <= ATTACK_RANGE ? current_action = ATTACK : current_action = MOVING;
+		
 		Set_Forward_Dir(d); // set direction to face
 	}
 	else
@@ -58,11 +85,16 @@ void Knight::Idle(const Dragon& d, const float dt)
 		Decrease_Idle_Time(dt); // reduce idle time
 	}
 }
-
+/**************************************************************************************
+//
+// Moving function for knight
+//
+**************************************************************************************/
 void Knight::Moving(const Dragon &d, const float dt)
 {
 	Set_Forward_Dir(d);	 // set the direction the knight suppose to go
 
+	// player is seen
 	if (Line_Of_Sight(d))
 	{
 		if (Get_Direction() == RIGHT)
@@ -74,7 +106,8 @@ void Knight::Moving(const Dragon &d, const float dt)
 			PosX -= GetVelocity().x * dt; // move the knight to the left
 		}
 
-		Transform_.SetTranslate(PosX, PosY); // move him to the new coordinates
+		// move him to the new coordinates
+		Transform_.SetTranslate(PosX, PosY); 
 		Transform_.Concat();
 
 		// update the collision box of knight
@@ -84,13 +117,13 @@ void Knight::Moving(const Dragon &d, const float dt)
 		
 		if (abs(d.PosX - PosX) <= ATTACK_RANGE) // player within attack range
 		{
-			current_action = ATTACK;
-			time_traveled = 2.0f;
+			current_action = ATTACK; // change state to attack
+			time_traveled = 0.0f;
 			return;
 		}
-		else if (time_traveled > 2.0f)    // player not within range
+		else if (time_traveled > 3.0f)    // player not within range
 		{
-			current_action = IDLE;
+			current_action = IDLE;       // change state to idle
 			time_traveled = 0.0f;
 			return;
 		}
@@ -99,11 +132,13 @@ void Knight::Moving(const Dragon &d, const float dt)
 	time_traveled += dt; // reduce timer
 	 
 }
-
+/**************************************************************************************
+//
+// Attack function for knight
+//
+**************************************************************************************/
 void Knight::Attack(Dragon& d, const float dt)
 {
-	UNREFERENCED_PARAMETER(dt);
-
 	if ( ! stab.ongoing_attack) // place stab position to knight location
 	{
 		stab.Start_Attack(PosX, PosY);
@@ -114,16 +149,14 @@ void Knight::Attack(Dragon& d, const float dt)
 		stab.Projectile::Update(dt, STAB_SCALE, false, 180);    // rotate texture to look right
 	else
 		stab.Projectile::Update(dt, STAB_SCALE, false, 0);      // rotate texture to look left
-	
-	
-	stab.Transform_.Concat();			 // apply rotation onto stab 
 
 	if ( ! stab.GetCollided()) // check if attack collided with player
 	{
+		// attack can only collide with player once
 		if (stab.Collision_.Dy_Rect_Rect(d.Collision_, stab.GetVelocity(), d.GetVelocity(), dt))
 		{
-			d.Decrease_HP();
-			stab.SetCollided(true);
+			d.Decrease_HP();        // decrease dragon hp
+			stab.SetCollided(true);	// set collided to true so it cannot collide again
 		}
 	}
 
@@ -142,40 +175,59 @@ void Knight::Attack(Dragon& d, const float dt)
 	}
 
 }
-
+/**************************************************************************************
+//
+// Dead function for knight
+//
+**************************************************************************************/
 void Knight::Dead(void)
 {
 	SetActive(false);	    // set active back to false
 	Set_HP(HEALTH);			// set HP to original state for future usage
 	stab.SetActive(false);  // set stab to false also
-	Add_Kill_count();      // add kill count
-	Add_Score(30);         // add score
+	Add_Kill_count();       // add kill count
+	Add_Score(30);          // add score
 
 }
-
+/**************************************************************************************
+//
+// check if player is within line of sight
+//
+**************************************************************************************/
 bool Knight::Line_Of_Sight(const Dragon& d)
 {
 	return abs(d.PosX - PosX) < 1280.0f; // check if knight can see player on screen
 }
 
+/**************************************************************************************
+//
+// Set the facing direction of knight
+//
+**************************************************************************************/
 void Knight::Set_Forward_Dir(const Dragon& d)
 {
-	if (d.PosX - PosX > 0)   // dragom on the right of player
+	if (d.PosX - PosX > 20)   // dragom on the right of player
 	{
-		Transform_.SetScale(1.0f, 1.0f);
-		Set_Direction(RIGHT);
-		stab.SetDir(true);
+		Transform_.SetScale(1.0f, 1.0f); // reflect texture
+		Set_Direction(RIGHT);			 // set direction
+		stab.SetDir(true);				 // set stab attack to go to the right
 	}
 	else                     // dragon on the left of player
 	{
-		Transform_.SetScale(-1.0f, 1.0f);
-		Set_Direction(LEFT);
-		stab.SetDir(false);
+		Transform_.SetScale(-1.0f, 1.0f); // reflect texture
+		Set_Direction(LEFT);			  // set direction
+		stab.SetDir(false);				  // set stab attack to go left
 	}
 
+	// apply transformations
 	Transform_.Concat();
 }
 
+/**************************************************************************************
+//
+// Update function of knight
+//
+**************************************************************************************/
 void Knight::Update(Dragon &d, const float dt)
 {
 	if (Get_HP() < 1) // knight has died
@@ -183,8 +235,8 @@ void Knight::Update(Dragon &d, const float dt)
 		current_action = DEAD;
 	}
 	
-	
-	if (this->IsActive())
+	// if knight is active, check for collision against fireball
+	if (IsActive())
 	{
 		for (char i = 0; i < Bullet_Buffer; ++i)
 			if (d.GetFireball()[i].IsActive())
@@ -214,9 +266,13 @@ void Knight::Update(Dragon &d, const float dt)
 		}
 	}
 
-	PosY -= GRAVITY;
+	PosY -= GRAVITY; // apply gravity on knight
+
+	// update AABB box
 	Collision_.Update_Col_Pos(PosX - KNIGHT_SCALE, PosY - KNIGHT_SCALE,
-		PosX + KNIGHT_SCALE, PosY + KNIGHT_SCALE);
+		                      PosX + KNIGHT_SCALE, PosY + KNIGHT_SCALE);
+
+	// update latest position of knight
 	Transform_.SetTranslate(PosX, PosY);
 	Transform_.Concat();
 
@@ -240,9 +296,14 @@ void Knight::Update(Dragon &d, const float dt)
 	anim.Update(*Sprite_);
 }
 
-void Knight::Render() // render both knight and his attack on screen
+/**************************************************************************************
+//
+// render both knight and his attack on screen
+//
+**************************************************************************************/
+void Knight::Render() 
 {
-	GameObject::Render();
-	stab.Render();
+	GameObject::Render(); // render knight
+	stab.Render();		  // render knight's attack
 }
 
