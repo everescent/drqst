@@ -25,37 +25,37 @@ Technology is prohibited.
 class Knight : public Characters
 {
 private:
-	//------------------------------------------------------------------
-	//
-	//  BEHAVIOUR FOR KNIGHT
-	//
-	//------------------------------------------------------------------
-	void Idle(const Dragon&, const float dt);              // idle state
-	void Moving(const Dragon&, const float dt);			   // moving state
-	void Attack(Dragon&, const float dt);				   // attack state
-	void Dead(void);									   // dead state
+    //------------------------------------------------------------------
+    //
+    //  BEHAVIOUR FOR KNIGHT
+    //
+    //------------------------------------------------------------------
+    void Idle(const Dragon&, const float dt);         // idle state
+    void Moving(const Dragon&, const float dt);       // moving state
+    void Attack(Dragon&, const float dt);             // attack state
+    void Dead(void);                                  // dead state
 
-	//------------------------------------------------------------------
-	//
-	//  HELPER FUNCTIONS
-	//
-	//------------------------------------------------------------------
-	void Set_Forward_Dir(const Dragon&);                   // direction the knight faces
-	bool Line_Of_Sight(const Dragon&);					   // player visible to knight
+    //------------------------------------------------------------------
+    //
+    //  HELPER FUNCTIONS
+    //
+    //------------------------------------------------------------------
+    void Set_Forward_Dir(const Dragon&);      // direction the knight faces
+    bool Line_Of_Sight(const Dragon&);        //player visible to knight
 
-	//------------------------------------------------------------------
-	//
-	//  KNIGHT VARIABLES
-	//
-	//------------------------------------------------------------------
-	Boss_Action_State current_action;                      // current state of knight
-	Boss_Attack stab;									   // stab attack of knight
-	float time_traveled;								   // timer for duration moved
-	Animation anim;										   // knight animation
+    //------------------------------------------------------------------
+    //
+    //  KNIGHT VARIABLES
+    //
+    //------------------------------------------------------------------
+    Boss_Action_State    current_action;      // current state of knight
+    Boss_Attack          stab;                // stab attack of knight
+    float                time_traveled;       // timer for duration moved
+    Animation            anim;                // knight animation
 
 public:
-	Knight(const AEVec2&, Sprite* );                       // coverting constructor/ only constructor
-	void Update(Dragon&, const float dt);				   // update the knight behaviour
-	void Render(void);									   // render the knight on screen
+    Knight(const AEVec2&, Sprite* );          // coverting constructor/ only constructor
+    void Update(Dragon&, const float dt);     // update the knight behaviour
+    void Render(void);                        // render the knight on screen
 
 };

@@ -1,66 +1,98 @@
+/* Start Header ************************************************************************/
+/*!
+\file       Stage3_3.cpp
+\author     William Yoong
+\par email: william.yoong\@digipen.edu
+\brief
+Final stage of the boss
+
+Copyright (C) 2018 DigiPen Institute of Technology.
+Reproduction or disclosure of this file or its contents
+without the prior written consent of DigiPen Institute of
+Technology is prohibited.
+*/
+/* End Header **************************************************************************/
 #include "Stage3_3.h"
 
-namespace
+namespace // global variables used in this file
 {
-	Dragon *player;
-	Sprite *BG;
-	Transform *M_BG;
-	Audio_Engine* audio;
-	UI* ui;
-
-	int** MapData;
-	int Map_Width;
-	int Map_Height;
+	Dragon *player;                      // player character
+	Sprite *BG;                          // background texture
+	Transform *M_BG;                     // transformation matrix for background
+	Audio_Engine* audio;                 // audio for current stage
+	UI* ui;                              // to display player's health
+                                         
+	int** MapData;                       // stores the binary map of the current stage
+	int Map_Width;                       // width of the map
+	int Map_Height;                      // height of the map
 
 	//std::vector<Floor> floors;
 	//std::vector<Wall> walls;
-	std::vector<Platform> platforms;
-	std::vector<Block> blocks;
-	King_Arthur* last_boss;
+	std::vector<Platform> platforms;     // platforms for the stage
+	std::vector<Block> blocks;           //
+	King_Arthur* last_boss;              // the final boss ai
 
 	//Sprite* HP_SPRITE;
 	//Sprite* DMG_SPRITE;
 	//Sprite* SPD_SPRITE;
-	Sprite* wall_sprite;
-	Sprite* floor_sprite;
-	Sprite* plat_sprite;
+	Sprite* wall_sprite;                 // texture for the wall  
+	Sprite* floor_sprite;                // texture for the floor
+	Sprite* plat_sprite;                 // texture for the platform
 
-    BOSS_PHASE curr_phase;
+    BOSS_PHASE curr_phase;               // current phase of the boss
 }
 
 namespace Stage3_3
 {
+	/**************************************************************************************
+	//
+	// Loads the variables that are needed
+	//
+	**************************************************************************************/
 	void Load(void)
 	{
+		// reads the map data from text file. If not found, exit the game
 		if (!Import_MapData(".//Levels/level3-3.txt", MapData, Map_Width, Map_Height)) { GSM::next = GS_QUIT; }
+		
+		// textures for floor, wall and platform
 		wall_sprite  = new Sprite{ S_CreateRectangle(50.0f, 50.0f, ".//Textures/download.jpg") };
 		floor_sprite = new Sprite{ CreateFloor(1.0f, ".//Textures/Cobblestone.png", 1.0f, 1.0f) };
 		plat_sprite  = new Sprite{ CreatePlatform(1.0f, 1.0f, ".//Textures/Cobblestone.png") };
 
+		// texture and transformation matrix for background
 		BG   = new Sprite{ CreateBG(22.0f, 2.0f, ".//Textures/BG_Stage1.png", 1.0f, 15.0f) };
 		M_BG = new Transform{};
 
-		AEVec2 startpos = { -450, -250 };
+		// creating the player obj
+		AEVec2 startpos = { -450, -250 };  // spawn point of player
 		player = dynamic_cast<Dragon*>(Create_Basic_AI(DRAGON, startpos));
+		player->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 
+		// creating the last boss obj
+        last_boss = dynamic_cast<King_Arthur*>(Create_Boss_AI(KING_ARTHUR)); // cast obj from character to king arthur
 
-        last_boss = dynamic_cast<King_Arthur*>(Create_Boss_AI(KING_ARTHUR));
-        player->PosY = last_boss->PosY;
-        player->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
-
+        // audio and us used for the stage
 		audio = new Audio_Engine{ 1, [](std::vector <std::string> &playlist)->void {playlist.push_back(".//Audio/KingArthur_BGM.mp3"); } };
 		ui    = new UI{ player };
 	}
 
+	/**************************************************************************************
+	//
+	// Init the variables that are needed
+	//
+	**************************************************************************************/
 	void Init(void)
 	{
+		// play the audio for the stage
 		audio->Play(0);
 		audio->SetLoop(0, 1);
 
         BG->SetRGB(0.5f, 0.5f, 0.5f);
 		
+		// show player on screen
 		player->SetActive(true);
 
+		// get the map data and create corresponding objects for the stage
 		for (int y = 0; y < Map_Height; ++y)
 		{
 			for (int x = 0; x < Map_Width; ++x)
@@ -87,18 +119,28 @@ namespace Stage3_3
 		}
 	}
 
+	/**************************************************************************************
+	//
+	// Updates the audio, character and boss behavior
+	//
+	**************************************************************************************/
 	void Update(float dt)
 	{
-	    audio->Update();
+	   // update the audio
+	   audio->Update();
 
+	   // get the current phase of the boss Ai
        curr_phase = last_boss->Get_Phase();
 
+		// update the boss behavior
         last_boss->Update(*player, dt);
 
+		// update the collision between AI/player and floor 
         for (Block& elem : blocks)
         {
             elem.Update(*player, dt);
-
+			
+			// only updates the ai if its in phase 2
             if (curr_phase == PHASE_2)
             {
                 auto& mobs = last_boss->Get_Mobs();
@@ -116,16 +158,20 @@ namespace Stage3_3
             elem.Update(*player, dt);
         }*/
 
-        for (Platform& elem : platforms)
+        // update collision between player and platforms
+		// different phases have different platforms for the fight
+		for (Platform& elem : platforms)
         {
-            switch (curr_phase)
+            // check collision with corresponding platforms depending on current phase
+			switch (curr_phase)
             {
             case PHASE_1: case PHASE_3:
-
+			
                 if (elem.Collision_.Get_MinPoint().y == -200)
                     elem.Update(*player, dt);
                 break;
             case PHASE_2:
+			
                 if(elem.Collision_.Get_MinPoint().y != -200)
                     elem.Update(*player, dt);
                 break;
@@ -133,15 +179,22 @@ namespace Stage3_3
             }
         }
 
-        player->Update(*player, dt);
+        // update the player behavior and UI
+		player->Update(*player, dt);
         ui->UI_Update(player);
 
 	}
-
+	/**************************************************************************************
+	//
+	// Render the variables that are needed 
+	//
+	**************************************************************************************/
 	void Draw(void)
 	{
         CamFollow(player->Transform_, 200, 120, player->GetFacing());
         CamStatic();
+		
+		// render the background
         BG->Render_Object(*M_BG);
 
         /*for (Floor& elem : floors)
@@ -149,10 +202,13 @@ namespace Stage3_3
             elem.Render();
         }*/
 
+		// render the floor
 		for (Block& elem : blocks)
 		{
 			elem.Render();
 		}
+		
+		// render the corresponding platforms depending on the current phase of the boss
         for (Platform& elem : platforms)
         {
             switch (curr_phase)
@@ -162,21 +218,30 @@ namespace Stage3_3
                 if (elem.Collision_.Get_MinPoint().y == -200)
                     elem.Render();
                 break;
+				
             case PHASE_2:
+			
                 if (elem.Collision_.Get_MinPoint().y != -200)
                     elem.Render();
                 break;
+				
             default: break;
             }
         }
 		
-		last_boss->Render();
+		
+		last_boss->Render(); // render king arthur on screen
         
-        player->Render();
-        
-        ui->Render();
+        player->Render();    // render player on screen
+         
+        ui->Render();        // render the UI on screen
 	}
 
+	/**************************************************************************************
+	//
+	// Free the variables that were used
+	//
+	**************************************************************************************/
 	void Free(void)
 	{
 		delete player;
@@ -202,6 +267,11 @@ namespace Stage3_3
 		delete plat_sprite;
 	}
 
+	/**************************************************************************************
+	//
+	// Unloads the variables that were used
+	//
+	**************************************************************************************/
 	void Unload(void)
 	{
 		/*delete wall_sprite;

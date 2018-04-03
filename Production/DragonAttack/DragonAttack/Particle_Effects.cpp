@@ -15,9 +15,10 @@ Technology is prohibited.
 #include "Particle_Effects.h"
 
 
-namespace
+namespace // global variables that are used in this file
 {
-    Particle_System* MFireball_Effects;
+    // pointers to various particle systems that will be used
+	Particle_System* MFireball_Effects;
     Particle_System* Coin_Effects;
     Particle_System* ME_Effects;
     Particle_System* Arondight_Effects;
@@ -27,6 +28,7 @@ namespace
 	Particle_System* Credit_Effects;
 	Particle_System* Score_Effects;
 
+	// pointers to mesh for the corresponding particle system
     AEGfxVertexList* MFireball_Mesh;
     AEGfxVertexList* Coin_Mesh;
     AEGfxVertexList* ME_Mesh;
@@ -37,16 +39,26 @@ namespace
 	AEGfxVertexList* Credit_Mesh;
 	AEGfxVertexList* Score_Mesh;
 
+	// helper functions
     void Particle_Mesh_Init();
     void Particle_Effects_Init();
 }
-
+/**************************************************************************************
+//
+// calls the mesh and effects initializer
+//
+**************************************************************************************/
 void Effects_Init(void)
 {
     Particle_Mesh_Init();
     Particle_Effects_Init();
 }
 
+/**************************************************************************************
+//
+// Returns a pointer to the corresponding particle system that the user asked for
+//
+**************************************************************************************/
 Particle_System* Effects_Get(EFFECTS type)
 {
     switch (type)
@@ -73,10 +85,19 @@ Particle_System* Effects_Get(EFFECTS type)
         break;
     }
 }
-
+/**************************************************************************************
+//
+// deletes the memory that was allocated for partial effects and mesh 
+//
+**************************************************************************************/
 void Effects_Cleanup(void)
 {
-    delete   MFireball_Effects;
+    //------------------------------------------------------------------
+	//
+	//  Deletes the particle system
+	//
+	//------------------------------------------------------------------
+	delete   MFireball_Effects;
     delete   Coin_Effects;
     delete   ME_Effects;
 	delete   Arondight_Effects;
@@ -85,7 +106,12 @@ void Effects_Cleanup(void)
     delete   KA_Slash_Effects;
 	delete   Credit_Effects;
 	delete   Score_Effects;
-
+	
+	//------------------------------------------------------------------
+	//
+	//  Free the mesh
+	//
+	//------------------------------------------------------------------
     AEGfxMeshFree(MFireball_Mesh);
     AEGfxMeshFree(Coin_Mesh);
     AEGfxMeshFree(ME_Mesh);
@@ -99,9 +125,19 @@ void Effects_Cleanup(void)
 
 namespace
 {
-    void Particle_Mesh_Init()
+    /**************************************************************************************
+    //
+    // initializes the various mesh that will be used in the game
+    //
+    **************************************************************************************/
+	void Particle_Mesh_Init()
     {
-        // Mesh for mega fireball particles
+        
+	    //------------------------------------------------------------------
+	    //
+	    // Mesh for mega fireball particles
+	    //
+	    //------------------------------------------------------------------
         AEGfxMeshStart();
         AEGfxTriAdd(
             -0.1f, -0.1f, 0xFFE25822, 0.0f, 1.0f,
@@ -116,8 +152,12 @@ namespace
 
         MFireball_Mesh = AEGfxMeshEnd();
         AE_ASSERT_MESG(MFireball_Mesh, "fail to create object!!");
-
-        // mesh for coin particle
+       
+	    //------------------------------------------------------------------
+	    //
+	    // mesh for coin particle
+	    //
+	    //------------------------------------------------------------------
         AEGfxMeshStart();
         AEGfxTriAdd(
             -0.1f, -0.1f, 0xFFFFD700, 0.0f, 1.0f,
@@ -132,8 +172,12 @@ namespace
 
         Coin_Mesh = AEGfxMeshEnd();
         AE_ASSERT_MESG(Coin_Mesh, "fail to create object!!");
-
-        // mesh for mad enhancement particle
+      
+		//------------------------------------------------------------------
+	    //
+	    // mesh for mad enhancement particle
+	    //
+	    //------------------------------------------------------------------
         AEGfxMeshStart();
         AEGfxTriAdd(
             -0.1f, -0.1f, 0xFFFFB7C5, 0.0f, 1.0f,
@@ -148,8 +192,12 @@ namespace
 
         ME_Mesh = AEGfxMeshEnd();
         AE_ASSERT_MESG(ME_Mesh, "fail to create object!!");
-
-        // mesh for arondight particle
+       
+		//------------------------------------------------------------------
+	    //
+	    // mesh for Arondight particle
+	    //
+	    //------------------------------------------------------------------
         AEGfxMeshStart();
         AEGfxTriAdd(
             -0.1f, -0.1f, 0xFFFFC0CB, 0.0f, 1.0f,
@@ -164,8 +212,12 @@ namespace
 
 		Arondight_Mesh = AEGfxMeshEnd();
         AE_ASSERT_MESG(Arondight_Mesh, "fail to create object!!");
-
-        // mesh for king arthur slash 
+      
+		//------------------------------------------------------------------
+	    //
+	    // mesh for king Arthur slash 
+	    //
+	    //------------------------------------------------------------------
         AEGfxMeshStart();
         AEGfxTriAdd(
             -0.1f, -0.1f, 0xFFFFFF00, 0.0f, 1.0f,
@@ -180,8 +232,12 @@ namespace
 
         KA_Slash_Mesh = AEGfxMeshEnd();
         AE_ASSERT_MESG(KA_Slash_Mesh, "fail to create object!!");
-
-		// mesh for king arthur healing effect
+		
+		//------------------------------------------------------------------
+	    //
+	    // mesh for king Arthur healing effect
+	    //
+	    //------------------------------------------------------------------
 		AEGfxMeshStart();
 		AEGfxTriAdd(
 			-0.1f, -0.1f, 0xFFFFF569, 0.0f, 1.0f,
@@ -196,8 +252,12 @@ namespace
 
 		KA_Healing_Mesh = AEGfxMeshEnd();
 		AE_ASSERT_MESG(KA_Healing_Mesh, "fail to create object!!");
-
-        // mesh for king arthur sword in phase 3
+        
+		//------------------------------------------------------------------
+	    //
+	    // mesh for king Arthur sword in phase 3
+	    //
+	    //------------------------------------------------------------------
         AEGfxMeshStart();
         AEGfxTriAdd(
             -0.1f, -0.1f,0xFF00FF7F, 0.0f, 1.0f,
@@ -212,8 +272,12 @@ namespace
 
         KA_Sword_Mesh = AEGfxMeshEnd();
         AE_ASSERT_MESG(KA_Sword_Mesh, "fail to create object!!")
-
-		// mesh for credits screen
+		
+		//------------------------------------------------------------------
+	    //
+	    // mesh for credits screen
+	    //
+	    //------------------------------------------------------------------
 		AEGfxMeshStart();
 		AEGfxTriAdd(
 			-0.1f, -0.1f, 0xFFFFFFFF, 0.0f, 1.0f,
@@ -228,8 +292,12 @@ namespace
 
 		Credit_Mesh = AEGfxMeshEnd();
 		AE_ASSERT_MESG(Credit_Mesh, "fail to create object!!")
-
-		// mesh for score screen
+		
+		//------------------------------------------------------------------
+	    //
+	    // mesh for score screen
+	    //
+	    //------------------------------------------------------------------
 		AEGfxMeshStart();
 		AEGfxTriAdd(
 			-0.1f, -0.1f, 0xFFFF6600, 0.0f, 1.0f,
@@ -247,7 +315,12 @@ namespace
         
 }
 
-    void Particle_Effects_Init()
+    /**************************************************************************************
+    //
+    // initializes the various particle system that will be used in the game
+    //
+    **************************************************************************************/
+	void Particle_Effects_Init()
     {
         MFireball_Effects = new Particle_System(MFireball_Mesh, {}, BOX);
         MFireball_Effects->Emitter_.Pos_.Point_Min_Max[0].x = -3.f;
@@ -305,22 +378,4 @@ test->UpdateEmission();
 test->Turbulence(0.2f);
 test->TransRamp_Exp();
 test->Newton({0.f, 0.0f}, 0.3f);
-*/
-
-/*
-BEHAVIOUR FOR COIN
-test->Emitter_.PPS_ = 150;
-test->Emitter_.Dist_Min_ = 10.f;
-test->Emitter_.Vol_Max = 150;
-test->Emitter_.Direction_ = 90.0f;
-test->Emitter_.Particle_Rand_.Spread_ = 360;
-test->Emitter_.Conserve_ = 0.9f;
-test->Emitter_.Size_ = 20.0f;
-test->Emitter_.Speed_ = 50.0f;
-test->Emitter_.Particle_Rand_.Sp_Rand_ = 3;
-test->Emitter_.Lifetime_ = 1.f;
-
-test->TransRamp_Exp();
-test->ColorRamp_Life();
-
 */

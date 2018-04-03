@@ -26,8 +26,8 @@ Technology is prohibited.
 //
 **************************************************************************************/
 Characters::Characters(Sprite* p_sprite, const int HP, Col_Comp &&t_col)
-	: GameObject{ p_sprite, std::move(t_col) }, hp{ HP },
-	  direction{ RIGHT }, vulnerable {true}
+	: GameObject{ p_sprite, std::move(t_col)  }, hp{ HP },
+	  direction { RIGHT },  vulnerable { true }
 {
 }
 /**************************************************************************************

@@ -15,9 +15,15 @@ Technology is prohibited.
 #pragma once
 #include "Particle_System.h"
 
+/**************************************************************************************
+//
+// Enumeration for the different particle effects that is used for the game
+//
+**************************************************************************************/
 enum EFFECTS
 {
-    MFIREBALL_PARTICLE,
+    // For stage/player
+	MFIREBALL_PARTICLE,
     COIN_PARTICLE,
 
     // For lancelot
@@ -35,6 +41,24 @@ enum EFFECTS
 
 };
 
+/**************************************************************************************
+//
+// initialize the meshes and particle systems that will be used in the game
+//
+**************************************************************************************/
 void Effects_Init(void);
+
+
+/**************************************************************************************
+//
+// Returns a pointer to the corresponding particle system that the user asked for
+//
+**************************************************************************************/
 Particle_System* Effects_Get(EFFECTS);
+
+/**************************************************************************************
+//
+// deletes the memory that was allocated for partial effects and mesh 
+//
+**************************************************************************************/
 void Effects_Cleanup(void);

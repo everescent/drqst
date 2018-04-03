@@ -48,11 +48,11 @@ Mage::Mage(const AEVec2& position, Sprite* texture)
 	    }}
 
 {
-   SetActive(false);                                               // don't spawn mage
-   SetPos(position.x, position.y);								   // starting coordinates
-   Transform_.SetTranslate(position.x, position.y);				   // add to matrix
-   Transform_.Concat();											   // add to final matrix
-   Reset_Idle_Time(2.0f);										   // idling time for mage
+   SetActive(false);                                        // don't spawn mage
+   SetPos(position.x, position.y);							// starting coordinates
+   Transform_.SetTranslate(position.x, position.y);			// add to matrix
+   Transform_.Concat();										// add to final matrix
+   Reset_Idle_Time(2.0f);									// idling time for mage
 }
 
 /**************************************************************************************
@@ -245,20 +245,22 @@ void Mage::Move(const Dragon &d)
 }
 /**************************************************************************************
 //
-// Reinstantiate the mage with its new position
+// Re-instantiate the mage with its new position
 //
 **************************************************************************************/
 
 void Mage::Renew_Mage(const AEVec2& newPos)
 {
-    PosX = newPos.x;
+    // updates the new position of Mage
+	PosX = newPos.x;
     PosY = newPos.y;
 
+	// update the transformation matrix
     Transform_.SetTranslate(PosX, PosY);
     Transform_.Concat();
     
     Collision_.Update_Col_Pos(PosX - MAGE_SCALE, PosY - MAGE_SCALE,  // min point
-                              PosX + MAGE_SCALE, PosY + MAGE_SCALE);	// max point
+                              PosX + MAGE_SCALE, PosY + MAGE_SCALE); // max point
 
 }
 
@@ -270,13 +272,13 @@ void Mage::Renew_Mage(const AEVec2& newPos)
 
 void Mage::Dead(void)
 {
-	SetActive(false);             // set active to false
-	energy_ball.SetActive(false); // set energyball to false
-	Set_HP(HEALTH);               // reset the hp of mage
-    teleport = true;              // reset teleport flag
-    current_action = IDLE;        // reset state
-	Add_Kill_count();             // add kill count
-	Add_Score(30);                // add score
+	SetActive(false);                // set active to false
+	energy_ball.SetActive(false);    // set energyball to false
+	Set_HP(HEALTH);                  // reset the hp of mage
+    teleport = true;                 // reset teleport flag
+    current_action = IDLE;           // reset state
+	Add_Kill_count();                // add kill count
+	Add_Score(30);                   // add score
 }
 
 /**************************************************************************************

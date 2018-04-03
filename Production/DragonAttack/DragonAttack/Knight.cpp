@@ -39,23 +39,23 @@ Knight::Knight(const AEVec2 & spawn_location, Sprite* texture)
 	: Characters(texture, HEALTH,
 		Col_Comp{ spawn_location.x - KNIGHT_SCALE, spawn_location.y - KNIGHT_SCALE ,
 				  spawn_location.x + KNIGHT_SCALE , spawn_location.y + KNIGHT_SCALE, Rect }),
-	current_action{ IDLE }, time_traveled{ 0 },
-
-	stab{ Get_Attack_Sprite(STAB_SPRITE),
-		  Col_Comp { spawn_location.x - STAB_SCALE, spawn_location.y - STAB_SCALE,
-					 spawn_location.x + STAB_SCALE, spawn_location.y + STAB_SCALE, Rect} },
-
-	anim{ WALK_ANIM + 1, 3, 5, [](std::vector <Range>& Init) -> void {
-							   Init.push_back(Range{ 0.0f, 1.0f, 0.00f, 0.00f }); //Hit
-							   Init.push_back(Range{ 0.0f, 1.0f, 0.33f, 0.33f }); //Idle
-							   Init.push_back(Range{ 0.0f, 1.0f, 0.66f, 0.66f }); //Walk
-         } }
+	  current_action{ IDLE }, time_traveled{ 0 },
+      
+	  stab{ Get_Attack_Sprite(STAB_SPRITE),
+	  	  Col_Comp { spawn_location.x - STAB_SCALE, spawn_location.y - STAB_SCALE,
+	  				 spawn_location.x + STAB_SCALE, spawn_location.y + STAB_SCALE, Rect} },
+      
+	  anim{ WALK_ANIM + 1, 3, 5, [](std::vector <Range>& Init) -> void {
+	  						     Init.push_back(Range{ 0.0f, 1.0f, 0.00f, 0.00f }); //Hit
+	  						     Init.push_back(Range{ 0.0f, 1.0f, 0.33f, 0.33f }); //Idle
+	  						     Init.push_back(Range{ 0.0f, 1.0f, 0.66f, 0.66f }); //Walk
+           } }
 {
 	SetPos(spawn_location.x, spawn_location.y);						 // spawn location of knight
 	SetActive(false);												 // don't render on screen yet
 	Transform_.SetTranslate(spawn_location.x, spawn_location.y);	 // moving him to screen location
 	Transform_.Concat();
-	Reset_Idle_Time(1.0f);											 // duration of idle time fot knight
+	Reset_Idle_Time(1.0f);											 // duration of idle time for knight
 	SetVelocity(AEVec2{ 50.0f, 0.0f });								 // velocity of knight
 	
 	stab.SetVelocity(STAB_VELOCITY);								 // velocity for stab

@@ -1,3 +1,17 @@
+/* Start Header ************************************************************************/
+/*!
+\file       Stage3_3.h
+\author     William Yoong
+\par email: william.yoong\@digipen.edu
+\brief
+Final stage for the game
+
+Copyright (C) 2018 DigiPen Institute of Technology.
+Reproduction or disclosure of this file or its contents
+without the prior written consent of DigiPen Institute of
+Technology is prohibited.
+*/
+/* End Header **************************************************************************/
 #pragma once
 
 #include "AEEngine.h"
@@ -26,15 +40,10 @@
 
 namespace Stage3_3
 {
-	void Init(void);
-
 	void Load(void);
-
+	void Init(void);
 	void Update(float dt);
-
 	void Draw(void);
-
 	void Free(void);
-
 	void Unload(void);
 }
