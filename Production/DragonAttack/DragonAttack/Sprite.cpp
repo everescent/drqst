@@ -76,8 +76,10 @@ Sprite::~Sprite()
   //Make sure I don't unload a nullptr
   if (Tex != nullptr)
     AEGfxTextureUnload(Tex);
+  Tex = nullptr;
   if (Mesh != nullptr)
     AEGfxMeshFree(Mesh)    ;
+  Mesh = nullptr;
 }
 
 //This function renders an object

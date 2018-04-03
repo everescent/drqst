@@ -705,6 +705,15 @@ void Lancelot::Dead(void)
 Lancelot::~Lancelot()
 {
 	lancelot.clear();
+
+	// remove particles from screens
+	if(arondight_particle->GetParticleCount())
+		arondight_particle->Off_Emitter();
+
+	if(me_particle->GetParticleCount())
+		me_particle->Off_Emitter();
+
+	attack_sprite.~Sprite(); // destroy the mesh and texture allcoated 
 }
 
 namespace

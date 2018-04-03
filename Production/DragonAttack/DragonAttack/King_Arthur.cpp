@@ -27,7 +27,7 @@ namespace {
 
 	std::vector <Boss_Attack> arthur; //an array of boss attacks
 
-	const int HEALTH    = 510; // initial hp for king arthur
+	const int HEALTH    = 310; // initial hp for king arthur
 	const int PHASE2_HP = 500; // phase 2 trigger
 	const int PHASE3_HP = 300; // phase 3 trigger
 
@@ -216,11 +216,11 @@ void King_Arthur::Init_Particle(void)
 void King_Arthur::Update(Dragon &d, const float dt)
 {
 	// activate phase 2 once hp drops is 50%
-	if (Get_HP() < PHASE2_HP && ka_phase & PHASE_1)
+	if (Get_HP() < PHASE2_HP && ka_phase & PHASE_1 && ! arthur[currAttk].ongoing_attack)
 	{
         King_Arthur_Phase2();
 	}
-    else if (Get_HP() < PHASE3_HP && ka_phase & PHASE_2)
+    else if (Get_HP() < PHASE3_HP && ka_phase & PHASE_2 && !arthur[currAttk].ongoing_attack)
     {
         King_Arthur_Phase3(dt);
     }
@@ -889,24 +889,33 @@ std::vector <Characters*>& King_Arthur::Get_Mobs(void)
 
 King_Arthur::~King_Arthur(void)
 {
+	// delete the mobs that was used 
 	for (auto& elem : mobs)
 		delete elem;
 	
+	// clear the mob and arthur attack vectors for future usage
 	mobs.clear();
 	arthur.clear();
 
+	attack_sprite.~Sprite();  // free texture for slash
+	sword_sprite.~Sprite() ;  // free texture for sword
+	
+	// remove every slash effect particle from screen
 	for (auto &elem : slash_effect)
 	{
 		if(elem->GetParticleCount())
 			elem->Off_Emitter();
 	}
 
+	// remove every healing effect particle from screen
 	if (healing_effect->GetParticleCount())
 		healing_effect->Off_Emitter();
 
+	// remove every sword effect particle from screen
 	if (sword_effect->GetParticleCount())
 		sword_effect->Off_Emitter();
 
+	// delete the slash that were new 
 	delete slash_effect[1];
 	delete slash_effect[2];
 }
