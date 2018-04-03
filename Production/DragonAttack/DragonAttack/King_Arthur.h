@@ -16,6 +16,7 @@ Technology is prohibited.
 
 #include "Characters.h"
 #include "Boss_Phase.h"
+#include "Boss_States.h"
 #include "Dragon.h"
 
 class King_Arthur : public Characters
@@ -40,7 +41,6 @@ private:
     void Update_Particle(const float dt);
 
 	void Set_Forward_Dir(const Dragon&);
-
 	
 	// boss behaviours /////////////////////////////////////////////////
 	void Idle(const Dragon &d, const float dt);
@@ -63,22 +63,10 @@ private:
     Particle_System *slash_effect[3];
 	KA_MoveSet       currAttk;
 	Animation		 anim;
+	Boss_Action_State current_action; // different states of boss arthur
     std::vector <Characters*> mobs; //an array to store the mobs to be spawn
 
 public:
-	/******************************************************************************/
-	/*!
-	\fn         King Arthuer
-
-	\brief      Constructor for King Arthur
-
-	\param      Sprite&& t_sprite
-	- an rvalue of the sprite to be moved
-
-	\retval     void
-	No return.
-	*/
-	/******************************************************************************/
 	King_Arthur(Sprite*);
 
 	~King_Arthur(); // destructor

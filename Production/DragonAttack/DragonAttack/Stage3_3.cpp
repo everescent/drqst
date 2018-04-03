@@ -16,18 +16,17 @@ Technology is prohibited.
 
 namespace // global variables used in this file
 {
-	Dragon *player;                      // player character
-	Sprite *BG;                          // background texture
-	Transform *M_BG;                     // transformation matrix for background
-	Audio_Engine* audio;                 // audio for current stage
-	UI* ui;                              // to display player's health
+	Dragon *          player;                     // player character
+	Sprite *          BG;                         // background texture
+	Transform *       M_BG;                       // transformation matrix for background
+	Audio_Engine*     audio;                      // audio for current stage
+	UI*               ui;                         // to display player's health
+	AEVec2            startpos = { -450, -250 };  // spawn point of player
                                          
 	int** MapData;                       // stores the binary map of the current stage
 	int Map_Width;                       // width of the map
 	int Map_Height;                      // height of the map
 
-	//std::vector<Floor> floors;
-	//std::vector<Wall> walls;
 	std::vector<Platform> platforms;     // platforms for the stage
 	std::vector<Block> blocks;           //
 	King_Arthur* last_boss;              // the final boss ai
@@ -64,16 +63,32 @@ namespace Stage3_3
 		M_BG = new Transform{};
 
 		// creating the player obj
-		AEVec2 startpos = { -450, -250 };  // spawn point of player
 		player = dynamic_cast<Dragon*>(Create_Basic_AI(DRAGON, startpos));
 		player->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
-
-		// creating the last boss obj
-        last_boss = dynamic_cast<King_Arthur*>(Create_Boss_AI(KING_ARTHUR)); // cast obj from character to king arthur
 
         // audio and us used for the stage
 		audio = new Audio_Engine{ 1, [](std::vector <std::string> &playlist)->void {playlist.push_back(".//Audio/KingArthur_BGM.mp3"); } };
 		ui    = new UI{ player };
+
+		// get the map data and create corresponding objects for the stage
+		for (int y = 0; y < Map_Height; ++y)
+		{
+			for (int x = 0; x < Map_Width; ++x)
+			{
+				if (MapData[y][x] == OBJ_PLATFORM)
+				{
+					float f_x = (float)x;
+					float f_y = (float)y;
+					platforms.push_back(Platform{ plat_sprite,Convert_X(f_x) , Convert_Y(f_y) });
+				}
+				if (MapData[y][x] == OBJ_FLOOR)
+				{
+					float f_x = (float)x;
+					float f_y = (float)y;
+					blocks.push_back(Block{ floor_sprite, Convert_X(f_x) , Convert_Y(f_y) });
+				}
+			}
+		}
 	}
 
 	/**************************************************************************************
@@ -89,34 +104,14 @@ namespace Stage3_3
 
         BG->SetRGB(0.5f, 0.5f, 0.5f);
 		
-		// show player on screen
-		player->SetActive(true);
+		// update player variables
+		player->SetPos(startpos.x, startpos.y); // set the spawn location of dragon
+		player->SetActive(true);                // set player to alive
 
-		// get the map data and create corresponding objects for the stage
-		for (int y = 0; y < Map_Height; ++y)
-		{
-			for (int x = 0; x < Map_Width; ++x)
-			{	
-				if (MapData[y][x] == OBJ_PLATFORM)
-				{
-					float f_x = (float)x;
-					float f_y = (float)y;
-					platforms.push_back(Platform{ plat_sprite,Convert_X(f_x) , Convert_Y(f_y) });
-				}
-				if (MapData[y][x] == OBJ_FLOOR)
-				{
-					float f_x = (float)x;
-					float f_y = (float)y;
-					blocks.push_back(Block{ floor_sprite, Convert_X(f_x) , Convert_Y(f_y) });
-				}
-				/*if (MapData[y][x] == OBJ_WALL)
-				{
-					float f_x = (float)x;
-					float f_y = (float)y;
-					walls.push_back(Wall{ wall_sprite, Convert_X(f_x) , Convert_Y(f_y) });
-				}*/
-			}
-		}
+		// creating the last boss obj
+		last_boss = dynamic_cast<King_Arthur*>(Create_Boss_AI(KING_ARTHUR)); // cast obj from character to king arthur
+
+		
 	}
 
 	/**************************************************************************************
@@ -153,11 +148,6 @@ namespace Stage3_3
             }
         }
 
-        /*for (Wall& elem : walls)
-        {
-            elem.Update(*player, dt);
-        }*/
-
         // update collision between player and platforms
 		// different phases have different platforms for the fight
 		for (Platform& elem : platforms)
@@ -182,6 +172,11 @@ namespace Stage3_3
         // update the player behavior and UI
 		player->Update(*player, dt);
         ui->UI_Update(player);
+
+		if (AEInputCheckTriggered(AEVK_U))
+		{
+			GSM::next = GS_RESTART;
+		}
 
 	}
 	/**************************************************************************************
@@ -244,27 +239,7 @@ namespace Stage3_3
 	**************************************************************************************/
 	void Free(void)
 	{
-		delete player;
-		delete BG;
-		delete M_BG;
-		delete audio;
-		delete ui;
-
-		for (int y = 0; y < Map_Height; ++y)
-		{
-			delete[] MapData[y];
-		}
-		delete[] MapData;
-
-		//floors.clear();
-		//walls.clear();
-		blocks.clear();
-		platforms.clear();
-
 		delete last_boss;
-		delete wall_sprite;
-		delete floor_sprite;
-		delete plat_sprite;
 	}
 
 	/**************************************************************************************
@@ -274,19 +249,21 @@ namespace Stage3_3
 	**************************************************************************************/
 	void Unload(void)
 	{
-		/*delete wall_sprite;
-		delete floor_sprite;
-		delete plat_sprite;
-		delete last_boss;
+        // delete the map data;
+		for (int y = 0; y < Map_Height; ++y)
+        {
+            delete[] MapData[y];
+        }
+        delete[] MapData;
+
+
+		delete player;
 		delete BG;
 		delete M_BG;
 		delete audio;
 		delete ui;
-
-        for (int y = 0; y < Map_Height; ++y)
-        {
-            delete[] MapData[y];
-        }
-        delete[] MapData;*/
+		delete wall_sprite;
+		delete floor_sprite;
+		delete plat_sprite;
 	}
 }

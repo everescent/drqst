@@ -15,7 +15,6 @@ Technology is prohibited.
 #include <iostream>
 #include <iomanip>
 #include "King_Arthur.h"
-#include "Boss_States.h"
 #include "AI_Data_Factory.h"
 #include "GameStateManager.h"
 #include "StageManager.h"
@@ -27,8 +26,6 @@ Technology is prohibited.
 namespace {
 
 	std::vector <Boss_Attack> arthur; //an array of boss attacks
-
-	Boss_Action_State current_action = IDLE; // different states of boss arthur
 
 	const int HEALTH    = 800; // initial hp for king arthur
 	const int PHASE2_HP = 500; // phase 2 trigger
@@ -89,7 +86,7 @@ King_Arthur::King_Arthur(Sprite* texture)
 							    Init.push_back(Range{ 0.0f, 1.0f, 0.33f, 0.33f }); //Idle
 							    Init.push_back(Range{ 0.0f, 1.0f, 0.66f, 0.66f }); //Walk
     }},
-	ka_phase{ PHASE_1 }, healing_effect{Effects_Get(KA_HEALING_PARTICLE)},
+	ka_phase{ PHASE_1 }, healing_effect{Effects_Get(KA_HEALING_PARTICLE)}, current_action{IDLE},
     sword_effect{ Effects_Get(KA_SWORD_PARTICLE) }, slash_effect{Effects_Get(KA_SLASH_PARTICLE)}
 {
 	PosX = START_POINT_X;                 // change king arthur coordinates to the location set
@@ -863,6 +860,7 @@ void King_Arthur::Dead(void)
 		elem.SetActive(false);
 	}
 
+	// put this in stage 3
 	SM::Set_Next(SS_QUIT);
 	GSM::next = GS_CREDITS;
 }

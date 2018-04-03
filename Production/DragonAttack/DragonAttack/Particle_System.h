@@ -143,6 +143,12 @@ void     WarmUp        (const float dt, const float time,
 //Scale the particle as time passes                                     
 void     ScaleRamp     (const float Strength                            );
 
+
+
+
+void Off_Emitter(void);
+
+
 //Get the number of particles in the volume
 const int GetParticleCount() const { return p_count; }
 //Renders the particles
