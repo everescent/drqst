@@ -107,6 +107,7 @@ namespace Stage3_3
 		// update player variables
 		player->SetPos(startpos.x, startpos.y); // set the spawn location of dragon
 		player->SetActive(true);                // set player to alive
+		player->Set_HP(3);
 
 		// creating the last boss obj
 		last_boss = dynamic_cast<King_Arthur*>(Create_Boss_AI(KING_ARTHUR)); // cast obj from character to king arthur
@@ -121,6 +122,18 @@ namespace Stage3_3
 	**************************************************************************************/
 	void Update(float dt)
 	{
+		// if king arthur has died, switch state to credit screen
+		if (last_boss->Get_HP() <= 0)
+		{
+			SM::Set_Next(SS_QUIT);
+			GSM::next = GS_CREDITS;
+	    }
+		else if (player->Get_HP() <= 0)
+		{
+			SM::Set_Next(SS_RESTART);  // change state to restart
+			last_boss->Set_HP(0);      // kills the boss
+		}
+		player->Set_Vulnerable(true);
 	   // update the audio
 	   audio->Update();
 
@@ -172,12 +185,6 @@ namespace Stage3_3
         // update the player behavior and UI
 		player->Update(*player, dt);
         ui->UI_Update(player);
-
-		if (AEInputCheckTriggered(AEVK_U))
-		{
-			GSM::next = GS_RESTART;
-		}
-
 	}
 	/**************************************************************************************
 	//

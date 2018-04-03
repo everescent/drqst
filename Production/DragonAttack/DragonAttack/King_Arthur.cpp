@@ -27,7 +27,7 @@ namespace {
 
 	std::vector <Boss_Attack> arthur; //an array of boss attacks
 
-	const int HEALTH    = 800; // initial hp for king arthur
+	const int HEALTH    = 510; // initial hp for king arthur
 	const int PHASE2_HP = 500; // phase 2 trigger
 	const int PHASE3_HP = 300; // phase 3 trigger
 
@@ -859,10 +859,6 @@ void King_Arthur::Dead(void)
 	{
 		elem.SetActive(false);
 	}
-
-	// put this in stage 3
-	SM::Set_Next(SS_QUIT);
-	GSM::next = GS_CREDITS;
 }
 
 void King_Arthur::Set_Forward_Dir(const Dragon& d)
@@ -893,8 +889,23 @@ std::vector <Characters*>& King_Arthur::Get_Mobs(void)
 
 King_Arthur::~King_Arthur(void)
 {
-	for (auto &elem : mobs)
+	for (auto& elem : mobs)
 		delete elem;
+	
+	mobs.clear();
+	arthur.clear();
+
+	for (auto &elem : slash_effect)
+	{
+		if(elem->GetParticleCount())
+			elem->Off_Emitter();
+	}
+
+	if (healing_effect->GetParticleCount())
+		healing_effect->Off_Emitter();
+
+	if (sword_effect->GetParticleCount())
+		sword_effect->Off_Emitter();
 
 	delete slash_effect[1];
 	delete slash_effect[2];

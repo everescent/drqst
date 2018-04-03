@@ -27,6 +27,10 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
   AESysReset();
   GSM::GSM_Init();
 
+  #if defined(DEBUG) | defined(_DEBUG)
+  	_CrtSetDbgFlag( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF );
+  #endif
+
   while (GSM::IsGameRunning())
  {
 	GSM::Init_and_Load();
