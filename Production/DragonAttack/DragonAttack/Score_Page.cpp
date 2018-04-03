@@ -111,7 +111,7 @@ void Update_Score_Page(const float dt)
 
 			// get the minimum point of x and y
 			minX = RNG(AEGfxGetWinMinX() + 80.f, AEGfxGetWinMaxX() - 80.f);
-			minY = RNG(AEGfxGetWinMinY() + 80.f, AEGfxGetWinMaxY() - 80.f);
+			minY = RNG(AEGfxGetWinMinY() + 40.f, AEGfxGetWinMaxY() - 300.f);
 			
 			// update the emiter box
 			score_effects[i]->Emitter_.Pos_.Min_Max.Point_Min.x = minX;
@@ -120,7 +120,7 @@ void Update_Score_Page(const float dt)
 			score_effects[i]->Emitter_.Pos_.Min_Max.Point_Max.y	= minY + offset;
 
 			
-			fireworks[i].distEnd = RNG(60.f, 80.f);  // randomize the end position between 60-80
+			fireworks[i].distEnd = RNG(80.f, 100.f);  // randomize the end position between 60-80
 			fireworks[i].lifeTime = 3.f;             // lifetime of the fireworks
 			++fireworks[i].dist;
 		}
@@ -128,8 +128,8 @@ void Update_Score_Page(const float dt)
 		else if (fireworks[i].dist < fireworks[i].distEnd)
 		{
 			// shoots the fireworks/emitter up
-			score_effects[i]->Emitter_.Pos_.Min_Max.Point_Min.y += 1.f;
-			score_effects[i]->Emitter_.Pos_.Min_Max.Point_Max.y += 1.f;
+			score_effects[i]->Emitter_.Pos_.Min_Max.Point_Min.y += 2.f;
+			score_effects[i]->Emitter_.Pos_.Min_Max.Point_Max.y += 2.f;
 			++fireworks[i].dist;
 
 			// cause the particles to become smaller as time passes
