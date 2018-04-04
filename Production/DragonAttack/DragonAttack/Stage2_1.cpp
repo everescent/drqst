@@ -15,9 +15,10 @@ namespace
 
 	std::vector<Platform> platforms;
 	//std::vector<Floor> floors;
-	std::vector<Wall> walls;
+	//std::vector<Wall> walls;
 	std::vector<Barrier> barriers;
 	std::vector<Block> blocks;
+	std::vector<Block> noupdate_blocks;
 	std::vector<Characters*> c;
 	std::vector<PickUp> PU;
 	LevelChangePlatform *next;
@@ -102,7 +103,7 @@ namespace Stage2_1
 				{
 					float f_x = (float)x;
 					float f_y = (float)y;
-					walls.push_back(Wall{ WALL_SPRITE,Convert_X(f_x) , Convert_Y(f_y) });
+					noupdate_blocks.push_back(Block{ FLOOR_SPRITE,Convert_X(f_x) , Convert_Y(f_y) });
 				}
 				if (MapData[y][x] == OBJ_GRUNT)
 				{
@@ -195,7 +196,7 @@ namespace Stage2_1
 				elem.Update(*(c[i]), dt);
 			}
 			elem.Update(*player, dt);
-		}*/
+		}
 		for (Wall& elem : walls)
 		{
 			for (size_t i = 0; i < c.size(); ++i)
@@ -203,6 +204,11 @@ namespace Stage2_1
 				elem.Update(*(c[i]), dt);
 			}
 			elem.Update(*player, dt);
+		}*/
+		for (Block& elem : noupdate_blocks)
+		{
+			elem.Transform_.SetTranslate(elem.PosX, elem.PosY);
+			elem.Transform_.Concat();
 		}
 		for (Block& elem : blocks)
 		{
@@ -253,7 +259,7 @@ namespace Stage2_1
 		{
 			elem.Render();
 		}*/
-		for (Wall& elem : walls)
+		for (Block& elem : noupdate_blocks)
 		{
 			elem.Render();
 		}
@@ -287,7 +293,7 @@ namespace Stage2_1
 	{
 		platforms.clear();
 		//floors.clear();
-		walls.clear();
+		noupdate_blocks.clear();
 		blocks.clear();
 		barriers.clear();
 		PU.clear();
