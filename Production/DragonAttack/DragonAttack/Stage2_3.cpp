@@ -39,18 +39,18 @@ namespace Stage2_3
 
 		// Textures for pick ups
 		COIN_SPRITE = new Sprite{ S_CreateSquare(50.0f, "Textures/coin.png", 1.0f) };
-		HP_SPRITE = new Sprite{ S_CreateSquare(50.0f, "Textures/hp.png", 1.0f) };
-		DMG_SPRITE = new Sprite{ S_CreateSquare(50.0f, "Textures/Fireball.png", 1.0f) };
-		SPD_SPRITE = new Sprite{ S_CreateSquare(50.0f, "Textures/spd.png", 1.0f) };
+		HP_SPRITE   = new Sprite{ S_CreateSquare(50.0f, "Textures/hp.png", 1.0f) };
+		DMG_SPRITE  = new Sprite{ S_CreateSquare(50.0f, "Textures/Fireball.png", 1.0f) };
+		SPD_SPRITE  = new Sprite{ S_CreateSquare(50.0f, "Textures/spd.png", 1.0f) };
 
 		// Textures for static objects
-		WALL_SPRITE = new Sprite{ CreateFloor(1.0f, ".//Textures/Cobblestone.png", 1.0f, 1.0f) };
+		WALL_SPRITE   = new Sprite{ CreateFloor(1.0f, ".//Textures/Cobblestone.png", 1.0f, 1.0f) };
 		LCPLAT_SPRITE = new Sprite{ CreatePlatform(2.0f, 3.0f, ".//Textures/Win_Platform.png") };
-		FLOOR_SPRITE = new Sprite{ CreateFloor(1.0f, ".//Textures/Cobblestone.png", 1.0f, 1.0f) };
-		PLAT_SPRITE = new Sprite{ CreatePlatform(1.0f, 1.0f, ".//Textures/Cobblestone.png") };
+		FLOOR_SPRITE  = new Sprite{ CreateFloor(1.0f, ".//Textures/Cobblestone.png", 1.0f, 1.0f) };
+		PLAT_SPRITE   = new Sprite{ CreatePlatform(1.0f, 1.0f, ".//Textures/Cobblestone.png") };
 
 		// Texture and transformation matrix for BG
-		BG = new Sprite{ CreateBG(22.0f, 2.0f, ".//Textures/BG_Stage2.png", 1.0f, 15.0f) };
+		BG = new Sprite{ CreateBG(22.0f, 2.0f, ".//Textures/BG_Library.png", 1.0f, 15.0f) };
 		M_BG = new Transform{};
 
 		// Player creation

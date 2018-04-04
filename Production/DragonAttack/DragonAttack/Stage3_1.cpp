@@ -54,16 +54,16 @@ namespace Stage3_1
 		INVUL_SPRITE   = new Sprite{ S_CreateSquare(50.0f, ".//Textures/invul.png", 1.0f) };
 
 		// Textures for static objects
-		BARRIER_SPRITE = new Sprite{ S_CreateSquare(130.0f,".//Textures/box.png") };
-		SIGN_SPRITE    = new Sprite{ S_CreateSquare(70.0f, ".//Textures/sign.png") };
-		WALL_SPRITE    = new Sprite{ CreateFloor(1.0f, ".//Textures/Cobblestone.png", 1.0f, 1.0f) };
-		FLOOR_SPRITE   = new Sprite{ CreateFloor(1.0f, ".//Textures/Cobblestone.png", 1.0f, 1.0f) };
-		PLAT_SPRITE    = new Sprite{ CreatePlatform(1.0f, 1.0f, ".//Textures/Cobblestone.png") };
-		LCPLAT_SPRITE  = new Sprite{ CreatePlatform(2.0f, 3.0f, ".//Textures/Win_Platform.png") };
+		BARRIER_SPRITE = new Sprite{ S_CreateSquare   (130.0f, ".//Textures/box.png") };
+		SIGN_SPRITE    = new Sprite{ S_CreateSquare   (70.0f, ".//Textures/sign.png") };
+		WALL_SPRITE    = new Sprite{ CreateFloor      (1.0f, ".//Textures/Cobblestone.png", 1.0f, 1.0f) };
+		FLOOR_SPRITE   = new Sprite{ CreateFloor      (1.0f, ".//Textures/Cobblestone.png", 1.0f, 1.0f) };
+		PLAT_SPRITE    = new Sprite{ CreatePlatform   (1.0f, 1.0f, ".//Textures/Cobblestone.png") };
+		LCPLAT_SPRITE  = new Sprite{ CreatePlatform   (2.0f, 3.0f, ".//Textures/Win_Platform.png") };
 		TOWER_SPRITE   = new Sprite{ S_CreateRectangle(300.0f, 300.0f, ".//Textures/tower.png") };
 
 		// Texture and transformation matrix for BG
-		BG = new Sprite{ CreateBG(22.0f, 2.0f, ".//Textures/BG_Stage1.png", 1.0f, 15.0f) };
+		BG = new Sprite{ CreateBG(22.0f, 2.0f, ".//Textures/BG_Stage2.png", 1.0f, 15.0f) };
 		M_BG = new Transform{};
 		
 		// Player creation

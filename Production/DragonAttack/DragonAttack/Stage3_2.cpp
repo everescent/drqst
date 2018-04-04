@@ -50,7 +50,7 @@ namespace Stage3_2
 		HP_SPRITE      = new Sprite{ S_CreateSquare(50.0f,   ".//Textures/hp.png", 1.0f) };
 		DMG_SPRITE     = new Sprite{ S_CreateSquare(50.0f,  ".//Textures/Fireball.png", 1.0f) };
 		SPD_SPRITE     = new Sprite{ S_CreateSquare(50.0f,  ".//Textures/spd.png", 1.0f) };
-		INVUL_SPRITE = new Sprite{ S_CreateSquare(50.0f, ".//Textures/invul.png", 1.0f) };
+		INVUL_SPRITE   = new Sprite{ S_CreateSquare(50.0f, ".//Textures/invul.png", 1.0f) };
 
 		// Textures for static objects
 		BARRIER_SPRITE = new Sprite{ S_CreateSquare(130.0f, ".//Textures/box.png") };
@@ -62,7 +62,7 @@ namespace Stage3_2
 		SIGN_SPRITE    = new Sprite{ S_CreateSquare(70.0f, ".//Textures/sign.png") };
 
 		// Texture and transformation matrix for BG
-		BG = new Sprite{ CreateBG(22.0f, 2.0f, ".//Textures/BG_Stage1.png", 1.0f, 15.0f) };
+		BG = new Sprite{ CreateBG(22.0f, 2.0f, ".//Textures/BG_Stage2.png", 1.0f, 15.0f) };
 		M_BG = new Transform{};
 
 		// Player creation

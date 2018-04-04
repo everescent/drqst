@@ -59,7 +59,7 @@ namespace Stage3_3
 		plat_sprite  = new Sprite{ CreatePlatform(1.0f, 1.0f, ".//Textures/Cobblestone.png") };
 
 		// texture and transformation matrix for background
-		BG   = new Sprite{ CreateBG(22.0f, 2.0f, ".//Textures/BG_Stage1.png", 1.0f, 15.0f) };
+		BG   = new Sprite{ CreateBG(22.0f, 2.0f, ".//Textures/BG_Stage2.png", 1.0f, 15.0f) };
 		M_BG = new Transform{};
 
 		// creating the player obj

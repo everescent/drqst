@@ -64,7 +64,7 @@ namespace Stage2_2
 		TOWER_SPRITE   = new Sprite{ S_CreateRectangle(300.0f, 300.0f, ".//Textures/tower.png") };
 
 		// Texture and transformation matrix for BG
-		BG = new Sprite{ CreateBG(22.0f, 2.0f, ".//Textures/BG_Stage2.png", 1.0f, 15.0f) };
+		BG = new Sprite{ CreateBG(22.0f, 2.0f, ".//Textures/BG_Library.png", 1.0f, 15.0f) };
 		M_BG = new Transform{}; 
 
 		// Player creation
