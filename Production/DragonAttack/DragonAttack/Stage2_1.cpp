@@ -7,6 +7,8 @@ namespace
 	Transform *M_BG;
 	Audio_Engine* Audio;
 	UI* ui;
+	AEVec2 startpos = { -440, -885 };
+
 	int** MapData;
 	int Map_Width;
 	int Map_Height;
@@ -16,9 +18,9 @@ namespace
 	std::vector<Wall> walls;
 	std::vector<Barrier> barriers;
 	std::vector<Block> blocks;
-	LevelChangePlatform *next;
 	std::vector<Characters*> c;
 	std::vector<PickUp> PU;
+	LevelChangePlatform *next;
 
 	Sprite* COIN_SPRITE;//pickups					 							   
 	Sprite* HP_SPRITE;
@@ -41,33 +43,39 @@ namespace Stage2_1
 {
 	void Load(void)
 	{
-		COIN_SPRITE = new Sprite{ S_CreateSquare(50.0f, ".//Textures/coin.png", 1.0f) };
-		HP_SPRITE = new Sprite{ S_CreateSquare(50.0f,   ".//Textures/hp.png", 1.0f) };
-		DMG_SPRITE = new Sprite{ S_CreateSquare(50.0f,  ".//Textures/Fireball.png", 1.0f) };
-		SPD_SPRITE = new Sprite{ S_CreateSquare(50.0f,  ".//Textures/spd.png", 1.0f) };
-		BARRIER_SPRITE = new Sprite{ S_CreateSquare(130.0f, ".//Textures/box.png") };
-		WALL_SPRITE = new Sprite{ CreateFloor(1.0f, ".//Textures/Cobblestone.png", 1.0f, 1.0f) };
-		PLAT_SPRITE = new Sprite{ CreatePlatform(1.0f, 1.0f, ".//Textures/Cobblestone.png") };
-		LCPLAT_SPRITE = new Sprite{ CreatePlatform(2.0f, 3.0f, ".//Textures/Win_Platform.png") };
-		FLOOR_SPRITE = new Sprite{ CreateFloor(1.0f, ".//Textures/Cobblestone.png", 1.0f, 1.0f) };
-		TOWER_SPRITE = new Sprite{ S_CreateRectangle(300.0f, 300.0f, ".//Textures/tower.png") };
-		SIGN_SPRITE = new Sprite{ S_CreateSquare(70.0f, ".//Textures/sign.png") };
-		INVUL_SPRITE = new Sprite{ S_CreateSquare(50.0f, ".//Textures/invul.png", 1.0f) };
+		// Reads in map data for this level
+		if (!Import_MapData(".//Levels/level2-1.txt", MapData, Map_Width, Map_Height)) { AEGfxExit(); }
 
+		// Textures for pick ups
+		COIN_SPRITE    = new Sprite{ S_CreateSquare(50.0f, ".//Textures/coin.png", 1.0f) };
+		HP_SPRITE      = new Sprite{ S_CreateSquare(50.0f, ".//Textures/hp.png", 1.0f) };
+		DMG_SPRITE     = new Sprite{ S_CreateSquare(50.0f, ".//Textures/Fireball.png", 1.0f) };
+		SPD_SPRITE     = new Sprite{ S_CreateSquare(50.0f, ".//Textures/spd.png", 1.0f) };
+		INVUL_SPRITE   = new Sprite{ S_CreateSquare(50.0f, ".//Textures/invul.png", 1.0f) };
 
-		BG = new Sprite{ CreateBG(22.0f, 2.0f, ".//Textures/BG_Stage2.png", 1.0f, 15.0f) };
+		// Textures for static objects
+		BARRIER_SPRITE = new Sprite{ S_CreateSquare(130.0f,     ".//Textures/box.png") };
+		SIGN_SPRITE    = new Sprite{ S_CreateSquare(70.0f,      ".//Textures/sign.png") };
+		PLAT_SPRITE    = new Sprite{ CreatePlatform(1.0f, 1.0f, ".//Textures/Cobblestone.png") };
+		LCPLAT_SPRITE  = new Sprite{ CreatePlatform(2.0f, 3.0f, ".//Textures/Win_Platform.png") };
+		WALL_SPRITE    = new Sprite{ CreateFloor   (1.0f,       ".//Textures/Cobblestone.png", 1.0f, 1.0f) };
+		FLOOR_SPRITE   = new Sprite{ CreateFloor   (1.0f,       ".//Textures/Cobblestone.png", 1.0f, 1.0f) };
+		TOWER_SPRITE   = new Sprite{ S_CreateRectangle(300.0f, 300.0f, ".//Textures/tower.png") };
+
+		// Texture and transformation matrix for BG
+		BG   = new Sprite{ CreateBG(22.0f, 2.0f, ".//Textures/BG_Stage2.png", 1.0f, 15.0f) };
 		M_BG = new Transform{};
 
-		AEVec2 startpos = {-440, -885};
+		// Player creation
 		player = dynamic_cast<Dragon*>(Create_Basic_AI(DRAGON, startpos));
 
+		// Audio and UI
 		Audio = new Audio_Engine{ 1, [](std::vector <std::string> &playlist)->void {playlist.push_back(".//Audio/Stage_2_BGM.mp3"); } };
-		ui = new UI(player);
-		if (!Import_MapData(".//Levels/level2-1.txt", MapData, Map_Width, Map_Height)) { AEGfxExit(); }
-		
+		ui = new UI{ player };
+
+		// Placement for level change platform
 		next = new LevelChangePlatform{ LCPLAT_SPRITE, 1180.0f,  -2685.0f };
 	}
-
 
 	void Init(void)
 	{
@@ -277,14 +285,30 @@ namespace Stage2_1
 
 	void Free(void)
 	{
-		delete BG;
-		delete M_BG;
-		delete player;
-		delete Audio;
+		platforms.clear();
+		//floors.clear();
+		walls.clear();
+		blocks.clear();
+		barriers.clear();
+		PU.clear();
 
-		delete next;
-		delete ui;
+		for (size_t i = 0; i < c.size(); ++i)
+		{
+			delete c[i];
+		}
+		c.clear();
+	}
 
+	void Unload(void)
+	{
+		// Delete map data
+		for (int y = 0; y < Map_Height; ++y)
+		{
+			delete[] MapData[y];
+		}
+		delete[] MapData;
+
+		// Delete Sprites
 		delete COIN_SPRITE;//pickups
 		delete HP_SPRITE;
 		delete DMG_SPRITE;
@@ -298,28 +322,11 @@ namespace Stage2_1
 		delete TOWER_SPRITE;
 		delete SIGN_SPRITE;
 
-		platforms.clear();
-		//floors.clear();
-		walls.clear();
-		blocks.clear();
-		barriers.clear();
-		PU.clear();
-
-		for (size_t i = 0; i < c.size(); ++i)
-		{
-			delete c[i];
-		}
-		c.clear();
-
-		for (int y = 0; y < Map_Height; ++y)
-		{
-			delete[] MapData[y];
-		}
-		delete[] MapData;
-	}
-
-	void Unload(void)
-	{
-
+		delete BG;
+		delete M_BG;
+		delete player;
+		delete Audio;
+		delete next;
+		delete ui;
 	}
 }
