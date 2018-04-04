@@ -28,30 +28,28 @@ const int   Bullet_Buffer   { 10      }; //Amount of fireballs at any one time
 const float Bullet_Interval { 600.0f  }; //Minimum distance between each fireball
 const float Bullet_Death    { 900.0f  }; //Distance when bullet dies
 const float Bullet_Speed    { 1200.0f }; //How fast a bullet travels
-const int   Fireball_Damage { 10      };
-const int   MFireball_Damage{ 15      };
-const float Fireball_Scale  { 50.0f   };
-const float MFireball_Scale { Fireball_Scale * 1.5f   };
+const int   Fireball_Damage { 10      }; //Fireball damage
+const int   MFireball_Damage{ 15      }; //Mega fireball damage
+const float Fireball_Scale  { 50.0f   }; //Scale of Fireball
+const float MFireball_Scale { 75.0f   }; //Scale of Mega Firaball
 
-const float Invul_Time      { 1.5f    };
-const float Dragon_Scale    { 70.0f   };
+const float Invul_Time      { 1.5f    }; //Time dragon is invul after being hit
+const float Dragon_Scale    { 70.0f   }; //Dragon scale
 const float Jump_Height     { 400.0f  }; //Maximum height player can jump
 const float Jump_Mult       { 3.2f    }; //How fast player can jump
-//const float Start_Pos_X     { -320.0f }; //Player stating position X
-//const float Start_Pos_Y     { -80.0f  }; //Player starting position Y
 //Player velocity
 const AEVec2 Player_Speed   { 480.0f, 480.0f * Jump_Mult };
-const float Cam_Offset_X    { 320.0f  }; //Camera offset X
-const float Cam_Offset_Y    { 120.0f  }; //Camera offset Y
 
+//Animation state identifier
 namespace Dragon_ANIM{
   typedef enum Dragon_Animation_States {
-    HIT,  //0
+    HIT , //0
     IDLE, //1
     JUMP, //2
     WALK  //3
   }DAS;
 }
+
 class Dragon : public Characters{
 
 public:

@@ -18,33 +18,37 @@ Technology is prohibited.
 #include <utility> //move
 
 //Counts the number of coins collected
-int PickUp::Coin_Counter = 0;
+int              PickUp::Coin_Counter   = 0      ;
 Particle_System* PickUp::coin_particles = nullptr;
 
-PickUp::PickUp(Sprite* p_sprite, Col_Comp && t_col, const PUT type, const float posX, const float posY)
+//Initialize with sprite, collision, type of power up and position
+PickUp::PickUp(Sprite* p_sprite, Col_Comp && t_col, const PUT type, 
+               const float posX, const float posY)
   :GameObject{ p_sprite, std::move(t_col)},
-  Type_{ type }, Active_{ false }, Cooldown_{ 0 }
+   Type_     { type                      },
+   Active_   { false                     },
+   Cooldown_ { 0                         }
 {
-  SetActive(true);
+  SetActive(true)                                      ;
   Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
-  PosX = posX;
-  PosY = posY;
-  Transform_.SetTranslate(PosX, PosY);
-  Transform_.Concat();
+  PosX = posX                                          ;
+  PosY = posY                                          ;
+  Transform_.SetTranslate(PosX, PosY)                  ;
+  Transform_.Concat      (          )                  ;
 
-  PickUp::coin_particles = Effects_Get(COIN_PARTICLE);
+  PickUp::coin_particles = Effects_Get(COIN_PARTICLE)  ;
 
   //BEHAVIOUR FOR COIN
-  coin_particles->Emitter_.PPS_ = 150;
-  coin_particles->Emitter_.Dist_Min_ = 10.f;
-  coin_particles->Emitter_.Vol_Max = 150;
-  coin_particles->Emitter_.Direction_ = 90.0f;
-  coin_particles->Emitter_.Particle_Rand_.Spread_ = 360;
-  coin_particles->Emitter_.Conserve_ = 0.9f;
-  coin_particles->Emitter_.Size_ = 20.0f;
-  coin_particles->Emitter_.Speed_ = 50.0f;
-  coin_particles->Emitter_.Particle_Rand_.Sp_Rand_ = 3;
-  coin_particles->Emitter_.Lifetime_ = 1.f;
+  coin_particles->Emitter_.PPS_                    = 150  ;
+  coin_particles->Emitter_.Dist_Min_               = 10.0f;
+  coin_particles->Emitter_.Vol_Max                 = 150  ;
+  coin_particles->Emitter_.Direction_              = 90.0f;
+  coin_particles->Emitter_.Particle_Rand_.Spread_  = 360  ;
+  coin_particles->Emitter_.Conserve_               = 0.9f ;
+  coin_particles->Emitter_.Size_                   = 20.0f;
+  coin_particles->Emitter_.Speed_                  = 50.0f;
+  coin_particles->Emitter_.Particle_Rand_.Sp_Rand_ = 3    ;
+  coin_particles->Emitter_.Lifetime_               = 1.0f ;
   //Initialize cooldown
   switch (Type_)
   {
@@ -60,6 +64,7 @@ PickUp::PickUp(Sprite* p_sprite, Col_Comp && t_col, const PUT type, const float 
   }
 }
 
+//Updates collision and cooldown
 void PickUp::Update(Dragon &player, const float dt)
 {
   //Pick up collision check
@@ -78,11 +83,11 @@ void PickUp::Update(Dragon &player, const float dt)
       SetActive(false);
       if (Type_ == COIN)
       {
-
-	    coin_particles->Emitter_.Pos_.Point = {PosX, PosY};
-		coin_particles->TransRamp_Exp();
-		coin_particles->ColorRamp_Life();
-		coin_particles->UpdateEmission();
+        //Coin behaviour and look
+        coin_particles->Emitter_.Pos_.Point = {PosX, PosY};
+        coin_particles->TransRamp_Exp()                   ;
+        coin_particles->ColorRamp_Life()                  ;
+        coin_particles->UpdateEmission()                  ;
         //Adds score if coin is picked up
         player.Add_Score(10);
         ++Coin_Counter;
@@ -111,9 +116,9 @@ void PickUp::Update(Dragon &player, const float dt)
       Active_ = false;
     }
   }
-
+  //Update coin particles if any
   if (coin_particles->GetParticleCount())
   {
-	  coin_particles->Update(dt);
+    coin_particles->Update(dt);
   }
 }

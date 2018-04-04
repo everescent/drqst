@@ -44,43 +44,40 @@ Particle Particle_System::Create()
   //Make a temporary particle
   Particle tmp_;
   float Dir_tmp  = Emitter_.Direction_; //Final Direction
-  float Sz_tmp   = Emitter_.Size_;      //Final Size
-  float Spd_tmp  = Emitter_.Speed_;     //Final Speed
-  float Life_tmp = Emitter_.Lifetime_;  //Final Lifetime
+  float Sz_tmp   = Emitter_.Size_     ; //Final Size
+  float Spd_tmp  = Emitter_.Speed_    ; //Final Speed
+  float Life_tmp = Emitter_.Lifetime_ ; //Final Lifetime
   //If there is spread
   if (Emitter_.Particle_Rand_.Spread_)
   {
-  float min = Emitter_.Direction_ - Emitter_.Particle_Rand_.Spread_;
-  float max = Emitter_.Direction_ + Emitter_.Particle_Rand_.Spread_;
-
-  //Randomize a direction between min and max values
-  Dir_tmp = (min + rand() % (int)(max - min + 1));
+    float min = Emitter_.Direction_ - Emitter_.Particle_Rand_.Spread_;
+    float max = Emitter_.Direction_ + Emitter_.Particle_Rand_.Spread_;
+    //Randomize a direction between min and max values
+    Dir_tmp = (min + rand() % (int)(max - min + 1));
   }
   //If there is random size
   if (Emitter_.Particle_Rand_.Size_Rand_)
   {
-  float min = Emitter_.Size_ - Emitter_.Particle_Rand_.Size_Rand_;
-  float max = Emitter_.Size_ + Emitter_.Particle_Rand_.Size_Rand_;
-
-  //Randomize a size between min and max values
-  Sz_tmp = (min + rand() % (int)(max - min + 1));
+    float min = Emitter_.Size_ - Emitter_.Particle_Rand_.Size_Rand_;
+    float max = Emitter_.Size_ + Emitter_.Particle_Rand_.Size_Rand_;
+    //Randomize a size between min and max values
+    Sz_tmp = (min + rand() % (int)(max - min + 1));
   }
   //If there is speed randomness
   if (Emitter_.Particle_Rand_.Sp_Rand_)
   {
-  float min = Emitter_.Speed_ - Emitter_.Particle_Rand_.Sp_Rand_;
-  float max = Emitter_.Speed_ + Emitter_.Particle_Rand_.Sp_Rand_;
-
-  //Randomize the speed between min and max values
-  Spd_tmp = (min + rand() % (int)(max - min + 1));
+    float min = Emitter_.Speed_ - Emitter_.Particle_Rand_.Sp_Rand_;
+    float max = Emitter_.Speed_ + Emitter_.Particle_Rand_.Sp_Rand_;
+    //Randomize the speed between min and max values
+    Spd_tmp = (min + rand() % (int)(max - min + 1));
   }
   //If there is life randomness
   if (Emitter_.Particle_Rand_.Life_Rand_)
   {
-  float min = Emitter_.Lifetime_ - Emitter_.Particle_Rand_.Life_Rand_;
-  float max = Emitter_.Lifetime_ + Emitter_.Particle_Rand_.Life_Rand_;
-
-  Life_tmp = (min + rand() % (int)(max - min + 1));
+    float min = Emitter_.Lifetime_ - Emitter_.Particle_Rand_.Life_Rand_;
+    float max = Emitter_.Lifetime_ + Emitter_.Particle_Rand_.Life_Rand_;
+    //Randomize the life between min and max values
+    Life_tmp = (min + rand() % (int)(max - min + 1));
   }
   //Convert to radians
   Dir_tmp = AEDegToRad(Dir_tmp);
@@ -119,6 +116,7 @@ Particle Particle_System::Create()
       AEVec2Add(&tmp_.Pos_, &tmp_.Pos_, &a2);
       break;
   }
+  //For minimum distance emission
   switch (rand() % 8)
   {
     case 0: 
@@ -173,6 +171,7 @@ Particle Particle_System::Create()
   return tmp_;
 }
 
+//Emits new particles
 void Particle_System::UpdateEmission()
 {
   //Do not emit if particles are capped
@@ -188,6 +187,7 @@ void Particle_System::UpdateEmission()
   }
 }
 
+//Updates the whole system
 void Particle_System::Update(const float dt)
 {
   //Update all particles
@@ -298,10 +298,10 @@ void Particle_System::TransRamp_Exp()
 //Scales particles as time passes
 void Particle_System::ScaleRamp(const float strength)
 {
-	for (auto& elem : Emitter_.Particles_)
-	{
-		elem.Size_ *= strength;
-	}
+  for (auto& elem : Emitter_.Particles_)
+  {
+    elem.Size_ *= strength;
+  }
 }
 
 //Attract the particles to a certain point
@@ -334,11 +334,12 @@ void Particle_System::Newton(const AEVec2 Point, const float strength, const flo
   }
 }
 
+//Resets the emitter
 void Particle_System::Off_Emitter(void)
 {
-	if (GetParticleCount())
-	{
-		for (Particle &elem : Emitter_.Particles_)
-			elem.Active_ = false;
-	}
+  if (GetParticleCount())
+  {
+    for (Particle &elem : Emitter_.Particles_)
+      elem.Active_ = false;
+  }
 }

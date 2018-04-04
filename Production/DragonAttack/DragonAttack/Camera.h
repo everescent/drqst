@@ -44,7 +44,8 @@ Parameters:
 Return:
   void
 *************************************************************************/
-void CamFollow(Transform const &PosMatrix, float OffsetX, float OffsetY, float dir);
+void CamFollow(Transform const &PosMatrix,
+               float              OffsetX, float OffsetY, float dir);
 
 /*************************************************************************
 Description:
@@ -59,4 +60,11 @@ Return:
 *************************************************************************/
 void CamStatic(float PositionX = 0.0f, float PositionY = 0.0f);
 
+/*************************************************************************
+Description:
+  Adds camera shake.
+
+Return:
+  void
+*************************************************************************/
 void CamShake();

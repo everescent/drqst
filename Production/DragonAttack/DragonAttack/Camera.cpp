@@ -148,12 +148,11 @@ void CamStatic(float PositionX, float PositionY)
   AEGfxSetCamPosition(PositionX, PositionY);
 }
 
+//Adds camera shake
 void CamShake()
 {
-	float phaseRot;
-		
-	phaseRot = AEDegToRad((float)(rand() % 360));
-
-	AEGfxSetCamPosition(cosf(phaseRot) * 7, sinf(phaseRot) * 7);
-
+  //Get a random number from 0 to 359 degrees
+  float phaseRot = AEDegToRad((float)(rand() % 360));
+  //Offset camera position
+  AEGfxSetCamPosition(cosf(phaseRot) * 7, sinf(phaseRot) * 7);
 }
