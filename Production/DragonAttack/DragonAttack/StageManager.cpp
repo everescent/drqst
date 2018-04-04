@@ -1,3 +1,17 @@
+/* Start Header ************************************************************************/
+/*!
+\file       StageManager.cpp
+\author     William Yoong
+\par email: william.yoong\@digipen.edu
+\brief
+
+
+Copyright (C) 2018 DigiPen Institute of Technology.
+Reproduction or disclosure of this file or its contents
+without the prior written consent of DigiPen Institute of
+Technology is prohibited.
+*/
+/* End Header **************************************************************************/
 #include "StageManager.h"
 #include "Stage1_1.h"
 #include "Stage1_2.h"
@@ -10,13 +24,19 @@
 #include "Stage3_3.h"
 #include "Score_Page.h"
 
-
+// global variables that will be used in this stage manager
 static STAGE_LIST s_previous, s_current, s_next, s_after_score;
 
 namespace SM
 {
+	// create an array of function pointers for the stage manager
 	GameStateFunctions StageManager[SS_QUIT] = { nullptr };
 
+	/**************************************************************************************
+	//
+	// Initialize the stage manager variables
+	//
+	**************************************************************************************/
 	void StageManagerInit()
 	{
 		StageManager[SUB_STAGE1].Init     = nullptr;
@@ -103,6 +123,11 @@ namespace SM
 
 	}
 	
+	/**************************************************************************************
+	//
+	// Load the current stage
+	//
+	**************************************************************************************/
 	void SM_Load(void)
 	{
 		if (s_current != SS_RESTART)
@@ -111,27 +136,52 @@ namespace SM
 			s_current = s_next = s_previous;
 	}
 
+	/**************************************************************************************
+	//
+	// Initialize the current stage
+	//
+	**************************************************************************************/
 	void SM_Init(void)
 	{
 		StageManager[s_current].Init();
 	}
 
+	/**************************************************************************************
+	//
+	// Updates the current stage
+	//
+	**************************************************************************************/
 	void SM_Update(float dt)
 	{
 		SubStage_Finished() ? SM_Unload(), SM_Free() : StageManager[s_current].Update(dt);
 	}
 
+	/**************************************************************************************
+	//
+	// Draw the current stage
+	//
+	**************************************************************************************/
 	void SM_Draw(void)
 	{
 		StageManager[s_current].Draw();
 	}
 
+	/**************************************************************************************
+	//
+	// Unload the resources that were used in the current stage
+	//
+	**************************************************************************************/
 	void SM_Unload(void)
 	{
 		if (s_next != SS_RESTART)
 			StageManager[s_current].Unload();
 	}
 
+	/**************************************************************************************
+	//
+	// Free the resources that were used in the current stage before changing to next stage
+	//
+	**************************************************************************************/
 	void SM_Free(void)
 	{
 		StageManager[s_current].Free();
@@ -146,31 +196,61 @@ namespace SM
 		}
 	}
 
+	/**************************************************************************************
+	//
+	// set the next state 
+	//
+	**************************************************************************************/
 	void Set_Next(STAGE_LIST next)
 	{
 		s_next = next;
 	}
 
+	/**************************************************************************************
+	//
+	// Get the next state
+	//
+	**************************************************************************************/
     STAGE_LIST Get_Next()
     {
         return s_next;
     }
 
+	/**************************************************************************************
+	//
+	// Get the current state
+	//
+	**************************************************************************************/
     STAGE_LIST Get_Curr()
     {
         return s_current;
     }
 
+	/**************************************************************************************
+	//
+	// Set the next state after the score page
+	//
+	**************************************************************************************/
 	void Set_After_Score(STAGE_LIST after_score)
 	{
 		s_after_score = after_score;
 	}
 
+	/**************************************************************************************
+	//
+	// return the state after_score is referring to
+	//
+	**************************************************************************************/
 	STAGE_LIST Get_After_Score(void)
 	{
 		return s_after_score;
 	}
 
+	/**************************************************************************************
+	//
+	// checks if the current stage is complete
+	//
+	**************************************************************************************/
 	bool SubStage_Finished(void)
 	{
 		return s_current != s_next;

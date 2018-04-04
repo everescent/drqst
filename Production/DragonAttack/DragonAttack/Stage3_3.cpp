@@ -133,7 +133,8 @@ namespace Stage3_3
 			SM::Set_Next(SS_RESTART);  // change state to restart
 			last_boss->Set_HP(0);      // kills the boss
 		}
-		player->Set_Vulnerable(true);
+
+		//player->Set_Vulnerable(true);
 	   // update the audio
 	   audio->Update();
 
@@ -193,9 +194,6 @@ namespace Stage3_3
 	**************************************************************************************/
 	void Draw(void)
 	{
-        CamFollow(player->Transform_, 200, 120, player->GetFacing());
-        CamStatic();
-		
 		// render the background
         BG->Render_Object(*M_BG);
 

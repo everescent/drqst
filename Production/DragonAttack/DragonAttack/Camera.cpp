@@ -16,6 +16,7 @@ Technology is prohibited.
 #include "Camera.h"
 #include "Transform.h"
 #include "AEEngine.h"
+#include <cmath>
 
 //This function follows an object with an offset
 void CamFollow(float PositionX, float PositionY, float OffsetX, float OffsetY)
@@ -145,4 +146,14 @@ void CamStatic(float PositionX, float PositionY)
 {
   //Set the camera position
   AEGfxSetCamPosition(PositionX, PositionY);
+}
+
+void CamShake()
+{
+	float phaseRot;
+		
+	phaseRot = AEDegToRad((float)(rand() % 360));
+
+	AEGfxSetCamPosition(cosf(phaseRot) * 7, sinf(phaseRot) * 7);
+
 }

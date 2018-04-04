@@ -19,14 +19,19 @@ Technology is prohibited.
 
 namespace GSM
 {
+	// defining the global variables
+	GAME_STATE previous = GS_LEVEL3_3;
+	GAME_STATE current  = GS_LEVEL3_3;
+	GAME_STATE next     = GS_LEVEL3_3;
 
-	GAME_STATE previous = GS_MAIN;
-	GAME_STATE current  = GS_MAIN;
-	GAME_STATE next     = GS_MAIN;
-
+	// create an array of pointers to state functions
 	GameStateFunctions GSF[GS_QUIT] = { 0 };
 
-	// initializes the array of function pointers for each state
+	/**************************************************************************************
+	//
+	// Initializes the various variables for game state manager usage
+	//
+	**************************************************************************************/
 	void GSM_Init(void)
 	{
 		GSF[GS_MAIN].Init         = Main_Menu::Init;
@@ -127,12 +132,17 @@ namespace GSM
 		//GSF[GS_LEVEL_IMPORT].Free   = Test_Stage_Import::Free;
 		//GSF[GS_LEVEL_IMPORT].Unload = Test_Stage_Import::Unload;
 		
-		SM::StageManagerInit();
-		Attack_Sprite_Init();
-		AI_Sprite_Init();
-		Effects_Init();
+		SM::StageManagerInit();  // initializes the stage manager 
+		Attack_Sprite_Init();	 // initializes the various sprites we need for ai attacks
+		AI_Sprite_Init();		 // initializes the various sprites we need for the ai
+		Effects_Init();			 // initializes the particle effects that will be used 
 	}
 
+	/**************************************************************************************
+	//
+	// calls the initialize and load functions of the game
+	//
+	**************************************************************************************/
 	void Init_and_Load(void)
 	{
 		if (current == GS_RESTART)
@@ -146,11 +156,15 @@ namespace GSM
 			GSF[current].Load();
 		}
 
-
 		GSF[current].Init();
 
 	}
 
+	/**************************************************************************************
+	//
+	// updates and draws the current game state
+	//
+	**************************************************************************************/
 	void Update_and_Draw(float dt)
 	{
         if (Input::Quit_Triggered())
@@ -160,11 +174,15 @@ namespace GSM
 
 		GSF[current].Update(dt);
 
-
 		GSF[current].Draw();
 
 	}
 
+	/**************************************************************************************
+	//
+	// unload and free the current game state before moving to the next game state
+	//
+	**************************************************************************************/
 	void Cleanup(void)
 	{
 
@@ -181,12 +199,21 @@ namespace GSM
 	}
 
 
-
+	/**************************************************************************************
+	//
+	// checks if the game is running
+	//
+	**************************************************************************************/
 	bool IsGameRunning(void)
 	{
 		return (current != GS_QUIT);
 	}
 
+	/**************************************************************************************
+	//
+	// free the resources that was used in this game
+	//
+	**************************************************************************************/
 	void GSM_Cleanup(void)
 	{
 		Effects_Cleanup();

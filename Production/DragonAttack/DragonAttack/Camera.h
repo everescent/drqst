@@ -58,3 +58,5 @@ Return:
   void
 *************************************************************************/
 void CamStatic(float PositionX = 0.0f, float PositionY = 0.0f);
+
+void CamShake();

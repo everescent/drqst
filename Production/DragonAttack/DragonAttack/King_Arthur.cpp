@@ -18,6 +18,7 @@ Technology is prohibited.
 #include "AI_Data_Factory.h"
 #include "GameStateManager.h"
 #include "StageManager.h"
+#include "Camera.h"
 #include <vector>
 
 #define NUM_OF_SWORD 4
@@ -27,7 +28,7 @@ namespace {
 
 	std::vector <Boss_Attack> arthur; //an array of boss attacks
 
-	const int HEALTH    = 310; // initial hp for king arthur
+	const int HEALTH    = 510; // initial hp for king arthur
 	const int PHASE2_HP = 500; // phase 2 trigger
 	const int PHASE3_HP = 300; // phase 3 trigger
 
@@ -87,7 +88,8 @@ King_Arthur::King_Arthur(Sprite* texture)
 							    Init.push_back(Range{ 0.0f, 1.0f, 0.66f, 0.66f }); //Walk
     }},
 	ka_phase{ PHASE_1 }, healing_effect{Effects_Get(KA_HEALING_PARTICLE)}, current_action{IDLE},
-    sword_effect{ Effects_Get(KA_SWORD_PARTICLE) }, slash_effect{Effects_Get(KA_SLASH_PARTICLE)}
+    sword_effect{ Effects_Get(KA_SWORD_PARTICLE) }, slash_effect{Effects_Get(KA_SLASH_PARTICLE)},
+	timer{ 2.f }
 {
 	PosX = START_POINT_X;                 // change king arthur coordinates to the location set
 	PosY = START_POINT_Y;                 // change king arthur coordinates to the location set
@@ -218,11 +220,13 @@ void King_Arthur::Update(Dragon &d, const float dt)
 	// activate phase 2 once hp drops is 50%
 	if (Get_HP() < PHASE2_HP && ka_phase & PHASE_1 && ! arthur[currAttk].ongoing_attack)
 	{
-        King_Arthur_Phase2();
+        King_Arthur_Phase2(dt);
+		return;
 	}
     else if (Get_HP() < PHASE3_HP && ka_phase & PHASE_2 && !arthur[currAttk].ongoing_attack)
     {
         King_Arthur_Phase3(dt);
+		return;
     }
 
 	if (behavior_swap == 3)
@@ -415,8 +419,17 @@ void King_Arthur::Attack(Dragon &d, const float dt)
 
 }
 
-void King_Arthur::King_Arthur_Phase2(void)
+void King_Arthur::King_Arthur_Phase2(const float dt)
 {
+	Set_Vulnerable(false);
+
+	while (timer > 0)
+	{
+		timer -= dt;
+		CamShake();
+		return;
+	}
+	
 	ka_phase = PHASE_2; // change to phase 2
 
 	// platform coordinates to teleport to
@@ -430,11 +443,18 @@ void King_Arthur::King_Arthur_Phase2(void)
 	teleport_location[TOP_LEFT].max.y  =  200.0f;
 
 	current_action = ATTACK;
+	Set_Vulnerable(true);
+	timer = 2.f;
 }
 
 void King_Arthur::King_Arthur_Phase3(const float dt)
 {
-	UNREFERENCED_PARAMETER(dt);
+	while (timer > 0)
+	{
+		timer -= dt;
+		CamShake();
+		return;
+	}
 	
 	Set_Vulnerable(false);
 
@@ -663,8 +683,8 @@ void King_Arthur::Heal_and_Spawn(Dragon &d, const float dt)
 	if (healing && Get_HP() <= HEALTH)
 	{
 		// heals every 0.5 seconds
-		static float timer = 0.5f;
-		timer <= 0 ? Set_HP(Get_HP() + 10), timer = 0.5f : timer -= dt;
+		static float heal_timer = 0.5f;
+		heal_timer <= 0 ? Set_HP(Get_HP() + 10), heal_timer = 0.5f : heal_timer -= dt;
 	
 		healing_effect->UpdateEmission();
 	}

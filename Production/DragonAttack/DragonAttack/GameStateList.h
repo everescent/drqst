@@ -16,7 +16,11 @@ Technology is prohibited.
 /* End Header **************************************************************************/
 #pragma once
 
-/* The different game states for the game */
+/**************************************************************************************
+//
+// enumeration for the various game states
+//
+**************************************************************************************/
 enum GAME_STATE
 {
 	GS_MAIN = 0,
@@ -40,7 +44,11 @@ enum GAME_STATE
 	GS_RESTART
 };
 
-// the different sub stages for stage manager
+/**************************************************************************************
+//
+// enumeration for the various stage states
+//
+**************************************************************************************/
 enum STAGE_LIST
 {
 	SUB_STAGE1 = 0,
@@ -54,6 +62,7 @@ enum STAGE_LIST
 	STAGE_3_1,
 	STAGE_3_2,
     STAGE_3_3,
+
 	// don't touch the bottom area, add from top
 	SS_SCORE,
 	SS_QUIT,

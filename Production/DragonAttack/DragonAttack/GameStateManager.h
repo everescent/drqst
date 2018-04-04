@@ -34,80 +34,23 @@ Technology is prohibited.
 
 namespace GSM
 {
-	// holds the previous, current and next state
+	/**************************************************************************************
+	//
+	// holds the previous, current and next game state. controls the game flow
+	//
+	**************************************************************************************/
 	extern GAME_STATE previous, current, next;
 	
-	/******************************************************************************/
-	/*!
-	\fn         void GSM_Init
-
-	\brief      Initializes the game state manager
-
-	\param      void
-
-	\retval     void
-	No return.
-	*/
-	/******************************************************************************/
+	/**************************************************************************************
+	//
+	// Function declarations
+	//
+	**************************************************************************************/
 	void GSM_Init(void);
-
-	/******************************************************************************/
-	/*!
-	\fn         void Init_and_Load
-
-	\brief      Initialize and load the current state
-
-	\param      void
-
-	\retval     void
-	No return.
-	*/
-	/******************************************************************************/
 	void Init_and_Load(void);
-
-	/******************************************************************************/
-	/*!
-	\fn         void Update_and_Draw
-
-	\brief      Update and draw the current state
-
-	\param      dt - delta time to for various formulas
-
-	\retval     void
-	No return.
-	*/
-	/******************************************************************************/
 	void Update_and_Draw(float dt);
-
-	/******************************************************************************/
-	/*!
-	\fn         void Cleanup
-
-	\brief      Free and unload and unload state and move on to the next one
-
-	\param      void
-
-	\retval     void
-	No return.
-	*/
-	/******************************************************************************/
 	void Cleanup(void);
-
-	/******************************************************************************/
-	/*!
-	\fn         void IsGameRunning
-
-	\brief      Checks if the game is still running
-
-	\param      void
-
-	\retval     void
-	No return.
-	*/
-	/******************************************************************************/
 	bool IsGameRunning(void);
-
-	// use to call all the functions that need to clear their global variables
 	void GSM_Cleanup(void);
 
 }
