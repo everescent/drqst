@@ -23,6 +23,7 @@ Technology is prohibited.
 
 #define NUM_OF_SWORD 4
 #define ACCEL        62.f
+#define NUM_OF_MOBS  4
 
 namespace {
 
@@ -44,7 +45,7 @@ namespace {
     float right_boundary = 400; // boundaries of charge attack
 
 	const char limit = 5; // num of king arthur attacks
-	const char num_of_mobs = 4; // number of mobs to spawn
+	char active_mobs;     // number of mobs to spawn
 	bool spawn_mob = false;
 
 	char behavior_swap = 0; // switch between idling and moving
@@ -73,7 +74,7 @@ namespace {
 
 	LOCATION teleport_location[3];
 	AEVec2 sword_pos[NUM_OF_SWORD] = {};
-    AEVec2 ai_spawn_pos[num_of_mobs];
+    AEVec2 ai_spawn_pos[NUM_OF_MOBS];
 }
 
 
@@ -89,7 +90,8 @@ King_Arthur::King_Arthur(Sprite* texture)
     }},
 	ka_phase{ PHASE_1 }, healing_effect{Effects_Get(KA_HEALING_PARTICLE)}, current_action{IDLE},
     sword_effect{ Effects_Get(KA_SWORD_PARTICLE) }, slash_effect{Effects_Get(KA_SLASH_PARTICLE)},
-	timer{ 2.f }
+	phase_effect{ Effects_Get(PHASE_PARTICLE)},
+	timer{ 2.f }, mob_timer{1.f}
 {
 	PosX = START_POINT_X;                 // change king arthur coordinates to the location set
 	PosY = START_POINT_Y;                 // change king arthur coordinates to the location set
@@ -146,7 +148,7 @@ void King_Arthur::Init_KA_Attacks(void)
 
 void King_Arthur::Init_MobArray(void)
 {
-	for (char i = 0; i < num_of_mobs; ++i)
+	for (char i = 0; i < NUM_OF_MOBS; ++i)
 	{
         if (i < 2)
         {
@@ -179,35 +181,58 @@ void King_Arthur::Init_MobArray(void)
 void King_Arthur::Init_Particle(void)
 {
     // intializing healing particle variables
-    healing_effect->Emitter_.PPS_ = 10;
-    healing_effect->Emitter_.Dist_Min_ = 30.f;
-    healing_effect->Emitter_.Vol_Max = 500;
-    healing_effect->Emitter_.Direction_ = 270.0f;
-    healing_effect->Emitter_.Particle_Rand_.Spread_ = 360;
-    healing_effect->Emitter_.Conserve_ = 0.8f;
-    healing_effect->Emitter_.Size_ = 10.0f;
-    healing_effect->Emitter_.Speed_ = 5.0f;
+    healing_effect->Emitter_.PPS_                    = 10;
+    healing_effect->Emitter_.Dist_Min_               = 30.f;
+    healing_effect->Emitter_.Vol_Max                 = 500;
+    healing_effect->Emitter_.Direction_              = 270.0f;
+    healing_effect->Emitter_.Particle_Rand_.Spread_  = 360;
+    healing_effect->Emitter_.Conserve_               = 0.8f;
+    healing_effect->Emitter_.Size_                   = 10.0f;
+    healing_effect->Emitter_.Speed_                  = 5.0f;
     healing_effect->Emitter_.Particle_Rand_.Sp_Rand_ = 3;
-    healing_effect->Emitter_.Lifetime_ = 1.f;
+    healing_effect->Emitter_.Lifetime_               = 1.f;
 
     // initializing the sword particle for phase 3
-    sword_effect->Emitter_.PPS_ = 8;
-    sword_effect->Emitter_.Dist_Min_ = 0.f;
-    sword_effect->Emitter_.Vol_Max = 2000;
-    sword_effect->Emitter_.Direction_ = 90.0f;
-    sword_effect->Emitter_.Conserve_ = 0.8f;
-    sword_effect->Emitter_.Size_ = 10.0f;
-    sword_effect->Emitter_.Speed_ = 3.0f;
-    sword_effect->Emitter_.Lifetime_ = 4.f;
+    sword_effect->Emitter_.PPS_                      = 8;
+    sword_effect->Emitter_.Dist_Min_                 = 0.f;
+    sword_effect->Emitter_.Vol_Max                   = 2000;
+    sword_effect->Emitter_.Direction_                = 90.0f;
+    sword_effect->Emitter_.Conserve_                 = 0.8f;
+    sword_effect->Emitter_.Size_                     = 10.0f;
+    sword_effect->Emitter_.Speed_                    = 3.0f;
+    sword_effect->Emitter_.Lifetime_                 = 4.f;
+
+	// initializing the particle variables for phase transition
+	phase_effect->Emitter_.PPS_                      = 20;
+	phase_effect->Emitter_.Dist_Min_                 = 10.f;
+	phase_effect->Emitter_.Vol_Max                   = 512;
+	phase_effect->Emitter_.Direction_                = 90.0f;
+	phase_effect->Emitter_.Particle_Rand_.Spread_    = 180;
+	phase_effect->Emitter_.Conserve_                 = 0.8f;
+	phase_effect->Emitter_.Size_                     = 15.0f;
+	phase_effect->Emitter_.Speed_                    = 4.0f;
+	phase_effect->Emitter_.Particle_Rand_.Sp_Rand_   = 3;
+	phase_effect->Emitter_.Lifetime_                 = 0.2f;
+
+	// update the phsae box location
+	phase_effect->Emitter_.Pos_.Point_Min_Max[0].y = Collision_.Get_MinPoint().y - 60;
+	phase_effect->Emitter_.Pos_.Point_Min_Max[1].y = Collision_.Get_MaxPoint().y + 20;
+	phase_effect->Emitter_.Pos_.Point_Min_Max[0].x = -40.f;
+	phase_effect->Emitter_.Pos_.Point_Min_Max[1].x = 40.f;
+
+	// update the particle color
+	phase_effect->Emitter_.Color_.R = 130.f / 255.f;
+	phase_effect->Emitter_.Color_.G = 224.f / 225.f;
+	phase_effect->Emitter_.Color_.B = 170.f / 255.f;
 
     // initializing the slash particle for slash
-	slash_effect[0]->Emitter_.PPS_ = 10;
-	slash_effect[0]->Emitter_.Vol_Max = 1000;
-	slash_effect[0]->Emitter_.Direction_ = 90.0f;
-	slash_effect[0]->Emitter_.Conserve_ = 0.8f;
-	slash_effect[0]->Emitter_.Size_ = 10.0f;
-	slash_effect[0]->Emitter_.Speed_ = 3.0f;
-	slash_effect[0]->Emitter_.Lifetime_ = 0.5f;
+	slash_effect[0]->Emitter_.PPS_                      = 10;
+	slash_effect[0]->Emitter_.Vol_Max                   = 1000;
+	slash_effect[0]->Emitter_.Direction_                = 90.0f;
+	slash_effect[0]->Emitter_.Conserve_                 = 0.8f;
+	slash_effect[0]->Emitter_.Size_                     = 10.0f;
+	slash_effect[0]->Emitter_.Speed_                    = 3.0f;
+	slash_effect[0]->Emitter_.Lifetime_                 = 0.5f;
 
 	slash_effect[2] = new Particle_System(slash_effect[0]->Emitter_.pMesh_, {}, BOX);
 	slash_effect[1] = new Particle_System(slash_effect[0]->Emitter_.pMesh_, {}, BOX);
@@ -221,11 +246,15 @@ void King_Arthur::Update(Dragon &d, const float dt)
 	if (Get_HP() < PHASE2_HP && ka_phase & PHASE_1 && ! arthur[currAttk].ongoing_attack)
 	{
         King_Arthur_Phase2(dt);
+		Update_Particle(dt);    // update particle effects for king arthur
 		return;
 	}
+
+	// activates phase 3 once hp drops to 30%
     else if (Get_HP() < PHASE3_HP && ka_phase & PHASE_2 && !arthur[currAttk].ongoing_attack)
     {
         King_Arthur_Phase3(dt);
+		Update_Particle(dt);    // update particle effects for king arthur
 		return;
     }
 
@@ -243,17 +272,23 @@ void King_Arthur::Update(Dragon &d, const float dt)
 	if (spawn_mob) // update the mobs that were spawned
 	{
 		char i = 0, mobs_dead = 0;
-		for (;i < num_of_mobs; ++i)
+
+		if (mob_timer < 5.f)
 		{
-			if (mobs[i]->IsActive())
-			{
-				mobs[i]->Update(d, dt);
-			}
-			else
-				++mobs_dead;
+			active_mobs = static_cast <char> (mob_timer);
+			mob_timer += dt;
+		}
+
+		for (;i < active_mobs; ++i)
+		{
+		   (mobs[i]->IsActive()) ? 	mobs[i]->Update(d, dt) : ++mobs_dead;
 		}
 		if (mobs_dead == i)
-			spawn_mob = false;
+		{
+			spawn_mob   = false;
+			mob_timer   = 1.f;
+			active_mobs = 0;
+		}
 	}
 
 	if (IsActive())
@@ -423,7 +458,20 @@ void King_Arthur::King_Arthur_Phase2(const float dt)
 {
 	Set_Vulnerable(false);
 
-	while (timer > 0)
+	// move king arthur to the middle of the screen
+	PosX = 0.0f;
+	PosY = START_POINT_Y;
+	Transform_.SetTranslate(0.0f, START_POINT_Y);
+	Transform_.Concat();
+	Collision_.Update_Col_Pos(PosX - 30.0f, PosY - 30.0f,  // min point
+		PosX + 30.0f, PosY + 30.0f);	// max point
+
+	Off_Particles(); // render particles off screen
+	Sprite_->SetAlphaTransBM(0.8f, 0.8f, AE_GFX_BM_BLEND);
+
+	phase_effect->UpdateEmission();
+
+	if (timer > 0)
 	{
 		timer -= dt;
 		CamShake();
@@ -431,6 +479,8 @@ void King_Arthur::King_Arthur_Phase2(const float dt)
 	}
 	
 	ka_phase = PHASE_2; // change to phase 2
+	Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+	
 
 	// platform coordinates to teleport to
 	teleport_location[TOP_RIGHT].max.x =  256.0f;
@@ -449,26 +499,31 @@ void King_Arthur::King_Arthur_Phase2(const float dt)
 
 void King_Arthur::King_Arthur_Phase3(const float dt)
 {
-	while (timer > 0)
+	Set_Vulnerable(false);
+
+	// move king arthur to the middle of the screen
+	PosX = 0.0f;
+	PosY = START_POINT_Y;
+	Transform_.SetTranslate(0.0f, START_POINT_Y);
+	Transform_.Concat();
+	Collision_.Update_Col_Pos(PosX - 30.0f, PosY - 30.0f,   // min point
+		                      PosX + 30.0f, PosY + 30.0f);	// max point
+
+	Off_Particles(); // render particles off screen
+	phase_effect->UpdateEmission();
+	Sprite_->SetAlphaTransBM(0.8f, 0.8f, AE_GFX_BM_BLEND); // set ka to fade out
+
+	if (timer > 0)
 	{
 		timer -= dt;
 		CamShake();
 		return;
 	}
-	
-	Set_Vulnerable(false);
-
-	// move king arthur to the middle of the screen
-    PosX = 0.0f;
-    PosY = START_POINT_Y;
-    Transform_.SetTranslate(0.0f, START_POINT_Y);
-    Transform_.Concat();
-    Collision_.Update_Col_Pos(PosX - 30.0f, PosY - 30.0f,  // min point
-                              PosX + 30.0f, PosY + 30.0f);	// max point
 
     ka_phase = PHASE_3;
 	current_action = ATTACK;
     Set_Vulnerable(true);
+	Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND); // set ka to original opaque
 
 	// resettings the boundaries of king arthur
 	left_boundary = -400; 
@@ -663,7 +718,7 @@ void King_Arthur::Heal_and_Spawn(Dragon &d, const float dt)
 		healing_effect->Emitter_.Pos_.Min_Max.Point_Max.x = PosX + 50.f;
 		healing_effect->Emitter_.Pos_.Min_Max.Point_Max.y = PosY + 50.f;
 
-        for (char i = 0; i < num_of_mobs; ++i)
+        for (char i = 0; i < NUM_OF_MOBS; ++i)
         {
             mobs[i]->SetActive(true);
 
@@ -721,9 +776,6 @@ void King_Arthur::Spinning_Blades(Dragon &d, const float dt)
 
 				arthur[SPIN_SWORD + i].ongoing_attack = true;
 				angle = 0;
-
-
-
 			}
 
             // update the particle effects and emiter position
@@ -774,7 +826,6 @@ void King_Arthur::Spinning_Blades(Dragon &d, const float dt)
 				arthur[SPIN_SWORD + i].ResetDist();            // reset distance traveled back to 0
 				arthur[SPIN_SWORD + i].SetCollided(false);     // reset collided flag
 
-
 				if (i == NUM_OF_SWORD - 1)
 				{
 					current_action = IDLE;
@@ -806,18 +857,20 @@ void King_Arthur::Render(void)
 		if (arthur[i].IsActive())
 			arthur[i].Render();
 	}
-	for (char i = 0; i < num_of_mobs; ++i)
+	for (char i = 0; i < active_mobs; ++i)
 	{
 		if (mobs[i]->IsActive())
 			mobs[i]->Render();
 	}
 
-    for (auto& i : slash_effect )
-    {
-        i->Render();
-    }
-
 	GameObject::Render(); // render king arthur on screen
+
+	phase_effect->Render();
+
+	for (auto& i : slash_effect)
+	{
+		i->Render();
+	}
     
     // rendering the particle systems
     switch (ka_phase)
@@ -846,6 +899,14 @@ void King_Arthur::Update_Particle(const float dt)
 		}
     }
 
+	if (phase_effect->GetParticleCount())
+	{
+		phase_effect->Turbulence(0.4f);
+		phase_effect->Force(0.5f, false, true);        //Simulate an upward force
+		phase_effect->Newton({ 10.f, 400.0f }, 2.8f);
+		phase_effect->Update(dt);
+	}
+
 	// updates healing effects if there are active particles
 	if (healing_effect->GetParticleCount())
 	{
@@ -872,7 +933,7 @@ void King_Arthur::Dead(void)
 	SetActive(false);
 	// play some animation. Camera shake?
 
-	for (char i = 0; i < num_of_mobs; ++i)
+	for (char i = 0; i < active_mobs; ++i)
 		mobs[i]->SetActive(false);
 
 	for (auto& elem : arthur)
@@ -894,6 +955,21 @@ void King_Arthur::Set_Forward_Dir(const Dragon& d)
 		this->Transform_.SetScale(-1.0f, 1.0f); // reflect the texture to face player
 	}
 	this->Transform_.Concat();
+}
+
+void King_Arthur::Off_Particles(void)
+{
+	// remove every slash effect particle from screen
+	for (auto &elem : slash_effect)
+	{
+		elem->Off_Emitter();
+	}
+
+	// remove every healing effect particle from screen
+	healing_effect->Off_Emitter();
+
+	// remove every sword effect particle from screen
+	sword_effect->Off_Emitter();
 }
 
 // return the current phase
@@ -920,20 +996,8 @@ King_Arthur::~King_Arthur(void)
 	attack_sprite.~Sprite();  // free texture for slash
 	sword_sprite.~Sprite() ;  // free texture for sword
 	
-	// remove every slash effect particle from screen
-	for (auto &elem : slash_effect)
-	{
-		if(elem->GetParticleCount())
-			elem->Off_Emitter();
-	}
-
-	// remove every healing effect particle from screen
-	if (healing_effect->GetParticleCount())
-		healing_effect->Off_Emitter();
-
-	// remove every sword effect particle from screen
-	if (sword_effect->GetParticleCount())
-		sword_effect->Off_Emitter();
+	Off_Particles(); // remove particles from screen
+	phase_effect->Off_Emitter(); // render all the phase particle effects from the screen
 
 	// delete the slash that were new 
 	delete slash_effect[1];

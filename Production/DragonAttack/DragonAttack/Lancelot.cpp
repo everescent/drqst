@@ -2,6 +2,7 @@
 #include "Boss_States.h"
 #include "Collision.h"
 #include "Audio_Engine.h"
+#include "Camera.h"
 #include <iostream>
 #include <cmath>
 #include <vector>
@@ -65,8 +66,8 @@ Lancelot::Lancelot(Sprite* texture)
 	: Characters(texture,
 		HEALTH,  Col_Comp{STARTING_POINT.x - LANCELOT_SCALE, STARTING_POINT.y - LANCELOT_SCALE,
 						  STARTING_POINT.x + LANCELOT_SCALE, STARTING_POINT.y + LANCELOT_SCALE, Rect}),
-    M_E{ false }, arondight_particle{ Effects_Get(ARONDIGHT_PARTICLE) }, me_particle{Effects_Get(ME_PARTICLE)},
-    phase {PHASE_1},
+    M_E{ false },     arondight_particle{ Effects_Get(ARONDIGHT_PARTICLE) }, me_particle{Effects_Get(ME_PARTICLE)},
+	phase{ PHASE_1 }, phase_particle{ Effects_Get(PHASE_PARTICLE) },         timer{2.f},
 	anim{ AFTER_ANIM + 1, 5, 5, [](std::vector <Range>& Init) -> void {
 	Init.push_back(Range{ 0.0f, 1.0f, 0.0f, 0.0f }); //Hit
 	Init.push_back(Range{ 0.0f, 1.0f, 0.2f, 0.2f }); //Idle
@@ -132,6 +133,29 @@ void Lancelot::Init_Particles(void)
     arondight_particle->Emitter_.Particle_Rand_.Sp_Rand_ = 3;
     arondight_particle->Emitter_.Lifetime_ = 1.f;
 
+	// initializing the particle variables for phase transition
+	phase_particle->Emitter_.PPS_ = 20;
+	phase_particle->Emitter_.Dist_Min_ = 10.f;
+	phase_particle->Emitter_.Vol_Max = 512;
+	phase_particle->Emitter_.Direction_ = 90.0f;
+	phase_particle->Emitter_.Particle_Rand_.Spread_ = 180;
+	phase_particle->Emitter_.Conserve_ = 0.8f;
+	phase_particle->Emitter_.Size_ = 15.0f;
+	phase_particle->Emitter_.Speed_ = 4.0f;
+	phase_particle->Emitter_.Particle_Rand_.Sp_Rand_ = 3;
+	phase_particle->Emitter_.Lifetime_ = 0.2f;
+
+	// update the phsae box location
+	phase_particle->Emitter_.Pos_.Point_Min_Max[0].y = Collision_.Get_MinPoint().y - 60;
+	phase_particle->Emitter_.Pos_.Point_Min_Max[1].y = Collision_.Get_MaxPoint().y + 20;
+	phase_particle->Emitter_.Pos_.Point_Min_Max[0].x = -40.f;
+	phase_particle->Emitter_.Pos_.Point_Min_Max[1].x = 40.f;
+
+	// update the particle color
+	phase_particle->Emitter_.Color_.R = 130.f / 255.f;
+	phase_particle->Emitter_.Color_.G = 224.f / 225.f;
+	phase_particle->Emitter_.Color_.B = 170.f / 255.f;
+
 }
 
 void Lancelot::Idle(const Dragon& d, const float dt)
@@ -179,9 +203,11 @@ void Lancelot::Moving(const Dragon &d, const float dt)
 void Lancelot::Update(Dragon &d, float dt)
 {
 
-	if (this->Get_HP() < PHASE2_HP && phase & PHASE_1)
+	if (this->Get_HP() < PHASE2_HP && phase & PHASE_1 && ! lancelot[currAttk].ongoing_attack)
 	{
 		Lancelot_Phase2(dt); // change to phase 2
+		Update_Particles(dt);
+		return;
 	}
 	else if (this->Get_HP() <= 0)
 	{
@@ -289,6 +315,13 @@ void Lancelot::Update_Particles(const float dt)
 		arondight_particle->Update(dt);
 	}
 
+	if (phase_particle->GetParticleCount())
+	{
+		phase_particle->Turbulence(0.4f);
+		phase_particle->Force(0.5f, false, true);        //Simulate an upward force
+		phase_particle->Newton({ 10.f, 400.0f }, 2.8f);
+		phase_particle->Update(dt);
+	}
 }
 
 void Lancelot::Render(void)
@@ -296,6 +329,7 @@ void Lancelot::Render(void)
 	GameObject::Render();
 	lancelot[currAttk].Render();
 
+	phase_particle->Render();
     me_particle->Render();
 	arondight_particle->Render();
 }
@@ -414,10 +448,28 @@ void Lancelot::Attack(Dragon &d, const float dt)
 
 void Lancelot::Lancelot_Phase2(const float dt)
 {
-	phase = PHASE_2;
-
 	if(M_E) // turns off mad enhancement if its activated
 		Mad_Enhancement(dt); 
+
+	// move lancelot to the middle of the screen
+	PosX = 0.0f;
+	Transform_.SetTranslate(PosX, PosY);
+	Transform_.Concat();
+	Collision_.Update_Col_Pos(PosX - LANCELOT_SCALE, PosY - LANCELOT_SCALE,   // min point
+							  PosX + LANCELOT_SCALE, PosY + LANCELOT_SCALE);  // max point
+	Set_Vulnerable(false);                                                    // make lancelot immune to attacks
+	phase_particle->UpdateEmission();
+
+	if (timer > 0.f)
+	{
+		CamShake();
+		timer -= dt;
+		return;
+	}
+
+	phase = PHASE_2;
+	current_action = ATTACK;
+	Set_Vulnerable(true);       // set lancelot to vulnerable to attack
 }
 
 void Lancelot::Stab(Dragon& d, const float dt)
@@ -707,11 +759,10 @@ Lancelot::~Lancelot()
 	lancelot.clear();
 
 	// remove particles from screens
-	if(arondight_particle->GetParticleCount())
-		arondight_particle->Off_Emitter();
+	arondight_particle->Off_Emitter();
+	me_particle->Off_Emitter();
+	phase_particle->Off_Emitter();
 
-	if(me_particle->GetParticleCount())
-		me_particle->Off_Emitter();
 
 	attack_sprite.~Sprite(); // destroy the mesh and texture allcoated 
 }

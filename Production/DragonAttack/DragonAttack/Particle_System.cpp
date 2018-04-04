@@ -336,6 +336,9 @@ void Particle_System::Newton(const AEVec2 Point, const float strength, const flo
 
 void Particle_System::Off_Emitter(void)
 {
-	for (Particle &elem : Emitter_.Particles_)
-		elem.Active_ = false;
+	if (GetParticleCount())
+	{
+		for (Particle &elem : Emitter_.Particles_)
+			elem.Active_ = false;
+	}
 }

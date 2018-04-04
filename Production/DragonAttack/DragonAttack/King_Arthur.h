@@ -41,6 +41,7 @@ private:
     void Update_Particle(const float dt);
 
 	void Set_Forward_Dir(const Dragon&);
+	void Off_Particles(void);
 	
 	// boss behaviours /////////////////////////////////////////////////
 	void Idle(const Dragon &d, const float dt);
@@ -61,11 +62,13 @@ private:
 	Particle_System *         healing_effect;
     Particle_System *         sword_effect;
     Particle_System *         slash_effect[3];
+	Particle_System *         phase_effect;
 	KA_MoveSet                currAttk;
 	Animation		          anim;
 	Boss_Action_State         current_action; // different states of boss arthur
     std::vector <Characters*> mobs;           //an array to store the mobs to be spawn
-	float                     timer;          // for phase transition         
+	float                     timer;          // for phase transition
+	float                     mob_timer;      // render the mobs base on time
 
 public:
 	King_Arthur(Sprite*);

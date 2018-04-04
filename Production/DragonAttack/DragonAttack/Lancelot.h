@@ -48,7 +48,9 @@ private:
 	bool             M_E;                     // lancelot berserk state
 	Particle_System *arondight_particle;      // particle system for arondight
     Particle_System *me_particle;			  // particle system for mad enhancement
+	Particle_System *phase_particle;          // particle effect for phase transition
 	Animation        anim;	                  // lancelot animation
+	float            timer;                   // timer for phase transition
 
 public:
 	Lancelot(Sprite*);  // default constructor for lancelot

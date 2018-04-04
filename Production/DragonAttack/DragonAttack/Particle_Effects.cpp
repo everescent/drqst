@@ -27,6 +27,7 @@ namespace // global variables that are used in this file
     Particle_System* KA_Slash_Effects;
 	Particle_System* Credit_Effects;
 	Particle_System* Score_Effects;
+	Particle_System* Phase_Effects;
 
 	// pointers to mesh for the corresponding particle system
     AEGfxVertexList* MFireball_Mesh;
@@ -38,6 +39,7 @@ namespace // global variables that are used in this file
     AEGfxVertexList* KA_Slash_Mesh;
 	AEGfxVertexList* Credit_Mesh;
 	AEGfxVertexList* Score_Mesh;
+	AEGfxVertexList* Phase_Mesh;
 
 	// helper functions
     void Particle_Mesh_Init();
@@ -81,6 +83,8 @@ Particle_System* Effects_Get(EFFECTS type)
 		break;
 	case SCORE_PARTICLE:      return Score_Effects;
 		break;
+	case PHASE_PARTICLE:      return Phase_Effects;
+		break;
     default: return nullptr;
         break;
     }
@@ -106,6 +110,7 @@ void Effects_Cleanup(void)
     delete   KA_Slash_Effects;
 	delete   Credit_Effects;
 	delete   Score_Effects;
+	delete   Phase_Effects;
 	
 	//------------------------------------------------------------------
 	//
@@ -121,6 +126,7 @@ void Effects_Cleanup(void)
     AEGfxMeshFree(KA_Slash_Mesh);
 	AEGfxMeshFree(Credit_Mesh);
 	AEGfxMeshFree(Score_Mesh);
+	AEGfxMeshFree(Phase_Mesh);
 }
 
 namespace
@@ -312,6 +318,26 @@ namespace
 
 		Score_Mesh = AEGfxMeshEnd();
 		AE_ASSERT_MESG(Score_Mesh, "fail to create object!!")
+
+		//------------------------------------------------------------------
+		//
+		// mesh for phase transition
+		//
+		//------------------------------------------------------------------
+		AEGfxMeshStart();
+		AEGfxTriAdd(
+			-0.1f, -0.1f, 0xFFFFFFFF, 0.0f, 1.0f,
+			0.1f, -0.1f,  0xFFFFFFFF, 1.0f, 1.0f,
+			-0.1f, 0.1f,  0xFFFFFFFF, 0.0f, 0.0f);
+
+		AEGfxTriAdd(
+			0.1f, -0.1f, 0xFFFFFFFF, 1.0f, 1.0f,
+			0.1f, 0.1f,  0xFFFFFFFF, 1.0f, 0.0f,
+			-0.1f, 0.1f, 0xFFFFFFFF, 0.0f, 0.0f);
+
+
+		Phase_Mesh = AEGfxMeshEnd();
+		AE_ASSERT_MESG(Phase_Mesh, "fail to create object!!")
         
 }
 
@@ -354,6 +380,9 @@ namespace
 		Credit_Effects = new Particle_System(Credit_Mesh, {}, BOX);
         
 		Score_Effects = new Particle_System(Score_Mesh, {}, BOX);
+
+		Phase_Effects = new Particle_System(Phase_Mesh, {}, BOX);
+		Phase_Effects->Emitter_.Particles_.reserve(512);
     }
 }
 
