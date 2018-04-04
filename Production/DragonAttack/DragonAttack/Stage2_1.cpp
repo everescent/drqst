@@ -13,7 +13,7 @@ namespace
 
 	std::vector<Platform> platforms;
 	//std::vector<Floor> floors;
-	//std::vector<Wall> walls;
+	std::vector<Wall> walls;
 	std::vector<Barrier> barriers;
 	std::vector<Block> blocks;
 	LevelChangePlatform *next;
@@ -33,6 +33,8 @@ namespace
 	Sprite* FLOOR_SPRITE;
 	Sprite* TOWER_SPRITE;
 	Sprite* SIGN_SPRITE;
+
+	float Camdown = 120.0f;
 }
 
 namespace Stage2_1
@@ -88,12 +90,12 @@ namespace Stage2_1
 					float f_y = (float)y;
 					blocks.push_back(Block{ FLOOR_SPRITE,Convert_X(f_x) , Convert_Y(f_y) });
 				}
-				/*if (MapData[y][x] == OBJ_WALL)
+				if (MapData[y][x] == OBJ_WALL)
 				{
 					float f_x = (float)x;
 					float f_y = (float)y;
 					walls.push_back(Wall{ WALL_SPRITE,Convert_X(f_x) , Convert_Y(f_y) });
-				}*/
+				}
 				if (MapData[y][x] == OBJ_GRUNT)
 				{
 					float f_x = (float)x;
@@ -165,7 +167,7 @@ namespace Stage2_1
 	void Update(float dt)
 	{
 		Audio->Update();
-		
+	
 		for (size_t i = 0; i < c.size(); ++i)
 		{
 			if (c[i]->IsActive())
@@ -185,7 +187,7 @@ namespace Stage2_1
 				elem.Update(*(c[i]), dt);
 			}
 			elem.Update(*player, dt);
-		}
+		}*/
 		for (Wall& elem : walls)
 		{
 			for (size_t i = 0; i < c.size(); ++i)
@@ -193,7 +195,7 @@ namespace Stage2_1
 				elem.Update(*(c[i]), dt);
 			}
 			elem.Update(*player, dt);
-		}*/
+		}
 		for (Block& elem : blocks)
 		{
 			for (size_t i = 0; i < c.size(); ++i)
@@ -213,10 +215,22 @@ namespace Stage2_1
 
 		next->Update(*player, dt);
 		player->Update(*player, dt);
-		CamFollow(player->Transform_, 200, 120, player->GetFacing());
+
+		/* Camera down testing */
+		if (AEInputCheckCurr(AEVK_S))
+		{
+			if (Camdown > - 250) // setting lowest point
+				Camdown -= 4.0f;
+		}
+		if (!AEInputCheckCurr(AEVK_S) && Camdown < 120)
+		{
+			Camdown += 4.0f;
+		}
+		CamFollow(player->Transform_, 200, Camdown, player->GetFacing());
+
 		ui->UI_Update(player);
 
-		std::cout << (int)player->PosX << ", " << (int)player->PosY << std::endl;
+		//std::cout << (int)player->PosX << ", " << (int)player->PosY << std::endl;
 	}
 
 	void Draw(void)
@@ -230,11 +244,11 @@ namespace Stage2_1
 		/*for (Floor& elem : floors)
 		{
 			elem.Render();
-		}
+		}*/
 		for (Wall& elem : walls)
 		{
 			elem.Render();
-		}*/
+		}
 		for (Barrier& elem : barriers)
 		{
 			elem.Render();
@@ -286,7 +300,7 @@ namespace Stage2_1
 
 		platforms.clear();
 		//floors.clear();
-		//walls.clear();
+		walls.clear();
 		blocks.clear();
 		barriers.clear();
 		PU.clear();
