@@ -7,6 +7,8 @@ namespace
 	Transform *M_BG;
 	Audio_Engine* Audio;
 	UI* ui;
+	AEVec2 startpos = { -345, -2500 };
+
 	int** MapData;
 	int Map_Width;
 	int Map_Height;
@@ -17,14 +19,14 @@ namespace
 	std::vector<Barrier> barriers;
 	std::vector<Block> blocks;
 	LevelChangePlatform *next;
-	PickUp *coin1, *coin2, *coin3, *hp, *invul;
 	std::vector<Characters*> c;
 
-	//Wall *w6, *w7, *w8, *w12, *w13, *w16, *w17, *w18, *w1, *w2, *w3, *w4, *w5, *w9, *w21, *w22, *w23, *w24, *w25, *w29;
 	Sprite* COIN_SPRITE;//pickups					 							   
 	Sprite* HP_SPRITE;
 	Sprite* DMG_SPRITE;
 	Sprite* SPD_SPRITE;
+	Sprite* INVUL_SPRITE;
+
 	Sprite* BARRIER_SPRITE;//objs												   
 	Sprite* WALL_SPRITE;
 	Sprite* PLAT_SPRITE;
@@ -33,93 +35,46 @@ namespace
 	Sprite* TOWER_SPRITE;
 	Sprite* SIGN_SPRITE;
 
-	float Camdown = 0;
+	float Camdown = 120.0f;
 }
 
 namespace Stage3_2
 {
 	void Load(void)
 	{
-		COIN_SPRITE = new Sprite{ S_CreateSquare(50.0f, ".//Textures/coin.png", 1.0f) };
-		HP_SPRITE = new Sprite{ S_CreateSquare(50.0f,   ".//Textures/hp.png", 1.0f) };
-		DMG_SPRITE = new Sprite{ S_CreateSquare(50.0f,  ".//Textures/Fireball.png", 1.0f) };
-		SPD_SPRITE = new Sprite{ S_CreateSquare(50.0f,  ".//Textures/spd.png", 1.0f) };
-		BARRIER_SPRITE = new Sprite{ S_CreateSquare(130.0f, ".//Textures/box.png") };
-		WALL_SPRITE = new Sprite{ CreateFloor(1.0f, ".//Textures/Cobblestone.png", 1.0f, 1.0f) };
-		PLAT_SPRITE = new Sprite{ CreatePlatform(1.0f, 1.0f, ".//Textures/Cobblestone.png") };
-		LCPLAT_SPRITE = new Sprite{ CreatePlatform(2.0f, 3.0f, ".//Textures/Win_Platform.png") };
-		FLOOR_SPRITE = new Sprite{ CreateFloor(1.0f, ".//Textures/Cobblestone.png", 1.0f, 1.0f) };
-		TOWER_SPRITE = new Sprite{ S_CreateRectangle(300.0f, 300.0f, ".//Textures/tower.png") };
-		SIGN_SPRITE = new Sprite{ S_CreateSquare(70.0f, ".//Textures/sign.png") };
+		// Reads in map data for this level
+		if (!Import_MapData(".//Levels/level3-2.txt", MapData, Map_Width, Map_Height)) { AEGfxExit(); }
 
+		// Textures for pick ups
+		COIN_SPRITE    = new Sprite{ S_CreateSquare(50.0f, ".//Textures/coin.png", 1.0f) };
+		HP_SPRITE      = new Sprite{ S_CreateSquare(50.0f,   ".//Textures/hp.png", 1.0f) };
+		DMG_SPRITE     = new Sprite{ S_CreateSquare(50.0f,  ".//Textures/Fireball.png", 1.0f) };
+		SPD_SPRITE     = new Sprite{ S_CreateSquare(50.0f,  ".//Textures/spd.png", 1.0f) };
+		INVUL_SPRITE = new Sprite{ S_CreateSquare(50.0f, ".//Textures/invul.png", 1.0f) };
+
+		// Textures for static objects
+		BARRIER_SPRITE = new Sprite{ S_CreateSquare(130.0f, ".//Textures/box.png") };
+		WALL_SPRITE    = new Sprite{ CreateFloor(1.0f, ".//Textures/Cobblestone.png", 1.0f, 1.0f) };
+		PLAT_SPRITE    = new Sprite{ CreatePlatform(1.0f, 1.0f, ".//Textures/Cobblestone.png") };
+		LCPLAT_SPRITE  = new Sprite{ CreatePlatform(2.0f, 3.0f, ".//Textures/Win_Platform.png") };
+		FLOOR_SPRITE   = new Sprite{ CreateFloor(1.0f, ".//Textures/Cobblestone.png", 1.0f, 1.0f) };
+		TOWER_SPRITE   = new Sprite{ S_CreateRectangle(300.0f, 300.0f, ".//Textures/tower.png") };
+		SIGN_SPRITE    = new Sprite{ S_CreateSquare(70.0f, ".//Textures/sign.png") };
+
+		// Texture and transformation matrix for BG
 		BG = new Sprite{ CreateBG(22.0f, 2.0f, ".//Textures/BG_Stage1.png", 1.0f, 15.0f) };
 		M_BG = new Transform{};
 
-		AEVec2 startpos = { -345, -2500 };
+		// Player creation
 		player = dynamic_cast<Dragon*>(Create_Basic_AI(DRAGON, startpos));
 
+		// Audio and UI
 		Audio = new Audio_Engine{ 1, [](std::vector <std::string> &playlist)->void {playlist.push_back(".//Audio/Stage_3_BGM.mp3"); } };
 		ui = new UI(player);
-		if (!Import_MapData(".//Levels/level3-2.txt", MapData, Map_Width, Map_Height)) { AEGfxExit(); }
 
+		// Placement for level change platform
 		next = new LevelChangePlatform{ LCPLAT_SPRITE, 5000.0f,  100.0f };
-		/*
-		w6 = new Wall{ WALL_SPRITE, 2240.0f, -690.0f };
-		w7 = new Wall{ WALL_SPRITE, 2240.0f, -630.0f };
-		w8 = new Wall{ WALL_SPRITE, 2240.0f, -570.0f };
-
-		w12 = new Wall{ WALL_SPRITE, 2650.0f, -560.0f };
-		w13 = new Wall{ WALL_SPRITE, 2650.0f, -630.0f };
-
-		w16 = new Wall{ WALL_SPRITE, 4955.0f, -330.0f };
-		w17 = new Wall{ WALL_SPRITE, 4955.0f, -400.0f };
-		w18 = new Wall{ WALL_SPRITE, 4955.0f, -440.0f };
-
-		w1 = new Wall{ WALL_SPRITE, 6460.0f, -170.0f };
-		w2 = new Wall{ WALL_SPRITE, 6460.0f, -230.0f };
-		w3 = new Wall{ WALL_SPRITE, 6460.0f, -280.0f };
-		w4 = new Wall{ WALL_SPRITE, 6460.0f, -330.0f };
-		w5 = new Wall{ WALL_SPRITE, 6460.0f, -400.0f };
-		w9 = new Wall{ WALL_SPRITE, 6460.0f, -440.0f };
-
-		w21 = new Wall{ WALL_SPRITE, 6460.0f,  130.0f };
-		w22 = new Wall{ WALL_SPRITE, 6460.0f,   80.0f };
-		w23 = new Wall{ WALL_SPRITE, 6460.0f,   30.0f };
-		w24 = new Wall{ WALL_SPRITE, 6460.0f,  -20.0f };
-		w25 = new Wall{ WALL_SPRITE, 6460.0f,  -70.0f };
-		w29 = new Wall{ WALL_SPRITE, 6460.0f, -120.0f };
-
-
-		coin1 = new PickUp{ COIN_SPRITE,
-		Col_Comp{ 0.0f - 25.0f, 0.0f - 25.0f, 0.0f + 25.0f, 0.0f + 25.0f, Rect },
-		COIN, 2080.0f , -680.0f };
-
-		coin2 = new PickUp{ COIN_SPRITE,
-		Col_Comp{ 0.0f - 25.0f, 0.0f - 25.0f, 0.0f + 25.0f, 0.0f + 25.0f, Rect },
-		COIN, 2800.0f , -600.0f };
-
-		coin3 = new PickUp{ COIN_SPRITE,
-		Col_Comp{ 0.0f - 25.0f, 0.0f - 25.0f, 0.0f + 25.0f, 0.0f + 25.0f, Rect },
-		COIN, 5750.0f , 200.0f };
-
-		hp = new PickUp{ HP_SPRITE,
-		Col_Comp{ 0.0f - 25.0f, 0.0f - 25.0f, 0.0f + 25.0f, 0.0f + 25.0f, Rect },
-		HP, 4300.0f , 60.0f };
-
-		c.push_back(Create_Basic_AI(GRUNT, AEVec2{ 727.0f ,  105.0f }));
-		c.push_back(Create_Basic_AI(GRUNT, AEVec2{ 1895.0f , -165.0f }));
-		c.push_back(Create_Basic_AI(ARCHER, AEVec2{ 2335.0f ,  195.0f }));
-		c.push_back(Create_Basic_AI(GRUNT, AEVec2{ 3200.0f , -600.0f }));
-		c.push_back(Create_Basic_AI(ARCHER, AEVec2{ 3500.0f , -600.0f }));
-		c.push_back(Create_Basic_AI(GRUNT, AEVec2{ 3800.0f , -600.0f }));
-		c.push_back(Create_Basic_AI(GRUNT, AEVec2{ 5200.0f ,  210.0f }));
-		//c.push_back(Create_Basic_AI(GRUNT , AEVec2{ 5800.0f ,  195.0f }));
-		c.push_back(Create_Basic_AI(GRUNT, AEVec2{ 6450.0f ,  195.0f }));
-		//c.push_back(Create_Basic_AI(ARCHER, AEVec2{ 6600.0f ,  300.0f }));
-		c.push_back(Create_Basic_AI(KNIGHT, AEVec2{ 7200.0f ,  300.0f }));
-		*/
 	}
-
 
 	void Init(void)
 	{
@@ -175,8 +130,6 @@ namespace Stage3_2
 		}
 	}
 
-
-
 	void Update(float dt)
 	{
 		Audio->Update();
@@ -222,28 +175,24 @@ namespace Stage3_2
 			elem.Update(*player, dt);
 		}
 
-		/*coin1->Update(*player, dt);
-		coin2->Update(*player, dt);
-		coin3->Update(*player, dt);*/
 		next->Update(*player, dt);
 		player->Update(*player, dt);
-		CamFollow(player->Transform_, 200, 120, player->GetFacing());
+
+		/* Camera down testing */
 		if (AEInputCheckCurr(AEVK_S))
 		{
-			if (Camdown > -250)
-				Camdown -= 4;
-
-			CamFollow(player->Transform_, 200, Camdown, player->GetFacing());
+			if (Camdown > -250) // setting lowest point
+				Camdown -= 4.0f;
 		}
-		else
+		if (!AEInputCheckCurr(AEVK_S) && Camdown < 120)
 		{
-			if (Camdown < 0)
-				Camdown += 4;
+			Camdown += 4.0f;
 		}
+		CamFollow(player->Transform_, 200, Camdown, player->GetFacing());
+		
 		ui->UI_Update(player);
 
-
-		std::cout << (int)player->PosX << ", " << (int)player->PosY << std::endl;
+		//std::cout << (int)player->PosX << ", " << (int)player->PosY << std::endl;
 	}
 
 	void Draw(void)
@@ -274,44 +223,15 @@ namespace Stage3_2
 		{
 			c[i]->Render();
 		}
-		/*coin1->Render();
-		coin2->Render();
-		coin3->Render();
-		hp->Render();*/
 		next->Render();
-
 
 		player->Render();
 		player->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 		ui->Render();
-
 	}
 
 	void Free(void)
 	{
-		delete BG;
-		delete M_BG;
-		delete player;
-		delete Audio;
-
-		/*delete w1, w2, w3, w4, w5, w6, w7, w8, w9, w12, w13, w16, w17, w18, w21, w22, w23, w24, w25, w29;
-
-		delete coin1, coin2, coin3, hp;*/
-		delete next;
-		delete ui;
-
-		delete COIN_SPRITE;//pickups
-		delete HP_SPRITE;
-		delete DMG_SPRITE;
-		delete SPD_SPRITE;
-		delete BARRIER_SPRITE;//objs
-		delete WALL_SPRITE;
-		delete PLAT_SPRITE;
-		delete LCPLAT_SPRITE;
-		delete FLOOR_SPRITE;
-		delete TOWER_SPRITE;
-		delete SIGN_SPRITE;
-
 		platforms.clear();
 		//floors.clear();
 		//walls.clear();
@@ -323,16 +243,36 @@ namespace Stage3_2
 			delete c[i];
 		}
 		c.clear();
+	}
 
+	void Unload(void)
+	{
+		// Delete map data
 		for (int y = 0; y < Map_Height; ++y)
 		{
 			delete[] MapData[y];
 		}
 		delete[] MapData;
-	}
 
-	void Unload(void)
-	{
+		// Delete Sprites
+		delete COIN_SPRITE;//pickups
+		delete HP_SPRITE;
+		delete DMG_SPRITE;
+		delete SPD_SPRITE;
+		delete INVUL_SPRITE;
+		delete BARRIER_SPRITE;//objs
+		delete WALL_SPRITE;
+		delete PLAT_SPRITE;
+		delete LCPLAT_SPRITE;
+		delete FLOOR_SPRITE;
+		delete TOWER_SPRITE;
+		delete SIGN_SPRITE;
 
+		delete BG;
+		delete M_BG;
+		delete player;
+		delete Audio;
+		delete next;
+		delete ui;
 	}
 }

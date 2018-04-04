@@ -7,6 +7,8 @@ namespace
 	Transform *M_BG;
 	Audio_Engine* Audio;
 	UI* ui;
+	AEVec2 startpos = { -310, -615 };
+
 	int** MapData;
 	int Map_Width;
 	int Map_Height;
@@ -15,8 +17,8 @@ namespace
 	//std::vector<Floor> floors;
 	//std::vector<Wall> walls;
 	std::vector<Block> blocks;
-	std::vector<PickUp> PU;
 	std::vector<Barrier> barriers;
+	std::vector<PickUp> PU;
 
 	LevelChangePlatform *next;
 	std::vector<Characters*> c;
@@ -38,12 +40,18 @@ namespace
 namespace Stage1_2
 {
 	void Load(void)
-	{		
+	{
+		// Reads in map data for this level
+		if (!Import_MapData(".//Levels/level1-2.txt", MapData, Map_Width, Map_Height)) { AEGfxExit(); }
+
+		// Textures for pick ups
 		COIN_SPRITE    = new Sprite{ S_CreateSquare   (35.0f, ".//Textures/coin.png", 1.0f) };
 		HP_SPRITE      = new Sprite{ S_CreateSquare   (50.0f, ".//Textures/hp.png", 1.0f) };
 		DMG_SPRITE     = new Sprite{ S_CreateSquare   (50.0f, ".//Textures/Fireball.png", 1.0f) };
 		SPD_SPRITE     = new Sprite{ S_CreateSquare   (50.0f, ".//Textures/spd.png", 1.0f) };
 		INVUL_SPRITE   = new Sprite{ S_CreateSquare   (50.0f, ".//Textures/invul.png", 1.0f) };
+
+		// Textures for static objects
 		BARRIER_SPRITE = new Sprite{ S_CreateSquare   (130.0f, ".//Textures/box.png") };
 		WALL_SPRITE    = new Sprite{ CreateFloor      (1.0f, ".//Textures/Cobblestone.png", 1.0f, 1.0f) };
 		PLAT_SPRITE    = new Sprite{ CreatePlatform   (1.0f, 1.0f, ".//Textures/Cobblestone.png") };
@@ -52,23 +60,25 @@ namespace Stage1_2
 		TOWER_SPRITE   = new Sprite{ S_CreateRectangle(300.0f, 300.0f, ".//Textures/tower.png") };
 		SIGN_SPRITE    = new Sprite{ S_CreateSquare   (70.0f, ".//Textures/sign.png") };
 
-		BG = new Sprite{ CreateBG(22.0f, 2.0f, ".//Textures/BG_Stage1.png", 1.0f, 15.0f) };
+		// Texture and transform matrix for BG
+		BG   = new Sprite{ CreateBG(22.0f, 2.0f, ".//Textures/BG_Stage1.png", 1.0f, 15.0f) };
 		M_BG = new Transform{};
 
-		AEVec2 startpos = { -310, -615 };
+		// Player creation
 		player = dynamic_cast<Dragon*>(Create_Basic_AI(DRAGON, startpos));
 
+		// Audio and UI
 		Audio = new Audio_Engine{ 1, [](std::vector <std::string> &playlist)->void {playlist.push_back(".//Audio/Stage_1_BGM.mp3"); } };
-		ui = new UI(player);
-		if (!Import_MapData(".//Levels/level1-2.txt", MapData, Map_Width, Map_Height)) { AEGfxExit(); }
+		ui    = new UI{ player };
 
+		// Placement for level change platform
 		next = new LevelChangePlatform {LCPLAT_SPRITE, 7300.0f,  240.0f };
 	}
 
 	void Init(void)
 	{
-		Audio->Play(0);
-		Audio->SetLoop(0, 1);
+		Audio->Play(0); // Plays selected track
+		Audio->SetLoop(0, 1); // Loops the selected track
 
 		for (int y = 0; y < Map_Height; ++y)
 		{
@@ -273,19 +283,6 @@ namespace Stage1_2
 
 	void Free(void)
 	{
-		delete player;
-		delete BG;
-		delete M_BG;
-		delete Audio;
-
-		delete ui;
-
-		for (int y = 0; y < Map_Height; ++y)
-		{
-			delete[] MapData[y];
-		}
-		delete[] MapData;
-
 		platforms.clear();
 		//floors.clear();
 		//walls.clear();
@@ -293,15 +290,23 @@ namespace Stage1_2
 		PU.clear();
 		barriers.clear();
 
-		delete next;
-
 		for (size_t i = 0; i < c.size(); ++i)
 		{
 			delete c[i];
 		}
 		c.clear();
-		
-		// 11 sprites
+	}
+
+	void Unload(void)
+	{
+		// Delete map data
+		for (int y = 0; y < Map_Height; ++y)
+		{
+			delete[] MapData[y];
+		}
+		delete[] MapData;
+
+		// Delete Sprites
 		delete COIN_SPRITE;//pickups
 		delete HP_SPRITE;
 		delete DMG_SPRITE;
@@ -314,10 +319,12 @@ namespace Stage1_2
 		delete FLOOR_SPRITE;
 		delete TOWER_SPRITE;
 		delete SIGN_SPRITE;
-	}
 
-	void Unload(void)
-	{
-
+		delete player;
+		delete BG;
+		delete M_BG;
+		delete Audio;
+		delete ui;
+		delete next;
 	}
 }

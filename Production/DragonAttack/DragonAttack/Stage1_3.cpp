@@ -7,6 +7,7 @@ namespace
 	Transform *M_BG;
 	Audio_Engine* Audio;
 	UI* ui;
+	AEVec2 startpos = { -450, -250 };
 
 	int** MapData;
 	int Map_Width;
@@ -32,26 +33,27 @@ namespace Stage1_3
 {
 	void Load(void)
 	{
-		/*COIN_SPRITE = new Sprite{ S_CreateSquare(50.0f, "Textures/coin.png", 1.0f) };
-		HP_SPRITE = new Sprite{ S_CreateSquare(50.0f, "Textures/hp.png", 1.0f) };
-		DMG_SPRITE = new Sprite{ S_CreateSquare(50.0f, "Textures/Fireball.png", 1.0f) };
-		SPD_SPRITE = new Sprite{ S_CreateSquare(50.0f, "Textures/spd.png", 1.0f) };*/
-		WALL_SPRITE = new Sprite{ CreateFloor(1.0f, ".//Textures/Cobblestone.png", 1.0f, 1.0f) };
-		LCPLAT_SPRITE = new Sprite{ CreatePlatform(2.0f, 3.0f, ".//Textures/Win_Platform.png") };
-		FLOOR_SPRITE = new Sprite{ CreateFloor(1.0f, ".//Textures/Cobblestone.png", 1.0f, 1.0f) };
+		// Reads in map data for this level
+		if (!Import_MapData(".//Levels/level1-3.txt", MapData, Map_Width, Map_Height)) { AEGfxExit(); }
 
+		// Textures for static objects
+		WALL_SPRITE   = new Sprite{ CreateFloor(1.0f, ".//Textures/Cobblestone.png", 1.0f, 1.0f) };
+		LCPLAT_SPRITE = new Sprite{ CreatePlatform(2.0f, 3.0f, ".//Textures/Win_Platform.png") };
+		FLOOR_SPRITE  = new Sprite{ CreateFloor(1.0f, ".//Textures/Cobblestone.png", 1.0f, 1.0f) };
+
+		// Texture and transform matrix for BG
 		BG = new Sprite{ CreateBG(22.0f, 2.0f, ".//Textures/BG_Stage1.png", 1.0f, 15.0f) };
 		M_BG = new Transform{};
 
-		AEVec2 startpos = { -450, -250 };
+		// Player creation
 		player = dynamic_cast<Dragon*>(Create_Basic_AI(DRAGON, startpos));
 
+		// Audio and UI
 		Audio = new Audio_Engine{ 1, [](std::vector <std::string> &playlist)->void {playlist.push_back(".//Audio/Lancelot_BGM.mp3"); } };
 		ui = new UI{ player };
-		if (!Import_MapData(".//Levels/level1-3.txt", MapData, Map_Width, Map_Height)) { AEGfxExit(); }
 
+		// Placement for level change platform
 		next = new LevelChangePlatform{LCPLAT_SPRITE, 500.0f,  -300.0f };
-		c.push_back(Create_Boss_AI(LANCELOT));
 	}
 
 	void Init(void)
@@ -77,6 +79,7 @@ namespace Stage1_3
 				}*/
 			}
 		}
+		c.push_back(Create_Boss_AI(LANCELOT));
 		c[0]->SetActive(true);
 		player->SetActive(true);
 	}
@@ -146,41 +149,40 @@ namespace Stage1_3
 
 	void Free(void)
 	{
-		delete player;
-		delete BG;
-		delete M_BG;
-		delete Audio;
-		delete ui;
-
-		for (int y = 0; y < Map_Height; ++y)
-		{
-			delete[] MapData[y];
-		}
-		delete[] MapData;
-		
 		//floors.clear();
 		//walls.clear();
 		blocks.clear();
-		delete next;
 		
 		for (size_t i = 0; i < c.size(); ++i)
 		{
 			delete c[i];
 		}
 		c.clear();
-		
+	}
+
+	void Unload(void)
+	{
+		// Delete map data
+		for (int y = 0; y < Map_Height; ++y)
+		{
+			delete[] MapData[y];
+		}
+		delete[] MapData;
+
+		// Delete Sprites
+		delete WALL_SPRITE;
+		delete LCPLAT_SPRITE;
+		delete FLOOR_SPRITE;
 		//delete COIN_SPRITE;//pickups
 		//delete HP_SPRITE;
 		//delete DMG_SPRITE;
 		//delete SPD_SPRITE;
 		
-		delete WALL_SPRITE;
-		delete LCPLAT_SPRITE;
-		delete FLOOR_SPRITE;
-	}
-
-	void Unload(void)
-	{
-
+		delete player;
+		delete BG;
+		delete M_BG;
+		delete Audio;
+		delete ui;
+		delete next;
 	}
 }

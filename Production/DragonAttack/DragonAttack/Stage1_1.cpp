@@ -7,6 +7,7 @@ namespace
 	Transform *M_BG;
 	Audio_Engine* Audio;
 	UI* ui;
+	AEVec2 startpos = { -320, -255 };
 
 	int** MapData;
 	int Map_Width;
@@ -55,18 +56,25 @@ namespace Stage1_1
 {
 	void Load(void)
 	{
-		/* Sprite Creation Start */
+		// Reads in map data for this level
+		if (!Import_MapData(".//Levels/level1-1.txt", MapData, Map_Width, Map_Height)) { AEGfxExit(); }
+
+		// Textures for tutorial messages
 		TUT1_SPRITE    = new Sprite { S_CreateRectangle(150.0f, 50.0f, ".//Textures/Shoot_Tutorial_MSG.png") };
 		TUT2_SPRITE    = new Sprite { S_CreateRectangle(230.0f, 80.0f, ".//Textures/Boxes_Tutorial_MSG.png") };
 		TUT3_SPRITE    = new Sprite { S_CreateRectangle(250.0f, 100.0f,".//Textures/Enemy_Tutorial_MSG.png") };
 		TUT4_SPRITE    = new Sprite { S_CreateRectangle(300.0f, 100.0f,".//Textures/Platforming_Tutorial_MSG.png") };
 		TUT5_SPRITE    = new Sprite { S_CreateRectangle(300.0f, 100.0f,".//Textures/MegaFireball_Tutorial_MSG.png") };
 		TUT6_SPRITE    = new Sprite { S_CreateRectangle(200.0f, 80.0f, ".//Textures/PowerUp_Tutorial_MSG.png") };
+
+		// Textures for pick ups
 		COIN_SPRITE    = new Sprite { S_CreateSquare   (35.0f, ".//Textures/coin.png", 1.0f) };
 		HP_SPRITE      = new Sprite { S_CreateSquare   (50.0f, ".//Textures/hp.png", 1.0f) };
 		DMG_SPRITE     = new Sprite { S_CreateSquare   (50.0f, ".//Textures/Fireball.png", 1.0f) };
 		SPD_SPRITE     = new Sprite { S_CreateSquare   (50.0f, ".//Textures/spd.png", 1.0f) };
 		INVUL_SPRITE   = new Sprite { S_CreateSquare   (50.0f, ".//Textures/invul.png", 1.0f) };
+
+		// Textures for static objects
 		BARRIER_SPRITE = new Sprite { S_CreateSquare   (130.0f, ".//Textures/box.png") };
 		WALL_SPRITE    = new Sprite { CreateFloor      (1.0f, ".//Textures/Cobblestone.png", 1.0f, 1.0f) };
 		PLAT_SPRITE    = new Sprite { CreatePlatform   (1.0f, 1.0f, ".//Textures/Cobblestone.png") };
@@ -75,27 +83,25 @@ namespace Stage1_1
 		TOWER_SPRITE   = new Sprite { S_CreateRectangle(300.0f, 300.0f, ".//Textures/tower.png") };
 		SIGN_SPRITE    = new Sprite { S_CreateSquare   (70.0f, ".//Textures/sign.png") };
 
-		BG = new Sprite{ CreateBG(22.0f, 2.0f, ".//Textures/BG_Stage1.png", 1.0f, 15.0f) };
-		/* Sprite Creation End */
+		// Texture and transform matrix for BG
+		BG     = new Sprite{ CreateBG(22.0f, 2.0f, ".//Textures/BG_Stage1.png", 1.0f, 15.0f) };
+		M_BG   = new Transform{};
 
-		/* Static Object Placement Start */
-		M_BG = new Transform{};
-
-		AEVec2 startpos = { -320, -255 };
+		// Player creation
 		player = dynamic_cast<Dragon*>(Create_Basic_AI(DRAGON, startpos));
 
-		Audio = new Audio_Engine{ 1, [](std::vector <std::string> &playlist)->void {playlist.push_back(".//Audio/Stage_1_BGM.mp3"); } };
-		archerTower = new Tower{ TOWER_SPRITE, 4800.0f, 0.0f };
-		ui = new UI{ player };
+		// Audio and UI
+		Audio  = new Audio_Engine{ 1, [](std::vector <std::string> &playlist)->void {playlist.push_back(".//Audio/Stage_1_BGM.mp3"); } };
+		ui     = new UI{ player };
 
-		box1 = new Barrier{ BARRIER_SPRITE, 1500.0f, -235.0f };
-		coin1 = new PickUp{ COIN_SPRITE,
-			Col_Comp{ 0.0f - 25.0f, 0.0f - 25.0f, 0.0f + 25.0f, 0.0f + 25.0f, Rect },
-			COIN, 1500.0f, -210.0f };
+		// Placement for specific objects
+		archerTower = new Tower  { TOWER_SPRITE, 4800.0f, 0.0f };
+		box1        = new Barrier{ BARRIER_SPRITE, 1500.0f, -235.0f };
+		coin1       = new PickUp { COIN_SPRITE, Col_Comp{ 0.0f - 25.0f, 0.0f - 25.0f, 0.0f + 25.0f, 0.0f + 25.0f, Rect },
+								   COIN, 1500.0f, -210.0f };
+		next        = new LevelChangePlatform{ LCPLAT_SPRITE, 6550.0f, -50.0f };
 
-		next = new LevelChangePlatform{ LCPLAT_SPRITE, 6550.0f, -50.0f };
-
-		/* Tutorial Signs */
+		// Tutorial Messages/Signs
 		s1 = new Sign{ SIGN_SPRITE, 400.0f, -255.0f };
 		tut1 = new GameObject{ TUT1_SPRITE, Col_Comp() };
 		s2 = new Sign{ SIGN_SPRITE, 1270.0f, -255.0f };
@@ -108,9 +114,6 @@ namespace Stage1_1
 		tut5 = new GameObject{ TUT5_SPRITE, Col_Comp() };
 		s6 = new Sign{ SIGN_SPRITE, 5200.0f, -75.0f };
 		tut6 = new GameObject{ TUT6_SPRITE, Col_Comp() };
-		/* Static Object Placement End */
-
-		if (!Import_MapData(".//Levels/level1-1.txt", MapData, Map_Width, Map_Height)) { AEGfxExit(); }
 	}
 
 	void Init(void)
@@ -132,7 +135,7 @@ namespace Stage1_1
 		Audio->Play(0);
 		Audio->SetLoop(0, 1);
 
-		for (int y = 0; y < Map_Height; ++y)
+		for (int y = 0; y < Map_Height; ++y) // MOVE TO LOAD()???
 		{
 			for (int x = 0; x < Map_Width; ++x)
 			{
@@ -394,36 +397,34 @@ namespace Stage1_1
 		PickUp::coin_particles->Render();
 	}
 
-	void Free(void)
+	void Free(void) // free what u init, the rest place in unload
 	{
-		delete BG;
-		delete M_BG;
-		delete player;
-		delete Audio;
-		delete s1;
-		delete s2;
-		delete s3;
-		delete s4;
-		delete s5;
-		delete s6;
-		delete tut1;
-		delete tut2;
-		delete tut3;
-		delete tut4;
-		delete tut5;
-		delete tut6;
-		delete box1;
-		delete archerTower;
-		delete coin1;
-		//delete coin2;
-		//delete coin3;
-		//delete power2;
-		delete next;
-		delete ui;
+		platforms.clear();
+		/*floors.clear();
+		walls.clear();*/
+		blocks.clear();
+		barriers.clear();
+		PU.clear();
 
-		//delete w2, w22, w5, w6;
+		 /* Delete enemies */
+		for (size_t i = 0; i < c.size(); ++i)
+		{
+			delete c[i];
+		}
+		c.clear();
 
-		/* Delete Sprites (17) */
+	}
+
+	void Unload(void)
+	{
+		// Delete map data
+		for (int y = 0; y < Map_Height; ++y)
+		{
+			delete[] MapData[y];
+		}
+		delete[] MapData;
+
+		// Delete Sprites
 		delete TUT1_SPRITE;
 		delete TUT2_SPRITE;
 		delete TUT3_SPRITE;
@@ -443,30 +444,28 @@ namespace Stage1_1
 		delete TOWER_SPRITE;
 		delete SIGN_SPRITE;
 
-		platforms.clear();
-		/*floors.clear();
-		walls.clear();*/
-		blocks.clear();
-		barriers.clear();
-		PU.clear();
+		delete BG;
+		delete M_BG;
+		delete player;
+		delete Audio;
+		delete ui;
 
-		 /* Delete enemies */
-		for (size_t i = 0; i < c.size(); ++i)
-		{
-			delete c[i];
-		}
-		c.clear();
+		delete s1;
+		delete s2;
+		delete s3;
+		delete s4;
+		delete s5;
+		delete s6;
+		delete tut1;
+		delete tut2;
+		delete tut3;
+		delete tut4;
+		delete tut5;
+		delete tut6;
 
-		/* Delete map */
-		for (int y = 0; y < Map_Height; ++y)
-		{
-			delete[] MapData[y];
-		}
-		delete[] MapData;
-	}
-
-	void Unload(void)
-	{
-
+		delete box1;
+		delete archerTower;
+		delete coin1;
+		delete next;
 	}
 }

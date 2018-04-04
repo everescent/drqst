@@ -7,6 +7,7 @@ namespace
 	Transform *M_BG;
 	Audio_Engine* Audio;
 	UI* ui;
+	AEVec2 startpos = { -450, -250 };
 
 	int** MapData;
 	int Map_Width;
@@ -19,10 +20,10 @@ namespace
 	LevelChangePlatform *next;
 	std::vector<Characters*> c;
 
-	//Sprite* COIN_SPRITE;//pickups
-	//Sprite* HP_SPRITE;
-	//Sprite* DMG_SPRITE;
-	//Sprite* SPD_SPRITE;
+	Sprite* COIN_SPRITE;//pickups
+	Sprite* HP_SPRITE;
+	Sprite* DMG_SPRITE;
+	Sprite* SPD_SPRITE;
 	Sprite* WALL_SPRITE;
 	Sprite* LCPLAT_SPRITE;
 	Sprite* FLOOR_SPRITE;
@@ -33,29 +34,35 @@ namespace Stage2_3
 {
 	void Load(void)
 	{
-		/*COIN_SPRITE = new Sprite{ S_CreateSquare(50.0f, "Textures/coin.png", 1.0f) };
+		// Reads in map data for this level
+		if (!Import_MapData(".//Levels/level2-3.txt", MapData, Map_Width, Map_Height)) { AEGfxExit(); }
+
+		// Textures for pick ups
+		COIN_SPRITE = new Sprite{ S_CreateSquare(50.0f, "Textures/coin.png", 1.0f) };
 		HP_SPRITE = new Sprite{ S_CreateSquare(50.0f, "Textures/hp.png", 1.0f) };
 		DMG_SPRITE = new Sprite{ S_CreateSquare(50.0f, "Textures/Fireball.png", 1.0f) };
-		SPD_SPRITE = new Sprite{ S_CreateSquare(50.0f, "Textures/spd.png", 1.0f) };*/
+		SPD_SPRITE = new Sprite{ S_CreateSquare(50.0f, "Textures/spd.png", 1.0f) };
+
+		// Textures for static objects
 		WALL_SPRITE = new Sprite{ CreateFloor(1.0f, ".//Textures/Cobblestone.png", 1.0f, 1.0f) };
 		LCPLAT_SPRITE = new Sprite{ CreatePlatform(2.0f, 3.0f, ".//Textures/Win_Platform.png") };
 		FLOOR_SPRITE = new Sprite{ CreateFloor(1.0f, ".//Textures/Cobblestone.png", 1.0f, 1.0f) };
 		PLAT_SPRITE = new Sprite{ CreatePlatform(1.0f, 1.0f, ".//Textures/Cobblestone.png") };
 
+		// Texture and transformation matrix for BG
 		BG = new Sprite{ CreateBG(22.0f, 2.0f, ".//Textures/BG_Stage2.png", 1.0f, 15.0f) };
 		M_BG = new Transform{};
 
-		AEVec2 startpos = { -450, -250 };
+		// Player creation
 		player = dynamic_cast<Dragon*>(Create_Basic_AI(DRAGON, startpos));
 
+		// Audio and UI
 		Audio = new Audio_Engine{ 1, [](std::vector <std::string> &playlist)->void {playlist.push_back(".//Audio/Merlin_BGM.mp3"); } };
 		ui = new UI{ player };
-		if (!Import_MapData(".//Levels/level2-3.txt", MapData, Map_Width, Map_Height)) { AEGfxExit(); }
 
+		// Placement for level change platform
 		next = new LevelChangePlatform{ LCPLAT_SPRITE, 500.0f,  -300.0f };
-		c.push_back(Create_Boss_AI(MERLIN));
 	}
-
 
 	void Init(void)
 	{
@@ -87,11 +94,10 @@ namespace Stage2_3
 			}
 		}
 
+		c.push_back(Create_Boss_AI(MERLIN));
 		c[0]->SetActive(true);
 		player->SetActive(true);
 	}
-
-
 
 	void Update(float dt)
 	{
@@ -172,22 +178,6 @@ namespace Stage2_3
 
 	void Free(void)
 	{
-		delete BG;
-		delete M_BG;
-		delete player;
-		delete Audio;
-		delete next;
-		delete ui;
-
-		//delete COIN_SPRITE;//pickups
-		//delete HP_SPRITE;
-		//delete DMG_SPRITE;
-		//delete SPD_SPRITE;
-		delete WALL_SPRITE;
-		delete LCPLAT_SPRITE;
-		delete FLOOR_SPRITE;
-		delete PLAT_SPRITE;
-
 		//floors.clear();
 		//walls.clear();
 		blocks.clear();
@@ -197,16 +187,32 @@ namespace Stage2_3
 			delete c[i];
 		}
 		c.clear();
+	}
 
+	void Unload(void)
+	{
+		// Deletes map data
 		for (int y = 0; y < Map_Height; ++y)
 		{
 			delete[] MapData[y];
 		}
 		delete[] MapData;
-	}
 
-	void Unload(void)
-	{
+		// Delete Sprites
+		delete COIN_SPRITE;//pickups
+		delete HP_SPRITE;
+		delete DMG_SPRITE;
+		delete SPD_SPRITE;
+		delete WALL_SPRITE;
+		delete LCPLAT_SPRITE;
+		delete FLOOR_SPRITE;
+		delete PLAT_SPRITE;
 
+		delete BG;
+		delete M_BG;
+		delete player;
+		delete Audio;
+		delete next;
+		delete ui;
 	}
 }
