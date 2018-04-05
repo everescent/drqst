@@ -90,6 +90,7 @@ void Merlin::Idle(Dragon &player, const float dt)
 {
   UNREFERENCED_PARAMETER(dt);
   UNREFERENCED_PARAMETER(player);
+  Anim_.SetState(ANIM_IDLE);
 }
 
 void Merlin::Move(Dragon &player, const float dt)
