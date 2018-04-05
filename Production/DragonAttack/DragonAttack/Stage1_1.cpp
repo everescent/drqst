@@ -253,10 +253,6 @@ namespace Stage1_1
 				c[i]->Update(*player, dt);
 			}
 			archerTower->Update(*(c[i]), dt);
-			/*w2->Update (*(c[i]), dt);
-			w22->Update(*(c[i]), dt);
-			w5->Update (*(c[i]), dt);
-			w6->Update(*(c[i]), dt);*/
 		}
 
 		if (!(box1->IsActive()))
@@ -273,22 +269,6 @@ namespace Stage1_1
 			}
 			elem.Update(*player, dt);
 		}
-		/*for (Floor& elem : floors)
-		{
-			for (size_t i = 0; i < c.size(); ++i)
-			{
-				elem.Update(*(c[i]), dt);
-			}
-			elem.Update(*player, dt);
-		}
-		for (Wall& elem : walls)
-		{
-			for (size_t i = 0; i < c.size(); ++i)
-			{
-				elem.Update(*(c[i]), dt);
-			}
-			elem.Update(*player, dt);
-		}*/
 		for (Block& elem : blocks)
 		{
 			for (size_t i = 0; i < c.size(); ++i)
@@ -310,12 +290,9 @@ namespace Stage1_1
 		archerTower->Update(*player, dt);
 		player->Update(*player, dt);
 		box1->Update(*player, dt);
-		//coin2->Update(*player, dt);
-		//coin3->Update(*player, dt);
-		//power2->Update(*player, dt);
 		CamFollow(player->Transform_, 200, 120, player->GetFacing());
 		next->Update(*player, dt);
-		ui->UI_Update(player);
+		ui->UI_Update(player, dt);
 
 		std::cout << (int)player->PosX << ", " << (int)player->PosY << std::endl;
 	}

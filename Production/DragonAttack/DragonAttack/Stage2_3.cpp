@@ -121,23 +121,6 @@ namespace Stage2_3
 			}
 			elem.Update(*player, dt);
 		}
-		/*for (Floor& elem : floors)
-		{
-			for (size_t i = 0; i < c.size(); ++i)
-			{
-				elem.Update(*(c[i]), dt);
-			}
-
-			elem.Update(*player, dt);
-		}
-		for (Wall& elem : walls)
-		{
-			for (size_t i = 0; i < c.size(); ++i)
-			{
-				elem.Update(*(c[i]), dt);
-			}
-			elem.Update(*player, dt);
-		}*/
 		for (Block& elem : blocks)
 		{
 			for (size_t i = 0; i < c.size(); ++i)
@@ -147,7 +130,7 @@ namespace Stage2_3
 			elem.Update(*player, dt);
 		}
 		player->Update(*player, dt);
-		ui->UI_Update(player);
+		ui->UI_Update(player, dt);
 
 		//std::cout << (int)player->PosX << ", " << (int)player->PosY << std::endl;
 	}

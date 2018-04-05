@@ -185,7 +185,7 @@ namespace Stage3_3
 
         // update the player behavior and UI
 		player->Update(*player, dt);
-        ui->UI_Update(player);
+        ui->UI_Update(player, dt);
 	}
 	/**************************************************************************************
 	//

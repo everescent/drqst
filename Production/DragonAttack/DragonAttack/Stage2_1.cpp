@@ -14,8 +14,6 @@ namespace
 	int Map_Height;
 
 	std::vector<Platform> platforms;
-	//std::vector<Floor> floors;
-	//std::vector<Wall> walls;
 	std::vector<Barrier> barriers;
 	std::vector<Block> blocks;
 	std::vector<Block> noupdate_blocks;
@@ -80,9 +78,13 @@ namespace Stage2_1
 
 	void Init(void)
 	{
+		// Plays selected track
 		Audio->Play(0);
+
+		// Loops selected track
 		Audio->SetLoop(0, 1);
 
+		// Object placement
 		for (int y = 0; y < Map_Height; ++y)
 		{
 			for (int x = 0; x < Map_Width; ++x)
@@ -116,6 +118,12 @@ namespace Stage2_1
 					float f_x = (float)x;
 					float f_y = (float)y;
 					c.push_back(Create_Basic_AI(ARCHER, AEVec2{ Convert_X(f_x) ,  Convert_Y(f_y) }));
+				}
+				if (MapData[y][x] == OBJ_KNIGHT)
+				{
+					float f_x = (float)x;
+					float f_y = (float)y;
+					c.push_back(Create_Basic_AI(KNIGHT, AEVec2{ Convert_X(f_x) ,  Convert_Y(f_y) }));
 				}
 				if (MapData[y][x] == OBJ_MAGE)
 				{
@@ -194,22 +202,6 @@ namespace Stage2_1
 			}
 			elem.Update(*player, dt);
 		}
-		/*for (Floor& elem : floors)
-		{
-			for (size_t i = 0; i < c.size(); ++i)
-			{
-				elem.Update(*(c[i]), dt);
-			}
-			elem.Update(*player, dt);
-		}
-		for (Wall& elem : walls)
-		{
-			for (size_t i = 0; i < c.size(); ++i)
-			{
-				elem.Update(*(c[i]), dt);
-			}
-			elem.Update(*player, dt);
-		}*/
 		for (Block& elem : noupdate_blocks)
 		{
 			elem.Transform_.SetTranslate(elem.PosX, elem.PosY);
@@ -247,7 +239,7 @@ namespace Stage2_1
 		}
 		CamFollow(player->Transform_, 200, Camdown, player->GetFacing());
 
-		ui->UI_Update(player);
+		ui->UI_Update(player, dt);
 
 		//std::cout << (int)player->PosX << ", " << (int)player->PosY << std::endl;
 	}
@@ -260,10 +252,6 @@ namespace Stage2_1
 		{
 			elem.Render();
 		}
-		/*for (Floor& elem : floors)
-		{
-			elem.Render();
-		}*/
 		for (Block& elem : noupdate_blocks)
 		{
 			elem.Render();

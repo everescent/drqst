@@ -7,17 +7,16 @@ namespace
 	Transform *M_BG;
 	Audio_Engine* Audio;
 	UI* ui;
-	AEVec2 startpos = { -345, -2500 };
+	AEVec2 startpos = { -345, -2350 };
 
 	int** MapData;
 	int Map_Width;
 	int Map_Height;
 
 	std::vector<Platform> platforms;
-	//std::vector<Floor> floors;
-	//std::vector<Wall> walls;
 	std::vector<Barrier> barriers;
 	std::vector<Block> blocks;
+	std::vector<PickUp> PU;
 	LevelChangePlatform *next;
 	std::vector<Characters*> c;
 
@@ -100,14 +99,8 @@ namespace Stage3_2
 				{
 					float f_x = (float)x;
 					float f_y = (float)y;
-					blocks.push_back(Block{ FLOOR_SPRITE, Convert_X(f_x) , Convert_Y(f_y) });
+					blocks.push_back(Block{ FLOOR_SPRITE,Convert_X(f_x) , Convert_Y(f_y) });
 				}
-				/*if (MapData[y][x] == OBJ_WALL)
-				{
-					float f_x = (float)x;
-					float f_y = (float)y;
-					walls.push_back(Wall{ WALL_SPRITE, Convert_X(f_x) , Convert_Y(f_y) });
-				}*/
 				if (MapData[y][x] == OBJ_GRUNT)
 				{
 					float f_x = (float)x;
@@ -120,11 +113,58 @@ namespace Stage3_2
 					float f_y = (float)y;
 					c.push_back(Create_Basic_AI(ARCHER, AEVec2{ Convert_X(f_x) ,  Convert_Y(f_y) }));
 				}
+				if (MapData[y][x] == OBJ_KNIGHT)
+				{
+					float f_x = (float)x;
+					float f_y = (float)y;
+					c.push_back(Create_Basic_AI(KNIGHT, AEVec2{ Convert_X(f_x) ,  Convert_Y(f_y) }));
+				}
 				if (MapData[y][x] == OBJ_MAGE)
 				{
 					float f_x = (float)x;
 					float f_y = (float)y;
 					c.push_back(Create_Basic_AI(MAGE, AEVec2{ Convert_X(f_x) ,  Convert_Y(f_y) }));
+				}
+				//pick ups
+				if (MapData[y][x] == OBJ_COIN)
+				{
+					float f_x = (float)x;
+					float f_y = (float)y;
+					PU.push_back(PickUp{ COIN_SPRITE,
+						Col_Comp{ 0.0f - 25.0f, 0.0f - 25.0f, 0.0f + 25.0f, 0.0f + 25.0f, Rect },
+						COIN, Convert_X(f_x) , Convert_Y(f_y) });
+				}
+				if (MapData[y][x] == OBJ_HP)
+				{
+					float f_x = (float)x;
+					float f_y = (float)y;
+					PU.push_back(PickUp{ HP_SPRITE,
+						Col_Comp{ 0.0f - 25.0f, 0.0f - 25.0f, 0.0f + 25.0f, 0.0f + 25.0f, Rect },
+						HP, Convert_X(f_x) , Convert_Y(f_y) });
+				}
+				if (MapData[y][x] == OBJ_SPD)
+				{
+					float f_x = (float)x;
+					float f_y = (float)y;
+					PU.push_back(PickUp{ SPD_SPRITE,
+						Col_Comp{ 0.0f - 25.0f, 0.0f - 25.0f, 0.0f + 25.0f, 0.0f + 25.0f, Rect },
+						SPD, Convert_X(f_x) , Convert_Y(f_y) });
+				}
+				if (MapData[y][x] == OBJ_DMG)
+				{
+					float f_x = (float)x;
+					float f_y = (float)y;
+					PU.push_back(PickUp{ DMG_SPRITE,
+						Col_Comp{ 0.0f - 25.0f, 0.0f - 25.0f, 0.0f + 25.0f, 0.0f + 25.0f, Rect },
+						DMG, Convert_X(f_x) , Convert_Y(f_y) });
+				}
+				if (MapData[y][x] == OBJ_INVUL)
+				{
+					float f_x = (float)x;
+					float f_y = (float)y;
+					PU.push_back(PickUp{ INVUL_SPRITE,
+						Col_Comp{ 0.0f - 25.0f, 0.0f - 25.0f, 0.0f + 25.0f, 0.0f + 25.0f, Rect },
+						INVUL, Convert_X(f_x) , Convert_Y(f_y) });
 				}
 			}
 		}
@@ -151,22 +191,6 @@ namespace Stage3_2
 			}
 			elem.Update(*player, dt);
 		}
-		/*for (Floor& elem : floors)
-		{
-			for (size_t i = 0; i < c.size(); ++i)
-			{
-				elem.Update(*(c[i]), dt);
-			}
-			elem.Update(*player, dt);
-		}
-		for (Wall& elem : walls)
-		{
-			for (size_t i = 0; i < c.size(); ++i)
-			{
-				elem.Update(*(c[i]), dt);
-			}
-			elem.Update(*player, dt);
-		}*/
 		for (Block& elem : blocks)
 		{
 			for (size_t i = 0; i < c.size(); ++i)
@@ -195,9 +219,9 @@ namespace Stage3_2
 		}
 		CamFollow(player->Transform_, 200, Camdown, player->GetFacing());
 		
-		ui->UI_Update(player);
+		ui->UI_Update(player, dt);
 
-		//std::cout << (int)player->PosX << ", " << (int)player->PosY << std::endl;
+		std::cout << (int)player->PosX << ", " << (int)player->PosY << std::endl;
 	}
 
 	void Draw(void)
@@ -208,14 +232,6 @@ namespace Stage3_2
 		{
 			elem.Render();
 		}
-		/*for (Floor& elem : floors)
-		{
-			elem.Render();
-		}
-		for (Wall& elem : walls)
-		{
-			elem.Render();
-		}*/
 		for (Block& elem : blocks)
 		{
 			elem.Render();
@@ -238,8 +254,6 @@ namespace Stage3_2
 	void Free(void)
 	{
 		platforms.clear();
-		//floors.clear();
-		//walls.clear();
 		blocks.clear();
 		barriers.clear();
 

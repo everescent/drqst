@@ -201,22 +201,6 @@ namespace Stage2_2
 			}
 			elem.Update(*player, dt);
 		}
-		/*for (Floor& elem : floors)
-		{
-			for (size_t i = 0; i < c.size(); ++i)
-			{
-				elem.Update(*(c[i]), dt);
-			}
-			elem.Update(*player, dt);
-		}
-		for (Wall& elem : walls)
-		{
-			for (size_t i = 0; i < c.size(); ++i)
-			{
-				elem.Update(*(c[i]), dt);
-			}
-			elem.Update(*player, dt);
-		}*/
 		for (Block& elem : blocks)
 		{
 			for (size_t i = 0; i < c.size(); ++i)
@@ -249,7 +233,7 @@ namespace Stage2_2
 		}
 		CamFollow(player->Transform_, 200, Camdown, player->GetFacing());
 
-		ui->UI_Update(player);
+		ui->UI_Update(player, dt);
 
 		//std::cout << (int)player->PosX << ", " << (int)player->PosY << std::endl;
 	}
