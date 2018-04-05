@@ -37,12 +37,24 @@ namespace
 	Sprite* PLAY_SPRITE;
 	Sprite* QUIT_SPRITE;
 	Sprite* CREDITS_SPRITE;
+	Sprite* DIGIPEN_SPRITE;
+	Transform* DIGIPEN_M;
+	Sprite* TEAM_SPRITE;
+	Transform* TEAM_M;
+	Sprite* GAME_SPRITE;
+	Transform* GAME_M;
+
+
+	float timer = 15.0f;
 }
 
 namespace Main_Menu
 {
 	void Load(void)
 	{
+		//set background color to black
+		AEGfxSetBackgroundColor(0.0f, 0.0f, 0.0f);
+		
 		//AEToogleFullScreen(true);
 		AEGfxSetCamPosition(0.0f, 0.0f);
 		// BG constructed by using Move constructor 
@@ -54,6 +66,25 @@ namespace Main_Menu
 		PLAY_SPRITE = new Sprite{S_CreateRectangle(Button_Width,Button_Height,"Textures/Play_Button.png")};
 		QUIT_SPRITE = new Sprite{S_CreateRectangle(Button_Width,Button_Height,"Textures/Quit_Button.png")};
 		CREDITS_SPRITE = new Sprite{ S_CreateRectangle(Button_Width, Button_Height, "Textures/Credits_Button.png") };
+
+		DIGIPEN_SPRITE = new Sprite{ S_CreateRectangle(210.f, 50.f, "Textures/DigiPen_RGB_Red.png") };
+		DIGIPEN_SPRITE->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+		DIGIPEN_M = new Transform;
+		DIGIPEN_M->SetScale(2.f, 2.f);
+		DIGIPEN_M->Concat();
+
+		TEAM_SPRITE = new Sprite{ S_CreateRectangle(64.f, 40.f, "Textures/TeamName.png") };
+		TEAM_SPRITE->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+		TEAM_M = new Transform;
+		TEAM_M->SetScale(8.f, 8.f);
+		TEAM_M->Concat();
+
+		GAME_SPRITE = new Sprite{ S_CreateRectangle(64.f, 32.f, "Textures/GameTitle.png") };
+		GAME_SPRITE->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+		GAME_M = new Transform;
+		GAME_M->SetScale(8.f, 8.f);
+		GAME_M->Concat();
+
 		// Construct Play Button 
 		Play_Button = new GameObject{ PLAY_SPRITE,
 			Col_Comp(Play_Pos.x - Button_Width, Play_Pos.y - Button_Height,
@@ -78,8 +109,15 @@ namespace Main_Menu
 		Audio->SetLoop(0,1);
 	}
 
-	void Update(float /*dt*/)
+	void Update(float dt)
 	{
+		if (timer > 0.0f)
+		{
+			timer -= dt;
+			return;
+		}
+		
+		
 		Play_Button->SetActive(true);
 		Quit_Button->SetActive(true);
 		Credits_Button->SetActive(true);
@@ -152,6 +190,32 @@ namespace Main_Menu
 
 	void Draw(void)
 	{
+		static float Exp_[3] = { 1.0f, 1.0f, 1.0f };
+		if (timer > 10.0f)
+		{
+			DIGIPEN_SPRITE->Render_Object(*DIGIPEN_M);
+			DIGIPEN_SPRITE->SetRGB(Exp_[0], Exp_[0], Exp_[0]);
+			if(timer <= 12.5f)
+				Exp_[0] -= 0.008f;
+			return;
+		}
+		else if(timer > 5.0f)
+		{
+			TEAM_SPRITE->Render_Object(*TEAM_M);
+			TEAM_SPRITE->SetRGB(Exp_[1], Exp_[1], Exp_[1]);
+			if (timer <= 7.5f)
+				Exp_[1] -= 0.008f;
+			return;
+		}
+		else if(timer > 0.0f)
+		{
+			GAME_SPRITE->Render_Object(*GAME_M);
+			GAME_SPRITE->SetRGB(Exp_[2], Exp_[2], Exp_[2]);
+			if (timer <= 2.5f)
+				Exp_[2] -= 0.008f;
+			return;
+		}
+		
 		//Always render the background image first  
 		MM_Background->Render_Object(*M_BG);
 		//Render the Play button 
@@ -169,6 +233,12 @@ namespace Main_Menu
 		delete PLAY_SPRITE;
 		delete QUIT_SPRITE;
 		delete CREDITS_SPRITE;
+		delete DIGIPEN_SPRITE;
+		delete DIGIPEN_M;
+		delete TEAM_SPRITE;
+		delete TEAM_M;
+		delete GAME_SPRITE;
+		delete GAME_M;
 		delete M_BG;
 		delete MM_Background;
 		delete Play_Button;
