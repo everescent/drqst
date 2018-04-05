@@ -14,7 +14,7 @@ Technology is prohibited.
 /* End Header **************************************************************************/
 #include "UI.h"
 // have to initialise static members in global namespace
-//Particle_System* UI::flame_particles = nullptr;
+Particle_System* UI::flame_particles = nullptr;
 
 UI::UI(Dragon* dragon)
 	:HP_Sprite{ S_CreateSquare(20.0f, "Textures/hp.png") },
@@ -29,11 +29,10 @@ UI::UI(Dragon* dragon)
 	
 	// put icons at {AEGfxWinMinX() + offsetX, AEGfxWinMaxY() - offsetY}
 	hp_icon1.Transform_.Concat();
-	//flame_particles = Effects_Get(MFIREBALL_PARTICLE);
+	flame_particles = Effects_Get(MFIREBALL_PARTICLE);
 
 	// BEHAVIOUR FOR MFIREBALL
-
-	/*flame_particles->Emitter_.PPS_ = 5;
+	flame_particles->Emitter_.PPS_ = 5;
 	flame_particles->Emitter_.Dist_Min_ = 10.f;
 	flame_particles->Emitter_.Vol_Max = 2000;
 	flame_particles->Emitter_.Direction_ = 90.0f;
@@ -44,11 +43,6 @@ UI::UI(Dragon* dragon)
 	flame_particles->Emitter_.Particle_Rand_.Sp_Rand_ = 3;
 	flame_particles->Emitter_.Lifetime_ = 3.0f;
 	flame_particles->Emitter_.Particle_Rand_.Life_Rand_ = 3;
-
-	flame_particles->UpdateEmission();
-	flame_particles->Turbulence(0.2f);
-	flame_particles->TransRamp_Exp();
-	flame_particles->Newton({0.f, 0.0f}, 0.3f);*/
 	
 	} 
 
@@ -107,23 +101,35 @@ UI::UI(Dragon* dragon)
 			charge_icon.Transform_.SetTranslate(dragon->PosX + 60, dragon->PosY + 30);
 		charge_icon.Transform_.Concat();
 
-		/*if (dragon->Get_Direction() == RIGHT)
-		flame_particles->Emitter_.Pos_.Point = { dragon->PosX - 60 , dragon->PosY + 30 };
-
-		if (dragon->Get_Direction() == LEFT)
-		flame_particles->Emitter_.Pos_.Point = { dragon->PosX + 60, dragon->PosY + 30 };
-		flame_particles->Emitter_.Pos_.Min_Max.Point_Max.x += 1;
-		flame_particles->Emitter_.Pos_.Min_Max.Point_Min.x += 1;
-		flame_particles->Emitter_.Pos_.Min_Max.Point_Max.y += 1;
-		flame_particles->Emitter_.Pos_.Min_Max.Point_Min.y += 1;
+    if (dragon->Get_Direction() == RIGHT)
+    {
+      flame_particles->Emitter_.Pos_.Min_Max.Point_Max.x = dragon->PosX - 30;
+      flame_particles->Emitter_.Pos_.Min_Max.Point_Min.x = dragon->PosX - 90;
+      flame_particles->Emitter_.Pos_.Min_Max.Point_Max.y = dragon->PosY + 50;
+      flame_particles->Emitter_.Pos_.Min_Max.Point_Min.y = dragon->PosY + 30;
+    }
+    if (dragon->Get_Direction() == LEFT)
+    {
+      flame_particles->Emitter_.Pos_.Min_Max.Point_Max.x = dragon->PosX + 90;
+      flame_particles->Emitter_.Pos_.Min_Max.Point_Min.x = dragon->PosX + 40;
+      flame_particles->Emitter_.Pos_.Min_Max.Point_Max.y = dragon->PosY + 50;
+      flame_particles->Emitter_.Pos_.Min_Max.Point_Min.y = dragon->PosY + 30;
+    }
+    flame_particles->UpdateEmission();
+    flame_particles->Turbulence(0.2f);
+    flame_particles->TransRamp_Exp();
+    if (dragon->Get_Direction() == RIGHT)
+      flame_particles->Newton({ dragon->PosX - 60,dragon->PosY + 50 }, 0.2f);
+    if (dragon->Get_Direction() == LEFT)
+      flame_particles->Newton({ dragon->PosX + 60,dragon->PosY + 50 }, 0.2f);
 		flame_particles->TransRamp_Exp();
 		flame_particles->ColorRamp_Life();
-		flame_particles->UpdateEmission();*/
+		flame_particles->UpdateEmission();
 
-		/*if (flame_particles->GetParticleCount())
+		if (flame_particles->GetParticleCount())
 		{
 			flame_particles->Update(dt);
-		}*/
+		}
 	}
 
 	void UI::Render()
@@ -139,7 +145,7 @@ UI::UI(Dragon* dragon)
 		{
 			charge_icon.Render();
 			charge_icon.Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
-			//flame_particles->Render();
+			flame_particles->Render();
 		}
 		
 	}
