@@ -203,6 +203,10 @@ namespace Stage3_2
 		{
 			elem.Update(*player, dt);
 		}
+		for (PickUp& elem : PU)
+		{
+			elem.Update(*player, dt);
+		}
 
 		next->Update(*player, dt);
 		player->Update(*player, dt);
@@ -221,7 +225,7 @@ namespace Stage3_2
 		
 		ui->UI_Update(player, dt);
 
-		std::cout << (int)player->PosX << ", " << (int)player->PosY << std::endl;
+		//std::cout << (int)player->PosX << ", " << (int)player->PosY << std::endl;
 	}
 
 	void Draw(void)
@@ -240,6 +244,10 @@ namespace Stage3_2
 		{
 			elem.Render();
 		}
+		for (PickUp& elem : PU)
+		{
+			elem.Render();
+		}
 		for (size_t i = 0; i < c.size(); ++i)
 		{
 			c[i]->Render();
@@ -249,6 +257,9 @@ namespace Stage3_2
 		player->Render();
 		player->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 		ui->Render();
+
+		// Particle Effects
+		PickUp::coin_particles->Render();
 	}
 
 	void Free(void)
@@ -256,6 +267,7 @@ namespace Stage3_2
 		platforms.clear();
 		blocks.clear();
 		barriers.clear();
+		PU.clear();
 
 		for (size_t i = 0; i < c.size(); ++i)
 		{
