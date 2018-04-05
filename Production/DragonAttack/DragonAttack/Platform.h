@@ -28,6 +28,7 @@ public:
 	Platform(Sprite* const p_Sprite, float x, float y); // default constructor
 	//(Jacob) Changed to take in player and dt
 	void Update(Dragon &player, const float &dt);
+	void Update(Characters &player, const float &dt);
   //(Jacob) Takes in AI
-  void Update(Characters &player, const float &dt, const bool xSnapping);
+  //void Update(Characters &player, const float &dt, const bool xSnapping);
 };

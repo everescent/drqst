@@ -196,6 +196,11 @@ namespace Stage1_2
 
 		for (Platform& elem : platforms)
 		{
+			// added collision for AI
+			for (size_t i = 0; i < c.size(); ++i)
+			{
+				elem.Update(*(c[i]), dt);
+			}
 			elem.Update(*player, dt);
 		}
 		/*for (Floor& elem : floors)

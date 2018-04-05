@@ -32,9 +32,29 @@ void Platform::Update(Dragon &player, const float &dt)
 	}
 }
 
+// for other characters
+void Platform::Update(Characters &obj, const float &dt)
+{
+	//(Jacob) So that I don't have to check for collision twice
+	bool Colide = Collision_.Dy_Rect_Rect(obj.Collision_, GetVelocity(),
+		obj.GetVelocity(), dt);
+	//(Jacob) Changed to PosX and PosY
+	this->Transform_.SetTranslate(PosX, PosY);
+	this->Transform_.Concat();
+	//(Jacob) Make sure player is on the platform if colide
+	if (Colide)
+	{
+		//obj.SetTouchBottom(true);
+		if (obj.PosY - obj.Sprite_->Get_Height() < PosY)
+			return;
+		if (obj.PosY <= PosY + Sprite_->Get_Height() + obj.Sprite_->Get_Height())
+			obj.PosY = PosY + Sprite_->Get_Height() +  obj.Sprite_->Get_Height();
+	}
+}
+
 // is this being used?
 //(Jacob) Updated to make dragon stand on platform
-void Platform::Update(Characters &player, const float &dt, const bool xSnapping)
+/*void Platform::Update(Characters &player, const float &dt, const bool xSnapping)
 {
   //(Jacob) So that I don't have to check for collision twice
   bool Colide = Collision_.Dy_Rect_Rect(player.Collision_, GetVelocity(),
@@ -61,4 +81,4 @@ void Platform::Update(Characters &player, const float &dt, const bool xSnapping)
     else if (player.PosX > PosX + Sprite_->Get_Width())
       player.PosX = PosX + Sprite_->Get_Width();
   }
-}
+}*/
