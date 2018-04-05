@@ -43,6 +43,6 @@ private:
 	GameObject charge_icon;
 	int Dragon_hp;
 	int Fireball_charge;
-	static Particle_System* flame_particles;
+	//static Particle_System* flame_particles;
 	//AEVec2 offset1;
 };

@@ -14,7 +14,7 @@ Technology is prohibited.
 /* End Header **************************************************************************/
 #include "UI.h"
 // have to initialise static members in global namespace
-Particle_System* UI::flame_particles = nullptr;
+//Particle_System* UI::flame_particles = nullptr;
 
 UI::UI(Dragon* dragon)
 	:HP_Sprite{ S_CreateSquare(20.0f, "Textures/hp.png") },
@@ -29,11 +29,11 @@ UI::UI(Dragon* dragon)
 	
 	// put icons at {AEGfxWinMinX() + offsetX, AEGfxWinMaxY() - offsetY}
 	hp_icon1.Transform_.Concat();
-	flame_particles = Effects_Get(MFIREBALL_PARTICLE);
+	//flame_particles = Effects_Get(MFIREBALL_PARTICLE);
 
 	// BEHAVIOUR FOR MFIREBALL
 
-	flame_particles->Emitter_.PPS_ = 5;
+	/*flame_particles->Emitter_.PPS_ = 5;
 	flame_particles->Emitter_.Dist_Min_ = 10.f;
 	flame_particles->Emitter_.Vol_Max = 2000;
 	flame_particles->Emitter_.Direction_ = 90.0f;
@@ -48,12 +48,13 @@ UI::UI(Dragon* dragon)
 	flame_particles->UpdateEmission();
 	flame_particles->Turbulence(0.2f);
 	flame_particles->TransRamp_Exp();
-	flame_particles->Newton({0.f, 0.0f}, 0.3f);
+	flame_particles->Newton({0.f, 0.0f}, 0.3f);*/
 	
 	} 
 
 	void UI::UI_Update(Dragon* dragon, const float dt)
 	{
+		UNREFERENCED_PARAMETER (dt);
 		Dragon_hp = dragon->Get_HP();
 		Fireball_charge = dragon->Get_Charge();
 		hp_icon1.SetActive(true);
@@ -106,7 +107,7 @@ UI::UI(Dragon* dragon)
 			charge_icon.Transform_.SetTranslate(dragon->PosX + 60, dragon->PosY + 30);
 		charge_icon.Transform_.Concat();
 
-		if (dragon->Get_Direction() == RIGHT)
+		/*if (dragon->Get_Direction() == RIGHT)
 		flame_particles->Emitter_.Pos_.Point = { dragon->PosX - 60 , dragon->PosY + 30 };
 
 		if (dragon->Get_Direction() == LEFT)
@@ -117,12 +118,12 @@ UI::UI(Dragon* dragon)
 		flame_particles->Emitter_.Pos_.Min_Max.Point_Min.y += 1;
 		flame_particles->TransRamp_Exp();
 		flame_particles->ColorRamp_Life();
-		flame_particles->UpdateEmission();
+		flame_particles->UpdateEmission();*/
 
-		if (flame_particles->GetParticleCount())
+		/*if (flame_particles->GetParticleCount())
 		{
 			flame_particles->Update(dt);
-		}
+		}*/
 	}
 
 	void UI::Render()
@@ -138,7 +139,7 @@ UI::UI(Dragon* dragon)
 		{
 			charge_icon.Render();
 			charge_icon.Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
-			flame_particles->Render();
+			//flame_particles->Render();
 		}
 		
 	}
