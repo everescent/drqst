@@ -121,7 +121,7 @@ namespace Stage1_3
 		}
 
 		player->Update(*player, dt);
-		ui->UI_Update(player);
+		ui->UI_Update(player,dt);
 
 		//std::cout << (int)player->PosX << ", " << (int)player->PosY << std::endl;
 	}

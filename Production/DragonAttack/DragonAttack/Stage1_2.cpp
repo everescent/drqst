@@ -239,7 +239,7 @@ namespace Stage1_2
 		next->Update(*player, dt);
 		player->Update(*player, dt);
 		CamFollow(player->Transform_, 200, 120, player->GetFacing());
-		ui->UI_Update(player);
+		ui->UI_Update(player,dt);
 
 		std::cout << (int)player->PosX <<", "<< (int)player->PosY << std::endl;
 	}
