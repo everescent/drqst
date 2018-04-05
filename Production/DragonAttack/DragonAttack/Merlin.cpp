@@ -31,7 +31,15 @@ Merlin::Merlin(Sprite *Merlin_Texture, Sprite *Eball_Sprite, Sprite *Arrow_Sprit
          Col_Comp{ Merlin_Start_X - 50.0f, Merlin_Start_Y - 50.0f,
                    Merlin_Start_X + 50.0f, Merlin_Start_Y + 50.0f, Rect } },
   Spread_Eball{}, Arrow{}, Blink_{}, Attack_Interval{ 0 },
-  MagicCircle{ S_CreateSquare(150.0f, ".//Textures/Magic_Circle.png") }
+  MagicCircle{ S_CreateSquare(150.0f, ".//Textures/Magic_Circle.png") },
+  Anim_{ ANIM_TELE_IN + 1, 4.0f, 5.0f, 
+  [](std::vector <Range>& Init) ->void {
+    Init.push_back(Range{ 0.0f, 1.0f, 0.00f, 0.00f }); //Hit
+    Init.push_back(Range{ 0.0f, 1.0f, 0.25f, 0.25f }); //Idle
+    Init.push_back(Range{ 0.0f, 1.0f, 0.50f, 0.50f }); //Tele Out
+    Init.push_back(Range{ 0.0f, 1.0f, 0.75f, 0.75f }); //Tele In
+  }
+}
 {
   //Set spawn position
   PosX = Merlin_Start_X;
@@ -82,13 +90,13 @@ void Merlin::Idle(Dragon &player, const float dt)
 {
   UNREFERENCED_PARAMETER(dt);
   UNREFERENCED_PARAMETER(player);
-  /*Do some idle animation or something idk yet*/
 }
 
 void Merlin::Move(Dragon &player, const float dt)
 {
   UNREFERENCED_PARAMETER(dt);
   UNREFERENCED_PARAMETER(player);
+
   //This will move merlin to the 3 different spots
   srand((unsigned int)time(nullptr));
   int RNG = rand() % 100;
@@ -120,6 +128,7 @@ void Merlin::Move(Dragon &player, const float dt)
 
   Blink_.Cooldown = true;
   Blink_.CD_Time = Blink_CD_Time;
+
 }
 
 void Merlin::Attack(Dragon &player, const float dt)
@@ -555,6 +564,7 @@ void Merlin::Update(Dragon &player, const float dt)
     //Check for attack colision with player
     Colision_Check(player, dt);
   }
+  Anim_.Update(*Sprite_);
 }
 
 void Merlin::Render()

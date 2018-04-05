@@ -18,6 +18,7 @@ Technology is prohibited.
 #include "Characters.h"
 #include "Boss_States.h"
 #include "Dragon.h"
+#include "Animation.h"
 #include <vector>
 
 //Attack state of Merlin
@@ -116,10 +117,18 @@ private:
       }
     }
   };
-  Blink     Blink_;         //Blink utilities
-  Sprite    MagicCircle;    //Magic circle sprite
-  Transform MC_Pos;         //Magic circle transform
-  
+  Blink     Blink_;      //Blink utilities
+  Sprite    MagicCircle; //Magic circle sprite
+  Transform MC_Pos;      //Magic circle transform
+
+  enum Anim_State {
+    ANIM_HIT     ,
+    ANIM_IDLE    ,
+    ANIM_TELE_OUT,
+    ANIM_TELE_IN
+  };
+
+  Animation Anim_;       //Animation
   //Attack Functions START///////////////////////////////////////////////////////////////
   void Melee(Dragon &player, const float dt);          //Melee attack function
   void S_Eball(Dragon &player, const float dt);        //Single shot energy ball function

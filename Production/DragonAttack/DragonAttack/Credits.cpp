@@ -58,16 +58,16 @@ namespace Credits
 
         // initializing the particle variables
         credit_effects = Effects_Get(CREDIT_PARTICLE);
-        credit_effects->Emitter_.Pos_.Min_Max.Point_Max = { AEGfxGetWinMaxX(), AEGfxGetWinMaxY() };
-        credit_effects->Emitter_.Pos_.Min_Max.Point_Min = { AEGfxGetWinMinX(), AEGfxGetWinMinY() };
+        credit_effects->Emitter_.Pos_.Min_Max.Point_Max = { AEGfxGetWinMaxX()         , AEGfxGetWinMaxY() + 50.0f };
+        credit_effects->Emitter_.Pos_.Min_Max.Point_Min = { AEGfxGetWinMinX() - 450.0f, AEGfxGetWinMaxY() + 10.0f };
         credit_effects->Emitter_.Particles_.reserve(1000);
-        credit_effects->Emitter_.PPS_ = 8;
+        credit_effects->Emitter_.PPS_ = 4;
         credit_effects->Emitter_.Vol_Max = 2000;
-        credit_effects->Emitter_.Direction_ = 270.0f;
-        credit_effects->Emitter_.Conserve_ = 0.8f;
+        credit_effects->Emitter_.Direction_ = 300.0f;
+        credit_effects->Emitter_.Conserve_ = 1.f;
         credit_effects->Emitter_.Size_ = 10.0f;
-        credit_effects->Emitter_.Speed_ = 8.0f;
-        credit_effects->Emitter_.Lifetime_ = 4.f;
+        credit_effects->Emitter_.Speed_ = 4.0f;
+        credit_effects->Emitter_.Lifetime_ = 8.f;
     }
     
 	/**************************************************************************************
@@ -78,7 +78,7 @@ namespace Credits
     void Init(void)
 	{
         // warm up the particle systme before showing it
-		credit_effects->WarmUp((float)g_dt(), 2, Update_Particle);
+		credit_effects->WarmUp((float)g_dt(), 8, Update_Particle);
 	}
 
 	/**************************************************************************************
@@ -168,10 +168,12 @@ namespace
 	**************************************************************************************/
 	void Update_Particle(void)
     {
-        //Simulate an right side force
-        credit_effects->Force(0.4f, true, false);
-        //Add gravity
-        credit_effects->Gravity(0.3f);
-
+    credit_effects->Turbulence(0.01f, []() -> float
+                                      {
+                                        float phaseRot = (float)(rand() % 360);
+                                        phaseRot = AEDegToRad(phaseRot);
+                                        return cosf(phaseRot);
+                                      }, 
+                                      []() ->float { return 0.0f;});
     }
 }
