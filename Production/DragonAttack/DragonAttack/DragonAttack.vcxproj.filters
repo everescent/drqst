@@ -291,6 +291,9 @@
     <ClCompile Include="Stage1_3.cpp">
       <Filter>Game_States\Stage\Stage 1</Filter>
     </ClCompile>
+    <ClCompile Include="Options.cpp">
+      <Filter>Game_Object\User_Interface</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h">
@@ -475,6 +478,9 @@
     </ClInclude>
     <ClInclude Include="Stage1_3.h">
       <Filter>Game_States\Stage\Stage 1</Filter>
+    </ClInclude>
+    <ClInclude Include="Options.h">
+      <Filter>Game_Object\User_Interface</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

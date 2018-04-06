@@ -16,13 +16,14 @@ Technology is prohibited.
 #include "StageManager.h"
 #include "Input_Handler.h"
 #include "AI_Test_Stage.h"
+#include "Options.h"
 
 namespace GSM
 {
 	// defining the global variables
-	GAME_STATE previous = GS_LEVELS;
-	GAME_STATE current  = GS_LEVELS;
-	GAME_STATE next     = GS_LEVELS;
+	GAME_STATE previous = AI_TEST_STAGE;
+	GAME_STATE current  = AI_TEST_STAGE;
+	GAME_STATE next     = AI_TEST_STAGE;
 
 	// create an array of pointers to state functions
 	GameStateFunctions GSF[GS_QUIT] = { 0 };
@@ -136,6 +137,7 @@ namespace GSM
 		Attack_Sprite_Init();	 // initializes the various sprites we need for ai attacks
 		AI_Sprite_Init();		 // initializes the various sprites we need for the ai
 		Effects_Init();			 // initializes the particle effects that will be used 
+        Init_Options();          // init the options menu
 	}
 
 	/**************************************************************************************
@@ -217,5 +219,6 @@ namespace GSM
 	void GSM_Cleanup(void)
 	{
 		Effects_Cleanup();
+        Cleanup_Options();
 	}
 }
