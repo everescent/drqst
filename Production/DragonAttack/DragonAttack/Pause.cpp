@@ -19,24 +19,40 @@ Technology is prohibited.
 Pause::Pause()
 	
 {
-	fontID = AEGfxCreateFont("calibri", 32, true, false);
-	M_BG = new Transform{};
+	fontID			= AEGfxCreateFont("calibri", 32, true, false);
+	M_BG			= new Transform{};
 	Pause_BG_Sprite = new Sprite{ CreateBG(1.0f, 1.0f, "Textures/Black_BG.png")};
+	//*********Construct the 'buttons' for the Pause Interface *********************************
+	/*Audio_box	{	};
+	Quit_box	{	};
+	FS_box		{	};*/
 	
 }
 
+//void Pause::Update_Buttons(f32 cameraX, f32 cameraY)
+//{
+//	Audio_pos.x += cameraX;
+//	Audio_pos.y += cameraY;
+//	Quit_pos.x += cameraX;
+//	Quit_pos.y += cameraY;
+//	FS_pos.x += cameraX;
+//	FS_pos.y += cameraY;
+//}
+
 void Pause::Update(bool &pause_bool)
 {
+	
+	AEGfxGetCamPosition(&cameraX, &cameraY);
+	//Update_Buttons(cameraX, cameraY);
 	/*what to update if the game is paused*/
 	if (pause_bool) 
 	{
 		AEInputShowCursor(ShowCursor);
 		if (AEInputCheckTriggered(AEVK_F))
 		{
-			fullscreen = fullscreen == true ? false : true;
-			 
+			fullscreen = fullscreen == true ? false : true;	 
 			AEToogleFullScreen(fullscreen);
-	
+			
 		}
 	}
 	else { AEInputShowCursor(HideCursor); }
@@ -45,7 +61,13 @@ void Pause::Update(bool &pause_bool)
 	{
 		pause_bool = pause_bool ==true?false:true;
 	}
-	AEGfxGetCamPosition(&cameraX, &cameraY);
+	
+	if (AEInputCheckTriggered(AEVK_Q))
+	{
+		GSM::next = GS_QUIT;
+	}
+
+
 	//cameraX -= 100.0f;
 	M_BG->SetTranslate(cameraX, cameraY);
 	M_BG->Concat();

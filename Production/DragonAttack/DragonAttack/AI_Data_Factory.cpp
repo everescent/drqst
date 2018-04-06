@@ -37,7 +37,7 @@ namespace
 void AI_Sprite_Init(void)
 {
 	A_SPRITE    = S_CreateSquare(70.0f, ".//Textures/Archer_SpriteSheet.png",     0.2f, 0.33f);
-	G_SPRITE    = S_CreateSquare(70.0f, ".//Textures/grunt.png");  
+	G_SPRITE    = S_CreateSquare(70.0f, ".//Textures/Grunt_SpriteSheet.png",      0.2f, 0.33f);  
 	K_SPRITE    = S_CreateSquare(70.0f, ".//Textures/Knight_SpriteSheet.png",     0.2f, 0.33f);
 	MA_SPRITE   = S_CreateSquare(55.0f, ".//Textures/Mage_SpriteSheet.png",       0.2f, 0.5f);
 	D_SPRITE    = S_CreateSquare(Dragon_Scale, ".//Textures/Bob_SpriteSheet.png", 0.2f, 0.25f);

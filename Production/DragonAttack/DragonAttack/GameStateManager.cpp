@@ -16,6 +16,7 @@ Technology is prohibited.
 #include "StageManager.h"
 #include "Input_Handler.h"
 #include "AI_Test_Stage.h"
+#include "Options.h"
 
 namespace GSM
 {
@@ -136,6 +137,7 @@ namespace GSM
 		Attack_Sprite_Init();	 // initializes the various sprites we need for ai attacks
 		AI_Sprite_Init();		 // initializes the various sprites we need for the ai
 		Effects_Init();			 // initializes the particle effects that will be used 
+        Init_Options();          // init the options menu
 	}
 
 	/**************************************************************************************
@@ -217,5 +219,6 @@ namespace GSM
 	void GSM_Cleanup(void)
 	{
 		Effects_Cleanup();
+        Cleanup_Options();
 	}
 }

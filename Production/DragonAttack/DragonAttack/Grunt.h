@@ -16,19 +16,24 @@ Technology is prohibited.
 #pragma once
 #include "Characters.h"
 #include "Dragon.h"
+#include "Boss_States.h"
 
 class Grunt : public  Characters
 {
 private:
-	void LineOfSight(const Dragon &d);
-
+	/* Behaviours */
 	void MoveTowardPlayer(const Dragon &d, const float dt);
+	//void AttackPlayer(const Dragon &d);
+	void Idle(const Dragon &d, const float dt);
 
-	void AttackPlayer(const Dragon &d);
+	/* Helper Function */
+	void Set_Facing_Dir(const Dragon &d);
+	bool LineOfSight(const Dragon &d);
 
-	void Idle(const Dragon &d);
+	/* Variables */
+	Animation anim;
+	Boss_Action_State current_action;
 	static Audio_Engine SFX;
-
 	bool  PlayerSeen;
 	bool  PlayerInRange;
 	float MovementX;
