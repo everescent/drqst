@@ -102,7 +102,7 @@ namespace Credits
   {
     static float time = 5.f;
 
-    time > 0.f ? time -= dt : GSM::next = GS_QUIT;
+    time > 0.f ? time -= dt : GSM::next = GS_MAIN;
 
     Update_Particle();
     credit_effects->UpdateEmission();
