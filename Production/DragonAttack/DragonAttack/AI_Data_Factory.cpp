@@ -65,7 +65,7 @@ Characters *Create_Basic_AI(const BASIC_AI mob, const AEVec2& position)
 	// return the corresponding ai that was given
 	switch (mob)
 	{
-  case GRUNT:  return new Grunt(new Sprite{ S_CreateSquare(70.0f, ".//Textures/grunt.png") }, position.x, position.y);
+  case GRUNT:  return new Grunt(new Sprite{ S_CreateSquare(70.0f, ".//Textures/Grunt_SpriteSheet.png", 0.2f, 0.33f) }, position.x, position.y);
 		break;
 	case MAGE:   return new Mage (position, new Sprite{ S_CreateSquare(55.0f, ".//Textures/Mage_SpriteSheet.png", 0.2f, 0.5f) });
 		break;

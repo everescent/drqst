@@ -33,7 +33,7 @@ Grunt::Grunt(Sprite *p_Sprite, const float posX, const float posY)
 		Col_Comp{ posX - GRUNT_SCALE, posY - GRUNT_SCALE,
 				  posX + GRUNT_SCALE, posY + GRUNT_SCALE, Rect }),
 	current_action{ IDLE },
-	anim{ WALK_ANIM + 1, 2, 5, [](std::vector <Range>& Init) -> void 
+	anim{ WALK_ANIM + 1, 3, 5, [](std::vector <Range>& Init) -> void 
 		{
 			Init.push_back(Range{ 0.0f, 1.0f, 0.00f, 0.00f }); // Hit
 			Init.push_back(Range{ 0.0f, 1.0f, 0.33f, 0.33f }); // Idle
