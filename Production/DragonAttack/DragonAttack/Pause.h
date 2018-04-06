@@ -20,6 +20,7 @@ Technology is prohibited.
 #include "AEEngine.h"
 #include "Transform.h"
 #include "PickUp.h"
+#include "Collision.h"
 #define PAUSE_MACRO
 
 #ifdef PAUSE_MACRO
@@ -44,8 +45,14 @@ public:
 	~Pause();
 	//Used to store the position of the camera 
 	f32 cameraX, cameraY;
-
+	Col_Comp Audio_box, Quit_box, FS_box;
 private:
 	u32 fontID;
-	char* buttons[pause_ns::NUM_BUTTONS ] = { "Resume  : Escape",	" Turn Audio On/Off: M", "Quit : Q", "Fullscreen : F" }; // array count from 0
+	char* buttons[pause_ns::NUM_BUTTONS ] = { "Resume [ESC]",	" Turn Audio On/Off", "Quit [Q]", "Fullscreen [F]" }; // array count from 0
+	Transform* M_BG;
+	Sprite* Pause_BG_Sprite;
+	s32 ShowCursor = 1;
+	s32 HideCursor = 0;
+	bool fullscreen = false;
+
 };
