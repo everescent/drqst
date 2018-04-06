@@ -14,44 +14,64 @@ Technology is prohibited.
 /* End Header **************************************************************************/
 #pragma once
 #include "Pause.h"
+#include <iostream>
 
 Pause::Pause()
 	
 {
 	fontID = AEGfxCreateFont("calibri", 32, true, false);
-	//M_BG = new Transform{};
-	//Pause_BG_Sprite = new Sprite{ CreateBG(1.0f, 1.0f, nullptr,1.0f,1.0f, 0xFF000000) };
-	 
+	M_BG = new Transform{};
+	Pause_BG_Sprite = new Sprite{ CreateBG(1.0f, 1.0f, "Textures/Black_BG.png")};
+	
 }
 
 void Pause::Update(bool &pause_bool)
 {
+	/*what to update if the game is paused*/
+	if (pause_bool) 
+	{
+		AEInputShowCursor(ShowCursor);
+		if (AEInputCheckTriggered(AEVK_F))
+		{
+			fullscreen = fullscreen == true ? false : true;
+			 
+			AEToogleFullScreen(fullscreen);
+	
+		}
+	}
+	else { AEInputShowCursor(HideCursor); }
+	
 	if (AEInputCheckTriggered(AEVK_ESCAPE))
 	{
 		pause_bool = pause_bool ==true?false:true;
 	}
 	AEGfxGetCamPosition(&cameraX, &cameraY);
-	cameraX -= 100.0f;
-
+	//cameraX -= 100.0f;
+	M_BG->SetTranslate(cameraX, cameraY);
+	M_BG->Concat();
+	Pause_BG_Sprite->SetAlphaTransBM(1.0f, 0.6f, AE_GFX_BM_BLEND);
 }
 
 void Pause::Render()
 {
-	AEGfxSetBackgroundColor(0.0f, 0.0f, 0.0f);
-
+	//AEGfxSetBackgroundColor(0.0f, 0.0f, 0.0f);
+	
+	Pause_BG_Sprite->Render_Object(*M_BG);
 	//Set the Render mode for rendering fonts 
 	AEGfxSetRenderMode(AE_GFX_RM_COLOR); // render with color
 	AEGfxTextureSet(NULL, 0, 0);		 // no texture needed
 	AEGfxSetTransparency(1.0f);
 
-	AEGfxPrint(fontID, buttons[0], (s32)cameraX, (s32)cameraY +	 100	, 1.0f, 1.0f, 1.0f);
-	AEGfxPrint(fontID, buttons[1], (s32)cameraX, (s32)cameraY			, 1.0f, 1.0f, 1.0f);
-	AEGfxPrint(fontID, buttons[2], (s32)cameraX, (s32)cameraY -  100 , 1.0f, 1.0f, 1.0f);
-	AEGfxPrint(fontID, buttons[3], (s32)cameraX, (s32)cameraY -	 200	, 1.0f, 1.0f, 1.0f);
+	AEGfxPrint(fontID, buttons[0], (s32)cameraX - 100, (s32)cameraY +	 100	, 1.0f, 1.0f, 1.0f);
+	AEGfxPrint(fontID, buttons[1], (s32)cameraX - 100, (s32)cameraY			, 1.0f, 1.0f, 1.0f);
+	AEGfxPrint(fontID, buttons[2], (s32)cameraX - 100, (s32)cameraY -  100 , 1.0f, 1.0f, 1.0f);
+	AEGfxPrint(fontID, buttons[3], (s32)cameraX - 100, (s32)cameraY -	 200	, 1.0f, 1.0f, 1.0f);
 	//std::cout << "Pause Render called" << std::endl;
 }
 
 Pause::~Pause()
 {
 	AEGfxDestroyFont(fontID);
+	delete Pause_BG_Sprite;
+	delete M_BG;
 }
