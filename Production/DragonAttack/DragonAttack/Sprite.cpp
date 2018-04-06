@@ -99,6 +99,7 @@ Sprite& Sprite::SetTexPos(const float posU, const float posV)
 Sprite& Sprite::SetTex(AEGfxTexture* texture)
 {
   Tex = texture;
+  return *this;
 }
 
 //Set render parameters
