@@ -65,13 +65,13 @@ Characters *Create_Basic_AI(const BASIC_AI mob, const AEVec2& position)
 	// return the corresponding ai that was given
 	switch (mob)
 	{
-	case GRUNT:  return new Grunt (&G_SPRITE, position.x, position.y);
+  case GRUNT:  return new Grunt(new Sprite{ S_CreateSquare(70.0f, ".//Textures/grunt.png") }, position.x, position.y);
 		break;
-	case MAGE:   return new Mage (position, &MA_SPRITE);
+	case MAGE:   return new Mage (position, new Sprite{ S_CreateSquare(55.0f, ".//Textures/Mage_SpriteSheet.png", 0.2f, 0.5f) });
 		break;
-    case ARCHER: return new Archer(&A_SPRITE, Get_Attack_Sprite(ARROW_SPRITE), position.x, position.y);
+    case ARCHER: return new Archer(new Sprite{ S_CreateSquare(70.0f, ".//Textures/Archer_SpriteSheet.png", 0.2f, 0.33f) }, Get_Attack_Sprite(ARROW_SPRITE), position.x, position.y);
 	    break;
-	case KNIGHT: return new Knight(position, &K_SPRITE);
+	case KNIGHT: return new Knight(position, new Sprite{ S_CreateSquare(70.0f, ".//Textures/Knight_SpriteSheet.png", 0.2f, 0.33f) });
 		break;
 	case DRAGON: return new Dragon(&D_SPRITE, Get_Attack_Sprite(FIREBALL_SPRITE), position);
 		break;
