@@ -13,19 +13,20 @@ namespace
 	int Map_Width;
 	int Map_Height;
 
-	std::vector<Platform> platforms;
-	std::vector<Block> blocks;
-	std::vector<Barrier> barriers;
-	std::vector<PickUp> PU;
+	std::vector<Platform>    platforms;
+	std::vector<Block>       blocks;
+	std::vector<Barrier>     barriers;
+	std::vector<PickUp>      PU;
+	std::vector<Characters*> c;
 
 	LevelChangePlatform *next;
-	std::vector<Characters*> c;
 
 	Sprite* COIN_SPRITE;//pickups					 							   
 	Sprite* HP_SPRITE;								 							   
 	Sprite* DMG_SPRITE;															   
 	Sprite* SPD_SPRITE;
 	Sprite* INVUL_SPRITE;
+
 	Sprite* BARRIER_SPRITE;//objs												   
 	Sprite* WALL_SPRITE;
 	Sprite* PLAT_SPRITE;
@@ -133,7 +134,7 @@ namespace Stage1_2
 					float f_y = (float)y;
 					PU.push_back(PickUp{ HP_SPRITE,
 						Col_Comp{ 0.0f - 25.0f, 0.0f - 25.0f, 0.0f + 25.0f, 0.0f + 25.0f, Rect },
-						COIN, Convert_X(f_x) , Convert_Y(f_y) });
+						HP, Convert_X(f_x) , Convert_Y(f_y) });
 				}
 				if (MapData[y][x] == OBJ_SPD)
 				{
