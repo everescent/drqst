@@ -4,7 +4,7 @@ namespace
 {
 	Dragon *player;
 	Sprite *BG;
-	Transform *M_BG;
+	Transform *M_BG, *M_BG2;
 	Audio_Engine* Audio;
 	UI* ui;
 	AEVec2 startpos = { -320, -700 };
@@ -64,7 +64,10 @@ namespace Stage3_1
 		// Texture and transformation matrix for BG
 		BG = new Sprite{ CreateBG(22.0f, 2.0f, ".//Textures/BG_Stage2.png", 1.0f, 15.0f) };
 		M_BG = new Transform{};
-		
+		M_BG2 = new Transform{};
+		M_BG2->SetTranslate(0.0f, -1440.0f);
+		M_BG2->Concat();
+
 		// Player creation
 		player = dynamic_cast<Dragon*>(Create_Basic_AI(DRAGON, startpos));
 
@@ -230,12 +233,13 @@ namespace Stage3_1
 
 		ui->UI_Update(player, dt);
 
-		std::cout << (int)player->PosX << ", " << (int)player->PosY << std::endl;
+		//std::cout << (int)player->PosX << ", " << (int)player->PosY << std::endl;
 	}
 
 	void Draw(void)
 	{
 		BG->Render_Object(*M_BG);
+		BG->Render_Object(*M_BG2);
 
 		for (Platform& elem : platforms)
 		{
@@ -309,6 +313,7 @@ namespace Stage3_1
 
 		delete BG;
 		delete M_BG;
+		delete M_BG2;
 		delete player;
 		delete Audio;
 		delete next;

@@ -4,7 +4,7 @@ namespace
 {
 	Dragon *player;
 	Sprite *BG;
-	Transform *M_BG;
+	Transform *M_BG, *M_BG2, *M_BG3, *M_BG4;
 	Audio_Engine* Audio;
 	UI* ui;
 	AEVec2 startpos = { -440, -885 };
@@ -65,6 +65,18 @@ namespace Stage2_1
 		BG   = new Sprite{ CreateBG(22.0f, 2.0f, ".//Textures/BG_Library.png", 1.0f, 15.0f) };
 		M_BG = new Transform{};
 
+		M_BG2 = new Transform{};
+		M_BG2->SetTranslate(0.0f, -1440.0f);
+		M_BG2->Concat();
+
+		M_BG3 = new Transform{};
+		M_BG3->SetTranslate(0.0f, -2880.0f);
+		M_BG3->Concat();
+
+		M_BG4 = new Transform{};
+		M_BG4->SetTranslate(0.0f, -4320.0f);
+		M_BG4->Concat();
+
 		// Player creation
 		player = dynamic_cast<Dragon*>(Create_Basic_AI(DRAGON, startpos));
 
@@ -73,7 +85,7 @@ namespace Stage2_1
 		ui = new UI{ player };
 
 		// Placement for level change platform
-		next = new LevelChangePlatform{ LCPLAT_SPRITE, 1180.0f,  -2685.0f };
+		next = new LevelChangePlatform{ LCPLAT_SPRITE, 1180.0f,  -2700.0f }; //-2685?
 	}
 
 	void Init(void)
@@ -247,6 +259,9 @@ namespace Stage2_1
 	void Draw(void)
 	{
 		BG->Render_Object(*M_BG);
+		BG->Render_Object(*M_BG2);
+		BG->Render_Object(*M_BG3);
+		BG->Render_Object(*M_BG4);
 
 		for (Platform& elem : platforms)
 		{
@@ -323,6 +338,9 @@ namespace Stage2_1
 
 		delete BG;
 		delete M_BG;
+		delete M_BG2;
+		delete M_BG3;
+		delete M_BG4;
 		delete player;
 		delete Audio;
 		delete next;
