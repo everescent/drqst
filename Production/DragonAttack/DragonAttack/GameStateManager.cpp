@@ -21,9 +21,9 @@ Technology is prohibited.
 namespace GSM
 {
 	// defining the global variables
-	GAME_STATE previous = AI_TEST_STAGE;
-	GAME_STATE current  = AI_TEST_STAGE;
-	GAME_STATE next     = AI_TEST_STAGE;
+	GAME_STATE previous = GS_LEVELS;
+	GAME_STATE current  = GS_LEVELS;
+	GAME_STATE next     = GS_LEVELS;
 
 	// create an array of pointers to state functions
 	GameStateFunctions GSF[GS_QUIT] = { 0 };

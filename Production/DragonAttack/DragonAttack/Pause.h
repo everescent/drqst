@@ -21,6 +21,7 @@ Technology is prohibited.
 #include "Transform.h"
 #include "PickUp.h"
 #include "Collision.h"
+#include "GameStateManager.h"
 #define PAUSE_MACRO
 
 #ifdef PAUSE_MACRO
@@ -40,6 +41,7 @@ public:
 	//This function checks if the pause button is triggered, if it is it changes the boolian to true
 	void Update(bool &pause_bool);
 	void Render();
+	void Update_Buttons(f32 cameraX, f32 cameraY);
 	////Renders the UI
 	//void Pause_Render();
 	~Pause();
@@ -54,5 +56,8 @@ private:
 	s32 ShowCursor = 1;
 	s32 HideCursor = 0;
 	bool fullscreen = false;
+	AEVec2 Audio_pos	{ 0.0f , 0.0f };
+	AEVec2 Quit_pos		{ 0.0f , 0.0f };
+	AEVec2 FS_pos		{ 0.0f , 0.0f };
 
 };
