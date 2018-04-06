@@ -13,8 +13,6 @@ namespace
 	int Map_Width;
 	int Map_Height;
 
-	//std::vector<Floor> floors;
-	//std::vector<Wall> walls;
 	std::vector<Platform> platforms;
 	std::vector<Block> blocks;
 	LevelChangePlatform *next;
@@ -79,12 +77,6 @@ namespace Stage2_3
 					float f_y = (float)y;
 					blocks.push_back(Block{ FLOOR_SPRITE, Convert_X(f_x) , Convert_Y(f_y) });
 				}
-				/*if (MapData[y][x] == OBJ_WALL)
-				{
-					float f_x = (float)x;
-					float f_y = (float)y;
-					walls.push_back(Wall{ WALL_SPRITE, Convert_X(f_x) , Convert_Y(f_y) });
-				}*/
 				if (MapData[y][x] == OBJ_PLATFORM)
 				{
 					float f_x = (float)x;
@@ -141,10 +133,6 @@ namespace Stage2_3
 		CamStatic();
 		BG->Render_Object(*M_BG);
 
-		/*for (Floor& elem : floors)
-		{
-			elem.Render();
-		}*/
 		for (Block& elem : blocks)
 		{
 			elem.Render();
@@ -166,8 +154,6 @@ namespace Stage2_3
 
 	void Free(void)
 	{
-		//floors.clear();
-		//walls.clear();
 		blocks.clear();
 
 		for (size_t i = 0; i < c.size(); ++i)
@@ -191,6 +177,7 @@ namespace Stage2_3
 		delete HP_SPRITE;
 		delete DMG_SPRITE;
 		delete SPD_SPRITE;
+
 		delete WALL_SPRITE;
 		delete LCPLAT_SPRITE;
 		delete FLOOR_SPRITE;

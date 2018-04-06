@@ -14,8 +14,6 @@ namespace
 	int Map_Height;
 
 	std::vector<Platform> platforms;
-	//std::vector<Floor> floors;
-	//std::vector<Wall> walls;
 	std::vector<Block> blocks;
 	std::vector<Barrier> barriers;
 	std::vector<PickUp> PU;
@@ -53,12 +51,12 @@ namespace Stage1_2
 
 		// Textures for static objects
 		BARRIER_SPRITE = new Sprite{ S_CreateSquare   (130.0f, ".//Textures/box.png") };
+		SIGN_SPRITE    = new Sprite{ S_CreateSquare   (70.0f, ".//Textures/sign.png") };
 		WALL_SPRITE    = new Sprite{ CreateFloor      (1.0f, ".//Textures/Cobblestone.png", 1.0f, 1.0f) };
+		FLOOR_SPRITE   = new Sprite{ CreateFloor      (1.0f, ".//Textures/Cobblestone.png", 1.0f, 1.0f) };
 		PLAT_SPRITE    = new Sprite{ CreatePlatform   (1.0f, 1.0f, ".//Textures/Cobblestone.png") };
 		LCPLAT_SPRITE  = new Sprite{ CreatePlatform   (2.0f, 3.0f, ".//Textures/Win_Platform.png") };
-		FLOOR_SPRITE   = new Sprite{ CreateFloor      (1.0f, ".//Textures/Cobblestone.png", 1.0f, 1.0f) };
 		TOWER_SPRITE   = new Sprite{ S_CreateRectangle(300.0f, 300.0f, ".//Textures/tower.png") };
-		SIGN_SPRITE    = new Sprite{ S_CreateSquare   (70.0f, ".//Textures/sign.png") };
 
 		// Texture and transform matrix for BG
 		BG   = new Sprite{ CreateBG(22.0f, 2.0f, ".//Textures/BG_Stage1.png", 1.0f, 15.0f) };
@@ -96,18 +94,6 @@ namespace Stage1_2
 					float f_y = (float)y;
 					blocks.push_back(Block{ FLOOR_SPRITE, Convert_X(f_x) , Convert_Y(f_y) });
 				}
-				/*if (MapData[y][x] == OBJ_BLOCK)
-				{
-					float f_x = (float)x;
-					float f_y = (float)y;
-					blocks.push_back(Block{ FLOOR_SPRITE, Convert_X(f_x) , Convert_Y(f_y) });
-				}
-				if (MapData[y][x] == OBJ_WALL)
-				{
-					float f_x = (float)x;
-					float f_y = (float)y;
-					walls.push_back(Wall{ WALL_SPRITE, Convert_X(f_x) , Convert_Y(f_y) });
-				}*/
 				if (MapData[y][x] == OBJ_GRUNT)
 				{
 					float f_x = (float)x;
@@ -203,22 +189,6 @@ namespace Stage1_2
 			}
 			elem.Update(*player, dt);
 		}
-		/*for (Floor& elem : floors)
-		{
-			for (size_t i = 0; i < c.size(); ++i)
-			{
-				elem.Update(*(c[i]), dt);
-			}
-			elem.Update(*player, dt);
-		}
-		for (Wall& elem : walls)
-		{
-			for (size_t i = 0; i < c.size(); ++i)
-			{
-				elem.Update(*(c[i]), dt);
-			}
-			elem.Update(*player, dt);
-		}*/
 		for (Block& elem : blocks)
 		{
 			for (size_t i = 0; i < c.size(); ++i)
@@ -241,7 +211,7 @@ namespace Stage1_2
 		CamFollow(player->Transform_, 200, 120, player->GetFacing());
 		ui->UI_Update(player,dt);
 
-		std::cout << (int)player->PosX <<", "<< (int)player->PosY << std::endl;
+		//std::cout << (int)player->PosX <<", "<< (int)player->PosY << std::endl;
 	}
 
 	void Draw(void)
@@ -252,14 +222,6 @@ namespace Stage1_2
 		{
 			elem.Render();
 		}
-		/*for (Floor& elem : floors)
-		{
-			elem.Render();
-		}
-		for (Wall& elem : walls)
-		{
-			elem.Render();
-		}*/
 		for (Block& elem : blocks)
 		{
 			elem.Render();
@@ -289,8 +251,6 @@ namespace Stage1_2
 	void Free(void)
 	{
 		platforms.clear();
-		//floors.clear();
-		//walls.clear();
 		blocks.clear();
 		PU.clear();
 		barriers.clear();
@@ -317,6 +277,7 @@ namespace Stage1_2
 		delete DMG_SPRITE;
 		delete SPD_SPRITE;
 		delete INVUL_SPRITE;
+
 		delete BARRIER_SPRITE;//objs
 		delete WALL_SPRITE;
 		delete PLAT_SPRITE;

@@ -14,8 +14,6 @@ namespace
 	int Map_Height;
 
 	std::vector<Platform> platforms;
-	//std::vector<Floor> floors;
-	//std::vector<Wall> walls;
 	std::vector<Barrier> barriers;
 	std::vector<Block> blocks;
 	std::vector<PickUp> PU;
@@ -113,12 +111,6 @@ namespace Stage2_2
 					float f_y = (float)y;
 					blocks.push_back(Block{ FLOOR_SPRITE, Convert_X(f_x) , Convert_Y(f_y) });
 				}
-				/*if (MapData[y][x] == OBJ_WALL)
-				{
-					float f_x = (float)x;
-					float f_y = (float)y;
-					walls.push_back(Wall{ WALL_SPRITE, Convert_X(f_x) , Convert_Y(f_y) });
-				}*/
 				if (MapData[y][x] == OBJ_GRUNT)
 				{
 					float f_x = (float)x;
@@ -256,14 +248,6 @@ namespace Stage2_2
 		{
 			elem.Render();
 		}
-		/*for (Floor& elem : floors)
-		{
-			elem.Render();
-		}
-		for (Wall& elem : walls)
-		{
-			elem.Render();
-		}*/
 		for (Barrier& elem : barriers)
 		{
 			elem.Render();
@@ -293,8 +277,6 @@ namespace Stage2_2
 	void Free(void)
 	{
 		platforms.clear();
-		//floors.clear();
-		//walls.clear();
 		blocks.clear();
 		barriers.clear();
 		PU.clear();
@@ -320,6 +302,7 @@ namespace Stage2_2
 		delete HP_SPRITE;
 		delete DMG_SPRITE;
 		delete SPD_SPRITE;
+
 		delete BARRIER_SPRITE;//objs
 		delete WALL_SPRITE;
 		delete PLAT_SPRITE;

@@ -14,8 +14,6 @@ namespace
 	int Map_Height;
 
 	std::vector<Platform> platforms;
-	//std::vector<Floor> floors;
-	//std::vector<Wall> walls;
 	std::vector<Block> blocks;
 	std::vector<Barrier> barriers;
 	std::vector<PickUp> PU;
@@ -49,7 +47,6 @@ namespace
 	Sprite* FLOOR_SPRITE;
 	Sprite* TOWER_SPRITE;
 	Sprite* SIGN_SPRITE;
-
 }
 
 namespace Stage1_1
@@ -124,6 +121,7 @@ namespace Stage1_1
 		tut4->SetActive(true);
 		tut5->SetActive(true);
 		tut6->SetActive(true);
+
 		//place all alpha stuff here
 		tut1->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 		tut2->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
@@ -131,7 +129,7 @@ namespace Stage1_1
 		tut4->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 		tut5->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 		tut6->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
-		player->SetActive(true);
+		
 		Audio->Play(0);
 		Audio->SetLoop(0, 1);
 
@@ -151,12 +149,6 @@ namespace Stage1_1
 					float f_y = (float)y;
 					blocks.push_back(Block{ FLOOR_SPRITE,Convert_X(f_x) , Convert_Y(f_y) });
 				}
-				/*if (MapData[y][x] == OBJ_WALL)
-				{
-					float f_x = (float)x;
-					float f_y = (float)y;
-					walls.push_back(Wall{ WALL_SPRITE,Convert_X(f_x) , Convert_Y(f_y) });
-				}*/
 				if (MapData[y][x] == OBJ_GRUNT)
 				{
 					float f_x = (float)x;
@@ -212,10 +204,10 @@ namespace Stage1_1
 				}
 			}
 		}
-
-
 		for (size_t i = 0; i < c.size(); ++i)
 			c[i]->SetActive(true);
+
+		player->SetActive(true);
 	}
 
 	void Update(float dt)
@@ -294,7 +286,7 @@ namespace Stage1_1
 		next->Update(*player, dt);
 		ui->UI_Update(player, dt);
 
-		std::cout << (int)player->PosX << ", " << (int)player->PosY << std::endl;
+		//std::cout << (int)player->PosX << ", " << (int)player->PosY << std::endl;
 	}
 
 	void Draw(void)
@@ -348,14 +340,6 @@ namespace Stage1_1
 		{
 			elem.Render();
 		}
-		/*for (Floor& elem : floors)
-		{
-			elem.Render();
-		}
-		for (Wall& elem : walls)
-		{
-			elem.Render();
-		}*/
 		for (Block& elem : blocks)
 		{
 			elem.Render();
@@ -379,11 +363,9 @@ namespace Stage1_1
 		PickUp::coin_particles->Render();
 	}
 
-	void Free(void) // free what u init, the rest place in unload
+	void Free(void)
 	{
 		platforms.clear();
-		/*floors.clear();
-		walls.clear();*/
 		blocks.clear();
 		barriers.clear();
 		PU.clear();
@@ -413,11 +395,13 @@ namespace Stage1_1
 		delete TUT4_SPRITE;
 		delete TUT5_SPRITE;
 		delete TUT6_SPRITE;
+
 		delete COIN_SPRITE;//pickups
 		delete HP_SPRITE;
 		delete DMG_SPRITE;
 		delete SPD_SPRITE;
 		delete INVUL_SPRITE;
+
 		delete BARRIER_SPRITE;//objs
 		delete WALL_SPRITE;
 		delete PLAT_SPRITE;
@@ -432,6 +416,7 @@ namespace Stage1_1
 		delete Audio;
 		delete ui;
 
+		// Tutorial sprites
 		delete s1;
 		delete s2;
 		delete s3;

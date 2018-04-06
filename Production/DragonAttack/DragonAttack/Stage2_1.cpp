@@ -204,7 +204,6 @@ namespace Stage2_1
 				c[i]->Update(*player, dt);
 			}
 		}
-
 		for (Platform& elem : platforms)
 		{
 			// added collision for AI
@@ -300,7 +299,6 @@ namespace Stage2_1
 	void Free(void)
 	{
 		platforms.clear();
-		//floors.clear();
 		noupdate_blocks.clear();
 		blocks.clear();
 		barriers.clear();
@@ -328,6 +326,7 @@ namespace Stage2_1
 		delete DMG_SPRITE;
 		delete SPD_SPRITE;
 		delete INVUL_SPRITE;
+
 		delete BARRIER_SPRITE;//objs
 		delete WALL_SPRITE;
 		delete PLAT_SPRITE;

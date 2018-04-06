@@ -13,8 +13,6 @@ namespace
 	int Map_Width;
 	int Map_Height;
 
-	//std::vector<Floor> floors;
-	//std::vector<Wall> walls;
 	std::vector<Block> blocks;
 	LevelChangePlatform *next;
 	std::vector<Characters*> c;
@@ -71,12 +69,6 @@ namespace Stage1_3
 					float f_y = (float)y;
 					blocks.push_back(Block{ FLOOR_SPRITE, Convert_X(f_x) , Convert_Y(f_y) });
 				}
-				/*if (MapData[y][x] == OBJ_WALL)
-				{
-					float f_x = (float)x;
-					float f_y = (float)y;
-					walls.push_back(Wall{ WALL_SPRITE, Convert_X(f_x) , Convert_Y(f_y) });
-				}*/
 			}
 		}
 		c.push_back(Create_Boss_AI(LANCELOT));
@@ -93,24 +85,6 @@ namespace Stage1_3
 		{
 			next->Update(*player, dt);
 		}
-
-		/*for (Floor& elem : floors)
-		{
-			for (size_t i = 0; i < c.size(); ++i)
-			{
-				elem.Update(*(c[i]), dt);
-			}
-
-			elem.Update(*player, dt);
-		}
-		for (Wall& elem : walls)
-		{
-			for (size_t i = 0; i < c.size(); ++i)
-			{
-				elem.Update(*(c[i]), dt);
-			}
-			elem.Update(*player, dt);
-		}*/
 		for (Block& elem : blocks)
 		{
 			for (size_t i = 0; i < c.size(); ++i)
@@ -149,8 +123,6 @@ namespace Stage1_3
 
 	void Free(void)
 	{
-		//floors.clear();
-		//walls.clear();
 		blocks.clear();
 		
 		for (size_t i = 0; i < c.size(); ++i)
@@ -173,10 +145,6 @@ namespace Stage1_3
 		delete WALL_SPRITE;
 		delete LCPLAT_SPRITE;
 		delete FLOOR_SPRITE;
-		//delete COIN_SPRITE;//pickups
-		//delete HP_SPRITE;
-		//delete DMG_SPRITE;
-		//delete SPD_SPRITE;
 		
 		delete player;
 		delete BG;

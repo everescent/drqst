@@ -2,38 +2,38 @@
 
 namespace
 {
-	Dragon *player;
-	Sprite *BG;
-	Transform *M_BG, *M_BG2;
-	Audio_Engine* Audio;
-	UI* ui;
-	AEVec2 startpos = { -320, -700 };
+	Dragon        * player;
+	Sprite        * BG;
+	Transform     * M_BG, * M_BG2;
+	Audio_Engine  * Audio;
+	UI            * ui;
+	AEVec2        startpos = { -320, -700 };
 
-	int** MapData;
-	int Map_Width;
-	int Map_Height;
+	int **  MapData;
+	int     Map_Width;
+	int     Map_Height;
 
-	std::vector<Platform> platforms;
-	std::vector<Barrier> barriers;
-	std::vector<Block> blocks;
-	std::vector<PickUp> PU;
+	std::vector<Platform>     platforms;
+	std::vector<Barrier>      barriers;
+	std::vector<Block>        blocks;
+	std::vector<PickUp>       PU;
+	std::vector<Characters*>  c;
+
 	LevelChangePlatform *next;
-	PickUp *coin1, *coin2, *coin3, *hp, *invul;
-	std::vector<Characters*> c;
 
-	Sprite* COIN_SPRITE;//pickups					 							   
-	Sprite* HP_SPRITE;
-	Sprite* DMG_SPRITE;
-	Sprite* SPD_SPRITE;
-	Sprite* INVUL_SPRITE;
-
-	Sprite* BARRIER_SPRITE;//objs												   
-	Sprite* WALL_SPRITE;
-	Sprite* PLAT_SPRITE;
-	Sprite* LCPLAT_SPRITE;
-	Sprite* FLOOR_SPRITE;
-	Sprite* TOWER_SPRITE;
-	Sprite* SIGN_SPRITE;
+	Sprite*  COIN_SPRITE;//pickups					 							   
+	Sprite*  HP_SPRITE;
+	Sprite*  DMG_SPRITE;
+	Sprite*  SPD_SPRITE;
+	Sprite*  INVUL_SPRITE;
+			 
+	Sprite*  BARRIER_SPRITE;//objs												   
+	Sprite*  WALL_SPRITE;
+	Sprite*  PLAT_SPRITE;
+	Sprite*  LCPLAT_SPRITE;
+	Sprite*  FLOOR_SPRITE;
+	Sprite*  TOWER_SPRITE;
+	Sprite*  SIGN_SPRITE;
 
 	float Camdown = 120.0f;
 }
@@ -46,11 +46,11 @@ namespace Stage3_1
 		if (!Import_MapData(".//Levels/level3-1.txt", MapData, Map_Width, Map_Height)) { AEGfxExit(); }
 
 		// Textures for pick ups
-		COIN_SPRITE    = new Sprite{ S_CreateSquare(50.0f, ".//Textures/coin.png", 1.0f) };
-		HP_SPRITE      = new Sprite{ S_CreateSquare(50.0f, ".//Textures/hp.png", 1.0f) };
-		DMG_SPRITE     = new Sprite{ S_CreateSquare(50.0f, ".//Textures/Fireball.png", 1.0f) };
-		SPD_SPRITE     = new Sprite{ S_CreateSquare(50.0f, ".//Textures/spd.png", 1.0f) };
-		INVUL_SPRITE   = new Sprite{ S_CreateSquare(50.0f, ".//Textures/invul.png", 1.0f) };
+		COIN_SPRITE    = new Sprite{ S_CreateSquare   (35.0f, ".//Textures/coin.png", 1.0f) };
+		HP_SPRITE      = new Sprite{ S_CreateSquare   (50.0f, ".//Textures/hp.png", 1.0f) };
+		DMG_SPRITE     = new Sprite{ S_CreateSquare   (50.0f, ".//Textures/Fireball.png", 1.0f) };
+		SPD_SPRITE     = new Sprite{ S_CreateSquare   (50.0f, ".//Textures/spd.png", 1.0f) };
+		INVUL_SPRITE   = new Sprite{ S_CreateSquare   (50.0f, ".//Textures/invul.png", 1.0f) };
 
 		// Textures for static objects
 		BARRIER_SPRITE = new Sprite{ S_CreateSquare   (130.0f, ".//Textures/box.png") };
@@ -64,6 +64,7 @@ namespace Stage3_1
 		// Texture and transformation matrix for BG
 		BG = new Sprite{ CreateBG(22.0f, 2.0f, ".//Textures/BG_Stage2.png", 1.0f, 15.0f) };
 		M_BG = new Transform{};
+
 		M_BG2 = new Transform{};
 		M_BG2->SetTranslate(0.0f, -1440.0f);
 		M_BG2->Concat();
@@ -189,7 +190,6 @@ namespace Stage3_1
 				c[i]->Update(*player, dt);
 			}
 		}
-
 		for (Platform& elem : platforms)
 		{
 			// added collision for AI
@@ -275,8 +275,6 @@ namespace Stage3_1
 	void Free(void)
 	{
 		platforms.clear();
-		//floors.clear();
-		//walls.clear();
 		blocks.clear();
 		barriers.clear();
 		PU.clear();
@@ -303,6 +301,7 @@ namespace Stage3_1
 		delete DMG_SPRITE;
 		delete SPD_SPRITE;
 		delete INVUL_SPRITE;
+
 		delete BARRIER_SPRITE;//objs
 		delete WALL_SPRITE;
 		delete PLAT_SPRITE;

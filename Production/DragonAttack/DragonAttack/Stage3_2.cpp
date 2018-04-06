@@ -2,37 +2,38 @@
 
 namespace
 {
-	Dragon *player;
-	Sprite *BG;
-	Transform *M_BG, *M_BG2, *M_BG3;
-	Audio_Engine* Audio;
-	UI* ui;
-	AEVec2 startpos = { -345, -2350 };
+	Dragon *       player;
+	Sprite *       BG;
+	Transform *    M_BG, *M_BG2, *M_BG3;
+	Audio_Engine*  Audio;
+	UI*            ui;
+	AEVec2         startpos = { -345, -2350 };
 
-	int** MapData;
-	int Map_Width;
-	int Map_Height;
+	int**   MapData;
+	int     Map_Width;
+	int     Map_Height;
 
-	std::vector<Platform> platforms;
-	std::vector<Barrier> barriers;
-	std::vector<Block> blocks;
-	std::vector<PickUp> PU;
+	std::vector<Platform>     platforms;
+	std::vector<Barrier>      barriers;
+	std::vector<Block>        blocks;
+	std::vector<PickUp>       PU;
+	std::vector<Characters*>  c;
+
 	LevelChangePlatform *next;
-	std::vector<Characters*> c;
 
-	Sprite* COIN_SPRITE;//pickups					 							   
-	Sprite* HP_SPRITE;
-	Sprite* DMG_SPRITE;
-	Sprite* SPD_SPRITE;
-	Sprite* INVUL_SPRITE;
-
-	Sprite* BARRIER_SPRITE;//objs												   
-	Sprite* WALL_SPRITE;
-	Sprite* PLAT_SPRITE;
-	Sprite* LCPLAT_SPRITE;
-	Sprite* FLOOR_SPRITE;
-	Sprite* TOWER_SPRITE;
-	Sprite* SIGN_SPRITE;
+	Sprite*  COIN_SPRITE;//pickups					 							   
+	Sprite*  HP_SPRITE;
+	Sprite*  DMG_SPRITE;
+	Sprite*  SPD_SPRITE;
+	Sprite*  INVUL_SPRITE;
+		     
+	Sprite*  BARRIER_SPRITE;//objs												   
+	Sprite*  WALL_SPRITE;
+	Sprite*  PLAT_SPRITE;
+	Sprite*  LCPLAT_SPRITE;
+	Sprite*  FLOOR_SPRITE;
+	Sprite*  TOWER_SPRITE;
+	Sprite*  SIGN_SPRITE;
 
 	float Camdown = 120.0f;
 }
@@ -45,20 +46,20 @@ namespace Stage3_2
 		if (!Import_MapData(".//Levels/level3-2.txt", MapData, Map_Width, Map_Height)) { AEGfxExit(); }
 
 		// Textures for pick ups
-		COIN_SPRITE    = new Sprite{ S_CreateSquare(50.0f, ".//Textures/coin.png", 1.0f) };
-		HP_SPRITE      = new Sprite{ S_CreateSquare(50.0f,   ".//Textures/hp.png", 1.0f) };
-		DMG_SPRITE     = new Sprite{ S_CreateSquare(50.0f,  ".//Textures/Fireball.png", 1.0f) };
-		SPD_SPRITE     = new Sprite{ S_CreateSquare(50.0f,  ".//Textures/spd.png", 1.0f) };
-		INVUL_SPRITE   = new Sprite{ S_CreateSquare(50.0f, ".//Textures/invul.png", 1.0f) };
-
-		// Textures for static objects
-		BARRIER_SPRITE = new Sprite{ S_CreateSquare(130.0f, ".//Textures/box.png") };
-		WALL_SPRITE    = new Sprite{ CreateFloor(1.0f, ".//Textures/Cobblestone.png", 1.0f, 1.0f) };
-		PLAT_SPRITE    = new Sprite{ CreatePlatform(1.0f, 1.0f, ".//Textures/Cobblestone.png") };
-		LCPLAT_SPRITE  = new Sprite{ CreatePlatform(2.0f, 3.0f, ".//Textures/Win_Platform.png") };
-		FLOOR_SPRITE   = new Sprite{ CreateFloor(1.0f, ".//Textures/Cobblestone.png", 1.0f, 1.0f) };
+		COIN_SPRITE    = new Sprite{ S_CreateSquare   (35.0f, ".//Textures/coin.png", 1.0f) };
+		HP_SPRITE      = new Sprite{ S_CreateSquare   (50.0f,   ".//Textures/hp.png", 1.0f) };
+		DMG_SPRITE     = new Sprite{ S_CreateSquare   (50.0f,  ".//Textures/Fireball.png", 1.0f) };
+		SPD_SPRITE     = new Sprite{ S_CreateSquare   (50.0f,  ".//Textures/spd.png", 1.0f) };
+		INVUL_SPRITE   = new Sprite{ S_CreateSquare   (50.0f, ".//Textures/invul.png", 1.0f) };
+												      
+		// Textures for static objects			      
+		BARRIER_SPRITE = new Sprite{ S_CreateSquare   (130.0f, ".//Textures/box.png") };
+		WALL_SPRITE    = new Sprite{ CreateFloor      (1.0f, ".//Textures/Cobblestone.png", 1.0f, 1.0f) };
+		PLAT_SPRITE    = new Sprite{ CreatePlatform   (1.0f, 1.0f, ".//Textures/Cobblestone.png") };
+		LCPLAT_SPRITE  = new Sprite{ CreatePlatform   (2.0f, 3.0f, ".//Textures/Win_Platform.png") };
+		FLOOR_SPRITE   = new Sprite{ CreateFloor      (1.0f, ".//Textures/Cobblestone.png", 1.0f, 1.0f) };
 		TOWER_SPRITE   = new Sprite{ S_CreateRectangle(300.0f, 300.0f, ".//Textures/tower.png") };
-		SIGN_SPRITE    = new Sprite{ S_CreateSquare(70.0f, ".//Textures/sign.png") };
+		SIGN_SPRITE    = new Sprite{ S_CreateSquare   (70.0f, ".//Textures/sign.png") };
 
 		// Texture and transformation matrix for BG
 		BG = new Sprite{ CreateBG(22.0f, 2.0f, ".//Textures/BG_Stage2.png", 1.0f, 15.0f) };
@@ -305,6 +306,7 @@ namespace Stage3_2
 		delete DMG_SPRITE;
 		delete SPD_SPRITE;
 		delete INVUL_SPRITE;
+
 		delete BARRIER_SPRITE;//objs
 		delete WALL_SPRITE;
 		delete PLAT_SPRITE;
