@@ -168,6 +168,10 @@ namespace Stage3_2
 				}
 			}
 		}
+		for (size_t i = 0; i < c.size(); ++i)
+			c[i]->SetActive(true);
+
+		player->SetActive(true);
 	}
 
 	void Update(float dt)
