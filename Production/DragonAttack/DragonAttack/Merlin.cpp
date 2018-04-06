@@ -368,6 +368,7 @@ void Merlin::Colision_Check(Dragon &player, const float dt)
           if (player.Collision_.Dy_Rect_Rect(Arrow[i].Collision_, 
               Arrow[i].GetVelocity(), player.GetVelocity(), dt))
           {
+            player.SetInvul(true);
             player.Decrease_HP();
             Arrow[i].SetActive(false);
           }
@@ -386,6 +387,7 @@ void Merlin::Colision_Check(Dragon &player, const float dt)
                                              Spread_Eball[i].GetVelocity(),
                                              player.GetVelocity(), dt))
           {
+            player.SetInvul(true);
             player.Decrease_HP();
             Spread_Eball[i].ResetDist();
             Spread_Eball[i].SetActive(false);
@@ -401,6 +403,7 @@ void Merlin::Colision_Check(Dragon &player, const float dt)
       if (player.Collision_.Dy_Rect_Rect(Eball.Collision_, Eball.GetVelocity(),
                                          player.GetVelocity(), dt))
       {
+        player.SetInvul(true);
         player.Decrease_HP();
         Eball.ResetDist();
         Eball.SetActive(false);

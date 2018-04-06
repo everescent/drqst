@@ -65,20 +65,24 @@ void Dragon::ApplyPowerUP()
 void Dragon::HitInvul(const float dt)
 {
   static float    Invul_CD = Invul_Time;
-  static unsigned frame_count = 0;
-  Set_Vulnerable(false);
+  static float    frame_count = 0.3f;
+  Set_Vulnerable(true);
   if (Invul_FLAG)
   {
+    Set_Vulnerable(false);
     Invul_CD -= dt;
-    if (frame_count & 1)
-      Sprite_->SetAlphaTransBM(0.5f, 0.5f, AE_GFX_BM_BLEND);
-    else
+    frame_count -= dt;
+    if (frame_count <= 0.0f)
       Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+    else if (frame_count >= 0.1f)
+      Sprite_->SetAlphaTransBM(0.8f, 0.8f, AE_GFX_BM_BLEND);
+    if (frame_count <= 0)
+      frame_count = 0.3f;
   }
   if (Invul_CD <= 0.0f)
   {
     Invul_CD = Invul_Time;
-    frame_count = 0;
+    frame_count = 0.3f;
     Set_Vulnerable(true);
     Invul_FLAG = false;
   }
