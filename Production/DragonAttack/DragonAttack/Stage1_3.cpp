@@ -25,6 +25,9 @@ namespace
 	Sprite* WALL_SPRITE;
 	Sprite* LCPLAT_SPRITE;
 	Sprite* FLOOR_SPRITE;
+
+	Pause* pause;
+	bool pause_bool = false;
 }
 
 namespace Stage1_3
@@ -52,6 +55,8 @@ namespace Stage1_3
 
 		// Placement for level change platform
 		next = new LevelChangePlatform{LCPLAT_SPRITE, 500.0f,  -300.0f };
+
+		pause = new Pause{};
 	}
 
 	void Init(void)
@@ -78,26 +83,35 @@ namespace Stage1_3
 
 	void Update(float dt)
 	{
-		Audio->Update();
-		
-		c[0]->Update(*player, dt);
-		if (c[0]->Get_HP() <= 0)
-		{
-			next->Update(*player, dt);
-		}
-		for (Block& elem : blocks)
-		{
-			for (size_t i = 0; i < c.size(); ++i)
+		if (!pause_bool) {
+
+			Audio->Update();
+			pause->Update(pause_bool);
+			c[0]->Update(*player, dt);
+			if (c[0]->Get_HP() <= 0)
 			{
-				elem.Update(*(c[i]), dt);
+				next->Update(*player, dt);
 			}
-			elem.Update(*player, dt);
+			for (Block& elem : blocks)
+			{
+				for (size_t i = 0; i < c.size(); ++i)
+				{
+					elem.Update(*(c[i]), dt);
+				}
+				elem.Update(*player, dt);
+			}
+
+			player->Update(*player, dt);
+			ui->UI_Update(player, dt);
+
+			//std::cout << (int)player->PosX << ", " << (int)player->PosY << std::endl;
 		}
 
-		player->Update(*player, dt);
-		ui->UI_Update(player,dt);
+		else 
+		{
+			pause->Update(pause_bool);
 
-		//std::cout << (int)player->PosX << ", " << (int)player->PosY << std::endl;
+		}
 	}
 
 	void Draw(void)
@@ -119,6 +133,8 @@ namespace Stage1_3
 		player->Render();
 		player->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 		ui->Render();
+
+		if (pause_bool) pause->Render();
 	}
 
 	void Free(void)
@@ -152,5 +168,6 @@ namespace Stage1_3
 		delete Audio;
 		delete ui;
 		delete next;
+		delete pause;
 	}
 }

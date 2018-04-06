@@ -34,6 +34,9 @@ namespace
 	Sprite* FLOOR_SPRITE;
 	Sprite* TOWER_SPRITE;
 	Sprite* SIGN_SPRITE;
+
+	Pause* pause;
+	bool pause_bool = false;
 }
 
 namespace Stage1_2
@@ -72,6 +75,8 @@ namespace Stage1_2
 
 		// Placement for level change platform
 		next = new LevelChangePlatform {LCPLAT_SPRITE, 7300.0f,  240.0f };
+
+		pause = new Pause{}; 
 	}
 
 	void Init(void)
@@ -171,48 +176,55 @@ namespace Stage1_2
 
 	void Update(float dt)
 	{
-		Audio->Update();
-
-		for (size_t i = 0; i < c.size(); ++i)
+		pause->Update(pause_bool);
+		if (!pause_bool) 
 		{
-			if (c[i]->IsActive())
-			{
-				c[i]->Update(*player, dt);
-			}
-		}
+			
+			Audio->Update();
 
-		for (Platform& elem : platforms)
-		{
-			// added collision for AI
 			for (size_t i = 0; i < c.size(); ++i)
 			{
-				elem.Update(*(c[i]), dt);
+				if (c[i]->IsActive())
+				{
+					c[i]->Update(*player, dt);
+				}
 			}
-			elem.Update(*player, dt);
-		}
-		for (Block& elem : blocks)
-		{
-			for (size_t i = 0; i < c.size(); ++i)
-			{
-				elem.Update(*(c[i]), dt);
-			}
-			elem.Update(*player, dt);
-		}
-		for (Barrier& elem : barriers)
-		{
-			elem.Update(*player, dt);
-		}
-		for (PickUp& elem : PU)
-		{
-			elem.Update(*player, dt);
-		}
 
-		next->Update(*player, dt);
-		player->Update(*player, dt);
-		CamFollow(player->Transform_, 200, 120, player->GetFacing());
-		ui->UI_Update(player,dt);
+			for (Platform& elem : platforms)
+			{
+				// added collision for AI
+				for (size_t i = 0; i < c.size(); ++i)
+				{
+					elem.Update(*(c[i]), dt);
+				}
+				elem.Update(*player, dt);
+			}
+			for (Block& elem : blocks)
+			{
+				for (size_t i = 0; i < c.size(); ++i)
+				{
+					elem.Update(*(c[i]), dt);
+				}
+				elem.Update(*player, dt);
+			}
+			for (Barrier& elem : barriers)
+			{
+				elem.Update(*player, dt);
+			}
+			for (PickUp& elem : PU)
+			{
+				elem.Update(*player, dt);
+			}
+
+			next->Update(*player, dt);
+			player->Update(*player, dt);
+			CamFollow(player->Transform_, 200, 120, player->GetFacing());
+			ui->UI_Update(player, dt);
+		}
 
 		//std::cout << (int)player->PosX <<", "<< (int)player->PosY << std::endl;
+
+		
 	}
 
 	void Draw(void)
@@ -247,6 +259,8 @@ namespace Stage1_2
 
 		// Particle Effects
 		PickUp::coin_particles->Render();
+
+		if (pause_bool) pause->Render();
 	}
 
 	void Free(void)
@@ -293,5 +307,7 @@ namespace Stage1_2
 		delete Audio;
 		delete ui;
 		delete next;
+
+		delete pause;
 	}
 }

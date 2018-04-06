@@ -34,6 +34,8 @@ namespace
 	Sprite* FLOOR_SPRITE;
 	Sprite* TOWER_SPRITE;
 	Sprite* SIGN_SPRITE;
+	Pause* pause;
+	bool pause_bool = false;
 
 	float Camdown = 120.0f;
 }
@@ -86,6 +88,8 @@ namespace Stage2_1
 
 		// Placement for level change platform
 		next = new LevelChangePlatform{ LCPLAT_SPRITE, 1180.0f,  -2700.0f }; //-2685?
+		pause = new Pause{};
+
 	}
 
 	void Init(void)
@@ -195,62 +199,67 @@ namespace Stage2_1
 
 	void Update(float dt)
 	{
-		Audio->Update();
-	
-		for (size_t i = 0; i < c.size(); ++i)
-		{
-			if (c[i]->IsActive())
-			{
-				c[i]->Update(*player, dt);
-			}
-		}
-		for (Platform& elem : platforms)
-		{
-			// added collision for AI
+		if (!pause_bool) {
+
+			Audio->Update();
+			pause->Update(pause_bool);
+
 			for (size_t i = 0; i < c.size(); ++i)
 			{
-				elem.Update(*(c[i]), dt);
+				if (c[i]->IsActive())
+				{
+					c[i]->Update(*player, dt);
+				}
 			}
-			elem.Update(*player, dt);
-		}
-		for (Block& elem : noupdate_blocks)
-		{
-			elem.Transform_.SetTranslate(elem.PosX, elem.PosY);
-			elem.Transform_.Concat();
-		}
-		for (Block& elem : blocks)
-		{
-			for (size_t i = 0; i < c.size(); ++i)
+			for (Platform& elem : platforms)
 			{
-				elem.Update(*(c[i]), dt);
+				// added collision for AI
+				for (size_t i = 0; i < c.size(); ++i)
+				{
+					elem.Update(*(c[i]), dt);
+				}
+				elem.Update(*player, dt);
 			}
-			elem.Update(*player, dt);
-		}
-		for (Barrier& elem : barriers)
-		{
-			elem.Update(*player, dt);
-		}
-		for (PickUp& elem : PU)
-		{
-			elem.Update(*player, dt);
-		}
+			for (Block& elem : noupdate_blocks)
+			{
+				elem.Transform_.SetTranslate(elem.PosX, elem.PosY);
+				elem.Transform_.Concat();
+			}
+			for (Block& elem : blocks)
+			{
+				for (size_t i = 0; i < c.size(); ++i)
+				{
+					elem.Update(*(c[i]), dt);
+				}
+				elem.Update(*player, dt);
+			}
+			for (Barrier& elem : barriers)
+			{
+				elem.Update(*player, dt);
+			}
+			for (PickUp& elem : PU)
+			{
+				elem.Update(*player, dt);
+			}
 
-		next->Update(*player, dt);
-		player->Update(*player, dt);
+			next->Update(*player, dt);
+			player->Update(*player, dt);
 
-		/* Camera down testing */
-		if (AEInputCheckCurr(AEVK_S))
-		{
-			if (Camdown > - 250) // setting lowest point
-				Camdown -= 4.0f;
-		}
-		if (!AEInputCheckCurr(AEVK_S) && Camdown < 120)
-		{
-			Camdown += 4.0f;
-		}
-		CamFollow(player->Transform_, 200, Camdown, player->GetFacing());
+			/* Camera down testing */
+			if (AEInputCheckCurr(AEVK_S))
+			{
+				if (Camdown > -250) // setting lowest point
+					Camdown -= 4.0f;
+			}
+			if (!AEInputCheckCurr(AEVK_S) && Camdown < 120)
+			{
+				Camdown += 4.0f;
+			}
+			CamFollow(player->Transform_, 200, Camdown, player->GetFacing());
 
-		ui->UI_Update(player, dt);
+			ui->UI_Update(player, dt);
+		}
+		else pause->Update(pause_bool);
 
 		//std::cout << (int)player->PosX << ", " << (int)player->PosY << std::endl;
 	}
@@ -291,6 +300,8 @@ namespace Stage2_1
 		player->Render();
 		player->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 		ui->Render();
+
+		if (pause_bool) pause->Render();
 
 		// Particle Effects
 		PickUp::coin_particles->Render();
@@ -344,5 +355,6 @@ namespace Stage2_1
 		delete Audio;
 		delete next;
 		delete ui;
+		delete pause;
 	}
 }

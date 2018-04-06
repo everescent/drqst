@@ -39,6 +39,9 @@ namespace // global variables used in this file
 	Sprite* plat_sprite;                 // texture for the platform
 
     BOSS_PHASE curr_phase;               // current phase of the boss
+
+	Pause* pause;
+	bool p_bool = false;
 }
 
 namespace Stage3_3
@@ -69,7 +72,7 @@ namespace Stage3_3
         // audio and us used for the stage
 		audio = new Audio_Engine{ 1, [](std::vector <std::string> &playlist)->void {playlist.push_back(".//Audio/KingArthur_BGM.mp3"); } };
 		ui    = new UI{ player };
-
+		pause = new Pause{};
 		// get the map data and create corresponding objects for the stage
 		for (int y = 0; y < Map_Height; ++y)
 		{
@@ -122,70 +125,74 @@ namespace Stage3_3
 	**************************************************************************************/
 	void Update(float dt)
 	{
-		// if king arthur has died, switch state to credit screen
-		if (last_boss->Get_HP() <= 0)
-		{
-			SM::Set_Next(SS_QUIT);
-			GSM::next = GS_CREDITS;
-	    }
-		else if (player->Get_HP() <= 0)
-		{
-			SM::Set_Next(SS_RESTART);  // change state to restart
-			last_boss->Set_HP(0);      // kills the boss
+		pause->Update(p_bool);
+		if (!p_bool) {
+
+			// if king arthur has died, switch state to credit screen
+			if (last_boss->Get_HP() <= 0)
+			{
+				SM::Set_Next(SS_QUIT);
+				GSM::next = GS_CREDITS;
+			}
+			else if (player->Get_HP() <= 0)
+			{
+				SM::Set_Next(SS_RESTART);  // change state to restart
+				last_boss->Set_HP(0);      // kills the boss
+			}
+
+			//player->Set_Vulnerable(true);
+		   // update the audio
+			audio->Update();
+
+			// get the current phase of the boss Ai
+			curr_phase = last_boss->Get_Phase();
+
+			// update the boss behavior
+			last_boss->Update(*player, dt);
+
+			// update the collision between AI/player and floor 
+			for (Block& elem : blocks)
+			{
+				elem.Update(*player, dt);
+
+				// only updates the ai if its in phase 2
+				if (curr_phase == PHASE_2)
+				{
+					auto& mobs = last_boss->Get_Mobs();
+
+					for (auto& elem1 : mobs)
+					{
+						elem.Update(*elem1, dt);
+					}
+
+				}
+			}
+
+			// update collision between player and platforms
+			// different phases have different platforms for the fight
+			for (Platform& elem : platforms)
+			{
+				// check collision with corresponding platforms depending on current phase
+				switch (curr_phase)
+				{
+				case PHASE_1: case PHASE_3:
+
+					if (elem.Collision_.Get_MinPoint().y == -200)
+						elem.Update(*player, dt);
+					break;
+				case PHASE_2:
+
+					if (elem.Collision_.Get_MinPoint().y != -200)
+						elem.Update(*player, dt);
+					break;
+				default: break;
+				}
+			}
+
+			// update the player behavior and UI
+			player->Update(*player, dt);
+			ui->UI_Update(player, dt);
 		}
-
-		//player->Set_Vulnerable(true);
-	   // update the audio
-	   audio->Update();
-
-	   // get the current phase of the boss Ai
-       curr_phase = last_boss->Get_Phase();
-
-		// update the boss behavior
-        last_boss->Update(*player, dt);
-
-		// update the collision between AI/player and floor 
-        for (Block& elem : blocks)
-        {
-            elem.Update(*player, dt);
-			
-			// only updates the ai if its in phase 2
-            if (curr_phase == PHASE_2)
-            {
-                auto& mobs = last_boss->Get_Mobs();
-
-                for (auto& elem1 : mobs)
-                {
-                    elem.Update(*elem1, dt);
-                }
-                
-            }
-        }
-
-        // update collision between player and platforms
-		// different phases have different platforms for the fight
-		for (Platform& elem : platforms)
-        {
-            // check collision with corresponding platforms depending on current phase
-			switch (curr_phase)
-            {
-            case PHASE_1: case PHASE_3:
-			
-                if (elem.Collision_.Get_MinPoint().y == -200)
-                    elem.Update(*player, dt);
-                break;
-            case PHASE_2:
-			
-                if(elem.Collision_.Get_MinPoint().y != -200)
-                    elem.Update(*player, dt);
-                break;
-            default: break;
-            }
-        }
-
-        // update the player behavior and UI
-		player->Update(*player, dt);
-        ui->UI_Update(player, dt);
 	}
 	/**************************************************************************************
 	//
@@ -235,6 +242,8 @@ namespace Stage3_3
         player->Render();    // render player on screen
          
         ui->Render();        // render the UI on screen
+
+		if (p_bool) pause->Render();
 	}
 
 	/**************************************************************************************
@@ -270,5 +279,6 @@ namespace Stage3_3
 		delete wall_sprite;
 		delete floor_sprite;
 		delete plat_sprite;
+		delete pause;
 	}
 }

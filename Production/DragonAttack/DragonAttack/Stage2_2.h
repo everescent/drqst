@@ -19,6 +19,7 @@
 #include "Level_Import.h"
 #include "LevelChangePlatform.h"
 #include "UI.h"
+#include "Pause.h"
 #include <utility>
 #include <iostream>
 

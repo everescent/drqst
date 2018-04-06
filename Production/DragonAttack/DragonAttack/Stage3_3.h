@@ -29,6 +29,7 @@ Technology is prohibited.
 #include "LevelChangePlatform.h"
 #include "UI.h"
 #include "Boss_Phase.h"
+#include "Pause.h"
 #include <utility>
 #include <iostream>
 
