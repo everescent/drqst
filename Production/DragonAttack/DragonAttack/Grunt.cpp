@@ -55,33 +55,33 @@ Grunt::Grunt(Sprite *p_Sprite, const float posX, const float posY)
 /* Idle state for grunt */
 void Grunt::Idle(const Dragon &d, const float dt)
 {
-	/*//UNREFERENCED_PARAMETER(d);
-	//float IdleXPos = PosX;
+	/*UNREFERENCED_PARAMETER(d);
+	float IdleXPos = PosX;
 
-	//int MaxXPos = (int)(IdleXPos + 120.0f); // max boundary
-	//int MinXPos = (int)(IdleXPos - 120.0f); // min boundary
-	//int EstCurrentX = (int)(this->PosX);
+	int MaxXPos = (int)(IdleXPos + 120.0f); // max boundary
+	int MinXPos = (int)(IdleXPos - 120.0f); // min boundary
+	int EstCurrentX = (int)(this->PosX);
 
-	//if (EstCurrentX < (EstIdleX - 121) || EstCurrentX >(EstIdleX + 120)) // if lesser than min boundary OR greater than max boundary
-	//{
-	//	//reason for strange values is due to how the obj will enter the bottom condition if it is close to the boundary
-	//	//then re-enter this condition because of the *= -1, forever continuing the back and forth
+	if (EstCurrentX < (EstIdleX - 121) || EstCurrentX >(EstIdleX + 120)) // if lesser than min boundary OR greater than max boundary
+	{
+		//reason for strange values is due to how the obj will enter the bottom condition if it is close to the boundary
+		//then re-enter this condition because of the *= -1, forever continuing the back and forth
 
-	//	MovementX = (this->PosX) - IdleXPos;
-	//	PosX -= MovementX / 120;
-	//}
-	//else
-	//{
-	//	if (PlayerSeen == false)
-	//	{
-	//		if ((PosX > MaxXPos) || (PosX < MinXPos))
-	//		{
-	//			moveSpd *= -1;
-	//		}
+		MovementX = (this->PosX) - IdleXPos;
+		PosX -= MovementX / 120;
+	}
+	else
+	{
+		if (PlayerSeen == false)
+		{
+			if ((PosX > MaxXPos) || (PosX < MinXPos))
+			{
+				moveSpd *= -1;
+			}
 
-	//		PosX += moveSpd;
-	//	}
-	//}*/
+			PosX += moveSpd;
+		}
+	}*/
 	
 	anim.SetState(IDLE_ANIM);
 
@@ -100,13 +100,12 @@ void Grunt::Idle(const Dragon &d, const float dt)
 		}
 	}
 
-
 	if (!LineOfSight(d))
 		return;
 	else
 	{
 		Set_Facing_Dir(d);
-		if (abs(d.PosX - PosX) <= 550.0f)
+		if (abs(d.PosX - PosX) <= 550.0f && abs(d.PosX - PosX) > 80.0f)
 			current_action = MOVING;
 	}
 }
@@ -115,21 +114,21 @@ void Grunt::Idle(const Dragon &d, const float dt)
 void Grunt::MoveTowardPlayer(const Dragon &d, const float dt)
 {
 	/*
-	//MovementX = (this->PosX) - d.PosX;
-	//MovementY = (this->PosY) - d.PosY;
+	MovementX = (this->PosX) - d.PosX;
+	MovementY = (this->PosY) - d.PosY;
 
-	//if (MovementX < 100.0f && MovementY < 50.0f &&
-	//	MovementX > -100.0f && MovementY > -50.0f) // Attack Range (change accordingly)
-	//{
-	//	PlayerInRange = true;
-	//}
-	//else
-	//if (MovementX > 100.0f || MovementX < -100.0f) // not entering
-	//{
-	//	PlayerInRange = false;
-	//}
+	if (MovementX < 100.0f && MovementY < 50.0f &&
+		MovementX > -100.0f && MovementY > -50.0f) // Attack Range (change accordingly)
+	{
+		PlayerInRange = true;
+	}
+	else
+	if (MovementX > 100.0f || MovementX < -100.0f) // not entering
+	{
+		PlayerInRange = false;
+	}
 
-	//PosX -= MovementX * 0.6f * dt;
+	PosX -= MovementX * 0.6f * dt;
 	*/
 
 	anim.SetState(WALK_ANIM);
@@ -137,6 +136,12 @@ void Grunt::MoveTowardPlayer(const Dragon &d, const float dt)
 						 
 	if (LineOfSight(d)) // player is seen
 	{
+		if (abs(PosX - d.PosX) <= 80.0f)
+		{
+			current_action = IDLE;
+			return;
+		}
+
 		if (Get_Direction() == RIGHT)
 		{
 			PosX += GetVelocity().x * dt; // move to the right
@@ -152,27 +157,27 @@ void Grunt::MoveTowardPlayer(const Dragon &d, const float dt)
 
 		// update the collision box of grunt
 		Collision_.Update_Col_Pos(PosX - GRUNT_SCALE, PosY - GRUNT_SCALE,  // min point
-			PosX + GRUNT_SCALE - 60.0f, PosY + GRUNT_SCALE); // max point
+			PosX + GRUNT_SCALE, PosY + GRUNT_SCALE); // max point
 	}
 }
 
 /* Checks if the player is in view */
 bool Grunt::LineOfSight(const Dragon &d)
 {
-	/*//float playerDist = (d.PosX - this->PosX);
-	//if (playerDist <= 600.0f && playerDist >= -600.0f)  // vision range
-	//{
-	//	if ((d.PosY < PosY + 150.0f) && (d.PosY > PosY - 150.0f))
-	//	{
-	//		PlayerSeen = true;
-	//	}
-	//}
-	//else
-	//{
-	//	PlayerSeen = false;
-	//}*/
+	/*float playerDist = (d.PosX - this->PosX);
+	if (playerDist <= 600.0f && playerDist >= -600.0f)  // vision range
+	{
+		if ((d.PosY < PosY + 150.0f) && (d.PosY > PosY - 150.0f))
+		{
+			PlayerSeen = true;
+		}
+	}
+	else
+	{
+		PlayerSeen = false;
+	}*/
 
-	return abs(d.PosX - PosX) < 1000.0f;
+	return (abs(d.PosX - PosX) < 1000.0f);
 }
 
 /* Sets the grunt facing direction */
