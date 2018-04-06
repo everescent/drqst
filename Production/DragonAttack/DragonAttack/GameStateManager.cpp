@@ -169,10 +169,10 @@ namespace GSM
 	**************************************************************************************/
 	void Update_and_Draw(float dt)
 	{
-        if (Input::Quit_Triggered())
+        /*if (Input::Quit_Triggered())
         {
             next = GS_QUIT;
-        }
+        }*/
 
 		GSF[current].Update(dt);
 

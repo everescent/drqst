@@ -46,6 +46,8 @@ public:
   **************************************************************************************/
   Sprite& SetTexPos       (const float posU       , const float  posV        );
 
+  Sprite& SetTex(AEGfxTexture* texture);
+
   /**************************************************************************************
   Description:
     Set tint RGB.

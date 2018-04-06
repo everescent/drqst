@@ -47,6 +47,9 @@ namespace
 	Sprite* FLOOR_SPRITE;
 	Sprite* TOWER_SPRITE;
 	Sprite* SIGN_SPRITE;
+
+	Pause* pause;
+	bool pause_bool = false;
 }
 
 namespace Stage1_1
@@ -111,6 +114,8 @@ namespace Stage1_1
 		tut5 = new GameObject{ TUT5_SPRITE, Col_Comp() };
 		s6 = new Sign{ SIGN_SPRITE, 5200.0f, -75.0f };
 		tut6 = new GameObject{ TUT6_SPRITE, Col_Comp() };
+
+		pause = new Pause{};
 	}
 
 	void Init(void)
@@ -212,155 +217,166 @@ namespace Stage1_1
 
 	void Update(float dt)
 	{
-		Audio->Update();
- 
-		  s1->Update(*player, dt);	   
-		tut1->Transform_.SetTranslate( 400.0f, -20.0f );
-		tut1->Transform_.Concat();	    
-									    
-		  s2->Update(*player, dt);	    
-		tut2->Transform_.SetTranslate( 1270.0f, -20.0f );
-		tut2->Transform_.Concat();	    
-									    
-		  s3->Update(*player, dt);	    
-		tut3->Transform_.SetTranslate( 1650.0f, -20.0f );
-		tut3->Transform_.Concat();	   
-									   
-		  s4->Update(*player, dt);	   
-		tut4->Transform_.SetTranslate( 2600.0f, -20.0f );
-		tut4->Transform_.Concat();	    
-									    
-	      s5->Update(*player, dt);	    
-		tut5->Transform_.SetTranslate( 4200.0f, 160.0f );
-		tut5->Transform_.Concat();	    
-								    
-		  s6->Update(*player, dt);	    
-		tut6->Transform_.SetTranslate( 5200.0f, 160.0f );
-		tut6->Transform_.Concat();
+		if (!pause_bool) {
+			Audio->Update();
+			pause->Update(pause_bool);
+			s1->Update(*player, dt);
+			tut1->Transform_.SetTranslate(400.0f, -20.0f);
+			tut1->Transform_.Concat();
 
-		for (size_t i = 0; i < c.size(); ++i)
-		{
-			if (c[i]->IsActive())
-			{
-				c[i]->Update(*player, dt);
-			}
-			archerTower->Update(*(c[i]), dt);
-		}
+			s2->Update(*player, dt);
+			tut2->Transform_.SetTranslate(1270.0f, -20.0f);
+			tut2->Transform_.Concat();
 
-		if (!(box1->IsActive()))
-		{
-			coin1->Update(*player, dt);
-		}
+			s3->Update(*player, dt);
+			tut3->Transform_.SetTranslate(1650.0f, -20.0f);
+			tut3->Transform_.Concat();
 
-		for (Platform& elem : platforms)
-		{
-			// added collision for AI
+			s4->Update(*player, dt);
+			tut4->Transform_.SetTranslate(2600.0f, -20.0f);
+			tut4->Transform_.Concat();
+
+			s5->Update(*player, dt);
+			tut5->Transform_.SetTranslate(4200.0f, 160.0f);
+			tut5->Transform_.Concat();
+
+			s6->Update(*player, dt);
+			tut6->Transform_.SetTranslate(5200.0f, 160.0f);
+			tut6->Transform_.Concat();
+
 			for (size_t i = 0; i < c.size(); ++i)
 			{
-				elem.Update(*(c[i]), dt);
+				if (c[i]->IsActive())
+				{
+					c[i]->Update(*player, dt);
+				}
+				archerTower->Update(*(c[i]), dt);
 			}
-			elem.Update(*player, dt);
-		}
-		for (Block& elem : blocks)
-		{
-			for (size_t i = 0; i < c.size(); ++i)
+
+			if (!(box1->IsActive()))
 			{
-				elem.Update(*(c[i]), dt);
+				coin1->Update(*player, dt);
 			}
-			elem.Update(*player, dt);
-		}
-		for (Barrier& elem : barriers)
-		{
-			elem.Update(*player, dt);
-			elem.Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
-		}
-		for (PickUp& elem : PU)
-		{
-			elem.Update(*player, dt);
+
+			for (Platform& elem : platforms)
+			{
+				// added collision for AI
+				for (size_t i = 0; i < c.size(); ++i)
+				{
+					elem.Update(*(c[i]), dt);
+				}
+				elem.Update(*player, dt);
+			}
+			for (Block& elem : blocks)
+			{
+				for (size_t i = 0; i < c.size(); ++i)
+				{
+					elem.Update(*(c[i]), dt);
+				}
+				elem.Update(*player, dt);
+			}
+			for (Barrier& elem : barriers)
+			{
+				elem.Update(*player, dt);
+				elem.Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+			}
+			for (PickUp& elem : PU)
+			{
+				elem.Update(*player, dt);
+			}
+
+			archerTower->Update(*player, dt);
+			player->Update(*player, dt);
+			box1->Update(*player, dt);
+			CamFollow(player->Transform_, 200, 120, player->GetFacing());
+			next->Update(*player, dt);
+			ui->UI_Update(player, dt);
 		}
 
-		archerTower->Update(*player, dt);
-		player->Update(*player, dt);
-		box1->Update(*player, dt);
-		CamFollow(player->Transform_, 200, 120, player->GetFacing());
-		next->Update(*player, dt);
-		ui->UI_Update(player, dt);
-
+		else
+		{
+			Audio->SetPause(0, 1);
+			pause->Update(pause_bool);
+		}
 		//std::cout << (int)player->PosX << ", " << (int)player->PosY << std::endl;
 	}
 
 	void Draw(void)
 	{
-		BG->Render_Object(*M_BG);
 		
-		// Tutorial Message Pop Ups
-		s1->Render();
-		if (s1->ShowTutorial)
-		{
-			tut1->Render();
-		}
-		s2->Render();
-		if (s2->ShowTutorial)
-		{
-			tut2->Render();
-		}
-		s3->Render();
-		if (s3->ShowTutorial)
-		{
-			tut3->Render();
-		}
-		s4->Render();
-		if (s4->ShowTutorial)
-		{
-			tut4->Render();
-		}
-		s5->Render();
-		if (s5->ShowTutorial)
-		{
-			tut5->Render();
-		}
-		s6->Render();
-		if (s6->ShowTutorial)
-		{
-			tut6->Render();
-		}
+			BG->Render_Object(*M_BG);
 
-		if (!(box1->IsActive()))
-		{
-			coin1->Render();
-		}
+			// Tutorial Message Pop Ups
+			s1->Render();
+			if (s1->ShowTutorial)
+			{
+				tut1->Render();
+			}
+			s2->Render();
+			if (s2->ShowTutorial)
+			{
+				tut2->Render();
+			}
+			s3->Render();
+			if (s3->ShowTutorial)
+			{
+				tut3->Render();
+			}
+			s4->Render();
+			if (s4->ShowTutorial)
+			{
+				tut4->Render();
+			}
+			s5->Render();
+			if (s5->ShowTutorial)
+			{
+				tut5->Render();
+			}
+			s6->Render();
+			if (s6->ShowTutorial)
+			{
+				tut6->Render();
+			}
+
+			if (!(box1->IsActive()))
+			{
+				coin1->Render();
+			}
 
 
-		for (size_t i = 0; i < c.size(); ++i)
-		{
-			c[i]->Render();
-		}
-		archerTower->Render();
-		for (Platform& elem : platforms)
-		{
-			elem.Render();
-		}
-		for (Block& elem : blocks)
-		{
-			elem.Render();
-		}
-		for (Barrier& elem : barriers)
-		{
-			elem.Render();
-		}
-		for (PickUp& elem : PU)
-		{
-			elem.Render();
-		}
+			for (size_t i = 0; i < c.size(); ++i)
+			{
+				c[i]->Render();
+			}
+			archerTower->Render();
+			for (Platform& elem : platforms)
+			{
+				elem.Render();
+			}
+			for (Block& elem : blocks)
+			{
+				elem.Render();
+			}
+			for (Barrier& elem : barriers)
+			{
+				elem.Render();
+			}
+			for (PickUp& elem : PU)
+			{
+				elem.Render();
+			}
 
-		box1->Render();
-		player->Render();
-		player->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
-		next->Render();
-		ui->Render();
+			box1->Render();
+			player->Render();
+			player->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+			next->Render();
+			ui->Render();
 
-		// Particle Effects
-		PickUp::coin_particles->Render();
+			// Particle Effects
+			PickUp::coin_particles->Render();
+		
+		if (pause_bool)
+			pause->Render();
 	}
 
 	void Free(void)
@@ -376,7 +392,7 @@ namespace Stage1_1
 			delete c[i];
 		}
 		c.clear();
-
+		
 	}
 
 	void Unload(void)
@@ -434,5 +450,7 @@ namespace Stage1_1
 		delete archerTower;
 		delete coin1;
 		delete next;
+
+		delete pause;
 	}
 }

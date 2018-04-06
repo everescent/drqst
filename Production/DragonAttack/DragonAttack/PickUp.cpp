@@ -96,7 +96,7 @@ void PickUp::Update(Dragon &player, const float dt)
       {
         //Give HP if HP is picked up
         player.SetPickup(Type_, false);
-        player.Increase_HP(1);
+	   player.Increase_HP(1);
       }
       else
         //If not activate cooldown timer

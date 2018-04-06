@@ -20,6 +20,7 @@
 #include "LevelChangePlatform.h"
 #include "UI.h"
 #include "Sign.h"
+#include "Pause.h"
 #include <utility>
 #include <iostream>
 
