@@ -40,19 +40,19 @@ const float  Blink_CD_Time   { 10.0f };   //Cooldown time for Blink
 const float  Merlin_Att_Inter{ 2.0f  };   //Merlin's Attack Interval
 
 const float  Eball_Scale     { 50.0f   }; //Energy Ball cooldown time
-const float  Eball_CD_Time   { 1.0f    }; //Energy Ball cooldown time
+const float  Eball_CD_Time   { 2.0f    }; //Energy Ball cooldown time
 const float  Eball_Death     { 1000.0f }; //How far the energy ball travels
 
 const float  Spread_Scale    { 30.0f   }; //Spread shot cooldown time
-const float  Spread_CD_Time  { 10.0f   }; //Spread shot cooldown time
+const float  Spread_CD_Time  { 8.0f   }; //Spread shot cooldown time
 const float  Spread_Death    { 1000.0f }; //How far the spread shot travels
 
 const int    A_Rain_Buffer   { 30      }; //How many arrows shot
 const float  A_Rain_Scale    { 30.0f   }; //Arrow death
-const float  A_Rain_CD_Time  { 20.0f   }; //Arrow rain cooldown time
+const float  A_Rain_CD_Time  { 30.0f   }; //Arrow rain cooldown time
 const float  A_Rain_Death    { 1000.0f }; //Arrow death
 
-const float  Melee_CD_Time   { 60.0f };   //Melee cooldown time
+const float  Melee_CD_Time   { 10.0f };   //Melee cooldown time
 
 const AEVec2 Blink_Pos_1     { -300.0f, 100.0f}; //(Point) 1st blink postion
 const AEVec2 Blink_Pos_2     { 300.0f, 100.0f }; //(Point) 2nd blink postion

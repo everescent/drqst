@@ -173,10 +173,10 @@ void Merlin::Sp_Eball(Dragon &player, const float dt)
                        (player.PosY - PosY) };
   //Second vector points above player
   AEVec2 Displacement1{ (player.PosX - PosX),
-                        (player.PosY - PosY) + 100.0f};
+                        (player.PosY - PosY) + 300.0f};
   //Third vector points below player
   AEVec2 Displacement2{ (player.PosX - PosX),
-                        (player.PosY - PosY) - 100.0f};
+                        (player.PosY - PosY) - 300.0f};
   //Normalize and scale all vectors
   AEVec2Normalize(&Displacement0, &Displacement0);
   AEVec2Scale(&Displacement0, &Displacement0, 360.0f);
@@ -550,6 +550,9 @@ void Merlin::Update(Dragon &player, const float dt)
         {
           //Decrease HP by player's damage
           Decrease_HP(player.GetDamage());
+          //Add Megafireball
+          player.AddCharge();
+          player.PlayImpact();
           //Reset the distance of the fireball and set false
           player.GetFireball()[i].Projectile::ResetDist();
           player.GetFireball()[i].SetActive(false);
@@ -560,6 +563,7 @@ void Merlin::Update(Dragon &player, const float dt)
       {
         //Decrease HP by player's damage
         Decrease_HP(player.GetMDamage());
+        player.AddCharge();
         player.PlayImpact();
         //Reset the distance of the fireball and set false
         player.GetMfireball().Projectile::ResetDist();
