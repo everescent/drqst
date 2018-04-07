@@ -116,10 +116,10 @@ namespace SM
 		StageManager[SS_SCORE].Free       = Free_Score_Page;
 		StageManager[SS_SCORE].Unload     = Unload_Score_Page;
 
-		s_previous    = STAGE_1_1;
-		s_current     = STAGE_1_1;
-		s_next        = STAGE_1_1;
-		s_after_score = STAGE_1_1;
+		s_previous    = STAGE_2_1;
+		s_current     = STAGE_2_1;
+		s_next        = STAGE_2_1;
+		s_after_score = STAGE_2_1;
 
 	}
 	

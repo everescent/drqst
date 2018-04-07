@@ -41,7 +41,7 @@ void CamFollow(Transform const &PosMatrix, float OffsetX, float OffsetY, float D
   //Current position Y
   float        PosYCurr = PosMatrix.GetTranslateMatrix().m[1][2]          ;
   //To use a smooth animation curve
-  float        Accel    = 4.0f                                            ;
+  float        Accel    = 6.0f                                            ;
   //Check direction
   if (Direction < 0.0f) //If facing left
   {

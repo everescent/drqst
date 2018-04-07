@@ -45,7 +45,7 @@ void Dragon::ApplyPowerUP()
   if (Pickup_.SPD)
   {
     //Increase SPD
-    SetVelocity(AEVec2{ Player_Speed.x * 1.5f, Player_Speed.y * 1.5f });
+    SetVelocity(AEVec2{ Player_Speed.x * 1.5f, Player_Speed.y });
   }
   else
   {
@@ -55,10 +55,12 @@ void Dragon::ApplyPowerUP()
   {
     //Make Player Invulnerable
     Set_Vulnerable(false);
+    Sprite_->SetAlphaTransBM(0.8f, 0.8f, AE_GFX_BM_BLEND);
   }
   else
   {
     Set_Vulnerable(true);
+    Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
   }
 }
 
@@ -138,6 +140,29 @@ void Dragon::Input()
       Anim_.GetComplete(Dragon_ANIM::JUMP))
     Anim_.SetState(Dragon_ANIM::IDLE);
 }
+
+
+//Mutes all audio
+void Dragon::Mute()
+{
+  SFX_.SetVolume(HIT   , 0.0f);
+  SFX_.SetVolume(IMPACT, 0.0f);
+  SFX_.SetVolume(SHOOT , 0.0f);
+  SFX_.SetPause (HIT   , true);
+  SFX_.SetPause (IMPACT, true);
+  SFX_.SetPause (SHOOT , true);
+}
+//Unmutes all audio
+void Dragon::Unmute()
+{
+  SFX_.SetVolume(HIT   , 1.0f );
+  SFX_.SetVolume(IMPACT, 1.0f );
+  SFX_.SetVolume(SHOOT , 1.0f );
+  SFX_.SetPause (HIT   , false);
+  SFX_.SetPause (IMPACT, false);
+  SFX_.SetPause (SHOOT , false);
+}
+
 
 void Dragon::Update(Dragon& dummy, const float dt)
 {

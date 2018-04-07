@@ -70,6 +70,10 @@ public:
   void PlayImpact() { SFX_.Play(IMPACT); }
   //Play this when dragon gets hit
   void PlayHit() { SFX_.Play(HIT); }
+  //Mutes all audio
+  void Mute();
+  //Unmutes all audio
+  void Unmute();
   //Renders the dragon
   void Render(); 
   //Get fireball damage

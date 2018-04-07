@@ -19,7 +19,6 @@ using namespace ArcherMacros;
 
 Audio_Engine Archer::Audio_{ 1, [](std::vector<std::string> &playlist) ->void {
   playlist.push_back(".//Audio/Hit_01.mp3");
-  //playlist.push_back(".//Audio/Arrow_Swoosh.mp3"); 
 } };
 
 Archer::Archer(Sprite *p_Sprite, Sprite *Arrow_Sprite, const float posX, const float posY)
@@ -209,9 +208,8 @@ void Archer::CheckState(Dragon &player, const float /*dt*/)
   if(A_Curr == ATTACK)
     A_Next = IDLE;
   //Only move if dragon was seen and my distance has not reached max
-  if ((abs(player.PosX - PosX) > Archer_LOS || abs(player.PosY - PosY) < Archer_LOS) &&
-      Distance < Archer_Max_Dist && Dragon_Seen && 
-      (abs(player.PosX - PosX) > Archer_LOS * 0.5f))
+  if (abs(player.PosX - PosX) > Archer_LOS &&
+      Distance < Archer_Max_Dist && Dragon_Seen)
   {
     A_Next = MOVING;
   }
@@ -227,6 +225,20 @@ void Archer::CheckState(Dragon &player, const float /*dt*/)
   }
 }
 
+//Mutes all audio
+void Archer::Mute()
+{
+  Audio_.SetVolume(HIT , 0.0f);
+  Audio_.SetPause (HIT , true);
+}
+
+//Unmutes all audio
+void Archer::Unmute()
+{
+  Audio_.SetVolume(HIT , 1.0f );
+  Audio_.SetPause (HIT , false);
+}
+
 void Archer::Update(Dragon& player, const float dt)
 {
   if (Get_HP() <= 0)
@@ -237,7 +249,7 @@ void Archer::Update(Dragon& player, const float dt)
   {
     //Check if Dragon within Line Of Sight
     if (abs(player.PosX - PosX) < Archer_LOS && 
-        abs(player.PosY - PosY) < Archer_LOS)
+        abs(player.PosY - PosY) < Archer_LOS * 0.2f)
     {
       Dragon_Seen = true;
     }
@@ -275,5 +287,5 @@ void Archer::Render()
 
 Archer::~Archer()
 {
-    delete Sprite_;
+  delete Sprite_;
 }
