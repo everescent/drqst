@@ -22,6 +22,7 @@ Technology is prohibited.
 #include "PickUp.h"
 #include "Particle_Effects.h"
 #include "GameStateManager.h"
+#include "StageManager.h"
 
 class UI
 {

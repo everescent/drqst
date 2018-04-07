@@ -120,6 +120,8 @@ namespace Stage1_1
 
 	void Init(void)
 	{
+		
+		
 		tut1->SetActive(true);
 		tut2->SetActive(true);
 		tut3->SetActive(true);
@@ -137,6 +139,8 @@ namespace Stage1_1
 		
 		Audio->Play(0);
 		Audio->SetLoop(0, 1);
+
+		
 
 		for (int y = 0; y < Map_Height; ++y) // MOVE TO LOAD()???
 		{
@@ -213,6 +217,13 @@ namespace Stage1_1
 			c[i]->SetActive(true);
 
 		player->SetActive(true);
+
+		//Javon's Edit for Level Restart
+		//Reset Dragon's HP 
+		player -> Set_HP(3);
+		player->SetPos(startpos.x, startpos.y);
+		player->ResetCharge();
+
 	}
 
 	void Update(float dt)
