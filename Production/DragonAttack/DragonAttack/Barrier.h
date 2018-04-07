@@ -26,6 +26,16 @@ private:
 
 public:
 	Barrier(Sprite* const p_Sprite, float x, float y); // default constructor
-
 	void Update(Dragon &player, const float &dt);
+
+};
+
+enum BOX_SPAWN
+{
+	SPD1,
+	SPD2,
+	DMG1,
+	DMG2,
+	DMG3,
+	INVUL1
 };

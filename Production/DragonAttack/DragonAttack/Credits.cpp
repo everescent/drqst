@@ -39,6 +39,7 @@ namespace
   Transform *copyright_m;
 
   auto& g_dt = AEFrameRateControllerGetFrameTime;
+  float timer = 5.f;
 }
 
 namespace Credits
@@ -100,9 +101,7 @@ namespace Credits
   **************************************************************************************/
   void Update(float dt)
   {
-    static float time = 5.f;
-
-    time > 0.f ? time -= dt : GSM::next = GS_MAIN;
+    timer > 0.f ? timer -= dt : GSM::next = GS_MAIN;
 
     Update_Particle();
     credit_effects->UpdateEmission();
@@ -173,7 +172,12 @@ namespace Credits
 
     delete copyright;
     delete copyright_m;
+
+    // reset the timer
+    timer = 5.0f;
   }
+
+  
 }
 
 namespace

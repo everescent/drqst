@@ -2,43 +2,42 @@
 
 namespace
 {
-	Dragon *player;
-	Sprite *BG;
-	Transform *M_BG, *M_BG2, *M_BG3;
-	Audio_Engine* Audio;
-	UI* ui;
-	AEVec2 startpos = { 4050, -2775 };
+	Dragon       *player;
+	Sprite       *BG;
+	Transform    *M_BG, *M_BG2, *M_BG3;
+	UI           *ui;
+	Audio_Engine *Audio;
+	Pause        *pause;
 
-	int** MapData;
-	int Map_Width;
-	int Map_Height;
+	bool pause_bool = false;
+	const AEVec2 startpos = { 4050, -2775 };
+	float Camdown = 120.0f;
 
-	std::vector<Platform> platforms;
-	std::vector<Barrier> barriers;
-	std::vector<Block> blocks;
-	std::vector<PickUp> PU;
+	int ** MapData;
+	int    Map_Width;
+	int    Map_Height;
 
-	LevelChangePlatform *next;
+	std::vector<Platform>    platforms;
+	std::vector<Barrier>     barriers;
+	std::vector<Block>       blocks;
+	std::vector<PickUp>      PU;
 	std::vector<Characters*> c;
 
-	Sprite* COIN_SPRITE;//pickups					 							   
-	Sprite* HP_SPRITE;
-	Sprite* DMG_SPRITE;
-	Sprite* SPD_SPRITE;
-	Sprite* INVUL_SPRITE;
+	LevelChangePlatform *next;
 
-	Sprite* BARRIER_SPRITE;//objs												   
-	Sprite* WALL_SPRITE;
-	Sprite* PLAT_SPRITE;
-	Sprite* LCPLAT_SPRITE;
-	Sprite* FLOOR_SPRITE;
-	Sprite* TOWER_SPRITE;
-	Sprite* SIGN_SPRITE;
-
-	Pause* pause;
-	bool pause_bool = false;
-
-	float Camdown = 120.0f;
+	Sprite *COIN_SPRITE;//pickups					 							   
+	Sprite *HP_SPRITE;
+	Sprite *DMG_SPRITE;
+	Sprite *SPD_SPRITE;
+	Sprite *INVUL_SPRITE;
+		   
+	Sprite *BARRIER_SPRITE;//objs												   
+	Sprite *WALL_SPRITE;
+	Sprite *PLAT_SPRITE;
+	Sprite *LCPLAT_SPRITE;
+	Sprite *FLOOR_SPRITE;
+	Sprite *TOWER_SPRITE;
+	Sprite *SIGN_SPRITE;
 }
 
 namespace Stage2_2
@@ -49,19 +48,19 @@ namespace Stage2_2
 		if (!Import_MapData(".//Levels/level2-2.txt", MapData, Map_Width, Map_Height)) { AEGfxExit(); }
 
 		// Textures for pick ups
-		COIN_SPRITE  = new Sprite{ S_CreateSquare(50.0f, ".//Textures/coin.png", 1.0f) };
-		HP_SPRITE    = new Sprite{ S_CreateSquare(50.0f, ".//Textures/hp.png", 1.0f) };
-		DMG_SPRITE   = new Sprite{ S_CreateSquare(50.0f, ".//Textures/Fireball.png", 1.0f) };
-		SPD_SPRITE   = new Sprite{ S_CreateSquare(50.0f, ".//Textures/spd.png", 1.0f) };
-		INVUL_SPRITE = new Sprite{ S_CreateSquare(50.0f, ".//Textures/invul.png", 1.0f) };
-
-		// Textures for static objects
-		BARRIER_SPRITE = new Sprite{ S_CreateSquare(130.0f, ".//Textures/box.png") };
-		SIGN_SPRITE    = new Sprite{ S_CreateSquare(70.0f, ".//Textures/sign.png") };
-		PLAT_SPRITE    = new Sprite{ CreatePlatform(1.0f, 1.0f, ".//Textures/Cobblestone.png") };
-		LCPLAT_SPRITE  = new Sprite{ CreatePlatform(2.0f, 3.0f, ".//Textures/Win_Platform.png") };
-		FLOOR_SPRITE   = new Sprite{ CreateFloor(1.0f, ".//Textures/Cobblestone.png", 1.0f, 1.0f) };
-		WALL_SPRITE    = new Sprite{ CreateFloor(1.0f, ".//Textures/Cobblestone.png", 1.0f, 1.0f) };
+		COIN_SPRITE    = new Sprite{ S_CreateSquare   (35.0f, ".//Textures/coin.png", 1.0f) };
+		HP_SPRITE      = new Sprite{ S_CreateSquare   (50.0f, ".//Textures/hp.png", 1.0f) };
+		DMG_SPRITE     = new Sprite{ S_CreateSquare   (50.0f, ".//Textures/Fireball.png", 1.0f) };
+		SPD_SPRITE     = new Sprite{ S_CreateSquare   (50.0f, ".//Textures/spd.png", 1.0f) };
+		INVUL_SPRITE   = new Sprite{ S_CreateSquare   (50.0f, ".//Textures/invul.png", 1.0f) };
+												      
+		// Textures for static objects			      
+		BARRIER_SPRITE = new Sprite{ S_CreateSquare   (130.0f,         ".//Textures/box.png") };
+		SIGN_SPRITE    = new Sprite{ S_CreateSquare   (70.0f,          ".//Textures/sign.png") };
+		PLAT_SPRITE    = new Sprite{ CreatePlatform   (1.0f, 1.0f,     ".//Textures/Cobblestone.png") };
+		LCPLAT_SPRITE  = new Sprite{ CreatePlatform   (2.0f, 3.0f,     ".//Textures/Win_Platform.png") };
+		FLOOR_SPRITE   = new Sprite{ CreateFloor      (1.0f,           ".//Textures/Cobblestone.png", 1.0f, 1.0f) };
+		WALL_SPRITE    = new Sprite{ CreateFloor      (1.0f,           ".//Textures/Cobblestone.png", 1.0f, 1.0f) };
 		TOWER_SPRITE   = new Sprite{ S_CreateRectangle(300.0f, 300.0f, ".//Textures/tower.png") };
 
 		// Texture and transformation matrix for BG
@@ -76,29 +75,25 @@ namespace Stage2_2
 		M_BG3->SetTranslate(0.0f, -2880.0f);
 		M_BG3->Concat();
 
-		// Player creation
-		player = dynamic_cast<Dragon*>(Create_Basic_AI(DRAGON, startpos));
-
 		// Audio and UI
 		Audio = new Audio_Engine{ 1, [](std::vector <std::string> &playlist)->void {playlist.push_back(".//Audio/Stage_2_BGM.mp3"); } };
-		ui = new UI(player);
 		
 		// Placement for level change platform
 		next = new LevelChangePlatform{ LCPLAT_SPRITE, 1750.0f,  -2200.0f };
+		
+		// Pause menu object
 		pause = new Pause{};
 	}
 
-
 	void Init(void)
 	{
+		// Plays selected track
 		Audio->Play(0);
+
+		// Loops selected track
 		Audio->SetLoop(0, 1);
 
-		for (size_t i = 0; i < c.size(); ++i)
-			c[i]->SetActive(true);
-
-		player->SetActive(true);
-
+		// Object placement
 		for (int y = 0; y < Map_Height; ++y)
 		{
 			for (int x = 0; x < Map_Width; ++x)
@@ -182,14 +177,30 @@ namespace Stage2_2
 				}
 			}
 		}
+
+		for (size_t i = 0; i < c.size(); ++i)
+			c[i]->SetActive(true);
+
+		// Creation of player done in init so restarting the level will set the position
+		player = dynamic_cast<Dragon*>(Create_Basic_AI(DRAGON, startpos));
+		ui = new UI{ player };
+
+		player->SetActive(true);
+
+		// Reset player's Health and charge
+		player->Set_HP(3);
+		player->ResetCharge();
 	}
 
 	void Update(float dt)
 	{
-		
-		if (!pause_bool) {
+		if (!pause_bool) 
+		{
 			Audio->Update();
 			pause->Update(pause_bool);
+
+			player->Update(*player, dt);
+
 			for (size_t i = 0; i < c.size(); ++i)
 			{
 				if (c[i]->IsActive())
@@ -197,7 +208,6 @@ namespace Stage2_2
 					c[i]->Update(*player, dt);
 				}
 			}
-
 			for (Platform& elem : platforms)
 			{
 				// added collision for AI
@@ -224,13 +234,10 @@ namespace Stage2_2
 				elem.Update(*player, dt);
 			}
 
-			next->Update(*player, dt);
-			player->Update(*player, dt);
-
-			/* Camera down testing */
+			// Camera down logic
 			if (AEInputCheckCurr(AEVK_S))
 			{
-				if (Camdown > -250) // setting lowest point
+				if (Camdown > -250) // Setting lowest camera point
 					Camdown -= 4.0f;
 			}
 			if (!AEInputCheckCurr(AEVK_S) && Camdown < 120)
@@ -238,16 +245,20 @@ namespace Stage2_2
 				Camdown += 4.0f;
 			}
 			CamFollow(player->Transform_, 200, Camdown, player->GetFacing());
-
+			next->Update(*player, dt);
 			ui->UI_Update(player, dt);
 		}
-		else pause->Update(pause_bool);
-
+		else 
+		{
+			Audio->SetPause(0, 1);
+			pause->Update(pause_bool);
+		}
 		//std::cout << (int)player->PosX << ", " << (int)player->PosY << std::endl;
 	}
 
 	void Draw(void)
 	{
+		// Background render
 		BG->Render_Object(*M_BG);
 		BG->Render_Object(*M_BG2);
 		BG->Render_Object(*M_BG3);
@@ -264,18 +275,18 @@ namespace Stage2_2
 		{
 			elem.Render();
 		}
+		for (PickUp& elem : PU)
+		{
+			elem.Render();
+		}		
 		for (size_t i = 0; i < c.size(); ++i)
 		{
 			c[i]->Render();
 		}
-		for (PickUp& elem : PU)
-		{
-			elem.Render();
-		}
-		next->Render();
 
 		player->Render();
 		player->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+		next->Render();
 		ui->Render();
 
 		// Particle Effects
@@ -286,11 +297,17 @@ namespace Stage2_2
 
 	void Free(void)
 	{
+		// Delete player and UI
+		delete player;
+		delete ui;
+
+		// Clear object vectors
 		platforms.clear();
 		blocks.clear();
 		barriers.clear();
 		PU.clear();
 
+		// Delete enemies
 		for (size_t i = 0; i < c.size(); ++i)
 		{
 			delete c[i];
@@ -325,10 +342,8 @@ namespace Stage2_2
 		delete M_BG;
 		delete M_BG2;
 		delete M_BG3;
-		delete player;
 		delete Audio;
 		delete next;
-		delete ui;
 		delete pause;
 	}
 }

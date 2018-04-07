@@ -21,12 +21,18 @@ Technology is prohibited.
 #include "Transform.h"
 #include "PickUp.h"
 #include "Particle_Effects.h"
+#include "GameStateManager.h"
+#include "StageManager.h"
 
 class UI
 {
 public:
 	//Default constructor for User interface that takes in a ptr to Dragon as a parameter 
 	UI(Dragon* dragon);
+
+	//Default destructor for UI
+	~UI();
+
 	//Updates the UI
 	void UI_Update(Dragon* dragon, const float dt);
 	//Renders the UI
@@ -34,15 +40,18 @@ public:
 
 private:
 
-	Sprite  HP_Sprite;
-	Sprite Charge_Sprite;
+	Sprite*  HP_Sprite;
+	Sprite* Charge_Sprite;
 	const float icon_w;
-	GameObject hp_icon1;
-	GameObject hp_icon2;
-	GameObject hp_icon3;
-	GameObject charge_icon;
+	Transform* HP_Trans;
+	GameObject* charge_icon;
 	int Dragon_hp;
 	int Fireball_charge;
 	static Particle_System* flame_particles;
+	AEVec2 CamPos{ 0.0f , 0.0f };
+
+	//***A function that updates how many HP sprite to print according to the Dragon's HP
+	void update_HP();
+
 	//AEVec2 offset1;
 };

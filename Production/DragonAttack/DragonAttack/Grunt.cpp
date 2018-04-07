@@ -353,16 +353,17 @@ void Grunt::Update(Dragon &d, const float dt)
 		}
 
 		//collision with player, player loses health
-		if (!Knockback)
+		//if (!Knockback)
 			if (Collision_.Dy_Rect_Rect(d.Collision_, GetVelocity(), d.GetVelocity(), dt))
 			{
 				d.Decrease_HP();
 				d.PlayHit();
-				Knockback = true;
-				posit_tmp = d.PosX;
+				d.SetInvul(true);
+				//Knockback = true;
+				//posit_tmp = d.PosX;
 			}
 
-		if (Knockback)
+		/*if (Knockback)
 		{
 			if (d.PosX > PosX)
 				posit_tmp += 1000.0f * dt;
@@ -380,7 +381,7 @@ void Grunt::Update(Dragon &d, const float dt)
 			}
 			recent_kb = true;
 			current_action = IDLE;
-		}
+		}*/
 	}
 
 	PosY -= 10.0f; //Gravity
@@ -403,4 +404,9 @@ void Grunt::Update(Dragon &d, const float dt)
 		default: break;
 	}
 	anim.Update(*Sprite_);
+}
+
+Grunt::~Grunt()
+{
+    delete Sprite_;
 }
