@@ -247,7 +247,6 @@ void Lancelot::Update(Dragon &d, float dt)
                     //Reset the distance of the fireball and set false
                     d.GetFireball()[i].Projectile::ResetDist();
                     d.GetFireball()[i].SetActive(false);
-                    d.SetInvul(true);
                     music.Play(0);
                 }
 
@@ -261,7 +260,6 @@ void Lancelot::Update(Dragon &d, float dt)
                 d.GetMfireball().Projectile::ResetDist();
                 d.GetMfireball().SetActive(false);
                 music.Play(0);
-                d.SetInvul(true);
                 d.PlayImpact();
             }
         }
@@ -493,6 +491,7 @@ void Lancelot::Stab(Dragon& d, const float dt)
                 lancelot[STAB].SetCollided(true);
                 d.Decrease_HP();
                 d.PlayHit();
+                d.SetInvul(true);                   // Visual Feedback and make dragon invulnerable for awhile
             }
         }
     }
@@ -529,6 +528,7 @@ void Lancelot::Slash(Dragon& d, const float dt)
             lancelot[SLASH].SetCollided(true);
             d.Decrease_HP();
             d.PlayHit();
+            d.SetInvul(true);                   // Visual Feedback and make dragon invulnerable for awhile
         }
     }
 
@@ -663,6 +663,7 @@ void Lancelot::Arondight(Dragon& d, const float dt)
             d.Decrease_HP();
             lancelot[ARONDIGHT].SetCollided(true);
             d.PlayHit();
+            d.SetInvul(true);                   // Visual Feedback and make dragon invulnerable for awhile
         }
     }
 

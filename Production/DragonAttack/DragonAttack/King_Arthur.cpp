@@ -310,7 +310,6 @@ void King_Arthur::Update(Dragon &d, const float dt)
                     //Reset the distance of the fireball and set false
                     d.GetFireball()[i].Projectile::ResetDist();
                     d.GetFireball()[i].SetActive(false);
-                    d.SetInvul(true);
                     //music.Play(0);
 
                     healing = false;
@@ -327,7 +326,6 @@ void King_Arthur::Update(Dragon &d, const float dt)
                 d.GetMfireball().SetActive(false);
                 //music.Play(0);
                 d.PlayImpact();
-                d.SetInvul(true);
 
                 healing = false;
             }
@@ -589,6 +587,7 @@ void King_Arthur::Single_Slash(Dragon &d, const float dt)
         {
             d.Decrease_HP();
             arthur[SINGLE_SLASH].SetCollided(true);
+            d.SetInvul(true);                   // Visual Feedback and make dragon invulnerable for awhile
         }
     }
 
@@ -647,8 +646,9 @@ void King_Arthur::Triple_Slash(Dragon &d, const float dt)
             if (arthur[i].Collision_.Dy_Rect_Rect(d.Collision_, arthur[i].GetVelocity(), d.GetVelocity(), dt))
             {
                 d.Decrease_HP();
+                d.SetInvul(true);                   // Visual Feedback and make dragon invulnerable for awhile
                 for (char j = 1; j < ts_limit; ++j)
-                    arthur[j].SetCollided(true); // set collided flag to true
+                    arthur[j].SetCollided(true);    // set collided flag to true
             }
         }
 
@@ -821,6 +821,7 @@ void King_Arthur::Spinning_Blades(Dragon &d, const float dt)
                 d.Set_Vulnerable(true);
                 d.Decrease_HP();
                 arthur[SPIN_SWORD + i].SetCollided(true);
+                d.SetInvul(true);                            // Visual Feedback and make dragon invulnerable for awhile
             }
 
             // checks if the sword reaches the ground, or fly out of screen

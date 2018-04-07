@@ -47,7 +47,6 @@ private:
 	void Idle(const Dragon &d, const float dt);
 	void Moving(const Dragon &d, const float dt);
 	void Attack(Dragon &d, const float dt);
-	void Dead(void);
 	// boss behaviours end /////////////////////////////////////////////
 
 	// attack functions /////////////////////////////////////////////////
@@ -76,6 +75,7 @@ public:
 	~King_Arthur(); // destructor
 	void Update(Dragon &player, const float dt);
 	void Render();
+    void Dead(void);
 	BOSS_PHASE Get_Phase(void) const;
     std::vector <Characters*>& Get_Mobs(void);
 };

@@ -2,54 +2,54 @@
 
 namespace
 {
-	Dragon *player;
-	Sprite *BG;
-	Transform *M_BG;
-	Audio_Engine* Audio;
-	UI* ui;
-	AEVec2 startpos = { -320, -255 };
+	Dragon       *player;
+	Sprite       *BG;
+	Transform    *M_BG;
+	UI           *ui;
+	Audio_Engine *Audio;
+	Pause        *pause;
 
-	int** MapData;
-	int Map_Width;
-	int Map_Height;
+	bool pause_bool = false; // <------
+	const AEVec2 startpos = { -320, -255 }; // <------
 
-	std::vector<Platform> platforms;
-	std::vector<Block> blocks;
-	std::vector<Barrier> barriers;
-	std::vector<PickUp> PU;
+	int ** MapData;
+	int    Map_Width;
+	int    Map_Height;
 
-	LevelChangePlatform *next;
-	Tower *archerTower;
-	PickUp *coin1;
-	Barrier *box1;
-	Sign *s1, *s2, *s3, *s4, *s5, *s6;
-	GameObject *tut1, *tut2, *tut3, *tut4, *tut5, *tut6;
-
+	std::vector<Platform>    platforms;
+	std::vector<Block>       blocks;
+	std::vector<Barrier>     barriers;
+	std::vector<PickUp>      PU;
 	std::vector<Characters*> c;
 
-	Sprite* TUT1_SPRITE;
-	Sprite* TUT2_SPRITE;
-	Sprite* TUT3_SPRITE;
-	Sprite* TUT4_SPRITE;
-	Sprite* TUT5_SPRITE;
-	Sprite* TUT6_SPRITE;
+	Tower                *archerTower;
+	PickUp               *coin1;
+	Barrier              *box1;
+	Sign                 *s1, *s2, *s3, *s4, *s5, *s6;
+	GameObject           *tut1, *tut2, *tut3, *tut4, *tut5, *tut6;
+	LevelChangePlatform  *next;
 
-	Sprite* COIN_SPRITE;//pickups
-	Sprite* HP_SPRITE;
-	Sprite* DMG_SPRITE;
-	Sprite* SPD_SPRITE;
-	Sprite* INVUL_SPRITE;
 
-	Sprite* BARRIER_SPRITE;//objs
-	Sprite* WALL_SPRITE;
-	Sprite* PLAT_SPRITE;
-	Sprite* LCPLAT_SPRITE;
-	Sprite* FLOOR_SPRITE;
-	Sprite* TOWER_SPRITE;
-	Sprite* SIGN_SPRITE;
-
-	Pause* pause;
-	bool pause_bool = false;
+	Sprite *TUT1_SPRITE;
+	Sprite *TUT2_SPRITE;
+	Sprite *TUT3_SPRITE;
+	Sprite *TUT4_SPRITE;
+	Sprite *TUT5_SPRITE;
+	Sprite *TUT6_SPRITE;
+		   
+	Sprite *COIN_SPRITE;//pickups
+	Sprite *HP_SPRITE;
+	Sprite *DMG_SPRITE;
+	Sprite *SPD_SPRITE;
+	Sprite *INVUL_SPRITE;
+		   
+	Sprite *BARRIER_SPRITE;//objs
+	Sprite *WALL_SPRITE;
+	Sprite *PLAT_SPRITE;
+	Sprite *LCPLAT_SPRITE;
+	Sprite *FLOOR_SPRITE;
+	Sprite *TOWER_SPRITE;
+	Sprite *SIGN_SPRITE;
 }
 
 namespace Stage1_1
@@ -60,12 +60,12 @@ namespace Stage1_1
 		if (!Import_MapData(".//Levels/level1-1.txt", MapData, Map_Width, Map_Height)) { AEGfxExit(); }
 
 		// Textures for tutorial messages
-		TUT1_SPRITE    = new Sprite { S_CreateRectangle(150.0f, 50.0f, ".//Textures/Shoot_Tutorial_MSG.png") };
-		TUT2_SPRITE    = new Sprite { S_CreateRectangle(230.0f, 80.0f, ".//Textures/Boxes_Tutorial_MSG.png") };
-		TUT3_SPRITE    = new Sprite { S_CreateRectangle(250.0f, 100.0f,".//Textures/Enemy_Tutorial_MSG.png") };
-		TUT4_SPRITE    = new Sprite { S_CreateRectangle(300.0f, 100.0f,".//Textures/Platforming_Tutorial_MSG.png") };
-		TUT5_SPRITE    = new Sprite { S_CreateRectangle(300.0f, 100.0f,".//Textures/MegaFireball_Tutorial_MSG.png") };
-		TUT6_SPRITE    = new Sprite { S_CreateRectangle(200.0f, 80.0f, ".//Textures/PowerUp_Tutorial_MSG.png") };
+		TUT1_SPRITE    = new Sprite { S_CreateRectangle(150.0f, 50.0f,  ".//Textures/Shoot_Tutorial_MSG.png") };
+		TUT2_SPRITE    = new Sprite { S_CreateRectangle(230.0f, 80.0f,  ".//Textures/Boxes_Tutorial_MSG.png") };
+		TUT3_SPRITE    = new Sprite { S_CreateRectangle(250.0f, 100.0f, ".//Textures/Enemy_Tutorial_MSG.png") };
+		TUT4_SPRITE    = new Sprite { S_CreateRectangle(300.0f, 100.0f, ".//Textures/Platforming_Tutorial_MSG.png") };
+		TUT5_SPRITE    = new Sprite { S_CreateRectangle(300.0f, 100.0f, ".//Textures/MegaFireball_Tutorial_MSG.png") };
+		TUT6_SPRITE    = new Sprite { S_CreateRectangle(200.0f, 80.0f,  ".//Textures/PowerUp_Tutorial_MSG.png") };
 
 		// Textures for pick ups
 		COIN_SPRITE    = new Sprite { S_CreateSquare   (35.0f, ".//Textures/coin.png", 1.0f) };
@@ -75,24 +75,20 @@ namespace Stage1_1
 		INVUL_SPRITE   = new Sprite { S_CreateSquare   (50.0f, ".//Textures/invul.png", 1.0f) };
 
 		// Textures for static objects
-		BARRIER_SPRITE = new Sprite { S_CreateSquare   (130.0f, ".//Textures/box.png") };
-		WALL_SPRITE    = new Sprite { CreateFloor      (1.0f, ".//Textures/Cobblestone.png", 1.0f, 1.0f) };
-		PLAT_SPRITE    = new Sprite { CreatePlatform   (1.0f, 1.0f, ".//Textures/Cobblestone.png") };
-		LCPLAT_SPRITE  = new Sprite { CreatePlatform   (2.0f, 3.0f, ".//Textures/Win_Platform.png") };
-		FLOOR_SPRITE   = new Sprite { CreateFloor      (1.0f, ".//Textures/Cobblestone.png", 1.0f, 1.0f) };
+		BARRIER_SPRITE = new Sprite { S_CreateSquare   (130.0f,         ".//Textures/box.png") };
+		SIGN_SPRITE    = new Sprite { S_CreateSquare   (70.0f,          ".//Textures/sign.png") };
+		WALL_SPRITE    = new Sprite { CreateFloor      (1.0f,           ".//Textures/Cobblestone.png", 1.0f, 1.0f) };
+		FLOOR_SPRITE   = new Sprite { CreateFloor      (1.0f,           ".//Textures/Cobblestone.png", 1.0f, 1.0f) };
+		PLAT_SPRITE    = new Sprite { CreatePlatform   (1.0f, 1.0f,     ".//Textures/Cobblestone.png") };
+		LCPLAT_SPRITE  = new Sprite { CreatePlatform   (2.0f, 3.0f,     ".//Textures/Win_Platform.png") };
 		TOWER_SPRITE   = new Sprite { S_CreateRectangle(300.0f, 300.0f, ".//Textures/tower.png") };
-		SIGN_SPRITE    = new Sprite { S_CreateSquare   (70.0f, ".//Textures/sign.png") };
 
 		// Texture and transform matrix for BG
 		BG     = new Sprite{ CreateBG(22.0f, 2.0f, ".//Textures/BG_Stage1.png", 1.0f, 15.0f) };
 		M_BG   = new Transform{};
 
-		// Player creation
-		player = dynamic_cast<Dragon*>(Create_Basic_AI(DRAGON, startpos));
-
 		// Audio and UI
 		Audio  = new Audio_Engine{ 1, [](std::vector <std::string> &playlist)->void {playlist.push_back(".//Audio/Stage_1_BGM.mp3"); } };
-		ui     = new UI{ player };
 
 		// Placement for specific objects
 		archerTower = new Tower  { TOWER_SPRITE, 4800.0f, 0.0f };
@@ -115,13 +111,11 @@ namespace Stage1_1
 		s6 = new Sign{ SIGN_SPRITE, 5200.0f, -75.0f };
 		tut6 = new GameObject{ TUT6_SPRITE, Col_Comp() };
 
-		pause = new Pause{};
+		pause = new Pause{}; // <------
 	}
 
 	void Init(void)
 	{
-		
-		
 		tut1->SetActive(true);
 		tut2->SetActive(true);
 		tut3->SetActive(true);
@@ -137,11 +131,13 @@ namespace Stage1_1
 		tut5->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 		tut6->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 		
+		// Plays selected track
 		Audio->Play(0);
+
+		// Loops selected track
 		Audio->SetLoop(0, 1);
-
 		
-
+		// Onject placement
 		for (int y = 0; y < Map_Height; ++y) // MOVE TO LOAD()???
 		{
 			for (int x = 0; x < Map_Width; ++x)
@@ -213,24 +209,30 @@ namespace Stage1_1
 				}
 			}
 		}
+		
 		for (size_t i = 0; i < c.size(); ++i)
 			c[i]->SetActive(true);
 
+		// Creation of player done in init so restarting the level will set the position
+		player = dynamic_cast<Dragon*>(Create_Basic_AI(DRAGON, startpos)); // <------
+		ui = new UI{ player }; // <------
+
 		player->SetActive(true);
 
-		//Javon's Edit for Level Restart
-		//Reset Dragon's HP 
-		player -> Set_HP(3);
-		player->SetPos(startpos.x, startpos.y);
-		player->ResetCharge();
-
+		// Reset player's Health and charge
+		player->Set_HP(3); // <------
+		player->ResetCharge(); // <------
 	}
 
 	void Update(float dt)
 	{
-		if (!pause_bool) {
+		if (!pause_bool) // <------
+		{ 
 			Audio->Update();
 			pause->Update(pause_bool);
+
+			player->Update(*player, dt); // <------
+
 			s1->Update(*player, dt);
 			tut1->Transform_.SetTranslate(400.0f, -20.0f);
 			tut1->Transform_.Concat();
@@ -297,14 +299,13 @@ namespace Stage1_1
 			}
 
 			archerTower->Update(*player, dt);
-			player->Update(*player, dt);
 			box1->Update(*player, dt);
+
 			CamFollow(player->Transform_, 200, 120, player->GetFacing());
 			next->Update(*player, dt);
 			ui->UI_Update(player, dt);
 		}
-
-		else
+		else // <--
 		{
 			Audio->SetPause(0, 1);
 			pause->Update(pause_bool);
@@ -314,96 +315,97 @@ namespace Stage1_1
 
 	void Draw(void)
 	{
+		// Background render
+		BG->Render_Object(*M_BG);
+
+		// Tutorial Message Pop Ups
+		s1->Render();
+		if (s1->ShowTutorial)
+		{
+			tut1->Render();
+		}
+		s2->Render();
+		if (s2->ShowTutorial)
+		{
+			tut2->Render();
+		}
+		s3->Render();
+		if (s3->ShowTutorial)
+		{
+			tut3->Render();
+		}
+		s4->Render();
+		if (s4->ShowTutorial)
+		{
+			tut4->Render();
+		}
+		s5->Render();
+		if (s5->ShowTutorial)
+		{
+			tut5->Render();
+		}
+		s6->Render();
+		if (s6->ShowTutorial)
+		{
+			tut6->Render();
+		}
+
+		if (!(box1->IsActive()))
+		{
+			coin1->Render();
+		}
+		archerTower->Render();
+		for (Platform& elem : platforms)
+		{
+			elem.Render();
+		}
+		for (Block& elem : blocks)
+		{
+			elem.Render();
+		}
+		for (Barrier& elem : barriers)
+		{
+			elem.Render();
+		}
+		for (PickUp& elem : PU)
+		{
+			elem.Render();
+		}
+		for (size_t i = 0; i < c.size(); ++i)
+		{
+			c[i]->Render();
+		}
+
+		box1->Render();
+		player->Render();
+		player->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+		next->Render();
+		ui->Render();
+
+		// Particle Effects
+		PickUp::coin_particles->Render();
 		
-			BG->Render_Object(*M_BG);
-
-			// Tutorial Message Pop Ups
-			s1->Render();
-			if (s1->ShowTutorial)
-			{
-				tut1->Render();
-			}
-			s2->Render();
-			if (s2->ShowTutorial)
-			{
-				tut2->Render();
-			}
-			s3->Render();
-			if (s3->ShowTutorial)
-			{
-				tut3->Render();
-			}
-			s4->Render();
-			if (s4->ShowTutorial)
-			{
-				tut4->Render();
-			}
-			s5->Render();
-			if (s5->ShowTutorial)
-			{
-				tut5->Render();
-			}
-			s6->Render();
-			if (s6->ShowTutorial)
-			{
-				tut6->Render();
-			}
-
-			if (!(box1->IsActive()))
-			{
-				coin1->Render();
-			}
-
-
-			for (size_t i = 0; i < c.size(); ++i)
-			{
-				c[i]->Render();
-			}
-			archerTower->Render();
-			for (Platform& elem : platforms)
-			{
-				elem.Render();
-			}
-			for (Block& elem : blocks)
-			{
-				elem.Render();
-			}
-			for (Barrier& elem : barriers)
-			{
-				elem.Render();
-			}
-			for (PickUp& elem : PU)
-			{
-				elem.Render();
-			}
-
-			box1->Render();
-			player->Render();
-			player->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
-			next->Render();
-			ui->Render();
-
-			// Particle Effects
-			PickUp::coin_particles->Render();
-		
-		if (pause_bool)
-			pause->Render();
+		if (pause_bool) pause->Render();
 	}
 
 	void Free(void)
 	{
+		// Delete player and UI
+		delete player;
+		delete ui;
+
+		// Clear object vectors
 		platforms.clear();
 		blocks.clear();
 		barriers.clear();
 		PU.clear();
 
-		 /* Delete enemies */
+		 // Delete enemies
 		for (size_t i = 0; i < c.size(); ++i)
 		{
 			delete c[i];
 		}
 		c.clear();
-		
 	}
 
 	void Unload(void)
@@ -439,9 +441,7 @@ namespace Stage1_1
 
 		delete BG;
 		delete M_BG;
-		delete player;
 		delete Audio;
-		delete ui;
 
 		// Tutorial sprites
 		delete s1;

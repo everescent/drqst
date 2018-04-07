@@ -2,20 +2,24 @@
 
 namespace
 {
-	Dragon *player;
-	Sprite *BG;
-	Transform *M_BG;
-	Audio_Engine* Audio;
-	UI* ui;
-	AEVec2 startpos = { -450, -250 };
+	Dragon       *player;
+	Sprite       *BG;
+	Transform    *M_BG;
+	UI           *ui;
+	Audio_Engine *Audio;
+	Pause        *pause;
 
-	int** MapData;
-	int Map_Width;
-	int Map_Height;
+	bool pause_bool = false;
+	const AEVec2 startpos = { -450, -250 };
 
-	std::vector<Block> blocks;
-	LevelChangePlatform *next;
+	int ** MapData;
+	int    Map_Width;
+	int    Map_Height;
+
+	std::vector<Block>       blocks;
 	std::vector<Characters*> c;
+
+	LevelChangePlatform *next;
 
 	//Sprite* COIN_SPRITE;//pickups
 	//Sprite* HP_SPRITE;
@@ -25,9 +29,6 @@ namespace
 	Sprite* WALL_SPRITE;
 	Sprite* LCPLAT_SPRITE;
 	Sprite* FLOOR_SPRITE;
-
-	Pause* pause;
-	bool pause_bool = false;
 }
 
 namespace Stage1_3
@@ -38,20 +39,16 @@ namespace Stage1_3
 		if (!Import_MapData(".//Levels/level1-3.txt", MapData, Map_Width, Map_Height)) { AEGfxExit(); }
 
 		// Textures for static objects
-		WALL_SPRITE   = new Sprite{ CreateFloor(1.0f, ".//Textures/Cobblestone.png", 1.0f, 1.0f) };
+		WALL_SPRITE   = new Sprite{ CreateFloor   (1.0f,       ".//Textures/Cobblestone.png", 1.0f, 1.0f) };
 		LCPLAT_SPRITE = new Sprite{ CreatePlatform(2.0f, 3.0f, ".//Textures/Win_Platform.png") };
-		FLOOR_SPRITE  = new Sprite{ CreateFloor(1.0f, ".//Textures/Cobblestone.png", 1.0f, 1.0f) };
+		FLOOR_SPRITE  = new Sprite{ CreateFloor   (1.0f,       ".//Textures/Cobblestone.png", 1.0f, 1.0f) };
 
 		// Texture and transform matrix for BG
 		BG = new Sprite{ CreateBG(22.0f, 2.0f, ".//Textures/BG_Stage1.png", 1.0f, 15.0f) };
 		M_BG = new Transform{};
 
-		// Player creation
-		player = dynamic_cast<Dragon*>(Create_Basic_AI(DRAGON, startpos));
-
 		// Audio and UI
 		Audio = new Audio_Engine{ 1, [](std::vector <std::string> &playlist)->void {playlist.push_back(".//Audio/Lancelot_BGM.mp3"); } };
-		ui = new UI{ player };
 
 		// Placement for level change platform
 		next = new LevelChangePlatform{LCPLAT_SPRITE, 500.0f,  -300.0f };
@@ -78,20 +75,33 @@ namespace Stage1_3
 		}
 		c.push_back(Create_Boss_AI(LANCELOT));
 		c[0]->SetActive(true);
+
+		// Creation of player done in init so restarting the level will set the position
+		player = dynamic_cast<Dragon*>(Create_Basic_AI(DRAGON, startpos));
+		ui = new UI{ player };
+
 		player->SetActive(true);
+
+		// Reset player's Health and charge
+		player->Set_HP(3);
+		player->ResetCharge();
 	}
 
 	void Update(float dt)
 	{
-		if (!pause_bool) {
-
+		if (!pause_bool) 
+		{
 			Audio->Update();
 			pause->Update(pause_bool);
+
+			player->Update(*player, dt);
+
 			c[0]->Update(*player, dt);
 			if (c[0]->Get_HP() <= 0)
 			{
 				next->Update(*player, dt);
 			}
+
 			for (Block& elem : blocks)
 			{
 				for (size_t i = 0; i < c.size(); ++i)
@@ -101,23 +111,21 @@ namespace Stage1_3
 				elem.Update(*player, dt);
 			}
 
-			player->Update(*player, dt);
 			ui->UI_Update(player, dt);
-
-			//std::cout << (int)player->PosX << ", " << (int)player->PosY << std::endl;
 		}
-
 		else 
 		{
+			Audio->SetPause(0, 1);
 			pause->Update(pause_bool);
-
 		}
+			//std::cout << (int)player->PosX << ", " << (int)player->PosY << std::endl;
 	}
 
 	void Draw(void)
 	{
 		CamFollow(player->Transform_, 200, 120, player->GetFacing());
 		CamStatic();
+
 		BG->Render_Object(*M_BG);
 
 		for (Block& elem : blocks)
@@ -130,6 +138,7 @@ namespace Stage1_3
 		{
 			next->Render();
 		}
+
 		player->Render();
 		player->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 		ui->Render();
@@ -139,8 +148,14 @@ namespace Stage1_3
 
 	void Free(void)
 	{
+		// Delete player and UI
+		delete player;
+		delete ui;
+
+		// Clear object vector
 		blocks.clear();
 		
+		// Delete enemies
 		for (size_t i = 0; i < c.size(); ++i)
 		{
 			delete c[i];
@@ -162,11 +177,9 @@ namespace Stage1_3
 		delete LCPLAT_SPRITE;
 		delete FLOOR_SPRITE;
 		
-		delete player;
 		delete BG;
 		delete M_BG;
 		delete Audio;
-		delete ui;
 		delete next;
 		delete pause;
 	}
