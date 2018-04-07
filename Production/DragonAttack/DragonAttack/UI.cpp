@@ -31,13 +31,13 @@ UI::UI(Dragon* dragon)
 	flame_particles = Effects_Get(MFIREBALL_PARTICLE);
 
 	// BEHAVIOUR FOR MFIREBALL
-	flame_particles->Emitter_.PPS_ = 10;
+	flame_particles->Emitter_.PPS_ = 15;
 	flame_particles->Emitter_.Dist_Min_ = 10.f;
-	flame_particles->Emitter_.Vol_Max = 2000;
+	flame_particles->Emitter_.Vol_Max = 800;
 	flame_particles->Emitter_.Direction_ = 90.0f;
 	flame_particles->Emitter_.Particle_Rand_.Spread_ = 360;
 	flame_particles->Emitter_.Conserve_ = 0.80f;
-	flame_particles->Emitter_.Size_ = 10.0f;
+	flame_particles->Emitter_.Size_ = 15.0f;
 	flame_particles->Emitter_.Speed_ = 6.0f;
 	flame_particles->Emitter_.Particle_Rand_.Sp_Rand_ = 3;
 	flame_particles->Emitter_.Lifetime_ = 1.0f;
@@ -71,7 +71,7 @@ UI::UI(Dragon* dragon)
 		AEGfxGetCamPosition(&(CamPos.x), &(CamPos.y));
 		
 		Dragon_hp = dragon->Get_HP();
-		if (Dragon_hp == 0) GSM::next = GS_MAIN;
+		if (Dragon_hp == 0) SM::Set_Next(SS_RESTART);
 		Fireball_charge = dragon->Get_Charge();
 		/*hp_icon1.SetActive(true);
 		hp_icon2.SetActive(true);
@@ -151,7 +151,7 @@ UI::UI(Dragon* dragon)
       flame_particles->Newton({ dragon->PosX + 60,dragon->PosY + 10}, 0.2f);
 
 		flame_particles->TransRamp_Exp();
-		flame_particles->ColorRamp_Life();
+		//flame_particles->ColorRamp_Life();
 		flame_particles->UpdateEmission();
 
 		if (flame_particles->GetParticleCount())
@@ -187,9 +187,10 @@ UI::UI(Dragon* dragon)
 
 		if (Fireball_charge == Max_Charge)
 		{
+			flame_particles->Render();
 			charge_icon.Render();
 			charge_icon.Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
-			flame_particles->Render();
+			
 		}
 		
 	}
