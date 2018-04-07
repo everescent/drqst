@@ -57,7 +57,7 @@ Knight::Knight(const AEVec2 & spawn_location, Sprite* texture)
 	Transform_.Concat();
 	Reset_Idle_Time(1.0f);											 // duration of idle time for knight
 	SetVelocity(AEVec2{ 50.0f, 0.0f });								 // velocity of knight
-	
+    Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);           // set blend mode
 	stab.SetVelocity(STAB_VELOCITY);								 // velocity for stab
 }
 /**************************************************************************************
@@ -251,6 +251,8 @@ void Knight::Update(Dragon &d, const float dt)
 					//Reset the distance of the fireball and set false
 					d.GetFireball()[i].Projectile::ResetDist();
 					d.GetFireball()[i].SetActive(false);
+                    // Visual Feedback and make dragon invulnerable for awhile
+                    d.SetInvul(true);
 				}
 
 		// mega fire ball hit lancelot
@@ -259,9 +261,12 @@ void Knight::Update(Dragon &d, const float dt)
 			if (Collision_.Dy_Rect_Rect(d.GetMfireball().Collision_, GetVelocity(),
 				d.GetMfireball().GetVelocity(), dt))
 			{
-				Decrease_HP(d.GetMDamage());
+				// decrease knight hp and reset mega fireball variables
+                Decrease_HP(d.GetMDamage());
 				d.GetMfireball().Projectile::ResetDist();
 				d.GetMfireball().SetActive(false);
+                // Visual Feedback and make dragon invulnerable for awhile
+                d.SetInvul(true);
 			}
 		}
 	}
@@ -305,5 +310,15 @@ void Knight::Render()
 {
 	GameObject::Render(); // render knight
 	stab.Render();		  // render knight's attack
+}
+
+/**************************************************************************************
+//
+// Destructor of knight to delete the sprite that was new for it
+//
+**************************************************************************************/
+Knight::~Knight()
+{
+    delete Sprite_;
 }
 

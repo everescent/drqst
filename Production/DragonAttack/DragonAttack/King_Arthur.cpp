@@ -307,6 +307,7 @@ void King_Arthur::Update(Dragon &d, const float dt)
 					//Reset the distance of the fireball and set false
 					d.GetFireball()[i].Projectile::ResetDist();
 					d.GetFireball()[i].SetActive(false);
+                    d.SetInvul(true);
 					//music.Play(0);
 
                     healing = false;
@@ -323,6 +324,7 @@ void King_Arthur::Update(Dragon &d, const float dt)
 				d.GetMfireball().SetActive(false);
 				//music.Play(0);
 				d.PlayImpact();
+                d.SetInvul(true);
 
                 healing = false;
 			}

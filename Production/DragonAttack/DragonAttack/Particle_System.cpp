@@ -94,10 +94,10 @@ Particle Particle_System::Create()
     case BOX:
       //Determines the maximum magnitude in the x direction
       float MagnitudeW = Emitter_.Pos_.Min_Max.Point_Max.x - 
-                         Emitter_.Pos_.Min_Max.Point_Min.x;
+                         Emitter_.Pos_.Min_Max.Point_Min.x + 1.0f;
       //Determines the maximum magnitude in the y direction
       float MagnitudeH = Emitter_.Pos_.Min_Max.Point_Max.y - 
-                         Emitter_.Pos_.Min_Max.Point_Min.y;
+                         Emitter_.Pos_.Min_Max.Point_Min.y + 1.0f;
       //Direction Up
       AEVec2 a1{ cosf(Emitter_.Pos_.Min_Max.Angle_), 
                  sinf(Emitter_.Pos_.Min_Max.Angle_) };

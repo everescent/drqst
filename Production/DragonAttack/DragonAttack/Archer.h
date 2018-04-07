@@ -41,7 +41,7 @@ public:
   //Constructs Archer with desired position
   Archer(Sprite *p_Sprite, Sprite *Arrow_Sprite, const float posX = 0.0f, const float posY = 0.0f);
   //Clears arrow vector memory
-  ~Archer() = default;
+  ~Archer();
   //Updates the Archer
   void Update(Dragon& player, const float dt);
   //Renders Archer and attacks

@@ -55,6 +55,7 @@ private:
 
 public:
     Knight(const AEVec2&, Sprite* );          // coverting constructor/ only constructor
+    ~Knight();                                // destructor to delete sprite
     void Update(Dragon&, const float dt);     // update the knight behaviour
     void Render(void);                        // render the knight on screen
 
