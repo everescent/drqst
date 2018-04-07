@@ -126,7 +126,8 @@ namespace Stage3_3
     void Update(float dt)
     {
         pause->Update(p_bool);
-        if (!p_bool) {
+        if (!p_bool)
+        {
 
             // if king arthur has died, switch state to credit screen
             if (last_boss->Get_HP() <= 0)
@@ -248,6 +249,8 @@ namespace Stage3_3
     **************************************************************************************/
     void Free(void)
     {
+        player->ResetCharge();
+        
         last_boss->Dead();
         delete last_boss;
     }
