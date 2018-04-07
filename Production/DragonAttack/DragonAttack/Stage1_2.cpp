@@ -2,16 +2,19 @@
 
 namespace
 {
-	Dragon *player;
-	Sprite *BG;
-	Transform *M_BG;
-	Audio_Engine* Audio;
-	UI* ui;
-	AEVec2 startpos = { -310, -615 };
+	Dragon       *player;
+	Sprite       *BG;
+	Transform    *M_BG;
+	UI           *ui;
+	Audio_Engine *Audio;
+	Pause        *pause;
 
-	int** MapData;
-	int Map_Width;
-	int Map_Height;
+	bool pause_bool = false;
+	const AEVec2 startpos = { -310, -615 };
+
+	int ** MapData;
+	int    Map_Width;
+	int    Map_Height;
 
 	std::vector<Platform>    platforms;
 	std::vector<Block>       blocks;
@@ -34,9 +37,6 @@ namespace
 	Sprite* FLOOR_SPRITE;
 	Sprite* TOWER_SPRITE;
 	Sprite* SIGN_SPRITE;
-
-	Pause* pause;
-	bool pause_bool = false;
 }
 
 namespace Stage1_2
@@ -54,24 +54,20 @@ namespace Stage1_2
 		INVUL_SPRITE   = new Sprite{ S_CreateSquare   (50.0f, ".//Textures/invul.png", 1.0f) };
 
 		// Textures for static objects
-		BARRIER_SPRITE = new Sprite{ S_CreateSquare   (130.0f, ".//Textures/box.png") };
-		SIGN_SPRITE    = new Sprite{ S_CreateSquare   (70.0f, ".//Textures/sign.png") };
-		WALL_SPRITE    = new Sprite{ CreateFloor      (1.0f, ".//Textures/Cobblestone.png", 1.0f, 1.0f) };
-		FLOOR_SPRITE   = new Sprite{ CreateFloor      (1.0f, ".//Textures/Cobblestone.png", 1.0f, 1.0f) };
-		PLAT_SPRITE    = new Sprite{ CreatePlatform   (1.0f, 1.0f, ".//Textures/Cobblestone.png") };
-		LCPLAT_SPRITE  = new Sprite{ CreatePlatform   (2.0f, 3.0f, ".//Textures/Win_Platform.png") };
+		BARRIER_SPRITE = new Sprite{ S_CreateSquare   (130.0f,         ".//Textures/box.png") };
+		SIGN_SPRITE    = new Sprite{ S_CreateSquare   (70.0f,          ".//Textures/sign.png") };
+		WALL_SPRITE    = new Sprite{ CreateFloor      (1.0f,           ".//Textures/Cobblestone.png", 1.0f, 1.0f) };
+		FLOOR_SPRITE   = new Sprite{ CreateFloor      (1.0f,           ".//Textures/Cobblestone.png", 1.0f, 1.0f) };
+		PLAT_SPRITE    = new Sprite{ CreatePlatform   (1.0f, 1.0f,     ".//Textures/Cobblestone.png") };
+		LCPLAT_SPRITE  = new Sprite{ CreatePlatform   (2.0f, 3.0f,     ".//Textures/Win_Platform.png") };
 		TOWER_SPRITE   = new Sprite{ S_CreateRectangle(300.0f, 300.0f, ".//Textures/tower.png") };
 
 		// Texture and transform matrix for BG
 		BG   = new Sprite{ CreateBG(22.0f, 2.0f, ".//Textures/BG_Stage1.png", 1.0f, 15.0f) };
 		M_BG = new Transform{};
 
-		// Player creation
-		player = dynamic_cast<Dragon*>(Create_Basic_AI(DRAGON, startpos));
-
 		// Audio and UI
 		Audio = new Audio_Engine{ 1, [](std::vector <std::string> &playlist)->void {playlist.push_back(".//Audio/Stage_1_BGM.mp3"); } };
-		ui    = new UI{ player };
 
 		// Placement for level change platform
 		next = new LevelChangePlatform {LCPLAT_SPRITE, 7300.0f,  240.0f };
@@ -171,16 +167,26 @@ namespace Stage1_2
 		for (size_t i = 0; i < c.size(); ++i)
 			c[i]->SetActive(true);
 
+		// Creation of player done in init so restarting the level will set the position
+		player = dynamic_cast<Dragon*>(Create_Basic_AI(DRAGON, startpos));
+		ui = new UI{ player };
+
 		player->SetActive(true);
+
+		// Reset player's Health and charge
+		player->Set_HP(3);
+		player->ResetCharge();
 	}
 
 	void Update(float dt)
 	{
-		pause->Update(pause_bool);
+		
 		if (!pause_bool) 
 		{
-			
 			Audio->Update();
+			pause->Update(pause_bool);
+
+			player->Update(*player, dt);
 
 			for (size_t i = 0; i < c.size(); ++i)
 			{
@@ -216,15 +222,16 @@ namespace Stage1_2
 				elem.Update(*player, dt);
 			}
 
-			next->Update(*player, dt);
-			player->Update(*player, dt);
 			CamFollow(player->Transform_, 200, 120, player->GetFacing());
+			next->Update(*player, dt);
 			ui->UI_Update(player, dt);
 		}
-
+		else 
+		{
+			Audio->SetPause(0, 1);
+			pause->Update(pause_bool);
+		}
 		//std::cout << (int)player->PosX <<", "<< (int)player->PosY << std::endl;
-
-		
 	}
 
 	void Draw(void)
@@ -251,10 +258,10 @@ namespace Stage1_2
 		{
 			c[i]->Render();
 		}
-		next->Render();
 
 		player->Render();
 		player->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+		next->Render();
 		ui->Render();
 
 		// Particle Effects
@@ -265,11 +272,17 @@ namespace Stage1_2
 
 	void Free(void)
 	{
+		// Delete player and UI
+		delete player;
+		delete ui;
+
+		// Clear object vectors
 		platforms.clear();
 		blocks.clear();
 		PU.clear();
 		barriers.clear();
 
+		// Delete enemies
 		for (size_t i = 0; i < c.size(); ++i)
 		{
 			delete c[i];
@@ -301,11 +314,9 @@ namespace Stage1_2
 		delete TOWER_SPRITE;
 		delete SIGN_SPRITE;
 
-		delete player;
 		delete BG;
 		delete M_BG;
 		delete Audio;
-		delete ui;
 		delete next;
 
 		delete pause;
