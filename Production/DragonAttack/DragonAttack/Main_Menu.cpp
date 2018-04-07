@@ -21,6 +21,7 @@ namespace
 	GameObject* Play_Button;
 	GameObject* Quit_Button;
 	GameObject* Credits_Button;
+	GameObject* Cursor;
 	Audio_Engine* Audio;
 	//GameObject* Credits_Button;
 	const float Menu_Width = AEGfxGetWinMaxX() * 2;
@@ -29,20 +30,24 @@ namespace
 	//i.e, these are the half of button's height/width
 	const float Button_Width = 80.0f;
 	const float Button_Height = 40.0f;
+	const float Cursor_D = 20.0f; // The dimensions of the height and width
 	s32 Store_X ,Store_Y ;
 	f32 Mouse_X, Mouse_Y ;
 	 AEVec2 Play_Pos{ 0.0f, 0.0f };
 	 AEVec2 Quit_Pos{ 0.0f, -100.0f };
 	 AEVec2 Credits_Pos{ 0.0f, -200.0f };
+	 AEVec2 Cursor_Pos{ 0.0f , 0.0f };
 	Sprite* PLAY_SPRITE;
 	Sprite* QUIT_SPRITE;
 	Sprite* CREDITS_SPRITE;
 	Sprite* DIGIPEN_SPRITE;
+	Sprite* CURSOR_SPRITE;
 	Transform* DIGIPEN_M;
 	Sprite* TEAM_SPRITE;
 	Transform* TEAM_M;
 	Sprite* GAME_SPRITE;
 	Transform* GAME_M;
+	Particle_System* cursor_particles;
 
 
 	float timer = 15.0f;
@@ -66,7 +71,9 @@ namespace Main_Menu
 		PLAY_SPRITE = new Sprite{S_CreateRectangle(Button_Width,Button_Height,"Textures/Play_Button.png")};
 		QUIT_SPRITE = new Sprite{S_CreateRectangle(Button_Width,Button_Height,"Textures/Quit_Button.png")};
 		CREDITS_SPRITE = new Sprite{ S_CreateRectangle(Button_Width, Button_Height, "Textures/Credits_Button.png") };
-
+		
+		CURSOR_SPRITE = new Sprite{ S_CreateRectangle(Cursor_D, Cursor_D, "Textures/Bob_Head.png") };
+		
 		DIGIPEN_SPRITE = new Sprite{ S_CreateRectangle(210.f, 50.f, "Textures/DigiPen_RGB_Red.png") };
 		DIGIPEN_SPRITE->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 		DIGIPEN_M = new Transform;
@@ -100,6 +107,11 @@ namespace Main_Menu
 			Col_Comp(Credits_Pos.x - (Button_Width), Credits_Pos.y - Button_Height,
 				Credits_Pos.x + Button_Width, Credits_Pos.y + Button_Height, Rect) } ;
 
+		//Construct a custom Cursor 
+		Cursor = new GameObject{ CURSOR_SPRITE, Col_Comp() };
+
+		cursor_particles = Effects_Get(COIN_PARTICLE);
+
 	}
 
 	void Init(void)
@@ -107,10 +119,69 @@ namespace Main_Menu
 		//Initialise buttons here
 		Audio->Play(0);
 		Audio->SetLoop(0,1);
+
+		// BEHAVIOUR FOR CURSOR PARTICLES
+		//Set to appear to be spitting out flames
+		cursor_particles->Emitter_.PPS_ = 5;
+		cursor_particles->Emitter_.Dist_Min_ = 0.0f;
+		cursor_particles->Emitter_.Vol_Max = 100;
+		cursor_particles->Emitter_.Direction_ = 0.0f; // shoot out to the right 
+		cursor_particles->Emitter_.Particle_Rand_.Spread_ = 10;
+		cursor_particles->Emitter_.Conserve_ = 0.80f;
+		cursor_particles->Emitter_.Size_ = 8.0f;
+		cursor_particles->Emitter_.Speed_ = 8.0f;
+		//cursor_particles->Emitter_.Particle_Rand_.Sp_Rand_ = 3;
+		cursor_particles->Emitter_.Lifetime_ = 0.5f;
+		//cursor_particles->Emitter_.Particle_Rand_.Life_Rand_ = 3;
 	}
 
 	void Update(float dt)
 	{
+		
+		Audio->Update();
+		AEInputShowCursor(0);
+		//Use AE_Engine to get the cursor position and convert the position to the global scale 
+		AEInputGetCursorPosition(&Store_X, &Store_Y);
+		//Conversion needed as the position gotten from AEInputGetCursorPosition is not in Global System
+		Mouse_X = ((float)Store_X - AEGfxGetWinMaxX());
+		Mouse_Y = AEGfxGetWinMaxY() - (float)Store_Y;
+		Cursor_Pos.x = Mouse_X + 10.0f;
+		Cursor_Pos.y = Mouse_Y - 10.0f;
+
+
+		//******Allowing Intro screen to be bypassed with a single mouse-click
+		if (AEInputCheckTriggered(AEVK_ESCAPE) || AEInputCheckTriggered(AEVK_SPACE) ||
+			AEInputCheckTriggered(AEVK_RETURN))
+		{
+			timer = 0.0f;
+		}
+
+		if (AEInputCheckTriggered(AEVK_LBUTTON))
+		{
+
+			timer = 0.0f;
+
+			//Use the Collision functions to check if the 'point'(mouse-click) is in the bouding box of the button
+			//Repeat this for all buttons 
+			if (Play_Button->Collision_.St_Rect_Point((float)Mouse_X, (float)Mouse_Y))
+			{
+				GSM::next = GS_LEVELS;
+			}
+
+			if (Quit_Button->Collision_.St_Rect_Point((float)Mouse_X, (float)Mouse_Y))
+			{
+				GSM::next = GS_QUIT;
+			}
+
+			if (Credits_Button->Collision_.St_Rect_Point((float)Mouse_X, (float)Mouse_Y))
+			{
+				GSM::next = GS_CREDITS;
+			}
+
+
+
+		}
+		
 		if (timer > 0.0f)
 		{
 			timer -= dt;
@@ -121,6 +192,7 @@ namespace Main_Menu
 		Play_Button->SetActive(true);
 		Quit_Button->SetActive(true);
 		Credits_Button->SetActive(true);
+		Cursor->SetActive(true);
 		//Translate and concat the play button
 		Play_Button->Transform_.SetTranslate(Play_Pos.x, Play_Pos.y);
 		Play_Button->Transform_.Concat();
@@ -131,13 +203,25 @@ namespace Main_Menu
 		Credits_Button->Transform_.SetTranslate(Credits_Pos.x, Credits_Pos.y);
 		Credits_Button->Transform_.Concat();
 
-		Audio->Update();
+		Cursor->Transform_.SetTranslate(Cursor_Pos.x, Cursor_Pos.y);
+		Cursor->Transform_.Concat();
 
-		//Use AE_Engine to get the cursor position and convert the position to the global scale 
-		AEInputGetCursorPosition(&Store_X, &Store_Y);
-		//Conversion needed as the position gotten from AEInputGetCursorPosition is not in Global System
-		Mouse_X = ((float)Store_X - AEGfxGetWinMaxX());
-		Mouse_Y = AEGfxGetWinMaxY() - (float)Store_Y;
+		
+
+		cursor_particles->Emitter_.Pos_.Min_Max.Point_Max.x = Cursor_Pos.x + 480.0f;
+		cursor_particles->Emitter_.Pos_.Min_Max.Point_Min.x = Cursor_Pos.x + 10.0f;
+		cursor_particles->Emitter_.Pos_.Min_Max.Point_Max.y = Cursor_Pos.y + 10.0f;
+		cursor_particles->Emitter_.Pos_.Min_Max.Point_Min.y = Cursor_Pos.y - 10.0f;
+
+		cursor_particles->UpdateEmission();
+		cursor_particles->Turbulence(0.7f);
+		cursor_particles->TransRamp_Exp();
+		cursor_particles->Newton({ Cursor_Pos.x + 20.0f , Cursor_Pos.y - 10.0f }, 0.2f);
+
+		if (cursor_particles->GetParticleCount())
+		{
+			cursor_particles->Update(dt);
+		}
 
 		if (Play_Button->Collision_.St_Rect_Point((float)Mouse_X, (float)Mouse_Y))
 		{
@@ -161,30 +245,7 @@ namespace Main_Menu
 			CREDITS_SPRITE->SetRGB(1.5f, 1.5, 1.5f);
 		}
 
-		if (AEInputCheckTriggered(AEVK_LBUTTON))
-		{
-			
-
-			//Use the Collision functions to check if the 'point'(mouse-click) is in the bouding box of the button
-			//Repeat this for all buttons 
-			if (Play_Button->Collision_.St_Rect_Point((float)Mouse_X, (float)Mouse_Y))
-			{
-				GSM::next = GS_LEVELS;
-			}
-
-			if (Quit_Button->Collision_.St_Rect_Point((float)Mouse_X, (float)Mouse_Y))
-			{
-				GSM::next = GS_QUIT;
-			}
-
-			if (Credits_Button->Collision_.St_Rect_Point((float)Mouse_X, (float)Mouse_Y))
-			{
-				GSM::next = GS_CREDITS;
-			}
-
-
-
-		}
+		
 		
 	}
 
@@ -227,6 +288,12 @@ namespace Main_Menu
 		//Render the Credits button 
 		Credits_Button->Render();
 		Credits_Button->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+
+		Cursor->Render();
+		Cursor->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+
+		cursor_particles->Render();
+
 	}
 
 	void Free(void) { 
@@ -238,13 +305,16 @@ namespace Main_Menu
 		delete TEAM_SPRITE;
 		delete TEAM_M;
 		delete GAME_SPRITE;
+		delete CURSOR_SPRITE;
 		delete GAME_M;
 		delete M_BG;
 		delete MM_Background;
 		delete Play_Button;
 		delete Quit_Button;
 		delete Credits_Button;
+		delete Cursor;
 		delete Audio;
+
 	}
 
 	void Unload(void) {}
