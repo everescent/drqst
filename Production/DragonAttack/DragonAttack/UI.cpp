@@ -22,7 +22,7 @@ UI::UI(Dragon* dragon)
 	Charge_Sprite{ new Sprite { S_CreateSquare(20.0f, "Textures/Fireball.png") } },
 	icon_w{ 20.0f },
 	HP_Trans{ new Transform {} },
-	charge_icon{ new GameObject{ &Charge_Sprite, Col_Comp() } },
+	charge_icon { new GameObject{ Charge_Sprite, Col_Comp() } },
 	Dragon_hp{ dragon->Get_HP() }, Fireball_charge{ dragon->Get_Charge() }
 	{
 	
@@ -86,7 +86,7 @@ UI::~UI()
 		hp_icon2.SetActive(true);
 		hp_icon3.SetActive(true);*/
 		
-		charge_icon.SetActive(false);
+		charge_icon->SetActive(false);
 
 		/*std::cout << "Dragon's HP:" << dragon->Get_HP() << std::endl;
 		
@@ -110,10 +110,10 @@ UI::~UI()
 
 		if (Fireball_charge == Max_Charge)
 		{
-			charge_icon.SetActive(true);
+			charge_icon->SetActive(true);
 		}
 		else 
-			charge_icon.SetActive(false);
+			charge_icon->SetActive(false);
 		
 		//std::cout << testX << " " << testY << std::endl;
 		//update the icons to follow the camera , Translate it first
@@ -129,10 +129,10 @@ UI::~UI()
 
 
 		if ( dragon->Get_Direction() == RIGHT )
-		charge_icon.Transform_.SetTranslate(dragon->PosX -60 , dragon->PosY + 30 );
+		charge_icon->Transform_.SetTranslate(dragon->PosX -60 , dragon->PosY + 30 );
 		if (dragon->Get_Direction() == LEFT)
-			charge_icon.Transform_.SetTranslate(dragon->PosX + 60, dragon->PosY + 30);
-		charge_icon.Transform_.Concat();
+			charge_icon->Transform_.SetTranslate(dragon->PosX + 60, dragon->PosY + 30);
+		charge_icon->Transform_.Concat();
 
     if (dragon->Get_Direction() == RIGHT)
     {
@@ -197,8 +197,8 @@ UI::~UI()
 		if (Fireball_charge == Max_Charge)
 		{
 			flame_particles->Render();
-			charge_icon.Render();
-			charge_icon.Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+			charge_icon->Render();
+			charge_icon->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 			
 		}
 		
