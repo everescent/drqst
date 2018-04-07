@@ -132,12 +132,7 @@ namespace Stage3_3
             if (last_boss->Get_HP() <= 0)
             {
                 SM::Set_Next(SS_QUIT);
-                //GSM::next = GS_CREDITS;
-            }
-            else if (player->Get_HP() <= 0)
-            {
-                SM::Set_Next(SS_RESTART);  // change state to restart
-                last_boss->Set_HP(0);      // kills the boss
+                GSM::next = GS_CREDITS;
             }
 
             //player->Set_Vulnerable(true);
@@ -253,6 +248,7 @@ namespace Stage3_3
     **************************************************************************************/
     void Free(void)
     {
+        last_boss->Dead();
         delete last_boss;
     }
 
