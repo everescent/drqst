@@ -404,3 +404,8 @@ void Grunt::Update(Dragon &d, const float dt)
 	}
 	anim.Update(*Sprite_);
 }
+
+Grunt::~Grunt()
+{
+    delete Sprite_;
+}
