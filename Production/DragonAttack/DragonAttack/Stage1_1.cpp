@@ -214,24 +214,24 @@ namespace Stage1_1
 			c[i]->SetActive(true);
 
 		// Creation of player done in init so restarting the level will set the position
-		player = dynamic_cast<Dragon*>(Create_Basic_AI(DRAGON, startpos)); // <------
-		ui = new UI{ player }; // <------
+		player = dynamic_cast<Dragon*>(Create_Basic_AI(DRAGON, startpos));
+		ui = new UI{ player };
 
 		player->SetActive(true);
 
 		// Reset player's Health and charge
-		player->Set_HP(3); // <------
-		player->ResetCharge(); // <------
+		player->Set_HP(3);
+		player->ResetCharge();
 	}
 
 	void Update(float dt)
 	{
-		if (!pause_bool) // <------
+		if (!pause_bool)
 		{ 
 			Audio->Update();
 			pause->Update(pause_bool);
 
-			player->Update(*player, dt); // <------
+			player->Update(*player, dt);
 
 			s1->Update(*player, dt);
 			tut1->Transform_.SetTranslate(400.0f, -20.0f);
@@ -305,7 +305,7 @@ namespace Stage1_1
 			next->Update(*player, dt);
 			ui->UI_Update(player, dt);
 		}
-		else // <--
+		else
 		{
 			Audio->SetPause(0, 1);
 			pause->Update(pause_bool);

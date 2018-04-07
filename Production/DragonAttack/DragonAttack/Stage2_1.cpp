@@ -84,7 +84,7 @@ namespace Stage2_1
 		Audio = new Audio_Engine{ 1, [](std::vector <std::string> &playlist)->void {playlist.push_back(".//Audio/Stage_2_BGM.mp3"); } };
 
 		// Placement for level change platform
-		next = new LevelChangePlatform{ LCPLAT_SPRITE, 1180.0f,  -2700.0f }; //-2685?
+		next = new LevelChangePlatform{ LCPLAT_SPRITE, 1180.0f,  -2750.0f }; //-2685?
 		
 		// Pause menu object
 		pause = new Pause{};
@@ -205,6 +205,11 @@ namespace Stage2_1
 
 	void Update(float dt)
 	{
+		if (AEInputCheckCurr(AEVK_G))
+		{
+			player->Set_HP(10);
+		}
+
 		if (!pause_bool) 
 		{
 			Audio->Update();
