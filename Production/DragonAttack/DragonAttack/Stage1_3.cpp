@@ -118,13 +118,12 @@ namespace Stage1_3
 			Audio->SetPause(0, 1);
 			pause->Update(pause_bool);
 		}
-			//std::cout << (int)player->PosX << ", " << (int)player->PosY << std::endl;
+		//std::cout << (int)player->PosX << ", " << (int)player->PosY << std::endl;
 	}
 
 	void Draw(void)
 	{
-		CamFollow(player->Transform_, 200, 120, player->GetFacing());
-		CamStatic();
+		// removed camera functions for lancelot's CamShake()
 
 		BG->Render_Object(*M_BG);
 

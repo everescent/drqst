@@ -9,8 +9,8 @@ namespace
 	Audio_Engine *Audio;
 	Pause        *pause;
 
-	bool pause_bool = false; // <------
-	const AEVec2 startpos = { -320, -255 }; // <------
+	bool pause_bool = false;
+	const AEVec2 startpos = { -320, -255 };
 
 	int ** MapData;
 	int    Map_Width;
@@ -111,7 +111,7 @@ namespace Stage1_1
 		s6 = new Sign{ SIGN_SPRITE, 5200.0f, -75.0f };
 		tut6 = new GameObject{ TUT6_SPRITE, Col_Comp() };
 
-		pause = new Pause{}; // <------
+		pause = new Pause{};
 	}
 
 	void Init(void)
