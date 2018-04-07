@@ -29,6 +29,10 @@ class UI
 public:
 	//Default constructor for User interface that takes in a ptr to Dragon as a parameter 
 	UI(Dragon* dragon);
+
+	//Default destructor for UI
+	~UI();
+
 	//Updates the UI
 	void UI_Update(Dragon* dragon, const float dt);
 	//Renders the UI
@@ -37,10 +41,10 @@ public:
 private:
 
 	Sprite*  HP_Sprite;
-	Sprite Charge_Sprite;
+	Sprite* Charge_Sprite;
 	const float icon_w;
 	Transform* HP_Trans;
-	GameObject charge_icon;
+	GameObject* charge_icon;
 	int Dragon_hp;
 	int Fireball_charge;
 	static Particle_System* flame_particles;

@@ -19,10 +19,10 @@ Particle_System* UI::flame_particles = nullptr;
 
 UI::UI(Dragon* dragon)
 	:HP_Sprite{ new Sprite {S_CreateSquare(20.0f, "Textures/hp.png") } },
-	Charge_Sprite{ S_CreateSquare(20.0f, "Textures/Fireball.png") },
+	Charge_Sprite{ new Sprite { S_CreateSquare(20.0f, "Textures/Fireball.png") } },
 	icon_w{ 20.0f },
 	HP_Trans{ new Transform {} },
-	charge_icon{ &Charge_Sprite, Col_Comp() },
+	charge_icon{ new GameObject{ &Charge_Sprite, Col_Comp() } },
 	Dragon_hp{ dragon->Get_HP() }, Fireball_charge{ dragon->Get_Charge() }
 	{
 	
@@ -41,9 +41,18 @@ UI::UI(Dragon* dragon)
 	flame_particles->Emitter_.Speed_ = 6.0f;
 	flame_particles->Emitter_.Particle_Rand_.Sp_Rand_ = 3;
 	flame_particles->Emitter_.Lifetime_ = 1.0f;
+
 	//flame_particles->Emitter_.Particle_Rand_.Life_Rand_ = 3;
 	
 	} 
+
+UI::~UI()
+	{
+	delete HP_Sprite;
+	delete Charge_Sprite;
+	delete HP_Trans;
+	delete charge_icon;
+	}
 
 	void UI::update_HP()
 	{
