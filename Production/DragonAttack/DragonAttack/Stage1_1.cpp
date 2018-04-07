@@ -2,54 +2,55 @@
 
 namespace
 {
-	Dragon *player;
-	Sprite *BG;
-	Transform *M_BG;
-	Audio_Engine* Audio;
-	UI* ui;
-	AEVec2 startpos = { -320, -255 };
+	Dragon       *player;
+	Sprite       *BG;
+	Transform    *M_BG;
+	UI           *ui;
+	Audio_Engine *Audio;
+	Pause        *pause;
 
-	int** MapData;
-	int Map_Width;
-	int Map_Height;
+	bool pause_bool = false;
+	const AEVec2 startpos = { -320, -255 };
+
+	int ** MapData;
+	int    Map_Width;
+	int    Map_Height;
 
 	std::vector<Platform> platforms;
-	std::vector<Block> blocks;
-	std::vector<Barrier> barriers;
-	std::vector<PickUp> PU;
+	std::vector<Block>    blocks;
+	std::vector<Barrier>  barriers;
+	std::vector<PickUp>   PU;
 
-	LevelChangePlatform *next;
-	Tower *archerTower;
-	PickUp *coin1;
-	Barrier *box1;
-	Sign *s1, *s2, *s3, *s4, *s5, *s6;
-	GameObject *tut1, *tut2, *tut3, *tut4, *tut5, *tut6;
+	Tower                *archerTower;
+	PickUp               *coin1;
+	Barrier              *box1;
+	Sign                 *s1, *s2, *s3, *s4, *s5, *s6;
+	GameObject           *tut1, *tut2, *tut3, *tut4, *tut5, *tut6;
+	LevelChangePlatform  *next;
 
 	std::vector<Characters*> c;
 
-	Sprite* TUT1_SPRITE;
-	Sprite* TUT2_SPRITE;
-	Sprite* TUT3_SPRITE;
-	Sprite* TUT4_SPRITE;
-	Sprite* TUT5_SPRITE;
-	Sprite* TUT6_SPRITE;
+	Sprite *TUT1_SPRITE;
+	Sprite *TUT2_SPRITE;
+	Sprite *TUT3_SPRITE;
+	Sprite *TUT4_SPRITE;
+	Sprite *TUT5_SPRITE;
+	Sprite *TUT6_SPRITE;
+		   
+	Sprite *COIN_SPRITE;//pickups
+	Sprite *HP_SPRITE;
+	Sprite *DMG_SPRITE;
+	Sprite *SPD_SPRITE;
+	Sprite *INVUL_SPRITE;
+		   
+	Sprite *BARRIER_SPRITE;//objs
+	Sprite *WALL_SPRITE;
+	Sprite *PLAT_SPRITE;
+	Sprite *LCPLAT_SPRITE;
+	Sprite *FLOOR_SPRITE;
+	Sprite *TOWER_SPRITE;
+	Sprite *SIGN_SPRITE;
 
-	Sprite* COIN_SPRITE;//pickups
-	Sprite* HP_SPRITE;
-	Sprite* DMG_SPRITE;
-	Sprite* SPD_SPRITE;
-	Sprite* INVUL_SPRITE;
-
-	Sprite* BARRIER_SPRITE;//objs
-	Sprite* WALL_SPRITE;
-	Sprite* PLAT_SPRITE;
-	Sprite* LCPLAT_SPRITE;
-	Sprite* FLOOR_SPRITE;
-	Sprite* TOWER_SPRITE;
-	Sprite* SIGN_SPRITE;
-
-	Pause* pause;
-	bool pause_bool = false;
 }
 
 namespace Stage1_1
@@ -87,12 +88,9 @@ namespace Stage1_1
 		BG     = new Sprite{ CreateBG(22.0f, 2.0f, ".//Textures/BG_Stage1.png", 1.0f, 15.0f) };
 		M_BG   = new Transform{};
 
-		// Player creation
-		player = dynamic_cast<Dragon*>(Create_Basic_AI(DRAGON, startpos));
-
 		// Audio and UI
 		Audio  = new Audio_Engine{ 1, [](std::vector <std::string> &playlist)->void {playlist.push_back(".//Audio/Stage_1_BGM.mp3"); } };
-		ui     = new UI{ player };
+		/*ui     = new UI{ player };*/
 
 		// Placement for specific objects
 		archerTower = new Tower  { TOWER_SPRITE, 4800.0f, 0.0f };
@@ -120,8 +118,6 @@ namespace Stage1_1
 
 	void Init(void)
 	{
-		
-		
 		tut1->SetActive(true);
 		tut2->SetActive(true);
 		tut3->SetActive(true);
@@ -139,7 +135,6 @@ namespace Stage1_1
 		
 		Audio->Play(0);
 		Audio->SetLoop(0, 1);
-
 		
 
 		for (int y = 0; y < Map_Height; ++y) // MOVE TO LOAD()???
@@ -216,14 +211,15 @@ namespace Stage1_1
 		for (size_t i = 0; i < c.size(); ++i)
 			c[i]->SetActive(true);
 
+		// Creation of player done in init so restarting the level will set the position
+		player = dynamic_cast<Dragon*>(Create_Basic_AI(DRAGON, startpos));
+		ui = new UI{ player };
+
 		player->SetActive(true);
 
-		//Javon's Edit for Level Restart
 		//Reset Dragon's HP 
-		player -> Set_HP(3);
-		player->SetPos(startpos.x, startpos.y);
+		player->Set_HP(3);
 		player->ResetCharge();
-
 	}
 
 	void Update(float dt)
@@ -231,6 +227,9 @@ namespace Stage1_1
 		if (!pause_bool) {
 			Audio->Update();
 			pause->Update(pause_bool);
+
+			player->Update(*player, dt);//////////////////
+
 			s1->Update(*player, dt);
 			tut1->Transform_.SetTranslate(400.0f, -20.0f);
 			tut1->Transform_.Concat();
@@ -297,7 +296,6 @@ namespace Stage1_1
 			}
 
 			archerTower->Update(*player, dt);
-			player->Update(*player, dt);
 			box1->Update(*player, dt);
 			CamFollow(player->Transform_, 200, 120, player->GetFacing());
 			next->Update(*player, dt);
@@ -309,7 +307,7 @@ namespace Stage1_1
 			Audio->SetPause(0, 1);
 			pause->Update(pause_bool);
 		}
-		//std::cout << (int)player->PosX << ", " << (int)player->PosY << std::endl;
+		std::cout << (int)player->PosX << ", " << (int)player->PosY << std::endl;
 	}
 
 	void Draw(void)
@@ -392,6 +390,8 @@ namespace Stage1_1
 
 	void Free(void)
 	{
+		delete player;
+		delete ui;
 		platforms.clear();
 		blocks.clear();
 		barriers.clear();
@@ -403,7 +403,6 @@ namespace Stage1_1
 			delete c[i];
 		}
 		c.clear();
-		
 	}
 
 	void Unload(void)
@@ -439,9 +438,7 @@ namespace Stage1_1
 
 		delete BG;
 		delete M_BG;
-		delete player;
 		delete Audio;
-		delete ui;
 
 		// Tutorial sprites
 		delete s1;
