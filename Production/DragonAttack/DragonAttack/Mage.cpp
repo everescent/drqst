@@ -52,6 +52,7 @@ Mage::Mage(const AEVec2& position, Sprite* texture)
    SetPos(position.x, position.y);							// starting coordinates
    Transform_.SetTranslate(position.x, position.y);			// add to matrix
    Transform_.Concat();										// add to final matrix
+   Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);   // set blend mode
    Reset_Idle_Time(2.0f);									// idling time for mage
 }
 
@@ -89,6 +90,7 @@ void Mage::Update(Dragon &d, const float dt)
 					//Reset the distance of the fireball and set false
 					d.GetFireball()[i].Projectile::ResetDist();
 					d.GetFireball()[i].SetActive(false);
+                    d.SetInvul(true);
 
 					anim.SetState(HIT_ANIM);
 				}
@@ -102,6 +104,7 @@ void Mage::Update(Dragon &d, const float dt)
 				Decrease_HP(d.GetMDamage());
 				d.GetMfireball().Projectile::ResetDist();
 				d.GetMfireball().SetActive(false);
+                d.SetInvul(true);
 
 				anim.SetState(HIT_ANIM);
 			}
@@ -294,4 +297,9 @@ bool Mage::Line_Of_Sight(const Dragon &d)
 	
 	// checks if player is in same screen as mage
 	return distance > LEFT_BOUNDARY && distance < RIGHT_BOUNDARY;
+}
+
+Mage::~Mage()
+{
+    delete Sprite_;
 }

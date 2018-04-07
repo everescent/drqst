@@ -247,6 +247,7 @@ void Lancelot::Update(Dragon &d, float dt)
 					//Reset the distance of the fireball and set false
 					d.GetFireball()[i].Projectile::ResetDist();
 					d.GetFireball()[i].SetActive(false);
+                    d.SetInvul(true);
 					music.Play(0);
 				}
 
@@ -260,6 +261,7 @@ void Lancelot::Update(Dragon &d, float dt)
 				d.GetMfireball().Projectile::ResetDist();
 				d.GetMfireball().SetActive(false);
 				music.Play(0);
+                d.SetInvul(true);
 				d.PlayImpact();
 			}
 		}

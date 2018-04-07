@@ -17,16 +17,16 @@ Technology is prohibited.
 
 namespace
 {
-	Sprite D_SPRITE;
+    Sprite D_SPRITE;
 
-	Sprite A_SPRITE;
-	Sprite G_SPRITE;
-	Sprite MA_SPRITE;
-	Sprite K_SPRITE;
+    Sprite A_SPRITE;
+    Sprite G_SPRITE;
+    Sprite MA_SPRITE;
+    Sprite K_SPRITE;
 
-	Sprite L_SPRITE;
-	Sprite ME_SPRITE;
-	Sprite KA_SPRITE;
+    Sprite L_SPRITE;
+    Sprite ME_SPRITE;
+    Sprite KA_SPRITE;
 }
 
 /**************************************************************************************
@@ -36,22 +36,14 @@ namespace
 **************************************************************************************/
 void AI_Sprite_Init(void)
 {
-	A_SPRITE    = S_CreateSquare(70.0f, ".//Textures/Archer_SpriteSheet.png",     0.2f, 0.33f);
-	G_SPRITE    = S_CreateSquare(70.0f, ".//Textures/Grunt_SpriteSheet.png",      0.2f, 0.33f);  
-	K_SPRITE    = S_CreateSquare(70.0f, ".//Textures/Knight_SpriteSheet.png",     0.2f, 0.33f);
-	MA_SPRITE   = S_CreateSquare(55.0f, ".//Textures/Mage_SpriteSheet.png",       0.2f, 0.5f);
-	D_SPRITE    = S_CreateSquare(Dragon_Scale, ".//Textures/Bob_SpriteSheet.png", 0.2f, 0.25f);
+    D_SPRITE    = S_CreateSquare(Dragon_Scale, ".//Textures/Bob_SpriteSheet.png", 0.2f, 0.25f);
 
-	L_SPRITE    = S_CreateSquare(60.0f, ".//Textures/Lancelot_SpriteSheet.png",   0.2f, 0.2f);
+    L_SPRITE    = S_CreateSquare(60.0f, ".//Textures/Lancelot_SpriteSheet.png",   0.2f, 0.2f);
     ME_SPRITE   = S_CreateSquare(1.5f, ".//Textures/Merlin_SpriteSheet.png", 0.2f, 0.25f);
-	KA_SPRITE   = S_CreateSquare(100.0f, ".//Textures/KA_SpriteSheet.png",        0.2f, 0.33f);
+    KA_SPRITE   = S_CreateSquare(100.0f, ".//Textures/KA_SpriteSheet.png",        0.2f, 0.33f);
 
-
-	MA_SPRITE.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
-	K_SPRITE.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
-
-	L_SPRITE.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
-	KA_SPRITE.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+    L_SPRITE.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+    KA_SPRITE.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 }
 /**************************************************************************************
 //
@@ -62,24 +54,24 @@ void AI_Sprite_Init(void)
 **************************************************************************************/
 Characters *Create_Basic_AI(const BASIC_AI mob, const AEVec2& position)
 {
-	// return the corresponding ai that was given
-	switch (mob)
-	{
+    // return the corresponding ai that was given
+    switch (mob)
+    {
   case GRUNT:  return new Grunt(new Sprite{ S_CreateSquare(70.0f, ".//Textures/Grunt_SpriteSheet.png", 0.2f, 0.33f) }, position.x, position.y);
-		break;
-	case MAGE:   return new Mage (position, new Sprite{ S_CreateSquare(55.0f, ".//Textures/Mage_SpriteSheet.png", 0.2f, 0.5f) });
-		break;
+        break;
+    case MAGE:   return new Mage (position, new Sprite{ S_CreateSquare(55.0f, ".//Textures/Mage_SpriteSheet.png", 0.2f, 0.5f) });
+        break;
     case ARCHER: return new Archer(new Sprite{ S_CreateSquare(70.0f, ".//Textures/Archer_SpriteSheet.png", 0.2f, 0.33f) }, Get_Attack_Sprite(ARROW_SPRITE), position.x, position.y);
-	    break;
-	case KNIGHT: return new Knight(position, new Sprite{ S_CreateSquare(70.0f, ".//Textures/Knight_SpriteSheet.png", 0.2f, 0.33f) });
-		break;
-	case DRAGON: return new Dragon(&D_SPRITE, Get_Attack_Sprite(FIREBALL_SPRITE), position);
-		break;
-	default: break;
-	}
-	
-	// returns nullptr if no match was found
-	return nullptr;
+        break;
+    case KNIGHT: return new Knight(position, new Sprite{ S_CreateSquare(70.0f, ".//Textures/Knight_SpriteSheet.png", 0.2f, 0.33f) });
+        break;
+    case DRAGON: return new Dragon(&D_SPRITE, Get_Attack_Sprite(FIREBALL_SPRITE), position);
+        break;
+    default: break;
+    }
+    
+    // returns nullptr if no match was found
+    return nullptr;
 }
 
 /**************************************************************************************
@@ -89,19 +81,19 @@ Characters *Create_Basic_AI(const BASIC_AI mob, const AEVec2& position)
 **************************************************************************************/
 Characters *Create_Boss_AI(const BOSS_AI boss)
 {
-	// returns the corresponding boss that was given
-	switch (boss)
-	{
-	case LANCELOT:    return new Lancelot(&L_SPRITE);
-		break;
-	case MERLIN:      return new Merlin(&ME_SPRITE, Get_Attack_Sprite(EBALL_SPRITE), Get_Attack_Sprite(ARROW_SPRITE));
-		break;
-	case KING_ARTHUR: return  new King_Arthur(&KA_SPRITE);
-		break;
+    // returns the corresponding boss that was given
+    switch (boss)
+    {
+    case LANCELOT:    return new Lancelot(&L_SPRITE);
+        break;
+    case MERLIN:      return new Merlin(&ME_SPRITE, Get_Attack_Sprite(EBALL_SPRITE), Get_Attack_Sprite(ARROW_SPRITE));
+        break;
+    case KING_ARTHUR: return  new King_Arthur(&KA_SPRITE);
+        break;
 
-	default: break;
-	}
-	
-	// returns null ptr if no match was found
-	return nullptr;
+    default: break;
+    }
+    
+    // returns null ptr if no match was found
+    return nullptr;
 }

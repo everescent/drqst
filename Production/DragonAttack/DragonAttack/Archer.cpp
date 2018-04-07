@@ -272,3 +272,8 @@ void Archer::Render()
   GameObject::Render();
   Arrow.Render();
 }
+
+Archer::~Archer()
+{
+    delete Sprite_;
+}

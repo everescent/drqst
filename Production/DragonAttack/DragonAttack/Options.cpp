@@ -29,7 +29,8 @@ namespace
     Transform  BG_M;                                   // background matrix
     Sprite     checkbox_texture[2];                    // checkbox   
     u32        fontID;                                 // fontID
-    char*      options[2] = { "Sound" , "Fullscreen"}; // Strings to print
+    Sprite     text[2];                                // stores the option text
+    Transform  text_m[2];                              // transform matrix for the text
     bool       mute;                                   // check current state
     bool       fullscreen;                             // check current state
     float      x, y;                                   // x and y coordinate of camera
@@ -54,6 +55,14 @@ void Init_Options()
     checkbox_texture[0].SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
     checkbox_texture[1].SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 
+    // initialize the sprites for option text
+    text[0] = S_CreateRectangle(102.4f, 51.2f, ".//Textures/Mute_Button.png");
+    text[1] = S_CreateRectangle(102.4f, 51.2f, ".//Textures/Fullscreen_Button.png");
+    text[0].SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+    text[1].SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+    text_m[1].SetScale(1.2f, 1.2f);
+    text_m[1].Concat();
+
     // create game objects to store the checkbox
     checkbox[0] = new GameObject(&checkbox_texture[0],
                       Col_Comp(0.f, 0.f, 0.f, 0.f, Rect));
@@ -62,8 +71,6 @@ void Init_Options()
     checkbox[0]->SetActive(true);
     checkbox[1]->SetActive(true);
 
-    // initializing the fontID
-    fontID = AEGfxCreateFont("calibri", 48, true, false);
 
 }
 
@@ -143,10 +150,6 @@ void Render_Options()
     float &y0 = checkbox[0]->PosY;
     float &x1 = checkbox[1]->PosX;
     float &y1 = checkbox[1]->PosY;
-    
-    // int version of current camera position
-    int camX = static_cast<int>(x);
-    int camY = static_cast<int>(y);
 
     // only render the background if its in the main menu
     if(GSM::current == GS_MAIN)
@@ -184,13 +187,15 @@ void Render_Options()
         checkbox[0]->Render();
     }
 
-    AEGfxSetRenderMode(AE_GFX_RM_COLOR); // render with color
-    AEGfxTextureSet(NULL, 0, 0);		 // no texture needed
-    AEGfxSetTransparency(1.0f);
-   
-    // render fonts at designated position
-    AEGfxPrint(fontID, options[0], camX - 150, camY - 40,  255.f, 140.f / 255.0f, 0.0f);
-    AEGfxPrint(fontID, options[1], camX - 150, camY - 100, 255.f, 140.f / 255.0f, 0.0f);
+    // translate the the text MUTE to its location adn render it
+    text_m[0].SetTranslate(x - 150, y - 30);
+    text_m[0].Concat();
+    text[0].Render_Object(text_m[0]);
+
+    // translate the the text FULLSCREEN to its location adn render it
+    text_m[1].SetTranslate(x - 150, y - 90);
+    text_m[1].Concat();
+    text[1].Render_Object(text_m[1]);
 }
 
 /**************************************************************************************
@@ -200,8 +205,7 @@ void Render_Options()
 **************************************************************************************/
 void Cleanup_Options()
 {
-    // destroy the font and free the memory that was allcoated for the checkbox
-    AEGfxDestroyFont(fontID);
+    // free the memory that was allocated
     delete checkbox[0];
     delete checkbox[1];
 }
