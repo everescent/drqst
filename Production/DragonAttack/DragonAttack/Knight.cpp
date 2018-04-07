@@ -157,6 +157,7 @@ void Knight::Attack(Dragon& d, const float dt)
         {
             d.Decrease_HP();        // decrease dragon hp
             stab.SetCollided(true);	// set collided to true so it cannot collide again
+            d.SetInvul(true);       // Visual Feedback and make dragon invulnerable for awhile         
         }
     }
 
@@ -251,8 +252,6 @@ void Knight::Update(Dragon &d, const float dt)
                     //Reset the distance of the fireball and set false
                     d.GetFireball()[i].Projectile::ResetDist();
                     d.GetFireball()[i].SetActive(false);
-                    // Visual Feedback and make dragon invulnerable for awhile
-                    d.SetInvul(true);
                 }
 
         // mega fire ball hit lancelot
@@ -264,9 +263,7 @@ void Knight::Update(Dragon &d, const float dt)
                 // decrease knight hp and reset mega fireball variables
                 Decrease_HP(d.GetMDamage());
                 d.GetMfireball().Projectile::ResetDist();
-                d.GetMfireball().SetActive(false);
-                // Visual Feedback and make dragon invulnerable for awhile
-                d.SetInvul(true);
+                d.GetMfireball().SetActive(false);               
             }
         }
     }
