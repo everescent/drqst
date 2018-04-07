@@ -41,7 +41,7 @@ namespace Stage2_3
 		if (!Import_MapData(".//Levels/level2-3.txt", MapData, Map_Width, Map_Height)) { AEGfxExit(); }
 
 		// Textures for pick ups
-		COIN_SPRITE = new Sprite{ S_CreateSquare  (50.0f, "Textures/coin.png", 1.0f) };
+		COIN_SPRITE = new Sprite{ S_CreateSquare  (35.0f, "Textures/coin.png", 1.0f) };
 		HP_SPRITE   = new Sprite{ S_CreateSquare  (50.0f, "Textures/hp.png", 1.0f) };
 		DMG_SPRITE  = new Sprite{ S_CreateSquare  (50.0f, "Textures/Fireball.png", 1.0f) };
 		SPD_SPRITE  = new Sprite{ S_CreateSquare  (50.0f, "Textures/spd.png", 1.0f) };
