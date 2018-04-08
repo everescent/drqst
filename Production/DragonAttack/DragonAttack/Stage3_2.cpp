@@ -79,7 +79,7 @@ namespace Stage3_2
 		Audio = new Audio_Engine{ 1, [](std::vector <std::string> &playlist)->void {playlist.push_back(".//Audio/Stage_3_BGM.mp3"); } };
 
 		// Placement for level change platform
-		next = new LevelChangePlatform{ LCPLAT_SPRITE, 5000.0f,  100.0f };
+		next = new LevelChangePlatform{ LCPLAT_SPRITE, 5000.0f,  220.0f };
 
 		// Pasue menu object
 		pause = new Pause{};

@@ -1,0 +1,39 @@
+
+  BUGLIST / FEEDBACK TO ADDRESS
+
+  [LEVEL DESIGN]
+ - Increase the starting health for stage 2/3 to 4, Boss stage to 5.
+ - Add a lot more coins, and slightly more power-ups (would make gameplay faster and less boring)
+ - 3-1, got like some short-cut is it intended? 
+ - 3-2 Winning platform is unreachable (FIXED)
+ - 3-2 the heart pick-up overlaps with the wall (FIXED)
+ - Stage 2-2 Invul is put in a place where it cant really be used well
+ 
+  [MECHANICS]
+ - Invul pick-up makes Dragon faded BUT the time it's faded does not corresponds to it's invul time
+ - 3-1, not recommended for death pits as there's no condition that will 'kill' the dragon 
+
+  [BUGS]
+ - Upon 'death' (or rather when the stage restarts), sometimes the camera 
+   would snap to the spawn point while sometimes it'll slowly move 
+   to the spawn point (if the dragon restart too far from the original point)
+ - Main Menu music not looping
+ - When pause and unpaused, music will stop playing
+ - If player moves when restarting, player can fall off the map
+ - Upon death and restarting, camera offset Y will be too low SOMETIMES
+
+  [AI]
+ - Increase the speed of the arrows ( mentioned by play-testers before, and Elie during Alpha presentation)
+ - Increase Knight's movement speed, currently I can kill it without even seeing it's attack animation.
+ - Implement mute/unmute for AI sound effects
+
+  [NEW]
+ - Add gameplay messages throughout the stages, 
+   can be 'implemented' using the same background sprite as the Message board 
+   in the tutorial stage. Can be displayed either via U.I easily. 
+   I would just need the sprite then display it at the start of the 
+   stage and fade it out.
+ - Boxes will spawn randomised power-up when broken
+ 
+ 
+ 
