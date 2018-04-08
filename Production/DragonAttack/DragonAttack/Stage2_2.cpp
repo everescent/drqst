@@ -329,6 +329,7 @@ namespace Stage2_2
 		delete HP_SPRITE;
 		delete DMG_SPRITE;
 		delete SPD_SPRITE;
+    delete INVUL_SPRITE;
 
 		delete BARRIER_SPRITE;//objs
 		delete WALL_SPRITE;

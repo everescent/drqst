@@ -32,7 +32,7 @@ void LevelChangePlatform::Update(Dragon &player, const float &dt)
 				SM::Set_After_Score(STAGE_1_3);
 				break;
 			case STAGE_1_3:
-				SM::Set_After_Score(STAGE_2_1);
+				SM::Set_Next(STAGE_2_1);
 				break;
 			case STAGE_2_1:
 				SM::Set_After_Score(STAGE_2_2);
@@ -41,7 +41,7 @@ void LevelChangePlatform::Update(Dragon &player, const float &dt)
 				SM::Set_After_Score(STAGE_2_3);
 				break;
 			case STAGE_2_3:
-				SM::Set_After_Score(STAGE_3_1);
+				SM::Set_Next(STAGE_3_1);
 				break;
 			case STAGE_3_1:
 				SM::Set_After_Score(STAGE_3_2);
@@ -52,6 +52,8 @@ void LevelChangePlatform::Update(Dragon &player, const float &dt)
 			default:
 				break;
 		}
-		SM::Set_Next(SS_SCORE);
+
+    if(SM::Get_Curr() != STAGE_1_3 && SM::Get_Curr() != STAGE_2_3)
+		  SM::Set_Next(SS_SCORE);
 	}
 }
