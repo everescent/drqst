@@ -80,7 +80,7 @@ UI::~UI()
 		AEGfxGetCamPosition(&(CamPos.x), &(CamPos.y));
 		
 		Dragon_hp = dragon->Get_HP();
-		if (Dragon_hp == 0) SM::Set_Next(SS_RESTART);
+		if (Dragon_hp == 0 || (AEInputCheckTriggered(AEVK_R)) ) SM::Set_Next(SS_RESTART);
 		Fireball_charge = dragon->Get_Charge();
 		/*hp_icon1.SetActive(true);
 		hp_icon2.SetActive(true);
