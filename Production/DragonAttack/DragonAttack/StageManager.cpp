@@ -116,9 +116,9 @@ namespace SM
     StageManager[SS_SCORE].Free       = Free_Score_Page;
     StageManager[SS_SCORE].Unload     = Unload_Score_Page;
 
-    s_previous    = STAGE_2_1;
-    s_current     = STAGE_2_1;
-    s_next        = STAGE_2_1;
+    s_previous    = STAGE_2_3;
+    s_current     = STAGE_2_3;
+    s_next        = STAGE_2_3;
     s_after_score = STAGE_2_1;
 
   }
@@ -211,30 +211,32 @@ namespace SM
   // Get the next state
   //
   **************************************************************************************/
-    STAGE_LIST Get_Next()
-    {
-        return s_next;
-    }
+  STAGE_LIST Get_Next()
+  {
+      return s_next;
+  }
 
-    /**************************************************************************************
-    //
-    // set the next state
-    //
-    **************************************************************************************/
-    void Set_Curr(STAGE_LIST next)
-    {
-      s_current = next;
-    }
+  /**************************************************************************************
+  //
+  // set the next state
+  //
+  **************************************************************************************/
+  void Reset()
+  {
+    s_current  = STAGE_1_1;
+    s_previous = STAGE_1_1;
+    s_next     = STAGE_1_1;
+  }
 
   /**************************************************************************************
   //
   // Get the current state
   //
   **************************************************************************************/
-    STAGE_LIST Get_Curr()
-    {
-        return s_current;
-    }
+  STAGE_LIST Get_Curr()
+  {
+      return s_current;
+  }
 
   /**************************************************************************************
   //

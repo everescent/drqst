@@ -33,7 +33,7 @@ namespace SM
 
   void          Set_Next               (STAGE_LIST);
   STAGE_LIST    Get_Next               (void);
-  void          Set_Curr               (STAGE_LIST);
+  void          Reset                  (void);
   STAGE_LIST    Get_Curr               (void);
   void	        Set_After_Score        (STAGE_LIST);
   STAGE_LIST    Get_After_Score        (void);
