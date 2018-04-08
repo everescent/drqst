@@ -172,5 +172,11 @@ Pause::~Pause()
 	{
 		delete elem;
 	}
+	delete Cursor_s;
+	delete Resume_s;
+	delete Options_s;
+	delete Restart_s;
+	delete Quit_s;
+	delete Quit_MM_s;
 }
 
