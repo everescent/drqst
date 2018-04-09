@@ -1,5 +1,4 @@
 #include "Lancelot.h"
-#include "Boss_States.h"
 #include "Collision.h"
 #include "Audio_Engine.h"
 #include "Camera.h"
@@ -27,7 +26,7 @@ namespace
 
     std::vector<Boss_Attack> lancelot;       // array to store lancelot attack
 
-    Boss_Action_State current_action = IDLE; // lancelot current action
+    
     Audio_Engine music{ 1,					 // sound for lance lot
     [](std::vector<std::string>& s)->void
     {
@@ -67,7 +66,7 @@ Lancelot::Lancelot(Sprite* texture)
         HEALTH,  Col_Comp{STARTING_POINT.x - LANCELOT_SCALE, STARTING_POINT.y - LANCELOT_SCALE,
                           STARTING_POINT.x + LANCELOT_SCALE, STARTING_POINT.y + LANCELOT_SCALE, Rect}),
     M_E{ false },     arondight_particle{ Effects_Get(ARONDIGHT_PARTICLE) }, me_particle{Effects_Get(ME_PARTICLE)},
-    phase{ PHASE_1 }, phase_particle{ Effects_Get(PHASE_PARTICLE) },         timer{2.f},
+    phase{ PHASE_1 }, phase_particle{ Effects_Get(PHASE_PARTICLE) },         timer{2.f}, current_action{IDLE},
     anim{ AFTER_ANIM + 1, 5, 5, [](std::vector <Range>& Init) -> void {
     Init.push_back(Range{ 0.0f, 1.0f, 0.0f, 0.0f }); //Hit
     Init.push_back(Range{ 0.0f, 1.0f, 0.2f, 0.2f }); //Idle

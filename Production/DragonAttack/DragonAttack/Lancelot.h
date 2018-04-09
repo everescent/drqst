@@ -17,45 +17,47 @@ Technology is prohibited.
 #include "Characters.h"
 #include "Dragon.h"
 #include "Boss_Phase.h"
+#include "Boss_States.h"
 
 class Lancelot : public Characters
 {
 private:
-	void Idle(const Dragon &  , const float dt); // lancelot idle state
-	void Moving(const Dragon& , const float dt); // moving state of lancelot
-	void Attack(Dragon &      , const float dt); // attack state of lancelot
-	void Dead(void);
+  void Idle(const Dragon &  , const float dt); // lancelot idle state
+  void Moving(const Dragon& , const float dt); // moving state of lancelot
+  void Attack(Dragon &      , const float dt); // attack state of lancelot
+  void Dead(void);
 
-	void Init(void); //initializer for lancelot
-	void Init_Stab(void);
-	void Init_Slash(void);
-	void Init_Arondight(void);
-    void Init_Particles(void);
-    void Update_Particles(const float dt);
-	void Set_Face_Dir(const Dragon &);
-	void Set_Attk_Dir(void); // set the attack direction of lancelot
+  void Init(void); //initializer for lancelot
+  void Init_Stab(void);
+  void Init_Slash(void);
+  void Init_Arondight(void);
+  void Init_Particles(void);
+  void Update_Particles(const float dt);
+  void Set_Face_Dir(const Dragon &);
+  void Set_Attk_Dir(void); // set the attack direction of lancelot
 
-	void Lancelot_Phase2(const float dt);
+  void Lancelot_Phase2(const float dt);
 
-	void Stab(Dragon&, const float dt); // first basic attack of lancelot
-	void Slash(Dragon&, const float dt); // second basic attack of lancelot
-	void Mad_Enhancement(const float dt); // makes lancelot move faster, shorter cooldown
-	void Arondight(Dragon&, const float dt); // phase 2 mechanism, long range attack
+  void Stab(Dragon&, const float dt); // first basic attack of lancelot
+  void Slash(Dragon&, const float dt); // second basic attack of lancelot
+  void Mad_Enhancement(const float dt); // makes lancelot move faster, shorter cooldown
+  void Arondight(Dragon&, const float dt); // phase 2 mechanism, long range attack
 
 
-	// variables use for lancelot
-	BOSS_PHASE       phase;                   // flag for lancelot phase
-	bool             M_E;                     // lancelot berserk state
-	Particle_System *arondight_particle;      // particle system for arondight
-    Particle_System *me_particle;			  // particle system for mad enhancement
-	Particle_System *phase_particle;          // particle effect for phase transition
-	Animation        anim;	                  // lancelot animation
-	float            timer;                   // timer for phase transition
+  // variables use for lancelot
+  BOSS_PHASE        phase;                   // flag for lancelot phase
+  bool              M_E;                     // lancelot berserk state
+  Particle_System  *arondight_particle;      // particle system for arondight
+  Particle_System  *me_particle;			       // particle system for mad enhancement
+  Particle_System  *phase_particle;          // particle effect for phase transition
+  Animation         anim;	                   // lancelot animation
+  float             timer;                   // timer for phase transition
+  Boss_Action_State current_action;          // lancelot current action
 
 public:
-	Lancelot(Sprite*);  // default constructor for lancelot
-	~Lancelot(); // destructor for lancelot
-	void Update(Dragon &player, const float dt);
-	void Render(void);
+  Lancelot(Sprite*);  // default constructor for lancelot
+  ~Lancelot(); // destructor for lancelot
+  void Update(Dragon &player, const float dt);
+  void Render(void);
 
 };

@@ -197,7 +197,8 @@ void Knight::Dead(void)
 **************************************************************************************/
 bool Knight::Line_Of_Sight(const Dragon& d)
 {
-    return abs(d.PosX - PosX) < 1280.0f; // check if knight can see player on screen
+  // check if knight can see player on screen  
+  return abs(d.PosX - PosX) < 1280.0f && abs(d.PosY - PosY) < 20;
 }
 
 /**************************************************************************************
