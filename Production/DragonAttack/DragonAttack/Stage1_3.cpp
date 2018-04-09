@@ -94,7 +94,7 @@ namespace Stage1_3
 			Audio->SetPause(0, false);
 			Audio->Update();
 
-			pause->Update(pause_bool);
+			pause->Update(pause_bool,dt);
 
 			player->Update(*player, dt);
 
@@ -118,7 +118,7 @@ namespace Stage1_3
 		else 
 		{
 			Audio->SetPause(0, true);
-			pause->Update(pause_bool);
+			pause->Update(pause_bool,dt);
 		}
 		//std::cout << (int)player->PosX << ", " << (int)player->PosY << std::endl;
 	}
