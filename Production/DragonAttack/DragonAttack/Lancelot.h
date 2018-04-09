@@ -59,5 +59,7 @@ public:
   ~Lancelot(); // destructor for lancelot
   void Update(Dragon &player, const float dt);
   void Render(void);
+  void Mute(void);
+  void Unmute(void);
 
 };

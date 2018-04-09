@@ -769,6 +769,18 @@ Lancelot::~Lancelot()
     attack_sprite.~Sprite(); // destroy the mesh and texture allcoated 
 }
 
+void Lancelot::Mute(void)
+{
+  music.SetVolume(0, 0.0f);
+  music.SetPause(0, true);
+}
+
+void Lancelot::Unmute(void)
+{
+  music.SetVolume(0, 1.0f);
+  music.SetPause(0, false);
+}
+
 namespace
 {
 

@@ -61,7 +61,6 @@ Mage::Mage(const AEVec2& position, Sprite* texture)
 // Update function of mage
 //
 **************************************************************************************/
-
 void Mage::Update(Dragon &d, const float dt)
 {	
     // changes state to dead when hp is 0
@@ -134,7 +133,6 @@ void Mage::Update(Dragon &d, const float dt)
 // render both mage and his attack on screen
 //
 **************************************************************************************/
-
 void Mage::Render(void)
 {
     GameObject::Render(); // render the mage
@@ -142,6 +140,8 @@ void Mage::Render(void)
 
     energy_ball.Render(); //render the energyball
 }
+
+
 
 /**************************************************************************************
 //
@@ -248,7 +248,6 @@ void Mage::Move(const Dragon &d)
 // Re-instantiate the mage with its new position
 //
 **************************************************************************************/
-
 void Mage::Renew_Mage(const AEVec2& newPos)
 {
     // updates the new position of Mage
@@ -269,7 +268,6 @@ void Mage::Renew_Mage(const AEVec2& newPos)
 // Dead function for mage
 //
 **************************************************************************************/
-
 void Mage::Dead(void)
 {
     SetActive(false);                // set active to false
@@ -286,7 +284,6 @@ void Mage::Dead(void)
 // Check if player is within line of sight
 //
 **************************************************************************************/
-
 bool Mage::Line_Of_Sight(const Dragon &d)
 {
     // distance between player and mage
