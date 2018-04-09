@@ -96,6 +96,16 @@ void Pause::Update(bool &pause_bool)
 		elem->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 		//update the Displacement to print the buttons away from each other 
 		Displacement.y += -90.0f; 
+
+		//Create a high-light effect when the cursor is over the Button 
+		if  (elem->Collision_.St_Rect_Point(Cursor_Pos.x, Cursor_Pos.y) )
+		{
+			elem->Sprite_->SetRGB(1.0f, 1.0f, 1.0f);
+		}
+		else
+		{
+			elem->Sprite_->SetRGB(1.5f, 1.5f, 1.5f);
+		}
 	}
 	//Reset the Displacement
 	
@@ -113,14 +123,32 @@ void Pause::Update(bool &pause_bool)
 			elem->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 			//update the Displacement to print the buttons away from each other 
 			Displacement.y += -100.0f;
+
+			//Create a high-light effect when the cursor is over the Button 
+			if (elem->Collision_.St_Rect_Point(Cursor_Pos.x, Cursor_Pos.y))
+			{
+				elem->Sprite_->SetRGB(1.0f, 1.0f, 1.0f);
+			}
+			else
+			{
+				elem->Sprite_->SetRGB(1.5f, 1.5f, 1.5f);
+			}
 			}
 			Displacement = { 0.0f, 50.0f };//Reset
+
+			
+
 
 			if (AEInputCheckTriggered(AEVK_LBUTTON))
 			{
 				if (Fullscreen->Collision_.St_Rect_Point(Cursor_Pos.x, Cursor_Pos.y))
 				{
 					pause_bool = pause_bool == true ? false : true;
+				}
+
+				if (Mute->Collision_.St_Rect_Point(Cursor_Pos.x, Cursor_Pos.y))
+				{
+					//Mute stuff
 				}
 			}
 
@@ -170,7 +198,8 @@ void Pause::Update(bool &pause_bool)
 			if (Quit_MM->Collision_.St_Rect_Point(Cursor_Pos.x, Cursor_Pos.y))
 			{
 				pause_bool = pause_bool == true ? false : true;
-				
+				STAGE_LIST current_stage = SM::Get_Curr();
+				SM::Reset(current_stage);
 				GSM::next = GS_MAIN;
 
 			}
@@ -233,17 +262,10 @@ void Pause::Render()
 Pause::~Pause()
 {
 	//AEGfxDestroyFont(fontID);
-	delete Pause_BG_Sprite;
+	//Delete the assests related to the pause BG
 	delete M_BG;
-	delete Cursor;
-	for (auto& elem : Buttons)
-	{
-		delete elem;
-	}
-	for (auto& elem : Option_Buttons)
-	{
-		delete elem;
-	}
+	delete Pause_BG_Sprite;
+
 	delete Cursor_s;
 	delete Resume_s;
 	delete Options_s;
@@ -252,6 +274,28 @@ Pause::~Pause()
 	delete Quit_MM_s;
 	delete Mute_s;
 	delete FS_s;
+
+	delete Cursor;
+	delete Resume;
+	delete Options;
+	delete Restart;
+	delete Quit;
+	delete Quit_MM;
+	delete Mute;
+	delete Fullscreen;
+
+
+	delete Cursor;
+	for (auto& elem : Buttons)
+	{
+		delete elem;
+	}
+
+	for (auto& elem : Option_Buttons)
+	{
+		delete elem;
+	}
+	
 	
 }
 
