@@ -55,6 +55,7 @@ enum BOSS_AI
 /**************************************************************************************
 //
 // initializes the different sprites we need for the ais
+// CALLED ONCE AND ONLY ONCE AT THE START OF THE GAME
 //
 **************************************************************************************/
 void AI_Sprite_Init(void);

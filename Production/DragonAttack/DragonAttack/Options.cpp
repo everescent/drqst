@@ -40,6 +40,7 @@ namespace
 /**************************************************************************************
 //
 // Initialize the various variables used in the options menu
+// CALLED ONLY ONCE AT THE START OF THE GAME
 //
 **************************************************************************************/
 void Init_Options()
@@ -201,6 +202,7 @@ void Render_Options()
 /**************************************************************************************
 //
 // Deletes the resources that was used in the option menu
+// CALLED ONLY ONCE AT THE END OF THE GAME
 //
 **************************************************************************************/
 void Cleanup_Options()

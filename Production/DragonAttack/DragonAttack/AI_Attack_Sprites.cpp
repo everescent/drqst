@@ -25,6 +25,7 @@ namespace // for global variables
 /**************************************************************************************
 //
 // initializes the different sprites we need for the attacks
+// CALLED ONCE AND ONLY ONCE WHICH IS AT THE START OF THE GAME INITIALIZING PHASE
 //
 **************************************************************************************/
 void Attack_Sprite_Init(void)

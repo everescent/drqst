@@ -45,6 +45,7 @@ enum EFFECTS
 /**************************************************************************************
 //
 // initialize the meshes and particle systems that will be used in the game
+// CALLED ONLY ONCE AT THE START OF THE GAME INITIALIZING PHASE
 //
 **************************************************************************************/
 void Effects_Init(void);
@@ -60,6 +61,7 @@ Particle_System* Effects_Get(EFFECTS);
 /**************************************************************************************
 //
 // deletes the memory that was allocated for partial effects and mesh 
+// CALLED ONLY ONCE AT THE END OF THE GAME
 //
 **************************************************************************************/
 void Effects_Cleanup(void);
