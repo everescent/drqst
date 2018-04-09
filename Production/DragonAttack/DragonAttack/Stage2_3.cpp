@@ -193,6 +193,7 @@ namespace Stage2_3
 
 		// Clear object vector
 		blocks.clear();
+        platforms.clear();
 
 		// Delete enemies
 		for (size_t i = 0; i < c.size(); ++i)

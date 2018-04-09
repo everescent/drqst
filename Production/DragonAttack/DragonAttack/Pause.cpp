@@ -198,8 +198,7 @@ void Pause::Update(bool &pause_bool)
 			if (Quit_MM->Collision_.St_Rect_Point(Cursor_Pos.x, Cursor_Pos.y))
 			{
 				pause_bool = pause_bool == true ? false : true;
-				STAGE_LIST current_stage = SM::Get_Curr();
-				SM::Reset(current_stage);
+                SM::Set_Next(SS_QUIT);
 				GSM::next = GS_MAIN;
 
 			}
