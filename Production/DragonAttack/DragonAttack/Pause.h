@@ -22,6 +22,7 @@ Technology is prohibited.
 #include "PickUp.h"
 #include "Collision.h"
 #include "GameStateManager.h"
+#include "Options.h"
 #define PAUSE_MACRO
 
 #ifdef PAUSE_MACRO
@@ -51,7 +52,7 @@ private:
 	//char* buttons[pause_ns::NUM_BUTTONS ] = { "Resume [ESC]",	" Turn Audio On/Off", "Quit [Q]", "Fullscreen [F]" }; // array count from 0
 	Transform* M_BG;
 	Sprite* Pause_BG_Sprite;
-	bool fullscreen = false; // a bool to control whether it's full screen or not 
+	bool Options_screen = false; // a bool to check if it's on the pause screen or not 
 	AEVec2 	 Displacement; //This represents the displacement between the various buttons 
 	AEVec2 Cursor_Pos;
 	//Set a constant width and height for the buttons
@@ -64,15 +65,24 @@ private:
 	Sprite*	Restart_s ;
 	Sprite*	Quit_s	  ;
 	Sprite*	Quit_MM_s ;
+	//For the Options 
+	Sprite* Mute_s;
+	Sprite* FS_s; 
 	//Create a GameObject to instantiate the custom cursor
 	GameObject* Cursor;
-	//using GameObjects to instantiate Different buttons 
+	//using GameObjects to instantiate Pause buttons 
 	GameObject* Resume	;
 	GameObject* Options	;
 	GameObject* Restart	;
 	GameObject* Quit	;
 	GameObject* Quit_MM	;
+	//using GameObjects to instantiate the Option buttons 
+	GameObject* Mute		;
+	GameObject* Fullscreen;
 
 	std::vector<GameObject*> Buttons;
+	std::vector <GameObject*> Option_Buttons;
+
+	void Toggle_Button_Display(); //This function toggles the display of all the buttons. 
 
 };
