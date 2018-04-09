@@ -63,8 +63,7 @@ namespace
 
 			Cursor->SetActive(true);
 
-			//Initialise the Option buttons/objects 
-			Init_Options();
+			
 
 		} //end of ctor 
 
