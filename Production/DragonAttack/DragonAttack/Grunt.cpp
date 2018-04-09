@@ -55,34 +55,6 @@ Grunt::Grunt(Sprite *p_Sprite, const float posX, const float posY)
 /* Idle state for grunt */
 void Grunt::Idle(const Dragon &d, const float dt)
 {
-	/*UNREFERENCED_PARAMETER(d);
-	float IdleXPos = PosX;
-
-	int MaxXPos = (int)(IdleXPos + 120.0f); // max boundary
-	int MinXPos = (int)(IdleXPos - 120.0f); // min boundary
-	int EstCurrentX = (int)(this->PosX);
-
-	if (EstCurrentX < (EstIdleX - 121) || EstCurrentX >(EstIdleX + 120)) // if lesser than min boundary OR greater than max boundary
-	{
-		//reason for strange values is due to how the obj will enter the bottom condition if it is close to the boundary
-		//then re-enter this condition because of the *= -1, forever continuing the back and forth
-
-		MovementX = (this->PosX) - IdleXPos;
-		PosX -= MovementX / 120;
-	}
-	else
-	{
-		if (PlayerSeen == false)
-		{
-			if ((PosX > MaxXPos) || (PosX < MinXPos))
-			{
-				moveSpd *= -1;
-			}
-
-			PosX += moveSpd;
-		}
-	}*/
-	
 	anim.SetState(IDLE_ANIM);
 
 	// waste time / idle on the spot <- not really working
@@ -113,24 +85,6 @@ void Grunt::Idle(const Dragon &d, const float dt)
 /* Movement State for grunt */
 void Grunt::MoveTowardPlayer(const Dragon &d, const float dt)
 {
-	/*
-	MovementX = (this->PosX) - d.PosX;
-	MovementY = (this->PosY) - d.PosY;
-
-	if (MovementX < 100.0f && MovementY < 50.0f &&
-		MovementX > -100.0f && MovementY > -50.0f) // Attack Range (change accordingly)
-	{
-		PlayerInRange = true;
-	}
-	else
-	if (MovementX > 100.0f || MovementX < -100.0f) // not entering
-	{
-		PlayerInRange = false;
-	}
-
-	PosX -= MovementX * 0.6f * dt;
-	*/
-
 	anim.SetState(WALK_ANIM);
 	Set_Facing_Dir(d);	 // set the direction
 						 
@@ -159,25 +113,14 @@ void Grunt::MoveTowardPlayer(const Dragon &d, const float dt)
 		Collision_.Update_Col_Pos(PosX - GRUNT_SCALE, PosY - GRUNT_SCALE,  // min point
 			PosX + GRUNT_SCALE, PosY + GRUNT_SCALE); // max point
 	}
+	else
+		anim.SetState(IDLE_ANIM);
 }
 
 /* Checks if the player is in view */
 bool Grunt::LineOfSight(const Dragon &d)
 {
-	/*float playerDist = (d.PosX - this->PosX);
-	if (playerDist <= 600.0f && playerDist >= -600.0f)  // vision range
-	{
-		if ((d.PosY < PosY + 150.0f) && (d.PosY > PosY - 150.0f))
-		{
-			PlayerSeen = true;
-		}
-	}
-	else
-	{
-		PlayerSeen = false;
-	}*/
-
-	return (abs(d.PosX - PosX) < 1000.0f);
+	return (abs(d.PosX - PosX) < 1000.0f) && (abs(d.PosY - PosY) < 200.0f);
 }
 
 /* Sets the grunt facing direction */
@@ -200,116 +143,6 @@ void Grunt::Set_Facing_Dir(const Dragon &d)
 /* Update function for grunt */
 void Grunt::Update(Dragon &d, const float dt)
 {
-	/*if (IsActive())
-	{
-		LineOfSight(d);
-
-		if (PlayerSeen)
-		{
-			//MoveTowardPlayer(d, dt);
-			current_action = MOVING;
-		}
-		else
-		{
-			Idle(d);
-			current_action = IDLE;
-		}
-
-		this->Transform_.SetTranslate(this->PosX, this->PosY);
-		this->Transform_.Concat();
-
-		PosY -= 10.0f; //testing gravity
-		// update the collision box of grunt
-		this->Collision_.Update_Col_Pos(this->PosX - GRUNT_SCALE, this->PosY - GRUNT_SCALE,  // min point
-										this->PosX + GRUNT_SCALE - 60.0f, this->PosY + GRUNT_SCALE); // max point
-
-		//collision with player, player loses health
-		if(!Knockback)
-			if (Collision_.Dy_Rect_Rect(d.Collision_, GetVelocity(), d.GetVelocity(), dt))
-			{
-				d.Decrease_HP();
-				d.PlayHit();
-				Knockback = true;
-				posit_tmp = d.PosX;
-			}
-
-		if (Knockback)
-		{
-			if (d.PosX > PosX)
-				posit_tmp += 1000.0f * dt;
-			else
-				posit_tmp -= 1000.0f * dt;
-
-			d.PosX = posit_tmp;
-
-			distance += 1000.0f * dt;
-
-			if (distance >= 20.0f)
-			{
-				Knockback = false;
-				distance = 0;
-			}
-		}
-
-		for (char i = 0; i < Bullet_Buffer; ++i)
-		{
-			if (d.GetFireball()[i].IsActive())
-			{
-				if (Collision_.Dy_Rect_Rect(d.GetFireball()[i].Collision_, this->GetVelocity(), d.GetFireball()[i].GetVelocity(), dt))
-				{
-					Decrease_HP(d.GetDamage());
-					d.AddCharge();
-					d.PlayImpact();
-					SFX.Play(0);
-					d.GetFireball()[i].Projectile::ResetDist();
-					d.GetFireball()[i].SetActive(false);
-
-					anim.SetState(HIT_ANIM);
-				}
-			}
-		}
-
-		if (d.GetMfireball().IsActive())
-		{
-			if (Collision_.Dy_Rect_Rect(d.GetMfireball().Collision_, this->GetVelocity(), d.GetMfireball().GetVelocity(), dt))
-			{
-				Decrease_HP(d.GetMDamage());
-				SFX.Play(0);
-				d.GetMfireball().Projectile::ResetDist();
-				d.GetMfireball().SetActive(false);
-
-				anim.SetState(HIT_ANIM);
-			}
-		}
-
-		if (this->Get_HP() <= 0)
-		{
-			SetActive(false);
-		}
-
-	}
-	// default animation
-	//if (anim.GetComplete(HIT_ANIM))
-	//	anim.SetState(IDLE_ANIM);
-
-	switch (current_action) // state machine for knight
-	{
-		case IDLE:   Idle(d);
-			anim.SetState(IDLE_ANIM);
-			break;
-		case MOVING: MoveTowardPlayer(d, dt);
-			anim.SetState(WALK_ANIM);
-			break;
-		//case DEAD:   Dead();
-		//	break;
-		default: break;
-	}
-
-	// update animation
-	anim.Update(*Sprite_);
-
-	SFX.Update();*/
-
 	if (Get_HP() <= 0)
 	{
 		SetActive(false);
@@ -325,7 +158,9 @@ void Grunt::Update(Dragon &d, const float dt)
 				if (Collision_.Dy_Rect_Rect(d.GetFireball()[i].Collision_, GetVelocity(), 
 					d.GetFireball()[i].GetVelocity(), dt))
 				{
-					anim.SetState(HIT_ANIM);
+					
+						anim.SetState(HIT_ANIM);
+					
 
 					Decrease_HP(d.GetDamage());
 					d.AddCharge();
@@ -343,7 +178,9 @@ void Grunt::Update(Dragon &d, const float dt)
 			if (Collision_.Dy_Rect_Rect(d.GetMfireball().Collision_, GetVelocity(), 
 				d.GetMfireball().GetVelocity(), dt))
 			{
-				anim.SetState(HIT_ANIM);
+				
+					anim.SetState(HIT_ANIM);
+				
 
 				Decrease_HP(d.GetMDamage());
 				SFX.Play(0);
