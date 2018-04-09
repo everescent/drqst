@@ -24,7 +24,7 @@ namespace  // global variables for KNIGHT
     #define STAB_ACCELRATOR  100.0f
 
     #define KNIGHT_SCALE 70.0f
-    #define STAB_SCALE  40.0f
+    #define STAB_SCALE  60.0f
     const AEVec2 STAB_VELOCITY {20.0f, 0.0f};
 
 }
@@ -51,14 +51,14 @@ Knight::Knight(const AEVec2 & spawn_location, Sprite* texture)
                                  Init.push_back(Range{ 0.0f, 1.0f, 0.66f, 0.66f }); //Walk
            } }
 {
-    SetPos(spawn_location.x, spawn_location.y);						 // spawn location of knight
-    SetActive(false);												 // don't render on screen yet
-    Transform_.SetTranslate(spawn_location.x, spawn_location.y);	 // moving him to screen location
+    SetPos(spawn_location.x, spawn_location.y);                      // spawn location of knight
+    SetActive(false);                                                // don't render on screen yet
+    Transform_.SetTranslate(spawn_location.x, spawn_location.y);     // moving him to screen location
     Transform_.Concat();
-    Reset_Idle_Time(1.0f);											 // duration of idle time for knight
-    SetVelocity(AEVec2{ 50.0f, 0.0f });								 // velocity of knight
+    Reset_Idle_Time(1.0f);                                           // duration of idle time for knight
+    SetVelocity(AEVec2{ 150.0f, 0.0f });                             // velocity of knight
     Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);           // set blend mode
-    stab.SetVelocity(STAB_VELOCITY);								 // velocity for stab
+    stab.SetVelocity(STAB_VELOCITY);                                 // velocity for stab
 }
 /**************************************************************************************
 //
@@ -150,7 +150,7 @@ void Knight::Attack(Dragon& d, const float dt)
     else
         stab.Projectile::Update(dt, STAB_SCALE, false, 0);      // rotate texture to look left
 
-    if ( ! stab.GetCollided()) // check if attack collided with player
+    if ( ! stab.GetCollided() && stab.GetDist() > 10.0f) // check if attack collided with player
     {
         // attack can only collide with player once
         if (stab.Collision_.Dy_Rect_Rect(d.Collision_, stab.GetVelocity(), d.GetVelocity(), dt))

@@ -102,12 +102,12 @@ namespace SM
     StageManager[STAGE_3_2].Free      = Stage3_2::Free;
     StageManager[STAGE_3_2].Unload    = Stage3_2::Unload;
 
-        StageManager[STAGE_3_3].Init      = Stage3_3::Init;
-        StageManager[STAGE_3_3].Load      = Stage3_3::Load;
-        StageManager[STAGE_3_3].Update    = Stage3_3::Update;
-        StageManager[STAGE_3_3].Draw      = Stage3_3::Draw;
-        StageManager[STAGE_3_3].Free      = Stage3_3::Free;
-        StageManager[STAGE_3_3].Unload    = Stage3_3::Unload;
+    StageManager[STAGE_3_3].Init      = Stage3_3::Init;
+    StageManager[STAGE_3_3].Load      = Stage3_3::Load;
+    StageManager[STAGE_3_3].Update    = Stage3_3::Update;
+    StageManager[STAGE_3_3].Draw      = Stage3_3::Draw;
+    StageManager[STAGE_3_3].Free      = Stage3_3::Free;
+    StageManager[STAGE_3_3].Unload    = Stage3_3::Unload;
 
     StageManager[SS_SCORE].Init       = Init_Score_Page;
     StageManager[SS_SCORE].Load       = Load_Score_Page;
@@ -116,10 +116,10 @@ namespace SM
     StageManager[SS_SCORE].Free       = Free_Score_Page;
     StageManager[SS_SCORE].Unload     = Unload_Score_Page;
 
-    s_previous    = STAGE_2_3;
-    s_current     = STAGE_2_3;
-    s_next        = STAGE_2_3;
-    s_after_score = STAGE_2_1;
+    s_previous    = STAGE_1_2;
+    s_current     = STAGE_1_2;
+    s_next        = STAGE_1_2;
+    s_after_score = STAGE_1_1;
 
   }
   
@@ -221,11 +221,11 @@ namespace SM
   // set the next state
   //
   **************************************************************************************/
-  void Reset()
+  void Reset(STAGE_LIST stage)
   {
-    s_current  = STAGE_1_1;
-    s_previous = STAGE_1_1;
-    s_next     = STAGE_1_1;
+    s_current  = stage;
+    s_previous = stage;
+    s_next     = stage;
   }
 
   /**************************************************************************************

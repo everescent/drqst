@@ -1002,7 +1002,7 @@ King_Arthur::~King_Arthur(void)
     attack_sprite.~Sprite();  // free texture for slash
     sword_sprite.~Sprite() ;  // free texture for sword
     
-    Off_Particles(); // remove particles from screen
+    Off_Particles();              // remove particles from screen
     phase_effect->Off_Emitter(); // render all the phase particle effects from the screen
 
     // delete the slash that were new 

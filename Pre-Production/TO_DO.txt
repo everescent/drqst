@@ -24,7 +24,7 @@
 
   [AI]
  - Increase the speed of the arrows ( mentioned by play-testers before, and Elie during Alpha presentation)
- - Increase Knight's movement speed, currently I can kill it without even seeing it's attack animation.
+ - Increase Knight's movement speed, currently I can kill it without even seeing it's attack animation. (FIXED)
  - Implement mute/unmute for AI sound effects
 
   [NEW]
