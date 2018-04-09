@@ -279,5 +279,8 @@ namespace Stage3_3
         delete floor_sprite;
         delete plat_sprite;
         delete pause;
+
+        platforms.clear();
+        blocks.clear();
     }
 }
