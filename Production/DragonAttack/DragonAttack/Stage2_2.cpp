@@ -91,7 +91,7 @@ namespace Stage2_2
 		Audio->Play(0);
 
 		// Loops selected track
-		Audio->SetLoop(0, 1);
+		Audio->SetLoop(0, FMOD_LOOP_NORMAL);
 
 		// Object placement
 		for (int y = 0; y < Map_Height; ++y)

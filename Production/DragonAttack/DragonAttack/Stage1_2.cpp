@@ -78,7 +78,7 @@ namespace Stage1_2
 	void Init(void)
 	{
 		Audio->Play(0); // Plays selected track
-		Audio->SetLoop(0, 1); // Loops the selected track
+		Audio->SetLoop(0, FMOD_LOOP_NORMAL); // Loops the selected track
 
 		for (int y = 0; y < Map_Height; ++y)
 		{

@@ -59,7 +59,7 @@ namespace Stage1_3
 	void Init(void)
 	{
 		Audio->Play(0);
-		Audio->SetLoop(0, 1);
+		Audio->SetLoop(0, FMOD_LOOP_NORMAL);
 
 		for (int y = 0; y < Map_Height; ++y)
 		{

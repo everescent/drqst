@@ -119,7 +119,7 @@ namespace Main_Menu
 	{
 		//Initialise buttons here
 		Audio->Play(0);
-		Audio->SetLoop(0,1);
+		Audio->SetLoop(0, FMOD_LOOP_NORMAL);
 
 		// BEHAVIOUR FOR CURSOR PARTICLES
 		//Set to appear to be spitting out flames

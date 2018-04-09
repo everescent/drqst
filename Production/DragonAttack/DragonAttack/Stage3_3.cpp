@@ -103,7 +103,7 @@ namespace Stage3_3
     {
         // play the audio for the stage
         audio->Play(0);
-        audio->SetLoop(0, 1);
+        audio->SetLoop(0, FMOD_LOOP_NORMAL);
 
         BG->SetRGB(0.5f, 0.5f, 0.5f);
         
