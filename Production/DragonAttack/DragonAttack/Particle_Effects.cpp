@@ -28,6 +28,7 @@ namespace // global variables that are used in this file
 	Particle_System* Credit_Effects;
 	Particle_System* Score_Effects;
 	Particle_System* Phase_Effects;
+	Particle_System* Cursor_Effects;
 
 	// pointers to mesh for the corresponding particle system
     AEGfxVertexList* MFireball_Mesh;
@@ -40,6 +41,7 @@ namespace // global variables that are used in this file
 	AEGfxVertexList* Credit_Mesh;
 	AEGfxVertexList* Score_Mesh;
 	AEGfxVertexList* Phase_Mesh;
+	AEGfxVertexList* Cursor_Mesh;
 
 	// helper functions
     void Particle_Mesh_Init();
@@ -85,6 +87,8 @@ Particle_System* Effects_Get(EFFECTS type)
 		break;
 	case PHASE_PARTICLE:      return Phase_Effects;
 		break;
+	case CURSOR_PARTICLE:	  return Cursor_Effects;
+		break;
     default: return nullptr;
         break;
     }
@@ -111,6 +115,7 @@ void Effects_Cleanup(void)
 	delete   Credit_Effects;
 	delete   Score_Effects;
 	delete   Phase_Effects;
+	delete	 Cursor_Effects;
 	
 	//------------------------------------------------------------------
 	//
@@ -127,6 +132,7 @@ void Effects_Cleanup(void)
 	AEGfxMeshFree(Credit_Mesh);
 	AEGfxMeshFree(Score_Mesh);
 	AEGfxMeshFree(Phase_Mesh);
+	AEGfxMeshFree(Cursor_Mesh);
 }
 
 namespace
@@ -338,6 +344,26 @@ namespace
 
 		Phase_Mesh = AEGfxMeshEnd();
 		AE_ASSERT_MESG(Phase_Mesh, "fail to create object!!")
+
+		//------------------------------------------------------------------
+		//
+		// mesh for cursor particle
+		//
+		//------------------------------------------------------------------
+		AEGfxMeshStart();
+		AEGfxTriAdd(
+			-0.1f, -0.1f, 0xFFDC143C, 0.0f, 1.0f,
+			0.1f, -0.1f, 0xFFDC143C, 1.0f, 1.0f,
+			-0.1f, 0.1f, 0xFFDC143C, 0.0f, 0.0f);
+
+		AEGfxTriAdd(
+			0.1f, -0.1f, 0xFFDC143C, 1.0f, 1.0f,
+			0.1f, 0.1f, 0xFFDC143C, 1.0f, 0.0f,
+			-0.1f, 0.1f, 0xFFDC143C, 0.0f, 0.0f);
+
+
+	Cursor_Mesh = AEGfxMeshEnd();
+	AE_ASSERT_MESG(Cursor_Mesh, "fail to create object!!");
         
 }
 
@@ -383,6 +409,9 @@ namespace
 
 		Phase_Effects = new Particle_System(Phase_Mesh, {}, BOX);
 		Phase_Effects->Emitter_.Particles_.reserve(512);
+
+		Cursor_Effects = new Particle_System(Cursor_Mesh, {}, BOX);
+		Cursor_Effects->Emitter_.Particles_.reserve(150);
     }
 }
 

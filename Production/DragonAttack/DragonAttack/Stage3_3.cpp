@@ -125,11 +125,12 @@ namespace Stage3_3
     **************************************************************************************/
     void Update(float dt)
     {
-        pause->Update(p_bool);
+       
         if (!p_bool)
         {
 
-            // if king arthur has died, switch state to credit screen
+			pause->Update(p_bool, dt);
+			// if king arthur has died, switch state to credit screen
             if (last_boss->Get_HP() <= 0)
             {
                 SM::Set_Next(SS_QUIT);
@@ -189,6 +190,12 @@ namespace Stage3_3
             player->Update(*player, dt);
             ui->UI_Update(player, dt);
         }
+
+		else
+		{
+			audio->SetPause(0, 1);
+			pause->Update(p_bool, dt);
+		}
     }
     /**************************************************************************************
     //
