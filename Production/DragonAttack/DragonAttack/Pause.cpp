@@ -275,16 +275,6 @@ Pause::~Pause()
 	delete FS_s;
 
 	delete Cursor;
-	delete Resume;
-	delete Options;
-	delete Restart;
-	delete Quit;
-	delete Quit_MM;
-	delete Mute;
-	delete Fullscreen;
-
-
-	delete Cursor;
 	for (auto& elem : Buttons)
 	{
 		delete elem;
