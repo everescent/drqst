@@ -15,6 +15,7 @@ Technology is prohibited.
 #pragma once
 #include "Pause.h"
 #include <iostream>
+#include "Audio_Engine.h"
 
 namespace
 {
@@ -85,6 +86,12 @@ Particle_System* Pause::pause_cursor_ps = nullptr;
 
 void Pause::Update(bool &pause_bool,const float dt)
 {
+	
+	if (!muting) 
+	{
+		if (pause_bool)  Audio_Engine::MUTE_ = true;
+		else Audio_Engine::MUTE_ = true;
+	}
 	AEGfxGetCamPosition(&cameraX, &cameraY);
 	//Update_Buttons(cameraX, cameraY);
 	/*what to update if the game is paused*/
@@ -129,7 +136,7 @@ void Pause::Update(bool &pause_bool,const float dt)
 		{
 			//Set a different Displacement for Option buttons to centralise it
 			Displacement = { 0.0f, 50.0f };
-			for (auto& elem : Option_Buttons)
+			for (auto& elem : Option_Buttons) 
 			{
 			elem->Collision_.Update_Col_Pos(cameraX - Button_W + Displacement.x, cameraY - Button_H + Displacement.y,
 				cameraX + Button_W + Displacement.x, cameraY + Button_H + Displacement.y);
@@ -158,12 +165,20 @@ void Pause::Update(bool &pause_bool,const float dt)
 			{
 				if (Fullscreen->Collision_.St_Rect_Point(Cursor_Pos.x, Cursor_Pos.y))
 				{
-					pause_bool = pause_bool == true ? false : true;
+					fullscreen = fullscreen ? false : true;
+					AEToogleFullScreen(fullscreen);
 				}
 
 				if (Mute->Collision_.St_Rect_Point(Cursor_Pos.x, Cursor_Pos.y))
 				{
-					//Mute stuff
+					
+					muting = muting ? false : true;
+					if (muting) 
+					{
+						Audio_Engine::MUTE_ = muting ;
+					}
+
+					std::cout << "muting is now :" << muting << std::endl;
 				}
 			}
 

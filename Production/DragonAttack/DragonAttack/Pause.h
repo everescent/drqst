@@ -82,7 +82,8 @@ private:
 	//using GameObjects to instantiate the Option buttons 
 	GameObject* Mute		;
 	GameObject* Fullscreen;
-
+	bool fullscreen = true; 
+	bool muting = false;
 	//Particle system for cursor
 	static Particle_System* pause_cursor_ps;
 
