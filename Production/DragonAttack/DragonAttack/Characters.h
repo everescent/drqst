@@ -20,6 +20,7 @@ Technology is prohibited.
 #include "Create_Object.h"
 #include "Animation.h"
 #include "AI_Attack_Sprites.h"
+#include "Audio_Engine.h"
 #include "Particle_Effects.h"
 
 /**************************************************************************************
