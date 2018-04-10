@@ -39,21 +39,14 @@ namespace {
     const float START_POINT_X = 200.0f; // spawn point of king arthur
     const float START_POINT_Y = -220.0f;// spawn point of king arthur
 
-    const float SLASH_SCALE = 40.0f;
+    const float SLASH_SCALE = 30.0f;
+    const char limit = 5;              // num of king arthur attacks
 
     float left_boundary = -400; // boundaries of charge attack
     float right_boundary = 400; // boundaries of charge attack
 
-    const char limit = 5; // num of king arthur attacks
-    char active_mobs;     // number of mobs to spawn
-    bool spawn_mob = false;
-
-    char behavior_swap = 0; // switch between idling and moving
-
-    bool healing = false; // determine if king arthur is healing
-
     bool Move_KA(const float dt, King_Arthur &ka, const Dragon &d); // move king arthur towards player
-    void Set_Attack_Dir(King_Arthur &ka);							// set the attack directions
+    void Set_Attack_Dir(King_Arthur &ka);                           // set the attack directions
     
     Sprite attack_sprite; // texture for slash
     Sprite sword_sprite;  // texture for sword
@@ -94,8 +87,8 @@ King_Arthur::King_Arthur(Sprite* texture)
     } },
     ka_phase{ PHASE_1 }, healing_effect{Effects_Get(KA_HEALING_PARTICLE)}, current_action{IDLE},
     sword_effect{ Effects_Get(KA_SWORD_PARTICLE) }, slash_effect{Effects_Get(KA_SLASH_PARTICLE)},
-    phase_effect{ Effects_Get(PHASE_PARTICLE)},
-    timer{ 2.f }, mob_timer{1.f}
+        phase_effect{ Effects_Get(PHASE_PARTICLE) }, active_mobs{ 0 }, spawn_mob {false},
+        timer{ 2.f }, mob_timer{ 1.f }, behavior_swap{ 0 }, healing {false}
 {
     PosX = START_POINT_X;                 // change king arthur coordinates to the location set
     PosY = START_POINT_Y;                 // change king arthur coordinates to the location set
@@ -1008,6 +1001,9 @@ King_Arthur::~King_Arthur(void)
     
     Off_Particles();              // remove particles from screen
     phase_effect->Off_Emitter(); // render all the phase particle effects from the screen
+
+    left_boundary = -400.0f;
+    right_boundary = 400.0f;
 
     // delete the slash that were new 
     delete slash_effect[1];
