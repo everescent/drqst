@@ -222,14 +222,14 @@ namespace Stage1_1
 		// Reset player's Health and charge
 		player->Set_HP(3);
 		player->ResetCharge();
+
+		CamFollow(player->Transform_, 200, 120, player->GetFacing());
 	}
 
 	void Update(float dt)
 	{
-		
-
 		if (!pause_bool)
-		{ 
+		{
 			Audio->SetPause(0, false);
 			Audio->Update();
 			pause->Update(pause_bool, dt);
@@ -310,7 +310,6 @@ namespace Stage1_1
 		}
 		else
 		{
-			player->Mute();
 			Audio->SetPause(0, 1);
 			pause->Update(pause_bool, dt);
 		}

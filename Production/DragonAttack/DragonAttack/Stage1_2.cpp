@@ -176,6 +176,8 @@ namespace Stage1_2
 		// Reset player's Health and charge
 		player->Set_HP(3);
 		player->ResetCharge();
+
+		CamFollow(player->Transform_, 200, 120, player->GetFacing());
 	}
 
 	void Update(float dt)

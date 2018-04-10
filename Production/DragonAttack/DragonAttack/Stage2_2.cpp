@@ -87,6 +87,7 @@ namespace Stage2_2
 
 	void Init(void)
 	{
+
 		// Plays selected track
 		Audio->Play(0);
 
@@ -190,6 +191,8 @@ namespace Stage2_2
 		// Reset player's Health and charge
 		player->Set_HP(3);
 		player->ResetCharge();
+
+		CamFollow(player->Transform_, 200, 120, player->GetFacing());
 	}
 
 	void Update(float dt)
@@ -329,7 +332,7 @@ namespace Stage2_2
 		delete HP_SPRITE;
 		delete DMG_SPRITE;
 		delete SPD_SPRITE;
-    delete INVUL_SPRITE;
+		delete INVUL_SPRITE;
 
 		delete BARRIER_SPRITE;//objs
 		delete WALL_SPRITE;
