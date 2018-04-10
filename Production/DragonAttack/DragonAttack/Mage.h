@@ -50,9 +50,10 @@ private:
   //
   //------------------------------------------------------------------
   Boss_Action_State current_action;     // mage behaviour
-  bool              teleport;	          // check if mage teleported 
-  Boss_Attack       energy_ball;		  // mage's attack
+  bool              teleport;           // check if mage teleported 
+  Boss_Attack       energy_ball;        // mage's attack
   Animation         anim;               // animations for the mage
+  Audio_Engine      music;              // music for mage
   
 public:
   //------------------------------------------------------------------
@@ -61,7 +62,7 @@ public:
   //
   //------------------------------------------------------------------
   Mage(const AEVec2&, Sprite*);
-    ~Mage();
+  ~Mage();
   //------------------------------------------------------------------
   //
   //  Functions used to update mage
@@ -70,7 +71,5 @@ public:
   void Update(Dragon &player, const float dt );
   void Render();
   void Renew_Mage(const AEVec2 & newPos);
-  void Mute();
-  void Unmute();
 
 };

@@ -45,15 +45,20 @@ Mage::Mage(const AEVec2& position, Sprite* texture)
     anim { IDLE_ANIM + 1, 2, 5, [](std::vector <Range>& Init) -> void {
                                 Init.push_back(Range{ 0.0f, 1.0f, 0.0f, 0.0f }); //Hit
                                 Init.push_back(Range{ 0.0f, 1.0f, 0.5f, 0.5f }); //Idle
-        }}
+        }},
+    music{ 1,
+            [](std::vector<std::string>& s)->void
+        {
+            s.push_back(".//Audio/Hit_02.mp3");
+        } }
 
 {
    SetActive(false);                                        // don't spawn mage
-   SetPos(position.x, position.y);							// starting coordinates
-   Transform_.SetTranslate(position.x, position.y);			// add to matrix
-   Transform_.Concat();										// add to final matrix
+   SetPos(position.x, position.y);                          // starting coordinates
+   Transform_.SetTranslate(position.x, position.y);         // add to matrix
+   Transform_.Concat();                                     // add to final matrix
    Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);   // set blend mode
-   Reset_Idle_Time(2.0f);									// idling time for mage
+   Reset_Idle_Time(2.0f);                                   // idling time for mage
 }
 
 /**************************************************************************************
@@ -90,6 +95,7 @@ void Mage::Update(Dragon &d, const float dt)
                     d.GetFireball()[i].Projectile::ResetDist();
                     d.GetFireball()[i].SetActive(false);
                     anim.SetState(HIT_ANIM);
+                    music.Play(0);
                 }
 
         // mega fire ball hit lancelot
@@ -102,6 +108,7 @@ void Mage::Update(Dragon &d, const float dt)
                 d.GetMfireball().Projectile::ResetDist();
                 d.GetMfireball().SetActive(false);
                 anim.SetState(HIT_ANIM);
+                music.Play(0);
             }
         }
     }

@@ -52,6 +52,7 @@ private:
     Boss_Attack          stab;                // stab attack of knight
     float                time_traveled;       // timer for duration moved
     Animation            anim;                // knight animation
+    Audio_Engine         music;               // music for knight
 
 public:
     Knight(const AEVec2&, Sprite* );          // coverting constructor/ only constructor

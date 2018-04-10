@@ -24,15 +24,7 @@ namespace
         AFTER_ANIM,
     };
 
-    std::vector<Boss_Attack> lancelot;       // array to store lancelot attack
-
-    
-    Audio_Engine music{ 1,					 // sound for lance lot
-    [](std::vector<std::string>& s)->void
-    {
-        s.push_back(".//Audio/Hit_02.mp3");
-    } };
-    
+    std::vector<Boss_Attack> lancelot;  // array to store lancelot attack
     
     const int HEALTH           = 800;   // health that lancelot start with
     const int PHASE2_HP        = 400;   // phase 2 trigger
@@ -73,7 +65,12 @@ Lancelot::Lancelot(Sprite* texture)
     Init.push_back(Range{ 0.0f, 1.0f, 0.4f, 0.4f }); //Walk
     Init.push_back(Range{ 0.0f, 1.0f, 0.6f, 0.6f }); //Before dash
     Init.push_back(Range{ 0.0f, 1.0f, 0.8f, 0.8f }); //After dash
-        }}
+        }},
+    music{ 1,
+        [](std::vector<std::string>& s)->void
+        {
+            s.push_back(".//Audio/Hit_02.mp3");
+        } }
 
 {
     Transform_.SetTranslate(STARTING_POINT.x, STARTING_POINT.y); // spawn lancelot at this location
@@ -767,18 +764,6 @@ Lancelot::~Lancelot()
 
 
     attack_sprite.~Sprite(); // destroy the mesh and texture allcoated 
-}
-
-void Lancelot::Mute(void)
-{
-  music.SetVolume(0, 0.0f);
-  music.SetPause(0, true);
-}
-
-void Lancelot::Unmute(void)
-{
-  music.SetVolume(0, 1.0f);
-  music.SetPause(0, false);
 }
 
 namespace
