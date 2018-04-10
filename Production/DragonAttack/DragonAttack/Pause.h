@@ -23,6 +23,9 @@ Technology is prohibited.
 #include "Collision.h"
 #include "GameStateManager.h"
 #include "Options.h"
+#include "Particle_System.h"
+#include "Particle_Effects.h"
+
 #define PAUSE_MACRO
 
 #ifdef PAUSE_MACRO
@@ -38,7 +41,7 @@ public:
 	Pause();
 	//pause
 	//This function checks if the pause button is triggered, if it is it changes the boolian to true
-	void Update(bool &pause_bool);
+	void Update(bool &pause_bool, const float dt);
 	void Render();
 	////Renders the UI
 	//void Pause_Render();
@@ -79,6 +82,9 @@ private:
 	//using GameObjects to instantiate the Option buttons 
 	GameObject* Mute		;
 	GameObject* Fullscreen;
+
+	//Particle system for cursor
+	static Particle_System* pause_cursor_ps;
 
 	std::vector<GameObject*> Buttons;
 	std::vector <GameObject*> Option_Buttons;

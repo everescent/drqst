@@ -21,6 +21,8 @@ Technology is prohibited.
   https://katyscode.wordpress.com/2013/01/15/cutting-your-teeth-on-fmod-part-2-channel-groups/
 */
 
+bool Audio_Engine::MUTE_ = false;
+
 //Provide number of songs, and give a function to initialize the list of filenames
 Audio_Engine::Audio_Engine(unsigned SoundNum, const Audio_Init& Init)
   :Audio_       { nullptr }, Playlist_{}, 
@@ -75,7 +77,7 @@ void Audio_Engine::Play(const int SongNum)
 void Audio_Engine::SetVolume(const int SongNum, const float Volume)
 {
   //Set volume for given song number
-  Channel_[SongNum]->setVolume(Volume);
+  Channel_[SongNum]->setVolume(MUTE_ ? 0.0f : Volume);
 }
 
 //Set song to loop, does not loop by default

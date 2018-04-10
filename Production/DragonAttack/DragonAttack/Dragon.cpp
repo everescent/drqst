@@ -167,6 +167,7 @@ void Dragon::Unmute()
 void Dragon::Update(Dragon& dummy, const float dt)
 {
   UNREFERENCED_PARAMETER(dummy);
+  
   //Call for player input
   Input();
   //Update position based on direction
@@ -272,7 +273,7 @@ void Dragon::Update(Dragon& dummy, const float dt)
   if (Falling)
   {
     Air_Dist -= Gravity;
-    if (Air_Dist <= 0.0f && TouchBottom)
+    if (Air_Dist <= 130.0f && TouchBottom)
     {
       Falling = false;
       TouchBottom = false;

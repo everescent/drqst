@@ -72,7 +72,7 @@ namespace Stage2_3
 		Audio->Play(0);
 
 		// Loops selected track
-		Audio->SetLoop(0, 1);
+		Audio->SetLoop(0, FMOD_LOOP_NORMAL);
 
 		// Object placement
 		for (int y = 0; y < Map_Height; ++y)
@@ -113,7 +113,7 @@ namespace Stage2_3
 		if (!pause_bool)
 		{
 			Audio->Update();
-			pause->Update(pause_bool);
+			pause->Update(pause_bool,dt);
 
 			player->Update(*player, dt);
 
@@ -150,7 +150,7 @@ namespace Stage2_3
 		else 
 		{ 
 			Audio->SetPause(0, 1);
-			pause->Update(pause_bool); 
+			pause->Update(pause_bool,dt); 
 		}
 		//std::cout << (int)player->PosX << ", " << (int)player->PosY << std::endl;
 	}

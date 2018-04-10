@@ -135,7 +135,7 @@ namespace Stage1_1
 		Audio->Play(0);
 
 		// Loops selected track
-		Audio->SetLoop(0, 1);
+		Audio->SetLoop(0, FMOD_LOOP_NORMAL);
 		
 		// Onject placement
 		for (int y = 0; y < Map_Height; ++y) // MOVE TO LOAD()???
@@ -226,11 +226,13 @@ namespace Stage1_1
 
 	void Update(float dt)
 	{
+		
+
 		if (!pause_bool)
 		{ 
 			Audio->SetPause(0, false);
 			Audio->Update();
-			pause->Update(pause_bool);
+			pause->Update(pause_bool, dt);
 
 			player->Update(*player, dt);
 
@@ -310,9 +312,7 @@ namespace Stage1_1
 		{
 			player->Mute();
 			Audio->SetPause(0, 1);
-			pause->Update(pause_bool);
-			
-
+			pause->Update(pause_bool, dt);
 		}
 		//std::cout << (int)player->PosX << ", " << (int)player->PosY << std::endl;
 	}

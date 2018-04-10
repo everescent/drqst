@@ -22,6 +22,9 @@ namespace
 	const float FakeWinMax_Y = 360.0f;
 }
 
+//Default initalize the Particle System for Pause Cursor 
+Particle_System* Pause::pause_cursor_ps = nullptr;
+
 	Pause::Pause()
 	:	M_BG			{ new Transform{} },
 		Pause_BG_Sprite	{ new Sprite{ CreateBG(1.0f, 1.0f, "Textures/Black_BG.png")} },
@@ -62,12 +65,25 @@ namespace
 			Option_Buttons.push_back(Fullscreen);
 
 			Cursor->SetActive(true);
+			
+			//Initialize the particle system for the Pause Cursor with the behaviour
+			Pause::pause_cursor_ps = Effects_Get(CURSOR_PARTICLE) ; //Get similar coin particles 
 
+			//Redefined Behaviour for cursor particle 
+			pause_cursor_ps->Emitter_.PPS_ = 5;
+			pause_cursor_ps->Emitter_.Dist_Min_ = 0.0f;
+			pause_cursor_ps->Emitter_.Vol_Max = 100;
+			pause_cursor_ps->Emitter_.Direction_ = 0.0f; // shoot out to the right 
+			pause_cursor_ps->Emitter_.Particle_Rand_.Spread_ = 10;
+			pause_cursor_ps->Emitter_.Conserve_ = 0.80f;
+			pause_cursor_ps->Emitter_.Size_ = 8.0f;
+			pause_cursor_ps->Emitter_.Speed_ = 8.0f;
+			pause_cursor_ps->Emitter_.Lifetime_ = 0.5f;
 			
 
 		} //end of ctor 
 
-void Pause::Update(bool &pause_bool)
+void Pause::Update(bool &pause_bool,const float dt)
 {
 	AEGfxGetCamPosition(&cameraX, &cameraY);
 	//Update_Buttons(cameraX, cameraY);
@@ -220,6 +236,21 @@ void Pause::Update(bool &pause_bool)
 	M_BG->SetTranslate(cameraX, cameraY);
 	M_BG->Concat();
 	Pause_BG_Sprite->SetAlphaTransBM(1.0f, 0.6f, AE_GFX_BM_BLEND);
+
+	//Update the Particle Effects 
+	pause_cursor_ps->Emitter_.Pos_.Min_Max.Point_Max.x = Cursor_Pos.x + 480.0f;
+	pause_cursor_ps->Emitter_.Pos_.Min_Max.Point_Min.x = Cursor_Pos.x + 10.0f;
+	pause_cursor_ps->Emitter_.Pos_.Min_Max.Point_Max.y = Cursor_Pos.y + 10.0f;
+	pause_cursor_ps->Emitter_.Pos_.Min_Max.Point_Min.y = Cursor_Pos.y - 10.0f;
+	pause_cursor_ps->UpdateEmission();
+	pause_cursor_ps->Turbulence(0.7f);
+	pause_cursor_ps->TransRamp_Exp();
+	pause_cursor_ps->Newton({ Cursor_Pos.x + 20.0f , Cursor_Pos.y - 10.0f }, 0.7f);
+
+	if (pause_cursor_ps->GetParticleCount())
+	{
+		pause_cursor_ps->Update(dt);
+	}
 }
 
 void Pause::Render()
@@ -242,6 +273,9 @@ void Pause::Render()
 	//Render the Mouse Cursor lasts so that it doesn't get hidden by the Buttons 
 	Cursor->Render();
 	Cursor->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+
+	//Render the cursor particles
+	pause_cursor_ps->Render();
 
 	/////////////////// UNUSED CODE AS CHANGED IMPLEMENTATION TO BUTTONS ///////////////////////
 	//Set the Render mode for rendering fonts 

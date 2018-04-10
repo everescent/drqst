@@ -119,7 +119,7 @@ namespace Main_Menu
 	{
 		//Initialise buttons here
 		Audio->Play(0);
-		Audio->SetLoop(0,1);
+		Audio->SetLoop(0, FMOD_LOOP_NORMAL);
 
 		// BEHAVIOUR FOR CURSOR PARTICLES
 		//Set to appear to be spitting out flames
@@ -166,8 +166,8 @@ namespace Main_Menu
 			//Repeat this for all buttons 
 			if (Play_Button->Collision_.St_Rect_Point((float)Mouse_X, (float)Mouse_Y))
 			{
-                SM::Reset(STAGE_2_3);
-                GSM::next = GS_LEVELS;
+				SM::Reset();
+				GSM::next = GS_LEVELS;
 			}
 
 			if (Quit_Button->Collision_.St_Rect_Point((float)Mouse_X, (float)Mouse_Y))
