@@ -2,15 +2,15 @@
   BUGLIST / FEEDBACK TO ADDRESS
 
   [LEVEL DESIGN]
- - Increase the starting health for stage 2/3 to 4, Boss stage to 5.
- - Add a lot more coins, and slightly more power-ups (would make gameplay faster and less boring)
+ - Increase the starting health for stage 2/3 to 4, Boss stage to 5. make everything 5
+ - Add a lot more coins, and slightly more power-ups (would make game play faster and less boring)
  - 3-1, got like some short-cut is it intended? 
  - 3-2 Winning platform is unreachable (FIXED)
  - 3-2 the heart pick-up overlaps with the wall (FIXED)
  - Stage 2-2 Invul is put in a place where it cant really be used well
  
   [MECHANICS]
- - Invul pick-up makes Dragon faded BUT the time it's faded does not corresponds to it's invul time
+ - Invul pick-up makes Dragon faded BUT the time it's faded does not corresponds to it's invul time (should be fixed)
  - 3-1, not recommended for death pits as there's no condition that will 'kill' the dragon 
 
   [BUGS]
@@ -18,14 +18,14 @@
    would snap to the spawn point while sometimes it'll slowly move 
    to the spawn point (if the dragon restart too far from the original point)
  - Main Menu music not looping
- - When pause and unpaused, music will stop playing
+ - When pause and unpaused, music will stop playing (fixed)
  - If player moves when restarting, player can fall off the map
  - Upon death and restarting, camera offset Y will be too low SOMETIMES
 
   [AI]
  - Increase the speed of the arrows ( mentioned by play-testers before, and Elie during Alpha presentation)
  - Increase Knight's movement speed, currently I can kill it without even seeing it's attack animation. (FIXED)
- - Implement mute/unmute for AI sound effects
+ - Implement mute / unmute for AI sound effects (add function to mute for all AI)
 
   [NEW]
  - Add gameplay messages throughout the stages, 
@@ -33,7 +33,16 @@
    in the tutorial stage. Can be displayed either via U.I easily. 
    I would just need the sprite then display it at the start of the 
    stage and fade it out.
- - Boxes will spawn randomised power-up when broken
+ - Boxes will spawn randomised power-up when broken (low-priority)
  
- 
- 
+ - hit animation needs to be more frames (don't play)
+ - camera needs to be faster
+ - 3-3 restart bug 
+ - snapping needs to snap to where the 2 meshes meet rather than back to centre
+ - JUMP IS STILL STICKY
+ - KA needs indicators for spawning mobs
+ - KA homing swords need to be slower or have a wind-up
+ - STAGE/STATE TRANSITION (fade in/out black bg)
+ - HOW TO PLAY SCREEN
+ - something bout getting hit while in the air doesn't kill the player all the time, (related) life check needs to check for <= 0 rather than == 0???
+ - player outside borders (death borders)
