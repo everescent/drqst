@@ -39,11 +39,11 @@ Delegation:
   Jacob:
     - JUMP IS STILL STICKY
     - HOW TO PLAY SCREEN (Sprite)
+    -hit animation needs to be more frames (don't play hit animation) (fixed) (your archer dey)
 
   William:
-    -hit animation needs to be more frames (don't play hit animation)
-    - KA needs indicators for spawning mobs
-    - STAGE/STATE TRANSITION (fade in/out black bg)
+    - KA needs indicators for spawning mobs (make do)
+    - STAGE/STATE TRANSITION (fade in/out black bg)  (fixed)
 
   Javon:
     - HOW TO PLAY SCREEN
