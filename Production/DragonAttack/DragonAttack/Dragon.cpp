@@ -116,7 +116,7 @@ void Dragon::Input()
     Attack = true;
   }
 
-  if (AEInputCheckTriggered(AEVK_RSHIFT || AEInputCheckTriggered(AEVK_LSHIFT)))
+  if (AEInputCheckTriggered(AEVK_RSHIFT) || AEInputCheckTriggered(AEVK_LSHIFT))
   {
     if (Charge == Max_Charge)
      {
