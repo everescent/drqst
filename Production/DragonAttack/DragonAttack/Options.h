@@ -22,4 +22,3 @@ void Init_Options();
 void Update_Options();
 void Render_Options();
 void Cleanup_Options();
-bool Check_Mute();

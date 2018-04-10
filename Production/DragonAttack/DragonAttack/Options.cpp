@@ -18,6 +18,7 @@ Technology is prohibited.
 #include "Transform.h"
 #include "GameStateManager.h"
 #include "GameObject.h"
+#include "Audio_Engine.h"
 
 // for global variables
 namespace
@@ -31,7 +32,6 @@ namespace
     u32        fontID;                                 // fontID
     Sprite     text[2];                                // stores the option text
     Transform  text_m[2];                              // transform matrix for the text
-    bool       mute;                                   // check current state
     bool       fullscreen;                             // check current state
     float      x, y;                                   // x and y coordinate of camera
     GameObject* checkbox[2];                           // for  check boxes
@@ -125,7 +125,7 @@ void Update_Options()
         if (checkbox[0]->Collision_.St_Rect_Point(mouse_x, mouse_y))
         {
             // change boolean
-            mute = mute ? false : true;
+            Audio_Engine::MUTE_ = Audio_Engine::MUTE_ ? false : true;
         }
         
         // if cursor was within second check box
@@ -157,7 +157,7 @@ void Render_Options()
         BG.Render_Object(BG_M);
 
     // print the ticked box or empty box depending on state
-    if (mute) // sound is muted currently
+    if (Audio_Engine::MUTE_) // sound is muted currently
     {
         // translate and render the box with tick
         checkbox[1]->Transform_.SetTranslate(x0, y0);
@@ -212,14 +212,4 @@ void Cleanup_Options()
     delete checkbox[1];
 }
 
-/**************************************************************************************
-//
-// return the mute status
-//
-**************************************************************************************/
-bool Check_Mute()
-{
-    // return mute status
-    return mute;
-}
 
