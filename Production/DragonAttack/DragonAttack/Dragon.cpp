@@ -273,7 +273,7 @@ void Dragon::Update(Dragon& dummy, const float dt)
   if (Falling)
   {
     Air_Dist -= Gravity;
-    if (Air_Dist <= 130.0f && TouchBottom)
+    if (Air_Dist <= 0.0f && TouchBottom)
     {
       Falling = false;
       TouchBottom = false;
