@@ -3,8 +3,6 @@
 
   [LEVEL DESIGN]
  - Add a lot more coins, and slightly more power-ups (would make game play faster and less boring)
- - 3-1, got like some short-cut is it intended? 
- - Stage 2-2 Invul is put in a place where it cant really be used well
  
   [MECHANICS]
  - 3-1, not recommended for death pits as there's no condition that will 'kill' the dragon 
@@ -32,9 +30,7 @@ Delegation:
 
   Andrew:
     -All [Level Design]
-    -3-1, not recommended for death pits as there's no condition that will 'kill' the dragon 
     -If player moves when restarting, player can fall off the map
-    -player outside borders (death borders)
 
   Jacob:
     - JUMP IS STILL STICKY
