@@ -52,6 +52,7 @@ namespace
 
 
 	float timer = 15.0f;
+	bool After_Load = false;
 }
 
 namespace Main_Menu
@@ -150,38 +151,41 @@ namespace Main_Menu
 		Cursor_Pos.y = Mouse_Y - 10.0f;
 
 
-		//******Allowing Intro screen to be bypassed with a single mouse-click
-		if (AEInputCheckTriggered(AEVK_ESCAPE) || AEInputCheckTriggered(AEVK_SPACE) ||
-			AEInputCheckTriggered(AEVK_RETURN))
+		
+
+		if (AEInputCheckTriggered(AEVK_LBUTTON))// && timer == 0.0f )
 		{
-			timer = 0.0f;
+			
+			if (After_Load)
+			{
+				//Use the Collision functions to check if the 'point'(mouse-click) is in the bouding box of the button
+				//Repeat this for all buttons 
+				if (Play_Button->Collision_.St_Rect_Point((float)Mouse_X, (float)Mouse_Y))
+				{
+					//SM::Reset();
+					GSM::next = GS_LEVEL_SELECTOR;
+				}
+
+				if (Quit_Button->Collision_.St_Rect_Point((float)Mouse_X, (float)Mouse_Y))
+				{
+					GSM::next = GS_QUIT;
+				}
+
+				if (Credits_Button->Collision_.St_Rect_Point((float)Mouse_X, (float)Mouse_Y))
+				{
+					GSM::next = GS_CREDITS;
+				}
+
+			}
+
 		}
 
-		if (AEInputCheckTriggered(AEVK_LBUTTON))
+		//******Allowing Intro screen to be bypassed with a single mouse-click
+		if (AEInputCheckTriggered(AEVK_ESCAPE) || AEInputCheckTriggered(AEVK_SPACE) ||
+			AEInputCheckTriggered(AEVK_RETURN) || AEInputCheckReleased(AEVK_LBUTTON))
 		{
-
+			After_Load = true;
 			timer = 0.0f;
-
-			//Use the Collision functions to check if the 'point'(mouse-click) is in the bouding box of the button
-			//Repeat this for all buttons 
-			if (Play_Button->Collision_.St_Rect_Point((float)Mouse_X, (float)Mouse_Y))
-			{
-				SM::Reset();
-				GSM::next = GS_LEVELS;
-			}
-
-			if (Quit_Button->Collision_.St_Rect_Point((float)Mouse_X, (float)Mouse_Y))
-			{
-				GSM::next = GS_QUIT;
-			}
-
-			if (Credits_Button->Collision_.St_Rect_Point((float)Mouse_X, (float)Mouse_Y))
-			{
-				GSM::next = GS_CREDITS;
-			}
-
-
-
 		}
 		
 		if (timer > 0.0f)

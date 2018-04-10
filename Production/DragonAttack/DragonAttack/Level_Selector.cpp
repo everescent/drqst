@@ -78,7 +78,7 @@ namespace Level_Selector
 	void Load(void)
 	{
 		//set background color to black
-		AEGfxSetBackgroundColor(0.0f, 0.0f, 0.0f);
+		//AEGfxSetBackgroundColor(0.0f, 0.0f, 0.0f);
 
 		//AEToogleFullScreen(true);
 		AEGfxSetCamPosition(0.0f, 0.0f);
@@ -145,6 +145,46 @@ namespace Level_Selector
 
 		cursor_particles = Effects_Get(COIN_PARTICLE);
 
+		Stage_1_1->Transform_.SetTranslate(Stage_1_1_pos.x, Stage_1_1_pos.y);
+		Stage_1_1->Transform_.Concat();
+		Stage_1_2->Transform_.SetTranslate(Stage_1_2_pos.x, Stage_1_2_pos.y);
+		Stage_1_2->Transform_.Concat();
+		Stage_1_3->Transform_.SetTranslate(Stage_1_3_pos.x, Stage_1_3_pos.y);
+		Stage_1_3->Transform_.Concat();
+
+		Stage_2_1->Transform_.SetTranslate(Stage_2_1_pos.x, Stage_2_1_pos.y);
+		Stage_2_1->Transform_.Concat();
+		Stage_2_2->Transform_.SetTranslate(Stage_2_2_pos.x, Stage_2_2_pos.y);
+		Stage_2_2->Transform_.Concat();
+		Stage_2_3->Transform_.SetTranslate(Stage_2_3_pos.x, Stage_2_3_pos.y);
+		Stage_2_3->Transform_.Concat();
+
+		Stage_3_1->Transform_.SetTranslate(Stage_3_1_pos.x, Stage_3_1_pos.y);
+		Stage_3_1->Transform_.Concat();
+		Stage_3_2->Transform_.SetTranslate(Stage_3_2_pos.x, Stage_3_2_pos.y);
+		Stage_3_2->Transform_.Concat();
+		Stage_3_3->Transform_.SetTranslate(Stage_3_3_pos.x, Stage_3_3_pos.y);
+		Stage_3_3->Transform_.Concat();
+
+
+		Stage_1_1->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+
+		Stage_1_2->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+
+		Stage_1_3->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+
+		Stage_2_1->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+
+		Stage_2_2->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+
+		Stage_2_3->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+
+		Stage_3_1->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+
+		Stage_3_2->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+
+		Stage_3_3->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+
 	}
 
 	void Init(void)
@@ -153,7 +193,7 @@ namespace Level_Selector
 		Audio->Play(0);
 		Audio->SetLoop(0, FMOD_LOOP_NORMAL);
 
-		// BEHAVIOUR FOR CURSOR PARTICLES
+		 //BEHAVIOUR FOR CURSOR PARTICLES
 		//Set to appear to be spitting out flames
 		cursor_particles->Emitter_.PPS_ = 5;
 		cursor_particles->Emitter_.Dist_Min_ = 0.0f;
@@ -165,27 +205,27 @@ namespace Level_Selector
 		cursor_particles->Emitter_.Speed_ = 8.0f;
 		//cursor_particles->Emitter_.Particle_Rand_.Sp_Rand_ = 3;
 		cursor_particles->Emitter_.Lifetime_ = 0.5f;
-		//cursor_particles->Emitter_.Particle_Rand_.Life_Rand_ = 3;
-
+		cursor_particles->Emitter_.Particle_Rand_.Life_Rand_ = 3;
 
 		Stage_1_1->SetActive(true);
 		Stage_1_2->SetActive(true);
 		Stage_1_3->SetActive(true);
-	
+
 		Stage_2_1->SetActive(true);
 		Stage_2_2->SetActive(true);
 		Stage_2_3->SetActive(true);
-		
+
 		Stage_3_1->SetActive(true);
 		Stage_3_2->SetActive(true);
 		Stage_3_3->SetActive(true);
 
 		Cursor->SetActive(true);
+
 	}
 
 	void Update(float dt)
 	{
-
+		UNREFERENCED_PARAMETER (dt);
 		Audio->Update();
 		AEInputShowCursor(0);
 		//Use AE_Engine to get the cursor position and convert the position to the global scale 
@@ -196,18 +236,8 @@ namespace Level_Selector
 		Cursor_Pos.x = Mouse_X + 10.0f;
 		Cursor_Pos.y = Mouse_Y - 10.0f;
 
-
-		//******Allowing Intro screen to be bypassed with a single mouse-click
-		if (AEInputCheckTriggered(AEVK_ESCAPE) || AEInputCheckTriggered(AEVK_SPACE) ||
-			AEInputCheckTriggered(AEVK_RETURN))
-		{
-			timer = 0.0f;
-		}
-
 		if (AEInputCheckTriggered(AEVK_LBUTTON))
 		{
-
-			timer = 0.0f;
 
 			//Use the Collision functions to check if the 'point'(mouse-click) is in the bouding box of the button
 			//Repeat this for all buttons 
@@ -269,36 +299,7 @@ namespace Level_Selector
 				GSM::next = GS_LEVELS;
 			}
 
-
-
 		}
-
-		if (timer > 0.0f)
-		{
-			timer -= dt;
-			return;
-		}
-
-		Stage_1_1->Transform_.SetTranslate(Stage_1_1_pos.x, Stage_1_1_pos.y);
-		Stage_1_1->Transform_.Concat();
-		Stage_1_2->Transform_.SetTranslate(Stage_1_2_pos.x, Stage_1_2_pos.y);
-		Stage_1_2->Transform_.Concat();
-		Stage_1_3->Transform_.SetTranslate(Stage_1_3_pos.x, Stage_1_3_pos.y);
-		Stage_1_3->Transform_.Concat();
-
-		Stage_2_1->Transform_.SetTranslate(Stage_2_1_pos.x, Stage_2_1_pos.y);
-		Stage_2_1->Transform_.Concat();			 				  
-		Stage_2_2->Transform_.SetTranslate(Stage_2_2_pos.x, Stage_2_2_pos.y);
-		Stage_2_2->Transform_.Concat();			 				  
-		Stage_2_3->Transform_.SetTranslate(Stage_2_3_pos.x, Stage_2_3_pos.y);
-		Stage_2_3->Transform_.Concat();
-
-		Stage_3_1->Transform_.SetTranslate(Stage_3_1_pos.x, Stage_3_1_pos.y);
-		Stage_3_1->Transform_.Concat();							  
-		Stage_3_2->Transform_.SetTranslate(Stage_3_2_pos.x, Stage_3_2_pos.y);
-		Stage_3_2->Transform_.Concat();							  
-		Stage_3_3->Transform_.SetTranslate(Stage_3_3_pos.x, Stage_3_3_pos.y);
-		Stage_3_3->Transform_.Concat();
 
 		Cursor->Transform_.SetTranslate(Cursor_Pos.x, Cursor_Pos.y);
 		Cursor->Transform_.Concat();
@@ -325,46 +326,46 @@ namespace Level_Selector
 			Stage_1_1_Sprite->SetRGB(1.0f, 1.0f, 1.0f);
 		}
 
-		if (Stage_1_2->Collision_.St_Rect_Point((float)Mouse_X, (float)Mouse_Y))
+		else if (Stage_1_2->Collision_.St_Rect_Point((float)Mouse_X, (float)Mouse_Y))
 		{
 			Stage_1_2_Sprite->SetRGB(1.0f, 1.0f, 1.0f);
 		}
 
-		if (Stage_1_3->Collision_.St_Rect_Point((float)Mouse_X, (float)Mouse_Y))
+		else if (Stage_1_3->Collision_.St_Rect_Point((float)Mouse_X, (float)Mouse_Y))
 		{
 			Stage_1_3_Sprite->SetRGB(1.0f, 1.0f, 1.0f);
 		}
 
 		//////////////////////// Stage 2 ////////////////////////////////////////////
 
-		if (Stage_2_1->Collision_.St_Rect_Point((float)Mouse_X, (float)Mouse_Y))
+		else if (Stage_2_1->Collision_.St_Rect_Point((float)Mouse_X, (float)Mouse_Y))
 		{
 			Stage_2_1_Sprite->SetRGB(1.0f, 1.0f, 1.0f);
 		}
 
-		if (Stage_2_2->Collision_.St_Rect_Point((float)Mouse_X, (float)Mouse_Y))
+		else if (Stage_2_2->Collision_.St_Rect_Point((float)Mouse_X, (float)Mouse_Y))
 		{
 			Stage_2_2_Sprite->SetRGB(1.0f, 1.0f, 1.0f);
 		}
 
-		if (Stage_2_3->Collision_.St_Rect_Point((float)Mouse_X, (float)Mouse_Y))
+		else if (Stage_2_3->Collision_.St_Rect_Point((float)Mouse_X, (float)Mouse_Y))
 		{
 			Stage_2_3_Sprite->SetRGB(1.0f, 1.0f, 1.0f);
 		}
 
 		//////////////////////// Stage 3 ////////////////////////////////////////////
 
-		if (Stage_3_1->Collision_.St_Rect_Point((float)Mouse_X, (float)Mouse_Y))
+		else if (Stage_3_1->Collision_.St_Rect_Point((float)Mouse_X, (float)Mouse_Y))
 		{
 			Stage_3_1_Sprite->SetRGB(1.0f, 1.0f, 1.0f);
 		}
 
-		if (Stage_3_2->Collision_.St_Rect_Point((float)Mouse_X, (float)Mouse_Y))
+		else if (Stage_3_2->Collision_.St_Rect_Point((float)Mouse_X, (float)Mouse_Y))
 		{
 			Stage_3_2_Sprite->SetRGB(1.0f, 1.0f, 1.0f);
 		}
 
-		if (Stage_3_3->Collision_.St_Rect_Point((float)Mouse_X, (float)Mouse_Y))
+		else if (Stage_3_3->Collision_.St_Rect_Point((float)Mouse_X, (float)Mouse_Y))
 		{
 			Stage_3_3_Sprite->SetRGB(1.0f, 1.0f, 1.0f);
 		}
@@ -389,26 +390,18 @@ namespace Level_Selector
 		MM_Background->Render_Object(*M_BG);
 
 		Stage_1_1->Render();
-		Stage_1_1->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 		Stage_1_2->Render();
-		Stage_1_2->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 		Stage_1_3->Render();
-		Stage_1_3->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 			
 		Stage_2_1->Render();
-		Stage_2_1->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 		Stage_2_2->Render();
-		Stage_2_2->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 		Stage_2_3->Render();
-		Stage_2_3->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+
 				
 		Stage_3_1->Render();
-		Stage_3_1->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 		Stage_3_2->Render();
-		Stage_3_2->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+		
 		Stage_3_3->Render();
-		Stage_3_3->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
-
 		Cursor->Render();
 		Cursor->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 
