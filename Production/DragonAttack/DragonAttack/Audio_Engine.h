@@ -100,11 +100,12 @@ public:
     Updates the audio system. CALL THIS!
   **************************************************************************************/
   void Update    (                                     );
-
+  static bool MUTE_;
 private:
   FMOD::System*                        Audio_       ; //The audio system
   std ::vector        <std ::string  > Playlist_    ; //The filenames for each song
   std ::vector        <FMOD::Sound*  > Soundlist_   ; //The songs
   std ::vector        <FMOD::Channel*> Channel_     ; //The channel for each song
   FMOD::ChannelGroup*                  ChannelGroup_; //Channel group to hold all channels
+
 };
