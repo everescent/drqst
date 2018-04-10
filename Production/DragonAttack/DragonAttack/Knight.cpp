@@ -49,6 +49,10 @@ Knight::Knight(const AEVec2 & spawn_location, Sprite* texture)
                                  Init.push_back(Range{ 0.0f, 1.0f, 0.00f, 0.00f }); //Hit
                                  Init.push_back(Range{ 0.0f, 1.0f, 0.33f, 0.33f }); //Idle
                                  Init.push_back(Range{ 0.0f, 1.0f, 0.66f, 0.66f }); //Walk
+           } },
+    music{ 1, [](std::vector<std::string>& s) -> void
+           {
+               s.push_back(".//Audio/Hit_01.mp3");
            } }
 {
     SetPos(spawn_location.x, spawn_location.y);                      // spawn location of knight
@@ -253,6 +257,7 @@ void Knight::Update(Dragon &d, const float dt)
                     //Reset the distance of the fireball and set false
                     d.GetFireball()[i].Projectile::ResetDist();
                     d.GetFireball()[i].SetActive(false);
+                    music.Play(0);
                 }
 
         // mega fire ball hit lancelot
@@ -264,7 +269,8 @@ void Knight::Update(Dragon &d, const float dt)
                 // decrease knight hp and reset mega fireball variables
                 Decrease_HP(d.GetMDamage());
                 d.GetMfireball().Projectile::ResetDist();
-                d.GetMfireball().SetActive(false);               
+                d.GetMfireball().SetActive(false);  
+                music.Play(0);
             }
         }
     }

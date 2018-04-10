@@ -48,18 +48,17 @@ private:
   BOSS_PHASE        phase;                   // flag for lancelot phase
   bool              M_E;                     // lancelot berserk state
   Particle_System  *arondight_particle;      // particle system for arondight
-  Particle_System  *me_particle;			       // particle system for mad enhancement
+  Particle_System  *me_particle;             // particle system for mad enhancement
   Particle_System  *phase_particle;          // particle effect for phase transition
-  Animation         anim;	                   // lancelot animation
+  Animation         anim;                    // lancelot animation
   float             timer;                   // timer for phase transition
   Boss_Action_State current_action;          // lancelot current action
+  Audio_Engine      music;                   // music for lancelot
 
 public:
   Lancelot(Sprite*);  // default constructor for lancelot
   ~Lancelot(); // destructor for lancelot
   void Update(Dragon &player, const float dt);
   void Render(void);
-  void Mute(void);
-  void Unmute(void);
 
 };

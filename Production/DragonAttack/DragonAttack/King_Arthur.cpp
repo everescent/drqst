@@ -88,6 +88,10 @@ King_Arthur::King_Arthur(Sprite* texture)
                                 Init.push_back(Range{ 0.0f, 1.0f, 0.33f, 0.33f }); //Idle
                                 Init.push_back(Range{ 0.0f, 1.0f, 0.66f, 0.66f }); //Walk
     }},
+    music{ 1, [](std::vector<std::string>& s) 
+    {
+        s.push_back(".//Audio/Hit_01.mp3");
+    } },
     ka_phase{ PHASE_1 }, healing_effect{Effects_Get(KA_HEALING_PARTICLE)}, current_action{IDLE},
     sword_effect{ Effects_Get(KA_SWORD_PARTICLE) }, slash_effect{Effects_Get(KA_SLASH_PARTICLE)},
     phase_effect{ Effects_Get(PHASE_PARTICLE)},
@@ -310,7 +314,7 @@ void King_Arthur::Update(Dragon &d, const float dt)
                     //Reset the distance of the fireball and set false
                     d.GetFireball()[i].Projectile::ResetDist();
                     d.GetFireball()[i].SetActive(false);
-                    //music.Play(0);
+                    music.Play(0);
 
                     healing = false;
                 }
@@ -324,7 +328,7 @@ void King_Arthur::Update(Dragon &d, const float dt)
                 Decrease_HP(d.GetMDamage());
                 d.GetMfireball().Projectile::ResetDist();
                 d.GetMfireball().SetActive(false);
-                //music.Play(0);
+                music.Play(0);
                 d.PlayImpact();
 
                 healing = false;

@@ -68,6 +68,7 @@ private:
     std::vector <Characters*> mobs;           //an array to store the mobs to be spawn
     float                     timer;          // for phase transition
     float                     mob_timer;      // render the mobs base on time
+    Audio_Engine              music;          // music for king arthur
 
 public:
     King_Arthur(Sprite*);
