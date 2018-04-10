@@ -2,7 +2,10 @@
 #include "AI_Data_Factory.h"
 #include "Particle_Effects.h"
 #include "Floor.h"
-
+#include "Options.h"
+#include "GameStateManager.h"
+#include "Pause.h"
+#include "Camera.h"
 
 namespace
 {
@@ -21,6 +24,15 @@ namespace
 	//Floor *floor1;
 
     float angle;
+
+    Sprite black;
+    Transform black_m;
+
+    Pause *p;
+
+
+    float timer = 3.0f;
+    bool fade = true;
 }
 
 namespace AI_Test_Stage
@@ -30,7 +42,6 @@ namespace AI_Test_Stage
 		d->SetActive(true);
 		d->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 		
-		//floor1->Collision_.Update_Col_Pos(-600.0f, -360.0f, 600.0f, -300.0f); 0xFFFFC0CB
 	    
         //Effects_Init();
         //test = Effects_Get(ARONDIGHT_PARTICLE);
@@ -46,19 +57,20 @@ namespace AI_Test_Stage
 		////test->Emitter_.Particle_Rand_.Sp_Rand_ = 3;
 		//test->Emitter_.Lifetime_ = 4.f;
 		////test->Emitter_.Particle_Rand_.Life_Rand_ = 1;
+        p = new Pause;
 
-
-
+        black = CreateBG(1.0f, 1.0f, ".//Textures/Black_BG.png");
 
         //test->Emitter_.Pos_.Point_Min_Max[0].x = 0.f;
         //test->Emitter_.Pos_.Point_Min_Max[0].y = -20.f;
         //test->Emitter_.Pos_.Point_Min_Max[1].x = 18.f;
         //test->Emitter_.Pos_.Point_Min_Max[1].y = -15.f;
+
 	}
 
 	void Load(void)
 	{
-		BG = new Sprite{ CreateBG(1.0f, 2.0f, "Textures/Cobblestone.png") };
+		BG = new Sprite{ CreateBG(1.0f, 2.0f, ".//Textures/Cobblestone.png") };
 		//floor1 = new Floor{ -200.0f, -350.0f }; //ok
 		M_BG = new Transform;
 		d = dynamic_cast<Dragon*> (Create_Basic_AI(DRAGON));
@@ -68,9 +80,22 @@ namespace AI_Test_Stage
 
 	void Update(float dt)
 	{
-		d->Update(*d, dt);
-		c[0]->Update(*d, dt);
-		
+        if (fade)
+        {
+            static float vis = 0.0f;
+            black.SetAlphaTransBM(1.0f, vis, AE_GFX_BM_BLEND);
+            vis += 0.005f;
+
+            timer -= dt;
+
+            if (timer < 0)
+                fade = false;
+
+            
+        }
+            d->Update(*d, dt);
+		//c[0]->Update(*d, dt);
+
         //static bool PPS = false;
 
         //if (PPS)
@@ -102,20 +127,37 @@ namespace AI_Test_Stage
 
 		//test->Update(dt);
        
-        
+       // float x, y;
+        //AEGfxGetCamPosition(&x, &y);
+        //AEGfxSetCamPosition(x + 1.f, y + 1.f);
+        Update_Options();
+     /*   GameObject **a = Get_Checkbox();
+        (*a)*/
         //PPS = true;
+
+        if (AEInputCheckTriggered(AEVK_Q))
+        {
+            GSM::next = GS_QUIT;
+        }
 	}
 
 	void Draw(void)
 	{
-		BG->Render_Object(*M_BG);
+		
+        
+       BG->Render_Object(*M_BG);
 		//floor1->Render();
 	
 		d->Render();
-		c[0]->Render();
+	//	c[0]->Render();
 
 		//Render Particles
 		//test->Render();
+
+        Render_Options();
+
+        if (fade)
+            black.Render_Object(black_m);
 	}
 
 	void Free(void)
@@ -123,7 +165,10 @@ namespace AI_Test_Stage
 		delete d;
 		delete c[0];
 		delete BG;
+        delete M_BG;
 		c.clear();
+
+        delete p;
 	}
 
 	void Unload(void)
