@@ -83,7 +83,6 @@ void Archer::Colision_Check(Dragon &player, const float dt)
       if (Collision_.Dy_Rect_Rect(player.GetFireball()[i].Collision_, GetVelocity(),
           player.GetFireball()[i].GetVelocity(), dt))
       {
-        Anim_.SetState(HIT_ANIM);
         //Decrease HP by player's damage
         Decrease_HP(player.GetDamage());
         //Add mega fireball charge
@@ -98,7 +97,6 @@ void Archer::Colision_Check(Dragon &player, const float dt)
     if (Collision_.Dy_Rect_Rect(player.GetMfireball().Collision_, GetVelocity(),
         player.GetMfireball().GetVelocity(), dt))
     {
-      Anim_.SetState(HIT_ANIM);
       //Decrease HP by player's damage
       Decrease_HP(player.GetMDamage());
       player.PlayImpact();
