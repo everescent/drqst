@@ -166,7 +166,7 @@ void Archer::Attack(Dragon &player, const float /*dt*/)
     Angle += 180.0f;
   //Normalize and scale
   AEVec2Normalize(&Disp, &Disp);
-  AEVec2Scale(&Disp, &Disp, 260.0f);
+  AEVec2Scale(&Disp, &Disp, 420.0f);
   Arrow.SetVelocity(Disp);
   Arrow_CD = Archer_CD_Time;
   Attack_ = true;

@@ -97,7 +97,7 @@ public:
 
   Dragon(Sprite* D_Sprite, Sprite *F_Sprite, AEVec2 Pos_)
     //Initialize Characters class
-    :Characters{ D_Sprite, 3,
+    :Characters{ D_Sprite, 5,
     Col_Comp{ Pos_.x - Dragon_Scale, Pos_.y - Dragon_Scale,
     Pos_.x + Dragon_Scale, Pos_.y + Dragon_Scale, Rect} },
     //Initialize data members
