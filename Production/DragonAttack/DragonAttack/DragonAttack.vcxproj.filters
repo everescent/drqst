@@ -115,6 +115,9 @@
     <Filter Include="Game_States\Stage\Score_Page">
       <UniqueIdentifier>{f6fa3ce7-52bf-4cd8-b8cc-7ea4da1ec179}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game_States\Stage\Level_Selector">
+      <UniqueIdentifier>{864cad51-5a43-42f1-aea3-04db650562c9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -293,6 +296,9 @@
     </ClCompile>
     <ClCompile Include="Options.cpp">
       <Filter>Game_Object\User_Interface</Filter>
+    </ClCompile>
+    <ClCompile Include="Level_Selector.cpp">
+      <Filter>Game_States\Stage\Level_Selector</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -481,6 +487,9 @@
     </ClInclude>
     <ClInclude Include="Options.h">
       <Filter>Game_Object\User_Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="Level_Selector.h">
+      <Filter>Game_States\Stage\Level_Selector</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

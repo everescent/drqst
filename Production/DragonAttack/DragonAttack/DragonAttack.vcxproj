@@ -181,6 +181,7 @@
     <ClCompile Include="Lancelot.cpp" />
     <ClCompile Include="LevelChangePlatform.cpp" />
     <ClCompile Include="Level_Import.cpp" />
+    <ClCompile Include="Level_Selector.cpp" />
     <ClCompile Include="Mage.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="EngineProof.cpp" />
@@ -238,6 +239,7 @@
     <ClInclude Include="GameStateList.h" />
     <ClInclude Include="GameStateManager.h" />
     <ClInclude Include="Grunt.h" />
+    <ClInclude Include="Level_Selector.h" />
     <ClInclude Include="Input_Handler.h" />
     <ClInclude Include="King_Arthur.h" />
     <ClInclude Include="Knight.h" />

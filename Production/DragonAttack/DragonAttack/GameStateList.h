@@ -37,7 +37,7 @@ enum GAME_STATE
 	AI_TEST_STAGE,  // to be removed before submitting
     
     GS_LEVELS,
-
+	GS_LEVEL_SELECTOR,
 	// do not touch this bottom area
 	GS_CREDITS,
 	GS_QUIT,

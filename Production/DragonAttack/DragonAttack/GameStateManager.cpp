@@ -21,9 +21,9 @@ Technology is prohibited.
 namespace GSM
 {
     // defining the global variables
-    GAME_STATE previous = GS_MAIN;
-    GAME_STATE current  = GS_MAIN;
-    GAME_STATE next     = GS_MAIN;
+    GAME_STATE previous = GS_LEVEL_SELECTOR;
+    GAME_STATE current  = GS_LEVEL_SELECTOR;
+    GAME_STATE next     = GS_LEVEL_SELECTOR;
 
     // create an array of pointers to state functions
     GameStateFunctions GSF[GS_QUIT] = { 0 };
@@ -41,6 +41,13 @@ namespace GSM
         GSF[GS_MAIN].Draw         = Main_Menu::Draw;
         GSF[GS_MAIN].Free         = Main_Menu::Free;
         GSF[GS_MAIN].Unload       = Main_Menu::Unload;
+
+		GSF[GS_LEVEL_SELECTOR].Init         = Level_Selector::Init;
+        GSF[GS_LEVEL_SELECTOR].Load         = Level_Selector::Load;
+        GSF[GS_LEVEL_SELECTOR].Update       = Level_Selector::Update;
+        GSF[GS_LEVEL_SELECTOR].Draw         = Level_Selector::Draw;
+        GSF[GS_LEVEL_SELECTOR].Free         = Level_Selector::Free;
+        GSF[GS_LEVEL_SELECTOR].Unload       = Level_Selector::Unload;
 
         GSF[GS_LEVEL1_1].Init	  = Stage1_1::Init;
         GSF[GS_LEVEL1_1].Load	  = Stage1_1::Load;
