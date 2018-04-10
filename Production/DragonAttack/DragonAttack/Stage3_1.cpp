@@ -25,6 +25,16 @@ namespace
 
 	LevelChangePlatform *next;
 
+	Sprite black;
+	Transform b_m;
+	Transform b_m2;
+
+	float timer = 3.0f;
+	bool FadeIn = true;
+	bool FadeOut = false;
+	f32 camX, camY;
+	static float vis = 1.0f;
+
 	Sprite*  COIN_SPRITE;//pickups					 							   
 	Sprite*  HP_SPRITE;
 	Sprite*  DMG_SPRITE;
@@ -79,6 +89,12 @@ namespace Stage3_1
 
 		// Pause menu object
 		pause = new Pause{};
+
+		// Fade in texture
+		black = CreateBG(1.0f, 1.0f, ".//Textures/Black_BG.png");
+		// Fade transformation matrix
+		b_m.SetTranslate(-120.0f, -135.0f);
+		b_m.Concat();
 	}
 	
 	void Init(void)
@@ -194,6 +210,23 @@ namespace Stage3_1
 	{
 		if (!pause_bool) 
 		{
+			// Fade In effect
+			if (FadeIn)
+			{
+				//static float vis = 1.0f;
+				black.SetAlphaTransBM(1.0f, vis, AE_GFX_BM_BLEND);
+				vis -= 0.005f;
+
+				timer -= dt;
+
+				if (timer <= 0)
+				{
+					FadeIn = false;
+				}
+			}
+
+
+			Audio->SetPause(0, false);
 			Audio->Update();
 			pause->Update(pause_bool,dt);
 
@@ -243,12 +276,12 @@ namespace Stage3_1
 				Camdown += 4.0f;
 			}
 			CamFollow(player->Transform_, 200, Camdown, player->GetFacing());
-			next->Update(*player, dt);
+			next->Update(*player, dt, black, FadeOut);
 			ui->UI_Update(player, dt);
 		}
 		else
 		{
-			Audio->SetPause(0, 1);
+			Audio->SetPause(0, true);
 			pause->Update(pause_bool,dt);
 		}
 		//std::cout << (int)player->PosX << ", " << (int)player->PosY << std::endl;
@@ -289,11 +322,23 @@ namespace Stage3_1
 		// Particle Effects
 		PickUp::coin_particles->Render();
 
+		if (FadeIn)
+			black.Render_Object(b_m);
+		if (FadeOut)
+		{
+			AEGfxGetCamPosition(&camX, &camY);
+			b_m2.SetTranslate(camX, camY);
+			b_m2.Concat();
+			black.Render_Object(b_m2);
+		}
+
 		if (pause_bool) pause->Render();
 	}
 
 	void Free(void)
 	{
+		timer = 3.0f;
+		vis = 1.0f;
 		// Delete player and UI
 		delete player;
 		delete ui;

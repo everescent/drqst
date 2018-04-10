@@ -21,6 +21,16 @@ namespace
 
 	LevelChangePlatform *next;
 
+	Sprite black;
+	Transform b_m;
+	Transform b_m2;
+
+	float timer = 3.0f;
+	bool FadeIn = true;
+	bool FadeOut = false;
+	f32 camX, camY;
+	static float vis = 1.0f;
+
 	//Sprite* COIN_SPRITE;//pickups
 	//Sprite* HP_SPRITE;
 	//Sprite* DMG_SPRITE;
@@ -54,6 +64,12 @@ namespace Stage1_3
 		next = new LevelChangePlatform{LCPLAT_SPRITE, 500.0f,  -300.0f };
 
 		pause = new Pause{};
+
+		// Fade in texture
+		black = CreateBG(1.0f, 1.0f, ".//Textures/Black_BG.png");
+		// Fade transformation matrix
+		b_m.SetTranslate(-120.0f, -135.0f);
+		b_m.Concat();
 	}
 
 	void Init(void)
@@ -91,6 +107,21 @@ namespace Stage1_3
 	{
 		if (!pause_bool) 
 		{
+			// Fade In effect
+			if (FadeIn)
+			{
+				//static float vis = 1.0f;
+				black.SetAlphaTransBM(1.0f, vis, AE_GFX_BM_BLEND);
+				vis -= 0.005f;
+
+				timer -= dt;
+
+				if (timer <= 0)
+				{
+					FadeIn = false;
+				}
+			}
+
 			Audio->SetPause(0, false);
 			Audio->Update();
 
@@ -101,7 +132,7 @@ namespace Stage1_3
 			c[0]->Update(*player, dt);
 			if (c[0]->Get_HP() <= 0)
 			{
-				next->Update(*player, dt);
+				next->Update(*player, dt, black, FadeOut);
 			}
 
 			for (Block& elem : blocks)
@@ -144,11 +175,23 @@ namespace Stage1_3
 		player->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 		ui->Render();
 
+		if (FadeIn)
+			black.Render_Object(b_m);
+		if (FadeOut)
+		{
+			AEGfxGetCamPosition(&camX, &camY);
+			b_m2.SetTranslate(camX, camY);
+			b_m2.Concat();
+			black.Render_Object(b_m2);
+		}
+
 		if (pause_bool) pause->Render();
 	}
 
 	void Free(void)
 	{
+		timer = 3.0f;
+		vis = 1.0f;
 		// Delete player and UI
 		delete player;
 		delete ui;

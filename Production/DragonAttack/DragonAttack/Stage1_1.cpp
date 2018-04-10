@@ -29,6 +29,15 @@ namespace
 	GameObject           *tut1, *tut2, *tut3, *tut4, *tut5, *tut6;
 	LevelChangePlatform  *next;
 
+	Sprite black;
+	Transform b_m;
+	Transform b_m2;
+
+	float timer = 3.0f;
+	bool FadeIn = true;
+	bool FadeOut = false;
+	f32 camX, camY;
+	static float vis = 1.0f;
 
 	Sprite *TUT1_SPRITE;
 	Sprite *TUT2_SPRITE;
@@ -112,6 +121,12 @@ namespace Stage1_1
 		tut6 = new GameObject{ TUT6_SPRITE, Col_Comp() };
 
 		pause = new Pause{};
+
+		// Fade in texture
+		black = CreateBG(1.0f, 1.0f, ".//Textures/Black_BG.png"); //  fading in texture
+		// Fade transformation matrix
+		b_m.SetTranslate(-120.0f, -135.0f);
+		b_m.Concat();
 	}
 
 	void Init(void)
@@ -229,12 +244,29 @@ namespace Stage1_1
 	void Update(float dt)
 	{
 		if (!pause_bool)
-		{
+		{			
+			// Fade In effect
+			if (FadeIn)
+			{
+				//static float vis = 1.0f;
+				black.SetAlphaTransBM(1.0f, vis, AE_GFX_BM_BLEND);
+				vis -= 0.005f;
+
+				timer -= dt;
+
+				if (timer <= 0)
+				{
+					FadeIn = false;
+				}
+			}
+
+
 			Audio->SetPause(0, false);
 			Audio->Update();
 			pause->Update(pause_bool, dt);
 
-			player->Update(*player, dt);
+			if (!FadeIn)
+				player->Update(*player, dt);
 
 			s1->Update(*player, dt);
 			tut1->Transform_.SetTranslate(400.0f, -20.0f);
@@ -305,12 +337,12 @@ namespace Stage1_1
 			box1->Update(*player, dt);
 
 			CamFollow(player->Transform_, 200, 120, player->GetFacing());
-			next->Update(*player, dt);
+			next->Update(*player, dt, black, FadeOut);
 			ui->UI_Update(player, dt);
 		}
 		else
 		{
-			Audio->SetPause(0, 1);
+			Audio->SetPause(0, true);//pausing BG music
 			pause->Update(pause_bool, dt);
 		}
 		//std::cout << (int)player->PosX << ", " << (int)player->PosY << std::endl;
@@ -388,11 +420,23 @@ namespace Stage1_1
 		// Particle Effects
 		PickUp::coin_particles->Render();
 		
+		if (FadeIn)
+			black.Render_Object(b_m);
+		if (FadeOut)
+		{
+			AEGfxGetCamPosition(&camX, &camY);
+			b_m2.SetTranslate(camX, camY);
+			b_m2.Concat();
+			black.Render_Object(b_m2);
+		}
+
 		if (pause_bool) pause->Render();
 	}
 
 	void Free(void)
 	{
+		timer = 3.0f;
+		vis = 1.0f;
 		// Delete player and UI
 		delete player;
 		delete ui;

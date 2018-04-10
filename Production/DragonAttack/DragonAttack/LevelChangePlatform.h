@@ -29,4 +29,5 @@ private:
 public:
 	LevelChangePlatform(Sprite* const p_Sprite, float x, float y); // default constructor
 	void Update(Dragon &player, const float &dt);
+	void Update(Dragon &player, const float &dt, Sprite& black, bool& FadeOut);
 };

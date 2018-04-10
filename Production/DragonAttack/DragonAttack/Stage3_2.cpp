@@ -25,6 +25,16 @@ namespace
 
 	LevelChangePlatform *next;
 
+	Sprite black;
+	Transform b_m;
+	Transform b_m2;
+
+	float timer = 3.0f;
+	bool FadeIn = true;
+	bool FadeOut = false;
+	f32 camX, camY;
+	static float vis = 1.0f;
+
 	Sprite*  COIN_SPRITE;//pickups					 							   
 	Sprite*  HP_SPRITE;
 	Sprite*  DMG_SPRITE;
@@ -83,6 +93,12 @@ namespace Stage3_2
 
 		// Pasue menu object
 		pause = new Pause{};
+
+		// Fade in texture
+		black = CreateBG(1.0f, 1.0f, ".//Textures/Black_BG.png");
+		// Fade transformation matrix
+		b_m.SetTranslate(-120.0f, -135.0f);
+		b_m.Concat();
 	}
 
 	void Init(void)
@@ -196,67 +212,87 @@ namespace Stage3_2
 
 	void Update(float dt)
 	{
-		if (!pause_bool) 
+		if (!pause_bool)
 		{
-			Audio->Update();
-			pause->Update(pause_bool,dt);
-
-			player->Update(*player, dt);
-
-			for (size_t i = 0; i < c.size(); ++i)
+			if (!pause_bool)
 			{
-				if (c[i]->IsActive())
+				// Fade In effect
+				if (FadeIn)
 				{
-					c[i]->Update(*player, dt);
-				}
-			}
+					//static float vis = 1.0f;
+					black.SetAlphaTransBM(1.0f, vis, AE_GFX_BM_BLEND);
+					vis -= 0.005f;
 
-			for (Platform& elem : platforms)
-			{
-				// added collision for AI
+					timer -= dt;
+
+					if (timer <= 0)
+					{
+						FadeIn = false;
+					}
+				}
+
+
+				Audio->SetPause(0, false);
+				Audio->Update();
+				pause->Update(pause_bool, dt);
+
+				player->Update(*player, dt);
+
 				for (size_t i = 0; i < c.size(); ++i)
 				{
-					elem.Update(*(c[i]), dt);
+					if (c[i]->IsActive())
+					{
+						c[i]->Update(*player, dt);
+					}
 				}
-				elem.Update(*player, dt);
-			}
-			for (Block& elem : blocks)
-			{
-				for (size_t i = 0; i < c.size(); ++i)
-				{
-					elem.Update(*(c[i]), dt);
-				}
-				elem.Update(*player, dt);
-			}
-			for (Barrier& elem : barriers)
-			{
-				elem.Update(*player, dt);
-			}
-			for (PickUp& elem : PU)
-			{
-				elem.Update(*player, dt);
-			}
 
-			// Camera down logic
-			if (AEInputCheckCurr(AEVK_S))
-			{
-				if (Camdown > -250) // Setting lowest camera point
-					Camdown -= 4.0f;
+				for (Platform& elem : platforms)
+				{
+					// added collision for AI
+					for (size_t i = 0; i < c.size(); ++i)
+					{
+						elem.Update(*(c[i]), dt);
+					}
+					elem.Update(*player, dt);
+				}
+				for (Block& elem : blocks)
+				{
+					for (size_t i = 0; i < c.size(); ++i)
+					{
+						elem.Update(*(c[i]), dt);
+					}
+					elem.Update(*player, dt);
+				}
+				for (Barrier& elem : barriers)
+				{
+					elem.Update(*player, dt);
+				}
+				for (PickUp& elem : PU)
+				{
+					elem.Update(*player, dt);
+				}
+
+				// Camera down logic
+				if (AEInputCheckCurr(AEVK_S))
+				{
+					if (Camdown > -250) // Setting lowest camera point
+						Camdown -= 4.0f;
+				}
+				if (!AEInputCheckCurr(AEVK_S) && Camdown < 120)
+				{
+					Camdown += 4.0f;
+				}
+				CamFollow(player->Transform_, 200, Camdown, player->GetFacing());
+				next->Update(*player, dt, black, FadeOut);
+				ui->UI_Update(player, dt);
 			}
-			if (!AEInputCheckCurr(AEVK_S) && Camdown < 120)
+			else
 			{
-				Camdown += 4.0f;
+				Audio->SetPause(0, true);
+				pause->Update(pause_bool, dt);
 			}
-			CamFollow(player->Transform_, 200, Camdown, player->GetFacing());
-			next->Update(*player, dt);
-			ui->UI_Update(player, dt);
+			//std::cout << (int)player->PosX << ", " << (int)player->PosY << std::endl;
 		}
-		else
-		{
-			Audio->SetPause(0, 1);
-			pause->Update(pause_bool,dt);
-		}
-		//std::cout << (int)player->PosX << ", " << (int)player->PosY << std::endl;
 	}
 
 	void Draw(void)
@@ -295,11 +331,23 @@ namespace Stage3_2
 		// Particle Effects
 		PickUp::coin_particles->Render();
 
+		if (FadeIn)
+			black.Render_Object(b_m);
+		if (FadeOut)
+		{
+			AEGfxGetCamPosition(&camX, &camY);
+			b_m2.SetTranslate(camX, camY);
+			b_m2.Concat();
+			black.Render_Object(b_m2);
+		}
+
 		if (pause_bool) pause->Render();
 	}
 
 	void Free(void)
 	{
+		timer = 3.0f;
+		vis = 1.0f;
 		// Delete player and UI
 		delete player;
 		delete ui;

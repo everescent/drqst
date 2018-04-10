@@ -31,6 +31,16 @@ namespace // global variables used in this file
     std::vector<Block> blocks;           //
     King_Arthur* last_boss;              // the final boss ai
 
+	Sprite black;
+	Transform b_m;
+	Transform b_m2;
+
+	float timer = 3.0f;
+	bool FadeIn = true;
+	bool FadeOut = false;
+	f32 camX, camY;
+	static float vis = 1.0f;
+
     //Sprite* HP_SPRITE;
     //Sprite* DMG_SPRITE;
     //Sprite* SPD_SPRITE;
@@ -92,6 +102,11 @@ namespace Stage3_3
                 }
             }
         }
+		// Fade in texture
+		black = CreateBG(1.0f, 1.0f, ".//Textures/Black_BG.png");
+		// Fade transformation matrix
+		b_m.SetTranslate(-120.0f, -135.0f);
+		b_m.Concat();
     }
 
     /**************************************************************************************
@@ -128,17 +143,32 @@ namespace Stage3_3
        
         if (!p_bool)
         {
+			// Fade In effect
+			if (FadeIn)
+			{
+				//static float vis = 1.0f;
+				black.SetAlphaTransBM(1.0f, vis, AE_GFX_BM_BLEND);
+				vis -= 0.005f;
+
+				timer -= dt;
+
+				if (timer <= 0)
+				{
+					FadeIn = false;
+				}
+			}
 
 			pause->Update(p_bool, dt);
 			// if king arthur has died, switch state to credit screen
             if (last_boss->Get_HP() <= 0)
-            {
+            { // needs fade out
                 SM::Set_Next(SS_QUIT);
                 GSM::next = GS_CREDITS;
             }
 
             //player->Set_Vulnerable(true);
            // update the audio
+			audio->SetPause(0, false);
             audio->Update();
 
             // get the current phase of the boss Ai
@@ -193,7 +223,7 @@ namespace Stage3_3
 
 		else
 		{
-			audio->SetPause(0, 1);
+			audio->SetPause(0, true);
 			pause->Update(p_bool, dt);
 		}
     }
@@ -246,6 +276,9 @@ namespace Stage3_3
          
         ui->Render();        // render the UI on screen
 
+		if (FadeIn)
+			black.Render_Object(b_m);
+
         if (p_bool) pause->Render();
     }
 
@@ -256,6 +289,8 @@ namespace Stage3_3
     **************************************************************************************/
     void Free(void)
     {
+		timer = 3.0f;
+		vis = 1.0f;
         player->ResetCharge();
         
         last_boss->Dead();
