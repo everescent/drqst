@@ -104,9 +104,6 @@ namespace Stage3_3
         }
 		// Fade in texture
 		black = CreateBG(1.0f, 1.0f, ".//Textures/Black_BG.png");
-		// Fade transformation matrix
-		b_m.SetTranslate(-120.0f, -135.0f);
-		b_m.Concat();
     }
 
     /**************************************************************************************
@@ -140,7 +137,11 @@ namespace Stage3_3
     **************************************************************************************/
     void Update(float dt)
     {
-       
+		// Fade transformation matrix
+		AEGfxGetCamPosition(&camX, &camY);
+		b_m.SetTranslate(camX, camY);
+		b_m.Concat();
+
         if (!p_bool)
         {
 			// Fade In effect
@@ -278,6 +279,8 @@ namespace Stage3_3
 
 		if (FadeIn)
 			black.Render_Object(b_m);
+
+		// no fade out after KA
 
         if (p_bool) pause->Render();
     }
