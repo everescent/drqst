@@ -103,17 +103,7 @@ namespace Stage2_1
 
 		// Fade in texture
 		black = CreateBG(1.5f, 1.5f, ".//Textures/Black_BG.png");
-	}
 
-	void Init(void)
-	{
-		// Plays selected track
-		Audio->Play(0);
-
-		// Loops selected track
-		Audio->SetLoop(0, FMOD_LOOP_NORMAL);
-
-		// Object placement
 		for (int y = 0; y < Map_Height; ++y)
 		{
 			for (int x = 0; x < Map_Width; ++x)
@@ -204,6 +194,107 @@ namespace Stage2_1
 			}
 		}
 
+	}
+
+	void Init(void)
+	{
+		// Plays selected track
+		Audio->Play(0);
+
+		// Loops selected track
+		Audio->SetLoop(0, FMOD_LOOP_NORMAL);
+
+		// Object placement
+		/*for (int y = 0; y < Map_Height; ++y)
+		{
+			for (int x = 0; x < Map_Width; ++x)
+			{
+				if (MapData[y][x] == OBJ_PLATFORM)
+				{
+					float f_x = (float)x;
+					float f_y = (float)y;
+					platforms.push_back(Platform{ PLAT_SPRITE, Convert_X(f_x) , Convert_Y(f_y) });
+				}
+				if (MapData[y][x] == OBJ_FLOOR)
+				{
+					float f_x = (float)x;
+					float f_y = (float)y;
+					blocks.push_back(Block{ FLOOR_SPRITE,Convert_X(f_x) , Convert_Y(f_y) });
+				}
+				if (MapData[y][x] == OBJ_WALL)
+				{
+					float f_x = (float)x;
+					float f_y = (float)y;
+					noupdate_blocks.push_back(Block{ FLOOR_SPRITE,Convert_X(f_x) , Convert_Y(f_y) });
+				}
+				if (MapData[y][x] == OBJ_GRUNT)
+				{
+					float f_x = (float)x;
+					float f_y = (float)y;
+					c.push_back(Create_Basic_AI(GRUNT, AEVec2{ Convert_X(f_x) ,  Convert_Y(f_y) }));
+				}
+				if (MapData[y][x] == OBJ_ARCHER)
+				{
+					float f_x = (float)x;
+					float f_y = (float)y;
+					c.push_back(Create_Basic_AI(ARCHER, AEVec2{ Convert_X(f_x) ,  Convert_Y(f_y) }));
+				}
+				if (MapData[y][x] == OBJ_KNIGHT)
+				{
+					float f_x = (float)x;
+					float f_y = (float)y;
+					c.push_back(Create_Basic_AI(KNIGHT, AEVec2{ Convert_X(f_x) ,  Convert_Y(f_y) }));
+				}
+				if (MapData[y][x] == OBJ_MAGE)
+				{
+					float f_x = (float)x;
+					float f_y = (float)y;
+					c.push_back(Create_Basic_AI(MAGE, AEVec2{ Convert_X(f_x) ,  Convert_Y(f_y) }));
+				}
+				//pick ups
+				if (MapData[y][x] == OBJ_COIN)
+				{
+					float f_x = (float)x;
+					float f_y = (float)y;
+					PU.push_back(PickUp{ COIN_SPRITE,
+						Col_Comp{ 0.0f - 25.0f, 0.0f - 25.0f, 0.0f + 25.0f, 0.0f + 25.0f, Rect },
+						COIN, Convert_X(f_x) , Convert_Y(f_y) });
+				}
+				if (MapData[y][x] == OBJ_HP)
+				{
+					float f_x = (float)x;
+					float f_y = (float)y;
+					PU.push_back(PickUp{ HP_SPRITE,
+						Col_Comp{ 0.0f - 25.0f, 0.0f - 25.0f, 0.0f + 25.0f, 0.0f + 25.0f, Rect },
+						HP, Convert_X(f_x) , Convert_Y(f_y) });
+				}
+				if (MapData[y][x] == OBJ_SPD)
+				{
+					float f_x = (float)x;
+					float f_y = (float)y;
+					PU.push_back(PickUp{ SPD_SPRITE,
+						Col_Comp{ 0.0f - 25.0f, 0.0f - 25.0f, 0.0f + 25.0f, 0.0f + 25.0f, Rect },
+						SPD, Convert_X(f_x) , Convert_Y(f_y) });
+				}
+				if (MapData[y][x] == OBJ_DMG)
+				{
+					float f_x = (float)x;
+					float f_y = (float)y;
+					PU.push_back(PickUp{ DMG_SPRITE,
+						Col_Comp{ 0.0f - 25.0f, 0.0f - 25.0f, 0.0f + 25.0f, 0.0f + 25.0f, Rect },
+						DMG, Convert_X(f_x) , Convert_Y(f_y) });
+				}
+				if (MapData[y][x] == OBJ_INVUL)
+				{
+					float f_x = (float)x;
+					float f_y = (float)y;
+					PU.push_back(PickUp{ INVUL_SPRITE,
+						Col_Comp{ 0.0f - 25.0f, 0.0f - 25.0f, 0.0f + 25.0f, 0.0f + 25.0f, Rect },
+						INVUL, Convert_X(f_x) , Convert_Y(f_y) });
+				}
+			}
+		}*/
+
 		for (size_t i = 0; i < c.size(); ++i)
 			c[i]->SetActive(true);
 
@@ -216,10 +307,8 @@ namespace Stage2_1
 		player->SetActive(true);
 
 		// Reset player's Health and charge
-		player->Set_HP(3);
+		player->Set_HP(5);
 		player->ResetCharge();
-
-		
 
 		CamFollow(test, 200, 120, player->GetFacing());
 	}
@@ -380,11 +469,11 @@ namespace Stage2_1
 		delete ui;
 
 		// Clear object vectors
-		platforms.clear();
+		/*platforms.clear();
 		noupdate_blocks.clear();
 		blocks.clear();
 		barriers.clear();
-		PU.clear();
+		PU.clear();*/
 
 		// Delete enemies
 		for (size_t i = 0; i < c.size(); ++i)
@@ -402,6 +491,12 @@ namespace Stage2_1
 			delete[] MapData[y];
 		}
 		delete[] MapData;
+
+		platforms.clear();
+		noupdate_blocks.clear();
+		blocks.clear();
+		barriers.clear();
+		PU.clear();
 
 		// Delete Sprites
 		delete COIN_SPRITE;//pickups

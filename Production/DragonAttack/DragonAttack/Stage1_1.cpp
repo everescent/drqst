@@ -119,40 +119,9 @@ namespace Stage1_1
 
 		// Fade in texture
 		black = CreateBG(1.5f, 1.5f, ".//Textures/Black_BG.png"); //  fading in texture
-	}
 
-	void Init(void)
-	{
-		tut1->SetActive(true);
-		tut2->SetActive(true);
-		tut3->SetActive(true);
-		tut4->SetActive(true);
-		tut5->SetActive(true);
-		tut6->SetActive(true);
-
-		//place all alpha stuff here
-		tut1->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
-		tut2->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
-		tut3->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
-		tut4->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
-		tut5->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
-		tut6->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
-
-		// Placement for specific objects
-		archerTower = new Tower{ TOWER_SPRITE, 4800.0f, 0.0f };
-		box1 = new Barrier{ BARRIER_SPRITE, 1500.0f, -235.0f };
-		coin1 = new PickUp{ COIN_SPRITE, Col_Comp{ 0.0f - 25.0f, 0.0f - 25.0f, 0.0f + 25.0f, 0.0f + 25.0f, Rect },
-			COIN, 1500.0f, -210.0f };
-
-		
-		// Plays selected track
-		Audio->Play(0);
-
-		// Loops selected track
-		Audio->SetLoop(0, FMOD_LOOP_NORMAL);
-		
-		// Onject placement
-		for (int y = 0; y < Map_Height; ++y) // MOVE TO LOAD()???
+		// Object placement
+		for (int y = 0; y < Map_Height; ++y)
 		{
 			for (int x = 0; x < Map_Width; ++x)
 			{
@@ -223,6 +192,112 @@ namespace Stage1_1
 				}
 			}
 		}
+
+
+	}
+
+	void Init(void)
+	{
+		tut1->SetActive(true);
+		tut2->SetActive(true);
+		tut3->SetActive(true);
+		tut4->SetActive(true);
+		tut5->SetActive(true);
+		tut6->SetActive(true);
+
+		//place all alpha stuff here
+		tut1->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+		tut2->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+		tut3->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+		tut4->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+		tut5->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+		tut6->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+
+		// Placement for specific objects
+		archerTower = new Tower{ TOWER_SPRITE, 4800.0f, 0.0f };
+		box1 = new Barrier{ BARRIER_SPRITE, 1500.0f, -235.0f };
+		coin1 = new PickUp{ COIN_SPRITE, Col_Comp{ 0.0f - 25.0f, 0.0f - 25.0f, 0.0f + 25.0f, 0.0f + 25.0f, Rect },
+			COIN, 1500.0f, -210.0f };
+
+		
+		// Plays selected track
+		Audio->Play(0);
+
+		// Loops selected track
+		Audio->SetLoop(0, FMOD_LOOP_NORMAL);
+		
+		//// Object placement
+		//for (int y = 0; y < Map_Height; ++y) // MOVE TO LOAD()???
+		//{
+		//	for (int x = 0; x < Map_Width; ++x)
+		//	{
+		//		if (MapData[y][x] == OBJ_PLATFORM)
+		//		{
+		//			float f_x = (float)x;
+		//			float f_y = (float)y;
+		//			platforms.push_back(Platform{ PLAT_SPRITE,Convert_X(f_x) , Convert_Y(f_y) });
+		//		}
+		//		if (MapData[y][x] == OBJ_FLOOR)
+		//		{
+		//			float f_x = (float)x;
+		//			float f_y = (float)y;
+		//			blocks.push_back(Block{ FLOOR_SPRITE,Convert_X(f_x) , Convert_Y(f_y) });
+		//		}
+		//		if (MapData[y][x] == OBJ_GRUNT)
+		//		{
+		//			float f_x = (float)x;
+		//			float f_y = (float)y;
+		//			c.push_back(Create_Basic_AI(GRUNT, AEVec2{ Convert_X(f_x) , Convert_Y(f_y) }));
+		//		}
+		//		if (MapData[y][x] == OBJ_ARCHER)
+		//		{
+		//			float f_x = (float)x;
+		//			float f_y = (float)y;
+		//			c.push_back(Create_Basic_AI(ARCHER, AEVec2{ Convert_X(f_x) , Convert_Y(f_y) }));
+		//		}
+		//		//pick ups
+		//		if (MapData[y][x] == OBJ_COIN)
+		//		{
+		//			float f_x = (float)x;
+		//			float f_y = (float)y;
+		//			PU.push_back(PickUp{ COIN_SPRITE,
+		//				Col_Comp{ 0.0f - 25.0f, 0.0f - 25.0f, 0.0f + 25.0f, 0.0f + 25.0f, Rect },
+		//				COIN, Convert_X(f_x) , Convert_Y(f_y) });
+		//		}
+		//		if (MapData[y][x] == OBJ_HP)
+		//		{
+		//			float f_x = (float)x;
+		//			float f_y = (float)y;
+		//			PU.push_back(PickUp{ HP_SPRITE,
+		//				Col_Comp{ 0.0f - 25.0f, 0.0f - 25.0f, 0.0f + 25.0f, 0.0f + 25.0f, Rect },
+		//				HP, Convert_X(f_x) , Convert_Y(f_y) });
+		//		}
+		//		if (MapData[y][x] == OBJ_SPD)
+		//		{
+		//			float f_x = (float)x;
+		//			float f_y = (float)y;
+		//			PU.push_back(PickUp{ SPD_SPRITE,
+		//				Col_Comp{ 0.0f - 25.0f, 0.0f - 25.0f, 0.0f + 25.0f, 0.0f + 25.0f, Rect },
+		//				SPD, Convert_X(f_x) , Convert_Y(f_y) });
+		//		}
+		//		if (MapData[y][x] == OBJ_DMG)
+		//		{
+		//			float f_x = (float)x;
+		//			float f_y = (float)y;
+		//			PU.push_back(PickUp{ DMG_SPRITE,
+		//				Col_Comp{ 0.0f - 25.0f, 0.0f - 25.0f, 0.0f + 25.0f, 0.0f + 25.0f, Rect },
+		//				DMG, Convert_X(f_x) , Convert_Y(f_y) });
+		//		}
+		//		if (MapData[y][x] == OBJ_INVUL)
+		//		{
+		//			float f_x = (float)x;
+		//			float f_y = (float)y;
+		//			PU.push_back(PickUp{ INVUL_SPRITE,
+		//				Col_Comp{ 0.0f - 25.0f, 0.0f - 25.0f, 0.0f + 25.0f, 0.0f + 25.0f, Rect },
+		//				INVUL, Convert_X(f_x) , Convert_Y(f_y) });
+		//		}
+		//	}
+		//}
 		
 		for (size_t i = 0; i < c.size(); ++i)
 			c[i]->SetActive(true);
@@ -234,7 +309,7 @@ namespace Stage1_1
 		player->SetActive(true);
 
 		// Reset player's Health and charge
-		player->Set_HP(3);
+		player->Set_HP(5);
 		player->ResetCharge();
 
 		CamFollow(player->Transform_, 200, 120, player->GetFacing());
@@ -442,6 +517,7 @@ namespace Stage1_1
 	{
 		timer = 3.0f;
 		vis = 1.0f;
+
 		// Delete player and UI
 		delete player;
 		delete ui;
@@ -449,11 +525,12 @@ namespace Stage1_1
 		delete box1;
 		delete archerTower;
 		delete coin1;
+
 		// Clear object vectors
-		platforms.clear();
-		blocks.clear();
-		barriers.clear();
-		PU.clear();
+		//platforms.clear();
+		//blocks.clear();
+		//barriers.clear();
+		//PU.clear();
 
 		 // Delete enemies
 		for (size_t i = 0; i < c.size(); ++i)
@@ -471,6 +548,11 @@ namespace Stage1_1
 			delete[] MapData[y];
 		}
 		delete[] MapData;
+
+		platforms.clear();
+		blocks.clear();
+		barriers.clear();
+		PU.clear();
 
 		// Delete Sprites
 		delete TUT1_SPRITE;

@@ -86,12 +86,6 @@ namespace Stage1_2
 
 		// Fade in texture
 		black = CreateBG(1.5f, 1.5f, ".//Textures/Black_BG.png");
-	}
-
-	void Init(void)
-	{
-		Audio->Play(0); // Plays selected track
-		Audio->SetLoop(0, FMOD_LOOP_NORMAL); // Loops the selected track
 
 		for (int y = 0; y < Map_Height; ++y)
 		{
@@ -177,6 +171,97 @@ namespace Stage1_2
 			}
 		}
 
+	}
+
+	void Init(void)
+	{
+		Audio->Play(0); // Plays selected track
+		Audio->SetLoop(0, FMOD_LOOP_NORMAL); // Loops the selected track
+
+	/*	for (int y = 0; y < Map_Height; ++y)
+		{
+			for (int x = 0; x < Map_Width; ++x)
+			{
+				if (MapData[y][x] == OBJ_PLATFORM)
+				{
+					float f_x = (float)x;
+					float f_y = (float)y;
+					platforms.push_back(Platform{ PLAT_SPRITE, Convert_X(f_x) , Convert_Y(f_y) });
+				}
+				if (MapData[y][x] == OBJ_FLOOR)
+				{
+					float f_x = (float)x;
+					float f_y = (float)y;
+					blocks.push_back(Block{ FLOOR_SPRITE, Convert_X(f_x) , Convert_Y(f_y) });
+				}
+				if (MapData[y][x] == OBJ_GRUNT)
+				{
+					float f_x = (float)x;
+					float f_y = (float)y;
+					c.push_back(Create_Basic_AI(GRUNT, AEVec2{ Convert_X(f_x) , Convert_Y(f_y) }));
+				}
+				if (MapData[y][x] == OBJ_ARCHER)
+				{
+					float f_x = (float)x;
+					float f_y = (float)y;
+					c.push_back(Create_Basic_AI(ARCHER, AEVec2{ Convert_X(f_x) , Convert_Y(f_y) }));
+				}
+				if (MapData[y][x] == OBJ_MAGE)
+				{
+					float f_x = (float)x;
+					float f_y = (float)y;
+					c.push_back(Create_Basic_AI(MAGE, AEVec2{ Convert_X(f_x) , Convert_Y(f_y) }));
+				}
+				if (MapData[y][x] == OBJ_KNIGHT)
+				{
+					float f_x = (float)x;
+					float f_y = (float)y;
+					c.push_back(Create_Basic_AI(KNIGHT, AEVec2{ Convert_X(f_x) , Convert_Y(f_y) }));
+				}
+				//pick ups
+				if (MapData[y][x] == OBJ_COIN)
+				{
+					float f_x = (float)x;
+					float f_y = (float)y;
+					PU.push_back(PickUp{ COIN_SPRITE,
+						Col_Comp{ 0.0f - 25.0f, 0.0f - 25.0f, 0.0f + 25.0f, 0.0f + 25.0f, Rect },
+						COIN, Convert_X(f_x) , Convert_Y(f_y) });
+				}
+				if (MapData[y][x] == OBJ_HP)
+				{
+					float f_x = (float)x;
+					float f_y = (float)y;
+					PU.push_back(PickUp{ HP_SPRITE,
+						Col_Comp{ 0.0f - 25.0f, 0.0f - 25.0f, 0.0f + 25.0f, 0.0f + 25.0f, Rect },
+						HP, Convert_X(f_x) , Convert_Y(f_y) });
+				}
+				if (MapData[y][x] == OBJ_SPD)
+				{
+					float f_x = (float)x;
+					float f_y = (float)y;
+					PU.push_back(PickUp{ SPD_SPRITE,
+						Col_Comp{ 0.0f - 25.0f, 0.0f - 25.0f, 0.0f + 25.0f, 0.0f + 25.0f, Rect },
+						SPD, Convert_X(f_x) , Convert_Y(f_y) });
+				}
+				if (MapData[y][x] == OBJ_DMG)
+				{
+					float f_x = (float)x;
+					float f_y = (float)y;
+					PU.push_back(PickUp{ DMG_SPRITE,
+						Col_Comp{ 0.0f - 25.0f, 0.0f - 25.0f, 0.0f + 25.0f, 0.0f + 25.0f, Rect },
+						DMG, Convert_X(f_x) , Convert_Y(f_y) });
+				}
+				if (MapData[y][x] == OBJ_INVUL)
+				{
+					float f_x = (float)x;
+					float f_y = (float)y;
+					PU.push_back(PickUp{ INVUL_SPRITE,
+						Col_Comp{ 0.0f - 25.0f, 0.0f - 25.0f, 0.0f + 25.0f, 0.0f + 25.0f, Rect },
+						INVUL, Convert_X(f_x) , Convert_Y(f_y) });
+				}
+			}
+		}*/
+
 		for (size_t i = 0; i < c.size(); ++i)
 			c[i]->SetActive(true);
 
@@ -187,7 +272,7 @@ namespace Stage1_2
 		player->SetActive(true);
 
 		// Reset player's Health and charge
-		player->Set_HP(3);
+		player->Set_HP(5);
 		player->ResetCharge();
 
 		CamFollow(player->Transform_, 200, 120, player->GetFacing());
@@ -327,10 +412,10 @@ namespace Stage1_2
 		delete ui;
 
 		// Clear object vectors
-		platforms.clear();
-		blocks.clear();
-		PU.clear();
-		barriers.clear();
+		//platforms.clear();
+		//blocks.clear();
+		//PU.clear();
+		//barriers.clear();
 
 		// Delete enemies
 		for (size_t i = 0; i < c.size(); ++i)
@@ -348,6 +433,11 @@ namespace Stage1_2
 			delete[] MapData[y];
 		}
 		delete[] MapData;
+
+		platforms.clear();
+		blocks.clear();
+		PU.clear();
+		barriers.clear();
 
 		// Delete Sprites
 		delete COIN_SPRITE;//pickups

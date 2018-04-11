@@ -67,12 +67,6 @@ namespace Stage1_3
 
 		// Fade in texture
 		black = CreateBG(1.5f, 1.5f, ".//Textures/Black_BG.png");
-	}
-
-	void Init(void)
-	{
-		Audio->Play(0);
-		Audio->SetLoop(0, FMOD_LOOP_NORMAL);
 
 		for (int y = 0; y < Map_Height; ++y)
 		{
@@ -86,6 +80,26 @@ namespace Stage1_3
 				}
 			}
 		}
+	}
+
+	void Init(void)
+	{
+		Audio->Play(0);
+		Audio->SetLoop(0, FMOD_LOOP_NORMAL);
+
+		/*for (int y = 0; y < Map_Height; ++y)
+		{
+			for (int x = 0; x < Map_Width; ++x)
+			{
+				if (MapData[y][x] == OBJ_FLOOR)
+				{
+					float f_x = (float)x;
+					float f_y = (float)y;
+					blocks.push_back(Block{ FLOOR_SPRITE, Convert_X(f_x) , Convert_Y(f_y) });
+				}
+			}
+		}
+		c.push_back(Create_Boss_AI(LANCELOT));*/
 		c.push_back(Create_Boss_AI(LANCELOT));
 		c[0]->SetActive(true);
 
@@ -96,7 +110,7 @@ namespace Stage1_3
 		player->SetActive(true);
 
 		// Reset player's Health and charge
-		player->Set_HP(3);
+		player->Set_HP(5);
 		player->ResetCharge();
 	}
 
@@ -201,7 +215,7 @@ namespace Stage1_3
 		delete ui;
 
 		// Clear object vector
-		blocks.clear();
+		//blocks.clear();
 		
 		// Delete enemies
 		for (size_t i = 0; i < c.size(); ++i)
@@ -219,6 +233,8 @@ namespace Stage1_3
 			delete[] MapData[y];
 		}
 		delete[] MapData;
+
+		blocks.clear();
 
 		// Delete Sprites
 		delete WALL_SPRITE;
