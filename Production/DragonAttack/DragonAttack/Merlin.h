@@ -82,6 +82,21 @@ public:
   const Projectile &GetEball() const { return Eball; }
   ~Merlin();
 
+  //
+  //
+  // WILLIAM WAS HERE
+  //
+  //
+
+  void Mute();
+  void Unmute();
+
+  //
+  //
+  // WILLIAM LEFT
+  //
+  //
+
 private:
   void(Merlin::*Merlin_Attack)(Dragon &player, const float dt); //Pointer to current attack function
   void(Merlin::*Merlin_State)(Dragon &player, const float dt);  //Pointer to current state function

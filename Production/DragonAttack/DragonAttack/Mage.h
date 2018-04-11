@@ -71,5 +71,6 @@ public:
   void Update(Dragon &player, const float dt );
   void Render();
   void Renew_Mage(const AEVec2 & newPos);
-
+  void Mute(void) override;
+  void Unmute(void) override;
 };

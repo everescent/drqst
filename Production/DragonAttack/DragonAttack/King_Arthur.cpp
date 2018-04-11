@@ -1012,6 +1012,18 @@ std::vector <Characters*>& King_Arthur::Get_Mobs(void)
     return mobs;
 }
 
+void King_Arthur::Mute(void)
+{
+    music.SetVolume(0, 0.0f);
+    music.SetPause(0, true);
+}
+
+void King_Arthur::Unmute(void)
+{
+    music.SetVolume(0, 1.0f);
+    music.SetPause(0, false);
+}
+
 King_Arthur::~King_Arthur(void)
 {
     // delete the mobs that was used 

@@ -596,3 +596,13 @@ void Merlin::Render()
     GameObject::Render();
   }
 }
+
+void Merlin::Mute()
+{
+    // does nothing
+}
+
+void Merlin::Unmute()
+{
+    // does nothing
+}

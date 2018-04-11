@@ -247,3 +247,15 @@ Grunt::~Grunt()
 {
     delete Sprite_;
 }
+
+void Grunt::Mute()
+{
+    SFX.SetVolume(0, 0.0f);
+    SFX.SetPause( 0, true);
+}
+
+void Grunt::Unmute()
+{
+    SFX.SetVolume(0, 1.0f);
+    SFX.SetPause( 0, false);
+}

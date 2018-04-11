@@ -6,6 +6,7 @@
 #include "Camera.h"
 #include "GameStateManager.h"
 #include "Collision.h"
+#include "resource.h"
 #include <utility>
 #include <iostream>
 
@@ -26,6 +27,9 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
   AESysSetWindowTitle("My New Demo!");
   AESysReset();
   GSM::GSM_Init();
+
+  //HICON icon = LoadIcon(instanceH, MAKEINTRESOURCE(IDI_ICON1));
+ // SendMessage(GetActiveWindow(), WM_SETICON, ICON_BIG, reinterpret_cast<LPARAM>(icon));
 
   #if defined(DEBUG) | defined(_DEBUG)
   	_CrtSetDbgFlag( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF );
@@ -53,5 +57,7 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 
   GSM::GSM_Cleanup();
   AESysExit();
+ // DestroyIcon(icon);
+
   return 0;
 }
