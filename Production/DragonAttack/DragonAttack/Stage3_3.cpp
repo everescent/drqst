@@ -31,15 +31,15 @@ namespace // global variables used in this file
     std::vector<Block> blocks;           //
     King_Arthur* last_boss;              // the final boss ai
 
-	Sprite black;
-	Transform b_m;
-	Transform b_m2;
+    Sprite black;
+    Transform b_m;
+    Transform b_m2;
 
-	float timer = 3.0f;
-	bool FadeIn = true;
-	bool FadeOut = false;
-	f32 camX, camY;
-	static float vis = 1.0f;
+    float timer = 3.0f;
+    bool FadeIn = true;
+    bool FadeOut = false;
+    f32 camX, camY;
+    static float vis = 1.0f;
 
     //Sprite* HP_SPRITE;
     //Sprite* DMG_SPRITE;
@@ -102,8 +102,8 @@ namespace Stage3_3
                 }
             }
         }
-		// Fade in texture
-		black = CreateBG(1.5f, 1.5f, ".//Textures/Black_BG.png");
+        // Fade in texture
+        black = CreateBG(1.5f, 1.5f, ".//Textures/Black_BG.png");
     }
 
     /**************************************************************************************
@@ -122,7 +122,7 @@ namespace Stage3_3
         // update player variables
         player->SetPos(startpos.x, startpos.y); // set the spawn location of dragon
         player->SetActive(true);                // set player to alive
-        player->Set_HP(3);
+        player->Set_HP(5);
 
         // creating the last boss obj
         last_boss = dynamic_cast<King_Arthur*>(Create_Boss_AI(KING_ARTHUR)); // cast obj from character to king arthur
@@ -137,50 +137,65 @@ namespace Stage3_3
     **************************************************************************************/
     void Update(float dt)
     {
-		// Fade transformation matrix
-		AEGfxGetCamPosition(&camX, &camY);
-		b_m.SetTranslate(camX, camY);
-		b_m.Concat();
+        // Fade transformation matrix
+        AEGfxGetCamPosition(&camX, &camY);
+        b_m.SetTranslate(camX, camY);
+        b_m.Concat();
 
         if (!p_bool)
         {
-			// Fade In effect
-			if (FadeIn)
-			{
-				//static float vis = 1.0f;
-				black.SetAlphaTransBM(1.0f, vis, AE_GFX_BM_BLEND);
-				vis -= 0.005f;
+            // Fade In effect
+            if (FadeIn)
+            {
+                //static float vis = 1.0f;
+                black.SetAlphaTransBM(1.0f, vis, AE_GFX_BM_BLEND);
+                vis -= 0.005f;
 
-				timer -= dt;
+                timer -= dt;
 
-				if (timer <= 0)
-				{
-					FadeIn = false;
-				}
-			}
+                if (timer <= 0)
+                {
+                    FadeIn = false;
+                }
+            }
 
-			pause->Update(p_bool, dt);
-			// if king arthur has died, switch state to credit screen
+            pause->Update(p_bool, dt);
+
+            // if king arthur has died
             if (last_boss->Get_HP() <= 0)
-            { // needs fade out
-                SM::Set_Next(SS_QUIT);
-                GSM::next = GS_CREDITS;
+            {
+                // duration to shake the camera
+                static float cam_shake_timer = 3.0f;
+
+                // duration over, switch game states
+                if (cam_shake_timer < 0)
+                {
+                    SM::Set_Next(SS_QUIT);
+                    GSM::next = GS_CREDITS;
+                    cam_shake_timer = 3.0f;
+                }
+                else
+                {
+                    // shake the camera
+                    CamShake();
+                    cam_shake_timer -= dt;
+                }
             }
 
             //player->Set_Vulnerable(true);
            // update the audio
-			audio->SetPause(0, false);
+            audio->SetPause(0, false);
             audio->Update();
 
             // get the current phase of the boss Ai
             curr_phase = last_boss->Get_Phase();
 
             // update the boss behavior
-			if (!FadeIn)
-			{
-				player->Update(*player, dt);
-				last_boss->Update(*player, dt);
-			}
+            if (!FadeIn)
+            {
+                player->Update(*player, dt);
+                last_boss->Update(*player, dt);
+            }
 
             // update the collision between AI/player and floor 
             for (Block& elem : blocks)
@@ -225,11 +240,11 @@ namespace Stage3_3
             ui->UI_Update(player, dt);
         }
 
-		else
-		{
-			audio->SetPause(0, true);
-			pause->Update(p_bool, dt);
-		}
+        else
+        {
+            audio->SetPause(0, true);
+            pause->Update(p_bool, dt);
+        }
     }
     /**************************************************************************************
     //
@@ -280,10 +295,10 @@ namespace Stage3_3
          
         ui->Render();        // render the UI on screen
 
-		if (FadeIn)
-			black.Render_Object(b_m);
+        if (FadeIn)
+            black.Render_Object(b_m);
 
-		// no fade out after KA
+        // no fade out after KA
 
         if (p_bool) pause->Render();
     }
@@ -295,8 +310,8 @@ namespace Stage3_3
     **************************************************************************************/
     void Free(void)
     {
-		timer = 3.0f;
-		vis = 1.0f;
+        timer = 3.0f;
+        vis = 1.0f;
         player->ResetCharge();
         
         last_boss->Dead();
