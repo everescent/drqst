@@ -104,6 +104,7 @@ namespace Stage3_3
         }
         // Fade in texture
         black = CreateBG(1.5f, 1.5f, ".//Textures/Black_BG.png");
+        Audio_Engine::MUTE_ = true;
     }
 
     /**************************************************************************************
@@ -116,6 +117,13 @@ namespace Stage3_3
         // play the audio for the stage
         audio->Play(0);
         audio->SetLoop(0, FMOD_LOOP_NORMAL);
+
+        // pause the music and set volume to 0 if current state is muted
+        if (Audio_Engine::MUTE_)
+        {
+            audio->SetVolume(0, 0.0f); // set volume to 0
+            audio->SetPause(0, true);  // pause volume
+        }
 
         BG->SetRGB(0.5f, 0.5f, 0.5f);
         
@@ -159,7 +167,38 @@ namespace Stage3_3
                 }
             }
 
+            // update pause
             pause->Update(p_bool, dt);
+
+            // audio is mute
+            if (Audio_Engine::MUTE_)
+            {
+                // mute king arthur mobs
+                auto& mobs = last_boss->Get_Mobs();
+                for (auto& elem : mobs)
+                    elem->Mute();
+
+                // mute king arthur
+                last_boss->Mute();
+                   
+                // mute the background music
+                audio->SetVolume(0, 0.0f); 
+                audio->SetPause(0, true);  
+            }
+            else
+            {
+                // unmute king arthur mobs
+                auto& mobs = last_boss->Get_Mobs();
+                for (auto& elem : mobs)
+                    elem->Unmute();
+
+                // unmute king arthur
+                last_boss->Unmute();
+
+                // unmute the background music
+                audio->SetVolume(0, 1.0f);
+                audio->SetPause(0, false);
+            }
 
             // if king arthur has died
             if (last_boss->Get_HP() <= 0)
