@@ -21,7 +21,7 @@ Technology is prohibited.
   https://katyscode.wordpress.com/2013/01/15/cutting-your-teeth-on-fmod-part-2-channel-groups/
 */
 
-bool Audio_Engine::MUTE_ = false;
+bool Audio_Engine::MUTE_ = false; //Global mute
 
 //Provide number of songs, and give a function to initialize the list of filenames
 Audio_Engine::Audio_Engine(unsigned SoundNum, const Audio_Init& Init)

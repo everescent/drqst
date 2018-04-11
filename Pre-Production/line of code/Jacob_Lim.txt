@@ -1,0 +1,61 @@
+Name              : Lim Jing Jie Jacob
+Role              : Producer
+Main contributions: Graphics
+
+Header Files (.h):
+  Archer
+  Merlin
+  Dragon
+  Audio_Engine
+  Animation
+  Camera
+  Create_Object
+  Render
+  Sprite
+  Transform
+  PickUp
+  GameObject
+  Particle
+  Particle_System
+  f_sqrt
+  Projectile
+
+Implementation Files (.cpp):
+  Archer
+  Merlin
+  Dragon
+  Audio_Engine
+  Animation
+  Camera
+  Create_Object
+  Render
+  Sprite
+  Transform
+  PickUp
+  GameObject
+  Particle_System
+  f_sqrt
+
+Total LOC      : 2556(?)
+
+What I liked   : 
+  I liked how my particle system turned out. It managed to be able to 
+  produce a variety of particle behavior for our game. I also liked how 
+  the general graphics system turned out. I wanted to streamline the 
+  process of creating a mesh, and it worked pretty well. Lastly, I 
+  am satisfied with how my boss A.I. - Merlin, turned out. I researched 
+  online and many said to use a state machine. I looked at code samples 
+  to study the design and implemented it for Merlin and Archer. 
+              
+What I disliked: 
+  I did not like how I implemented the Audio System at all. I feel it is a 
+  failure. It was only later that I realized I should not have more than one 
+  instance of the Audio System. It was a mistake on my part but it was too late 
+  to correct the implementation. 
+             
+What I learned : 
+  I learned more advanced techniques of c++ during the course of this 
+  GAM module. I learned about move constructors, lambdas, A.I. state machines, 
+  function objects, etc. This module has allowed me to develop and enforce my 
+  skill set. Furthermore, I have a better understanding of game engine 
+  architecture now that I have completed both GAM and CS230. 

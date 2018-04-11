@@ -54,143 +54,169 @@ class Dragon : public Characters{
 
 public:
   //Handles player input
-  void Input();
+  void Input()                                                                         ;
   //Don't need to use dt
-  void Update(Dragon&, const float dt);
+  void Update(Dragon&, const float dt)                                                 ;
   //Adds charge to the Mega Fireball, caps at Max_Charge
-  void AddCharge() { Charge == Max_Charge ? Max_Charge : ++Charge; }
+  void AddCharge()                       { Charge == Max_Charge ? Max_Charge : ++Charge; }
   //Resets Mega Fireball charge
-  void ResetCharge() { Charge = 0; }
+  void ResetCharge()                     { Charge = 0                                  ; }
   //Set pickup type
-  void SetPickup(const int type, const bool status);
+  void SetPickup(const int  type  , 
+                 const bool status  )                                                  ;
   //Set Invul Flag when hit
-  void SetInvul(const bool state) { Invul_FLAG = state; }
-  void SetTouchBottom(const bool state) { TouchBottom = state; }
+  void SetInvul(const bool state)        { Invul_FLAG = state                          ; }
+  void SetTouchBottom(const bool state)  { TouchBottom = state                         ; }
   //Play this when firebal made contact
-  void PlayImpact() { SFX_.Play(IMPACT); }
+  void PlayImpact()                      { SFX_.Play(IMPACT)                           ; }
   //Play this when dragon gets hit
-  void PlayHit() { SFX_.Play(HIT); }
+  void PlayHit()                         { SFX_.Play(HIT)                              ; }
   //Mutes all audio
-  void Mute();
+  void Mute()                                                                          ;
   //Unmutes all audio
-  void Unmute();
+  void Unmute()                                                                        ;
   //Renders the dragon
-  void Render(); 
+  void Render()                                                                        ;
   //Get fireball damage
-  char GetDamage() const { return Damage; }
-  //Get mega fireball damage
-  char GetMDamage() const { return M_Damage; }
+  char GetDamage()         const         { return Damage                               ; }
+  //Get mega fireball damage             
+  char GetMDamage()        const         { return M_Damage                             ; }
   //Jump check
-  bool GetJump() { return Dir.UP; }
+  bool GetJump()                         { return Dir.UP                               ; }
   //Returns Fireballs to check for collision
-  std::vector<Projectile> &GetFireball() { return Fireball; }
+  std::vector<Projectile> &GetFireball() { return Fireball                             ; }
   //Returns Mega Fireball to check for collision
-  Projectile &GetMfireball() { return Mfireball; }
-  //Get the direction the player is facing
-  float GetFacing() const { return Facing; }
-  //Returns the Invul_FLAG value
-  bool GetInvulFlag() const { return Invul_FLAG; }
-  //Returns this pos
-  const Dragon &Get_this() const { return *this; }
+  Projectile &GetMfireball()             { return Mfireball                            ; }
+  //Get the direction the player         is facing
+  float GetFacing()        const         { return Facing                               ; }
+  //Returns the Invul_FLAG value         
+  bool GetInvulFlag()      const         { return Invul_FLAG                           ; }
+  //Returns this pos                     
+  const Dragon &Get_this() const         { return *this                                ; }
   //Gets current charge
-  int Get_Charge();
+  int Get_Charge()                                                                     ;
 
   Dragon(Sprite* D_Sprite, Sprite *F_Sprite, AEVec2 Pos_)
     //Initialize Characters class
-    :Characters{ D_Sprite, 5,
-    Col_Comp{ Pos_.x - Dragon_Scale, Pos_.y - Dragon_Scale,
-    Pos_.x + Dragon_Scale, Pos_.y + Dragon_Scale, Rect} },
+    :Characters{ D_Sprite,                     5,
+                 Col_Comp{ Pos_.x - Dragon_Scale,
+                           Pos_.y - Dragon_Scale,
+                           Pos_.x + Dragon_Scale,
+                           Pos_.y + Dragon_Scale,
+                           Rect
+                         } 
+               },
     //Initialize data members
-    Attack{ false }, Pwr_Up{ false }, Falling{ false }, TouchBottom{ true }, Invul_FLAG{ false },
-    Damage { Fireball_Damage }, M_Damage{ MFireball_Damage }, Charge{ 0 }, Gravity{ 10.0f }, 
-    Dir{}, Pickup_{}, Fireball{},
+    Attack     { false            }, Pwr_Up    { false }, Falling { false           },
+    TouchBottom{ true             }, Invul_FLAG{ false }, Damage  { Fireball_Damage },
+    M_Damage   { MFireball_Damage }, Charge    { 0     }, Gravity { 10.0f           },
+    Dir        {                  }, Pickup_   {       }, Fireball{                 },
     //Initialize Mega Fireball
-    Mfireball{ F_Sprite, Col_Comp{ Pos_.x - MFireball_Scale, Pos_.y - MFireball_Scale,
-    Pos_.x + MFireball_Scale, Pos_.y + MFireball_Scale, Rect } }, Air_Dist{ 0.0f }, Facing{ 1.0f },
+    Mfireball  { F_Sprite, 
+                 Col_Comp{ Pos_.x - MFireball_Scale,
+                           Pos_.y - MFireball_Scale,
+                           Pos_.x + MFireball_Scale,
+                           Pos_.y + MFireball_Scale, 
+                           Rect 
+                         } 
+               }, 
+    Air_Dist   { 0.0f             }, Facing    { 1.0f  },
     //Initialize Audio Engine
-    SFX_{ 3, [](std::vector<std::string> &playlist) ->void {
-      playlist.push_back(".//Audio/Dragon_Hit.mp3");
-      playlist.push_back(".//Audio/Fireball_Hit.mp3"); 
-      playlist.push_back(".//Audio/Fireball.mp3");     } }, 
-    Anim_{ Dragon_ANIM::WALK + 1, 4, 5, [](std::vector <Range>& Init) -> void {
-      Init.push_back(Range{ 0.0f, 1.0f, 0.00f, 0.00f }); //Hit
-      Init.push_back(Range{ 0.0f, 1.0f, 0.25f, 0.25f }); //Idle
-      Init.push_back(Range{ 0.0f, 1.0f, 0.50f, 0.50f }); //Jump
-      Init.push_back(Range{ 0.0f, 1.0f, 0.75f, 0.75f }); //Walk
-      } }
+    SFX_       { 3, [](std::vector<std::string> &playlist) ->void {
+                      playlist.push_back(".//Audio/Dragon_Hit.mp3"  );
+                      playlist.push_back(".//Audio/Fireball_Hit.mp3");
+                      playlist.push_back(".//Audio/Fireball.mp3"    );
+                    } 
+               }, 
+    Anim_      { Dragon_ANIM::WALK + 1, 4, 5,
+                 [](std::vector <Range>& Init) -> void {
+                   Init.push_back(Range{ 0.0f, 1.0f, 0.00f, 0.00f }); //Hit
+                   Init.push_back(Range{ 0.0f, 1.0f, 0.25f, 0.25f }); //Idle
+                   Init.push_back(Range{ 0.0f, 1.0f, 0.50f, 0.50f }); //Jump
+                   Init.push_back(Range{ 0.0f, 1.0f, 0.75f, 0.75f }); //Walk
+                 } 
+               }
   {
-    SetActive(true);
+    SetActive(true)                    ;
     //Initialize player start location
-    PosX = Pos_.x;
-    PosY = Pos_.y;
+    PosX = Pos_.x                      ;
+    PosY = Pos_.y                      ;
     //Update position of player
     Transform_.SetTranslate(PosX, PosY);
-    Transform_.Concat();
+    Transform_.Concat()                ;
     //Set velocity
-    SetVelocity(Player_Speed);
+    SetVelocity(Player_Speed)          ;
     //Reserve a block of memory per number of bullets 
-    Fireball.reserve(Bullet_Buffer);
+    Fireball.reserve(Bullet_Buffer)    ;
     //Initialize all the fireballs
     for (int i = 0; i < Bullet_Buffer; ++i)
-      Fireball.push_back(Projectile{ F_Sprite,
-                                     Col_Comp{ Pos_.x - Fireball_Scale, Pos_.y - Fireball_Scale,
-        Pos_.x + Fireball_Scale, Pos_.y + Fireball_Scale, Rect } });
+      Fireball.push_back(Projectile{ F_Sprite                         ,
+                                     Col_Comp{ Pos_.x - Fireball_Scale,
+                                               Pos_.y - Fireball_Scale,
+                                               Pos_.x + Fireball_Scale,
+                                               Pos_.y + Fireball_Scale,
+                                               Rect 
+                                             } 
+                                   }
+                        );
     for (int i = 0; i < Bullet_Buffer; ++i)
     {
-      Fireball[i].SetVelocity(AEVec2{ Bullet_Speed, 0.0f });
+      Fireball[i].SetVelocity(AEVec2{ Bullet_Speed, 0.0f })            ;
       Fireball[i].Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
     }
     //Initialize Mega Fireball
-    Mfireball.SetVelocity(AEVec2{ Bullet_Speed / 2, 0.0f });
-    Mfireball.Transform_.SetScale(1.5f, 1.5f);
-    Mfireball.Transform_.Concat();
+    Mfireball.SetVelocity(AEVec2{ Bullet_Speed / 2, 0.0f })        ;
+    Mfireball.Transform_.SetScale(1.5f, 1.5f)                      ;
+    Mfireball.Transform_.Concat()                                  ;
     Mfireball.Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
   }
+
   ~Dragon()
   {
     Fireball.clear();
   }
 private:
 
-  bool  Attack;    //Check if player is attacking
-  bool  MAttack;   //Check if player is mega attacking
-  bool  Pwr_Up;    //Check if power up is in effect
-  bool  Falling;   //Check if player is falling
-  bool TouchBottom;
-  bool  Invul_FLAG;
-  char  Damage;    //Amount of damage each fireball does
-  char  M_Damage;  //Amount of damage each mega fireball does
-  int   Charge;    //Charge for Mega Fireball
-  float Gravity;   //Gravity
-  float Air_Dist;  //Distance jumped
-  float Facing;    //Direction of player is facing
+  bool  Attack     ; //Check if player is attacking
+  bool  MAttack    ; //Check if player is mega attacking
+  bool  Pwr_Up     ; //Check if power up is in effect
+  bool  Falling    ; //Check if player is falling
+  bool  TouchBottom; //Check if player has touched bottom
+  bool  Invul_FLAG ; //Check if invul for getting hit needs to be activated
+  char  Damage     ; //Amount of damage each fireball does
+  char  M_Damage   ; //Amount of damage each mega fireball does
+  int   Charge     ; //Charge for Mega Fireball
+  float Gravity    ; //Gravity
+  float Air_Dist   ; //Distance jumped
+  float Facing     ; //Direction of player is facing
   //Determines direction 
   struct Direction {
-    bool L;  //Check for left
-    bool R;  //Check for right
+    bool L ; //Check for left
+    bool R ; //Check for right
     bool UP; //Check for jump
-    Direction() :L{ false }, R{ false }, UP{ false } {};
+    Direction() :L{ false }, R{ false }, UP{ false } {}
   };
   //Determines what kind of pickup is activated
   struct Pickup {
-    bool DMG;   //Damage
-    bool SPD;   //Speed
+    bool DMG  ; //Damage
+    bool SPD  ; //Speed
     bool INVUL; //Invulnerability
-    Pickup() :DMG{ false }, SPD{ false }, INVUL{ false } {};
+    Pickup() :DMG{ false }, SPD{ false }, INVUL{ false } {}
   };
+  //Audio enums
   enum AudioState {
-    HIT,    //Dragon get hit SFX
+    HIT   , //Dragon get hit SFX
     IMPACT, //Fireball impact SFX
     SHOOT   //Fireball shot SFX
   };
-  Direction               Dir;       //Direction variable
-  Pickup                  Pickup_;   //Type of power up
-  std::vector<Projectile> Fireball;  //Array of Fireball projectile
+  Direction               Dir      ; //Direction variable
+  Pickup                  Pickup_  ; //Type of power up
+  std::vector<Projectile> Fireball ; //Array of Fireball projectile
   Projectile              Mfireball; //Mega Fireball projectile
-  Audio_Engine            SFX_;      //Dragon Sounds
-  Animation               Anim_;     //For Dragon animation
+  Audio_Engine            SFX_     ; //Dragon Sounds
+  Animation               Anim_    ; //For Dragon animation
   //Private Functions START//////////////////////////////////////////////////////////////
-  void ApplyPowerUP();
+  void ApplyPowerUP()          ;
   //Makes dragon invulnerable for a short time after getting hit
   void HitInvul(const float dt);
   //Private Functions END////////////////////////////////////////////////////////////////
