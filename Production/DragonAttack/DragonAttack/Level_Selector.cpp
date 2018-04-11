@@ -236,6 +236,12 @@ namespace Level_Selector
 		Cursor_Pos.x = Mouse_X + 10.0f;
 		Cursor_Pos.y = Mouse_Y - 10.0f;
 
+		if (AEInputCheckTriggered(AEVK_ESCAPE))
+		{
+			GSM::next = GS_MAIN;
+		}
+
+
 		if (AEInputCheckTriggered(AEVK_LBUTTON))
 		{
 

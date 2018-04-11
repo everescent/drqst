@@ -24,6 +24,9 @@ namespace
 	GameObject* Credits_Button;
 	GameObject* Cursor;
 	Audio_Engine* Audio;
+	GameObject* Options_Button;
+	GameObject* Fullscreen_Button;
+	GameObject* Mute_Button;
 	//GameObject* Credits_Button;
 	const float Menu_Width = AEGfxGetWinMaxX() * 2;
 	const float Menu_Height = AEGfxGetWinMaxY() * 2;
@@ -34,13 +37,19 @@ namespace
 	const float Cursor_D = 20.0f; // The dimensions of the height and width
 	s32 Store_X ,Store_Y ;
 	f32 Mouse_X, Mouse_Y ;
-	 AEVec2 Play_Pos{ 0.0f, 0.0f };
-	 AEVec2 Quit_Pos{ 0.0f, -100.0f };
-	 AEVec2 Credits_Pos{ 0.0f, -200.0f };
-	 AEVec2 Cursor_Pos{ 0.0f , 0.0f };
+	AEVec2 Play_Pos			{ 0.0f, 0.0f };
+	AEVec2 Options_Pos		{ 0.0f, -100.0f };
+	AEVec2 Quit_Pos			{ 0.0f, -200.0f };
+	AEVec2 Credits_Pos		{ 0.0f, -300.0f };
+	AEVec2 Fullscreen_Pos	{ 0.0f, 0.0f };
+	AEVec2 Mute_Pos			{ 0.0f, -100.0f };
+	AEVec2 Cursor_Pos		{ 0.0f , 0.0f };
 	Sprite* PLAY_SPRITE;
 	Sprite* QUIT_SPRITE;
 	Sprite* CREDITS_SPRITE;
+	Sprite* OPTIONS_SPRITE;
+	Sprite* FULLSCREEN_SPRITE;
+	Sprite* MUTE_SPRITE;
 	Sprite* DIGIPEN_SPRITE;
 	Sprite* CURSOR_SPRITE;
 	Transform* DIGIPEN_M;
@@ -49,7 +58,9 @@ namespace
 	Sprite* GAME_SPRITE;
 	Transform* GAME_M;
 	Particle_System* cursor_particles;
-
+	bool Options_Shown = false;
+	bool FS_active = true;
+	bool Mute_active = false;
 
 	float timer = 15.0f;
 	bool After_Load = false;
@@ -59,6 +70,9 @@ namespace Main_Menu
 {
 	void Load(void)
 	{
+		//Activate fullscreen at the start of the game 
+		AEToogleFullScreen(FS_active);
+
 		//set background color to black
 		AEGfxSetBackgroundColor(0.0f, 0.0f, 0.0f);
 		
@@ -75,6 +89,12 @@ namespace Main_Menu
 		CREDITS_SPRITE = new Sprite{ S_CreateRectangle(Button_Width, Button_Height, "Textures/Credits_Button.png") };
 		
 		CURSOR_SPRITE = new Sprite{ S_CreateRectangle(Cursor_D, Cursor_D, "Textures/Bob_Head.png") };
+
+		OPTIONS_SPRITE = new Sprite{ S_CreateRectangle(Button_Width,Button_Height,"Textures/Options_Button.png") };
+		FULLSCREEN_SPRITE = new Sprite{ S_CreateRectangle(Button_Width,Button_Height,"Textures/Fullscreen_Button.png") };
+		MUTE_SPRITE = new Sprite{ S_CreateRectangle(Button_Width,Button_Height,"Textures/Mute_Button.png") };
+
+
 		
 		DIGIPEN_SPRITE = new Sprite{ S_CreateRectangle(210.f, 50.f, "Textures/DigiPen_RGB_Red.png") };
 		DIGIPEN_SPRITE->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
@@ -109,6 +129,18 @@ namespace Main_Menu
 			Col_Comp(Credits_Pos.x - (Button_Width), Credits_Pos.y - Button_Height,
 				Credits_Pos.x + Button_Width, Credits_Pos.y + Button_Height, Rect) } ;
 
+		//Construct Options Button
+		 Options_Button = new GameObject{ OPTIONS_SPRITE,
+			 Col_Comp(Options_Pos.x - (Button_Width), Options_Pos.y - Button_Height,
+				 Options_Pos.x + Button_Width, Options_Pos.y + Button_Height, Rect) };
+		 Fullscreen_Button = new GameObject{ FULLSCREEN_SPRITE,
+			 Col_Comp(Fullscreen_Pos.x - (Button_Width), Fullscreen_Pos.y - Button_Height,
+				 Fullscreen_Pos.x + Button_Width, Fullscreen_Pos.y + Button_Height, Rect) };
+
+		 Mute_Button = new GameObject{ MUTE_SPRITE,
+			 Col_Comp(Mute_Pos.x - (Button_Width), Mute_Pos.y - Button_Height,
+				 Mute_Pos.x + Button_Width, Mute_Pos.y + Button_Height, Rect) };
+
 		//Construct a custom Cursor 
 		Cursor = new GameObject{ CURSOR_SPRITE, Col_Comp() };
 
@@ -121,6 +153,34 @@ namespace Main_Menu
 		//Initialise buttons here
 		Audio->Play(0);
 		Audio->SetLoop(0, FMOD_LOOP_NORMAL);
+
+		//Only need to Translate and Concat the buttons once for Main Menu
+
+		//Translate and concat the play button 
+		Play_Button->Transform_.SetTranslate(Play_Pos.x, Play_Pos.y);
+		Play_Button->Transform_.Concat();
+		Play_Button->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+		//Translate and concat the quit button
+		Quit_Button->Transform_.SetTranslate(Quit_Pos.x, Quit_Pos.y);
+		Quit_Button->Transform_.Concat();
+		Quit_Button->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+		//Translate and concat the credits button
+		Credits_Button->Transform_.SetTranslate(Credits_Pos.x, Credits_Pos.y);
+		Credits_Button->Transform_.Concat();
+		Credits_Button->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+		//Translate and concat the options button
+		Options_Button->Transform_.SetTranslate(Options_Pos.x, Options_Pos.y);
+		Options_Button->Transform_.Concat();
+		Options_Button->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+		//Translate and concat the fullscreen button
+		Fullscreen_Button->Transform_.SetTranslate(Fullscreen_Pos.x, Fullscreen_Pos.y);
+		Fullscreen_Button->Transform_.Concat();
+		Fullscreen_Button->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+		//Translate and concat the mute button
+		Mute_Button->Transform_.SetTranslate(Mute_Pos.x, Mute_Pos.y);
+		Mute_Button->Transform_.Concat();
+		Mute_Button->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+
 
 		// BEHAVIOUR FOR CURSOR PARTICLES
 		//Set to appear to be spitting out flames
@@ -139,7 +199,6 @@ namespace Main_Menu
 
 	void Update(float dt)
 	{
-		
 		Audio->Update();
 		AEInputShowCursor(0);
 		//Use AE_Engine to get the cursor position and convert the position to the global scale 
@@ -150,32 +209,55 @@ namespace Main_Menu
 		Cursor_Pos.x = Mouse_X + 10.0f;
 		Cursor_Pos.y = Mouse_Y - 10.0f;
 
-
-		
-
 		if (AEInputCheckTriggered(AEVK_LBUTTON))// && timer == 0.0f )
 		{
 			
 			if (After_Load)
 			{
 				//Use the Collision functions to check if the 'point'(mouse-click) is in the bouding box of the button
-				//Repeat this for all buttons 
-				if (Play_Button->Collision_.St_Rect_Point((float)Mouse_X, (float)Mouse_Y))
+				//Repeat this for all buttons
+				if (!Options_Shown) 
 				{
-					//SM::Reset();
-					GSM::next = GS_LEVEL_SELECTOR;
+					if (Play_Button->Collision_.St_Rect_Point((float)Mouse_X, (float)Mouse_Y))
+					{
+						//SM::Reset();
+						GSM::next = GS_LEVEL_SELECTOR;
+					}
+
+					if (Quit_Button->Collision_.St_Rect_Point((float)Mouse_X, (float)Mouse_Y))
+					{
+						GSM::next = GS_QUIT;
+					}
+
+					if (Credits_Button->Collision_.St_Rect_Point((float)Mouse_X, (float)Mouse_Y))
+					{
+						GSM::next = GS_CREDITS;
+					}
+
+					if (Options_Button->Collision_.St_Rect_Point((float)Mouse_X, (float)Mouse_Y))
+					{
+						Options_Shown = Options_Shown ? false : true;
+					}
 				}
 
-				if (Quit_Button->Collision_.St_Rect_Point((float)Mouse_X, (float)Mouse_Y))
+				else
 				{
-					GSM::next = GS_QUIT;
-				}
+					if (Fullscreen_Button->Collision_.St_Rect_Point((float)Mouse_X, (float)Mouse_Y))
+					{
+						FS_active = FS_active ? false : true;
+						AEToogleFullScreen(FS_active);
+					}
 
-				if (Credits_Button->Collision_.St_Rect_Point((float)Mouse_X, (float)Mouse_Y))
-				{
-					GSM::next = GS_CREDITS;
-				}
+					if (Mute_Button->Collision_.St_Rect_Point((float)Mouse_X, (float)Mouse_Y))
+					{
+						Mute_active = Mute_active ? false : true;
 
+						if (Mute_active)
+						{
+							Audio_Engine::MUTE_ = Mute_active;
+						}
+					}
+				}
 			}
 
 		}
@@ -194,25 +276,28 @@ namespace Main_Menu
 			return;
 		}
 		
+		if (Options_Shown)
+		{
+			if (AEInputCheckTriggered(AEVK_ESCAPE))
+			{
+				Options_Shown = Options_Shown ? false : true;
+			}
+		}
+
 		
-		Play_Button->SetActive(true);
-		Quit_Button->SetActive(true);
-		Credits_Button->SetActive(true);
-		Cursor->SetActive(true);
-		//Translate and concat the play button
-		Play_Button->Transform_.SetTranslate(Play_Pos.x, Play_Pos.y);
-		Play_Button->Transform_.Concat();
-		//Translate and concat the quit button
-		Quit_Button->Transform_.SetTranslate(Quit_Pos.x, Quit_Pos.y);
-		Quit_Button->Transform_.Concat();
-		//Translate and concat the credits button
-		Credits_Button->Transform_.SetTranslate(Credits_Pos.x, Credits_Pos.y);
-		Credits_Button->Transform_.Concat();
+		Play_Button->			SetActive(!Options_Shown);
+		Quit_Button->			SetActive(!Options_Shown);
+		Credits_Button->		SetActive(!Options_Shown);
+		Options_Button->		SetActive(!Options_Shown);
+
+		Cursor->				SetActive(true);
+
+		Fullscreen_Button->		SetActive(Options_Shown);
+		Mute_Button->			SetActive(Options_Shown);
+		
 
 		Cursor->Transform_.SetTranslate(Cursor_Pos.x, Cursor_Pos.y);
 		Cursor->Transform_.Concat();
-
-		
 
 		cursor_particles->Emitter_.Pos_.Min_Max.Point_Max.x = Cursor_Pos.x + 480.0f;
 		cursor_particles->Emitter_.Pos_.Min_Max.Point_Min.x = Cursor_Pos.x + 10.0f;
@@ -232,7 +317,6 @@ namespace Main_Menu
 		if (Play_Button->Collision_.St_Rect_Point((float)Mouse_X, (float)Mouse_Y))
 		{
 			PLAY_SPRITE->SetRGB(1.0f, 1.0f, 1.0f);
-			//Will add in particle effects later 
 		}
 
 		else if (Quit_Button->Collision_.St_Rect_Point((float)Mouse_X, (float)Mouse_Y))
@@ -244,11 +328,28 @@ namespace Main_Menu
 		{
 			CREDITS_SPRITE->SetRGB(1.0f, 1.0f, 1.0f);
 		}
+		else if (Options_Button->Collision_.St_Rect_Point((float)Mouse_X, (float)Mouse_Y))
+		{
+			OPTIONS_SPRITE->SetRGB(1.0f, 1.0f, 1.0f);
+		}
+		else if (Fullscreen_Button->Collision_.St_Rect_Point((float)Mouse_X, (float)Mouse_Y))
+		{
+			FULLSCREEN_SPRITE->SetRGB(1.0f, 1.0f, 1.0f);
+		}
+		else if (Mute_Button->Collision_.St_Rect_Point((float)Mouse_X, (float)Mouse_Y))
+		{
+			MUTE_SPRITE->SetRGB(1.0f, 1.0f, 1.0f);
+		}
+
 		else  
 		{
-			PLAY_SPRITE->SetRGB(1.5f, 1.5f, 1.5f);
-			QUIT_SPRITE->SetRGB(1.5f, 1.5f, 1.5f);
-			CREDITS_SPRITE->SetRGB(1.5f, 1.5, 1.5f);
+			PLAY_SPRITE->			SetRGB(1.5f, 1.5f, 1.5f);
+			QUIT_SPRITE->			SetRGB(1.5f, 1.5f, 1.5f);
+			CREDITS_SPRITE->		SetRGB(1.5f, 1.5, 1.5f);
+			OPTIONS_SPRITE->		SetRGB(1.5f, 1.5f, 1.5f);
+			FULLSCREEN_SPRITE->		SetRGB(1.5f, 1.5f, 1.5f);
+			MUTE_SPRITE->			SetRGB(1.5f, 1.5, 1.5f);
+			
 		}
 
 		
@@ -285,15 +386,13 @@ namespace Main_Menu
 		
 		//Always render the background image first  
 		MM_Background->Render_Object(*M_BG);
-		//Render the Play button 
-		Play_Button->Render();
-		Play_Button -> Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
-		//Render the Quit button 
-		Quit_Button->Render();
-		Quit_Button->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
-		//Render the Credits button 
-		Credits_Button->Render();
-		Credits_Button->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+		
+		Play_Button->			Render();//Render the Play button 
+		Quit_Button->			Render();//Render the Quit button 
+		Credits_Button->		Render();//Render the Credits button 
+		Options_Button->		Render();//Render Options
+		Fullscreen_Button->		Render();//Render Fullscreen
+		Mute_Button->			Render();//Render Mute 
 
 		Cursor->Render();
 		Cursor->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
@@ -306,6 +405,9 @@ namespace Main_Menu
 		delete PLAY_SPRITE;
 		delete QUIT_SPRITE;
 		delete CREDITS_SPRITE;
+		delete OPTIONS_SPRITE;
+		delete FULLSCREEN_SPRITE;
+		delete MUTE_SPRITE;
 		delete DIGIPEN_SPRITE;
 		delete DIGIPEN_M;
 		delete TEAM_SPRITE;
@@ -318,6 +420,9 @@ namespace Main_Menu
 		delete Play_Button;
 		delete Quit_Button;
 		delete Credits_Button;
+		delete Options_Button;
+		delete Fullscreen_Button;
+		delete Mute_Button;
 		delete Cursor;
 		delete Audio;
 
