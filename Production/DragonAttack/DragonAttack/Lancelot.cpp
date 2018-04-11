@@ -47,9 +47,9 @@ namespace
     const char   limit            = 4;                  // num of lancelot attacks
     const AEVec2 ATK_START_POINT{ -100.0f, -140.0f };   // starting point of slash attacks
     const AEVec2 ARONDIGHT_SCALE{ 11.5f, 3.0f };        // scale of arondight
-    const AEVec2 STARTING_POINT{ 200.0f, -250.0f };     // lancelot spawn location
+    const AEVec2 STARTING_POINT{ 200.0f, -260.0f };     // lancelot spawn location
     const AEVec2 SLASH_VELOCITY{ 20.0f, 500.0f };       // velocity of slash
-    const AEVec2 STAB_VELOCITY{ 20.0f, 0.0f }; // velocity for stab
+    const AEVec2 STAB_VELOCITY{ 20.0f, 0.0f };          // velocity for stab
 
     //------------------------------------------------------------------
     //

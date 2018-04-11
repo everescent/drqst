@@ -15,15 +15,13 @@
  - snapping needs to snap to where the 2 meshes meet rather than back to centre
  - JUMP IS STILL STICKY (cannot be fixable)
  - HOW TO PLAY SCREEN
+ -Set fade effect on player death??
 
 //Delete above as well when done fixing
 Delegation:
 
   Andrew:
     -All [Level Design]
-    -STAGE/STATE TRANSITION (fade in/out black bg)
-    -Set camera position to the player's startpos
-    -Set fade effect on player death??
 
   Jacob:
     -hit animation needs to be more frames (don't play hit animation) (fixed) (your archer dey)

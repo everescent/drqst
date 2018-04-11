@@ -1,3 +1,17 @@
+/* Start Header ************************************************************************/
+/*!
+\file       Stage3_2.cpp
+\author     Andrew Chong Jiahao (100%)
+\par email: c.jiahaoandrew\@digipen.edu
+\brief
+Implementation for stage 3-2 of the game.
+
+Copyright (C) 2018 DigiPen Institute of Technology.
+Reproduction or disclosure of this file or its contents
+without the prior written consent of DigiPen Institute of
+Technology is prohibited.
+*/
+/* End Header **************************************************************************/
 #include "Stage3_2.h"
 
 namespace
@@ -10,7 +24,7 @@ namespace
 	Pause        *pause;
 
 	bool pause_bool = false;
-	const AEVec2 startpos = { -345, -2350 };
+	const AEVec2 startpos = { -345, -2330 };
 	float Camdown = 120.0f;
 
 	int ** MapData;
@@ -48,6 +62,8 @@ namespace
 	Sprite*  FLOOR_SPRITE;
 	Sprite*  TOWER_SPRITE;
 	Sprite*  SIGN_SPRITE;
+
+	Transform camReset;
 }
 
 namespace Stage3_2
@@ -116,7 +132,7 @@ namespace Stage3_2
 				}
 			}
 		}
-
+		camReset.SetTranslate(0.0f, 0.0f);
 
 	}
 
@@ -214,7 +230,7 @@ namespace Stage3_2
 		player->Set_HP(5);
 		player->ResetCharge();
 
-		CamFollow(player->Transform_, 200, 120, player->GetFacing());
+		CamFollow(player->Transform_, 200, 120, player->GetFacing(), true);
 	}
 
 	void Update(float dt)
@@ -231,7 +247,7 @@ namespace Stage3_2
 			{
 				//static float vis = 1.0f;
 				black.SetAlphaTransBM(1.0f, vis, AE_GFX_BM_BLEND);
-				vis -= 0.005f;
+				vis -= 0.003f;
 
 				timer -= dt;
 
@@ -300,6 +316,16 @@ namespace Stage3_2
 		}
 		else
 		{
+			//for (size_t i = 0; i < c.size(); ++i)
+			//{
+			//	if (c[i]->IsActive())
+			//	{
+			//		c[i]->Mute();
+			//	}
+			//}
+
+			//Audio->MUTE_ =
+
 			Audio->SetPause(0, true);
 			pause->Update(pause_bool, dt);
 		}
