@@ -104,7 +104,6 @@ namespace Stage3_3
         }
         // Fade in texture
         black = CreateBG(1.5f, 1.5f, ".//Textures/Black_BG.png");
-        Audio_Engine::MUTE_ = true;
     }
 
     /**************************************************************************************
@@ -180,7 +179,7 @@ namespace Stage3_3
 
                 // mute king arthur
                 last_boss->Mute();
-                   
+				player->Mute();
                 // mute the background music
                 audio->SetVolume(0, 0.0f); 
                 audio->SetPause(0, true);  
@@ -194,7 +193,7 @@ namespace Stage3_3
 
                 // unmute king arthur
                 last_boss->Unmute();
-
+				player->Unmute();
                 // unmute the background music
                 audio->SetVolume(0, 1.0f);
                 audio->SetPause(0, false);

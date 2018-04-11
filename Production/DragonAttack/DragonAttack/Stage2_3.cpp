@@ -122,6 +122,13 @@ namespace Stage2_3
 		// Loops selected track
 		Audio->SetLoop(0, FMOD_LOOP_NORMAL);
 
+		// pause the music and set volume to 0 if current state is muted
+		if (Audio_Engine::MUTE_)
+		{
+			Audio->SetVolume(0, 0.0f); // set volume to 0
+			Audio->SetPause(0, true);  // pause volume
+		}
+
 		c.push_back(Create_Boss_AI(MERLIN));
 		c[0]->SetActive(true);
 
@@ -160,6 +167,24 @@ namespace Stage2_3
 				}
 			}
 
+			// audio is mute
+			if (Audio_Engine::MUTE_)
+			{
+				// mute lancelot
+				c[0]->Mute();
+				player->Mute();
+				// mute the background music
+				Audio->SetVolume(0, 0.0f);
+				Audio->SetPause(0, true);
+			}
+			else
+			{
+				c[0]->Unmute();
+				player->Unmute();
+				// unmute the background music
+				Audio->SetVolume(0, 1.0f);
+				Audio->SetPause(0, false);
+			}
 
 			Audio->SetPause(0, false);
 			Audio->Update();

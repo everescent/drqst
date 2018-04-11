@@ -197,7 +197,7 @@ void Pause::Update(bool &pause_bool,const float dt)
 			{
 				Options_screen = Options_screen ? false : true; //toggle the options screen to show/hide
 				//For the Options button, it's reaction would be to call the functions in Options. 
-				std::cout << "Is options on?" << Options_screen << std::endl;
+				//std::cout << "Is options on?" << Options_screen << std::endl;
 				//Set all the buttons to not-Active first 
 				Toggle_Button_Display();
 			}

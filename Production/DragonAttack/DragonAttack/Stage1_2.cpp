@@ -128,6 +128,13 @@ namespace Stage1_2
 		Audio->Play(0); // Plays selected track
 		Audio->SetLoop(0, FMOD_LOOP_NORMAL); // Loops the selected track
 
+		// pause the music and set volume to 0 if current state is muted
+		if (Audio_Engine::MUTE_)
+		{
+			Audio->SetVolume(0, 0.0f); // set volume to 0
+			Audio->SetPause(0, true);  // pause volume
+		}
+
 		for (int y = 0; y < Map_Height; ++y)
 		{
 			for (int x = 0; x < Map_Width; ++x)
@@ -238,6 +245,31 @@ namespace Stage1_2
 				{
 					FadeIn = false;
 				}
+			}
+
+
+			// audio is mute
+			if (Audio_Engine::MUTE_)
+			{
+				// mute all AI
+				for (auto& elem : c)
+					elem->Mute();
+
+				player->Mute();
+				// mute the background music
+				Audio->SetVolume(0, 0.0f);
+				Audio->SetPause(0, true);
+			}
+			else
+			{
+				// mute all AI
+				for (auto& elem : c)
+					elem->Unmute();
+
+				player->Unmute();
+				// unmute the background music
+				Audio->SetVolume(0, 1.0f);
+				Audio->SetPause(0, false);
 			}
 
 
