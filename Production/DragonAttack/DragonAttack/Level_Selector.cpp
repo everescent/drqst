@@ -205,7 +205,7 @@ namespace Level_Selector
 		cursor_particles->Emitter_.Speed_ = 8.0f;
 		//cursor_particles->Emitter_.Particle_Rand_.Sp_Rand_ = 3;
 		cursor_particles->Emitter_.Lifetime_ = 0.17f;
-		cursor_particles->Emitter_.Particle_Rand_.Life_Rand_ = 3;
+		//cursor_particles->Emitter_.Particle_Rand_.Life_Rand_ = 3;
 
 		Stage_1_1->SetActive(true);
 		Stage_1_2->SetActive(true);
