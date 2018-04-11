@@ -99,11 +99,6 @@ namespace Stage1_1
 		// Audio and UI
 		Audio  = new Audio_Engine{ 1, [](std::vector <std::string> &playlist)->void {playlist.push_back(".//Audio/Stage_1_BGM.mp3"); } };
 
-		// Placement for specific objects
-		archerTower = new Tower  { TOWER_SPRITE, 4800.0f, 0.0f };
-		box1        = new Barrier{ BARRIER_SPRITE, 1500.0f, -235.0f };
-		coin1       = new PickUp { COIN_SPRITE, Col_Comp{ 0.0f - 25.0f, 0.0f - 25.0f, 0.0f + 25.0f, 0.0f + 25.0f, Rect },
-								   COIN, 1500.0f, -210.0f };
 		next        = new LevelChangePlatform{ LCPLAT_SPRITE, 6550.0f, -50.0f };
 
 		// Tutorial Messages/Signs
@@ -142,6 +137,13 @@ namespace Stage1_1
 		tut4->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 		tut5->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 		tut6->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+
+		// Placement for specific objects
+		archerTower = new Tower{ TOWER_SPRITE, 4800.0f, 0.0f };
+		box1 = new Barrier{ BARRIER_SPRITE, 1500.0f, -235.0f };
+		coin1 = new PickUp{ COIN_SPRITE, Col_Comp{ 0.0f - 25.0f, 0.0f - 25.0f, 0.0f + 25.0f, 0.0f + 25.0f, Rect },
+			COIN, 1500.0f, -210.0f };
+
 		
 		// Plays selected track
 		Audio->Play(0);
@@ -444,6 +446,9 @@ namespace Stage1_1
 		delete player;
 		delete ui;
 
+		delete box1;
+		delete archerTower;
+		delete coin1;
 		// Clear object vectors
 		platforms.clear();
 		blocks.clear();
@@ -507,9 +512,6 @@ namespace Stage1_1
 		delete tut5;
 		delete tut6;
 
-		delete box1;
-		delete archerTower;
-		delete coin1;
 		delete next;
 
 		delete pause;
