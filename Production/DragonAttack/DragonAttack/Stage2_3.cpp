@@ -77,15 +77,6 @@ namespace Stage2_3
 
 		// Fade in texture
 		black = CreateBG(1.5f, 1.5f, ".//Textures/Black_BG.png");
-	}
-
-	void Init(void)
-	{
-		// Plays selected track
-		Audio->Play(0);
-
-		// Loops selected track
-		Audio->SetLoop(0, FMOD_LOOP_NORMAL);
 
 		// Object placement
 		for (int y = 0; y < Map_Height; ++y)
@@ -107,6 +98,37 @@ namespace Stage2_3
 			}
 		}
 
+	}
+
+	void Init(void)
+	{
+		// Plays selected track
+		Audio->Play(0);
+
+		// Loops selected track
+		Audio->SetLoop(0, FMOD_LOOP_NORMAL);
+
+		//// Object placement
+		//for (int y = 0; y < Map_Height; ++y)
+		//{
+		//	for (int x = 0; x < Map_Width; ++x)
+		//	{
+		//		if (MapData[y][x] == OBJ_FLOOR)
+		//		{
+		//			float f_x = (float)x;
+		//			float f_y = (float)y;
+		//			blocks.push_back(Block{ FLOOR_SPRITE, Convert_X(f_x) , Convert_Y(f_y) });
+		//		}
+		//		if (MapData[y][x] == OBJ_PLATFORM)
+		//		{
+		//			float f_x = (float)x;
+		//			float f_y = (float)y;
+		//			platforms.push_back(Platform{ PLAT_SPRITE, Convert_X(f_x) , Convert_Y(f_y) });
+		//		}
+		//	}
+		//}
+
+		//c.push_back(Create_Boss_AI(MERLIN));
 		c.push_back(Create_Boss_AI(MERLIN));
 		c[0]->SetActive(true);
 
@@ -117,7 +139,7 @@ namespace Stage2_3
 		player->SetActive(true);
 
 		// Reset player's Health and charge
-		player->Set_HP(3);
+		player->Set_HP(5);
 		player->ResetCharge();
 	}
 
@@ -241,8 +263,8 @@ namespace Stage2_3
 		delete ui;
 
 		// Clear object vector
-		blocks.clear();
-        platforms.clear();
+		/*blocks.clear();
+        platforms.clear();*/
 
 		// Delete enemies
 		for (size_t i = 0; i < c.size(); ++i)
@@ -260,6 +282,9 @@ namespace Stage2_3
 			delete[] MapData[y];
 		}
 		delete[] MapData;
+
+		blocks.clear();
+		platforms.clear();
 
 		// Delete Sprites
 		delete COIN_SPRITE;//pickups
