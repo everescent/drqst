@@ -26,6 +26,9 @@ Delegation:
     -All [Level Design]
     -If player moves when restarting, player can fall off the map
     -STAGE/STATE TRANSITION (fade in/out black bg)
+    -Set camera position to the player's startpos
+    -Set all level's start health to 5
+    -Set fade effect on player death??
 
   Jacob:
     - JUMP IS STILL STICKY
