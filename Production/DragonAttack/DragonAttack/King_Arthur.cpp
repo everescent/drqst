@@ -46,7 +46,7 @@ namespace
 	//  CONST VARIABLES
 	//
 	//------------------------------------------------------------------
-    const int HEALTH                          = 510;       // initial hp for king arthur
+    const int HEALTH                          = 800;       // initial hp for king arthur
     const int PHASE2_HP                       = 500;       // phase 2 trigger
     const int PHASE3_HP                       = 300;       // phase 3 trigger
     const int interval                        = 80;        // interval for triple slash
@@ -94,10 +94,10 @@ King_Arthur::King_Arthur(Sprite* texture)
     {
         s.push_back(".//Audio/Hit_01.mp3");
     } },
-        ka_phase{ PHASE_1 }, healing_effect{Effects_Get(KA_HEALING_PARTICLE)}, current_action{IDLE},
-        sword_effect{ Effects_Get(KA_SWORD_PARTICLE) }, slash_effect{Effects_Get(KA_SLASH_PARTICLE)},
-        phase_effect{ Effects_Get(PHASE_PARTICLE) }, active_mobs{ 0 }, spawn_mob {false},
-        timer{ 2.f }, mob_timer{ 1.f }, behavior_swap{ 0 }, healing {false}
+        healing_effect{ Effects_Get( KA_HEALING_PARTICLE )}, sword_effect{ Effects_Get(KA_SWORD_PARTICLE) },       
+        phase_effect  { Effects_Get( PHASE_PARTICLE      )}, slash_effect{ Effects_Get(KA_SLASH_PARTICLE) },
+        ka_phase{ PHASE_1 }, currAttk{ SINGLE_SLASH }      , current_action{ IDLE }                        , timer{ 2.f }, mob_timer{ 1.f },
+        behavior_swap{ 0 } , healing {false}               , active_mobs{ 0 }                              , spawn_mob{ false }
 {
     PosX = START_POINT_X;                 // change king arthur coordinates to the location set
     PosY = START_POINT_Y;                 // change king arthur coordinates to the location set
@@ -171,11 +171,12 @@ void King_Arthur::Init_KA_Attacks(void)
 **************************************************************************************/
 void King_Arthur::Init_MobArray(void)
 {
+    // creating and pushing the mobs to the std::vector
     for (char i = 0; i < NUM_OF_MOBS; ++i)
     {
         if (i < 2)
         {
-            // spawn the mobs at the left/right of the screen
+            
             if (i % 2)
             {
                 mobs.push_back(Create_Basic_AI(MAGE, { 356.f, 180.f }));
@@ -188,19 +189,24 @@ void King_Arthur::Init_MobArray(void)
             }
         }
 
-        ai_spawn_pos[0] = { 356.f,  180.f };
-        ai_spawn_pos[1] = { 200.f, -200.f };
-        ai_spawn_pos[2] = { -356.0f, 180.f };
-        ai_spawn_pos[3] = { -200.f, -200.f };
-
         // do not render on screen yet
         mobs[i]->SetActive(false);
 
         // set the blend mode
         mobs[i]->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
     }
-}
 
+    // the spawning location of each ai
+    ai_spawn_pos[0] = { 356.f,  180.f };
+    ai_spawn_pos[1] = { 200.f, -200.f };
+    ai_spawn_pos[2] = { -356.0f, 180.f };
+    ai_spawn_pos[3] = { -200.f, -200.f };
+}
+/**************************************************************************************
+//
+// Initializing the particle system variables
+//
+**************************************************************************************/
 void King_Arthur::Init_Particle(void)
 {
     // intializing healing particle variables
@@ -260,18 +266,22 @@ void King_Arthur::Init_Particle(void)
     slash_effect[0]->Emitter_.Speed_                    = 3.0f;
     slash_effect[0]->Emitter_.Lifetime_                 = 0.5f;
 
+    // create 2 copies of slash_effect particle system
     slash_effect[2] = new Particle_System(slash_effect[0]->Emitter_.pMesh_, {}, BOX);
     slash_effect[1] = new Particle_System(slash_effect[0]->Emitter_.pMesh_, {}, BOX);
-
     slash_effect[2]->Emitter_ = slash_effect[1]->Emitter_ = slash_effect[0]->Emitter_;
 }
-
+/**************************************************************************************
+//
+// Update king arthur's behavior
+//
+**************************************************************************************/
 void King_Arthur::Update(Dragon &d, const float dt)
 {
     // activate phase 2 once hp drops is 50%
     if (Get_HP() < PHASE2_HP && ka_phase & PHASE_1 && ! arthur[currAttk].ongoing_attack)
     {
-        King_Arthur_Phase2(dt);
+        King_Arthur_Phase2(dt); // call phase 2
         Update_Particle(dt);    // update particle effects for king arthur
         return;
     }
@@ -279,11 +289,12 @@ void King_Arthur::Update(Dragon &d, const float dt)
     // activates phase 3 once hp drops to 30%
     else if (Get_HP() < PHASE3_HP && ka_phase & PHASE_2 && !arthur[currAttk].ongoing_attack)
     {
-        King_Arthur_Phase3(dt);
+        King_Arthur_Phase3(dt); // call phase 3
         Update_Particle(dt);    // update particle effects for king arthur
         return;
     }
 
+    // change current action to moving after attacking 3 times
     if (behavior_swap == 3)
     {
         current_action = MOVING;  // switch state to moving
@@ -299,16 +310,23 @@ void King_Arthur::Update(Dragon &d, const float dt)
     {
         char i = 0, mobs_dead = 0;
 
+        // spawn the mobs 1 by 1 after 1 second pass
         if (mob_timer < 5.f)
         {
+            // get the current timer
             active_mobs = static_cast <char> (mob_timer);
+
+            // add dt to timer
             mob_timer += dt;
         }
 
+        // loop and only update the mob ai that are active
         for (;i < active_mobs; ++i)
         {
            (mobs[i]->IsActive()) ? 	mobs[i]->Update(d, dt) : ++mobs_dead;
         }
+
+        // if all mob ai active is false, set flag to false and reset timer
         if (mobs_dead == i)
         {
             spawn_mob   = false;
@@ -335,6 +353,7 @@ void King_Arthur::Update(Dragon &d, const float dt)
                     d.GetFireball()[i].SetActive(false);
                     music.Play(0);
 
+                    // stop healing;
                     healing = false;
                 }
 
@@ -350,6 +369,7 @@ void King_Arthur::Update(Dragon &d, const float dt)
                 music.Play(0);
                 d.PlayImpact();
 
+                // stop healing
                 healing = false;
             }
         }
@@ -384,7 +404,11 @@ void King_Arthur::Update(Dragon &d, const float dt)
     Update_Particle(dt);    // update particle effects for king arthur
     anim.Update(*Sprite_);  // update animation effects
 }
-
+/**************************************************************************************
+//
+// Idle state of king arthur
+//
+**************************************************************************************/
 void King_Arthur::Idle(const Dragon& d, const float dt)
 {
     //changes state to attack once idling is finished, reset idle
@@ -396,13 +420,19 @@ void King_Arthur::Idle(const Dragon& d, const float dt)
         Set_Forward_Dir(d);
         Set_Attack_Dir(*this);
     }
+
+    // decrease timer per frame till its below 0
     else
     {
         Decrease_Idle_Time(dt);
     }
     
 }
-
+/**************************************************************************************
+//
+// Moving state of king arthur
+//
+**************************************************************************************/
 void King_Arthur::Moving(const Dragon &d, const float dt)
 {	
     static float move_duration = 3.0f; // duration KA moves
@@ -416,41 +446,53 @@ void King_Arthur::Moving(const Dragon &d, const float dt)
 
     Set_Attack_Dir(*this); // set attack directions
 }
-
+/**************************************************************************************
+//
+// Attack state of king arthur
+//
+**************************************************************************************/
 void King_Arthur::Attack(Dragon &d, const float dt)
-{		
-    //unique mechanic has the highest priority 
+{
+    //checks if there is any ongoing attack
     if (! arthur[currAttk].ongoing_attack)
     {
+        // dash attack not on cool down and currently in phase1
         if (!(arthur[DASH].cooldown) && ka_phase & PHASE_1)
         {
+            // set current attack to dash
             currAttk = DASH;
         }
+
+        // heal is not on cooldown and currently in phase2
         else if (!(arthur[HEAL].cooldown) && ka_phase & PHASE_2)
         {
+            // set current attack to heal
             currAttk = HEAL;
         }
 
+        // spin sword is not on cooldown and currently in phase 3
         else if (!(arthur[SPIN_SWORD].cooldown) && ka_phase & PHASE_3)
         {
+           // reset the swords variable
             for (char i = 0; i < NUM_OF_SWORD; ++i)
             {
+                // set the spawn location of the swords and apply transformation
                 arthur[SPIN_SWORD + i].Start_Attack(sword_pos[i].x, sword_pos[i].y);
                 arthur[SPIN_SWORD + i].Transform_.SetRotation(0.0f);
                 arthur[SPIN_SWORD + i].Transform_.SetTranslate(arthur[SPIN_SWORD + i].PosX, arthur[SPIN_SWORD + i].PosY);
                 arthur[SPIN_SWORD + i].Transform_.Concat();
                 arthur[SPIN_SWORD + i].ongoing_attack = false;
-
-                PosX = 0.0f;
-                PosY = sword_pos[0].y;
-                Transform_.SetTranslate(PosX, PosY);
-                Transform_.Concat();
-                Collision_.Update_Col_Pos(PosX - 30.0f, PosY - 30.0f,  // min point
-                                          PosX + 30.0f, PosY + 30.0f);	// max point
-
             }
+
+            // set the spawn location of the king arthur and apply transformation
+            PosX = 0.0f;
+            PosY = sword_pos[0].y;
+            Transform_.SetTranslate(PosX, PosY);
+            Transform_.Concat();
+            Collision_.Update_Col_Pos(PosX - 30.0f, PosY - 30.0f,  // min point of aabb box
+                                      PosX + 30.0f, PosY + 30.0f); // max point of aabb box
             
-            currAttk = SPIN_SWORD;
+            currAttk = SPIN_SWORD; // set current attack to spin sword
         }
         //followed by triple slash
         else if (!(arthur[TRIPLE_SLASH].cooldown))
@@ -462,6 +504,8 @@ void King_Arthur::Attack(Dragon &d, const float dt)
         }
 
     }
+
+    // State machine for attacks
     switch (currAttk)
     {
     case SINGLE_SLASH: Single_Slash(d, dt);
@@ -477,11 +521,15 @@ void King_Arthur::Attack(Dragon &d, const float dt)
     default: break;
     }
 
-
 }
-
+/**************************************************************************************
+//
+// Phase 2 of king arthur
+//
+**************************************************************************************/
 void King_Arthur::King_Arthur_Phase2(const float dt)
 {
+    // king arthur is invulnerable during the transition
     Set_Vulnerable(false);
 
     // move king arthur to the middle of the screen
@@ -489,14 +537,18 @@ void King_Arthur::King_Arthur_Phase2(const float dt)
     PosY = START_POINT_Y;
     Transform_.SetTranslate(0.0f, START_POINT_Y);
     Transform_.Concat();
-    Collision_.Update_Col_Pos(PosX - 30.0f, PosY - 30.0f,  // min point
-        PosX + 30.0f, PosY + 30.0f);	// max point
+    Collision_.Update_Col_Pos(PosX - 30.0f, PosY - 30.0f,  // min point of aabb box
+                              PosX + 30.0f, PosY + 30.0f); // max point of aabb box
+    // render attack particles off screen
+    Off_Particles(); 
 
-    Off_Particles(); // render particles off screen
+    // make king arthur semi transparent 
     Sprite_->SetAlphaTransBM(0.8f, 0.8f, AE_GFX_BM_BLEND);
 
+    // emit particles
     phase_effect->UpdateEmission();
 
+    // shake the camera till the timer reaches 0
     if (timer > 0)
     {
         timer -= dt;
@@ -518,13 +570,19 @@ void King_Arthur::King_Arthur_Phase2(const float dt)
     teleport_location[TOP_LEFT].max.x  = -344.0f;
     teleport_location[TOP_LEFT].max.y  =  200.0f;
 
+    // change current action to attack and set king arthur to be vulnerable again
     current_action = ATTACK;
     Set_Vulnerable(true);
     timer = 2.f;
 }
-
+/**************************************************************************************
+//
+// Phase 3 of king arthur
+//
+**************************************************************************************/
 void King_Arthur::King_Arthur_Phase3(const float dt)
 {
+    // king arthur is immune during the transition phase
     Set_Vulnerable(false);
 
     // move king arthur to the middle of the screen
@@ -532,13 +590,17 @@ void King_Arthur::King_Arthur_Phase3(const float dt)
     PosY = START_POINT_Y;
     Transform_.SetTranslate(0.0f, START_POINT_Y);
     Transform_.Concat();
-    Collision_.Update_Col_Pos(PosX - 30.0f, PosY - 30.0f,   // min point
-                              PosX + 30.0f, PosY + 30.0f);	// max point
+    Collision_.Update_Col_Pos(PosX - 30.0f, PosY - 30.0f,   // min point of aabb box
+                              PosX + 30.0f, PosY + 30.0f);  // max point of aabb box
 
-    Off_Particles(); // render particles off screen
+    // render attack particles off screen
+    Off_Particles(); 
+
+    // emit phase transition particle
     phase_effect->UpdateEmission();
     Sprite_->SetAlphaTransBM(0.8f, 0.8f, AE_GFX_BM_BLEND); // set ka to fade out
 
+    // shake the camera until timer runs out
     if (timer > 0)
     {
         timer -= dt;
@@ -546,12 +608,12 @@ void King_Arthur::King_Arthur_Phase3(const float dt)
         return;
     }
 
-    ka_phase = PHASE_3;
-    current_action = ATTACK;
-    Set_Vulnerable(true);
+    ka_phase = PHASE_3;       // set phase to phae 3
+    current_action = ATTACK;  // set current action state to attack
+    Set_Vulnerable(true);     // king arthur is not vulnerable to attacks
     Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND); // set ka to original opaque
 
-    // resettings the boundaries of king arthur
+    // resettings the boundaries king arthur can move
     left_boundary = -400; 
     right_boundary = 400; 
 
@@ -559,58 +621,71 @@ void King_Arthur::King_Arthur_Phase3(const float dt)
     for (auto& elem : mobs)
         elem->Set_HP(0);
 }
-
+/**************************************************************************************
+//
+// Dash attack
+//
+**************************************************************************************/
 void King_Arthur::Dash_Attack(Dragon &d, const float dt)
-{	
-    static Direction dash;           // direction KA should dash in
+{
+    static Direction dash;               // direction KA should dash in
 
-    if (!(arthur[DASH].ongoing_attack)) // called once to fix dash direction
+    if (!(arthur[DASH].ongoing_attack))  // called once to fix dash direction
     {
-        dash = this->Get_Direction();
-        arthur[DASH].ongoing_attack = true;
+        dash = Get_Direction();    // get the direction to dash to
+        arthur[DASH].ongoing_attack = true; 
     }
 
-    this->Set_Direction(dash);       // change back the dash direction
-
-    this->SetVelocity({ 800, 0 }); // change king arthur's velocity to dash
-    bool hit = Move_KA(dt, *this, d);         // move king arthur towards player
+    Set_Direction(dash);                 // change back the dash direction
+    SetVelocity({ 800, 0 });             // change king arthur's velocity to dash
+    bool hit = Move_KA(dt, *this, d);    // move king arthur towards player
 
     // need check for collision against dragon
-    if(this->Get_Direction() == STAY)
+    if(Get_Direction() == STAY)
     {
-        current_action = IDLE;           // switch current state to idle
-        arthur[DASH].cooldown = true;       // start the cooldown of dash attk
-        this->SetVelocity({ 120, 0 });   // reset the velocity of king arthur
-        ++behavior_swap;    
-        arthur[DASH].ongoing_attack = false;
-        arthur[DASH].cooldown_timer = 10.0f; // cooldown of jump attack
+        current_action = IDLE;                // switch current state to idle
+        arthur[DASH].cooldown = true;         // start the cooldown of dash attk
+        SetVelocity({ 120, 0 });              // reset the velocity of king arthur
+        ++behavior_swap;                      // increment behavior swap counter
+        arthur[DASH].ongoing_attack = false;  // attack ended
+        arthur[DASH].cooldown_timer = 10.0f;  // cooldown of jump attack
 
-        if(hit)
-            d.Decrease_HP();
+        // player was hit
+        if (hit)
+        {
+            d.Decrease_HP();  // decrease player hp
+            d.SetInvul(true); // set player to invulnerable
+        }
     }
 
-    this->Transform_.Concat();
-
-
+    Transform_.Concat(); // apply transformation 
 }
-
+/**************************************************************************************
+//
+// Single Slash
+//
+**************************************************************************************/
 void King_Arthur::Single_Slash(Dragon &d, const float dt)
 {
+    // update emitter position and emit particles
     slash_effect[0]->Emitter_.Pos_.Min_Max.Point_Max.x = arthur[SINGLE_SLASH].PosX + 8.f;
     slash_effect[0]->Emitter_.Pos_.Min_Max.Point_Min.x = arthur[SINGLE_SLASH].PosX - 8.f;
     slash_effect[0]->Emitter_.Pos_.Min_Max.Point_Max.y = arthur[SINGLE_SLASH].PosY + 35.f;
     slash_effect[0]->Emitter_.Pos_.Min_Max.Point_Min.y = arthur[SINGLE_SLASH].PosY - 35.f;
     slash_effect[0]->UpdateEmission();
+    
+    // move the slash
+    arthur[SINGLE_SLASH].Projectile::Update(dt, SLASH_SCALE, false, 0.f); 
 
-    arthur[SINGLE_SLASH].Projectile::Update(dt, SLASH_SCALE, false, 0.f); // move the slash
-
-    if(! arthur[SINGLE_SLASH].GetCollided()) // check for collision
+    // check if collided
+    if(! arthur[SINGLE_SLASH].GetCollided()) 
     {
+        // check if slash hit player
         if (arthur[SINGLE_SLASH].Collision_.Dy_Rect_Rect(d.Collision_, arthur[SINGLE_SLASH].GetVelocity(), d.GetVelocity(), dt))
         {
-            d.Decrease_HP();
-            arthur[SINGLE_SLASH].SetCollided(true);
-            d.SetInvul(true);                   // Visual Feedback and make dragon invulnerable for awhile
+            d.Decrease_HP();                         // decrease player hp
+            arthur[SINGLE_SLASH].SetCollided(true);  // set collided flag to true
+            d.SetInvul(true);                        // Visual Feedback and make dragon invulnerable for awhile
         }
     }
 
@@ -618,18 +693,20 @@ void King_Arthur::Single_Slash(Dragon &d, const float dt)
     if (arthur[SINGLE_SLASH].GetDist() > range_limit || arthur[SINGLE_SLASH].PosX < -600 ||
         arthur[SINGLE_SLASH].PosX > 600)      
     {
-        arthur[SINGLE_SLASH].End_Attack();
-
-        current_action = IDLE;                       // set the behaviour to idle
-        ++behavior_swap;
+        arthur[SINGLE_SLASH].End_Attack(); // reset single slash variable
+        current_action = IDLE;             // set the behaviour to idle
+        ++behavior_swap;                   // increment behavior counter
     }
     
-
 }
-
+/**************************************************************************************
+//
+// Triple Slash
+//
+**************************************************************************************/
 void King_Arthur::Triple_Slash(Dragon &d, const float dt)
 {
-    const char ts_limit = limit - 1; // limit the loop to just the triple slashes
+    const char ts_limit = limit - 1;            // limit the loop to just the triple slashes
     
     if (!(arthur[TRIPLE_SLASH].ongoing_attack)) // sets the attack to start from KA
     {
@@ -651,11 +728,13 @@ void King_Arthur::Triple_Slash(Dragon &d, const float dt)
             arthur[i].SetActive(true);
         }
 
-        arthur[i].Projectile::Update(dt, SLASH_SCALE, false, 0.f); // update the pos of the slash
+        // update the pos of the slash
+        arthur[i].Projectile::Update(dt, SLASH_SCALE, false, 0.f); 
 
         // create particles if slash is active
         if (arthur[i].IsActive())
         {
+            // update emitter pos and emit particles
             slash_effect[i - 1]->Emitter_.Pos_.Min_Max.Point_Max.x = arthur[i].PosX + 8.f;
             slash_effect[i - 1]->Emitter_.Pos_.Min_Max.Point_Min.x = arthur[i].PosX - 8.f;
             slash_effect[i - 1]->Emitter_.Pos_.Min_Max.Point_Max.y = arthur[i].PosY + 35.f;
@@ -666,18 +745,18 @@ void King_Arthur::Triple_Slash(Dragon &d, const float dt)
         // checks if it has collided with the player
         if (!arthur[i].GetCollided())
         {
+            // slash collided with player
             if (arthur[i].Collision_.Dy_Rect_Rect(d.Collision_, arthur[i].GetVelocity(), d.GetVelocity(), dt))
             {
-                d.Decrease_HP();
-                d.SetInvul(true);                   // Visual Feedback and make dragon invulnerable for awhile
-                for (char j = 1; j < ts_limit; ++j)
-                    arthur[j].SetCollided(true);    // set collided flag to true
+                d.Decrease_HP();                     // decrease player hp
+                d.SetInvul(true);                    // Visual Feedback and make dragon invulnerable for awhile
+                for (char j = 1; j < ts_limit; ++j)  // set collided flag to true
+                    arthur[j].SetCollided(true);    
             }
         }
 
-        // makes projectiles disappear
-        if (arthur[i].GetDist() > range_limit || arthur[i].PosX < -600 ||
-            arthur[i].PosX > 600) 
+        // makes projectiles disappear after flying a certain range or out of screen
+        if (arthur[i].GetDist() > range_limit || arthur[i].PosX < -600 || arthur[i].PosX > 600) 
         {
             arthur[i].SetActive(false); // disappears from screen
             arthur[i].ResetDist();      // reset the projectile distance traveled
@@ -689,7 +768,7 @@ void King_Arthur::Triple_Slash(Dragon &d, const float dt)
                 arthur[TRIPLE_SLASH].cooldown       = true;     // start cooldown		
                 arthur[TRIPLE_SLASH].ongoing_attack = false;    // attack has complete
                 arthur[TRIPLE_SLASH].cooldown_timer = 5.0f;     // cooldown duration
-                ++behavior_swap;								// behavior counter
+                ++behavior_swap;                                // behavior counter
 
                 for (char j = 1; j < ts_limit; ++j)
                     arthur[j].SetCollided(false);
@@ -698,8 +777,11 @@ void King_Arthur::Triple_Slash(Dragon &d, const float dt)
     }
 
 }
-
-
+/**************************************************************************************
+//
+// Heal and spawn mobs
+//
+**************************************************************************************/
 void King_Arthur::Heal_and_Spawn(Dragon &d, const float dt)
 {
     UNREFERENCED_PARAMETER(d);
@@ -733,23 +815,30 @@ void King_Arthur::Heal_and_Spawn(Dragon &d, const float dt)
 
         default: break;
         }
+
+        // translate king arthur and apply transformation
         Transform_.SetTranslate(PosX, PosY);
         Transform_.Concat();
         Collision_.Update_Col_Pos(PosX - 30.0f, PosY - 30.0f,  // min point
-                                  PosX + 30.0f, PosY + 30.0f);	// max point
-        healing = true;
-        arthur[HEAL].ongoing_attack = true;
-        spawn_mob = true;
+                                  PosX + 30.0f, PosY + 30.0f); // max point
+        
+        healing = true;                      // set healing flag to true
+        spawn_mob = true;                    // mobs were spawned
+        arthur[HEAL].ongoing_attack = true;  // attack is currently ongoing
 
+        // update emiter position
         healing_effect->Emitter_.Pos_.Min_Max.Point_Min.x = PosX - 50.f;
         healing_effect->Emitter_.Pos_.Min_Max.Point_Min.y = PosY - 50.f;
         healing_effect->Emitter_.Pos_.Min_Max.Point_Max.x = PosX + 50.f;
         healing_effect->Emitter_.Pos_.Min_Max.Point_Max.y = PosY + 50.f;
 
+        
         for (char i = 0; i < NUM_OF_MOBS; ++i)
         {
+            // set mob active to true
             mobs[i]->SetActive(true);
-
+ 
+            // update mage and archer spawn point
             if (! (i %2))
             {
                 auto* temp = static_cast <Mage*> (mobs[i]);
@@ -763,34 +852,42 @@ void King_Arthur::Heal_and_Spawn(Dragon &d, const float dt)
         }
     }
     
+    // heal flag is true and current hp is less than maximum health
     if (healing && Get_HP() <= HEALTH)
     {
         // heals every 0.5 seconds
         static float heal_timer = 0.5f;
         heal_timer <= 0 ? Set_HP(Get_HP() + 10), heal_timer = 0.5f : heal_timer -= dt;
-    
+        
+        // emit healing particle
         healing_effect->UpdateEmission();
     }
     else
     {
+        // stop healing and start the cooldown
         arthur[HEAL].cooldown       = true;
-        arthur[HEAL].ongoing_attack = false;		
+        arthur[HEAL].ongoing_attack = false;
         arthur[HEAL].cooldown_timer = 20.0f;
         ++behavior_swap;
     }
 
 }
-
+/**************************************************************************************
+//
+// Spinning blades attack
+//
+**************************************************************************************/
 void King_Arthur::Spinning_Blades(Dragon &d, const float dt)
 {    
-    int i = 0;
-    //float x, y;
-    static float angle, angle_end;
+    int i = 0;                     // loop iterator
+    static float angle, angle_end; // angle of spining baldes
 
+    // loop through all the swords
     for (; i < NUM_OF_SWORD; ++i)
     {
         if (arthur[SPIN_SWORD + i].IsActive())
-        {   //rotate the sword until it is facing the player
+        {   
+            //rotate the sword until it is facing the player
             if (!arthur[SPIN_SWORD + i].ongoing_attack)
             {
                 AEVec2 pos{ d.PosX - arthur[SPIN_SWORD + i].PosX, d.PosY - arthur[SPIN_SWORD + i].PosY };
@@ -811,11 +908,13 @@ void King_Arthur::Spinning_Blades(Dragon &d, const float dt)
             sword_effect->Emitter_.Pos_.Point.y = arthur[SPIN_SWORD + i].PosY;
             sword_effect->UpdateEmission();
 
+            // hasn't rotated to the angle it is suppose to rotate
             if (angle != angle_end)
             {
-                // offset
+                // angle rotated within plus minus 1- of the end angle
                 if (angle_end - angle < 10)
                 {
+                    // set velocity to vector from play position to sword position
                     angle = angle_end;
                     arthur[SPIN_SWORD + i].SetVelocity({ d.PosX - arthur[SPIN_SWORD + i].PosX, d.PosY - arthur[SPIN_SWORD + i].PosY });
                     arthur[SPIN_SWORD + i].Transform_.SetRotation(angle);
@@ -823,13 +922,17 @@ void King_Arthur::Spinning_Blades(Dragon &d, const float dt)
                 }
                 else
                 {
+                    // rotate angle and apply transformation and end the function call
                     arthur[SPIN_SWORD + i].Transform_.SetRotation(angle += 10);
                     arthur[SPIN_SWORD + i].Transform_.Concat();
                     return;
                 }
             }
+
+            // get the current velocity
             AEVec2 new_velocity = arthur[SPIN_SWORD + i].GetVelocity();
 
+            // apply acceleration to the sword, set new velocity translate and apply transformation to the sword
             arthur[SPIN_SWORD + i].PosX += arthur[SPIN_SWORD + i].GetVelocity().x * dt;
             arthur[SPIN_SWORD + i].PosY += arthur[SPIN_SWORD + i].GetVelocity().y * dt;
             AEVec2Scale(&new_velocity, &new_velocity, ACCEL);
@@ -839,11 +942,11 @@ void King_Arthur::Spinning_Blades(Dragon &d, const float dt)
             arthur[SPIN_SWORD + i].Transform_.Concat();
             arthur[SPIN_SWORD + i].Collision_.Update_Col_Pos(arthur[SPIN_SWORD + i].PosX, arthur[SPIN_SWORD + i].PosY);
 
+            // check if sword collided with player
             if (!arthur[SPIN_SWORD + i].GetCollided() && arthur[SPIN_SWORD + i].Collision_.Point_Rect(d.Collision_, arthur[SPIN_SWORD + i].Collision_))
             {
-                d.Set_Vulnerable(true);
-                d.Decrease_HP();
-                arthur[SPIN_SWORD + i].SetCollided(true);
+                d.Decrease_HP();                             // decrease player hp
+                arthur[SPIN_SWORD + i].SetCollided(true);    // set collision flag to true
                 d.SetInvul(true);                            // Visual Feedback and make dragon invulnerable for awhile
             }
 
@@ -855,21 +958,23 @@ void King_Arthur::Spinning_Blades(Dragon &d, const float dt)
                 arthur[SPIN_SWORD + i].ResetDist();            // reset distance traveled back to 0
                 arthur[SPIN_SWORD + i].SetCollided(false);     // reset collided flag
 
+                // all swords have been shot out
                 if (i == NUM_OF_SWORD - 1)
                 {
                     current_action = IDLE;
                     arthur[SPIN_SWORD].cooldown_timer = 10.0f;
-                    arthur[SPIN_SWORD].cooldown = true;        // start cooldown
-                    arthur[SPIN_SWORD].ongoing_attack = false; // attack animation has concluded
+                    arthur[SPIN_SWORD].cooldown = true;            // start cooldown
+                    arthur[SPIN_SWORD].ongoing_attack = false;     // attack animation has concluded
                     arthur[SPIN_SWORD + 1].ongoing_attack = false; // attack animation has concluded
 
+                    // move king arthur back to the ground
                     PosX = 0.0f;
                     PosY = START_POINT_Y;
                     Transform_.SetTranslate(PosX, PosY);
                     Transform_.Concat();
                     Collision_.Update_Col_Pos(PosX - 30.0f, PosY - 30.0f,  // min point
-                                              PosX + 30.0f, PosY + 30.0f);	// max point
-                    ++behavior_swap;
+                                              PosX + 30.0f, PosY + 30.0f); // max point
+                    ++behavior_swap; // update behavior counter
 
                 }
             }
@@ -878,24 +983,32 @@ void King_Arthur::Spinning_Blades(Dragon &d, const float dt)
         }
     }
 }
-
+/**************************************************************************************
+//
+// Render king arthur, its particle effects and his current attack an dhis minions
+//
+**************************************************************************************/
 void King_Arthur::Render(void)
 {
+    // render king arthur attacks
     for (unsigned char i = 0; i < arthur.size(); ++i)
     {
         if (arthur[i].IsActive())
             arthur[i].Render();
     }
+
+    // render the minions
     for (char i = 0; i < active_mobs; ++i)
     {
         if (mobs[i]->IsActive())
             mobs[i]->Render();
     }
 
-    GameObject::Render(); // render king arthur on screen
+    GameObject::Render();   // render king arthur on screen
 
-    phase_effect->Render();
+    phase_effect->Render(); // render the phase transition 
 
+    // render the slash particle effects
     for (auto& i : slash_effect)
     {
         i->Render();
@@ -911,7 +1024,11 @@ void King_Arthur::Render(void)
     default: break;
     }
 }
-
+/**************************************************************************************
+//
+// update the particle effects
+//
+**************************************************************************************/
 void King_Arthur::Update_Particle(const float dt)
 {
     // update particle behaviour
@@ -920,6 +1037,7 @@ void King_Arthur::Update_Particle(const float dt)
         // only update if there are active particles
         if (i->GetParticleCount())
         {
+            // particle behaviors
             i->Turbulence(0.4f);
             i->Drag(0.5f);
             i->ColorRamp_Life();
@@ -928,10 +1046,12 @@ void King_Arthur::Update_Particle(const float dt)
         }
     }
 
+    // there are active particles in phase transition effects
     if (phase_effect->GetParticleCount())
     {
+        // particle behaviors
         phase_effect->Turbulence(0.4f);
-        phase_effect->Force(0.5f, false, true);        //Simulate an upward force
+        phase_effect->Force(0.5f, false, true);        
         phase_effect->Newton({ 10.f, 400.0f }, 2.8f);
         phase_effect->Update(dt);
     }
@@ -939,6 +1059,7 @@ void King_Arthur::Update_Particle(const float dt)
     // updates healing effects if there are active particles
     if (healing_effect->GetParticleCount())
     {
+        // particle behaviors
         healing_effect->Turbulence(0.4f);
         sword_effect->ColorRamp_Life();
         healing_effect->TransRamp_Exp();
@@ -949,6 +1070,7 @@ void King_Arthur::Update_Particle(const float dt)
     // update rotating sword effects if there are active particles
     if (sword_effect->GetParticleCount())
     {
+        // particle behaviors
         sword_effect->Turbulence(0.4f);
         sword_effect->Force(0.1f, false, true);
         sword_effect->ColorRamp_Life();
@@ -956,36 +1078,53 @@ void King_Arthur::Update_Particle(const float dt)
         sword_effect->Update(dt);
     }
 }
-
+/**************************************************************************************
+//
+// Dead state of king arthur
+//
+**************************************************************************************/
 void King_Arthur::Dead(void)
 {
+    // set king arthur active to false
     SetActive(false);
-    // play some animation. Camera shake?
 
+    // set minion active to false
     for (char i = 0; i < active_mobs; ++i)
         mobs[i]->SetActive(false);
 
+    // set active attacks to false
     for (auto& elem : arthur)
     {
         elem.SetActive(false);
     }
 }
-
+/**************************************************************************************
+//
+// Set the direction king arthur should face
+//
+**************************************************************************************/
 void King_Arthur::Set_Forward_Dir(const Dragon& d)
 {
+    // player on the right side of king arthur
     if ((d.PosX - this->PosX) > 0)
     {
         this->Set_Direction(RIGHT);
         this->Transform_.SetScale(1.0f, 1.0f); // reflect the texture to face player
     }
+
+    // player is on the left side of king arthur
     else
     {
         this->Set_Direction(LEFT);
         this->Transform_.SetScale(-1.0f, 1.0f); // reflect the texture to face player
     }
-    this->Transform_.Concat();
+    this->Transform_.Concat(); // apply transformation
 }
-
+/**************************************************************************************
+//
+// off the attack particle system
+//
+**************************************************************************************/
 void King_Arthur::Off_Particles(void)
 {
     // remove every slash effect particle from screen
@@ -1001,29 +1140,49 @@ void King_Arthur::Off_Particles(void)
     sword_effect->Off_Emitter();
 }
 
-// return the current phase
+/**************************************************************************************
+//
+// get the current phase of king arthur
+//
+**************************************************************************************/
 BOSS_PHASE King_Arthur::Get_Phase(void) const
 {
     return ka_phase;
 }
-
+/**************************************************************************************
+//
+// get the vector of mobs
+//
+**************************************************************************************/
 std::vector <Characters*>& King_Arthur::Get_Mobs(void)
 {
     return mobs;
 }
-
+/**************************************************************************************
+//
+// mute king arthur
+//
+**************************************************************************************/
 void King_Arthur::Mute(void)
 {
     music.SetVolume(0, 0.0f);
     music.SetPause(0, true);
 }
-
+/**************************************************************************************
+//
+// Unmute king arthur
+//
+**************************************************************************************/
 void King_Arthur::Unmute(void)
 {
     music.SetVolume(0, 1.0f);
     music.SetPause(0, false);
 }
-
+/**************************************************************************************
+//
+// Destructor for king arthur
+//
+**************************************************************************************/
 King_Arthur::~King_Arthur(void)
 {
     // delete the mobs that was used 
@@ -1034,12 +1193,12 @@ King_Arthur::~King_Arthur(void)
     mobs.clear();
     arthur.clear();
 
-    attack_sprite.~Sprite();  // free texture for slash
-    sword_sprite.~Sprite() ;  // free texture for sword
-    
+    attack_sprite.~Sprite();      // free texture for slash
+    sword_sprite.~Sprite() ;      // free texture for sword
     Off_Particles();              // remove particles from screen
-    phase_effect->Off_Emitter(); // render all the phase particle effects from the screen
-
+    phase_effect->Off_Emitter();  // render all the phase particle effects from the screen
+     
+    // reset the boundaries of king arthur
     left_boundary = -400.0f;
     right_boundary = 400.0f;
 
@@ -1051,6 +1210,11 @@ King_Arthur::~King_Arthur(void)
 
 namespace
 {
+    /**************************************************************************************
+    //
+    // move king arthur to the direction he is facing
+    //
+    **************************************************************************************/
     bool Move_KA(const float dt, King_Arthur &ka, const Dragon &d)
     {
         if (ka.PosX < right_boundary && ka.PosX > left_boundary)
@@ -1088,6 +1252,11 @@ namespace
         return false;
     }
 
+    /**************************************************************************************
+    //
+    // set the attack directions
+    //
+    **************************************************************************************/
     void Set_Attack_Dir(King_Arthur & ka)
     {
         
