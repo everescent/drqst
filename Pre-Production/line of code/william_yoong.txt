@@ -1,0 +1,54 @@
+Name: William Yoong
+Role: Product Manager
+Main contributions: AI, and a portion of UI
+List:
+    Knight.h
+    Knight.cpp
+    Mage.h
+    Mage.cpp
+    Boss_Phase.h
+    Boss_States.h
+    Boss_States.cpp
+    King_Arthur.h
+    King_Arthur.cpp
+    Lancelot.h
+    Lancelot.cpp
+    AI_Attack_Sprites.cpp
+    AI_Attack_Sprites.h
+    AI_Data_Factory.h
+    AI_Data_Factory.cpp
+    AI_Test_Stage.h
+    AI_Test_Stage.cpp
+    Characters.h
+    Characters.cpp
+    Options.h
+    Options.cpp
+    Credits.h
+    Credits.cpp
+    Score_Page.h
+    Score_Page.cpp
+    Stage3_3.h
+    Stage3_3.cpp
+    GameStateList.h
+    GameStateManager.h
+    GameStateManager.cpp
+    Input_Handler.h
+    Input_Handler.cpp
+    Particle_Effects.h
+    Particle_Effects.cpp
+    StageManager.h
+    StageManager.cpp
+    
+Total LOC:
+
+What I liked:    I like the fact that coding AIs is very hard to code as you are basically creating another life form from scratch,
+                 but the results is satisfying when you see the work you have put in come to life. This semester has taught me that
+                 I enjoy coding AIs even though there are times where I was really frustrated at why the AI wasn't behaving the way
+                 I wanted it to.
+              
+What I disliked: I disliked the fact that my knowledge is not as good as my peers. I believe that the things I have done can behaving
+                 accomplished in a much more efficient way than what I have done right now. But I also have no idea on how it can be
+                 improved or where I should start.
+             
+What I learned:  I have learn the usage of inheritance, the different form of access and the usage of virtual functions. I have also
+                 learn how to use state machines for AI behavior

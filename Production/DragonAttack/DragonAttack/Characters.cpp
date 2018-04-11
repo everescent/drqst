@@ -14,8 +14,8 @@ Technology is prohibited.
 /* End Header **************************************************************************/
 
 #include "Characters.h" // header file
-#include <iostream>
-#include <utility>
+#include <iostream>     // cout, endl used for debugging
+#include <utility>      // std::move
 
  int Characters::score = 0;            // player score for the stage
  int Characters::enemies_killed = 0;   // number of enemies killed

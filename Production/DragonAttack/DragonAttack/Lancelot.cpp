@@ -1,15 +1,30 @@
-#include "Lancelot.h"
-#include "Collision.h"
-#include "Audio_Engine.h"
-#include "Camera.h"
-#include <iostream>
-#include <cmath>
-#include <vector>
+/* Start Header ************************************************************************/
+/*!
+\file       Lancelot.cpp
+\author     William Yoong
+\par email: william.yoong\@digipen.edu
+\brief
+This file creates, set the behaviour and rules for the first boss Lancelot
+
+Copyright (C) 2018 DigiPen Institute of Technology.
+Reproduction or disclosure of this file or its contents
+without the prior written consent of DigiPen Institute of
+Technology is prohibited.
+*/
+/* End Header **************************************************************************/
+#include "Lancelot.h"      // header file
+#include "Collision.h"     // point and line collision
+#include "Camera.h"        // camShake
+#include <iostream>        // cout, endl ( used for debugging)
+#include <cmath>           // cos, sin
+#include <vector>          // std::vector
 
 
+// use to store global variables
 namespace
 {
-    enum Lancelot_Moveset
+    // enumeration for lancelot attacks
+	enum Lancelot_Moveset
     {
         STAB,
         SLASH,
@@ -17,49 +32,54 @@ namespace
         ARONDIGHT
     };
 
-    // dash animation
-    enum
-    {
-        BEFORE_ANIM = 3,
-        AFTER_ANIM,
-    };
-
     std::vector<Boss_Attack> lancelot;  // array to store lancelot attack
     
-    const int HEALTH           = 800;   // health that lancelot start with
-    const int PHASE2_HP        = 400;   // phase 2 trigger
-    const float LANCELOT_SCALE = 60.0f; // lancelot size
+	//------------------------------------------------------------------
+	//
+	//  CONST VARIABLES
+	//
+	//------------------------------------------------------------------
+	const int    HEALTH           = 800;                // health that lancelot start with
+    const int    PHASE2_HP        = 400;                // phase 2 trigger
+    const float  LANCELOT_SCALE   = 60.0f;              // lancelot size
+	const float  ATTACK_RANGE     = 150.0f;             // range of attack of lancelot
+	const float  ATTACK_SCALE     = 20.0f;              // scale of attacks
+    const char   limit            = 4;                  // num of lancelot attacks
+	const AEVec2 ATK_START_POINT{ -100.0f, -140.0f };   // starting point of slash attacks
+	const AEVec2 ARONDIGHT_SCALE{ 11.5f, 3.0f };        // scale of arondight
+	const AEVec2 STARTING_POINT{ 200.0f, -250.0f };     // lancelot spawn location
+	const AEVec2 SLASH_VELOCITY{ 20.0f, 500.0f };       // velocity of slash
+	const AEVec2 STAB_VELOCITY{ 20.0f, 0.0f }; // velocity for stab
 
-    const char limit = 4;               // num of lancelot attacks
-
+	//------------------------------------------------------------------
+	//
+	//  GLOBAL VARIABLES
+	//
+	//------------------------------------------------------------------
     float idle_time           = 1.0f;   // idling time for lancelot
-    const float ATTACK_RANGE  = 150.0f; // range of attack of lancelot
-    const float ATTACK_SCALE  = 20.0f;  // scale of attacks
     Lancelot_Moveset currAttk = STAB;   // currnet attack lancelot is using
-
-    // variables for slash and arondight
-    const AEVec2 ATK_START_POINT {-100.0f, -140.0f}; 
-    const AEVec2 ARONDIGHT_SCALE { 11.5f, 3.0f };
-    const AEVec2 STARTING_POINT { 200.0f, -250.0f };
-    const AEVec2 SLASH_VELOCITY { 20.0f, 500.0f };
-    float angle = 25.0f;
-    float angle_offset = 2.0f;
-    float charge_time;
-
-    const AEVec2 STAB_VELOCITY{ 20.0f, 0.0f }; // velocity for stab
-    Sprite       attack_sprite;                // texture for attacks
+    float  angle              = 25.0f;  // angle for rotation
+    float  angle_offset       = 2.0f;   // offset of angle per frame
+    float  charge_time;                 // duration lancelot use to charge his attacks
+    Sprite attack_sprite;               // texture for attacks
 
     // checks if the player if facing lancelot
     bool Player_Facing_Me(Lancelot&, Dragon&);
 }
 
+/**************************************************************************************
+//
+// Converting constructor for lancelot. Takes in a pointer to its texture
+// and used it to create a lancelot object
+//
+**************************************************************************************/
 Lancelot::Lancelot(Sprite* texture)
     : Characters(texture,
         HEALTH,  Col_Comp{STARTING_POINT.x - LANCELOT_SCALE, STARTING_POINT.y - LANCELOT_SCALE,
                           STARTING_POINT.x + LANCELOT_SCALE, STARTING_POINT.y + LANCELOT_SCALE, Rect}),
-    M_E{ false },     arondight_particle{ Effects_Get(ARONDIGHT_PARTICLE) }, me_particle{Effects_Get(ME_PARTICLE)},
-    phase{ PHASE_1 }, phase_particle{ Effects_Get(PHASE_PARTICLE) },         timer{2.f}, current_action{IDLE},
-    anim{ AFTER_ANIM + 1, 5, 5, [](std::vector <Range>& Init) -> void {
+    M_E{ false     }, arondight_particle{ Effects_Get(ARONDIGHT_PARTICLE) }, me_particle{Effects_Get(ME_PARTICLE)},
+    phase{ PHASE_1 }, phase_particle    { Effects_Get(PHASE_PARTICLE)     }, timer{2.f}, current_action{IDLE},
+    anim{ WALK_ANIM + 1, 5, 5, [](std::vector <Range>& Init) -> void {
     Init.push_back(Range{ 0.0f, 1.0f, 0.0f, 0.0f }); //Hit
     Init.push_back(Range{ 0.0f, 1.0f, 0.2f, 0.2f }); //Idle
     Init.push_back(Range{ 0.0f, 1.0f, 0.4f, 0.4f }); //Walk
@@ -74,38 +94,49 @@ Lancelot::Lancelot(Sprite* texture)
 
 {
     Transform_.SetTranslate(STARTING_POINT.x, STARTING_POINT.y); // spawn lancelot at this location
-    Transform_.SetScale(-1.0f, 1.0f);
-    Transform_.Concat();
-    SetPos(STARTING_POINT.x, STARTING_POINT.y);    // update lancelot current coordinates
-    SetActive(true);                               // spawn lancelot
-    Set_Direction(LEFT);                           // face left
-    SetVelocity({ 200.0f, 0.0f });                 // velocity for lancelot
-    Reset_Idle_Time(idle_time);
-    Init();                                        // initialize the attacks lancelot have
+    Transform_.SetScale(-1.0f, 1.0f);                            // set texture to face left
+    Transform_.Concat();                                         // concat the matrix
+    SetPos(STARTING_POINT.x, STARTING_POINT.y);                  // update lancelot current coordinates
+    SetActive(true);                                             // spawn lancelot
+    Set_Direction(LEFT);                                         // face left
+    SetVelocity({ 200.0f, 0.0f });                               // velocity for lancelot
+    Reset_Idle_Time(idle_time);		                             // reset the idle duration of lancelot			                 
+    Init();                                                      // initialize the attacks lancelot have
 }
 
+/**************************************************************************************
+//
+// Initializes the attacks and particle system for lancelot
+//
+**************************************************************************************/
 void Lancelot::Init()
 {
-    //initialize lancelot attacks here
+    //initialize the sword texture for lancelot
     const char* sword = ".//Textures/arondight.png";
+	attack_sprite = S_CreateSquare(ATTACK_SCALE, sword);
 
+	// reserve the memory used with the number of attacks lancelot have
     lancelot.reserve(limit);
-
-    attack_sprite = S_CreateSquare(ATTACK_SCALE, sword);
     
+	// initializes the various moves lancelot have
     Init_Stab();
     Init_Slash();
     lancelot.emplace_back(Boss_Attack()); // mad enhancement
     Init_Arondight();
 
     // prevent unique mechanic from activating at the start of fight
-    lancelot[MAD_ENHANCEMENT].cooldown_timer = 0.0f; 
+    lancelot[MAD_ENHANCEMENT].cooldown_timer = 5.0f; 
     lancelot[MAD_ENHANCEMENT].cooldown = true; 
 
-
+	// initializes the various particle systems
     Init_Particles();
 }
 
+/**************************************************************************************
+//
+// Initializes the particle system variables
+//
+**************************************************************************************/
 void Lancelot::Init_Particles(void)
 {
    // mad enhancement particle variables
@@ -154,23 +185,34 @@ void Lancelot::Init_Particles(void)
 
 }
 
+/**************************************************************************************
+//
+// Idle state of lancelot
+//
+**************************************************************************************/
 void Lancelot::Idle(const Dragon& d, const float dt)
 {
     // change current_action to attack and idle to 0 once idling is over
     if (Get_Idle_Time() <= 0)
     {		
-        current_action = abs(d.PosX - this->PosX) <= ATTACK_RANGE ? ATTACK : MOVING;
-        Reset_Idle_Time(idle_time);
-        Set_Face_Dir(d);
-        Set_Attk_Dir();
+        // change current action to attack if player within attack range, else change it to moving state
+		current_action = abs(d.PosX - this->PosX) <= ATTACK_RANGE ? ATTACK : MOVING;
+        Reset_Idle_Time(idle_time);   // reset the idle time
+        Set_Face_Dir(d);              // set direction lancelot should face
+        Set_Attk_Dir();               // set attack direction
     }
     else
-        Decrease_Idle_Time(dt);
+        Decrease_Idle_Time(dt);       // decrease the duration time
 }
-
+/**************************************************************************************
+//
+// Moving state of lancelot
+//
+**************************************************************************************/
 void Lancelot::Moving(const Dragon &d, const float dt)
 {
-    Set_Face_Dir(d);
+    // set the direction lancelot should face
+	Set_Face_Dir(d);
     
     if (Get_Direction() == RIGHT)     
     {
@@ -181,7 +223,8 @@ void Lancelot::Moving(const Dragon &d, const float dt)
         PosX -= GetVelocity().x * dt; // move lancelot to the left
     }
 
-    Transform_.SetTranslate(PosX, PosY);
+    // translate lancelot and apply the concatenation 
+	Transform_.SetTranslate(PosX, PosY);
     Transform_.Concat();
 
     // update the collision box of lancelot
@@ -196,40 +239,48 @@ void Lancelot::Moving(const Dragon &d, const float dt)
     }
 }
 
+/**************************************************************************************
+//
+// Update function of lancelot
+//
+**************************************************************************************/
 void Lancelot::Update(Dragon &d, float dt)
 {
-
+	// change lancelot to phase 2 if the hp is within the threshold and there is no attack ongoing
     if (this->Get_HP() < PHASE2_HP && phase & PHASE_1 && ! lancelot[currAttk].ongoing_attack)
     {
-        Lancelot_Phase2(dt); // change to phase 2
-        Update_Particles(dt);
+        Lancelot_Phase2(dt);  // change to phase 2
+        Update_Particles(dt); // render the phase transition particle effects
         return;
     }
-    else if (this->Get_HP() <= 0)
+    else if (this->Get_HP() <= 0) // check if king arthur is dead
     {
-        current_action = DEAD;
+        current_action = DEAD;    // set king arthur to its death state
     }
 
-    if (M_E) // off mad enhancement state
+	
+    if (M_E) 
     {
-        if (lancelot[MAD_ENHANCEMENT].cooldown_timer < 10)
+		// off mad enhancement state if lancelot is currently under mad enhancement
+		if (lancelot[MAD_ENHANCEMENT].cooldown_timer < 10)
             this->Mad_Enhancement(dt);  
 
-        me_particle->Emitter_.Pos_.Min_Max.Point_Max = Collision_.Get_MaxPoint();
-        me_particle->Emitter_.Pos_.Min_Max.Point_Min = Collision_.Get_MinPoint();
-
+		// update emitter position
+        me_particle->Emitter_.Pos_.Min_Max.Point_Max    = Collision_.Get_MaxPoint();
+        me_particle->Emitter_.Pos_.Min_Max.Point_Min    = Collision_.Get_MinPoint();
         me_particle->Emitter_.Pos_.Min_Max.Point_Max.x -= 10.f;
         me_particle->Emitter_.Pos_.Min_Max.Point_Max.y -= 10.f;
         me_particle->Emitter_.Pos_.Min_Max.Point_Min.x += 10.f;
         me_particle->Emitter_.Pos_.Min_Max.Point_Min.y += 10.f;
 
+		// emit particles
         me_particle->UpdateEmission();
     }
 
     // checks if lancelot is alive
     if (IsActive())
     {
-        // fireball hit lancelot
+        // check if fireball hit lancelot
         for (char i = 0; i < Bullet_Buffer; ++i)
             if (d.GetFireball()[i].IsActive())
                 if (Collision_.Dy_Rect_Rect(d.GetFireball()[i].Collision_, GetVelocity(),
@@ -246,13 +297,15 @@ void Lancelot::Update(Dragon &d, float dt)
                     music.Play(0);
                 }
 
-        // mega fire ball hit lancelot
+		// mega fire ball is active
         if (d.GetMfireball().IsActive())
         {
-            if (Collision_.Dy_Rect_Rect(d.GetMfireball().Collision_, GetVelocity(),
+			// mega fire ball hit lancelot
+			if (Collision_.Dy_Rect_Rect(d.GetMfireball().Collision_, GetVelocity(),
                 d.GetMfireball().GetVelocity(), dt))
             {
-                Decrease_HP(d.GetMDamage());
+                // decrease lancelot hp, reset mega fireball variables
+				Decrease_HP(d.GetMDamage());
                 d.GetMfireball().Projectile::ResetDist();
                 d.GetMfireball().SetActive(false);
                 music.Play(0);
@@ -260,12 +313,13 @@ void Lancelot::Update(Dragon &d, float dt)
             }
         }
     }
+
     // switch between boss states
     switch (current_action)
     {
     case IDLE: this->Idle(d, dt);
                anim.SetState(IDLE_ANIM);
-        break;
+		break;
 
     case MOVING: this->Moving(d, dt);
                  anim.SetState(WALK_ANIM);
@@ -281,14 +335,19 @@ void Lancelot::Update(Dragon &d, float dt)
     default: break;
     }
 
-    for (char i = 0; i < limit; ++i) // update the skill cooldowns
+	// update the skill cooldowns
+    for (char i = 0; i < limit; ++i) 
         lancelot[i].Update(dt);
 
-    Update_Particles(dt);
-    anim.Update(*Sprite_);
+    Update_Particles(dt);  // update particle effects
+    anim.Update(*Sprite_); // update animation
 }
 
-// updates the system only if there are active particles
+/**************************************************************************************
+//
+// Updates the particle system in lancelot ONLY IF there are active particle
+//
+**************************************************************************************/
 void Lancelot::Update_Particles(const float dt)
 {
     if (me_particle->GetParticleCount())
@@ -297,7 +356,8 @@ void Lancelot::Update_Particles(const float dt)
         if (current_action == MOVING)
             me_particle->Drag(0.5f);
 
-        me_particle->Turbulence(0.6f);
+        // particle behaviors
+		me_particle->Turbulence(0.6f);
         me_particle->Force(0.8f, false, true);
         me_particle->ColorRamp_Life();
         me_particle->TransRamp_Exp();
@@ -306,20 +366,26 @@ void Lancelot::Update_Particles(const float dt)
 
     if (arondight_particle->GetParticleCount())
     {
-        arondight_particle->Turbulence(0.5f);
+		// particle behaviors
+		arondight_particle->Turbulence(0.5f);
         arondight_particle->TransRamp_Exp();
         arondight_particle->Update(dt);
     }
 
     if (phase_particle->GetParticleCount())
     {
-        phase_particle->Turbulence(0.4f);
+		// particle behaviors
+		phase_particle->Turbulence(0.4f);
         phase_particle->Force(0.5f, false, true);        //Simulate an upward force
         phase_particle->Newton({ 10.f, 400.0f }, 2.8f);
         phase_particle->Update(dt);
     }
 }
-
+/**************************************************************************************
+//
+// Render lancelot and his attacks and particles if active
+//
+**************************************************************************************/
 void Lancelot::Render(void)
 {
     GameObject::Render();
@@ -329,12 +395,18 @@ void Lancelot::Render(void)
     me_particle->Render();
     arondight_particle->Render();
 }
-
+/**************************************************************************************
+//
+// Attack state of lancelot
+//
+**************************************************************************************/
 void Lancelot::Attack(Dragon &d, const float dt)
 {
-    if (!lancelot[currAttk].ongoing_attack)
+    // if attacks are not ongoing
+	if ( ! lancelot[currAttk].ongoing_attack )
     {
-        if (phase & PHASE_1 && !lancelot[MAD_ENHANCEMENT].cooldown)
+        // currently in phase 1 and mad enhancement is not on cooldown
+		if (phase & PHASE_1 && ! lancelot[MAD_ENHANCEMENT].cooldown)
         {
             // teleport lancelot to the center of the screen and make him semi transparent
             PosX = 0.0f;
@@ -344,7 +416,7 @@ void Lancelot::Attack(Dragon &d, const float dt)
 
             charge_time = 2.0f;				// freeze lancelot in the middle of the screen
             Set_Vulnerable(false);		    // make him immune to attacks 
-            currAttk = MAD_ENHANCEMENT;
+            currAttk = MAD_ENHANCEMENT;     // set current attack lancelot is using
 
             // attack is currently ongoing
             lancelot[MAD_ENHANCEMENT].ongoing_attack = true;
@@ -356,12 +428,13 @@ void Lancelot::Attack(Dragon &d, const float dt)
 
         }
 
-        else if (phase & PHASE_2 && !lancelot[ARONDIGHT].cooldown)
+		// it is currently phase 2 and arondight is not on cooldown
+        else if (phase & PHASE_2 && ! lancelot[ARONDIGHT].cooldown)
         {				
             angle = 0.0f;         // used for setting range the sword can go
             angle_offset = 3.0f;  // add to the angle every frame
             charge_time = 2.0f;   // freeze lancelot for 2 seconds so player can prepare
-            currAttk = ARONDIGHT;
+            currAttk = ARONDIGHT; // set current attack to arondight
 
             // teleport lancelot to the middle of the screen and make him semi transparent
             PosX = 0.0f;
@@ -384,68 +457,79 @@ void Lancelot::Attack(Dragon &d, const float dt)
 
             // update the collision box of lancelot
             Collision_.Update_Col_Pos(PosX - LANCELOT_SCALE, PosY - LANCELOT_SCALE,
-                                      PosX + LANCELOT_SCALE, PosY + LANCELOT_SCALE);
-        
-            
+                                      PosX + LANCELOT_SCALE, PosY + LANCELOT_SCALE);           
         }
-   
-        else if (!lancelot[SLASH].cooldown)
+        
+		// slash is not on cooldown
+        else if ( ! lancelot[SLASH].cooldown)
         {
-            currAttk = SLASH;
+            currAttk = SLASH;   // change current attack to slash
             charge_time = 0.5f; // charge time for player to prepare themselves
 
             // player is on the right hand side
             if (this->Get_Direction())
             {
-                lancelot[SLASH].Start_Attack(this->PosX + -ATK_START_POINT.x, ATK_START_POINT.y);
+                // set slash to go to the right side
+				lancelot[SLASH].Start_Attack(this->PosX + -ATK_START_POINT.x, ATK_START_POINT.y);
                 lancelot[SLASH].SetDir(false);
-                angle = -200.0f;
-                angle_offset = 2.0f;
+                angle = -200.0f;         // starting angle of rotation
+                angle_offset = 2.0f;     // offset of angle
             }
             else // player on the left hand side
             {
-                lancelot[SLASH].Start_Attack(this->PosX + ATK_START_POINT.x, ATK_START_POINT.y);
-                angle = 25.0f;
-                angle_offset = -2.0f;
+                // set slash to go to the left side
+				lancelot[SLASH].Start_Attack(this->PosX + ATK_START_POINT.x, ATK_START_POINT.y);
+                angle = 25.0f;            // starting angle of rotation
+                angle_offset = -2.0f;     // offset of angle
             }
             lancelot[SLASH].SetActive(false);
         }
+
+		// default attack is stab
         else
         {
-            currAttk = STAB;
+            // set current attack to stab
+			currAttk = STAB;  
             lancelot[STAB].Start_Attack(this->PosX, this->PosY);
-
-            // rotate the texture to the right direction
+           
             if (Get_Direction() == RIGHT)
             {
-                lancelot[STAB].Transform_.SetScale(-3.0f, 2.0f);
+				// rotate the texture to the right direction
+				lancelot[STAB].Transform_.SetScale(-3.0f, 2.0f);
             }
             else
             {
-                lancelot[STAB].Transform_.SetScale(3.0f, 2.0f);
+				// rotate the texture to the left direction
+				lancelot[STAB].Transform_.SetScale(3.0f, 2.0f);
             }
         }
     }
 
-    // state machine for boss
+    // state machine for boss attacks
     switch (currAttk)
     {
-    case STAB: Stab(d, dt);
+    case STAB:            Stab(d, dt);
         break;
-    case SLASH: Slash(d, dt);
+    case SLASH:           Slash(d, dt);
         break;
     case MAD_ENHANCEMENT: Mad_Enhancement(dt);
         break;
-    case ARONDIGHT: Arondight(d, dt);
+    case ARONDIGHT:       Arondight(d, dt);
         break;
     }
 
 }
-
+/**************************************************************************************
+//
+// lancelot phase 2 transition function
+//
+**************************************************************************************/
 void Lancelot::Lancelot_Phase2(const float dt)
 {
     if(M_E) // turns off mad enhancement if its activated
         Mad_Enhancement(dt); 
+
+	me_particle->Off_Emitter(); // set all particle active to false
 
     // move lancelot to the middle of the screen
     PosX = 0.0f;
@@ -453,9 +537,11 @@ void Lancelot::Lancelot_Phase2(const float dt)
     Transform_.Concat();
     Collision_.Update_Col_Pos(PosX - LANCELOT_SCALE, PosY - LANCELOT_SCALE,   // min point
                               PosX + LANCELOT_SCALE, PosY + LANCELOT_SCALE);  // max point
-    Set_Vulnerable(false);                                                    // make lancelot immune to attacks
-    phase_particle->UpdateEmission();
+    
+	Set_Vulnerable(false);                 // make lancelot immune to attacks
+    phase_particle->UpdateEmission();      // create particles
 
+	// shake the camera for a few seconds
     if (timer > 0.f)
     {
         CamShake();
@@ -463,30 +549,36 @@ void Lancelot::Lancelot_Phase2(const float dt)
         return;
     }
 
-    phase = PHASE_2;
-    current_action = ATTACK;
+    phase = PHASE_2;            // change to phase 2
+    current_action = ATTACK;    // set current state to attack
     Set_Vulnerable(true);       // set lancelot to vulnerable to attack
 }
-
+/**************************************************************************************
+//
+// stab attack of lancelot
+//
+**************************************************************************************/
 void Lancelot::Stab(Dragon& d, const float dt)
 {
     lancelot[STAB].Projectile::Update(dt, ATTACK_SCALE, false, 0.0f); // move the stab projectile
     
-
-    if (lancelot[STAB].GetDist() > 10.0f) // accelerate the stab once it past 10 pixels
+	// accelerate the stab once it past 10 pixels
+    if (lancelot[STAB].GetDist() > 10.0f) 
     {
-        const float stab_accel = 80.0f;
-        AEVec2 new_velocity = lancelot[STAB].GetVelocity();
-        new_velocity.x += stab_accel;
-        lancelot[STAB].SetVelocity(new_velocity);
+        const float stab_accel = 80.0f;                        // acceleration of stab
+        AEVec2 new_velocity = lancelot[STAB].GetVelocity();    // get the current velocity of stab
+        new_velocity.x += stab_accel;                          // add the acceleration of stab
+        lancelot[STAB].SetVelocity(new_velocity);              // set the new velocity
 
-        if (!lancelot[STAB].GetCollided()) // check for collision
+		// check if stab has collided, so player only take once instance of damage
+        if (!lancelot[STAB].GetCollided()) 
         {
-            if (lancelot[STAB].Collision_.Dy_Rect_Rect(d.Collision_, lancelot[STAB].GetVelocity(), d.GetVelocity(), dt))
+            // stab collided with player
+			if (lancelot[STAB].Collision_.Dy_Rect_Rect(d.Collision_, lancelot[STAB].GetVelocity(), d.GetVelocity(), dt))
             {
-                lancelot[STAB].SetCollided(true);
-                d.Decrease_HP();
-                d.PlayHit();
+                lancelot[STAB].SetCollided(true);   // set collided to true
+                d.Decrease_HP();                    // decrease dragon hp
+                d.PlayHit();                        // play sound
                 d.SetInvul(true);                   // Visual Feedback and make dragon invulnerable for awhile
             }
         }
@@ -494,14 +586,17 @@ void Lancelot::Stab(Dragon& d, const float dt)
 
     if (lancelot[STAB].GetDist() > 100.0f) // range of stab
     {
-        lancelot[STAB].End_Attack();
-        lancelot[STAB].SetVelocity(STAB_VELOCITY);
-        current_action = IDLE;             // set behavior to idle
+        lancelot[STAB].End_Attack();                 // reset the stab variables
+        lancelot[STAB].SetVelocity(STAB_VELOCITY);   // reset stab's velocity
+        current_action = IDLE;                       // set behavior to idle
     }
-
-        
+    
 }
-
+/**************************************************************************************
+//
+// slash attack of lancelot
+//
+**************************************************************************************/
 void Lancelot::Slash(Dragon& d, const float dt)
 {
     static bool second_slash = false;	 // checks if its the first or second slash
@@ -513,24 +608,29 @@ void Lancelot::Slash(Dragon& d, const float dt)
         return;
     }
 
+	// set slash active to true
     lancelot[SLASH].SetActive(true);
+
+	// rotate the slash texture
     lancelot[SLASH].Projectile::Update(dt, ATTACK_SCALE, false, angle += angle_offset);
 
     // checks for collision with player. Only collide once
     if (!lancelot[SLASH].GetCollided())
     {
-        if (lancelot[SLASH].Collision_.Dy_Rect_Rect(d.Collision_, lancelot[SLASH].GetVelocity(), d.GetVelocity(), dt))
+        // slash hit player
+		if (lancelot[SLASH].Collision_.Dy_Rect_Rect(d.Collision_, lancelot[SLASH].GetVelocity(), d.GetVelocity(), dt))
         {
-            lancelot[SLASH].SetCollided(true);
-            d.Decrease_HP();
-            d.PlayHit();
+            lancelot[SLASH].SetCollided(true);  // set collision flag to true
+            d.Decrease_HP();                    // decrease player hp
+            d.PlayHit();                        // play music
             d.SetInvul(true);                   // Visual Feedback and make dragon invulnerable for awhile
         }
     }
 
-    if (lancelot[SLASH].GetDist() > 200.0f) // range of slash
+	// range of slash
+    if (lancelot[SLASH].GetDist() > 200.0f) 
     { 
-
+		// currently in second slash
         if (second_slash)
         {
             lancelot[SLASH].cooldown_timer = M_E ? 2.0f : 4.0f;  // shorter cooldown when berserked.
@@ -540,20 +640,24 @@ void Lancelot::Slash(Dragon& d, const float dt)
             second_slash = false;                                // reset second slash flag
             angle_offset = -angle_offset;
         }
-        else  // reverse the velocity to make slash move backwards
+        else  // reverse the velocity to make slash move backwards for second slash
         {
-            AEVec2 reverse = {SLASH_VELOCITY.x, SLASH_VELOCITY.y};
-            reverse.x = -reverse.x;
-            reverse.y = -reverse.y;
-            second_slash = true;
-            lancelot[SLASH].SetVelocity(reverse);
-            lancelot[SLASH].ResetDist();        // reset distance travled back to 0
-            angle_offset = -angle_offset;
+            AEVec2 reverse = {SLASH_VELOCITY.x, SLASH_VELOCITY.y};    // current velocity
+            reverse.x = -reverse.x;                                   // negate the velocity to move backwards
+            reverse.y = -reverse.y;									  // negate the velocity to move backwards
+            second_slash = true;                                      // set flag to true
+            lancelot[SLASH].SetVelocity(reverse);                     // update new velocity
+            lancelot[SLASH].ResetDist();                              // reset distance travled back to 0
+            angle_offset = -angle_offset;                             // reverse the angle offset
         }
     }
 
 }
-
+/**************************************************************************************
+//
+// mad enhancement of lancelot
+//
+**************************************************************************************/
 void Lancelot::Mad_Enhancement(const float dt)
 {
     while (charge_time > 0) // freeze lancelot for 2 seconds
@@ -575,14 +679,18 @@ void Lancelot::Mad_Enhancement(const float dt)
         lancelot[MAD_ENHANCEMENT].cooldown = true;               // cooldown duration
         idle_time = 0.0f;                                        // no idle interval
         M_E = true;												 // mad enhancement flag
-        lancelot[MAD_ENHANCEMENT].ongoing_attack = false;
-        current_action = MOVING;
-        Sprite_->SetAlphaTransBM(1.f, 1.f, AE_GFX_BM_BLEND);
-        Set_Vulnerable(true);
+        lancelot[MAD_ENHANCEMENT].ongoing_attack = false;        // mad enhancement is no longer ongoing
+        current_action = MOVING;                                 // change current action
+        Sprite_->SetAlphaTransBM(1.f, 1.f, AE_GFX_BM_BLEND);     // set lancelot to be opaque
+        Set_Vulnerable(true);                                    // lancelot is now vulnerable to attacks
     }
 
 }
-
+/**************************************************************************************
+//
+// Arondight attack of lancelot
+//
+**************************************************************************************/
 void Lancelot::Arondight(Dragon& d, const float dt)
 {
     // play particle effects
@@ -595,17 +703,17 @@ void Lancelot::Arondight(Dragon& d, const float dt)
         return;
     }
 
-    AEVec2 new_vector = lancelot[ARONDIGHT].Collision_.Get_Point(); // get the point at the top of the sword
-    AEVec2 position = { this->PosX, this->PosY }; // position of lancelot. Used for collision detection
-    HalfPlane side;
-    float s = 0.0f;				  // sin of angle to rotate
-    float c = 0.0f;				  // cosine of angle to rotate
-    float radians = 0.0f;		  // randians version of degree to rotate
-    float tempX = new_vector.x;   // old value of x
-    new_vector.x -= PosX;		  // rotate collision point with using lancelot as the origin
-    new_vector.y -= PosY;		  // rotate collision point with using lancelot as the origin
-    lancelot[ARONDIGHT].Transform_.SetRotation(AERadToDeg(atan(new_vector.y / new_vector.x)));
-    Sprite_->SetAlphaTransBM(1.f, 1.f, AE_GFX_BM_BLEND);
+    AEVec2 new_vector = lancelot[ARONDIGHT].Collision_.Get_Point();                                // get the point at the top of the sword
+    AEVec2 position = { this->PosX, this->PosY };                                                  // position of lancelot. Used for collision detection
+    HalfPlane side;                                                                                // determine which side of the screen the player is at
+    float s = 0.0f;				                                                                   // sin of angle to rotate
+    float c = 0.0f;				                                                                   // cosine of angle to rotate
+    float radians = 0.0f;		                                                                   // randians version of degree to rotate
+    float tempX = new_vector.x;                                                                    // old value of x
+    new_vector.x -= PosX;		                                                                   // rotate collision point with using lancelot as the origin
+    new_vector.y -= PosY;		                                                                   // rotate collision point with using lancelot as the origin
+    lancelot[ARONDIGHT].Transform_.SetRotation(AERadToDeg(atan(new_vector.y / new_vector.x)));     // rotate texture
+    Sprite_->SetAlphaTransBM(1.f, 1.f, AE_GFX_BM_BLEND);                                           // set lancelot to be opqque
     
 
     if (Get_Direction() == RIGHT)
@@ -635,31 +743,32 @@ void Lancelot::Arondight(Dragon& d, const float dt)
     arondight_particle->Emitter_.Pos_.Point_Min_Max[0].y -= 15.f;
     arondight_particle->Emitter_.Pos_.Point_Min_Max[1].y -= 15.f;
 
-    s = sin(radians);		  
-    c = cos(radians);		  
+    s = sin(radians);   // get the sin of the angle
+    c = cos(radians);	// get the cos of the angle 
 
     new_vector.x = new_vector.x * c - new_vector.y * s + PosX; // collision new point after rotation
     new_vector.y = tempX * s + new_vector.y * c + PosY;		   // collision new point after rotation
 
 
 
-    lancelot[ARONDIGHT].PosX = new_vector.x * 0.5f + PosX * 0.5f; // new position of sword
-    lancelot[ARONDIGHT].PosY = new_vector.y * 0.5f + PosY * 0.5f; // new position of sword
-    lancelot[ARONDIGHT].Transform_.SetTranslate(lancelot[ARONDIGHT].PosX, lancelot[ARONDIGHT].PosY);	
-    lancelot[ARONDIGHT].Transform_.Concat();
-    lancelot[ARONDIGHT].Collision_.Update_Col_Pos(new_vector.x, new_vector.y); // update point coordinates for collision
+    lancelot[ARONDIGHT].PosX = new_vector.x * 0.5f + PosX * 0.5f;                                      // new position of sword
+    lancelot[ARONDIGHT].PosY = new_vector.y * 0.5f + PosY * 0.5f;                                      // new position of sword
+    lancelot[ARONDIGHT].Transform_.SetTranslate(lancelot[ARONDIGHT].PosX, lancelot[ARONDIGHT].PosY);   // update position of texture
+    lancelot[ARONDIGHT].Transform_.Concat();                                                           // apply transformation
+    lancelot[ARONDIGHT].Collision_.Update_Col_Pos(new_vector.x, new_vector.y);                         // update point coordinates for collision
 
-    angle += angle_offset;
+    angle += angle_offset; // update the new angle
 
     // checks if the attack collided with player
     if (!lancelot[ARONDIGHT].GetCollided() && Player_Facing_Me (*this, d) )
     {
-        if (lancelot[ARONDIGHT].Collision_.Line_Point(lancelot[ARONDIGHT].Collision_, d.Collision_, position, side))
+        // attack hited player
+		if (lancelot[ARONDIGHT].Collision_.Line_Point(lancelot[ARONDIGHT].Collision_, d.Collision_, position, side))
         {
-            d.Decrease_HP();
-            lancelot[ARONDIGHT].SetCollided(true);
-            d.PlayHit();
-            d.SetInvul(true);                   // Visual Feedback and make dragon invulnerable for awhile
+            d.Decrease_HP();                        // decrease player hp
+            lancelot[ARONDIGHT].SetCollided(true);  // set collided flag to true
+            d.PlayHit();                            // play music
+            d.SetInvul(true);                       // Visual Feedback and make dragon invulnerable for awhile
         }
     }
 
@@ -679,22 +788,37 @@ void Lancelot::Arondight(Dragon& d, const float dt)
     }
 
 }
-
+/**************************************************************************************
+//
+// sets the texture facing direction
+//
+**************************************************************************************/
 void Lancelot::Set_Face_Dir(const Dragon& d)
 {
-    if (d.PosX - this->PosX > 0)
+    // dragon is on the right of player
+	if (d.PosX - this->PosX > 0)
     {
-        this->Set_Direction(RIGHT);
+        // set direction to right and flip the texture
+		this->Set_Direction(RIGHT);
         this->Transform_.SetScale(1.0f, 1.0f);
     }
+
+	// dragon is on the left of player
     else
     {
-        this->Set_Direction(LEFT);
+		// set direction to left and flip the texture
+		this->Set_Direction(LEFT);
         this->Transform_.SetScale(-1.0f, 1.0f);
     }
+
+	// apply transformation
     this->Transform_.Concat();
 }
-
+/**************************************************************************************
+//
+// sets the attack facing direction
+//
+**************************************************************************************/
 void Lancelot::Set_Attk_Dir()
 {
     if (Get_Direction() == RIGHT)            // set all attacks to go right
@@ -712,50 +836,76 @@ void Lancelot::Set_Attk_Dir()
         }
     }
 }
-
+/**************************************************************************************
+//
+// Initialize the stab variables
+//
+**************************************************************************************/
 void Lancelot::Init_Stab(void)
 {
-    lancelot.emplace_back(&attack_sprite, Col_Comp(0.0f, 0.0f, 5.0f, 5.0f, Rect));
+    // push back a boss_attack object
+	lancelot.emplace_back(&attack_sprite, Col_Comp(0.0f, 0.0f, 5.0f, 5.0f, Rect));
     
-    lancelot[STAB].SetVelocity(STAB_VELOCITY);       // velocity for slash
-    lancelot[STAB].Transform_.SetScale(3.0f, 2.0f);  // determine the size of projectile
-    lancelot[STAB].Transform_.Concat();
-    lancelot[STAB].Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+    lancelot[STAB].SetVelocity(STAB_VELOCITY);                              // velocity for slash
+    lancelot[STAB].Transform_.SetScale(3.0f, 2.0f);                         // determine the size of projectile
+    lancelot[STAB].Transform_.Concat();                                     // apply transformation
+    lancelot[STAB].Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);   // set it to blend mode
 }
-
+/**************************************************************************************
+//
+// Initialize the slash variables
+//
+**************************************************************************************/
 void Lancelot::Init_Slash(void)
 {
-    lancelot.emplace_back(&attack_sprite, Col_Comp(0.0f, 0.0f, 5.0f, 5.0f, Rect));
-    lancelot[SLASH].SetVelocity(SLASH_VELOCITY); // velocity for slash
-    lancelot[SLASH].Transform_.SetScale(3.0f, 2.0f);       // determine the size of projectile
-    lancelot[SLASH].Transform_.Concat();
-    lancelot[SLASH].Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+	// push back a boss_attack object
+	lancelot.emplace_back(&attack_sprite, Col_Comp(0.0f, 0.0f, 5.0f, 5.0f, Rect));
+   
+	lancelot[SLASH].SetVelocity(SLASH_VELOCITY);                             // velocity for slash
+    lancelot[SLASH].Transform_.SetScale(3.0f, 2.0f);                         // scale the slash
+    lancelot[SLASH].Transform_.Concat();                                     // apply transformation
+    lancelot[SLASH].Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);   // set it to blend mode
 }
-
+/**************************************************************************************
+//
+// Initialize the arondight variables
+//
+**************************************************************************************/
 void Lancelot::Init_Arondight(void)
 {
-    lancelot.emplace_back(&attack_sprite, Col_Comp(0.0f, 400.0f, Point));
+	// push back a boss_attack object
+	lancelot.emplace_back(&attack_sprite, Col_Comp(0.0f, 400.0f, Point));
     
     lancelot[ARONDIGHT].SetVelocity(AEVec2{ 600.0f, 600.0f });                        // velocity for slash
     lancelot[ARONDIGHT].Transform_.SetScale(ARONDIGHT_SCALE.x, ARONDIGHT_SCALE.y);    // determine the size of projectile
-    lancelot[ARONDIGHT].Transform_.Concat();
-    lancelot[ARONDIGHT].Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+    lancelot[ARONDIGHT].Transform_.Concat();                                          // apply transformation
+    lancelot[ARONDIGHT].Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);        // set to blend mode
 }
-
+/**************************************************************************************
+//
+// Dead state of lancelot
+//
+**************************************************************************************/
 void Lancelot::Dead(void)
 {
-    //change next state to next stage
-
-    for (Boss_Attack& i : lancelot)
+    // set all active attacks to false
+	for (Boss_Attack& i : lancelot)
     {
         i.SetActive(false);
     }
+
+	// set lancelot active to false
     SetActive(false);
 }
-
+/**************************************************************************************
+//
+// lancelot destructor
+//
+**************************************************************************************/
 Lancelot::~Lancelot()
 {
-    lancelot.clear();
+    // empty the vector of attacks    
+	lancelot.clear();
 
     // remove particles from screens
     arondight_particle->Off_Emitter();
@@ -769,9 +919,15 @@ Lancelot::~Lancelot()
 namespace
 {
 
+/**************************************************************************************
+//
+// check if the player is facing lancelot ( used for arondight attack)
+//
+**************************************************************************************/
 bool Player_Facing_Me(Lancelot& l, Dragon& d)
 {
-    Direction boss_face = l.Get_Direction();
+    // get the direction lancelot is facing
+	Direction boss_face = l.Get_Direction();
 
     switch (boss_face)
     {
