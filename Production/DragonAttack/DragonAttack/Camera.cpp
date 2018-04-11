@@ -29,19 +29,19 @@ void CamFollow(float PositionX, float PositionY, float OffsetX, float OffsetY)
 void CamFollow(Transform const &PosMatrix, float OffsetX, float OffsetY, float Direction, const bool Reset)
 {
   //Moves the camera left or right
-  static float Offset   = OffsetX                                         ;
-  //Holds the previous Y poistion
-  static float PosYold  = PosMatrix.GetTranslateMatrix().m[1][2] + OffsetY;
-  //Flag for camera to move up
-  static bool  GoUp     = false                                           ;
-  //Flag for camera to move down
-  static bool  GoDown   = false                                           ;
-  //Flag for whether camera is moving
-  static bool  Moving   = false                                           ;
-  //Current position Y
-  float        PosYCurr = PosMatrix.GetTranslateMatrix().m[1][2]          ;
-  //To use a smooth animation curve
-  float        Accel    = 6.0f                                            ;
+  static float Offset   = OffsetX                                             ;
+  //Holds the previous Y poistion                                             
+  static float PosYold  = PosMatrix.GetTranslateMatrix().m[1][2] + OffsetY    ;
+  //Flag for camera to move up                                                
+  static bool  GoUp     = false                                               ;
+  //Flag for camera to move down                                              
+  static bool  GoDown   = false                                               ;
+  //Flag for whether camera is moving                                         
+  static bool  Moving   = false                                               ;
+  //Current position Y                                                        
+  float        PosYCurr = PosMatrix.GetTranslateMatrix().m[1][2]              ;
+  //To use a smooth animation curve                                           
+  float        Accel    = 6.0f                                                ;
   PosYold = Reset ? PosMatrix.GetTranslateMatrix().m[1][2] + OffsetY : PosYold;
   //Check direction
   if (Direction < 0.0f) //If facing left

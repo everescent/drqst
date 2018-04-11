@@ -37,10 +37,11 @@ Description:
   Make the camera follow an object.
 
 Parameters:
-  PosMatrix : Transform matrix to follow
+  PosMatrix : Transform matrix to follow. 
   OffsetX   : Camera offset in the X direction.
   OffsetY   : Camera offset in the Y direction.
-  dir       : Direction camera target is facing. 
+  dir       : Direction camera target is facing.
+  Reset     : Resets the camera position. 
 Return:
   void
 *************************************************************************/
