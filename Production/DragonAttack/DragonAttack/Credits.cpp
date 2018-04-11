@@ -146,8 +146,8 @@ namespace Credits
     AEGfxPrint(fontID[1], creators[7],  150, -160, 1.0f, 1.0f, 1.0f);
 
     //Print special thanks to fmod
-    AEGfxPrint(fontID[0], Fmod[0], 0, -100, 1.0f, 1.0f, 1.0f);
-    AEGfxPrint(fontID[1], Fmod[1], 0, -100, 1.0f, 1.0f, 1.0f);
+    AEGfxPrint(fontID[0], Fmod[0], -90, -220, 1.0f, 1.0f, 1.0f);
+    AEGfxPrint(fontID[1], Fmod[1], -50, -260, 1.0f, 1.0f, 1.0f);
 
     copyright->Render_Object(*copyright_m);
 
