@@ -1,3 +1,17 @@
+/* Start Header ************************************************************************/
+/*!
+\file       Stage2_2.cpp
+\author     Andrew Chong Jiahao (100%)
+\par email: c.jiahaoandrew\@digipen.edu
+\brief
+Implementation for stage 2-2 of the game.
+
+Copyright (C) 2018 DigiPen Institute of Technology.
+Reproduction or disclosure of this file or its contents
+without the prior written consent of DigiPen Institute of
+Technology is prohibited.
+*/
+/* End Header **************************************************************************/
 #include "Stage2_2.h"
 
 namespace
@@ -215,7 +229,7 @@ namespace Stage2_2
 		player->Set_HP(5);
 		player->ResetCharge();
 
-		CamFollow(player->Transform_, 200, 120, player->GetFacing());
+		CamFollow(player->Transform_, 200, 120, player->GetFacing(), true);
 	}
 
 	void Update(float dt)
