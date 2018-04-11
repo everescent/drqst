@@ -205,11 +205,11 @@ namespace Stage2_1
 		Audio->SetLoop(0, FMOD_LOOP_NORMAL);
 
 		// Object placement
-		/*for (int y = 0; y < Map_Height; ++y)
+		for (int y = 0; y < Map_Height; ++y)
 		{
 			for (int x = 0; x < Map_Width; ++x)
 			{
-				if (MapData[y][x] == OBJ_PLATFORM)
+				/*if (MapData[y][x] == OBJ_PLATFORM)
 				{
 					float f_x = (float)x;
 					float f_y = (float)y;
@@ -226,7 +226,7 @@ namespace Stage2_1
 					float f_x = (float)x;
 					float f_y = (float)y;
 					noupdate_blocks.push_back(Block{ FLOOR_SPRITE,Convert_X(f_x) , Convert_Y(f_y) });
-				}
+				}*/
 				if (MapData[y][x] == OBJ_GRUNT)
 				{
 					float f_x = (float)x;
@@ -293,7 +293,7 @@ namespace Stage2_1
 						INVUL, Convert_X(f_x) , Convert_Y(f_y) });
 				}
 			}
-		}*/
+		}
 
 		for (size_t i = 0; i < c.size(); ++i)
 			c[i]->SetActive(true);
@@ -472,8 +472,8 @@ namespace Stage2_1
 		/*platforms.clear();
 		noupdate_blocks.clear();
 		blocks.clear();
-		barriers.clear();
-		PU.clear();*/
+		barriers.clear();*/
+		PU.clear();
 
 		// Delete enemies
 		for (size_t i = 0; i < c.size(); ++i)
@@ -496,7 +496,7 @@ namespace Stage2_1
 		noupdate_blocks.clear();
 		blocks.clear();
 		barriers.clear();
-		PU.clear();
+		//PU.clear();
 
 		// Delete Sprites
 		delete COIN_SPRITE;//pickups

@@ -178,11 +178,11 @@ namespace Stage1_2
 		Audio->Play(0); // Plays selected track
 		Audio->SetLoop(0, FMOD_LOOP_NORMAL); // Loops the selected track
 
-	/*	for (int y = 0; y < Map_Height; ++y)
+		for (int y = 0; y < Map_Height; ++y)
 		{
 			for (int x = 0; x < Map_Width; ++x)
 			{
-				if (MapData[y][x] == OBJ_PLATFORM)
+				/*if (MapData[y][x] == OBJ_PLATFORM)
 				{
 					float f_x = (float)x;
 					float f_y = (float)y;
@@ -193,7 +193,7 @@ namespace Stage1_2
 					float f_x = (float)x;
 					float f_y = (float)y;
 					blocks.push_back(Block{ FLOOR_SPRITE, Convert_X(f_x) , Convert_Y(f_y) });
-				}
+				}*/
 				if (MapData[y][x] == OBJ_GRUNT)
 				{
 					float f_x = (float)x;
@@ -260,7 +260,7 @@ namespace Stage1_2
 						INVUL, Convert_X(f_x) , Convert_Y(f_y) });
 				}
 			}
-		}*/
+		}
 
 		for (size_t i = 0; i < c.size(); ++i)
 			c[i]->SetActive(true);
@@ -414,7 +414,7 @@ namespace Stage1_2
 		// Clear object vectors
 		//platforms.clear();
 		//blocks.clear();
-		//PU.clear();
+		PU.clear();
 		//barriers.clear();
 
 		// Delete enemies
@@ -436,7 +436,7 @@ namespace Stage1_2
 
 		platforms.clear();
 		blocks.clear();
-		PU.clear();
+		//PU.clear();
 		barriers.clear();
 
 		// Delete Sprites

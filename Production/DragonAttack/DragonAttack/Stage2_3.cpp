@@ -128,7 +128,6 @@ namespace Stage2_3
 		//	}
 		//}
 
-		//c.push_back(Create_Boss_AI(MERLIN));
 		c.push_back(Create_Boss_AI(MERLIN));
 		c[0]->SetActive(true);
 

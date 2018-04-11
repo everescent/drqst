@@ -98,8 +98,7 @@ namespace Stage1_3
 					blocks.push_back(Block{ FLOOR_SPRITE, Convert_X(f_x) , Convert_Y(f_y) });
 				}
 			}
-		}
-		c.push_back(Create_Boss_AI(LANCELOT));*/
+		}*/
 		c.push_back(Create_Boss_AI(LANCELOT));
 		c[0]->SetActive(true);
 
