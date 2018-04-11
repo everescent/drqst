@@ -62,36 +62,111 @@ const float  Merlin_Start_X  { 320.0f  }; //Merlin default position X
 const float  Merlin_Start_Y  { -120.0f }; //Merlin default position Y
 //Global Read-Only Variables END/////////////////////////////////////////////////////////
 
+/****************************************************************************************
+Description:
+  This is the Merlin Boss A.I. 
+****************************************************************************************/
 class Merlin : public Characters {
 
 public:
+
+  /**************************************************************************************
+  Description:
+    Constructs Merlin. Only make one of this at any one time. 
+  Merlin_Texture:
+    Merlin's sprite. 
+  Eball_Sprite:
+    Sprite for the energy balls. 
+  Arrow_Sprite:
+    Sprite for the arrow rain attack. 
+  **************************************************************************************/
   Merlin(Sprite *Merlin_Texture, Sprite *Eball_Sprite, Sprite *Arrow_Sprite) ;
-  //Updates Merlin
+
+  /**************************************************************************************
+  Description:
+    Updates Merlin.
+  player:
+    The player. 
+  dt:
+    Delta time. 
+  **************************************************************************************/
   void Update(Dragon &player, const float dt)                                ;
-  //Renders Merlin and attacks
+
+  /**************************************************************************************
+  Description:
+    Renders Merlin and attacks. 
+  **************************************************************************************/
   void Render()                                                              ;
-  //Returns boss state, use this to check if boss is attacking
+
+  /**************************************************************************************
+  Description:
+    Returns boss state, use this to check if boss is attacking. 
+  **************************************************************************************/
   Boss_Action_State GetState()                    const { return M_Curr      ; }
-  //Returns the type of attack
+
+  /**************************************************************************************
+  Description:
+    Returns the type of attack. 
+  **************************************************************************************/
   MAS GetAttack()                                 const { return M_Att_Curr  ; }
-  //To override mute function
+
+  /**************************************************************************************
+  Description:
+    To override mute function. 
+  **************************************************************************************/
   void Mute()                                                                ;
-  //To override unmute function
+
+  /**************************************************************************************
+  Description:
+    To override unmute function. 
+  **************************************************************************************/
   void Unmute()                                                              ;
-  //Returns Spread Eball to check for collision
+
+  /**************************************************************************************
+  Description:
+    Returns Spread Eball to check for collision. 
+  **************************************************************************************/
   const std::vector<Boss_Attack> &GetSpreadBall() const { return Spread_Eball; }
-  //Returns arrow to check for collision
+
+  /**************************************************************************************
+  Description:
+    Returns arrow to check for collision. 
+  **************************************************************************************/
   const std::vector<Boss_Attack> &GetArrow()      const { return Arrow       ; }
-  //Returns Eball to check for collision
+
+  /**************************************************************************************
+  Description:
+    Returns Eball to check for collision. 
+  **************************************************************************************/
   const Projectile &GetEball()                    const { return Eball       ; }
+
+  /**************************************************************************************
+  Description:
+    Deconstructs Merlin. 
+  **************************************************************************************/
   ~Merlin()                                                                  ;
 
 private:
-  void(Merlin::*Merlin_Attack)(Dragon &player, const float dt); //Pointer to current attack function
-  void(Merlin::*Merlin_State)(Dragon &player, const float dt) ; //Pointer to current state function
-  void CheckState(Dragon &player)                             ; //Sets current state to next, checks for next state
-  bool CheckAttack(Dragon &player)                            ; //Check if can attack, and sets the appropriate 
-                                                                //function for it; Returns true if can attack, else false
+  void(Merlin::*Merlin_Attack)(Dragon &player, const float dt) ; //Pointer to current attack function
+  void(Merlin::*Merlin_State)(Dragon &player , const float dt) ; //Pointer to current state function
+
+  /**************************************************************************************
+  Description:
+    Sets current state to next, checks for next state.
+  player:
+    The player.
+  **************************************************************************************/
+  void CheckState(Dragon &player)                              ;
+
+  /**************************************************************************************
+  Description:
+    Check if can attack, and sets the appropriate function for it.
+    Returns true if can attack, else false. 
+  player:
+    The player.
+  **************************************************************************************/
+  bool CheckAttack(Dragon &player)                             ;
+
   int castime{ 100 }      ; //Arrow rain cast time
   float Attack_Interval   ; //Time between attacks
   Boss_Action_State M_Curr; //Current state
@@ -102,6 +177,7 @@ private:
   Boss_Attack Eball                    ; //Projectile for engery ball
   std::vector<Boss_Attack> Spread_Eball; //Projectiles for spread shot energy ball
   std::vector<Boss_Attack> Arrow       ; //Projectiles for arrow rain
+
   //Blink attack struct
   struct Blink {
     float CD_Time ; //Cooldown time
@@ -121,6 +197,7 @@ private:
       }
     }
   };
+
   Blink     Blink_     ; //Blink utilities
   Sprite    MagicCircle; //Magic circle sprite
   Transform MC_Pos     ; //Magic circle transform
@@ -135,21 +212,120 @@ private:
   Animation Anim_;       //Animation
 
   //Attack Functions START///////////////////////////////////////////////////////////////
-  void Melee(Dragon &player, const float dt)         ; //Melee attack function
-  void S_Eball(Dragon &player, const float dt)       ; //Single shot energy ball function
-  void Sp_Eball(Dragon &player, const float dt)      ; //Spread shot energy ball function
-  void A_Rain(Dragon &player, const float dt)        ; //Arrow rain function
-  void Melee_Update(const float dt)                  ; //Melee Update
-  void S_Eball_Update(const float dt)                ; //Single shot update
-  void Sp_Eball_Update(const float dt)               ; //Spread shot update
-  void A_Rain_Update(Dragon &player, const float dt) ; //Arrow rain update
-  void Colision_Check(Dragon &player, const float dt); //Checks if attacks hit
+  /**************************************************************************************
+  Description:
+    Melee attack function.
+  player:
+    The player.
+  dt:
+    Delta time.
+  **************************************************************************************/
+  void Melee(Dragon &player, const float dt)         ;
+
+  /**************************************************************************************
+  Description:
+    Single shot energy ball function.
+  player:
+    The player.
+  dt:
+    Delta time.
+  **************************************************************************************/
+  void S_Eball(Dragon &player, const float dt)       ;
+
+  /**************************************************************************************
+  Description:
+    Spread shot energy ball function.
+  player:
+    The player.
+  dt:
+    Delta time.
+  **************************************************************************************/
+  void Sp_Eball(Dragon &player, const float dt)      ;
+
+  /**************************************************************************************
+  Description:
+    Arrow rain function.
+  player:
+    The player.
+  dt:
+    Delta time.
+  **************************************************************************************/
+  void A_Rain(Dragon &player, const float dt)        ;
+
+  /**************************************************************************************
+  Description:
+    Melee Update.
+  dt:
+    Delta time.
+  **************************************************************************************/
+  void Melee_Update(const float dt)                  ;
+
+  /**************************************************************************************
+  Description:
+    Single shot update.
+  dt:
+    Delta time.
+  **************************************************************************************/
+  void S_Eball_Update(const float dt)                ;
+
+  /**************************************************************************************
+  Description:
+    Spread shot update.
+  dt:
+    Delta time.
+  **************************************************************************************/
+  void Sp_Eball_Update(const float dt)               ;
+
+  /**************************************************************************************
+  Description:
+    Arrow rain update.
+  player:
+    The player.
+  dt:
+    Delta time.
+  **************************************************************************************/
+  void A_Rain_Update(Dragon &player, const float dt) ;
+
+  /**************************************************************************************
+  Description:
+    Checks if attacks hit.
+  player:
+    The player.
+  dt:
+    Delta time.
+  **************************************************************************************/
+  void Colision_Check(Dragon &player, const float dt);
   //Attack Functions END/////////////////////////////////////////////////////////////////
 
   //State Functions START///////////////////////////////////////////////////////////////
-  void Idle(Dragon &player, const float dt)  ; //Idle state function
-  void Move(Dragon &player, const float dt)  ; //Move state function
-  void Attack(Dragon &player, const float dt); //Attack state function
-  //State Functions END/////////////////////////////////////////////////////////////////
+  /**************************************************************************************
+  Description:
+    Idle state function.
+  player:
+    The player.
+  dt:
+    Delta time.
+  **************************************************************************************/
+  void Idle(Dragon &player, const float dt)  ;
 
+  /**************************************************************************************
+  Description:
+    Move state function.
+  player:
+    The player.
+  dt:
+    Delta time.
+  **************************************************************************************/
+  void Move(Dragon &player, const float dt)  ;
+
+  /**************************************************************************************
+  Description:
+    Attack state function.
+  player:
+    The player.
+  dt:
+    Delta time.
+  **************************************************************************************/
+  void Attack(Dragon &player, const float dt);
+  //State Functions END/////////////////////////////////////////////////////////////////
 };

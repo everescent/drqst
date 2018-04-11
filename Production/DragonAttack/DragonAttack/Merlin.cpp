@@ -17,6 +17,7 @@ Technology is prohibited.
 #include <ctime>
 #include <cstdlib>
 
+//Constructs Merlin. Only make one of this at any one time. 
 Merlin::Merlin(Sprite *Merlin_Texture, Sprite *Eball_Sprite, Sprite *Arrow_Sprite)
   //Initialize characters class
   :Characters{ Merlin_Texture                         ,
@@ -105,20 +106,25 @@ Merlin::Merlin(Sprite *Merlin_Texture, Sprite *Eball_Sprite, Sprite *Arrow_Sprit
     Arrow[i].cooldown_timer = A_Rain_CD_Time                      ;
   }
 }
+
 //Clears the vector memory
 Merlin::~Merlin()
 {
   Arrow.clear()       ;
   Spread_Eball.clear();
 }
+
 //STATE FUNCTIONS START//////////////////////////////////////////////////////////////////
+//Idle state
 void Merlin::Idle(Dragon &player, const float dt)
 {
   UNREFERENCED_PARAMETER(dt)    ;
   UNREFERENCED_PARAMETER(player);
+  //Set idle animation
   Anim_.SetState(ANIM_IDLE)     ;
 }
 
+//Move state
 void Merlin::Move(Dragon &player, const float dt)
 {
   UNREFERENCED_PARAMETER(dt)    ;
@@ -149,6 +155,7 @@ void Merlin::Move(Dragon &player, const float dt)
     PosX = Merlin_Start_X;
     PosY = Merlin_Start_Y;
   }
+  //Set selected blink position
   Transform_.SetTranslate(PosX, PosY);
   Transform_.Concat()                ;
   Blink_.Cooldown = true             ;
@@ -156,6 +163,7 @@ void Merlin::Move(Dragon &player, const float dt)
 
 }
 
+//Attack state
 void Merlin::Attack(Dragon &player, const float dt)
 {
   //This will execute the attacks
@@ -165,14 +173,17 @@ void Merlin::Attack(Dragon &player, const float dt)
 //STATE FUNCTIONS END////////////////////////////////////////////////////////////////////
 
 //ATTACK FUNCTIONS START/////////////////////////////////////////////////////////////////
+//Melee attack
 void Merlin::Melee(Dragon &player, const float dt)
 {
   UNREFERENCED_PARAMETER(player)        ;
   UNREFERENCED_PARAMETER(dt)            ;
+  //Reset melee
   M_Melee.cooldown = true               ;
   M_Melee.cooldown_timer = Melee_CD_Time;
 }
 
+//Single shot energy ball attack
 void Merlin::S_Eball(Dragon &player, const float dt)
 {
   UNREFERENCED_PARAMETER(dt)                           ;
@@ -189,6 +200,7 @@ void Merlin::S_Eball(Dragon &player, const float dt)
   Eball.cooldown_timer = Eball_CD_Time                 ;
 }
 
+//Spread shot energy ball attack 
 void Merlin::Sp_Eball(Dragon &player, const float dt)
 {
   UNREFERENCED_PARAMETER(dt)                             ;
@@ -220,6 +232,7 @@ void Merlin::Sp_Eball(Dragon &player, const float dt)
   }
 }
 
+//Arrow rain attack 
 void Merlin::A_Rain(Dragon &player, const float dt)
 {
   UNREFERENCED_PARAMETER(player);
@@ -242,6 +255,8 @@ void Merlin::A_Rain(Dragon &player, const float dt)
     }
   }
 }
+
+//Update melee attack
 void Merlin::Melee_Update(const float dt)
 {
   //Check if melee is used
@@ -257,6 +272,8 @@ void Merlin::Melee_Update(const float dt)
     }
   }
 }
+
+//Update single shot energy ball
 void Merlin::S_Eball_Update(const float dt)
 {
   //Check if single shot is dead
@@ -280,6 +297,8 @@ void Merlin::S_Eball_Update(const float dt)
   Eball.Projectile::Pos(PosX, PosY)        ;
   Eball.Projectile::Update(dt, Eball_Scale);
 }
+
+//Update spread shot energy ball
 void Merlin::Sp_Eball_Update(const float dt)
 {
   //Check if any bullets for spread shot are on cooldown
@@ -323,6 +342,7 @@ void Merlin::Sp_Eball_Update(const float dt)
   }
 }
 
+//Update Arrow rain
 void Merlin::A_Rain_Update(Dragon &player, const float dt)
 {
   //Check if last arrow died
@@ -381,6 +401,7 @@ void Merlin::A_Rain_Update(Dragon &player, const float dt)
   }
 }
 
+//Check for collision
 void Merlin::Colision_Check(Dragon &player, const float dt)
 {
   //Arrow rain collision check
@@ -444,6 +465,7 @@ void Merlin::Colision_Check(Dragon &player, const float dt)
 }
 //ATTACK FUNCTIONS END///////////////////////////////////////////////////////////////////
 
+//Check if ready to move on to next stage
 void Merlin::CheckState(Dragon &player)
 {
   M_Curr = M_Next                   ;
@@ -492,6 +514,7 @@ void Merlin::CheckState(Dragon &player)
   }
 }
 
+//Check if any attack is ready
 bool Merlin::CheckAttack(Dragon &player)
 {
   bool CanAttack{ false }    ;
@@ -551,6 +574,7 @@ bool Merlin::CheckAttack(Dragon &player)
   return CanAttack                     ;
 }
 
+//Updates Merlin
 void Merlin::Update(Dragon &player, const float dt)
 {
   //Check if Merlin is dead
@@ -607,9 +631,11 @@ void Merlin::Update(Dragon &player, const float dt)
     //Check for attack colision with player
     Colision_Check(player, dt);
   }
+  //Update animation 
   Anim_.Update(*Sprite_)      ;
 }
 
+//Renders Merlin and attacks
 void Merlin::Render()
 {
   //Check if Merlin is dead

@@ -20,10 +20,12 @@ using namespace ArcherMacros;
 
 //Initialize audio engine
 Audio_Engine Archer::Audio_{ 1, [](std::vector<std::string> &playlist) ->void {
+                                  //Archer hit sound
                                   playlist.push_back(".//Audio/Hit_01.mp3");
                                 } 
                            };
 
+//Constructs the Archer object with its sprites and position
 Archer::Archer(Sprite *p_Sprite, Sprite *Arrow_Sprite, 
                const float posX, const float posY      )
   //Initialize characters class
@@ -65,16 +67,20 @@ Archer::Archer(Sprite *p_Sprite, Sprite *Arrow_Sprite,
   Arrow.Transform_.Concat()                                        ;
 }
 
+//Updates the arrow projectile
 void Archer::Attack_Update(Dragon &/*player*/, const float dt)
 {
+  //Check for active arrow
   if (Arrow.IsActive())
   {
+    //Kill the arrow if more than desired range
     if (Arrow.GetDist() >= Arrow_Death)
     {
       Arrow.ResetDist()     ;
       Arrow.SetActive(false);
     }
   }
+  //Activate cooldown
   else
   {
     Arrow_CD -= dt    ;
@@ -84,12 +90,15 @@ void Archer::Attack_Update(Dragon &/*player*/, const float dt)
       Attack_  = false;
     }
   }
+  //Update arrow
   Arrow.Pos(PosX, PosY)                      ;
   Arrow.Update(dt, Arrow_Scale, false, Angle);
 }
 
+//Check for collision
 void Archer::Colision_Check(Dragon &player, const float dt)
 {
+  //Update collision box
   GameObject::Collision_.Update_Col_Pos(PosX - Archer_Scale,
                                         PosY - Archer_Scale,
                                         PosX + Archer_Scale,
@@ -114,6 +123,7 @@ void Archer::Colision_Check(Dragon &player, const float dt)
         player.GetFireball()[i].Projectile::ResetDist();
         player.GetFireball()[i].SetActive(false)       ;
       }
+  //Similarly, for mega fireball 
   if(player.GetMfireball().IsActive())
     if (Collision_.Dy_Rect_Rect(player.GetMfireball().Collision_   ,
                                 GetVelocity()                      ,
@@ -142,6 +152,7 @@ void Archer::Colision_Check(Dragon &player, const float dt)
                                         )
         )
       {
+        //Damage the player
         player.Decrease_HP()  ;
         player.PlayHit()      ;
         Arrow.ResetDist()     ;
@@ -151,6 +162,7 @@ void Archer::Colision_Check(Dragon &player, const float dt)
   }
 }
 
+//Idle state
 void Archer::Idle(Dragon &/*player*/, const float /*dt*/)
 {
   //Do some idle animation
@@ -158,12 +170,14 @@ void Archer::Idle(Dragon &/*player*/, const float /*dt*/)
   Anim_.SetState(IDLE_ANIM);
 }
 
+//Moving state
 void Archer::Move(Dragon &player, const float dt)
 {
   //Move the Archer away from player if too near
-  //Archer can only move for a max distance of 100m or something
+  //Archer can only move for a max distance
   Anim_.SetState(WALK_ANIM)              ;
   float Displacement = player.PosX - PosX;
+  //Check for direction of displacement
   if (Displacement < 0.0f)
   {
     PosX     += -Archer_Speed * dt       ;
@@ -176,6 +190,7 @@ void Archer::Move(Dragon &player, const float dt)
   }
 }
 
+//Attack state
 void Archer::Attack(Dragon &player, const float /*dt*/)
 {
   //Shoots an arrow, based on player's displacement with archer
@@ -200,6 +215,7 @@ void Archer::Attack(Dragon &player, const float /*dt*/)
   Distance = 0.0f                  ;
 }
 
+//Dead state
 void Archer::Dead()
 {
   //Add score only once
@@ -208,12 +224,14 @@ void Archer::Dead()
     Characters::Add_Kill_count();
     Characters::Add_Score(5)    ;
   }
+  //Kill the archer
   SetActive(false)      ;
   Arrow.SetActive(false);
   Set_HP(Archer_HP)     ;
   A_Curr = IDLE         ;
 }
 
+//Check for which state to go into
 void Archer::CheckState(Dragon &player, const float /*dt*/)
 {
   //Check if dragon is seen
@@ -266,8 +284,10 @@ void Archer::Unmute()
   Audio_.SetPause (HIT , false);
 }
 
+//Updates archer
 void Archer::Update(Dragon& player, const float dt)
 {
+  //Kill the archer if 0 or less health
   if (Get_HP() <= 0)
   {
     Dead()                             ;
@@ -302,16 +322,20 @@ void Archer::Update(Dragon& player, const float dt)
     Transform_.SetTranslate(PosX, PosY);
     Transform_.Concat()                ;
   }
+  //Update animation
   Anim_.Update(*Sprite_)               ;
 }
 
 //Renders Archer and attacks
 void Archer::Render()
 {
+  //Render Archer
   GameObject::Render();
+  //Render arrow
   Arrow.Render()      ;
 }
 
+//Deletes the sprite
 Archer::~Archer()
 {
   delete Sprite_;

@@ -15,22 +15,24 @@ Technology is prohibited.
 
 #include "Dragon.h"
 
+//Set pickup type, when a pick up is picked up. OK, this sounds obvious, but yes.
 void Dragon::SetPickup(const int type, const bool status)
 {
   switch (type)
   {
     case DMG:
-      Pickup_.DMG = status;
-      break;
+      Pickup_.DMG   = status;
+      break                 ;
     case SPD:
-      Pickup_.SPD = status;
-      break;
+      Pickup_.SPD   = status;
+      break                 ;
     case INVUL:
       Pickup_.INVUL = status;
-      break;
+      break                 ;
   }
 }
 
+//Puts the power ups into effect, if any
 void Dragon::ApplyPowerUP()
 {
   if (Pickup_.DMG)
@@ -40,7 +42,8 @@ void Dragon::ApplyPowerUP()
   }
   else
   {
-    Damage = Fireball_Damage;
+    //Revert increase in damage
+    Damage = Fireball_Damage     ;
   }
   if (Pickup_.SPD)
   {
@@ -49,74 +52,90 @@ void Dragon::ApplyPowerUP()
   }
   else
   {
-    SetVelocity(Player_Speed);
+    //Revert increase speed
+    SetVelocity(Player_Speed                                   );
   }
   if (Pickup_.INVUL)
   {
     //Make Player Invulnerable
-    Set_Vulnerable(false);
+    Set_Vulnerable(false                                );
     Sprite_->SetAlphaTransBM(0.8f, 0.8f, AE_GFX_BM_BLEND);
   }
   else
   {
-    Set_Vulnerable(true);
+    //Make player vulberable
+    Set_Vulnerable(true                                 );
     Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
   }
 }
 
+//Makes dragon invulnerable for a short time after getting hit
 void Dragon::HitInvul(const float dt)
 {
-  static float    Invul_CD = Invul_Time;
-  static float    frame_count = 0.3f;
-  Set_Vulnerable(true);
+  //Invulnerable time frame
+  static float Invul_CD    = Invul_Time;
+  //To switch between semi transparent and opaque states
+  static float frame_count = 0.3f      ;
+  //Always vulnerable unless invulnerability is activated
+  Set_Vulnerable(true)                 ;
+  //If invulnerability is activated
   if (Invul_FLAG)
   {
+    //Make invulnerable
     Set_Vulnerable(false);
-    Invul_CD -= dt;
-    frame_count -= dt;
+    Invul_CD    -= dt    ;
+    frame_count -= dt    ;
+    //Count the time to switch opcaity states
     if (frame_count <= 0.0f)
       Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
     else if (frame_count >= 0.1f)
       Sprite_->SetAlphaTransBM(0.8f, 0.8f, AE_GFX_BM_BLEND);
     if (frame_count <= 0)
-      frame_count = 0.3f;
+      frame_count = 0.3f                                   ;
   }
+  //When invulnerability time frame is up
   if (Invul_CD <= 0.0f)
   {
-    Invul_CD = Invul_Time;
-    frame_count = 0.3f;
-    Set_Vulnerable(true);
-    Invul_FLAG = false;
+    //Reset everything
+    Invul_CD    = Invul_Time;
+    frame_count = 0.3f      ;
+    Set_Vulnerable(true)    ;
+    Invul_FLAG  = false     ;
   }
 }
 
+//This function receives the player input
 void Dragon::Input()
 {
+  //Cehck for "Right" movement key
   if (AEInputCheckCurr(AEVK_D))
   {
     Dir.R = true;
     if(Anim_.GetComplete(Dragon_ANIM::HIT))
       Anim_.SetState(Dragon_ANIM::WALK);
   }
+  //Check for "Left" movement key
   else if (AEInputCheckCurr(AEVK_A))
   {
     Dir.L = true;
     if (Anim_.GetComplete(Dragon_ANIM::HIT))
       Anim_.SetState(Dragon_ANIM::WALK);
   }
+  //If not idle
   else
   {
     Anim_.SetState(Dragon_ANIM::IDLE);
   }
-
+  //Check for "Attack" key
   if (AEInputCheckTriggered(AEVK_RETURN))
   {
     if (!SFX_.GetPlaying(0))
       SFX_.Play(SHOOT);
     Attack = true;
   }
-
-  if (AEInputCheckTriggered(AEVK_RSHIFT) || AEInputCheckTriggered(AEVK_LSHIFT))
+  //Check for "Special Attack" key
+  if (AEInputCheckTriggered(AEVK_RSHIFT) || 
+      AEInputCheckTriggered(AEVK_LSHIFT))
   {
     if (Charge == Max_Charge)
      {
@@ -125,7 +144,7 @@ void Dragon::Input()
        ResetCharge();
      }
   }
-
+  //Check for "Jump" key
   if (AEInputCheckCurr(AEVK_SPACE))
   {
     if (!Falling)
@@ -136,7 +155,9 @@ void Dragon::Input()
         Anim_.SetState(Dragon_ANIM::JUMP);
     }
   }
-  if(!Dir.L && !Dir.R && !Dir.UP && Anim_.GetComplete(Dragon_ANIM::HIT) && 
+  //Check if truly idle
+  if(!Dir.L && !Dir.R && !Dir.UP && 
+      Anim_.GetComplete(Dragon_ANIM::HIT ) && 
       Anim_.GetComplete(Dragon_ANIM::JUMP))
     Anim_.SetState(Dragon_ANIM::IDLE);
 }
@@ -152,6 +173,7 @@ void Dragon::Mute()
   SFX_.SetPause (IMPACT, true);
   SFX_.SetPause (SHOOT , true);
 }
+
 //Unmutes all audio
 void Dragon::Unmute()
 {
@@ -163,7 +185,7 @@ void Dragon::Unmute()
   SFX_.SetPause (SHOOT , false);
 }
 
-
+//This updates the dragon's behavior, according to player input
 void Dragon::Update(Dragon& dummy, const float dt)
 {
   UNREFERENCED_PARAMETER(dummy);
@@ -173,39 +195,48 @@ void Dragon::Update(Dragon& dummy, const float dt)
   //Update position based on direction
   if (Dir.L)
   {
-    PosX -= GetVelocity().x * dt;
-    Facing = -1.0f;
-    Set_Direction(LEFT);
+    PosX  -= GetVelocity().x * dt    ;
+    Facing = -1.0f                   ;
+    Set_Direction(LEFT)              ;
     Transform_.SetScale(Facing, 1.0f);
   }
   else if (Dir.R)
   {
-    PosX += GetVelocity().x * dt;
-    Facing = 1.0f;
-    Set_Direction(RIGHT);
+    PosX  += GetVelocity().x * dt    ;
+    Facing = 1.0f                    ;
+    Set_Direction(RIGHT)             ;
     Transform_.SetScale(Facing, 1.0f);
   }
   if (Dir.UP)
   {
-    PosY += GetVelocity().y * dt;
-    Air_Dist += GetVelocity().y * dt;
+    PosY     += GetVelocity().y * dt ;
+    Air_Dist += GetVelocity().y * dt ;
   }
-  PosY -= Gravity;
-  SFX_.Update();
+  //Apply gravity
+  PosY -= Gravity                    ;
+  SFX_.Update()                      ;
   //Update position of player
   Transform_.SetTranslate(PosX, PosY);
-  Transform_.Concat();
+  Transform_.Concat()                ;
+  //Update collision box
   if(Facing < 0.0f)
-    Collision_.Update_Col_Pos(PosX - Dragon_Scale, PosY - Dragon_Scale,
-                              PosX + Dragon_Scale * 0.9f, PosY + Dragon_Scale);
+    Collision_.Update_Col_Pos(PosX - Dragon_Scale       ,
+                              PosY - Dragon_Scale       ,
+                              PosX + Dragon_Scale * 0.9f,
+                              PosY + Dragon_Scale         );
   else
-    Collision_.Update_Col_Pos(PosX - Dragon_Scale * 0.9f, PosY - Dragon_Scale,
-                              PosX + Dragon_Scale, PosY + Dragon_Scale);
-  ApplyPowerUP();
-  HitInvul(dt);
+    Collision_.Update_Col_Pos(PosX - Dragon_Scale * 0.9f,
+                              PosY - Dragon_Scale       ,
+                              PosX + Dragon_Scale       ,
+                              PosY + Dragon_Scale         );
+  //Apply any power ups
+  ApplyPowerUP()                                           ;
+  //Apply any invulnerability due to hit
+  HitInvul(dt)                                             ;
   //Check if attack has been made
   if (Attack)
   {
+    //Check for active bullets, less than the required interval
     for (int i = 0; i < Bullet_Buffer; ++i)
       if (Fireball[i].IsActive())
       {
@@ -222,6 +253,7 @@ void Dragon::Update(Dragon& dummy, const float dt)
         break;
       }
   }
+  //Check if special attack has been made
   if (MAttack)
   {
     if (Mfireball.IsActive())
@@ -233,19 +265,19 @@ void Dragon::Update(Dragon& dummy, const float dt)
   //Update fireballs
   for (int i = 0; i < Bullet_Buffer; ++i)
   {
-    Fireball[i].Pos(PosX, PosY);
+    Fireball[i].Pos(PosX, PosY)           ;
     Fireball[i].Update(dt, Fireball_Scale);
   }
   //Update Mega Fireball
-  Mfireball.Pos(PosX, PosY);
-  Mfireball.Update(dt, MFireball_Scale);
+  Mfireball.Pos(PosX, PosY)               ;
+  Mfireball.Update(dt, MFireball_Scale)   ;
   //Check for distance limit (Fireball)
   for (int i = 0; i < Bullet_Buffer; ++i)
     if (Fireball[i].IsActive())
     {
       if (Fireball[i].GetDist() >= Bullet_Death)
       {
-        Fireball[i].ResetDist();
+        Fireball[i].ResetDist()     ;
         Fireball[i].SetActive(false);
       }
     }
@@ -256,40 +288,48 @@ void Dragon::Update(Dragon& dummy, const float dt)
   {
     if (Mfireball.GetDist() >= Bullet_Death)
     {
-      Mfireball.ResetDist();
+      Mfireball.ResetDist()     ;
       Mfireball.SetActive(false);
     }
   }
-  Anim_.Update(*Sprite_);
+  //Update animation
+  Anim_.Update(*Sprite_)        ;
   //Reset direction and attack
-  Attack = false;
-  MAttack = false;
+  Attack        = false;
+  MAttack       = false;
   Dir.L = Dir.R = false;
+  //Check for maximum jump height
   if (Air_Dist >= Jump_Height)
   {
-    Falling = true;
-    Dir.UP = false;
+    Falling = true ;
+    Dir.UP  = false;
   }
+  //Deactivate jump mode after landing
   if (Falling)
   {
-    Air_Dist -= Gravity;
+    Air_Dist     -= Gravity            ;
     if (Air_Dist <= 0.0f && TouchBottom)
     {
-      Falling = false;
-      TouchBottom = false;
+      Falling     = false              ;
+      TouchBottom = false              ;
       Anim_.SetState(Dragon_ANIM::IDLE);
     }
   }
 }
 
+//Redners the dragon
 void Dragon::Render()
 {
+  //Render all active fireballs
   for (int i = 0; i < Bullet_Buffer; ++i)
     Fireball[i].Render();
+  //Render active mega fireball
   Mfireball.Render();
+  //Redner the Dragon
   GameObject::Render();
 }
 
+//Gets the charge of the mega fireball
 int Dragon::Get_Charge()
 {
   return Charge;

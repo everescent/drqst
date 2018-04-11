@@ -22,7 +22,7 @@ Technology is prohibited.
 #include <cmath>
 
 namespace ArcherMacros {
-  //Global Read-Only Variables START///////////////////////////////////////////////////////
+  //Global Read-Only Variables START/////////////////////////////////////////////////////
   const int   Archer_HP      { 50      }; //Archer HP
   const float Archer_Scale   { 70.0f   }; //Scale of Archer mesh
   const float Archer_Speed   { 120.0f  }; //Scale of Archer mesh
@@ -32,24 +32,64 @@ namespace ArcherMacros {
   const float Archer_CD_Time { 2.0f    }; //Attack Interval
   const float Archer_Max_Dist{ 500.0f  }; //Maximum travelling distance
   const float Gravity        { 10.0f   }; //Gravity
-  //Global Read-Only Variables END/////////////////////////////////////////////////////////
+  //Global Read-Only Variables END///////////////////////////////////////////////////////
 }
 
+/****************************************************************************************
+Description:
+  This class is the Archer A.I. 
+****************************************************************************************/
 class Archer : public Characters {
 
 public: 
-  //Constructs Archer with desired position
+
+  /**************************************************************************************
+  Description:
+    Constructs Archer with desired position.
+  p_Sprite:
+    The sprite of the archer. 
+  Arrow_Sprite:
+    The arrow's sprite. 
+  posX:
+    Archer's position X. 
+  posY:
+    Archer's position Y. 
+  **************************************************************************************/
   Archer(Sprite *p_Sprite       , Sprite *Arrow_Sprite   , 
          const float posX = 0.0f, const float posY = 0.0f  );
-  //Clears arrow vector memory
+
+  /**************************************************************************************
+  Description:
+    Clears arrow vector memory. 
+  **************************************************************************************/
   ~Archer()                                                 ;
-  //Mutes all audio
+
+  /**************************************************************************************
+  Description:
+    Mutes all audio.
+  **************************************************************************************/
   void Mute()                                               ;
-  //Unmutes all audio
+
+  /**************************************************************************************
+  Description:
+    Unmutes all audio.
+  **************************************************************************************/
   void Unmute()                                             ;
-  //Updates the Archer
+
+  /**************************************************************************************
+  Description:
+    Updates the Archer. 
+  player:
+    The player. 
+  dt: 
+    Delta time. 
+  **************************************************************************************/
   void Update(Dragon& player, const float dt)               ;
-  //Renders Archer and attacks
+
+  /**************************************************************************************
+  Description:
+    Renders Archer and attacks.
+  **************************************************************************************/
   void Render()                                             ;
 
 private:
@@ -66,28 +106,91 @@ private:
   float               Angle                    ; //Arrow rotation
   static Audio_Engine Audio_                   ; //Audio SFX
   Animation           Anim_                    ; //Animation for Archer
+
   //Audio enums
   enum AudioState {
     HIT,
     SHOOT
   };
+
   //Animation enums
   enum Anim_State {
     HIT_ANIM ,
     IDLE_ANIM,
     WALK_ANIM
   };
-//Attack Functions START///////////////////////////////////////////////////////////////
-  void Attack_Update(Dragon &player, const float dt) ; //Arrow update
-  void Colision_Check(Dragon &player, const float dt); //Checks if attacks hit
-//Attack Functions END/////////////////////////////////////////////////////////////////
 
-//State Functions START////////////////////////////////////////////////////////////////
-  void Idle(Dragon &player, const float dt)      ; //Idle state function
-  void Move(Dragon &player, const float dt)      ; //Move state function
-  void Attack(Dragon &player, const float dt)    ; //Attack state function
-  void Dead()                                    ; //Kills an archer when HP is 0
-  void CheckState(Dragon &player, const float dt); //Sets current state to next, 
-                                                   //checks for next state
-//State Functions END//////////////////////////////////////////////////////////////////
+//Attack Functions START/////////////////////////////////////////////////////////////////
+  /**************************************************************************************
+  Description:
+    Arrow update.
+  player:
+    The player.
+  dt:
+    Delta time.
+  **************************************************************************************/
+  void Attack_Update(Dragon &player, const float dt) ;
+
+  /**************************************************************************************
+  Description:
+    Checks if attacks hit.
+  player:
+    The player.
+  dt:
+    Delta time.
+  **************************************************************************************/
+  void Colision_Check(Dragon &player, const float dt);
+//Attack Functions END///////////////////////////////////////////////////////////////////
+
+//State Functions START//////////////////////////////////////////////////////////////////
+  /**************************************************************************************
+  Description:
+    Idle state function.
+  player:
+    The player.
+  dt:
+    Delta time.
+  **************************************************************************************/
+  void Idle(Dragon &player, const float dt)      ;
+
+  /**************************************************************************************
+  Description:
+    Move state function.
+  player:
+    The player.
+  dt:
+    Delta time.
+  **************************************************************************************/
+  void Move(Dragon &player, const float dt)      ;
+
+  /**************************************************************************************
+  Description:
+    Attack state function.
+  player:
+    The player.
+  dt:
+    Delta time.
+  **************************************************************************************/
+  void Attack(Dragon &player, const float dt)    ;
+
+  /**************************************************************************************
+  Description:
+   Kills an archer when HP is 0.
+  player:
+    The player.
+  dt:
+    Delta time.
+  **************************************************************************************/
+  void Dead()                                    ;
+
+  /**************************************************************************************
+  Description:
+    Sets current state to next, checks for next state. 
+  player:
+    The player.
+  dt:
+    Delta time.
+  **************************************************************************************/
+  void CheckState(Dragon &player, const float dt);
+//State Functions END////////////////////////////////////////////////////////////////////
 };

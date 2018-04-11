@@ -50,52 +50,162 @@ namespace Dragon_ANIM{
   }DAS;
 }
 
+/****************************************************************************************
+Description:
+  This is the player controlled object, otherwise known as the player's class. 
+  This class handles all the input by the play and updates accordingly. 
+****************************************************************************************/
 class Dragon : public Characters{
 
 public:
-  //Handles player input
+
+  /**************************************************************************************
+  Description:
+    This function receives the player input. 
+  **************************************************************************************/
   void Input()                                                                         ;
-  //Don't need to use dt
+
+  /**************************************************************************************
+  Description:
+    This updates the dragon's behavior, according to player input. 
+  Dragon&: 
+    This is a dummy, and not used. 
+  **************************************************************************************/
   void Update(Dragon&, const float dt)                                                 ;
-  //Adds charge to the Mega Fireball, caps at Max_Charge
+
+  /**************************************************************************************
+  Description:
+    Adds charge to the Mega Fireball, caps at Max_Charge. 
+  **************************************************************************************/
   void AddCharge()                       { Charge == Max_Charge ? Max_Charge : ++Charge; }
-  //Resets Mega Fireball charge
+
+  /**************************************************************************************
+  Description:
+    Resets Mega Fireball charge.
+  **************************************************************************************/
   void ResetCharge()                     { Charge = 0                                  ; }
-  //Set pickup type
-  void SetPickup(const int  type  , 
+
+  /**************************************************************************************
+  Description:
+    Set pickup type, when a pick up is picked up. OK, this sounds obvious, but yes. 
+  type:
+    Pick up type.
+  status:
+    Whether or not pickup effects have expired. 
+  **************************************************************************************/
+  void SetPickup(const int  type  ,
                  const bool status  )                                                  ;
-  //Set Invul Flag when hit
+
+  /**************************************************************************************
+  Description:
+    Set Invul Flag when hit. Makes the player invulanerable for a few seconds. 
+  state: 
+    Whether or not to activate invulnerability. 
+  **************************************************************************************/
   void SetInvul(const bool state)        { Invul_FLAG = state                          ; }
+
+  /**************************************************************************************
+  Description:
+    This tells the object whether or not the player is touching the ground. 
+  state:
+    Whether or not the object has touched the ground. 
+  **************************************************************************************/
   void SetTouchBottom(const bool state)  { TouchBottom = state                         ; }
-  //Play this when firebal made contact
+
+  /**************************************************************************************
+  Description:
+    Play this when fireball made contact.
+  **************************************************************************************/
   void PlayImpact()                      { SFX_.Play(IMPACT)                           ; }
-  //Play this when dragon gets hit
+
+  /**************************************************************************************
+  Description:
+    Play this when dragon gets hit. 
+  **************************************************************************************/
   void PlayHit()                         { SFX_.Play(HIT)                              ; }
-  //Mutes all audio
+
+  /**************************************************************************************
+  Description:
+    Mutes all audio.
+  **************************************************************************************/
   void Mute()                                                                          ;
-  //Unmutes all audio
+
+  /**************************************************************************************
+  Description:
+    Unmutes all audio.
+  **************************************************************************************/
   void Unmute()                                                                        ;
-  //Renders the dragon
+
+  /**************************************************************************************
+  Description:
+    Renders the dragon.
+  **************************************************************************************/
   void Render()                                                                        ;
-  //Get fireball damage
+
+  /**************************************************************************************
+  Description:
+    Get fireball damage.
+  **************************************************************************************/
   char GetDamage()         const         { return Damage                               ; }
-  //Get mega fireball damage             
+
+  /**************************************************************************************
+  Description:
+    Get mega fireball damage. 
+  **************************************************************************************/
   char GetMDamage()        const         { return M_Damage                             ; }
-  //Jump check
+
+  /**************************************************************************************
+  Description:
+    Jump check.
+  **************************************************************************************/
   bool GetJump()                         { return Dir.UP                               ; }
-  //Returns Fireballs to check for collision
+
+  /**************************************************************************************
+  Description:
+    Returns Fireballs to check for collision. 
+  **************************************************************************************/
   std::vector<Projectile> &GetFireball() { return Fireball                             ; }
-  //Returns Mega Fireball to check for collision
+
+  /**************************************************************************************
+  Description:
+    Returns Mega Fireball to check for collision. 
+  **************************************************************************************/
   Projectile &GetMfireball()             { return Mfireball                            ; }
-  //Get the direction the player         is facing
+
+  /**************************************************************************************
+  Description:
+    Get the direction the player is facing. 
+  **************************************************************************************/
   float GetFacing()        const         { return Facing                               ; }
-  //Returns the Invul_FLAG value         
+
+  /**************************************************************************************
+  Description:
+    Returns the Invul_FLAG value. 
+  **************************************************************************************/
   bool GetInvulFlag()      const         { return Invul_FLAG                           ; }
-  //Returns this pos                     
+
+  /**************************************************************************************
+  Description:
+    Returns this object. 
+  **************************************************************************************/
   const Dragon &Get_this() const         { return *this                                ; }
-  //Gets current charge
+
+  /**************************************************************************************
+  Description:
+    Gets current charge. 
+  **************************************************************************************/
   int Get_Charge()                                                                     ;
 
+  /**************************************************************************************
+  Description:
+    Constructs the Dragon.
+  D_Sprite:
+    The dragon's sprite. 
+  F_Sprite:
+    The fireball's srpite. 
+  Pos_:
+    Spawn position of the dragon. 
+  **************************************************************************************/
   Dragon(Sprite* D_Sprite, Sprite *F_Sprite, AEVec2 Pos_)
     //Initialize Characters class
     :Characters{ D_Sprite,                     5,
@@ -123,9 +233,9 @@ public:
     Air_Dist   { 0.0f             }, Facing    { 1.0f  },
     //Initialize Audio Engine
     SFX_       { 3, [](std::vector<std::string> &playlist) ->void {
-                      playlist.push_back(".//Audio/Dragon_Hit.mp3"  );
-                      playlist.push_back(".//Audio/Fireball_Hit.mp3");
-                      playlist.push_back(".//Audio/Fireball.mp3"    );
+                      playlist.push_back(".//Audio/Dragon_Hit.mp3"  ); //Dragon hit sound
+                      playlist.push_back(".//Audio/Fireball_Hit.mp3"); //Fireball on impact sound
+                      playlist.push_back(".//Audio/Fireball.mp3"    ); //Fireball launch sound
                     } 
                }, 
     Anim_      { Dragon_ANIM::WALK + 1, 4, 5,
@@ -159,6 +269,7 @@ public:
                                              } 
                                    }
                         );
+    //Initialize fireball
     for (int i = 0; i < Bullet_Buffer; ++i)
     {
       Fireball[i].SetVelocity(AEVec2{ Bullet_Speed, 0.0f })            ;
@@ -171,6 +282,10 @@ public:
     Mfireball.Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
   }
 
+  /**************************************************************************************
+  Description:
+    Deconstructs the Dragon. Clears the vector memory. 
+  **************************************************************************************/
   ~Dragon()
   {
     Fireball.clear();
@@ -189,6 +304,7 @@ private:
   float Gravity    ; //Gravity
   float Air_Dist   ; //Distance jumped
   float Facing     ; //Direction of player is facing
+
   //Determines direction 
   struct Direction {
     bool L ; //Check for left
@@ -196,6 +312,7 @@ private:
     bool UP; //Check for jump
     Direction() :L{ false }, R{ false }, UP{ false } {}
   };
+
   //Determines what kind of pickup is activated
   struct Pickup {
     bool DMG  ; //Damage
@@ -203,21 +320,32 @@ private:
     bool INVUL; //Invulnerability
     Pickup() :DMG{ false }, SPD{ false }, INVUL{ false } {}
   };
+
   //Audio enums
   enum AudioState {
     HIT   , //Dragon get hit SFX
     IMPACT, //Fireball impact SFX
     SHOOT   //Fireball shot SFX
   };
+
   Direction               Dir      ; //Direction variable
   Pickup                  Pickup_  ; //Type of power up
   std::vector<Projectile> Fireball ; //Array of Fireball projectile
   Projectile              Mfireball; //Mega Fireball projectile
   Audio_Engine            SFX_     ; //Dragon Sounds
   Animation               Anim_    ; //For Dragon animation
+
   //Private Functions START//////////////////////////////////////////////////////////////
+  /**************************************************************************************
+  Description:
+    Puts the power ups into effect, if any. 
+  **************************************************************************************/
   void ApplyPowerUP()          ;
-  //Makes dragon invulnerable for a short time after getting hit
+
+  /**************************************************************************************
+  Description:
+    Makes dragon invulnerable for a short time after getting hit. 
+  **************************************************************************************/
   void HitInvul(const float dt);
   //Private Functions END////////////////////////////////////////////////////////////////
 };
