@@ -45,7 +45,8 @@ Return:
   void
 *************************************************************************/
 void CamFollow(Transform const &PosMatrix,
-               float              OffsetX, float OffsetY, float dir);
+               float              OffsetX, float OffsetY, float dir,
+               const bool Reset = false);
 
 /*************************************************************************
 Description:

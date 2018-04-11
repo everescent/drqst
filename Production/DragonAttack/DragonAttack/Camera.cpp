@@ -26,7 +26,7 @@ void CamFollow(float PositionX, float PositionY, float OffsetX, float OffsetY)
 }
 
 //This function follows an object using its transform matrix, with an offset
-void CamFollow(Transform const &PosMatrix, float OffsetX, float OffsetY, float Direction)
+void CamFollow(Transform const &PosMatrix, float OffsetX, float OffsetY, float Direction, const bool Reset)
 {
   //Moves the camera left or right
   static float Offset   = OffsetX                                         ;
@@ -42,6 +42,7 @@ void CamFollow(Transform const &PosMatrix, float OffsetX, float OffsetY, float D
   float        PosYCurr = PosMatrix.GetTranslateMatrix().m[1][2]          ;
   //To use a smooth animation curve
   float        Accel    = 6.0f                                            ;
+  PosYold = Reset ? PosMatrix.GetTranslateMatrix().m[1][2] + OffsetY : PosYold;
   //Check direction
   if (Direction < 0.0f) //If facing left
   {
