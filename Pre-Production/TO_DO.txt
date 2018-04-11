@@ -5,14 +5,9 @@
  - Add a lot more coins, and slightly more power-ups (would make game play faster and less boring)
  
   [MECHANICS]
- - 3-1, not recommended for death pits as there's no condition that will 'kill' the dragon 
 
   [BUGS]
- - Upon 'death' (or rather when the stage restarts), sometimes the camera 
-   would snap to the spawn point while sometimes it'll slowly move 
-   to the spawn point (if the dragon restart too far from the original point)
  - If player moves when restarting, player can fall off the map
- - Upon death and restarting, camera offset Y will be too low SOMETIMES
 
   [NEW]
  - Boxes will spawn randomised power-up when broken (low-priority)
@@ -20,7 +15,6 @@
  - snapping needs to snap to where the 2 meshes meet rather than back to centre
  - JUMP IS STILL STICKY
  - KA needs indicators for spawning mobs
- - STAGE/STATE TRANSITION (fade in/out black bg)
  - HOW TO PLAY SCREEN
  - something bout getting hit while in the air doesn't kill the player all the time, (related) life check needs to check for <= 0 rather than == 0???
  - player outside borders (death borders)
@@ -31,6 +25,7 @@ Delegation:
   Andrew:
     -All [Level Design]
     -If player moves when restarting, player can fall off the map
+    -STAGE/STATE TRANSITION (fade in/out black bg)
 
   Jacob:
     - JUMP IS STILL STICKY
