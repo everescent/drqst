@@ -1,0 +1,59 @@
+Name: Andrew Chong Jiahao
+Role: Lead Designer
+Main Contributions: Level design and environmental objects
+List:
+  Grunt.cpp
+  Grunt.h
+  Physics.cpp
+  Physics.h
+  Barrier.cpp
+  Barrier.h
+  Floor.cpp
+  Floor.h
+  LevelChangePlatform.cpp
+  LevelChangePlatform.h
+  Platform.cpp
+  Platform.h
+  Sign.cpp
+  Sign.h
+  Tower.cpp
+  Tower.h
+  Wall.cpp
+  Wall.h
+  Stage1_1.cpp
+  Stage1_1.h
+  Stage1_2.cpp
+  Stage1_2.h
+  Stage1_3.cpp
+  Stage1_3.h
+  Stage2_1.cpp
+  Stage2_1.h
+  Stage2_2.cpp
+  Stage2_2.h
+  Stage2_3.cpp
+  Stage2_3.h
+  Stage3_1.cpp
+  Stage3_1.h
+  Stage3_2.cpp
+  Stage3_2.h
+  
+Total LOC: 4154
+
+What I liked: 
+I liked being able to design my own levels with our level reader and how to 
+Boss AI turned out. Designing a level, let alone 6 levels, was no easy task 
+as I tried to make them each unique in their own right. I learnt how to use 
+verticality and how to give players different choices in the form of 
+routes to take throughout the level.
+
+What I disliked: 
+I disliked the fact that my implementation of the physics wasn't used even 
+though I managed a working demo of it early on in the project. I also disliked 
+that despite being the lead designer, I was not capable enough to develop 
+the mechanics as I visualised them.
+
+What I learned: 
+I learnt a lot about general coding methods and structures from my group mates 
+as they were more experienced programmers than me. Implementing their code in 
+my levels taught me that there will not always be a solution for evey problem, 
+and that modifications to pre-existing functions and classes were sometimes needed.

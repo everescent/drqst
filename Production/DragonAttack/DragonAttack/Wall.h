@@ -22,10 +22,7 @@ Technology is prohibited.
 // A class that creates a basic character
 class Wall : public GameObject
 {
-private:
-
 public:
 	Wall(Sprite* const p_Sprite, float x, float y); // default constructor
-
 	void Update(Characters &obj, const float &dt);
 };

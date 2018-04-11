@@ -19,16 +19,10 @@ Technology is prohibited.
 #include "Dragon.h"
 #include "Create_Object.h"
 
-// A class that creates a basic character
 class Platform : public GameObject
 {
-private:
-
 public:
 	Platform(Sprite* const p_Sprite, float x, float y); // default constructor
-	//(Jacob) Changed to take in player and dt
 	void Update(Dragon &player, const float &dt);
 	void Update(Characters &player, const float &dt);
-  //(Jacob) Takes in AI
-  //void Update(Characters &player, const float &dt, const bool xSnapping);
 };

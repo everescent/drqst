@@ -29,5 +29,4 @@ void Wall::Update(Characters &obj, const float &dt)
 			obj.PosX = PosX - Sprite_->Get_Width() - obj.Sprite_->Get_Width() ;
 		}
 	}
-
 }

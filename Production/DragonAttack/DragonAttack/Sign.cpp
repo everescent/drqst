@@ -26,13 +26,9 @@ void Sign::Update(Dragon &player, const float &dt)
 		this->Transform_.Concat();
 
 		if (Collision_.Dy_Rect_Rect(player.Collision_, GetVelocity(), player.GetVelocity(), dt))
-		{
 			ShowTutorial = true;
-		}
 		else
-		{
 			ShowTutorial = false;
-		}
 	}
 
 }

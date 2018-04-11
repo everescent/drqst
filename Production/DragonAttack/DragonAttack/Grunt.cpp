@@ -39,10 +39,7 @@ Grunt::Grunt(Sprite *p_Sprite, const float posX, const float posY)
 			Init.push_back(Range{ 0.0f, 1.0f, 0.33f, 0.33f }); // Idle
 			Init.push_back(Range{ 0.0f, 1.0f, 0.66f, 0.66f }); // Walk
 		} 
-	},
-	PlayerSeen{ false }, PlayerInRange{ false },
-	MovementX{ 0.5f }, MovementY{ 0.5f },
-	moveSpd{ 3.0f }, EstIdleX{ 0 }
+	}
 {
 	SetActive(true);
 	Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
@@ -159,8 +156,7 @@ void Grunt::Update(Dragon &d, const float dt)
 					d.GetFireball()[i].GetVelocity(), dt))
 				{
 					
-						anim.SetState(HIT_ANIM);
-					
+					anim.SetState(HIT_ANIM);
 
 					Decrease_HP(d.GetDamage());
 					d.AddCharge();
@@ -179,8 +175,7 @@ void Grunt::Update(Dragon &d, const float dt)
 				d.GetMfireball().GetVelocity(), dt))
 			{
 				
-					anim.SetState(HIT_ANIM);
-				
+				anim.SetState(HIT_ANIM);
 
 				Decrease_HP(d.GetMDamage());
 				SFX.Play(0);

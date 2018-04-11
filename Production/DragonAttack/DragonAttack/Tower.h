@@ -7,8 +7,6 @@
 // A class that creates a basic character
 class Tower : public GameObject
 {
-private:
-
 public:
 	Tower(Sprite* const p_Sprite, float x, float y); // default constructor
 
