@@ -198,8 +198,8 @@ namespace Level_Selector
 		// pause the music and set volume to 0 if current state is muted
 		if (Audio_Engine::MUTE_)
 		{
-			audio->SetVolume(0, 0.0f); // set volume to 0
-			audio->SetPause(0, true);  // pause volume
+			Audio->SetVolume(0, 0.0f); // set volume to 0
+			Audio->SetPause(0, true);  // pause volume
 		}
 
 		 //BEHAVIOUR FOR CURSOR PARTICLES
