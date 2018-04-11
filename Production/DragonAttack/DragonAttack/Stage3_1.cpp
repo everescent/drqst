@@ -109,71 +109,6 @@ namespace Stage3_1
 					float f_y = (float)y;
 					blocks.push_back(Block{ FLOOR_SPRITE,Convert_X(f_x) , Convert_Y(f_y) });
 				}
-				/*if (MapData[y][x] == OBJ_GRUNT)
-				{
-					float f_x = (float)x;
-					float f_y = (float)y;
-					c.push_back(Create_Basic_AI(GRUNT, AEVec2{ Convert_X(f_x) ,  Convert_Y(f_y) }));
-				}
-				if (MapData[y][x] == OBJ_ARCHER)
-				{
-					float f_x = (float)x;
-					float f_y = (float)y;
-					c.push_back(Create_Basic_AI(ARCHER, AEVec2{ Convert_X(f_x) ,  Convert_Y(f_y) }));
-				}
-				if (MapData[y][x] == OBJ_KNIGHT)
-				{
-					float f_x = (float)x;
-					float f_y = (float)y;
-					c.push_back(Create_Basic_AI(KNIGHT, AEVec2{ Convert_X(f_x) ,  Convert_Y(f_y) }));
-				}
-				if (MapData[y][x] == OBJ_MAGE)
-				{
-					float f_x = (float)x;
-					float f_y = (float)y;
-					c.push_back(Create_Basic_AI(MAGE, AEVec2{ Convert_X(f_x) ,  Convert_Y(f_y) }));
-				}
-				//pick ups
-				if (MapData[y][x] == OBJ_COIN)
-				{
-					float f_x = (float)x;
-					float f_y = (float)y;
-					PU.push_back(PickUp{ COIN_SPRITE,
-						Col_Comp{ 0.0f - 25.0f, 0.0f - 25.0f, 0.0f + 25.0f, 0.0f + 25.0f, Rect },
-						COIN, Convert_X(f_x) , Convert_Y(f_y) });
-				}
-				if (MapData[y][x] == OBJ_HP)
-				{
-					float f_x = (float)x;
-					float f_y = (float)y;
-					PU.push_back(PickUp{ HP_SPRITE,
-						Col_Comp{ 0.0f - 25.0f, 0.0f - 25.0f, 0.0f + 25.0f, 0.0f + 25.0f, Rect },
-						HP, Convert_X(f_x) , Convert_Y(f_y) });
-				}
-				if (MapData[y][x] == OBJ_SPD)
-				{
-					float f_x = (float)x;
-					float f_y = (float)y;
-					PU.push_back(PickUp{ SPD_SPRITE,
-						Col_Comp{ 0.0f - 25.0f, 0.0f - 25.0f, 0.0f + 25.0f, 0.0f + 25.0f, Rect },
-						SPD, Convert_X(f_x) , Convert_Y(f_y) });
-				}
-				if (MapData[y][x] == OBJ_DMG)
-				{
-					float f_x = (float)x;
-					float f_y = (float)y;
-					PU.push_back(PickUp{ DMG_SPRITE,
-						Col_Comp{ 0.0f - 25.0f, 0.0f - 25.0f, 0.0f + 25.0f, 0.0f + 25.0f, Rect },
-						DMG, Convert_X(f_x) , Convert_Y(f_y) });
-				}
-				if (MapData[y][x] == OBJ_INVUL)
-				{
-					float f_x = (float)x;
-					float f_y = (float)y;
-					PU.push_back(PickUp{ INVUL_SPRITE,
-						Col_Comp{ 0.0f - 25.0f, 0.0f - 25.0f, 0.0f + 25.0f, 0.0f + 25.0f, Rect },
-						INVUL, Convert_X(f_x) , Convert_Y(f_y) });
-				}*/
 			}
 		}
 
@@ -192,18 +127,6 @@ namespace Stage3_1
 		{
 			for (int x = 0; x < Map_Width; ++x)
 			{
-		//		if (MapData[y][x] == OBJ_PLATFORM)
-		//		{
-		//			float f_x = (float)x;
-		//			float f_y = (float)y;
-		//			platforms.push_back(Platform{ PLAT_SPRITE, Convert_X(f_x) , Convert_Y(f_y) });
-		//		}
-		//		if (MapData[y][x] == OBJ_FLOOR)
-		//		{
-		//			float f_x = (float)x;
-		//			float f_y = (float)y;
-		//			blocks.push_back(Block{ FLOOR_SPRITE,Convert_X(f_x) , Convert_Y(f_y) });
-		//		}
 				if (MapData[y][x] == OBJ_GRUNT)
 				{
 					float f_x = (float)x;
@@ -311,7 +234,6 @@ namespace Stage3_1
 					FadeIn = false;
 				}
 			}
-
 
 			Audio->SetPause(0, false);
 			Audio->Update();
@@ -432,10 +354,7 @@ namespace Stage3_1
 		delete player;
 		delete ui;
 
-		// Clear object vectors
-		/*platforms.clear();
-		blocks.clear();
-		barriers.clear();*/
+		// Clear pickups vector
 		PU.clear();
 
 		// Delete enemies
@@ -458,7 +377,6 @@ namespace Stage3_1
 		platforms.clear();
 		blocks.clear();
 		barriers.clear();
-		//PU.clear();
 
 		// Delete Sprites
 		delete COIN_SPRITE;//pickups

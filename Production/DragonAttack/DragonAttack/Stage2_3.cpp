@@ -108,26 +108,6 @@ namespace Stage2_3
 		// Loops selected track
 		Audio->SetLoop(0, FMOD_LOOP_NORMAL);
 
-		//// Object placement
-		//for (int y = 0; y < Map_Height; ++y)
-		//{
-		//	for (int x = 0; x < Map_Width; ++x)
-		//	{
-		//		if (MapData[y][x] == OBJ_FLOOR)
-		//		{
-		//			float f_x = (float)x;
-		//			float f_y = (float)y;
-		//			blocks.push_back(Block{ FLOOR_SPRITE, Convert_X(f_x) , Convert_Y(f_y) });
-		//		}
-		//		if (MapData[y][x] == OBJ_PLATFORM)
-		//		{
-		//			float f_x = (float)x;
-		//			float f_y = (float)y;
-		//			platforms.push_back(Platform{ PLAT_SPRITE, Convert_X(f_x) , Convert_Y(f_y) });
-		//		}
-		//	}
-		//}
-
 		c.push_back(Create_Boss_AI(MERLIN));
 		c[0]->SetActive(true);
 
@@ -257,13 +237,10 @@ namespace Stage2_3
 	{
 		timer = 3.0f;
 		vis = 1.0f;
+
 		// Delete player and UI
 		delete player;
 		delete ui;
-
-		// Clear object vector
-		/*blocks.clear();
-        platforms.clear();*/
 
 		// Delete enemies
 		for (size_t i = 0; i < c.size(); ++i)
