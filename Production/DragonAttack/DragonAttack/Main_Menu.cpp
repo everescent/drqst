@@ -24,6 +24,8 @@ namespace
 	GameObject* Play_Button;
 	GameObject* Quit_Button;
 	GameObject* Credits_Button;
+	GameObject* Yes_Button;
+	GameObject* No_Button;
 	GameObject* Cursor;
 	Audio_Engine* Audio;
 	GameObject* Options_Button;
@@ -52,6 +54,9 @@ namespace
 	AEVec2 Fullscreen_Pos	{ 0.0f, 0.0f };
 	AEVec2 Mute_Pos			{ 0.0f, -100.0f };
 	AEVec2 Cursor_Pos		{ 0.0f , 0.0f };
+	AEVec2 Yes_Pos 			 { -100.0f , -100.0f };
+	AEVec2 No_Pos			 { 100.0f , -100.0f };
+	AEVec2 Confirm_Pos		 { 0.0f , 0.0f };
 
 	Sprite* INSTRUCTIONS_SPRITE;
 	Sprite* HOWTOPLAY_SPRITE;
@@ -67,12 +72,19 @@ namespace
 	Sprite* TEAM_SPRITE;
 	Transform* TEAM_M;
 	Sprite* GAME_SPRITE;
+
+	Sprite* YES_SPRITE;
+	Sprite* NO_SPRITE;
+	Sprite* CONFIRM_SPRITE;
+	Transform* CONFIRM_TRANS;
+
 	Transform* GAME_M;
 	Particle_System* cursor_particles;
 	bool Instructions_Shown = false;
 	bool Options_Shown = false;
 	bool FS_active = true;
 	bool Mute_active = false;
+	bool Confirm_Shown = false;
 
 	float timer = 15.0f;
 	bool After_Load = false;
@@ -87,31 +99,34 @@ namespace Main_Menu
 
 		//set background color to black
 		AEGfxSetBackgroundColor(0.0f, 0.0f, 0.0f);
-		
+
 		//AEToogleFullScreen(true);
 		AEGfxSetCamPosition(0.0f, 0.0f);
 		// BG constructed by using Move constructor 
-		MM_Background = new Sprite{ CreateBG(1.0f, 1.0f, "Textures/Main_Menu_BG.png" ) };
+		MM_Background = new Sprite{ CreateBG(1.0f, 1.0f, "Textures/Main_Menu_BG.png") };
 		M_BG = new Transform{};
 
-		Audio = new Audio_Engine{ 1, [](std::vector <std::string> &playlist)->void{playlist.push_back(".//Audio/MainMenu_BGM.mp3"); } };
+		Audio = new Audio_Engine{ 1, [](std::vector <std::string> &playlist)->void {playlist.push_back(".//Audio/MainMenu_BGM.mp3"); } };
 
 		INSTRUCTIONS_SPRITE = new Sprite{ S_CreateRectangle(Button_Width,Button_Height,"Textures/HowToPlay_Button.png") };
 		HOWTOPLAY_SPRITE = new Sprite{ S_CreateRectangle(Popup_Width,Popup_Height,"Textures/HowToPlay.png") };
 
 
-		PLAY_SPRITE = new Sprite{S_CreateRectangle(Button_Width,Button_Height,"Textures/Play_Button.png")};
-		QUIT_SPRITE = new Sprite{S_CreateRectangle(Button_Width,Button_Height,"Textures/Quit_Button.png")};
+		PLAY_SPRITE = new Sprite{ S_CreateRectangle(Button_Width,Button_Height,"Textures/Play_Button.png") };
+		QUIT_SPRITE = new Sprite{ S_CreateRectangle(Button_Width,Button_Height,"Textures/Quit_Button.png") };
 		CREDITS_SPRITE = new Sprite{ S_CreateRectangle(Button_Width, Button_Height, "Textures/Credits_Button.png") };
-		
+
 		CURSOR_SPRITE = new Sprite{ S_CreateRectangle(Cursor_D, Cursor_D, "Textures/Bob_Head.png") };
 
 		OPTIONS_SPRITE = new Sprite{ S_CreateRectangle(Button_Width,Button_Height,"Textures/Options_Button.png") };
 		FULLSCREEN_SPRITE = new Sprite{ S_CreateRectangle(Button_Width,Button_Height,"Textures/Fullscreen_Button.png") };
 		MUTE_SPRITE = new Sprite{ S_CreateRectangle(Button_Width,Button_Height,"Textures/Mute_Button.png") };
 
+		YES_SPRITE = new Sprite{ S_CreateRectangle(Button_Width,Button_Height,"Textures/Yes.png") };
+		NO_SPRITE = new Sprite{ S_CreateRectangle(Button_Width,Button_Height,"Textures/No.png") };
+		CONFIRM_SPRITE = new Sprite{ S_CreateRectangle(Button_Width,Button_Height,"Textures/AreYouSure.png") };
+		CONFIRM_TRANS = new Transform;
 
-		
 		DIGIPEN_SPRITE = new Sprite{ S_CreateRectangle(210.f, 50.f, "Textures/DigiPen_RGB_Red.png") };
 		DIGIPEN_SPRITE->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 		DIGIPEN_M = new Transform;
@@ -148,24 +163,37 @@ namespace Main_Menu
 		// Construct Quit Button 
 		Quit_Button = new GameObject{ QUIT_SPRITE,
 			Col_Comp(Quit_Pos.x - Button_Width , Quit_Pos.y - (Button_Height),
-				Quit_Pos.x + Button_Width, Quit_Pos.y + (Button_Height ), Rect) } ;
+				Quit_Pos.x + Button_Width, Quit_Pos.y + (Button_Height), Rect) };
 
 		// Construct Credits Button 
 		Credits_Button = new GameObject{ CREDITS_SPRITE,
 			Col_Comp(Credits_Pos.x - (Button_Width), Credits_Pos.y - Button_Height,
-				Credits_Pos.x + Button_Width, Credits_Pos.y + Button_Height, Rect) } ;
+				Credits_Pos.x + Button_Width, Credits_Pos.y + Button_Height, Rect) };
 
 		//Construct Options Button
-		 Options_Button = new GameObject{ OPTIONS_SPRITE,
-			 Col_Comp(Options_Pos.x - (Button_Width), Options_Pos.y - Button_Height,
-				 Options_Pos.x + Button_Width, Options_Pos.y + Button_Height, Rect) };
-		 Fullscreen_Button = new GameObject{ FULLSCREEN_SPRITE,
-			 Col_Comp(Fullscreen_Pos.x - (Button_Width), Fullscreen_Pos.y - Button_Height,
-				 Fullscreen_Pos.x + Button_Width, Fullscreen_Pos.y + Button_Height, Rect) };
+		Options_Button = new GameObject{ OPTIONS_SPRITE,
+			Col_Comp(Options_Pos.x - (Button_Width), Options_Pos.y - Button_Height,
+				Options_Pos.x + Button_Width, Options_Pos.y + Button_Height, Rect) };
 
-		 Mute_Button = new GameObject{ MUTE_SPRITE,
-			 Col_Comp(Mute_Pos.x - (Button_Width), Mute_Pos.y - Button_Height,
-				 Mute_Pos.x + Button_Width, Mute_Pos.y + Button_Height, Rect) };
+		//Construct Fullscreen Button
+		Fullscreen_Button = new GameObject{ FULLSCREEN_SPRITE,
+			Col_Comp(Fullscreen_Pos.x - (Button_Width), Fullscreen_Pos.y - Button_Height,
+				Fullscreen_Pos.x + Button_Width, Fullscreen_Pos.y + Button_Height, Rect) };
+
+		//Construct Mute Button 
+		Mute_Button = new GameObject{ MUTE_SPRITE,
+			Col_Comp(Mute_Pos.x - (Button_Width), Mute_Pos.y - Button_Height,
+				Mute_Pos.x + Button_Width, Mute_Pos.y + Button_Height, Rect) };
+
+		//Construct Yes Button 
+		Yes_Button = new GameObject{ YES_SPRITE,
+			Col_Comp(Yes_Pos.x - (Button_Width), Yes_Pos.y - Button_Height,
+				Yes_Pos.x + Button_Width, Yes_Pos.y + Button_Height, Rect) };
+
+		//Construct No Button 
+		No_Button = new GameObject{ NO_SPRITE,
+			Col_Comp(No_Pos.x - (Button_Width), No_Pos.y - Button_Height,
+				No_Pos.x + Button_Width, No_Pos.y + Button_Height, Rect) };
 
 		//Construct a custom Cursor 
 		Cursor = new GameObject{ CURSOR_SPRITE, Col_Comp() };
@@ -214,6 +242,18 @@ namespace Main_Menu
 		Mute_Button->Transform_.SetTranslate(Mute_Pos.x, Mute_Pos.y);
 		Mute_Button->Transform_.Concat();
 		Mute_Button->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+		//Translate and concat the Yes button
+		Yes_Button->Transform_.SetTranslate(Yes_Pos.x, Yes_Pos.y);
+		Yes_Button->Transform_.Concat();
+		Yes_Button->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+		//Translate and concat the Yes button
+		No_Button->Transform_.SetTranslate(No_Pos.x, No_Pos.y);
+		No_Button->Transform_.Concat();
+		No_Button->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+		//Translate and concat the transformation matrix for Confirmation
+		CONFIRM_TRANS->SetTranslate(Confirm_Pos.x, Confirm_Pos.y);
+		CONFIRM_TRANS->Concat();
+		CONFIRM_SPRITE->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 
 
 		// BEHAVIOUR FOR CURSOR PARTICLES
@@ -249,7 +289,7 @@ namespace Main_Menu
 			{
 				//Use the Collision functions to check if the 'point'(mouse-click) is in the bouding box of the button
 				//Repeat this for all buttons
-				if (!Options_Shown && !Instructions_Shown)
+				if (!Options_Shown && !Instructions_Shown && !Confirm_Shown)
 				{
 					if (Instructions_Button->Collision_.St_Rect_Point((float)Mouse_X, (float)Mouse_Y))
 					{
@@ -264,7 +304,7 @@ namespace Main_Menu
 
 					if (Quit_Button->Collision_.St_Rect_Point((float)Mouse_X, (float)Mouse_Y))
 					{
-						GSM::next = GS_QUIT;
+						Confirm_Shown = Confirm_Shown ? false : true;
 					}
 
 					if (Credits_Button->Collision_.St_Rect_Point((float)Mouse_X, (float)Mouse_Y))
@@ -296,6 +336,19 @@ namespace Main_Menu
 					}
 				}
 
+				else if (Confirm_Shown)
+				{
+					if (Yes_Button->Collision_.St_Rect_Point((float)Mouse_X, (float)Mouse_Y))
+					{
+						GSM::next = GS_QUIT;
+					}
+					if (No_Button->Collision_.St_Rect_Point((float)Mouse_X, (float)Mouse_Y))
+					{
+						Confirm_Shown = Confirm_Shown ? false : true;
+					}
+				}
+
+				
 
 			}
 		}
@@ -340,6 +393,15 @@ namespace Main_Menu
 				}
 			}
 
+			else if (Confirm_Shown)
+			{
+				Instructions_Button->SetActive(false);
+				Play_Button->SetActive(false);
+				Quit_Button->SetActive(false);
+				Credits_Button->SetActive(false);
+				Options_Button->SetActive(false);
+			}
+
 			else if (!Options_Shown && !Instructions_Shown)
 			{
 				Instructions_Button->		SetActive(true);
@@ -356,6 +418,8 @@ namespace Main_Menu
 
 			Howtoplay->SetActive(Instructions_Shown);
 
+			Yes_Button->SetActive(Confirm_Shown);
+			No_Button->SetActive(Confirm_Shown);
 
 			Cursor->Transform_.SetTranslate(Cursor_Pos.x, Cursor_Pos.y);
 			Cursor->Transform_.Concat();
@@ -404,16 +468,27 @@ namespace Main_Menu
 			{
 				MUTE_SPRITE->SetRGB(1.0f, 1.0f, 1.0f);
 			}
+			else if (Yes_Button->Collision_.St_Rect_Point((float)Mouse_X, (float)Mouse_Y))
+			{
+				MUTE_SPRITE->SetRGB(0.7f, 0.7f, 0.7f);
+			}
+			else if (No_Button->Collision_.St_Rect_Point((float)Mouse_X, (float)Mouse_Y))
+			{
+				MUTE_SPRITE->SetRGB(0.7f, 0.7f, 0.7f);
+			}
 
 			else
 			{
-				INSTRUCTIONS_SPRITE->SetRGB(1.5f, 1.5f, 1.5f);
-				PLAY_SPRITE->SetRGB(1.5f, 1.5f, 1.5f);
-				QUIT_SPRITE->SetRGB(1.5f, 1.5f, 1.5f);
-				CREDITS_SPRITE->SetRGB(1.5f, 1.5, 1.5f);
-				OPTIONS_SPRITE->SetRGB(1.5f, 1.5f, 1.5f);
-				FULLSCREEN_SPRITE->SetRGB(1.5f, 1.5f, 1.5f);
-				MUTE_SPRITE->SetRGB(1.5f, 1.5, 1.5f);
+				INSTRUCTIONS_SPRITE->		SetRGB(1.5f, 1.5f, 1.5f);
+				PLAY_SPRITE->				SetRGB(1.5f, 1.5f, 1.5f);
+				QUIT_SPRITE->				SetRGB(1.5f, 1.5f, 1.5f);
+				CREDITS_SPRITE->			SetRGB(1.5f, 1.5, 1.5f);
+				OPTIONS_SPRITE->			SetRGB(1.5f, 1.5f, 1.5f);
+				FULLSCREEN_SPRITE->			SetRGB(1.5f, 1.5f, 1.5f);
+				MUTE_SPRITE->				SetRGB(1.5f, 1.5, 1.5f);
+
+				YES_SPRITE->				SetRGB(1.0f, 1.0f, 1.0f);
+				NO_SPRITE->					SetRGB(1.0f, 1.0f, 1.0f);
 			}
 
 
@@ -451,6 +526,9 @@ namespace Main_Menu
 		
 		//Always render the background image first  
 		MM_Background->Render_Object(*M_BG);
+		if (Confirm_Shown)
+		CONFIRM_SPRITE->Render_Object(*CONFIRM_TRANS);
+
 		Instructions_Button->	Render();
 		Howtoplay->				Render();
 		Play_Button->			Render();//Render the Play button 
@@ -459,7 +537,8 @@ namespace Main_Menu
 		Options_Button->		Render();//Render Options
 		Fullscreen_Button->		Render();//Render Fullscreen
 		Mute_Button->			Render();//Render Mute 
-
+		Yes_Button->			Render();
+		No_Button->				Render();
 		Cursor->Render();
 		Cursor->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 
@@ -482,6 +561,10 @@ namespace Main_Menu
 		delete TEAM_M;
 		delete GAME_SPRITE;
 		delete CURSOR_SPRITE;
+		delete YES_SPRITE;
+		delete NO_SPRITE;
+		delete CONFIRM_SPRITE;
+		delete CONFIRM_TRANS;
 		delete GAME_M;
 		delete M_BG;
 		delete MM_Background;
@@ -493,6 +576,8 @@ namespace Main_Menu
 		delete Options_Button;
 		delete Fullscreen_Button;
 		delete Mute_Button;
+		delete No_Button;
+		delete Yes_Button;
 		delete Cursor;
 		delete Audio;
 
