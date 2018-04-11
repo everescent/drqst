@@ -114,5 +114,7 @@ public:
     void Dead(void);                              // update king arthur when he dies
     BOSS_PHASE Get_Phase(void) const;             // get the current phsae of king arthur
     std::vector <Characters*>& Get_Mobs(void);    // get the vector storing the mobs
+    void Mute(void) override;
+    void Unmute(void) override;
 };
 

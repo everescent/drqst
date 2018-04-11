@@ -91,7 +91,7 @@ namespace Stage3_1
 		pause = new Pause{};
 
 		// Fade in texture
-		black = CreateBG(1.0f, 1.0f, ".//Textures/Black_BG.png");
+		black = CreateBG(1.5f, 1.5f, ".//Textures/Black_BG.png");
 	}
 	
 	void Init(void)

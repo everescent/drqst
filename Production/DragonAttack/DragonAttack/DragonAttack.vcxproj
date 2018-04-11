@@ -259,6 +259,7 @@
     <ClInclude Include="PickUp.h" />
     <ClInclude Include="Platform.h" />
     <ClInclude Include="Projectile.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="Scarecrow.h" />
     <ClInclude Include="Score_Page.h" />
     <ClInclude Include="Sign.h" />
@@ -289,6 +290,12 @@
     <Text Include="level2-3.txt" />
     <Text Include="level3-1.txt" />
     <Text Include="level3-2.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="DragonAttack.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\Textures\Bob_Head.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

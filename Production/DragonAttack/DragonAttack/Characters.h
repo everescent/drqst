@@ -30,11 +30,11 @@ Technology is prohibited.
 **************************************************************************************/
 enum Direction
 {
-	LEFT = 0,
-	RIGHT,
-	TOP,
-	DOWN,
-	STAY
+    LEFT = 0,
+    RIGHT,
+    TOP,
+    DOWN,
+    STAY
 };
 
 /**************************************************************************************
@@ -44,9 +44,9 @@ enum Direction
 **************************************************************************************/
 enum
 {
-	HIT_ANIM,
-	IDLE_ANIM,
-	WALK_ANIM,
+    HIT_ANIM,
+    IDLE_ANIM,
+    WALK_ANIM,
 };
 
 class Dragon; //forward declaration
@@ -58,76 +58,84 @@ class Dragon; //forward declaration
 **************************************************************************************/
 class Characters : public GameObject
 {
-	private:
-		//------------------------------------------------------------------
-		//
-		//  CHARACTER VARIABLES
-		//
-		//------------------------------------------------------------------
-		int              hp;                   // hp the character have
-		Direction        direction;            // moving in left or right, up or down?
-		static int       score;                // player score for the stage
-		static int       enemies_killed;       // number of enemies killed
-		float            idle_timing;          // idle timing for mob
-		bool             vulnerable;  	       // immune to damage if false
+    private:
+        //------------------------------------------------------------------
+        //
+        //  CHARACTER VARIABLES
+        //
+        //------------------------------------------------------------------
+        int              hp;                   // hp the character have
+        Direction        direction;            // moving in left or right, up or down?
+        static int       score;                // player score for the stage
+        static int       enemies_killed;       // number of enemies killed
+        float            idle_timing;          // idle timing for mob
+        bool             vulnerable;  	       // immune to damage if false
 
-	public:
-		//------------------------------------------------------------------
-		//
-		//  FUNCTIONS FOR CHARACTERS
-		//
-		//------------------------------------------------------------------
-		Characters(Sprite* t_sprite, const int HP, Col_Comp &&t_col); // default constructor
+    public:
+        //------------------------------------------------------------------
+        //
+        //  FUNCTIONS FOR CHARACTERS
+        //
+        //------------------------------------------------------------------
+        Characters(Sprite* t_sprite, const int HP, Col_Comp &&t_col); // default constructor
         virtual ~Characters() = default;                              // virtual destructor
-		
-	    //------------------------------------------------------------------
-	    //
-	    //  FUNCTIONS THAT AFFECTS THE HP OF CHARACTERS
-	    //
-	    //------------------------------------------------------------------
-		int Get_HP() const;                        // get HP of mob
-		void Set_HP(int hp);                       // set the hp for mob
-		void Increase_HP(const int increment);     // increase hp via power ups / status
-		void Decrease_HP(const char damage = 1);   // decrease the hp of the character
+        
+        //------------------------------------------------------------------
+        //
+        //  FUNCTIONS THAT AFFECTS THE HP OF CHARACTERS
+        //
+        //------------------------------------------------------------------
+        int Get_HP() const;                        // get HP of mob
+        void Set_HP(int hp);                       // set the hp for mob
+        void Increase_HP(const int increment);     // increase hp via power ups / status
+        void Decrease_HP(const char damage = 1);   // decrease the hp of the character
 
-	    //------------------------------------------------------------------
-	    //
-	    //  SETTERS AND GETTERS FOR DIRECTION
-	    //
-	    //------------------------------------------------------------------
-	    Direction Get_Direction() const;               // get the direction of mob
-		void      Set_Direction(Direction direction);  // set the direction of mob
+        //------------------------------------------------------------------
+        //
+        //  SETTERS AND GETTERS FOR DIRECTION
+        //
+        //------------------------------------------------------------------
+        Direction Get_Direction() const;               // get the direction of mob
+        void      Set_Direction(Direction direction);  // set the direction of mob
 
-	 	//------------------------------------------------------------------
-	    //
-	    //  FUNCTIONS THAT AFFECTS THE IDLE DURATION
-	    //
-	    //------------------------------------------------------------------
-		float Get_Idle_Time() const;
-		void  Reset_Idle_Time(float);
-		void  Decrease_Idle_Time(float);
+        //------------------------------------------------------------------
+        //
+        //  FUNCTIONS THAT AFFECTS THE IDLE DURATION
+        //
+        //------------------------------------------------------------------
+        float Get_Idle_Time() const;
+        void  Reset_Idle_Time(float);
+        void  Decrease_Idle_Time(float);
 
-		//------------------------------------------------------------------
-		//
-		//  GETTERS AND SETTERS FOR VULNERABILITY OF CHARACTERS
-		//
-		//------------------------------------------------------------------
-		void Set_Vulnerable(const bool status);
-		bool Get_Vulnerable(void) const;
+        //------------------------------------------------------------------
+        //
+        //  GETTERS AND SETTERS FOR VULNERABILITY OF CHARACTERS
+        //
+        //------------------------------------------------------------------
+        void Set_Vulnerable(const bool status);
+        bool Get_Vulnerable(void) const;
 
-		//------------------------------------------------------------------
-		//
-		//  STATIC VARIABLES AND FUNCTION
-		//
-		//------------------------------------------------------------------
-		static int  Get_Score();                 // get current score
-		static void Add_Score(const int score);  // add score
-		static void Reset_Score();               // reset score
+        //------------------------------------------------------------------
+        //
+        //  FUNCTIONS THAT AFFECT THE SOUND EFFECT OF CHARACTERS
+        //
+        //------------------------------------------------------------------
+        virtual void Mute()   = 0;
+        virtual void Unmute() = 0;
 
-		static int  Get_Enemies_Killed();        // get enemies killed
-		static void Add_Kill_count();			 // add enemy kill count
-		static void Reset_Enemy_Killed();		 // reset enemy kill count
+        //------------------------------------------------------------------
+        //
+        //  STATIC VARIABLES AND FUNCTION
+        //
+        //------------------------------------------------------------------
+        static int  Get_Score();                 // get current score
+        static void Add_Score(const int score);  // add score
+        static void Reset_Score();               // reset score
 
-		// virtual destructor of characters
+        static int  Get_Enemies_Killed();        // get enemies killed
+        static void Add_Kill_count();			 // add enemy kill count
+        static void Reset_Enemy_Killed();		 // reset enemy kill count
+
+        // virtual destructor of characters
         virtual void Update(Dragon& d, const float dt) = 0;
 };
