@@ -79,7 +79,7 @@ Particle_System* Pause::pause_cursor_ps = nullptr;
 			pause_cursor_ps->Emitter_.Conserve_ = 0.80f;
 			pause_cursor_ps->Emitter_.Size_ = 8.0f;
 			pause_cursor_ps->Emitter_.Speed_ = 8.0f;
-			pause_cursor_ps->Emitter_.Lifetime_ = 0.5f;
+			pause_cursor_ps->Emitter_.Lifetime_ = 0.17f;
 			
 
 		} //end of ctor 
@@ -257,16 +257,17 @@ void Pause::Update(bool &pause_bool,const float dt)
 	pause_cursor_ps->Emitter_.Pos_.Min_Max.Point_Min.x = Cursor_Pos.x + 10.0f;
 	pause_cursor_ps->Emitter_.Pos_.Min_Max.Point_Max.y = Cursor_Pos.y + 10.0f;
 	pause_cursor_ps->Emitter_.Pos_.Min_Max.Point_Min.y = Cursor_Pos.y - 10.0f;
+
 	pause_cursor_ps->UpdateEmission();
 	pause_cursor_ps->Turbulence(0.7f);
 	pause_cursor_ps->TransRamp_Exp();
-	pause_cursor_ps->Newton({ Cursor_Pos.x + 20.0f , Cursor_Pos.y - 10.0f }, 0.7f);
+	pause_cursor_ps->Newton({ Cursor_Pos.x + 20.0f , Cursor_Pos.y - 10.0f }, 0.2f);
 
 	if (pause_cursor_ps->GetParticleCount())
 	{
 		pause_cursor_ps->Update(dt);
 	}
-}
+}//End of Pause::Update 
 
 void Pause::Render()
 {

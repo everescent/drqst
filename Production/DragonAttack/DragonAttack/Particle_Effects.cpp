@@ -410,7 +410,7 @@ namespace
 		Phase_Effects = new Particle_System(Phase_Mesh, {}, BOX);
 		Phase_Effects->Emitter_.Particles_.reserve(512);
 
-		Cursor_Effects = new Particle_System(Cursor_Mesh, {}, BOX);
+		Cursor_Effects = new Particle_System(Cursor_Mesh, {}, CENTER);
 		Cursor_Effects->Emitter_.Particles_.reserve(150);
     }
 }

@@ -9,20 +9,6 @@
 
 enum OBJ_TYPE
 {
-	//OBJ_TYPE_EMPTY,   // 0
-	//OBJ_PLATFORM,     // 1
-	//OBJ_FLOOR,        // 2
-	//OBJ_GRUNT,		// 3
-	//OBJ_SC,			// 4
-	//OBJ_WALL,		    // 5
-	//OBJ_BARRIER,	    // 6
-	//OBJ_COIN,		    // 7
-	//OBJ_HP,		    // 8
-	//OBJ_SPD,		    // 9
-	//OBJ_INVUL,		// 10
-	//OBJ_DMG,		    // 11
-	//OBJ_ARCHER,		// 12
-
 	OBJ_TYPE_EMPTY,	// 0
 	OBJ_PLATFORM,	// 1
 	OBJ_FLOOR,		// 2

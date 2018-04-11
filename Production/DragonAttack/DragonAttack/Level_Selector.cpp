@@ -143,7 +143,7 @@ namespace Level_Selector
 		//Construct a custom Cursor 
 		Cursor = new GameObject{ CURSOR_SPRITE, Col_Comp() };
 
-		cursor_particles = Effects_Get(COIN_PARTICLE);
+		cursor_particles = Effects_Get(CURSOR_PARTICLE);
 
 		Stage_1_1->Transform_.SetTranslate(Stage_1_1_pos.x, Stage_1_1_pos.y);
 		Stage_1_1->Transform_.Concat();
@@ -204,7 +204,7 @@ namespace Level_Selector
 		cursor_particles->Emitter_.Size_ = 8.0f;
 		cursor_particles->Emitter_.Speed_ = 8.0f;
 		//cursor_particles->Emitter_.Particle_Rand_.Sp_Rand_ = 3;
-		cursor_particles->Emitter_.Lifetime_ = 0.5f;
+		cursor_particles->Emitter_.Lifetime_ = 0.17f;
 		cursor_particles->Emitter_.Particle_Rand_.Life_Rand_ = 3;
 
 		Stage_1_1->SetActive(true);
