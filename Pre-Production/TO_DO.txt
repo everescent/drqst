@@ -7,26 +7,21 @@
   [MECHANICS]
 
   [BUGS]
- - If player moves when restarting, player can fall off the map
 
   [NEW]
  - Boxes will spawn randomised power-up when broken (low-priority)
  - hit animation needs to be more frames (don't play)
  - snapping needs to snap to where the 2 meshes meet rather than back to centre
  - JUMP IS STILL STICKY (cannot be fixable)
- - KA needs indicators for spawning mobs (make do)
  - HOW TO PLAY SCREEN
- - player outside borders (death borders)
 
 //Delete above as well when done fixing
 Delegation:
 
   Andrew:
     -All [Level Design]
-    -If player moves when restarting, player can fall off the map
     -STAGE/STATE TRANSITION (fade in/out black bg)
     -Set camera position to the player's startpos
-    -Set all level's start health to 5
     -Set fade effect on player death??
 
   Jacob:

@@ -103,7 +103,7 @@ namespace Stage1_2
 					float f_y = (float)y;
 					blocks.push_back(Block{ FLOOR_SPRITE, Convert_X(f_x) , Convert_Y(f_y) });
 				}
-				if (MapData[y][x] == OBJ_GRUNT)
+				/*if (MapData[y][x] == OBJ_GRUNT)
 				{
 					float f_x = (float)x;
 					float f_y = (float)y;
@@ -167,7 +167,7 @@ namespace Stage1_2
 					PU.push_back(PickUp{ INVUL_SPRITE,
 						Col_Comp{ 0.0f - 25.0f, 0.0f - 25.0f, 0.0f + 25.0f, 0.0f + 25.0f, Rect },
 						INVUL, Convert_X(f_x) , Convert_Y(f_y) });
-				}
+				}*/
 			}
 		}
 
