@@ -13,8 +13,8 @@
  - Boxes will spawn randomised power-up when broken (low-priority)
  - hit animation needs to be more frames (don't play)
  - snapping needs to snap to where the 2 meshes meet rather than back to centre
- - JUMP IS STILL STICKY
- - KA needs indicators for spawning mobs
+ - JUMP IS STILL STICKY (cannot be fixable)
+ - KA needs indicators for spawning mobs (make do)
  - HOW TO PLAY SCREEN
  - something bout getting hit while in the air doesn't kill the player all the time, (related) life check needs to check for <= 0 rather than == 0???
  - player outside borders (death borders)
@@ -31,14 +31,10 @@ Delegation:
     -Set fade effect on player death??
 
   Jacob:
-    - JUMP IS STILL STICKY
-    - HOW TO PLAY SCREEN (Sprite)
     -hit animation needs to be more frames (don't play hit animation) (fixed) (your archer dey)
 
   William:
-    - KA needs indicators for spawning mobs (make do)
-    - STAGE/STATE TRANSITION (fade in/out black bg)  (fixed)
+    - presentation slides
 
   Javon:
     - HOW TO PLAY SCREEN
-    - snapping needs to snap to where the 2 meshes meet rather than back to centre
