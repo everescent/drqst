@@ -77,23 +77,23 @@ private:
     //
     // VARIABLES FOR KING ARTHUR
     //
-    //------------------------------------------------------------------
-    BOSS_PHASE                ka_phase;           // current phase of king arthur
+    //------------------------------------------------------------------    
+    Animation		          anim;               // king arthur's animation
+    Audio_Engine              music;              // music for king arthur
     Particle_System *         healing_effect;     // particle system for healing effect
     Particle_System *         sword_effect;       // particle system for the swords in phase 3
     Particle_System *         slash_effect[3];    // particle system for the slashes
     Particle_System *         phase_effect;       // particle system for phase transition
+    BOSS_PHASE                ka_phase;           // current phase of king arthur
     KA_MoveSet                currAttk;           // current attack king arthur is using
-    Animation		          anim;               // king arthur's animation
     Boss_Action_State         current_action;     // different states of boss arthur
     std::vector <Characters*> mobs;               //an array to store the mobs to be spawn
     float                     timer;              // for phase transition
     float                     mob_timer;          // render the mobs base on time
-    Audio_Engine              music;              // music for king arthur
-    char                      active_mobs;        // number of mobs to spawn
-    bool                      spawn_mob;          // check when to update and render mob
     char                      behavior_swap;      // switch between idling and moving
     bool                      healing;            // determine if king arthur is healing
+    char                      active_mobs;        // number of mobs to spawn
+    bool                      spawn_mob;          // check when to update and render mob
 
 public:
     //------------------------------------------------------------------
