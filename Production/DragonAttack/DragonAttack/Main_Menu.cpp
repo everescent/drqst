@@ -19,6 +19,8 @@ namespace
 {
 	Sprite* MM_Background;
 	Transform *M_BG;
+	GameObject* Instructions_Button;
+	GameObject* Howtoplay;
 	GameObject* Play_Button;
 	GameObject* Quit_Button;
 	GameObject* Credits_Button;
@@ -27,16 +29,22 @@ namespace
 	GameObject* Options_Button;
 	GameObject* Fullscreen_Button;
 	GameObject* Mute_Button;
-	//GameObject* Credits_Button;
+	//GameObject* Button_Borders;
+	//GameObject* BB_Array []
 	const float Menu_Width = AEGfxGetWinMaxX() * 2;
 	const float Menu_Height = AEGfxGetWinMaxY() * 2;
 	//The button's actual height and width is double of these values.
 	//i.e, these are the half of button's height/width
 	const float Button_Width = 80.0f;
 	const float Button_Height = 40.0f;
+	const float Popup_Width = 500.0f;
+	const float Popup_Height = 300.0f;
+
 	const float Cursor_D = 20.0f; // The dimensions of the height and width
 	s32 Store_X ,Store_Y ;
 	f32 Mouse_X, Mouse_Y ;
+	AEVec2 Instructions_Pos	{ 0.0f, 100.0f };
+	AEVec2 Howtoplay_Pos	{ 0.0f, -100.0f };
 	AEVec2 Play_Pos			{ 0.0f, 0.0f };
 	AEVec2 Options_Pos		{ 0.0f, -100.0f };
 	AEVec2 Quit_Pos			{ 0.0f, -200.0f };
@@ -44,6 +52,9 @@ namespace
 	AEVec2 Fullscreen_Pos	{ 0.0f, 0.0f };
 	AEVec2 Mute_Pos			{ 0.0f, -100.0f };
 	AEVec2 Cursor_Pos		{ 0.0f , 0.0f };
+
+	Sprite* INSTRUCTIONS_SPRITE;
+	Sprite* HOWTOPLAY_SPRITE;
 	Sprite* PLAY_SPRITE;
 	Sprite* QUIT_SPRITE;
 	Sprite* CREDITS_SPRITE;
@@ -58,6 +69,7 @@ namespace
 	Sprite* GAME_SPRITE;
 	Transform* GAME_M;
 	Particle_System* cursor_particles;
+	bool Instructions_Shown = false;
 	bool Options_Shown = false;
 	bool FS_active = true;
 	bool Mute_active = false;
@@ -71,7 +83,7 @@ namespace Main_Menu
 	void Load(void)
 	{
 		//Activate fullscreen at the start of the game 
-		AEToogleFullScreen(FS_active);
+		//AEToogleFullScreen(FS_active);
 
 		//set background color to black
 		AEGfxSetBackgroundColor(0.0f, 0.0f, 0.0f);
@@ -83,6 +95,10 @@ namespace Main_Menu
 		M_BG = new Transform{};
 
 		Audio = new Audio_Engine{ 1, [](std::vector <std::string> &playlist)->void{playlist.push_back(".//Audio/MainMenu_BGM.mp3"); } };
+
+		INSTRUCTIONS_SPRITE = new Sprite{ S_CreateRectangle(Button_Width,Button_Height,"Textures/HowToPlay_Button.png") };
+		HOWTOPLAY_SPRITE = new Sprite{ S_CreateRectangle(Popup_Width,Popup_Height,"Textures/HowToPlay.png") };
+
 
 		PLAY_SPRITE = new Sprite{S_CreateRectangle(Button_Width,Button_Height,"Textures/Play_Button.png")};
 		QUIT_SPRITE = new Sprite{S_CreateRectangle(Button_Width,Button_Height,"Textures/Quit_Button.png")};
@@ -113,6 +129,16 @@ namespace Main_Menu
 		GAME_M = new Transform;
 		GAME_M->SetScale(8.f, 8.f);
 		GAME_M->Concat();
+
+		//Construct Instructions Button
+		Instructions_Button = new GameObject{ INSTRUCTIONS_SPRITE,
+			Col_Comp(Instructions_Pos.x - Button_Width , Instructions_Pos.y - (Button_Height),
+				Instructions_Pos.x + Button_Width, Instructions_Pos.y + (Button_Height), Rect) };
+
+		//Construct Instructions Pop_Up
+		Howtoplay = new GameObject{ HOWTOPLAY_SPRITE,
+			Col_Comp(Howtoplay_Pos.x - Popup_Width , Howtoplay_Pos.y - (Popup_Height),
+				Howtoplay_Pos.x + Popup_Width, Howtoplay_Pos.y + (Popup_Height), Rect) };
 
 		// Construct Play Button 
 		Play_Button = new GameObject{ PLAY_SPRITE,
@@ -156,6 +182,14 @@ namespace Main_Menu
 
 		//Only need to Translate and Concat the buttons once for Main Menu
 
+		//Translate and concat the Instructions Button 
+		Instructions_Button->Transform_.SetTranslate(Instructions_Pos.x, Instructions_Pos.y);
+		Instructions_Button->Transform_.Concat();
+		Instructions_Button->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+		//Translate and concat the HowToPlay POP-UP
+		Howtoplay->Transform_.SetTranslate(Howtoplay_Pos.x, Howtoplay_Pos.y);
+		Howtoplay->Transform_.Concat();
+		Howtoplay->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 		//Translate and concat the play button 
 		Play_Button->Transform_.SetTranslate(Play_Pos.x, Play_Pos.y);
 		Play_Button->Transform_.Concat();
@@ -211,13 +245,17 @@ namespace Main_Menu
 
 		if (AEInputCheckTriggered(AEVK_LBUTTON))// && timer == 0.0f )
 		{
-			
 			if (After_Load)
 			{
 				//Use the Collision functions to check if the 'point'(mouse-click) is in the bouding box of the button
 				//Repeat this for all buttons
-				if (!Options_Shown) 
+				if (!Options_Shown && !Instructions_Shown)
 				{
+					if (Instructions_Button->Collision_.St_Rect_Point((float)Mouse_X, (float)Mouse_Y))
+					{
+						Instructions_Shown = Instructions_Shown ? false : true;
+					}
+
 					if (Play_Button->Collision_.St_Rect_Point((float)Mouse_X, (float)Mouse_Y))
 					{
 						//SM::Reset();
@@ -240,7 +278,7 @@ namespace Main_Menu
 					}
 				}
 
-				else
+				else if (Options_Shown)
 				{
 					if (Fullscreen_Button->Collision_.St_Rect_Point((float)Mouse_X, (float)Mouse_Y))
 					{
@@ -251,110 +289,137 @@ namespace Main_Menu
 					if (Mute_Button->Collision_.St_Rect_Point((float)Mouse_X, (float)Mouse_Y))
 					{
 						Mute_active = Mute_active ? false : true;
-
 						if (Mute_active)
 						{
 							Audio_Engine::MUTE_ = Mute_active;
 						}
 					}
 				}
+
+
 			}
-
 		}
 
-		//******Allowing Intro screen to be bypassed with a single mouse-click
-		if (AEInputCheckTriggered(AEVK_ESCAPE) || AEInputCheckTriggered(AEVK_SPACE) ||
-			AEInputCheckTriggered(AEVK_RETURN) || AEInputCheckReleased(AEVK_LBUTTON))
-		{
-			After_Load = true;
-			timer = 0.0f;
-		}
-		
-		if (timer > 0.0f)
-		{
-			timer -= dt;
-			return;
-		}
-		
-		if (Options_Shown)
-		{
-			if (AEInputCheckTriggered(AEVK_ESCAPE))
+			//******Allowing Intro screen to be bypassed with a single mouse-click
+			if (AEInputCheckTriggered(AEVK_ESCAPE) || AEInputCheckTriggered(AEVK_SPACE) ||
+				AEInputCheckTriggered(AEVK_RETURN) || AEInputCheckReleased(AEVK_LBUTTON))
 			{
-				Options_Shown = Options_Shown ? false : true;
+				After_Load = true;
+				timer = 0.0f;
 			}
-		}
+
+			if (timer > 0.0f)
+			{
+				timer -= dt;
+				return;
+			}
+
+			if (Options_Shown)
+			{
+				Instructions_Button->		SetActive(false);
+				Play_Button->				SetActive(false);
+				Quit_Button->				SetActive(false);
+				Credits_Button->			SetActive(false);
+				Options_Button->			SetActive(false);
+				if (AEInputCheckTriggered(AEVK_ESCAPE))
+				{
+					Options_Shown = Options_Shown ? false : true;
+				}
+			}
+
+			else if (Instructions_Shown)
+			{
+				Instructions_Button->		SetActive(false);
+				Play_Button->				SetActive(false);
+				Quit_Button->				SetActive(false);
+				Credits_Button->			SetActive(false);
+				Options_Button->			SetActive(false);
+				if (AEInputCheckTriggered(AEVK_ESCAPE))
+				{
+					Instructions_Shown = Instructions_Shown ? false : true;
+				}
+			}
+
+			else if (!Options_Shown && !Instructions_Shown)
+			{
+				Instructions_Button->		SetActive(true);
+				Play_Button->				SetActive(true);
+				Quit_Button->				SetActive(true);
+				Credits_Button->			SetActive(true);
+				Options_Button->			SetActive(true);
+			}
+
+			Cursor->SetActive(true);
+
+			Fullscreen_Button->SetActive(Options_Shown);
+			Mute_Button->SetActive(Options_Shown);
+
+			Howtoplay->SetActive(Instructions_Shown);
+
+
+			Cursor->Transform_.SetTranslate(Cursor_Pos.x, Cursor_Pos.y);
+			Cursor->Transform_.Concat();
+
+			cursor_particles->Emitter_.Pos_.Min_Max.Point_Max.x = Cursor_Pos.x + 480.0f;
+			cursor_particles->Emitter_.Pos_.Min_Max.Point_Min.x = Cursor_Pos.x + 10.0f;
+			cursor_particles->Emitter_.Pos_.Min_Max.Point_Max.y = Cursor_Pos.y + 10.0f;
+			cursor_particles->Emitter_.Pos_.Min_Max.Point_Min.y = Cursor_Pos.y - 10.0f;
+
+			cursor_particles->UpdateEmission();
+			cursor_particles->Turbulence(0.7f);
+			cursor_particles->TransRamp_Exp();
+			cursor_particles->Newton({ Cursor_Pos.x + 20.0f , Cursor_Pos.y - 10.0f }, 0.2f);
+
+			if (cursor_particles->GetParticleCount())
+			{
+				cursor_particles->Update(dt);
+			}
+			if (Instructions_Button->Collision_.St_Rect_Point((float)Mouse_X, (float)Mouse_Y))
+			{
+				INSTRUCTIONS_SPRITE->SetRGB(1.0f, 1.0f, 1.0f);
+			}
+			else if (Play_Button->Collision_.St_Rect_Point((float)Mouse_X, (float)Mouse_Y))
+			{
+				PLAY_SPRITE->SetRGB(1.0f, 1.0f, 1.0f);
+			}
+
+			else if (Quit_Button->Collision_.St_Rect_Point((float)Mouse_X, (float)Mouse_Y))
+			{
+				QUIT_SPRITE->SetRGB(1.0f, 1.0f, 1.0f);
+			}
+
+			else if (Credits_Button->Collision_.St_Rect_Point((float)Mouse_X, (float)Mouse_Y))
+			{
+				CREDITS_SPRITE->SetRGB(1.0f, 1.0f, 1.0f);
+			}
+			else if (Options_Button->Collision_.St_Rect_Point((float)Mouse_X, (float)Mouse_Y))
+			{
+				OPTIONS_SPRITE->SetRGB(1.0f, 1.0f, 1.0f);
+			}
+			else if (Fullscreen_Button->Collision_.St_Rect_Point((float)Mouse_X, (float)Mouse_Y))
+			{
+				FULLSCREEN_SPRITE->SetRGB(1.0f, 1.0f, 1.0f);
+			}
+			else if (Mute_Button->Collision_.St_Rect_Point((float)Mouse_X, (float)Mouse_Y))
+			{
+				MUTE_SPRITE->SetRGB(1.0f, 1.0f, 1.0f);
+			}
+
+			else
+			{
+				INSTRUCTIONS_SPRITE->SetRGB(1.5f, 1.5f, 1.5f);
+				PLAY_SPRITE->SetRGB(1.5f, 1.5f, 1.5f);
+				QUIT_SPRITE->SetRGB(1.5f, 1.5f, 1.5f);
+				CREDITS_SPRITE->SetRGB(1.5f, 1.5, 1.5f);
+				OPTIONS_SPRITE->SetRGB(1.5f, 1.5f, 1.5f);
+				FULLSCREEN_SPRITE->SetRGB(1.5f, 1.5f, 1.5f);
+				MUTE_SPRITE->SetRGB(1.5f, 1.5, 1.5f);
+			}
+
+
 
 		
-		Play_Button->			SetActive(!Options_Shown);
-		Quit_Button->			SetActive(!Options_Shown);
-		Credits_Button->		SetActive(!Options_Shown);
-		Options_Button->		SetActive(!Options_Shown);
-
-		Cursor->				SetActive(true);
-
-		Fullscreen_Button->		SetActive(Options_Shown);
-		Mute_Button->			SetActive(Options_Shown);
-		
-
-		Cursor->Transform_.SetTranslate(Cursor_Pos.x, Cursor_Pos.y);
-		Cursor->Transform_.Concat();
-
-		cursor_particles->Emitter_.Pos_.Min_Max.Point_Max.x = Cursor_Pos.x + 480.0f;
-		cursor_particles->Emitter_.Pos_.Min_Max.Point_Min.x = Cursor_Pos.x + 10.0f;
-		cursor_particles->Emitter_.Pos_.Min_Max.Point_Max.y = Cursor_Pos.y + 10.0f;
-		cursor_particles->Emitter_.Pos_.Min_Max.Point_Min.y = Cursor_Pos.y - 10.0f;
-
-		cursor_particles->UpdateEmission();
-		cursor_particles->Turbulence(0.7f);
-		cursor_particles->TransRamp_Exp();
-		cursor_particles->Newton({ Cursor_Pos.x + 20.0f , Cursor_Pos.y - 10.0f }, 0.2f);
-
-		if (cursor_particles->GetParticleCount())
-		{
-			cursor_particles->Update(dt);
-		}
-
-		if (Play_Button->Collision_.St_Rect_Point((float)Mouse_X, (float)Mouse_Y))
-		{
-			PLAY_SPRITE->SetRGB(1.0f, 1.0f, 1.0f);
-		}
-
-		else if (Quit_Button->Collision_.St_Rect_Point((float)Mouse_X, (float)Mouse_Y))
-		{
-			QUIT_SPRITE->SetRGB(1.0f, 1.0f, 1.0f);
-		}
-
-		else if (Credits_Button->Collision_.St_Rect_Point((float)Mouse_X, (float)Mouse_Y))
-		{
-			CREDITS_SPRITE->SetRGB(1.0f, 1.0f, 1.0f);
-		}
-		else if (Options_Button->Collision_.St_Rect_Point((float)Mouse_X, (float)Mouse_Y))
-		{
-			OPTIONS_SPRITE->SetRGB(1.0f, 1.0f, 1.0f);
-		}
-		else if (Fullscreen_Button->Collision_.St_Rect_Point((float)Mouse_X, (float)Mouse_Y))
-		{
-			FULLSCREEN_SPRITE->SetRGB(1.0f, 1.0f, 1.0f);
-		}
-		else if (Mute_Button->Collision_.St_Rect_Point((float)Mouse_X, (float)Mouse_Y))
-		{
-			MUTE_SPRITE->SetRGB(1.0f, 1.0f, 1.0f);
-		}
-
-		else  
-		{
-			PLAY_SPRITE->			SetRGB(1.5f, 1.5f, 1.5f);
-			QUIT_SPRITE->			SetRGB(1.5f, 1.5f, 1.5f);
-			CREDITS_SPRITE->		SetRGB(1.5f, 1.5, 1.5f);
-			OPTIONS_SPRITE->		SetRGB(1.5f, 1.5f, 1.5f);
-			FULLSCREEN_SPRITE->		SetRGB(1.5f, 1.5f, 1.5f);
-			MUTE_SPRITE->			SetRGB(1.5f, 1.5, 1.5f);
-			
-		}
-
-		
-		
-	}
+	} // END OF UPDATE FUNCTIONS 
 
 	void Draw(void)
 	{
@@ -386,7 +451,8 @@ namespace Main_Menu
 		
 		//Always render the background image first  
 		MM_Background->Render_Object(*M_BG);
-		
+		Instructions_Button->	Render();
+		Howtoplay->				Render();
 		Play_Button->			Render();//Render the Play button 
 		Quit_Button->			Render();//Render the Quit button 
 		Credits_Button->		Render();//Render the Credits button 
@@ -402,6 +468,8 @@ namespace Main_Menu
 	}
 
 	void Free(void) { 
+		delete INSTRUCTIONS_SPRITE;
+		delete HOWTOPLAY_SPRITE;
 		delete PLAY_SPRITE;
 		delete QUIT_SPRITE;
 		delete CREDITS_SPRITE;
@@ -417,6 +485,8 @@ namespace Main_Menu
 		delete GAME_M;
 		delete M_BG;
 		delete MM_Background;
+		delete Instructions_Button;
+		delete Howtoplay;
 		delete Play_Button;
 		delete Quit_Button;
 		delete Credits_Button;
