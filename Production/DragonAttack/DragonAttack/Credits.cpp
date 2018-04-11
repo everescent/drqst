@@ -28,6 +28,7 @@ namespace
     char* instructors[3] = { "Instructors"    , "Elie Hosry"    , "Michael David Thompson"                    };
     char* creators   [8] = { "Lead Designer"  , "Andrew Chong"  , "Technical Lead"          , "Javon Lee",
                              "Producer"       , "Jacob Lim"     , "Product Manager"         , "William Yoong" };
+    char* Fmod       [2] = { "Special Thanks" , "FMOD" };
     // particle effects
   Particle_System* credit_effects;
 
@@ -143,6 +144,10 @@ namespace Credits
     AEGfxPrint(fontID[1], creators[5],  150,  -80, 1.0f, 1.0f, 1.0f);
     AEGfxPrint(fontID[0], creators[6],  150, -130, 1.0f, 1.0f, 1.0f);
     AEGfxPrint(fontID[1], creators[7],  150, -160, 1.0f, 1.0f, 1.0f);
+
+    //Print special thanks to fmod
+    AEGfxPrint(fontID[0], Fmod[0], 0, -100, 1.0f, 1.0f, 1.0f);
+    AEGfxPrint(fontID[1], Fmod[1], 0, -100, 1.0f, 1.0f, 1.0f);
 
     copyright->Render_Object(*copyright_m);
 
