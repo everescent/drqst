@@ -49,6 +49,8 @@ namespace
 	Sprite *FLOOR_SPRITE;
 	Sprite *TOWER_SPRITE;
 	Sprite *SIGN_SPRITE;
+
+	Transform test;
 }
 
 namespace Stage2_1
@@ -209,13 +211,17 @@ namespace Stage2_1
 		player = dynamic_cast<Dragon*>(Create_Basic_AI(DRAGON, startpos));
 		ui = new UI{ player };
 
+		test.SetTranslate(startpos.x, startpos.y);
+
 		player->SetActive(true);
 
 		// Reset player's Health and charge
 		player->Set_HP(3);
 		player->ResetCharge();
 
-		CamFollow(player->Transform_, 200, 120, player->GetFacing());
+		
+
+		CamFollow(test, 200, 120, player->GetFacing());
 	}
 
 	void Update(float dt)
@@ -225,7 +231,7 @@ namespace Stage2_1
 		b_m.SetTranslate(camX, camY);
 		b_m.Concat();
 
-		if (!pause_bool) 
+		if (!pause_bool)
 		{
 			// Fade In effect
 			if (FadeIn)
@@ -245,9 +251,12 @@ namespace Stage2_1
 
 			Audio->SetPause(0, false);
 			Audio->Update();
-			pause->Update(pause_bool,dt);
+			pause->Update(pause_bool, dt);
 
-			player->Update(*player, dt);
+			if (!FadeIn)
+			{
+				player->Update(*player, dt);
+			}
 
 			for (size_t i = 0; i < c.size(); ++i)
 			{

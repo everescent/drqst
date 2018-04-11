@@ -150,12 +150,15 @@ namespace Stage2_3
 			Audio->Update();
 			pause->Update(pause_bool,dt);
 
-			player->Update(*player, dt);
-
-			if (c[0]->IsActive())
+			if (!FadeIn)
 			{
-				c[0]->Update(*player, dt);
+				player->Update(*player, dt);
+				if (c[0]->IsActive())
+				{
+					c[0]->Update(*player, dt);
+				}
 			}
+
 			if (c[0]->Get_HP() <= 0)
 			{
 				next->Update(*player, dt, black, FadeOut);

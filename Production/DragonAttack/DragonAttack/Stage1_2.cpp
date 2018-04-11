@@ -221,8 +221,11 @@ namespace Stage1_2
 			Audio->SetPause(0, false);
 			Audio->Update();
 			pause->Update(pause_bool,dt);
-
-			player->Update(*player, dt);
+			
+			if (!FadeIn)
+			{
+				player->Update(*player, dt);
+			}
 
 			for (size_t i = 0; i < c.size(); ++i)
 			{

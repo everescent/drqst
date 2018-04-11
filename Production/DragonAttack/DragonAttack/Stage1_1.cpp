@@ -268,7 +268,9 @@ namespace Stage1_1
 			pause->Update(pause_bool, dt);
 
 			if (!FadeIn)
+			{
 				player->Update(*player, dt);
+			}
 
 			s1->Update(*player, dt);
 			tut1->Transform_.SetTranslate(400.0f, -20.0f);

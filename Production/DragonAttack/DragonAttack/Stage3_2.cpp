@@ -214,87 +214,89 @@ namespace Stage3_2
 		b_m.SetTranslate(camX, camY);
 		b_m.Concat();
 
+		
 		if (!pause_bool)
 		{
-			if (!pause_bool)
+			// Fade In effect
+			if (FadeIn)
 			{
-				// Fade In effect
-				if (FadeIn)
+				//static float vis = 1.0f;
+				black.SetAlphaTransBM(1.0f, vis, AE_GFX_BM_BLEND);
+				vis -= 0.005f;
+
+				timer -= dt;
+
+				if (timer <= 0)
 				{
-					//static float vis = 1.0f;
-					black.SetAlphaTransBM(1.0f, vis, AE_GFX_BM_BLEND);
-					vis -= 0.005f;
-
-					timer -= dt;
-
-					if (timer <= 0)
-					{
-						FadeIn = false;
-					}
+					FadeIn = false;
 				}
+			}
 
 
-				Audio->SetPause(0, false);
-				Audio->Update();
-				pause->Update(pause_bool, dt);
+			Audio->SetPause(0, false);
+			Audio->Update();
+			pause->Update(pause_bool, dt);
 
+			if (!FadeIn)
+			{
 				player->Update(*player, dt);
+			}
 
+			for (size_t i = 0; i < c.size(); ++i)
+			{
+				if (c[i]->IsActive())
+				{
+					c[i]->Update(*player, dt);
+				}
+			}
+
+			for (Platform& elem : platforms)
+			{
+				// added collision for AI
 				for (size_t i = 0; i < c.size(); ++i)
 				{
-					if (c[i]->IsActive())
-					{
-						c[i]->Update(*player, dt);
-					}
+					elem.Update(*(c[i]), dt);
 				}
-
-				for (Platform& elem : platforms)
-				{
-					// added collision for AI
-					for (size_t i = 0; i < c.size(); ++i)
-					{
-						elem.Update(*(c[i]), dt);
-					}
-					elem.Update(*player, dt);
-				}
-				for (Block& elem : blocks)
-				{
-					for (size_t i = 0; i < c.size(); ++i)
-					{
-						elem.Update(*(c[i]), dt);
-					}
-					elem.Update(*player, dt);
-				}
-				for (Barrier& elem : barriers)
-				{
-					elem.Update(*player, dt);
-				}
-				for (PickUp& elem : PU)
-				{
-					elem.Update(*player, dt);
-				}
-
-				// Camera down logic
-				if (AEInputCheckCurr(AEVK_S))
-				{
-					if (Camdown > -250) // Setting lowest camera point
-						Camdown -= 4.0f;
-				}
-				if (!AEInputCheckCurr(AEVK_S) && Camdown < 120)
-				{
-					Camdown += 4.0f;
-				}
-				CamFollow(player->Transform_, 200, Camdown, player->GetFacing());
-				next->Update(*player, dt, black, FadeOut);
-				ui->UI_Update(player, dt);
+				elem.Update(*player, dt);
 			}
-			else
+			for (Block& elem : blocks)
 			{
-				Audio->SetPause(0, true);
-				pause->Update(pause_bool, dt);
+				for (size_t i = 0; i < c.size(); ++i)
+				{
+					elem.Update(*(c[i]), dt);
+				}
+				elem.Update(*player, dt);
 			}
-			//std::cout << (int)player->PosX << ", " << (int)player->PosY << std::endl;
+			for (Barrier& elem : barriers)
+			{
+				elem.Update(*player, dt);
+			}
+			for (PickUp& elem : PU)
+			{
+				elem.Update(*player, dt);
+			}
+
+			// Camera down logic
+			if (AEInputCheckCurr(AEVK_S))
+			{
+				if (Camdown > -250) // Setting lowest camera point
+					Camdown -= 4.0f;
+			}
+			if (!AEInputCheckCurr(AEVK_S) && Camdown < 120)
+			{
+				Camdown += 4.0f;
+			}
+			CamFollow(player->Transform_, 200, Camdown, player->GetFacing());
+			next->Update(*player, dt, black, FadeOut);
+			ui->UI_Update(player, dt);
 		}
+		else
+		{
+			Audio->SetPause(0, true);
+			pause->Update(pause_bool, dt);
+		}
+		//std::cout << (int)player->PosX << ", " << (int)player->PosY << std::endl;
+		
 	}
 
 	void Draw(void)

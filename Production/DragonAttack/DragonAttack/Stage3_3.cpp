@@ -176,7 +176,11 @@ namespace Stage3_3
             curr_phase = last_boss->Get_Phase();
 
             // update the boss behavior
-            last_boss->Update(*player, dt);
+			if (!FadeIn)
+			{
+				player->Update(*player, dt);
+				last_boss->Update(*player, dt);
+			}
 
             // update the collision between AI/player and floor 
             for (Block& elem : blocks)
@@ -218,7 +222,6 @@ namespace Stage3_3
             }
 
             // update the player behavior and UI
-            player->Update(*player, dt);
             ui->UI_Update(player, dt);
         }
 

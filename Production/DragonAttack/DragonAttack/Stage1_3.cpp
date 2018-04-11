@@ -129,9 +129,12 @@ namespace Stage1_3
 
 			pause->Update(pause_bool,dt);
 
-			player->Update(*player, dt);
+			if (!FadeIn)
+			{
+				player->Update(*player, dt);
+				c[0]->Update(*player, dt);
+			}
 
-			c[0]->Update(*player, dt);
 			if (c[0]->Get_HP() <= 0)
 			{
 				next->Update(*player, dt, black, FadeOut);

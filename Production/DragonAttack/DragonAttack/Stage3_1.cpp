@@ -232,7 +232,10 @@ namespace Stage3_1
 			Audio->Update();
 			pause->Update(pause_bool,dt);
 
-			player->Update(*player, dt);
+			if (!FadeIn)
+			{
+				player->Update(*player, dt);
+			}
 
 			for (size_t i = 0; i < c.size(); ++i)
 			{
