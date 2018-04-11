@@ -96,4 +96,7 @@ public:
   void Update(Dragon &player, const float dt);
   void Render(void);
 
+  void Mute(void) override;
+  void Unmute(void) override;
+
 };

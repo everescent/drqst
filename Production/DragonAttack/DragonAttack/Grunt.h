@@ -76,4 +76,7 @@ public:
 	*/
 	/******************************************************************************/
 	void Update(Dragon &d, const float dt);
+
+    void Mute();
+    void Unmute();
 };

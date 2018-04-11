@@ -491,6 +491,9 @@
     <ClInclude Include="Level_Selector.h">
       <Filter>Game_States\Stage\Level_Selector</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="level1-1.txt">
@@ -517,5 +520,15 @@
     <Text Include="level3-2.txt">
       <Filter>Resource Files</Filter>
     </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\Textures\Bob_Head.ico">
+      <Filter>Source Files</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="DragonAttack.rc">
+      <Filter>Source Files</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>

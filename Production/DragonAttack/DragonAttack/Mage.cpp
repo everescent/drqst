@@ -300,7 +300,24 @@ bool Mage::Line_Of_Sight(const Dragon &d)
     return distance > LEFT_BOUNDARY && distance < RIGHT_BOUNDARY;
 }
 
+/**************************************************************************************
+//
+// Destructor that free the memory used by sprite
+//
+**************************************************************************************/
 Mage::~Mage()
 {
     delete Sprite_;
+}
+
+void Mage::Mute(void)
+{
+    music.SetVolume(0, 0.0f);
+    music.SetPause(0, true);
+}
+
+void Mage::Unmute(void)
+{
+    music.SetVolume(0, 1.0f);
+    music.SetPause(0, false);
 }

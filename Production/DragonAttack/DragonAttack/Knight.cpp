@@ -326,3 +326,15 @@ Knight::~Knight()
     delete Sprite_;
 }
 
+void Knight::Mute(void)
+{
+    music.SetVolume(0, 0.0f);
+    music.SetPause(0, true);
+}
+
+void Knight::Unmute(void)
+{
+    music.SetVolume(0, 1.0f);
+    music.SetPause(0, false);
+}
+
