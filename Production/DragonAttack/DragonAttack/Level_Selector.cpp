@@ -190,8 +190,17 @@ namespace Level_Selector
 	void Init(void)
 	{
 		//Initialise buttons here
+	
 		Audio->Play(0);
+		
 		Audio->SetLoop(0, FMOD_LOOP_NORMAL);
+
+		// pause the music and set volume to 0 if current state is muted
+		if (Audio_Engine::MUTE_)
+		{
+			audio->SetVolume(0, 0.0f); // set volume to 0
+			audio->SetPause(0, true);  // pause volume
+		}
 
 		 //BEHAVIOUR FOR CURSOR PARTICLES
 		//Set to appear to be spitting out flames
@@ -303,6 +312,15 @@ namespace Level_Selector
 			{
 				SM::Reset(STAGE_3_3);
 				GSM::next = GS_LEVELS;
+			}
+
+			if (Audio_Engine::MUTE_)
+			{
+				Audio->SetVolume(0, 0);
+			}
+			else
+			{
+				Audio->SetVolume(0, 1);
 			}
 
 		}

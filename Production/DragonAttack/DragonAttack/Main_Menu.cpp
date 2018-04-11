@@ -208,6 +208,13 @@ namespace Main_Menu
 		Audio->Play(0);
 		Audio->SetLoop(0, FMOD_LOOP_NORMAL);
 
+		// pause the music and set volume to 0 if current state is muted
+		if (Audio_Engine::MUTE_)
+		{
+			Audio->SetVolume(0, 0.0f); // set volume to 0
+			Audio->SetPause(0, true);  // pause volume
+		}
+
 		//Only need to Translate and Concat the buttons once for Main Menu
 
 		//Translate and concat the Instructions Button 
@@ -328,11 +335,7 @@ namespace Main_Menu
 
 					if (Mute_Button->Collision_.St_Rect_Point((float)Mouse_X, (float)Mouse_Y))
 					{
-						Mute_active = Mute_active ? false : true;
-						if (Mute_active)
-						{
-							Audio_Engine::MUTE_ = Mute_active;
-						}
+						Audio_Engine::MUTE_ = Audio_Engine::MUTE_ ? false : true; 
 					}
 				}
 
@@ -347,9 +350,14 @@ namespace Main_Menu
 						Confirm_Shown = Confirm_Shown ? false : true;
 					}
 				}
-
-				
-
+				if (Audio_Engine::MUTE_)
+				{
+					Audio->SetVolume(0, 0);
+				}
+				else
+				{
+					Audio->SetVolume(0, 1);
+				}
 			}
 		}
 
@@ -460,6 +468,7 @@ namespace Main_Menu
 			{
 				OPTIONS_SPRITE->SetRGB(1.0f, 1.0f, 1.0f);
 			}
+
 			else if (Fullscreen_Button->Collision_.St_Rect_Point((float)Mouse_X, (float)Mouse_Y))
 			{
 				FULLSCREEN_SPRITE->SetRGB(1.0f, 1.0f, 1.0f);
@@ -468,13 +477,14 @@ namespace Main_Menu
 			{
 				MUTE_SPRITE->SetRGB(1.0f, 1.0f, 1.0f);
 			}
+
 			else if (Yes_Button->Collision_.St_Rect_Point((float)Mouse_X, (float)Mouse_Y))
 			{
-				MUTE_SPRITE->SetRGB(0.7f, 0.7f, 0.7f);
+				YES_SPRITE->SetRGB(0.7f, 0.7f, 0.7f);
 			}
 			else if (No_Button->Collision_.St_Rect_Point((float)Mouse_X, (float)Mouse_Y))
 			{
-				MUTE_SPRITE->SetRGB(0.7f, 0.7f, 0.7f);
+				NO_SPRITE->SetRGB(0.7f, 0.7f, 0.7f);
 			}
 
 			else

@@ -29,18 +29,18 @@ Particle_System* Pause::pause_cursor_ps = nullptr;
 	Pause::Pause()
 	:	M_BG			{ new Transform{} },
 		Pause_BG_Sprite	{ new Sprite{ CreateBG(1.0f, 1.0f, "Textures/Black_BG.png")} },
-		Displacement	{ 0.0f, 230.0f },
+		Displacement	{ 0.0f, 130.0f },
 		Cursor_Pos		{ 0.0f, 0.0f}, //just to initalise it 
 		Button_W		{50.0f},
 		Button_H		{30.0f},
 		Cursor_s	{	new Sprite { S_CreateRectangle( 20.0f, 20.0f, "Textures/Bob_Head.png")					}	},
-		Resume_s	{	new Sprite { S_CreateRectangle (Button_W, Button_H, "Textures/Resume_Button.png" )		}	},
-		Options_s	{	new Sprite { S_CreateRectangle (Button_W, Button_H, "Textures/Options_Button.png")		}	},
-		Restart_s 	{	new Sprite { S_CreateRectangle (Button_W, Button_H, "Textures/Play_Button.png")			}	},
+		Resume_s	{	new Sprite { S_CreateRectangle (Button_W, Button_H, "Textures/Resume_Button_PM.png" )		}	},
+		Options_s	{	new Sprite { S_CreateRectangle (Button_W, Button_H, "Textures/Options_Button_PM.png")		}	},
+		Restart_s 	{	new Sprite { S_CreateRectangle (Button_W, Button_H, "Textures/Restart_Button_PM.png")			}	},
 		Quit_s	 	{	new Sprite { S_CreateRectangle (Button_W, Button_H, "Textures/Quit_Button.png")			}	},
-		Quit_MM_s	{	new Sprite { S_CreateRectangle (80.0f, 60.0f, "Textures/QuitMainMenu_Button.png")		}	},
-		Mute_s		{	new Sprite{ S_CreateRectangle(Button_W, Button_H, ".//Textures/Mute_Button.png")		}	},
-		FS_s		{	new Sprite{ S_CreateRectangle( 80.0f , 45.0f, ".//Textures/Fullscreen_Button.png")		}	},
+		Quit_MM_s	{	new Sprite { S_CreateRectangle (Button_W, Button_H, "Textures/QuitMainMenu_Button_PM.png")		}	},
+		Mute_s		{	new Sprite{ S_CreateRectangle(Button_W, Button_H, ".//Textures/Mute_Button_PM.png")		}	},
+		FS_s		{	new Sprite{ S_CreateRectangle(Button_W , Button_H, ".//Textures/Fullscreen_Button_PM.png")		}	},
 		Cursor		{	new GameObject {	Cursor_s  , Col_Comp(0.0f, 0.0f, 0.0f, 0.0f, Rect)					}	},
 		Resume		{	new GameObject {	Resume_s  ,	Col_Comp(0.0f, 0.0f, 0.0f, 0.0f, Rect)					}	},			
 		Options		{	new GameObject {	Options_s ,	Col_Comp(0.0f, 0.0f, 0.0f, 0.0f, Rect)					}	},			
@@ -55,7 +55,7 @@ Particle_System* Pause::pause_cursor_ps = nullptr;
 			Buttons.push_back(Resume);
 			Buttons.push_back(Options);
 			Buttons.push_back(Restart);
-			Buttons.push_back(Quit);
+			//Buttons.push_back(Quit);
 			Buttons.push_back(Quit_MM);
 			for (auto& elem : Buttons)
 			{
@@ -87,11 +87,6 @@ Particle_System* Pause::pause_cursor_ps = nullptr;
 void Pause::Update(bool &pause_bool,const float dt)
 {
 	
-	if (!muting) 
-	{
-		if (pause_bool)  Audio_Engine::MUTE_ = true;
-		else Audio_Engine::MUTE_ = true;
-	}
 	AEGfxGetCamPosition(&cameraX, &cameraY);
 	//Update_Buttons(cameraX, cameraY);
 	/*what to update if the game is paused*/
@@ -122,11 +117,11 @@ void Pause::Update(bool &pause_bool,const float dt)
 		//Create a high-light effect when the cursor is over the Button 
 		if  (elem->Collision_.St_Rect_Point(Cursor_Pos.x, Cursor_Pos.y) )
 		{
-			elem->Sprite_->SetRGB(1.0f, 1.0f, 1.0f);
+			elem->Sprite_->SetRGB(0.7f, 0.7f, 0.7f);
 		}
 		else
 		{
-			elem->Sprite_->SetRGB(1.5f, 1.5f, 1.5f);
+			elem->Sprite_->SetRGB(1.0f, 1.0f, 1.0f);
 		}
 	}
 	//Reset the Displacement
@@ -149,11 +144,11 @@ void Pause::Update(bool &pause_bool,const float dt)
 			//Create a high-light effect when the cursor is over the Button 
 			if (elem->Collision_.St_Rect_Point(Cursor_Pos.x, Cursor_Pos.y))
 			{
-				elem->Sprite_->SetRGB(1.0f, 1.0f, 1.0f);
+				elem->Sprite_->SetRGB(0.7f, 0.7f, 0.7f);
 			}
 			else
 			{
-				elem->Sprite_->SetRGB(1.5f, 1.5f, 1.5f);
+				elem->Sprite_->SetRGB(1.0f, 1.0f, 1.0f);
 			}
 			}
 			Displacement = { 0.0f, 50.0f };//Reset
@@ -171,20 +166,13 @@ void Pause::Update(bool &pause_bool,const float dt)
 
 				if (Mute->Collision_.St_Rect_Point(Cursor_Pos.x, Cursor_Pos.y))
 				{
-					
-					muting = muting ? false : true;
-					if (muting) 
-					{
-						Audio_Engine::MUTE_ = muting ;
-					}
-
-					std::cout << "muting is now :" << muting << std::endl;
+					Audio_Engine::MUTE_ = Audio_Engine::MUTE_ ? false: true ;
 				}
 			}
 
 		}
 	//Reset the Displacement
-	Displacement = { 0.0f, 230.0f };
+	Displacement = { 0.0f, 130.0f };
 
 
 	// only do all these checks if the game is paused 
