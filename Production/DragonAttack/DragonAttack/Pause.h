@@ -66,7 +66,7 @@ private:
 	Sprite* Resume_s  ;
 	Sprite*	Options_s ;
 	Sprite*	Restart_s ;
-	Sprite*	Quit_s	  ;
+	//Sprite*	Quit_s	  ;
 	Sprite*	Quit_MM_s ;
 	//For the Options 
 	Sprite* Mute_s;
@@ -77,7 +77,7 @@ private:
 	GameObject* Resume	;
 	GameObject* Options	;
 	GameObject* Restart	;
-	GameObject* Quit	;
+	//GameObject* Quit	;
 	GameObject* Quit_MM	;
 	//using GameObjects to instantiate the Option buttons 
 	GameObject* Mute		;

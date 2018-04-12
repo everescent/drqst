@@ -4,8 +4,6 @@ Main Contributions: Level design and environmental objects
 List:
   Grunt.cpp
   Grunt.h
-  Physics.cpp
-  Physics.h
   Barrier.cpp
   Barrier.h
   Floor.cpp

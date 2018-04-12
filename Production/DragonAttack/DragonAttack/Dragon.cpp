@@ -1,18 +1,15 @@
 /* Start Header ************************************************************************/
 /*!
-\file       Dragon.cpp
-\author     Jacob Lim
-\par email: jacob.lim\@digipen.edu
+\file    Dragon.cpp
+\project Dragon Attack
+\author  Jacob Lim
+\email   jacob.lim@digipen.edu
 \brief
   Dragon class member function definitions here.
 
-Copyright (C) 2018 DigiPen Institute of Technology.
-Reproduction or disclosure of this file or its contents
-without the prior written consent of DigiPen Institute of
-Technology is prohibited.
+All content © 2018 DigiPen (SINGAPORE) Corporation, all rights reserved.
 */
 /* End Header **************************************************************************/
-
 #include "Dragon.h"
 
 //Set pickup type, when a pick up is picked up. OK, this sounds obvious, but yes.

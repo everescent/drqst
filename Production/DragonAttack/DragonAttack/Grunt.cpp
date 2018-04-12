@@ -1,39 +1,40 @@
 /* Start Header ************************************************************************/
 /*!
-\file       Grunt.cpp
-\author     Andrew Chong
-\par email: c.jiahaoandrew\@digipen.edu
+\file    Grunt.cpp
+\project Dragon Attack
+\author  Andrew Chong
+\email   c.jiahaoandrew@digipen.edu
 \brief
-Grunts to be created for the game.
+Archer class functions defined here.
 
-Copyright (C) 2018 DigiPen Institute of Technology.
-Reproduction or disclosure of this file or its contents
-without the prior written consent of DigiPen Institute of
-Technology is prohibited.
+All content © 2018 DigiPen (SINGAPORE) Corporation, all rights reserved.
 */
 /* End Header **************************************************************************/
 #include "Grunt.h"
 #include "Transform.h"
 #include <iostream>
 
-namespace // global variables just for THIS file
+// Global variables
+namespace 
 {
 	const int grunt_hp = 20;
 	const float GRUNT_SCALE = 70.0F;
 	bool recent_kb = false;
+	const float grunt_velocity = 160.0f;
 }
 
+// Audio engine component for grunt sound effects
 Audio_Engine Grunt::SFX{ 1, [](std::vector<std::string> &playlist)
 ->void {	playlist.push_back(".//Audio/Hit_02.mp3");
 } };
 
-/* Grunt Constructor */
+// Grunt Constructor
 Grunt::Grunt(Sprite *p_Sprite, const float posX, const float posY)
 	: Characters(p_Sprite, grunt_hp,
 		Col_Comp{ posX - GRUNT_SCALE, posY - GRUNT_SCALE,
-				  posX + GRUNT_SCALE, posY + GRUNT_SCALE, Rect }),
-	current_action{ IDLE },
-	anim{ WALK_ANIM + 1, 3, 5, [](std::vector <Range>& Init) -> void 
+				  posX + GRUNT_SCALE, posY + GRUNT_SCALE, Rect }), // Set collision positions
+	current_action{ IDLE }, // Set default animation
+	anim{ WALK_ANIM + 1, 3, 5, [](std::vector <Range>& Init) -> void  // Set animation states
 		{
 			Init.push_back(Range{ 0.0f, 1.0f, 0.00f, 0.00f }); // Hit
 			Init.push_back(Range{ 0.0f, 1.0f, 0.33f, 0.33f }); // Idle
@@ -45,11 +46,13 @@ Grunt::Grunt(Sprite *p_Sprite, const float posX, const float posY)
 	Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 	PosX = posX;
 	PosY = posY;
-	SetVelocity(AEVec2{ 160.0f, 0.0f });
+	SetVelocity(AEVec2{ grunt_velocity, 0.0f });
 	Reset_Idle_Time(1.0f);
+	Transform_.SetTranslate(PosX, PosY);
+	Transform_.Concat();
 }
 
-/* Idle state for grunt */
+// Idle state for grunt
 void Grunt::Idle(const Dragon &d, const float dt)
 {
 	anim.SetState(IDLE_ANIM);
@@ -69,6 +72,7 @@ void Grunt::Idle(const Dragon &d, const float dt)
 		}
 	}
 
+	// Unable to see player
 	if (!LineOfSight(d))
 		return;
 	else
@@ -79,7 +83,7 @@ void Grunt::Idle(const Dragon &d, const float dt)
 	}
 }
 
-/* Movement State for grunt */
+// Movement State for grunt
 void Grunt::MoveTowardPlayer(const Dragon &d, const float dt)
 {
 	anim.SetState(WALK_ANIM);
@@ -111,16 +115,16 @@ void Grunt::MoveTowardPlayer(const Dragon &d, const float dt)
 			PosX + GRUNT_SCALE, PosY + GRUNT_SCALE); // max point
 	}
 	else
-		anim.SetState(IDLE_ANIM);
+		anim.SetState(IDLE_ANIM); // set to idle
 }
 
-/* Checks if the player is in view */
+// Checks if the player is in view
 bool Grunt::LineOfSight(const Dragon &d)
 {
 	return (abs(d.PosX - PosX) < 1000.0f) && (abs(d.PosY - PosY) < 200.0f);
 }
 
-/* Sets the grunt facing direction */
+// Sets the grunt facing direction
 void Grunt::Set_Facing_Dir(const Dragon &d)
 {
 	if (d.PosX - PosX > 20.0f) // player on right side
@@ -137,7 +141,7 @@ void Grunt::Set_Facing_Dir(const Dragon &d)
 	Transform_.Concat();
 }
 
-/* Update function for grunt */
+// Update function for grunt
 void Grunt::Update(Dragon &d, const float dt)
 {
 	if (Get_HP() <= 0)
@@ -155,13 +159,12 @@ void Grunt::Update(Dragon &d, const float dt)
 				if (Collision_.Dy_Rect_Rect(d.GetFireball()[i].Collision_, GetVelocity(), 
 					d.GetFireball()[i].GetVelocity(), dt))
 				{
-					
 					anim.SetState(HIT_ANIM);
 
-					Decrease_HP(d.GetDamage());
-					d.AddCharge();
-					d.PlayImpact();
-					SFX.Play(0);
+					Decrease_HP(d.GetDamage()); // decrease AI health by fireball dmg
+					d.AddCharge(); // adds to mega fireball charge
+					d.PlayImpact(); // impact sfx
+					SFX.Play(0); // plays sfx
 					d.GetFireball()[i].Projectile::ResetDist();
 					d.GetFireball()[i].SetActive(false);
 				}
@@ -174,17 +177,16 @@ void Grunt::Update(Dragon &d, const float dt)
 			if (Collision_.Dy_Rect_Rect(d.GetMfireball().Collision_, GetVelocity(), 
 				d.GetMfireball().GetVelocity(), dt))
 			{
-				
 				anim.SetState(HIT_ANIM);
 
-				Decrease_HP(d.GetMDamage());
-				SFX.Play(0);
+				Decrease_HP(d.GetMDamage()); // decrease AI health by mega fireball dmg
+				SFX.Play(0); // plays sfx
 				d.GetMfireball().Projectile::ResetDist();
 				d.GetMfireball().SetActive(false);
 			}
 		}
 
-		//collision with player, player loses health
+		// collision with player, player loses health
 		//if (!Knockback)
 			if (Collision_.Dy_Rect_Rect(d.Collision_, GetVelocity(), d.GetVelocity(), dt))
 			{
@@ -195,6 +197,7 @@ void Grunt::Update(Dragon &d, const float dt)
 				//posit_tmp = d.PosX;
 			}
 
+		// Previous knockback implementation that was later scrapped
 		/*if (Knockback)
 		{
 			if (d.PosX > PosX)
@@ -225,6 +228,7 @@ void Grunt::Update(Dragon &d, const float dt)
 	Transform_.SetTranslate(PosX, PosY);
 	Transform_.Concat();
 
+	// switch case for determining the current state of the grunt
 	switch (current_action)
 	{
 		case IDLE:   Idle(d, dt);
@@ -238,17 +242,20 @@ void Grunt::Update(Dragon &d, const float dt)
 	anim.Update(*Sprite_);
 }
 
+// destructor for grunt
 Grunt::~Grunt()
 {
     delete Sprite_;
 }
 
+// mutes the sfx for grunt
 void Grunt::Mute()
 {
     SFX.SetVolume(0, 0.0f);
     SFX.SetPause( 0, true);
 }
 
+// unmutes the sfx for grunt
 void Grunt::Unmute()
 {
     SFX.SetVolume(0, 1.0f);

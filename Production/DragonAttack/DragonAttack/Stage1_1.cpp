@@ -18,7 +18,9 @@ namespace
 {
 	Dragon       *player;
 	Sprite       *BG;
+	Sprite		 *BG2;
 	Transform    *M_BG;
+	Transform    *M_BG2;
 	UI           *ui;
 	Audio_Engine *Audio;
 	Pause        *pause;
@@ -110,6 +112,11 @@ namespace Stage1_1
 		BG     = new Sprite{ CreateBG(22.0f, 2.0f, ".//Textures/BG_Stage1.png", 1.0f, 15.0f) };
 		M_BG   = new Transform{};
 
+		BG2    = new Sprite{ CreateBG(22.0f, 2.0f, ".//Textures/BG_Stage1_Ground.png", 1.0f, 15.0f) };
+		M_BG2  = new Transform{};
+		M_BG2->SetTranslate(0.0f, -1440.0f);
+		M_BG2->Concat();
+
 		// Audio and UI
 		Audio  = new Audio_Engine{ 1, [](std::vector <std::string> &playlist)->void {playlist.push_back(".//Audio/Stage_1_BGM.mp3"); } };
 
@@ -175,10 +182,18 @@ namespace Stage1_1
 
 		// Placement for specific objects
 		archerTower = new Tower{ TOWER_SPRITE, 4800.0f, 0.0f };
+		archerTower->Transform_.SetTranslate(4800.0f, 0.0f);
+		archerTower->Transform_.Concat();
+
 		box1 = new Barrier{ BARRIER_SPRITE, 1500.0f, -235.0f };
+		box1->Transform_.SetTranslate(1500.0f, -235.0f);
+		box1->Transform_.Concat();
+
 		coin1 = new PickUp{ COIN_SPRITE, Col_Comp{ 0.0f - 25.0f, 0.0f - 25.0f, 0.0f + 25.0f, 0.0f + 25.0f, Rect },
 			COIN, 1500.0f, -210.0f };
-
+		coin1->Transform_.SetTranslate(1500.0f, -210.0f);
+		coin1->Transform_.Concat();
+		
 		
 		// Plays selected track
 		Audio->Play(0);
@@ -412,6 +427,7 @@ namespace Stage1_1
 	{
 		// Background render
 		BG->Render_Object(*M_BG);
+		BG2->Render_Object(*M_BG2);
 
 		// Tutorial Message Pop Ups
 		s1->Render();
@@ -496,6 +512,8 @@ namespace Stage1_1
 	{
 		timer = 3.0f;
 		vis = 1.0f;
+		FadeIn = true;
+		FadeOut = false;
 
 		// Delete player and UI
 		delete player;
@@ -553,6 +571,8 @@ namespace Stage1_1
 
 		delete BG;
 		delete M_BG;
+		delete BG2;
+		delete M_BG2;
 		delete Audio;
 
 		// Tutorial sprites

@@ -118,6 +118,9 @@
     <Filter Include="Game_States\Stage\Level_Selector">
       <UniqueIdentifier>{864cad51-5a43-42f1-aea3-04db650562c9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Game_States\Stage\Load_Screen">
+      <UniqueIdentifier>{afafc894-5b91-4f7a-a448-d0cd6af3e5f7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -299,6 +302,9 @@
     </ClCompile>
     <ClCompile Include="Level_Selector.cpp">
       <Filter>Game_States\Stage\Level_Selector</Filter>
+    </ClCompile>
+    <ClCompile Include="Load_Screen.cpp">
+      <Filter>Game_States\Stage\Load_Screen</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -493,6 +499,9 @@
     </ClInclude>
     <ClInclude Include="resource.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Load_Screen.h">
+      <Filter>Game_States\Stage\Load_Screen</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

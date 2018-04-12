@@ -1,25 +1,23 @@
 /* Start Header ************************************************************************/
 /*!
 \file       Credits.h
+\project    Dragon Attack
 \author     William Yoong
 \par email: william.yoong\@digipen.edu
 \brief
-  Credits page
+Header file for Credits
 
-Copyright (C) 2018 DigiPen Institute of Technology.
-Reproduction or disclosure of this file or its contents
-without the prior written consent of DigiPen Institute of
-Technology is prohibited.
+All content © 2018 DigiPen (SINGAPORE) Corporation, all rights reserved.
 */
 /* End Header **************************************************************************/
 #pragma once
 
 namespace Credits
 {
-	void Init(void);
-	void Load(void);
-	void Update(float dt);
-	void Draw(void);
-	void Free(void);
-	void Unload(void);
+  void Init(void);
+  void Load(void);
+  void Update(float dt);
+  void Draw(void);
+  void Free(void);
+  void Unload(void);
 }

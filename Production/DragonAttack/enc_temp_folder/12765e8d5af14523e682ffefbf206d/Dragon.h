@@ -26,7 +26,7 @@ const float Bullet_Interval { 600.0f  }; //Minimum distance between each firebal
 const float Bullet_Death    { 900.0f  }; //Distance when bullet dies
 const float Bullet_Speed    { 1200.0f }; //How fast a bullet travels
 const int   Fireball_Damage { 10      }; //Fireball damage
-const int   MFireball_Damage{ 25      }; //Mega fireball damage
+const int   MFireball_Damage{ 15      }; //Mega fireball damage
 const float Fireball_Scale  { 50.0f   }; //Scale of Fireball
 const float MFireball_Scale { 75.0f   }; //Scale of Mega Firaball
 
@@ -99,15 +99,7 @@ public:
   state: 
     Whether or not to activate invulnerability. 
   **************************************************************************************/
-  void SetInvul(const bool state)        { Invul_FLAG  = state                         ; }
-
-  /**************************************************************************************
-  Description:
-    This tells the object whether of not to update.
-  state:
-    Whether or not dragon can be updated. 
-  **************************************************************************************/
-  void SetUpdateFlag(const bool state)   { Update_Flag = state                         ; }
+  void SetInvul(const bool state)        { Invul_FLAG = state                          ; }
 
   /**************************************************************************************
   Description:
@@ -197,12 +189,6 @@ public:
 
   /**************************************************************************************
   Description:
-    Update_Flag check
-  **************************************************************************************/
-  bool GetUpdateFlag()                   { return Update_Flag                          ; }
-
-  /**************************************************************************************
-  Description:
     Gets current charge. 
   **************************************************************************************/
   int Get_Charge()                                                                     ;
@@ -232,7 +218,6 @@ public:
     TouchBottom{ true             }, Invul_FLAG{ false }, Damage  { Fireball_Damage },
     M_Damage   { MFireball_Damage }, Charge    { 0     }, Gravity { 10.0f           },
     Dir        {                  }, Pickup_   {       }, Fireball{                 },
-    Update_Flag{ true             },
     //Initialize Mega Fireball
     Mfireball  { F_Sprite, 
                  Col_Comp{ Pos_.x - MFireball_Scale,
@@ -310,7 +295,6 @@ private:
   bool  Falling    ; //Check if player is falling
   bool  TouchBottom; //Check if player has touched bottom
   bool  Invul_FLAG ; //Check if invul for getting hit needs to be activated
-  bool  Update_Flag; //Checks if u can update the dragon
   char  Damage     ; //Amount of damage each fireball does
   char  M_Damage   ; //Amount of damage each mega fireball does
   int   Charge     ; //Charge for Mega Fireball

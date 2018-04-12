@@ -182,6 +182,7 @@
     <ClCompile Include="LevelChangePlatform.cpp" />
     <ClCompile Include="Level_Import.cpp" />
     <ClCompile Include="Level_Selector.cpp" />
+    <ClCompile Include="Load_Screen.cpp" />
     <ClCompile Include="Mage.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="EngineProof.cpp" />
@@ -246,6 +247,7 @@
     <ClInclude Include="Lancelot.h" />
     <ClInclude Include="LevelChangePlatform.h" />
     <ClInclude Include="Level_Import.h" />
+    <ClInclude Include="Load_Screen.h" />
     <ClInclude Include="Mage.h" />
     <ClInclude Include="EngineProof.h" />
     <ClInclude Include="Main_Menu.h" />

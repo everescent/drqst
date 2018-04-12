@@ -276,6 +276,8 @@ namespace Stage2_3
 	{
 		timer = 3.0f;
 		vis = 1.0f;
+		FadeIn = true;
+		FadeOut = false;
 
 		// Delete player and UI
 		delete player;

@@ -1,15 +1,13 @@
 /* Start Header ************************************************************************/
 /*!
 \file       GameStateManager.h
+\project    Dragon Attack
 \author     William Yoong
 \par email: william.yoong\@digipen.edu
 \brief
-Manages the game state
+Header file for GameStateManager
 
-Copyright (C) 20xx DigiPen Institute of Technology.
-Reproduction or disclosure of this file or its contents
-without the prior written consent of DigiPen Institute of
-Technology is prohibited.
+All content © 2018 DigiPen (SINGAPORE) Corporation, all rights reserved.
 */
 /* End Header **************************************************************************/
 

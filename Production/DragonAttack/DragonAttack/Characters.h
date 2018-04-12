@@ -1,27 +1,25 @@
 /* Start Header ************************************************************************/
 /*!
 \file       Characters.h
+\project    Dragon Attack
 \author     William Yoong
 \par email: william.yoong\@digipen.edu
 \brief
-Character class, parent class of the characters to be created
+Header file for Character class
 
-Copyright (C) 2018 DigiPen Institute of Technology.
-Reproduction or disclosure of this file or its contents
-without the prior written consent of DigiPen Institute of
-Technology is prohibited.
+All content © 2018 DigiPen (SINGAPORE) Corporation, all rights reserved.
 */
 /* End Header **************************************************************************/
 
 #pragma once
-#include <utility>
-#include "GameObject.h"
-#include "Transform.h"
-#include "Create_Object.h"
-#include "Animation.h"
-#include "AI_Attack_Sprites.h"
-#include "Audio_Engine.h"
-#include "Particle_Effects.h"
+#include <utility>               // std::move
+#include "GameObject.h"          // Parent class of characters
+#include "Transform.h"			 // Transform class
+#include "Create_Object.h"		 // S_CreateSquare
+#include "Animation.h"			 // Animation class
+#include "AI_Attack_Sprites.h"	 // Get_Attack_Sprite
+#include "Audio_Engine.h"		 // Audio_Engine class
+#include "Particle_Effects.h"	 // Effect_Get
 
 /**************************************************************************************
 //

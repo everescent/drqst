@@ -1,3 +1,17 @@
+/* Start Header ************************************************************************/
+/*!
+\file       AI_Test_Stage.cpp
+\author     William Yoong
+\par email: william.yoong\@digipen.edu
+\brief
+This place to test various ai behaviour
+
+Copyright (C) 2018 DigiPen Institute of Technology.
+Reproduction or disclosure of this file or its contents
+without the prior written consent of DigiPen Institute of
+Technology is prohibited.
+*/
+/* End Header **************************************************************************/
 #include "AI_Test_Stage.h"
 #include "AI_Data_Factory.h"
 #include "Particle_Effects.h"
