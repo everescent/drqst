@@ -258,19 +258,22 @@ namespace Level_Selector
 			//Repeat this for all buttons 
 			if (Stage_1_1->Collision_.St_Rect_Point((float)Mouse_X, (float)Mouse_Y))
 			{
-				SM::Reset(STAGE_1_1);
+				SM::Reset(SS_LOAD);
+				SM::Set_After_Score(STAGE_1_1);
 				GSM::next = GS_LEVELS;
 			}
 
 			if (Stage_1_2->Collision_.St_Rect_Point((float)Mouse_X, (float)Mouse_Y))
 			{
-				SM::Reset(STAGE_1_2);
+				SM::Reset(SS_LOAD);
+				SM::Set_After_Score(STAGE_1_2);
 				GSM::next = GS_LEVELS;
 			}
 
 			if (Stage_1_3->Collision_.St_Rect_Point((float)Mouse_X, (float)Mouse_Y))
 			{
-				SM::Reset(STAGE_1_3);
+				SM::Reset(SS_LOAD);
+				SM::Set_After_Score(STAGE_1_3);
 				GSM::next = GS_LEVELS;
 			}
 
@@ -278,19 +281,22 @@ namespace Level_Selector
 
 			if (Stage_2_1->Collision_.St_Rect_Point((float)Mouse_X, (float)Mouse_Y))
 			{
-				SM::Reset(STAGE_2_1);
+				SM::Reset(SS_LOAD);
+				SM::Set_After_Score(STAGE_2_1);
 				GSM::next = GS_LEVELS;
 			}
 
 			if (Stage_2_2->Collision_.St_Rect_Point((float)Mouse_X, (float)Mouse_Y))
 			{
-				SM::Reset(STAGE_2_2);
+				SM::Reset(SS_LOAD);
+				SM::Set_After_Score(STAGE_2_2);
 				GSM::next = GS_LEVELS;
 			}
 
 			if (Stage_2_3->Collision_.St_Rect_Point((float)Mouse_X, (float)Mouse_Y))
 			{
-				SM::Reset(STAGE_2_3);
+				SM::Reset(SS_LOAD);
+				SM::Set_After_Score(STAGE_2_3);
 				GSM::next = GS_LEVELS;
 			}
 
@@ -298,19 +304,22 @@ namespace Level_Selector
 
 			if (Stage_3_1->Collision_.St_Rect_Point((float)Mouse_X, (float)Mouse_Y))
 			{
-				SM::Reset(STAGE_3_1);
+				SM::Reset(SS_LOAD);
+				SM::Set_After_Score(STAGE_3_1);
 				GSM::next = GS_LEVELS;
 			}
 
 			if (Stage_3_2->Collision_.St_Rect_Point((float)Mouse_X, (float)Mouse_Y))
 			{
-				SM::Reset(STAGE_3_2);
+				SM::Reset(SS_LOAD);
+				SM::Set_After_Score(STAGE_3_2);
 				GSM::next = GS_LEVELS;
 			}
 
 			if (Stage_3_3->Collision_.St_Rect_Point((float)Mouse_X, (float)Mouse_Y))
 			{
-				SM::Reset(STAGE_3_3);
+				SM::Reset(SS_LOAD);
+				SM::Set_After_Score(STAGE_3_3);
 				GSM::next = GS_LEVELS;
 			}
 

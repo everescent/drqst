@@ -95,11 +95,11 @@ namespace Main_Menu
 	void Load(void)
 	{
 		//Activate fullscreen at the start of the game 
-		//AEToogleFullScreen(FS_active);
+		AEToogleFullScreen(FS_active);
 
 		//set background color to black
 		AEGfxSetBackgroundColor(0.0f, 0.0f, 0.0f);
-
+		
 		//AEToogleFullScreen(true);
 		AEGfxSetCamPosition(0.0f, 0.0f);
 		// BG constructed by using Move constructor 
@@ -361,7 +361,11 @@ namespace Main_Menu
 			}
 		}
 
+		if (AEInputCheckTriggered(AEVK_ESCAPE)) Confirm_Shown = true;
+
 			//******Allowing Intro screen to be bypassed with a single mouse-click
+		if (!After_Load) 
+		{
 			if (AEInputCheckTriggered(AEVK_ESCAPE) || AEInputCheckTriggered(AEVK_SPACE) ||
 				AEInputCheckTriggered(AEVK_RETURN) || AEInputCheckReleased(AEVK_LBUTTON))
 			{
@@ -374,6 +378,8 @@ namespace Main_Menu
 				timer -= dt;
 				return;
 			}
+		}
+
 
 			if (Options_Shown)
 			{
