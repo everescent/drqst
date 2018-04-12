@@ -114,12 +114,12 @@ namespace Credits
   //
   **************************************************************************************/
   void Draw(void)
-  {		
+  {
     // render the particle system
     credit_effects->Render();
 
     AEGfxSetRenderMode(AE_GFX_RM_COLOR); // render with color
-    AEGfxTextureSet(NULL, 0, 0);		 // no texture needed
+    AEGfxTextureSet(NULL, 0, 0);         // no texture needed
     AEGfxSetTransparency(1.0f);
 
     // print president on screen

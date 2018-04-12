@@ -12,18 +12,19 @@ All content © 2018 DigiPen (SINGAPORE) Corporation, all rights reserved.
 /* End Header **************************************************************************/
 #include "Score_Page.h"     // header file
 #include "AEEngine.h"       // AEGfxCreateFont, AEGfxSetBackgroundColor, AEGfxSetCamPosition
-#include "Characters.h"		// Get_Enemies_Killed, Get_Score
-#include "PickUp.h"			// GetCoin
-#include "StageManager.h"	// set_Next
+#include "Characters.h"     // Get_Enemies_Killed, Get_Score
+#include "PickUp.h"         // GetCoin
+#include "StageManager.h"   // set_Next
+#include "Load_Screen.h"
 
 #define EFFECT_NUM 8 // number of fireworks in the score page
 
 // for global variables
 namespace
 {
-    u32 fontID;									 // stores the font type
-    Particle_System* score_effects[EFFECT_NUM];	 // stores the fireworks
-    const float offset = 2.f;					 // offset for emitter box
+    u32 fontID;                                   // stores the font type
+    Particle_System* score_effects[EFFECT_NUM];   // stores the fireworks
+    const float offset = 2.f;                     // offset for emitter box
 
     // type to keep track on where the fireworks explode and how long they last
     struct Fireworks
@@ -119,7 +120,7 @@ void Update_Score_Page(const float dt)
 
             
             fireworks[i].distEnd = RNG(80.f, 100.f);  // randomize the end position between 60-80
-            fireworks[i].lifeTime = 3.f;             // lifetime of the fireworks
+            fireworks[i].lifeTime = 3.f;              // lifetime of the fireworks
             ++fireworks[i].dist;
         }
         // move the emitter to its final destination
@@ -168,7 +169,7 @@ void Update_Score_Page(const float dt)
     // go to the next state if enter was pressed
     if (AEInputCheckTriggered(AEVK_RETURN))
     {
-        SM::Set_Next(SM::Get_After_Score());
+        SM::Set_Next(SS_LOAD);
     }
 
 }

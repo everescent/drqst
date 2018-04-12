@@ -1,15 +1,13 @@
 /* Start Header ************************************************************************/
 /*!
 \file       StageManager.cpp
+\project    Dragon Attack
 \author     William Yoong
 \par email: william.yoong\@digipen.edu
 \brief
+Cpp file for StageManager
 
-
-Copyright (C) 2018 DigiPen Institute of Technology.
-Reproduction or disclosure of this file or its contents
-without the prior written consent of DigiPen Institute of
-Technology is prohibited.
+All content © 2018 DigiPen (SINGAPORE) Corporation, all rights reserved.
 */
 /* End Header **************************************************************************/
 #include "StageManager.h"
@@ -23,6 +21,7 @@ Technology is prohibited.
 #include "Stage3_2.h"
 #include "Stage3_3.h"
 #include "Score_Page.h"
+#include "Load_Screen.h"
 
 // global variables that will be used in this stage manager
 static STAGE_LIST s_previous, s_current, s_next, s_after_score;
@@ -116,10 +115,17 @@ namespace SM
     StageManager[SS_SCORE].Free       = Free_Score_Page;
     StageManager[SS_SCORE].Unload     = Unload_Score_Page;
 
-    s_previous    = SS_SCORE;
-    s_current     = SS_SCORE;
-    s_next        = SS_SCORE;
-    s_after_score =	STAGE_1_1;
+    StageManager[SS_LOAD].Init        = Load_Screen::Init;
+    StageManager[SS_LOAD].Load        = Load_Screen::Load;
+    StageManager[SS_LOAD].Update      = Load_Screen::Update;
+    StageManager[SS_LOAD].Draw        = Load_Screen::Draw;
+    StageManager[SS_LOAD].Free        = Load_Screen::Free;
+    StageManager[SS_LOAD].Unload      = Load_Screen::Unload;
+
+    s_previous    = STAGE_1_1;
+    s_current     = STAGE_1_1;
+    s_next        = STAGE_1_1;
+    s_after_score = STAGE_1_1;
 
   }
   
