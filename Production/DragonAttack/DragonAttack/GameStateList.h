@@ -1,17 +1,13 @@
 /* Start Header ************************************************************************/
 /*!
-\file GameStateList.h
-\author William Yoong, william.yoong, 1701674
-
-\par william.yoong\@digipen.edu
-\date Jan 24, 2017
+\file       GameStateList.h
+\project    Dragon Attack
+\author     William Yoong
+\par email: william.yoong\@digipen.edu
 \brief
-This header file contains the enum for the different states the game haves
+Header file for GameStateList
 
-Copyright (C) 2018 DigiPen Institute of Technology.
-Reproduction or disclosure of this file or its contents
-without the prior written consent of DigiPen Institute of
-Technology is prohibited.
+All content © 2018 DigiPen (SINGAPORE) Corporation, all rights reserved.
 */
 /* End Header **************************************************************************/
 #pragma once

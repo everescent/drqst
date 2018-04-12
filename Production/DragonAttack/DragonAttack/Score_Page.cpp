@@ -1,22 +1,20 @@
 /* Start Header ************************************************************************/
 /*!
 \file       Score_Page.cpp
+\project    Dragon Attack
 \author     William Yoong
 \par email: william.yoong\@digipen.edu
 \brief
-score page
+Cpp file for Score_Page
 
-Copyright (C) 2018 DigiPen Institute of Technology.
-Reproduction or disclosure of this file or its contents
-without the prior written consent of DigiPen Institute of
-Technology is prohibited.
+All content © 2018 DigiPen (SINGAPORE) Corporation, all rights reserved.
 */
 /* End Header **************************************************************************/
-#include "Score_Page.h"
-#include "AEEngine.h"
-#include "Characters.h"
-#include "StageManager.h"
-#include "PickUp.h"
+#include "Score_Page.h"     // header file
+#include "AEEngine.h"       // AEGfxCreateFont, AEGfxSetBackgroundColor, AEGfxSetCamPosition
+#include "Characters.h"		// Get_Enemies_Killed, Get_Score
+#include "PickUp.h"			// GetCoin
+#include "StageManager.h"	// set_Next
 
 #define EFFECT_NUM 8 // number of fireworks in the score page
 

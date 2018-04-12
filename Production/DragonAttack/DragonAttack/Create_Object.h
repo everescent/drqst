@@ -1,18 +1,15 @@
 /* Start Header ************************************************************************/
 /*!
-\file       Create_Object.h
-\author     Jacob Lim
-\par email: jacob.lim\@digipen.edu
+\file    Create_Object.h
+\project Dragon Attack
+\author  Jacob Lim
+\email   jacob.lim@digipen.edu
 \brief
   Mesh creation functions are declared here.
 
-Copyright (C) 2018 DigiPen Institute of Technology.
-Reproduction or disclosure of this file or its contents
-without the prior written consent of DigiPen Institute of
-Technology is prohibited.
+All content © 2018 DigiPen (SINGAPORE) Corporation, all rights reserved.
 */
 /* End Header **************************************************************************/
-
 #pragma once
 #include "AEEngine.h"
 #include "Sprite.h"

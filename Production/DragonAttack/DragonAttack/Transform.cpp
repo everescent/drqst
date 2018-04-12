@@ -1,18 +1,15 @@
 /* Start Header ************************************************************************/
 /*!
-\file       Transform.cpp
-\author     Jacob Lim
-\par email: jacob.lim\@digipen.edu
+\file    Transform.cpp
+\project Dragon Attack
+\author  Jacob Lim
+\email   jacob.lim@digipen.edu
 \brief
   Transform class functions are defined here.
 
-Copyright (C) 2018 DigiPen Institute of Technology.
-Reproduction or disclosure of this file or its contents
-without the prior written consent of DigiPen Institute of
-Technology is prohibited.
+All content © 2018 DigiPen (SINGAPORE) Corporation, all rights reserved.
 */
 /* End Header **************************************************************************/
-
 #include "AEEngine.h"
 #include "Transform.h"
 

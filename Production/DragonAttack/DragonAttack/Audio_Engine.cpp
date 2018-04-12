@@ -1,25 +1,16 @@
 /* Start Header ************************************************************************/
 /*!
-\file       Audio_Engine.cpp
-\author     Jacob Lim
-\par email: jacob.lim\@digipen.edu
+\file    Audio_Engine.cpp
+\project Dragon Attack
+\author  Jacob Lim
+\email   jacob.lim@digipen.edu
 \brief
-  Audio Engine class member functions defined here.
+  Audio Engine class member functions defined here. 
 
-Copyright (C) 2018 DigiPen Institute of Technology.
-Reproduction or disclosure of this file or its contents
-without the prior written consent of DigiPen Institute of
-Technology is prohibited.
+All content © 2018 DigiPen (SINGAPORE) Corporation, all rights reserved.
 */
 /* End Header **************************************************************************/
-
 #include "Audio_Engine.h"
-
-/*Guide Links: 
-  https://cuboidzone.wordpress.com/2013/07/26/tutorial-implementing-fmod/
-  https://katyscode.wordpress.com/2012/10/05/cutting-your-teeth-on-fmod-part-1-build-environment-initialization-and-playing-sounds/
-  https://katyscode.wordpress.com/2013/01/15/cutting-your-teeth-on-fmod-part-2-channel-groups/
-*/
 
 bool Audio_Engine::MUTE_ = false; //Global mute
 

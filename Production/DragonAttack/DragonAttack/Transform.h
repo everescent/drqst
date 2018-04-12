@@ -1,18 +1,15 @@
 /* Start Header ************************************************************************/
 /*!
-\file       Transform.h
-\author     Jacob Lim
-\par email: jacob.lim\@digipen.edu
+\file    Transform.h
+\project Dragon Attack
+\author  Jacob Lim
+\email   jacob.lim@digipen.edu
 \brief
   Transform class declared here.
 
-Copyright (C) 2018 DigiPen Institute of Technology.
-Reproduction or disclosure of this file or its contents
-without the prior written consent of DigiPen Institute of
-Technology is prohibited.
+All content © 2018 DigiPen (SINGAPORE) Corporation, all rights reserved.
 */
 /* End Header **************************************************************************/
-
 #pragma once
 #include "AEEngine.h"
 

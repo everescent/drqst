@@ -26,7 +26,7 @@ const float Bullet_Interval { 600.0f  }; //Minimum distance between each firebal
 const float Bullet_Death    { 900.0f  }; //Distance when bullet dies
 const float Bullet_Speed    { 1200.0f }; //How fast a bullet travels
 const int   Fireball_Damage { 10      }; //Fireball damage
-const int   MFireball_Damage{ 25      }; //Mega fireball damage
+const int   MFireball_Damage{ 15      }; //Mega fireball damage
 const float Fireball_Scale  { 50.0f   }; //Scale of Fireball
 const float MFireball_Scale { 75.0f   }; //Scale of Mega Firaball
 
