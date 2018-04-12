@@ -3,9 +3,11 @@
 
 namespace 
 {
+	// fade effect variables
 	float timer = 3.0f;
 	static float vis = 0.0f;
 }
+
 LevelChangePlatform::LevelChangePlatform(Sprite* const p_Sprite, float x, float y)
 	: GameObject{ p_Sprite,
 	Col_Comp{ x - 10.0f, y - 10.0f,
@@ -25,23 +27,24 @@ void LevelChangePlatform::Update(Dragon &player, const float &dt, Sprite& black,
 	
 	this->Transform_.SetTranslate(PosX, PosY);
 	this->Transform_.Concat();
-	if (Collide)
+	if (Collide) // on player collision
 	{
+		player.SetUpdateFlag(false);
 		FadeOut = true;
 		if (FadeOut) // Fade in effect
 		{
 			black.SetAlphaTransBM(1.0f, vis, AE_GFX_BM_BLEND);
-			vis += 0.005f;
+			vis += 0.005f; // increase visibility every loop
 			timer -= dt;
 
-			if (timer <= 0)
+			if (timer <= 0) // stops fade out once timer reaches 0
 			{
 				FadeOut = false;
 			}
 			if (FadeOut)
 				return;
 		}
-
+		// switch case to change between game states depending on current level
 		switch (SM::Get_Curr()) 
 		{
 			case STAGE_1_1:
@@ -71,8 +74,11 @@ void LevelChangePlatform::Update(Dragon &player, const float &dt, Sprite& black,
 			default:
 				break;
 		}
+		// reset fade effect variables
 		timer = 3.0f;
 		vis = 0.0f;
+		player.SetUpdateFlag(true);
+	// set next state for boss stages to the next stage directly
     if(SM::Get_Curr() != STAGE_1_3 && SM::Get_Curr() != STAGE_2_3)
 		  SM::Set_Next(SS_SCORE);
 	}

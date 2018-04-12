@@ -1,15 +1,13 @@
 /* Start Header ************************************************************************/
 /*!
-\file       Stage3_2.cpp
-\author     Andrew Chong Jiahao (100%)
-\par email: c.jiahaoandrew\@digipen.edu
+\file	 Stage3_2.cpp
+\project Dragon Attack
+\author  Andrew Chong
+\email   c.jiahaoandrew@digipen.edu
 \brief
-Implementation for stage 3-2 of the game.
+Implementation for the stage 3-2 game state.
 
-Copyright (C) 2018 DigiPen Institute of Technology.
-Reproduction or disclosure of this file or its contents
-without the prior written consent of DigiPen Institute of
-Technology is prohibited.
+All content © 2018 DigiPen (SINGAPORE) Corporation, all rights reserved.
 */
 /* End Header **************************************************************************/
 #include "Stage3_2.h"
@@ -292,7 +290,8 @@ namespace Stage3_2
 
 			if (!FadeIn)
 			{
-				player->Update(*player, dt);
+				if (player->GetUpdateFlag())
+					player->Update(*player, dt);
 			}
 
 			for (size_t i = 0; i < c.size(); ++i)

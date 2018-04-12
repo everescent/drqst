@@ -231,7 +231,10 @@ namespace Stage3_3
             // update the boss behavior
             if (!FadeIn)
             {
-                player->Update(*player, dt);
+				if (player->GetUpdateFlag())
+				{
+					player->Update(*player, dt);
+				}
                 last_boss->Update(*player, dt);
             }
 

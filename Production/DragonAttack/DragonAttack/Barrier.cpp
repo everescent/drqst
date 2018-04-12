@@ -1,5 +1,18 @@
+/* Start Header ************************************************************************/
+/*!
+\file	 Barrier.cpp
+\project Dragon Attack
+\author  Andrew Chong
+\email   c.jiahaoandrew@digipen.edu
+\brief
+Barrier class functions defined here.
+
+All content © 2018 DigiPen (SINGAPORE) Corporation, all rights reserved.
+*/
+/* End Header **************************************************************************/
 #include "Barrier.h"
 
+// Barrier constructor
 Barrier::Barrier(Sprite* const p_Sprite, float x, float y)
 	:GameObject{p_Sprite,
 	Col_Comp{ x - 100.0f, y - 100.0f,
@@ -12,6 +25,7 @@ Barrier::Barrier(Sprite* const p_Sprite, float x, float y)
 	PosY = y;
 }
 
+// Update function for Barrier
 void Barrier::Update(Dragon &player, const float &dt)
 {
 	if (this->IsActive() == true)
