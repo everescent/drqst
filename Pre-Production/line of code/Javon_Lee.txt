@@ -1,0 +1,39 @@
+Name: Javon Lee
+Role: Tech Lead
+Main contributions: Collision, Tools, UI 
+
+List:
+Block.cpp
+Block.h
+Collision.cpp
+Collision.h
+Level_Import.h
+Level_Import.cpp
+Level_Selector.h
+Level_Selector.cpp
+Main_Menu.cpp
+Main_Menu.h
+Pause.cpp
+Pause.h
+UI.cpp
+UI.h
+
+Total LOC:
+
+What I liked: 
+	I'm quite satisfied that the Level importer was able to work as it allows my level designer to work with a script
+	instead of hard coding the positions. I also like how the general user interface turned out despite the lack of time 
+	to work on it, as there is a certain level of interactivity. 
+	
+What I disliked:
+	As the tech lead, I felt that I wasn't able to work a lot on the low-level design or the engine as I spent too much 
+	time making the collision system to work. In the end, not much of the collision functions was used as it was not needed
+	This taught me the hard way that it is important to determine what the game needs early and add it in the engine.
+	Also, I feel disappointed that I was not able to make a working level editor in time, as it would have streamline 
+	our game development process. 
+	
+What I learned:
+	I have a much clearer view on how the Game Engine should be designed now and to prioritize which components better.
+	I've also learned when to encapsulate components in the Engine and when not to, as sometimes there are more efficient 
+	methods to do things. Lastly, I learned a lot more about Collision and how it works now, as well as have a clearer 
+	idea on how a level editor would work. 
