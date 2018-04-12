@@ -1,42 +1,42 @@
 Name              : Lim Jing Jie Jacob
 Role              : Producer
-Main contributions: Graphics
+Main contributions: Graphics, Tools, Art, Animation, Audio, Particle System
 
 Header Files (.h):
-  Archer
-  Merlin
-  Dragon
-  Audio_Engine
-  Animation
-  Camera
-  Create_Object
-  Render
-  Sprite
-  Transform
-  PickUp
-  GameObject
-  Particle
-  Particle_System
-  f_sqrt
-  Projectile
+  Archer         :57
+  Merlin         :102
+  Dragon         :167
+  Audio_Engine   :28
+  Animation      :38
+  Camera         :9
+  Create_Object  :24
+  Render         :26
+  Sprite         :46
+  Transform      :33
+  PickUp         :30
+  GameObject     :24
+  Particle       :64
+  Particle_System:97
+  f_sqrt         :4
+  Projectile     :68
 
 Implementation Files (.cpp):
-  Archer
-  Merlin
-  Dragon
-  Audio_Engine
-  Animation
-  Camera
-  Create_Object
-  Render
-  Sprite
-  Transform
-  PickUp
-  GameObject
-  Particle_System
-  f_sqrt
+  Archer         :251
+  Merlin         :533
+  Dragon         :266
+  Audio_Engine   :72
+  Animation      :68
+  Camera         :109
+  Create_Object  :149
+  Render         :31
+  Sprite         :80
+  Transform      :15
+  PickUp         :87
+  GameObject     :16
+  Particle_System:247
+  f_sqrt         :17
 
-Total LOC      : 2556(?)
+Total LOC      : 2758
 
 What I liked   : 
   I liked how my particle system turned out. It managed to be able to 
@@ -59,3 +59,4 @@ What I learned :
   function objects, etc. This module has allowed me to develop and enforce my 
   skill set. Furthermore, I have a better understanding of game engine 
   architecture now that I have completed both GAM and CS230. 
+  
