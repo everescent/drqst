@@ -22,8 +22,11 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 
   float dt = 0.0f;       // delta time
   float timePast = 0.0f; // time past in game
-
-  AESysInit(instanceH, show, R_WIDTH, R_HEIGHT, true, 60, NULL);
+  #if defined(DEBUG) | defined(_DEBUG)
+    AESysInit(instanceH, show, R_WIDTH, R_HEIGHT, true, 60, NULL);
+  #else
+    AESysInit(instanceH, show, R_WIDTH, R_HEIGHT, false, 60, NULL);
+  #endif
   AESysSetWindowTitle("Dragon Attack");
   AESysReset();
   GSM::GSM_Init();
