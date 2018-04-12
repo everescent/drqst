@@ -89,8 +89,8 @@ void Archer::Attack_Update(Dragon &/*player*/, const float dt)
     }
   }
   //Update arrow
-  Arrow.Pos(PosX, PosY)                      ;
-  Arrow.Update(dt, Arrow_Scale, false, Angle);
+  Arrow.Pos(PosX, PosY)                             ;
+  Arrow.Update(dt, Arrow_Scale * 0.5f, false, Angle);
 }
 
 //Check for collision
