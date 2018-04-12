@@ -39,7 +39,7 @@ List:
     StageManager.h
     StageManager.cpp
     
-Total LOC:
+Total LOC: 3809 lines of code
 
 What I liked:    I like the fact that coding AIs is very hard to code as you are basically creating another life form from scratch,
                  but the results is satisfying when you see the work you have put in come to life. This semester has taught me that

@@ -1097,6 +1097,9 @@ void King_Arthur::Dead(void)
     {
         elem.SetActive(false);
     }
+
+    Off_Particles();              // remove particles from screen
+    phase_effect->Off_Emitter();  // render all the phase particle effects from the screen
 }
 /**************************************************************************************
 //
@@ -1138,6 +1141,8 @@ void King_Arthur::Off_Particles(void)
 
     // remove every sword effect particle from screen
     sword_effect->Off_Emitter();
+
+
 }
 
 /**************************************************************************************
@@ -1193,13 +1198,8 @@ King_Arthur::~King_Arthur(void)
     mobs.clear();
     arthur.clear();
 
-    // off the phase effect emitter
-    phase_effect->Off_Emitter();
-
     attack_sprite.~Sprite();      // free texture for slash
     sword_sprite.~Sprite() ;      // free texture for sword
-    Off_Particles();              // remove particles from screen
-    phase_effect->Off_Emitter();  // render all the phase particle effects from the screen
      
     // reset the boundaries of king arthur
     left_boundary = -400.0f;

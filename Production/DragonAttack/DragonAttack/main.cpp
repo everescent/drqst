@@ -22,6 +22,7 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 
   float dt = 0.0f;       // delta time
   float timePast = 0.0f; // time past in game
+
   #if defined(DEBUG) | defined(_DEBUG)
     AESysInit(instanceH, show, R_WIDTH, R_HEIGHT, true, 60, NULL);
   #else
@@ -31,12 +32,15 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
   AESysReset();
   GSM::GSM_Init();
 
-  //HICON icon = LoadIcon(instanceH, MAKEINTRESOURCE(IDI_ICON1));
- // SendMessage(GetActiveWindow(), WM_SETICON, ICON_BIG, reinterpret_cast<LPARAM>(icon));
+ HICON icon = LoadIcon(instanceH, MAKEINTRESOURCE(IDI_ICON1));
+ SendMessage(GetActiveWindow(), WM_SETICON, ICON_BIG, reinterpret_cast<LPARAM>(icon));
 
   #if defined(DEBUG) | defined(_DEBUG)
   	_CrtSetDbgFlag( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF );
   #endif
+
+	AEInputShowCursor(0);
+	AEToogleFullScreen(true);
 
   while (GSM::IsGameRunning())
  {
@@ -60,7 +64,7 @@ int WINAPI WinMain(HINSTANCE instanceH, HINSTANCE prevInstanceH, LPSTR command_l
 
   GSM::GSM_Cleanup();
   AESysExit();
- // DestroyIcon(icon);
+  DestroyIcon(icon);
 
   return 0;
 }

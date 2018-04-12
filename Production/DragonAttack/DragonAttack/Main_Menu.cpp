@@ -93,7 +93,7 @@ namespace Main_Menu
 	void Load(void)
 	{
 		//Activate fullscreen at the start of the game 
-		AEToogleFullScreen(FS_active);
+		//AEToogleFullScreen(FS_active);
 
 		//set background color to black
 		AEGfxSetBackgroundColor(0.0f, 0.0f, 0.0f);

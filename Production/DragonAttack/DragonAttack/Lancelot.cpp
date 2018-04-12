@@ -439,6 +439,7 @@ void Lancelot::Attack(Dragon &d, const float dt)
             PosX = 0.0f;
             Transform_.SetTranslate(PosX, PosY);
             Transform_.Concat();
+            Set_Vulnerable(false);
             Sprite_->SetAlphaTransBM(0.8f, 0.8f, AE_GFX_BM_BLEND);
 
             lancelot[ARONDIGHT].Start_Attack(20.0f, ATK_START_POINT.y + 200); // starting position of arondight
@@ -705,20 +706,20 @@ void Lancelot::Arondight(Dragon& d, const float dt)
     AEVec2 new_vector = lancelot[ARONDIGHT].Collision_.Get_Point();                                // get the point at the top of the sword
     AEVec2 position = { this->PosX, this->PosY };                                                  // position of lancelot. Used for collision detection
     HalfPlane side;                                                                                // determine which side of the screen the player is at
-    float s = 0.0f;				                                                                   // sin of angle to rotate
-    float c = 0.0f;				                                                                   // cosine of angle to rotate
-    float radians = 0.0f;		                                                                   // randians version of degree to rotate
+    float s = 0.0f;                                                                                // sin of angle to rotate
+    float c = 0.0f;                                                                                // cosine of angle to rotate
+    float radians = 0.0f;                                                                          // randians version of degree to rotate
     float tempX = new_vector.x;                                                                    // old value of x
-    new_vector.x -= PosX;		                                                                   // rotate collision point with using lancelot as the origin
-    new_vector.y -= PosY;		                                                                   // rotate collision point with using lancelot as the origin
+    new_vector.x -= PosX;                                                                          // rotate collision point with using lancelot as the origin
+    new_vector.y -= PosY;                                                                          // rotate collision point with using lancelot as the origin
     lancelot[ARONDIGHT].Transform_.SetRotation(AERadToDeg(atan(new_vector.y / new_vector.x)));     // rotate texture
     Sprite_->SetAlphaTransBM(1.f, 1.f, AE_GFX_BM_BLEND);                                           // set lancelot to be opqque
-    
+	Set_Vulnerable(true);
 
     if (Get_Direction() == RIGHT)
     {
         radians = AEDegToRad(-angle_offset); // rotate the sword by -3 degrees
-        side = OUTSIDE;					     // check the outisde half plane
+        side = OUTSIDE;                      // check the outisde half plane
 
         // reflect the texture
         lancelot[ARONDIGHT].Transform_.SetScale(-ARONDIGHT_SCALE.x, ARONDIGHT_SCALE.y); 
@@ -893,6 +894,11 @@ void Lancelot::Dead(void)
         i.SetActive(false);
     }
 
+    // remove particles from screens
+    arondight_particle->Off_Emitter();
+    me_particle->Off_Emitter();
+    phase_particle->Off_Emitter();
+
     // set lancelot active to false
     SetActive(false);
 }
@@ -917,12 +923,6 @@ Lancelot::~Lancelot()
 {
     // empty the vector of attacks    
     lancelot.clear();
-
-    // remove particles from screens
-    arondight_particle->Off_Emitter();
-    me_particle->Off_Emitter();
-    phase_particle->Off_Emitter();
-
 
     attack_sprite.~Sprite(); // destroy the mesh and texture allcoated 
 }
