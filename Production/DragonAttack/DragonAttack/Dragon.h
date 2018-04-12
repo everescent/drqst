@@ -103,6 +103,14 @@ public:
 
   /**************************************************************************************
   Description:
+    This tells if I can update the dragon or not
+  state:
+    Whether dragon can be updated or not
+  **************************************************************************************/
+  void SetUpdateFlag(const bool state) { Update_Flag  = state; }
+
+  /**************************************************************************************
+  Description:
     This tells the object whether or not the player is touching the ground. 
   state:
     Whether or not the object has touched the ground. 
@@ -189,6 +197,12 @@ public:
 
   /**************************************************************************************
   Description:
+  Update_Flag check
+  **************************************************************************************/
+  bool GetUpdateFlag() { return Update_Flag; }
+
+  /**************************************************************************************
+  Description:
     Gets current charge. 
   **************************************************************************************/
   int Get_Charge()                                                                     ;
@@ -218,6 +232,7 @@ public:
     TouchBottom{ true             }, Invul_FLAG{ false }, Damage  { Fireball_Damage },
     M_Damage   { MFireball_Damage }, Charge    { 0     }, Gravity { 10.0f           },
     Dir        {                  }, Pickup_   {       }, Fireball{                 },
+    Update_Flag{ true             },
     //Initialize Mega Fireball
     Mfireball  { F_Sprite, 
                  Col_Comp{ Pos_.x - MFireball_Scale,
@@ -295,6 +310,7 @@ private:
   bool  Falling    ; //Check if player is falling
   bool  TouchBottom; //Check if player has touched bottom
   bool  Invul_FLAG ; //Check if invul for getting hit needs to be activated
+  bool  Update_Flag; //Checks if u can update the dragon
   char  Damage     ; //Amount of damage each fireball does
   char  M_Damage   ; //Amount of damage each mega fireball does
   int   Charge     ; //Charge for Mega Fireball
