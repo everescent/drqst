@@ -1,18 +1,15 @@
 /* Start Header ************************************************************************/
 /*!
-\file       Audio_Engine.cpp
-\author     Jacob Lim
-\par email: jacob.lim\@digipen.edu
+\file    Audio_Engine.h
+\project Dragon Attack
+\author  Jacob Lim
+\email   jacob.lim@digipen.edu
 \brief
   Audio Engine class declared here.
 
-Copyright (C) 2018 DigiPen Institute of Technology.
-Reproduction or disclosure of this file or its contents
-without the prior written consent of DigiPen Institute of
-Technology is prohibited.
+All content © 2018 DigiPen (SINGAPORE) Corporation, all rights reserved.
 */
 /* End Header **************************************************************************/
-
 #pragma once
 #include "fmod.hpp"
 #include "fmod_studio.hpp"

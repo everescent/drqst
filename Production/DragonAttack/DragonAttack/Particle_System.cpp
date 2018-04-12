@@ -1,18 +1,16 @@
-/*****************************************************************************/
+/* Start Header ************************************************************************/
 /*!
 \file    Particle_System.cpp
-\author  Jacob Lim, jacob.lim, 440002417
-\par     email: jaocb.lim\@digipen.edu
-\date    March 08, 2018
+\project Dragon Attack
+\author  Jacob Lim
+\email   jacob.lim@digipen.edu
 \brief
   This file contains the implementation of the Emitter and
   Particle System.
-Copyright (C) 2018 DigiPen Institute of Technology.
-Reproduction or disclosure of this file or its contents without the
-prior written consent of DigiPen Institute of Technology is prohibited.
-*/
-/*****************************************************************************/
 
+All content © 2018 DigiPen (SINGAPORE) Corporation, all rights reserved.
+*/
+/* End Header **************************************************************************/
 #include "Particle_System.h"
 
 //Initialize mesh and position, everything else is 0
