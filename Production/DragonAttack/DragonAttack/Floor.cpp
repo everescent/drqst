@@ -1,20 +1,32 @@
+/* Start Header ************************************************************************/
+/*!
+\file	 Floor.cpp
+\project Dragon Attack
+\author  Andrew Chong
+\email   c.jiahaoandrew@digipen.edu
+\brief
+	Floor class body definitions.
+	
+All content © 2018 DigiPen (SINGAPORE) Corporation, all rights reserved.
+*/
+/* End Header **************************************************************************/
 #include "Floor.h"
 
+// Floor constructor
 Floor::Floor(Sprite* const p_Sprite, float x, float y)
 	: GameObject{ p_Sprite,
 	Col_Comp{ x - FLOOR_WIDTH, y - FLOOR_HEIGHT,
 	x + FLOOR_WIDTH, y + FLOOR_HEIGHT, Rect },
-	x, y }
+	x, y } // Set collision positions
 {
 	SetActive(true);
 	PosX = x;
 	PosY = y;
 }
 
-
+// Update function for Floor
 void Floor::Update(Dragon &obj, const float &dt)
 {
-	//need to convert to dt based
 	if (Collision_.Dy_Rect_Rect(obj.Collision_, GetVelocity(), obj.GetVelocity(), dt))
 	{
     obj.SetTouchBottom(true);

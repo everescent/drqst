@@ -1,18 +1,15 @@
 /* Start Header ************************************************************************/
 /*!
-\file       LevelChangePlatform.h
-\author     Andrew Chong
-\par email: c.jiahaoandrew\@digipen.edu
+\file	 LevelChangePlatform.h
+\project Dragon Attack
+\author  Andrew Chong
+\email   c.jiahaoandrew@digipen.edu
 \brief
-Character class, parent class of the characters to be created
+	LevelChangePlatform class body declarations.
 
-Copyright (C) 2018 DigiPen Institute of Technology.
-Reproduction or disclosure of this file or its contents
-without the prior written consent of DigiPen Institute of
-Technology is prohibited.
+All content © 2018 DigiPen (SINGAPORE) Corporation, all rights reserved.
 */
 /* End Header **************************************************************************/
-
 #pragma once
 #include "GameObject.h"
 #include "Transform.h"
@@ -21,11 +18,36 @@ Technology is prohibited.
 #include "GameStateManager.h"
 #include "StageManager.h"
 
-// A class that creates a basic character
+/**************************************************************************************
+Description:
+	LevelChangePlatform class inherits from GameObject class
+**************************************************************************************/
 class LevelChangePlatform : public GameObject
 {
 public:
-	LevelChangePlatform(Sprite* const p_Sprite, float x, float y); // default constructor
+	/**************************************************************************************
+	Description:
+		Constructor for the LevelChangePlatform class with a sprite pointer and 
+		default position.
+	p_Sprite:
+		The LevelChangePlatform's sprite.
+	x:
+		The X position.
+	y:
+		The Y position.
+	**************************************************************************************/
+	LevelChangePlatform(Sprite* const p_Sprite, float x, float y);
+	/**************************************************************************************
+	Description:
+		Update function for the LevelChangePlatform class.
+	player:
+		This allows access to the player.
+	dt:
+		This is the delta time that is used for calculations.
+	black:
+		The black sprite for fading out.
+	FadeOut:
+		For fading out.
+	**************************************************************************************/
 	void Update(Dragon &player, const float &dt, Sprite& black, bool& FadeOut);
-	//bool Update(Dragon &player, const float &dt, Sprite& black, bool& FadeOut);
 };

@@ -5,7 +5,7 @@
 \author  Andrew Chong
 \email   c.jiahaoandrew@digipen.edu
 \brief
-Archer class functions defined here.
+	Grunt class body definitions.
 
 All content © 2018 DigiPen (SINGAPORE) Corporation, all rights reserved.
 */
@@ -57,7 +57,7 @@ void Grunt::Idle(const Dragon &d, const float dt)
 {
 	anim.SetState(IDLE_ANIM);
 
-	// waste time / idle on the spot <- not really working
+	// waste time / idle on the spot
 	if (recent_kb)
 	{
 		if (Get_Idle_Time() < 0)
@@ -187,36 +187,12 @@ void Grunt::Update(Dragon &d, const float dt)
 		}
 
 		// collision with player, player loses health
-		//if (!Knockback)
-			if (Collision_.Dy_Rect_Rect(d.Collision_, GetVelocity(), d.GetVelocity(), dt))
-			{
-				d.Decrease_HP();
-				d.PlayHit();
-				d.SetInvul(true);
-				//Knockback = true;
-				//posit_tmp = d.PosX;
-			}
-
-		// Previous knockback implementation that was later scrapped
-		/*if (Knockback)
+		if (Collision_.Dy_Rect_Rect(d.Collision_, GetVelocity(), d.GetVelocity(), dt))
 		{
-			if (d.PosX > PosX)
-				posit_tmp += 1000.0f * dt;
-			else
-				posit_tmp -= 1000.0f * dt;
-
-			d.PosX = posit_tmp;
-
-			distance += 1000.0f * dt;
-
-			if (distance >= 20.0f)
-			{
-				Knockback = false;
-				distance = 0;
-			}
-			recent_kb = true;
-			current_action = IDLE;
-		}*/
+			d.Decrease_HP();
+			d.PlayHit();
+			d.SetInvul(true);
+		}
 	}
 
 	PosY -= 10.0f; //Gravity

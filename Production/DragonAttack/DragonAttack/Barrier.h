@@ -1,40 +1,46 @@
 /* Start Header ************************************************************************/
 /*!
-\file       Barrier.h
-\author     Andrew Chong
-\par email: c.jiahaoandrew\@digipen.edu
+\file	 Barrier.h
+\project Dragon Attack
+\author  Andrew Chong
+\email   c.jiahaoandrew@digipen.edu
 \brief
-Character class, parent class of a destructable object to be created
+	Barrier class body declarations.
 
-Copyright (C) 2018 DigiPen Institute of Technology.
-Reproduction or disclosure of this file or its contents
-without the prior written consent of DigiPen Institute of
-Technology is prohibited.
+All content © 2018 DigiPen (SINGAPORE) Corporation, all rights reserved.
 */
 /* End Header **************************************************************************/
-
 #pragma once
 #include "GameObject.h"
 #include "Transform.h"
 #include "Dragon.h"
 #include "Create_Object.h"
 
-// A class that creates a basic character
+/**************************************************************************************
+Description:
+	Barrier class inherits from GameObject class
+**************************************************************************************/
 class Barrier : public GameObject
 {
-private:
-
 public:
-	Barrier(Sprite* const p_Sprite, float x, float y); // default constructor
+	/**************************************************************************************
+	Description:
+		Constructor for the Barrier class with a sprite pointer and	default position.
+	p_Sprite:
+		The Barrier's sprite.
+	x:
+		The X position.
+	y:
+		The Y position.
+	**************************************************************************************/
+	Barrier(Sprite* const p_Sprite, float x, float y);
+	/**************************************************************************************
+	Description:
+		Update function for the Barrier class.
+	player:
+		This allows access to the player.
+	dt:
+		This is the delta time that is used for calculations.
+	**************************************************************************************/
 	void Update(Dragon &player, const float &dt);
 };
-
-//enum BOX_SPAWN
-//{
-//	SPD1,
-//	SPD2,
-//	DMG1,
-//	DMG2,
-//	DMG3,
-//	INVUL1
-//};

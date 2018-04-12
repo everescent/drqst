@@ -5,7 +5,7 @@
 \author  Andrew Chong
 \email   c.jiahaoandrew@digipen.edu
 \brief
-Archer class functions declarations here.
+	Grunt class body declarations.
 
 All content © 2018 DigiPen (SINGAPORE) Corporation, all rights reserved.
 */
@@ -24,7 +24,7 @@ class Grunt : public  Characters
 private:
 	/**************************************************************************************
 	Description:
-		This moves the soldier towards to player.
+		This moves the Grunt towards to player.
 	d:
 		This allows access to the player's position.
 	dt:
@@ -33,7 +33,7 @@ private:
 	void MoveTowardPlayer(const Dragon &d, const float dt);
 	/**************************************************************************************
 	Description:
-		This puts the soldier into an idle state that constantly checks if 
+		This puts the Grunt into an idle state that constantly checks if 
 		the player is back within range.
 	d:
 		This allows access to the player's position.
@@ -43,7 +43,7 @@ private:
 	void Idle(const Dragon &d, const float dt);
 	/**************************************************************************************
 	Description:
-		This sets the current direction that the soldier faces.
+		This sets the current direction that the Grunt faces.
 	d:
 		This allows access to the player's position.
 	**************************************************************************************/
@@ -51,22 +51,23 @@ private:
 	/**************************************************************************************
 	Description:
 		This returns true of false based on whether the distance between the 
-		soldier and player is within a certain range.
+		Grunt and player is within a certain range.
 	d:
 		This allows access to the player's position.
 	**************************************************************************************/
 	bool LineOfSight(const Dragon &d);
 
 	/* Variables */
-	Animation anim;                   // Current animation state of the soldier.
-	Boss_Action_State current_action; // Current state of the soldier
-	static Audio_Engine SFX;          // Soldier sounds
+	Animation anim;                   // Current animation state of the Grunt.
+	Boss_Action_State current_action; // Current state of the Grunt.
+	static Audio_Engine SFX;          // Soldier sound effects.
+
 public:
 	/**************************************************************************************
 	Description:
-		Constructs the soldier class with a sprite pointer and default position.
+		Constructor for the Grunt class with a sprite pointer and default position.
 	p_Sprite:
-		The soldier's sprite.
+		The Grunt's sprite.
 	posX:
 		The default X position.
 	posY:
@@ -75,12 +76,12 @@ public:
 	Grunt(Sprite *p_Sprite, const float posX = 0.0f, const float posY = 0.0f);
 	/**************************************************************************************
 	Description:
-		Deletes the soldier sprite.
+		Deletes the Grunt sprite.
 	**************************************************************************************/
     ~Grunt();
 	/**************************************************************************************
 	Description:
-		Update function for the soldier class.
+		Update function for the Grunt class.
 	d:
 		Player reference for checking position.
 	dt:
@@ -89,12 +90,12 @@ public:
 	void Update(Dragon &d, const float dt);
 	/**************************************************************************************
 	Description:
-		Mutes the sound effects for the soldier.
+		Mutes the sound effects for the Grunt.
 	**************************************************************************************/
     void Mute();
 	/**************************************************************************************
 	Description:
-		Unmutes the sound effects for the soldier.
+		Unmutes the sound effects for the Grunt.
 	**************************************************************************************/
     void Unmute();
 };
