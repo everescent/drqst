@@ -30,8 +30,8 @@ enum Merlin_Attack_State {
 using MAS = Merlin_Attack_State;
 
 //Global Read-Only Variables START///////////////////////////////////////////////////////
-const int    Merlin_HP       { 500   };   //Merlin's HP
-const int    M_Phase2_HP     { 250   };   //Merlin's phase 2 HP
+const int    Merlin_HP       { 800   };   //Merlin's HP
+const int    M_Phase2_HP     { 450   };   //Merlin's phase 2 HP
 const float  Merlin_Scale    { 70.0f };   //Cooldown time for Blink
 const float  Blink_CD_Time   { 10.0f };   //Cooldown time for Blink
 const float  Merlin_Att_Inter{ 2.0f  };   //Merlin's Attack Interval
