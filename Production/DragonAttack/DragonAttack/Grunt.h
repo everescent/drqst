@@ -1,29 +1,26 @@
 /* Start Header ************************************************************************/
 /*!
-\file       Grunt.h
-\author     Andrew Chong Jiahao
-\par email: c.jiahaoandrew\@digipen.edu
+\file    Grunt.h
+\project Dragon Attack
+\author  Andrew Chong
+\email   c.jiahaoandrew@digipen.edu
 \brief
-Grunts to be created for the game.
+Archer class functions declarations here.
 
-Copyright (C) 2018 DigiPen Institute of Technology.
-Reproduction or disclosure of this file or its contents
-without the prior written consent of DigiPen Institute of
-Technology is prohibited.
+All content © 2018 DigiPen (SINGAPORE) Corporation, all rights reserved.
 */
 /* End Header **************************************************************************/
-
 #pragma once
 #include "Characters.h"
 #include "Dragon.h"
 #include "Boss_States.h"
 
+// Grunt class inherits from Characters class
 class Grunt : public  Characters
 {
 private:
 	/* Behaviours */
 	void MoveTowardPlayer(const Dragon &d, const float dt);
-	//void AttackPlayer(const Dragon &d);
 	void Idle(const Dragon &d, const float dt);
 
 	/* Helper Function */
@@ -37,39 +34,14 @@ private:
 	bool  Knockback = false;
 	float posit_tmp = 0.0f;
 public:
-	/******************************************************************************/
-	/*!
-	\fn         Grunt
-
-	\brief      Constructor for a Grunt Object
-
-	\param      float x, float y
-	- x and y coordinates of the object
-
-	\retval     void
-	No return.
-	*/
-	/******************************************************************************/
+	// Grunt constructor
 	Grunt(Sprite *p_Sprite, const float posX = 0.0f, const float posY = 0.0f);
+	// Grunt destructor
     ~Grunt();
-	/******************************************************************************/
-	/*!
-	\fn         Update
-
-	\brief      Update function for a Grunt Object
-
-	\param      Dragon &d, const float dt
-	d
-	- reference to player
-	dt
-	- delta time
-
-	\retval     void
-	No return.
-	*/
-	/******************************************************************************/
+	// Grunt update function
 	void Update(Dragon &d, const float dt);
-
+	// Grunt Mute function
     void Mute();
+	// Grunt Unmute function
     void Unmute();
 };
