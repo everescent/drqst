@@ -1,15 +1,13 @@
 /* Start Header ************************************************************************/
 /*!
 \file       Credits.cpp
+\project    Dragon Attack
 \author     William Yoong
 \par email: william.yoong\@digipen.edu
 \brief
-Credits page
+Cpp file for Credits
 
-Copyright (C) 2018 DigiPen Institute of Technology.
-Reproduction or disclosure of this file or its contents
-without the prior written consent of DigiPen Institute of
-Technology is prohibited.
+All content © 2018 DigiPen (SINGAPORE) Corporation, all rights reserved.
 */
 /* End Header **************************************************************************/
 #include "Credits.h"            // header file

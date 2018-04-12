@@ -1,24 +1,23 @@
 /* Start Header ************************************************************************/
 /*!
 \file       Options.cpp
+\project    Dragon Attack
 \author     William Yoong
 \par email: william.yoong\@digipen.edu
 \brief
+Cpp file for options 
 
-Copyright (C) 2018 DigiPen Institute of Technology.
-Reproduction or disclosure of this file or its contents
-without the prior written consent of DigiPen Institute of
-Technology is prohibited.
+All content © 2018 DigiPen (SINGAPORE) Corporation, all rights reserved.
 */
 /* End Header **************************************************************************/
-#include "Options.h"
-#include "Create_Object.h"
-#include "Camera.h"
-#include "Sprite.h"
-#include "Transform.h"
-#include "GameStateManager.h"
-#include "GameObject.h"
-#include "Audio_Engine.h"
+#include "Options.h"              // header file
+#include "Create_Object.h"		  // S_CreateRectangle
+#include "Camera.h"				  // Static_Cam
+#include "Sprite.h"				  // Sprite class
+#include "Transform.h"			  // Transform class
+#include "GameStateManager.h"	  // GS::Current
+#include "GameObject.h"			  // GameObject class
+#include "Audio_Engine.h"		  // Audio_Engine::MUTE_
 
 // for global variables
 namespace
