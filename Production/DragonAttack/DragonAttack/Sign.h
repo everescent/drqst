@@ -1,15 +1,13 @@
 /* Start Header ************************************************************************/
 /*!
-\file       Sign.h
-\author     Andrew Chong
-\par email: c.jiahaoandrew\@digipen.edu
+\file	 Sign.h
+\project Dragon Attack
+\author  Andrew Chong
+\email   c.jiahaoandrew@digipen.edu
 \brief
-Character class, parent class of a destructable object to be created
+	Sign class body declarations.
 
-Copyright (C) 2018 DigiPen Institute of Technology.
-Reproduction or disclosure of this file or its contents
-without the prior written consent of DigiPen Institute of
-Technology is prohibited.
+All content © 2018 DigiPen (SINGAPORE) Corporation, all rights reserved.
 */
 /* End Header **************************************************************************/
 
@@ -19,12 +17,36 @@ Technology is prohibited.
 #include "Dragon.h"
 #include "Create_Object.h"
 
-// A class that creates a basic character
+/**************************************************************************************
+Description:
+	Sign class inherits from GameObject class
+**************************************************************************************/
 class Sign : public GameObject
 {
-private:
 public:
-	Sign(Sprite* const p_Sprite, float x, float y); // default constructor
+	/**************************************************************************************
+	Description:
+		Constructor for the Sign class with a sprite pointer and default position.
+	p_Sprite:
+		The Sign's sprite.
+	x:
+		The X position.
+	y:
+		The Y position.
+	**************************************************************************************/
+	Sign(Sprite* const p_Sprite, float x, float y);
+	/**************************************************************************************
+	Description:
+		For showing the tutorial message.
+	**************************************************************************************/
 	bool ShowTutorial;
+	/**************************************************************************************
+	Description:
+		Update function for player for the Sign class.
+	player:
+		The Sign's sprite.
+	dt:
+		This is the delta time that is used for calculations.
+	**************************************************************************************/
 	void Update(Dragon &player, const float &dt);
 };

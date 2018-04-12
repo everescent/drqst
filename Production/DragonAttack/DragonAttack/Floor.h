@@ -1,29 +1,55 @@
 /* Start Header ************************************************************************/
 /*!
-\file       Platform.h
-\author     Andrew Chong/Jacob Lim
-\par email: c.jiahaoandrew\@digipen.edu/jacob.lim\@digipen.edu
+\file	 Floor.h
+\project Dragon Attack
+\author  Andrew Chong
+\email   c.jiahaoandrew@digipen.edu
 \brief
-Character class, parent class of the characters to be created
+	Floor class body declarations.
 
-Copyright (C) 2018 DigiPen Institute of Technology.
-Reproduction or disclosure of this file or its contents
-without the prior written consent of DigiPen Institute of
-Technology is prohibited.
+All content © 2018 DigiPen (SINGAPORE) Corporation, all rights reserved.
 */
 /* End Header **************************************************************************/
-
 #pragma once
 #include "GameObject.h"
 #include "Transform.h"
 #include "Dragon.h"
 #include "Create_Object.h"
 
-// A class that creates a basic character
+/**************************************************************************************
+Description:
+	Floor class inherits from GameObject class
+**************************************************************************************/
 class Floor : public GameObject
 {
 public:
-	Floor(Sprite* const p_Sprite, float x, float y); // default constructor
+	/**************************************************************************************
+	Description:
+		Constructor for the Floor class with a sprite pointer and default position.
+	p_Sprite:
+		The Floor's sprite.
+	x:
+		The X position.
+	y:
+		The Y position.
+	**************************************************************************************/
+	Floor(Sprite* const p_Sprite, float x, float y);
+	/**************************************************************************************
+	Description:
+		Update function for player for the Floor class.
+	player:
+		The Floor's sprite.
+	dt:
+		This is the delta time that is used for calculations.
+	**************************************************************************************/
 	void Update(Dragon &player, const float &dt);
+	/**************************************************************************************
+	Description:
+		Update function for AI for the Floor class.
+	obj:
+		The Floor's sprite.
+	dt:
+		This is the delta time that is used for calculations.
+	**************************************************************************************/
 	void Update(Characters &obj, const float &dt);
 };

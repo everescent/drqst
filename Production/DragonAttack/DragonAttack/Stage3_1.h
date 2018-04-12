@@ -38,14 +38,9 @@ All content © 2018 DigiPen (SINGAPORE) Corporation, all rights reserved.
 namespace Stage3_1
 {
 	void Init(void);
-
 	void Load(void);
-
 	void Update(float dt);
-
 	void Draw(void);
-
 	void Free(void);
-
 	void Unload(void);
 }
