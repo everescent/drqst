@@ -1,15 +1,13 @@
 /* Start Header ************************************************************************/
 /*!
-\file       Main_Menu.cpp
-\author     Javon Lee
-\par email: xiongweijavon.lee\@digipen.edu
+\file    Main_Menu.cpp
+\project Dragon Attack
+\author  Javon Lee
+\email   xiongweijavon.lee@digipen.edu
 \brief
-The Main menu (gamestate) functions definition are done here. 
+This is a game state that displays the Main Menu for the game
 
-Copyright (C) 20xx DigiPen Institute of Technology.
-Reproduction or disclosure of this file or its contents
-without the prior written consent of DigiPen Institute of
-Technology is prohibited.
+All content © 2018 DigiPen (SINGAPORE) Corporation, all rights reserved.
 */
 /* End Header **************************************************************************/
 #include "Main_Menu.h"
@@ -95,7 +93,7 @@ namespace Main_Menu
 	void Load(void)
 	{
 		//Activate fullscreen at the start of the game 
-		AEToogleFullScreen(FS_active);
+		//AEToogleFullScreen(FS_active);
 
 		//set background color to black
 		AEGfxSetBackgroundColor(0.0f, 0.0f, 0.0f);
@@ -281,7 +279,7 @@ namespace Main_Menu
 	void Update(float dt)
 	{
 		Audio->Update();
-		AEInputShowCursor(0);
+		
 		//Use AE_Engine to get the cursor position and convert the position to the global scale 
 		AEInputGetCursorPosition(&Store_X, &Store_Y);
 		//Conversion needed as the position gotten from AEInputGetCursorPosition is not in Global System
@@ -364,7 +362,7 @@ namespace Main_Menu
 		if ( !Options_Shown && !Confirm_Shown && !Instructions_Shown &&
 			AEInputCheckTriggered(AEVK_ESCAPE)) Confirm_Shown = true;
 
-			//******Allowing Intro screen to be bypassed with a single mouse-click
+			//******Allowing Intro screen to be bypassed with a single mouse-click,ESC,ENTER or space
 		if (!After_Load) 
 		{
 			if (AEInputCheckTriggered(AEVK_ESCAPE) || AEInputCheckTriggered(AEVK_SPACE) ||
@@ -509,7 +507,6 @@ namespace Main_Menu
 				CREDITS_SPRITE->			SetRGB(1.5f, 1.5, 1.5f);
 				OPTIONS_SPRITE->			SetRGB(1.5f, 1.5f, 1.5f);
 				
-
 				YES_SPRITE->				SetRGB(1.0f, 1.0f, 1.0f);
 				NO_SPRITE->					SetRGB(1.0f, 1.0f, 1.0f);
 			}

@@ -1,20 +1,20 @@
 /* Start Header ************************************************************************/
 /*!
-\file       Collision.cpp
-\author     Javon Lee
-\par email: xiongweijavon.lee\@digipen.edu
+\file    Collision.cpp
+\project Dragon Attack
+\author  Javon Lee
+\email   xiongweijavon.lee@digipen.edu
 \brief
 Collision class functions are defined here.
 
-Copyright (C) 20xx DigiPen Institute of Technology.
-Reproduction or disclosure of this file or its contents
-without the prior written consent of DigiPen Institute of
-Technology is prohibited.
+All content © 2018 DigiPen (SINGAPORE) Corporation, all rights reserved.
 */
 /* End Header **************************************************************************/
 
 #include "Collision.h" 
 #include <iostream> // for debugging
+
+//A basic method to detect collision between 2 static objects 
 bool Col_Comp::St_Rect_Rect( const Col_Comp &aabb_obj2)
 {
 	//check if the two objects are Rectangles 
@@ -41,6 +41,7 @@ bool Col_Comp::St_Rect_Rect( const Col_Comp &aabb_obj2)
 	return true;
 }
 
+//A basic method to detect collision between 2 circular objects, does not work for moving circular objects 
 bool Col_Comp::St_Circle_Circle( const Col_Comp &objB)
 {
 	int RadiusSumSq = (radius + objB.radius)*(radius + objB.radius);
@@ -52,6 +53,7 @@ bool Col_Comp::St_Circle_Circle( const Col_Comp &objB)
 
 }
 
+//Detects if a point is in a bounding Box or not 
 bool Col_Comp::St_Rect_Point(float point_x, float point_y)
 {
 
@@ -60,6 +62,7 @@ bool Col_Comp::St_Rect_Point(float point_x, float point_y)
 	return false;
 }
 
+//This function is used to detect collision between 2 Objects that has Rectangle shape 
 bool Col_Comp::Dy_Rect_Rect( const Col_Comp &B, const AEVec2 &velocity_A, const AEVec2 &velocity_B, float dt)
 {
 	
@@ -166,29 +169,31 @@ bool Col_Comp::Dy_Rect_Rect( const Col_Comp &B, const AEVec2 &velocity_A, const 
 
 	return true; 
 
-}
+}// End of Col_Comp::Dy_Rect_Rect
 
+
+//Update the min and max coordiantes in the Collision Component. This MUST be called whenever an Object moves 
 void Col_Comp::Update_Col_Pos(f32 min_x, f32 min_y, f32 max_x, f32 max_y)
 {
 	min.x = min_x;
 	min.y = min_y;
 	max.x = max_x;
 	max.y = max_y;
-
 }
-
+//An overloaded function to update the mid-point coordinates for Circle objects 
 void Col_Comp::Update_Col_Pos(f32 mid_x, f32 mid_y)
 {
 	mid.x = mid_x;
 	mid.y = mid_y;
 }
 
+//A getter function to return the shape of an object 
 Shape Col_Comp::GetShape()
 {
 	return shape;
 }
 
-
+//A function that checks if a point is on a line or not 
 bool Col_Comp::Line_Point(Col_Comp &A, Col_Comp &B,  AEVec2 & A_Pos, HalfPlane side)
 {
 	AEVec2 vector = { (B.max.x - A_Pos.x), (B.max.y - A_Pos.y) };
@@ -226,19 +231,18 @@ bool Col_Comp::Point_Rect(Col_Comp &a, Col_Comp &b)
 	return b.mid.x < a.max.x && b.mid.x > a.min.x &&
 		   b.mid.y < a.max.y && b.mid.y > a.min.y;
 }
-
+//A getter function to return the midpoint 
 AEVec2 Col_Comp::Get_Point(void) const
 {
 	return mid;
 }
-
+//A getter function to return the max point of a bounding box 
 AEVec2 Col_Comp::Get_MaxPoint(void)const
 {
     return max;
 }
-
+//A getter function to return the min point of a bounding box 
 AEVec2 Col_Comp::Get_MinPoint(void)const
 {
     return min;
 }
-

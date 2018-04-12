@@ -52,6 +52,7 @@ UI::UI(Dragon* dragon)
 
 UI::~UI()
 	{
+	//delete all the Sprites and Transforms
 	delete HP_Sprite;
 	delete Charge_Sprite;
 	delete HP_Trans;
@@ -67,10 +68,10 @@ UI::~UI()
 		if (timer_UI < 0.0f) 
 		{
 			timer_UI = 2.0f; visual_effect = 0.0f;
-		}
+		}//Reset the variables 
 
 		Dragon_hp = dragon->Get_HP();
-		if (Dragon_hp <= 0 || (AEInputCheckTriggered(AEVK_R)))
+		if (Dragon_hp <= 0 ) //If the player loses
 		{
 			if (timer_UI >= 0.0f && timer_UI <= 2.0f)
 			{

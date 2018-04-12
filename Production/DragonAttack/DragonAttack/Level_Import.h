@@ -1,3 +1,15 @@
+/* Start Header ************************************************************************/
+/*!
+\file    Level_Import.h
+\project Dragon Attack
+\author  Javon Lee
+\email   xiongweijavon.lee@digipen.edu
+\brief
+The Level Import functions are forward declared here
+
+All content © 2018 DigiPen (SINGAPORE) Corporation, all rights reserved.
+*/
+/* End Header **************************************************************************/
 #pragma once
 #pragma once
 #include "AEEngine.h"
@@ -6,7 +18,7 @@
 #include <cmath>
 #include <vector>
 #include <iostream>
-
+//This is an enumeration to differentiate between the different object types in the txt file 
 enum OBJ_TYPE
 {
 	OBJ_TYPE_EMPTY,	// 0
@@ -25,16 +37,30 @@ enum OBJ_TYPE
 	OBJ_LCPLAT		// 13
 };
 
-//determine necessary functions for Level Editor 
+
+/****************************************************************************************
+Description:
+This function is used to snap a coordinate to the cell of the map
+****************************************************************************************/
  void SnapToCell(float *Coordinate);
-
-//void FreeMapData(void); Got to free the allocated memory 
-
- bool Import_MapData(char* filename, int**& MapData, int& Map_Width, int& Map_Height); //Allocates the memory for the array 
-
+ /****************************************************************************************
+ Description:
+ This function allocates the memory for the array to store the Map data 
+ ****************************************************************************************/
+ bool Import_MapData(char* filename, int**& MapData, int& Map_Width, int& Map_Height); 
+ /****************************************************************************************
+ Description:
+ This function converts the y-coordinate to fit the game's map size
+ ****************************************************************************************/
 float Convert_Y(float& y);
-
+/****************************************************************************************
+Description:
+This function converts the x-coordinate to fit the game's map size
+****************************************************************************************/
 float Convert_X(float& x);
-
+/****************************************************************************************
+Description:
+This function is used for debugging to check that the txt file is imported correctly 
+****************************************************************************************/
 void PrintRetrievedInformation(int** MapData, int Map_Width, int Map_Height);
 

@@ -4,8 +4,7 @@
 \author     Javon Lee
 \par email: xiongweijavon.lee\@digipen.edu
 \brief
-The Main menu (gamestate) function declarations are done here, as well as the 
-libraries and header files necessary to be included.
+This is a game state that displays the Main Menu for the game
 
 Copyright (C) 20xx DigiPen Institute of Technology.
 Reproduction or disclosure of this file or its contents

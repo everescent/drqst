@@ -1,15 +1,13 @@
 /* Start Header ************************************************************************/
 /*!
-\file       UI.h
-\author     Javon Lee Xiong Wei 
-\par email: xiongweijavon.lee\@digipen.edu
+\file    UI.h
+\project Dragon Attack
+\author  Javon Lee
+\email   xiongweijavon.lee@digipen.edu
 \brief
-UI class body declared here.
+UI class is declared here, together with it's members and functions
 
-Copyright (C) 2018 DigiPen Institute of Technology.
-Reproduction or disclosure of this file or its contents
-without the prior written consent of DigiPen Institute of
-Technology is prohibited.
+All content © 2018 DigiPen (SINGAPORE) Corporation, all rights reserved.
 */
 /* End Header **************************************************************************/
 #pragma once
@@ -23,21 +21,37 @@ Technology is prohibited.
 #include "Particle_Effects.h"
 #include "GameStateManager.h"
 #include "StageManager.h"
-
+/****************************************************************************************
+Description:
+	This is a class that implements the User Interface. It controls the printing of
+	the hp icons and tells the user if the mega-fireball is charged up
+****************************************************************************************/
 class UI
 {
 public:
-	//Default constructor for User interface that takes in a ptr to Dragon as a parameter 
+/****************************************************************************************
+Description:
+Default constructor for User interface that takes in a ptr to Dragon as a parameter
+****************************************************************************************/
+ 
 	UI(Dragon* dragon);
 
-	//Default destructor for UI
+/****************************************************************************************
+Description:
+Default destructor for UI
+****************************************************************************************/
 	~UI();
 
-	//Updates the UI
+/****************************************************************************************
+Description:
+Updates the UI
+****************************************************************************************/
 	void UI_Update(Dragon* dragon, const float dt);
-	//Renders the UI
+/****************************************************************************************
+Description:
+Renders the UI
+****************************************************************************************/
 	void Render();
-
 private:
 
 	Sprite*  HP_Sprite;
@@ -54,6 +68,4 @@ private:
 	static float visual_effect;
 	static float timer_UI;
 
-
-	//AEVec2 offset1;
 };
