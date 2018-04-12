@@ -38,7 +38,8 @@ void CamFollow(Transform const &PosMatrix, float OffsetX, float OffsetY, float D
   //Current position Y                                                        
   float        PosYCurr = PosMatrix.GetTranslateMatrix().m[1][2]              ;
   //To use a smooth animation curve                                           
-  float        Accel    = 6.0f                                                ;
+  float        Accel    = 4.0f                                                ;
+  float        AccelY   = 10.0f                                                ;
   PosYold = Reset ? PosMatrix.GetTranslateMatrix().m[1][2] + OffsetY : PosYold;
   //Check direction
   if (Direction < 0.0f) //If facing left
@@ -60,12 +61,12 @@ void CamFollow(Transform const &PosMatrix, float OffsetX, float OffsetY, float D
     //Move up if needed
     if (Moving && GoUp)
     {
-      PosYold += Accel;
+      PosYold += AccelY;
     }
     //Move down if needed
     else if (Moving && GoDown)
     {
-      PosYold -= Accel;
+      PosYold -= AccelY;
     }
     //Stop moving
     if (Offset <= -OffsetX)
@@ -108,12 +109,12 @@ void CamFollow(Transform const &PosMatrix, float OffsetX, float OffsetY, float D
     //Move up if needed
     if (Moving && GoUp)
     {
-      PosYold += Accel;
+      PosYold += AccelY;
     }
     //Move down if needed
     else if (Moving && GoDown)
     {
-      PosYold -= Accel;
+      PosYold -= AccelY;
     }
     //Stop moving
     if (Offset >= OffsetX)

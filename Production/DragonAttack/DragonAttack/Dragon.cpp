@@ -108,6 +108,7 @@ void Dragon::Input()
   if (AEInputCheckCurr(AEVK_D))
   {
     Dir.R = true;
+    Set_Direction(RIGHT);
     if(Anim_.GetComplete(Dragon_ANIM::HIT))
       Anim_.SetState(Dragon_ANIM::WALK);
   }
@@ -115,6 +116,7 @@ void Dragon::Input()
   else if (AEInputCheckCurr(AEVK_A))
   {
     Dir.L = true;
+    Set_Direction(LEFT);
     if (Anim_.GetComplete(Dragon_ANIM::HIT))
       Anim_.SetState(Dragon_ANIM::WALK);
   }
@@ -190,14 +192,14 @@ void Dragon::Update(Dragon& dummy, const float dt)
   //Call for player input
   Input();
   //Update position based on direction
-  if (Dir.L)
+  if (Dir.L && Get_Direction() == LEFT)
   {
     PosX  -= GetVelocity().x * dt    ;
     Facing = -1.0f                   ;
     Set_Direction(LEFT)              ;
     Transform_.SetScale(Facing, 1.0f);
   }
-  else if (Dir.R)
+  else if (Dir.R && Get_Direction() == RIGHT)
   {
     PosX  += GetVelocity().x * dt    ;
     Facing = 1.0f                    ;
