@@ -138,12 +138,6 @@ UI::~UI()
 
 	void UI::Render()
 	{
-			/*hp_icon1.Render();
-			hp_icon1.Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
-			hp_icon2.Render();
-			hp_icon2.Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
-			hp_icon3.Render();
-			hp_icon3.Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);*/
 		int iterations;
 		//Starting displacement to print the Left corner HP Sprite
 		if (Dragon_hp <= 0)
