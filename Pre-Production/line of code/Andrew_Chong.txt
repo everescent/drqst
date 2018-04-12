@@ -2,40 +2,42 @@ Name: Andrew Chong Jiahao
 Role: Lead Designer
 Main Contributions: Level design and environmental objects
 List:
-  Grunt.cpp
-  Grunt.h
-  Barrier.cpp
-  Barrier.h
-  Floor.cpp
-  Floor.h
+  Grunt.cpp		
+  Grunt.h		
+  Barrier.cpp	
+  Barrier.h		
+  Physics.cpp	
+  Physics.h		
+  Floor.cpp 	
+  Floor.h 		
   LevelChangePlatform.cpp
-  LevelChangePlatform.h
-  Platform.cpp
-  Platform.h
-  Sign.cpp
-  Sign.h
-  Tower.cpp
-  Tower.h
-  Wall.cpp
-  Wall.h
-  Stage1_1.cpp
-  Stage1_1.h
-  Stage1_2.cpp
-  Stage1_2.h
-  Stage1_3.cpp
-  Stage1_3.h
-  Stage2_1.cpp
-  Stage2_1.h
-  Stage2_2.cpp
-  Stage2_2.h
-  Stage2_3.cpp
-  Stage2_3.h
-  Stage3_1.cpp
-  Stage3_1.h
-  Stage3_2.cpp
-  Stage3_2.h
+  LevelChangePlatform.h	
+  Platform.cpp	
+  Platform.h	
+  Sign.cpp		
+  Sign.h		
+  Tower.cpp		
+  Tower.h		
+  Wall.cpp 		
+  Wall.h 		
+  Stage1_1.cpp	
+  Stage1_1.h	
+  Stage1_2.cpp	
+  Stage1_2.h	
+  Stage1_3.cpp	
+  Stage1_3.h	
+  Stage2_1.cpp	
+  Stage2_1.h	
+  Stage2_2.cpp	
+  Stage2_2.h	
+  Stage2_3.cpp	
+  Stage2_3.h	
+  Stage3_1.cpp	
+  Stage3_1.h	
+  Stage3_2.cpp	
+  Stage3_2.h	
   
-Total LOC: 4154
+Total LOC: 4109
 
 What I liked: 
 I liked being able to design my own levels with our level reader and how to 
