@@ -61,12 +61,12 @@ namespace
     //------------------------------------------------------------------
     float left_boundary                       = -400;      // boundaries of charge attack
     float right_boundary                      = 400;       // boundaries of charge attack
-  Sprite attack_sprite;                                  // texture for slash
-  Sprite sword_sprite;                                   // texture for sword
-  std::vector <Boss_Attack> arthur;                      // an array of boss attacks
-  LOCATION teleport_location[3];                         // teleport locations of king arthur
-  AEVec2 sword_pos[NUM_OF_SWORD]            = {};        // rotating sword postitions for phase 3
-  AEVec2 ai_spawn_pos[NUM_OF_MOBS];                      // mob ai spawning location
+    Sprite attack_sprite;                                  // texture for slash
+    Sprite sword_sprite;                                   // texture for sword
+    std::vector <Boss_Attack> arthur;                      // an array of boss attacks
+    LOCATION teleport_location[3];                         // teleport locations of king arthur
+    AEVec2 sword_pos[NUM_OF_SWORD]            = {};        // rotating sword postitions for phase 3
+    AEVec2 ai_spawn_pos[NUM_OF_MOBS];                      // mob ai spawning location
 
   // function declarations
     bool Move_KA(const float dt, King_Arthur &ka, const Dragon &d); // move king arthur towards player
@@ -1192,6 +1192,9 @@ King_Arthur::~King_Arthur(void)
     // clear the mob and arthur attack vectors for future usage
     mobs.clear();
     arthur.clear();
+
+    // off the phase effect emitter
+    phase_effect->Off_Emitter();
 
     attack_sprite.~Sprite();      // free texture for slash
     sword_sprite.~Sprite() ;      // free texture for sword

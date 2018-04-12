@@ -75,13 +75,8 @@ namespace Stage3_3
         BG   = new Sprite{ CreateBG(22.0f, 2.0f, ".//Textures/BG_Stage2.png", 1.0f, 15.0f) };
         M_BG = new Transform{};
 
-        // creating the player obj
-        player = dynamic_cast<Dragon*>(Create_Basic_AI(DRAGON, startpos));
-        player->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
-
         // audio and us used for the stage
         audio = new Audio_Engine{ 1, [](std::vector <std::string> &playlist)->void {playlist.push_back(".//Audio/KingArthur_BGM.mp3"); } };
-        ui    = new UI{ player };
         pause = new Pause{};
         // get the map data and create corresponding objects for the stage
         for (int y = 0; y < Map_Height; ++y)
@@ -126,10 +121,22 @@ namespace Stage3_3
 
         BG->SetRGB(0.5f, 0.5f, 0.5f);
         
+         // creating the player obj
+         player = dynamic_cast<Dragon*>(Create_Basic_AI(DRAGON, startpos));
+         player->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+
         // update player variables
         player->SetPos(startpos.x, startpos.y); // set the spawn location of dragon
+        player->Transform_.SetScale(1.0f, 1.0f);
+        player->Transform_.SetTranslate(startpos.x, startpos.y);
+        player->Transform_.Concat();
         player->SetActive(true);                // set player to alive
+        player->ResetCharge();
+        player->FaceRight();
         player->Set_HP(5);
+
+        // ui
+        ui = new UI{ player };
 
         // creating the last boss obj
         last_boss = dynamic_cast<King_Arthur*>(Create_Boss_AI(KING_ARTHUR)); // cast obj from character to king arthur
@@ -179,7 +186,7 @@ namespace Stage3_3
 
                 // mute king arthur
                 last_boss->Mute();
-				player->Mute();
+                player->Mute();
                 // mute the background music
                 audio->SetVolume(0, 0.0f); 
                 audio->SetPause(0, true);  
@@ -193,7 +200,7 @@ namespace Stage3_3
 
                 // unmute king arthur
                 last_boss->Unmute();
-				player->Unmute();
+                player->Unmute();
                 // unmute the background music
                 audio->SetVolume(0, 1.0f);
                 audio->SetPause(0, false);
@@ -231,10 +238,11 @@ namespace Stage3_3
             // update the boss behavior
             if (!FadeIn)
             {
-				if (player->GetUpdateFlag())
-				{
-					player->Update(*player, dt);
-				}
+                 if (player->GetUpdateFlag())
+                 {
+                   player->Update(*player, dt);
+                 }
+
                 last_boss->Update(*player, dt);
             }
 
@@ -359,6 +367,8 @@ namespace Stage3_3
         
         last_boss->Dead();
         delete last_boss;
+        delete player;
+        delete ui;
     }
 
     /**************************************************************************************
@@ -375,12 +385,9 @@ namespace Stage3_3
         }
         delete[] MapData;
 
-
-        delete player;
         delete BG;
         delete M_BG;
         delete audio;
-        delete ui;
         delete wall_sprite;
         delete floor_sprite;
         delete plat_sprite;
