@@ -1,15 +1,13 @@
 /* Start Header ************************************************************************/
 /*!
-\file       Stage1_3.cpp
-\author     Andrew Chong Jiahao (100%)
-\par email: c.jiahaoandrew\@digipen.edu
+\file	 Stage1_3.cpp
+\project Dragon Attack
+\author  Andrew Chong
+\email   c.jiahaoandrew@digipen.edu
 \brief
-Implementation for stage 1-3 of the game.
+Implementation for the stage 1-3 game state.
 
-Copyright (C) 2018 DigiPen Institute of Technology.
-Reproduction or disclosure of this file or its contents
-without the prior written consent of DigiPen Institute of
-Technology is prohibited.
+All content © 2018 DigiPen (SINGAPORE) Corporation, all rights reserved.
 */
 /* End Header **************************************************************************/
 #include "Stage1_3.h"
@@ -48,6 +46,8 @@ namespace
 	Sprite* WALL_SPRITE;
 	Sprite* LCPLAT_SPRITE;
 	Sprite* FLOOR_SPRITE;
+
+	bool levelChange = false;
 }
 
 namespace Stage1_3
@@ -168,7 +168,11 @@ namespace Stage1_3
 
 			if (!FadeIn)
 			{
-				player->Update(*player, dt);
+				if (player->GetUpdateFlag())
+				{
+					player->Update(*player, dt);
+				}
+					
 				c[0]->Update(*player, dt);
 			}
 

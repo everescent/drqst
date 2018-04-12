@@ -1,15 +1,13 @@
 /* Start Header ************************************************************************/
 /*!
-\file       Stage1_2.cpp
-\author     Andrew Chong Jiahao (100%)
-\par email: c.jiahaoandrew\@digipen.edu
+\file	 Stage1_2.cpp
+\project Dragon Attack
+\author  Andrew Chong
+\email   c.jiahaoandrew@digipen.edu
 \brief
-Implementation for stage 1-2 of the game.
+Implementation for the stage 1-2 game state.
 
-Copyright (C) 2018 DigiPen Institute of Technology.
-Reproduction or disclosure of this file or its contents
-without the prior written consent of DigiPen Institute of
-Technology is prohibited.
+All content © 2018 DigiPen (SINGAPORE) Corporation, all rights reserved.
 */
 /* End Header **************************************************************************/
 #include "Stage1_2.h"
@@ -286,7 +284,8 @@ namespace Stage1_2
 			
 			if (!FadeIn)
 			{
-				player->Update(*player, dt);
+				if (player->GetUpdateFlag())
+					player->Update(*player, dt);
 			}
 
 			for (size_t i = 0; i < c.size(); ++i)
@@ -332,7 +331,6 @@ namespace Stage1_2
 			Audio->SetPause(0, true);
 			pause->Update(pause_bool,dt);
 		}
-		//std::cout << (int)player->PosX <<", "<< (int)player->PosY << std::endl;
 	}
 
 	void Draw(void)

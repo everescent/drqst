@@ -1,29 +1,28 @@
 /* Start Header ************************************************************************/
 /*!
-\file       Stage1_1.cpp
-\author     Andrew Chong Jiahao (100%)
-\par email: c.jiahaoandrew\@digipen.edu
+\file	 Stage1_1.cpp
+\project Dragon Attack
+\author  Andrew Chong
+\email   c.jiahaoandrew@digipen.edu
 \brief
-Implementation for stage 1-1 of the game.
+Implementation for the stage 1-1 game state.
 
-Copyright (C) 2018 DigiPen Institute of Technology.
-Reproduction or disclosure of this file or its contents
-without the prior written consent of DigiPen Institute of
-Technology is prohibited.
+All content © 2018 DigiPen (SINGAPORE) Corporation, all rights reserved.
 */
 /* End Header **************************************************************************/
 #include "Stage1_1.h"
 
+// Global Variables
 namespace
 {
-	Dragon       *player;
-	Sprite       *BG;
-	Sprite		 *BG2;
-	Transform    *M_BG;
-	Transform    *M_BG2;
-	UI           *ui;
-	Audio_Engine *Audio;
-	Pause        *pause;
+	Dragon       *player;	// Player texture
+	Sprite       *BG;		// First background texture
+	Sprite		 *BG2;		// Second background texture
+	Transform    *M_BG;		// Transformation matrix for first background texture
+	Transform    *M_BG2;	// Transformation matrix for second background texture
+	UI           *ui;		// User interface
+	Audio_Engine *Audio;	// Audio for current stage
+	Pause        *pause;	// Pause screen
 
 	bool pause_bool = false;
 	const AEVec2 startpos = { -320, -255 };
@@ -165,6 +164,7 @@ namespace Stage1_1
 
 	void Init(void)
 	{
+		// Set all tutorial objects to be active
 		tut1->SetActive(true);
 		tut2->SetActive(true);
 		tut3->SetActive(true);
@@ -172,7 +172,7 @@ namespace Stage1_1
 		tut5->SetActive(true);
 		tut6->SetActive(true);
 
-		//place all alpha stuff here
+		// set alpha for tutorial sprites
 		tut1->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 		tut2->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 		tut3->Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
@@ -194,7 +194,6 @@ namespace Stage1_1
 		coin1->Transform_.SetTranslate(1500.0f, -210.0f);
 		coin1->Transform_.Concat();
 		
-		
 		// Plays selected track
 		Audio->Play(0);
 
@@ -213,6 +212,7 @@ namespace Stage1_1
 		{
 			for (int x = 0; x < Map_Width; ++x)
 			{
+				// AI
 				if (MapData[y][x] == OBJ_GRUNT)
 				{
 					float f_x = (float)x;
@@ -225,7 +225,8 @@ namespace Stage1_1
 					float f_y = (float)y;
 					c.push_back(Create_Basic_AI(ARCHER, AEVec2{ Convert_X(f_x) , Convert_Y(f_y) }));
 				}
-				//pick ups
+
+				// pickups
 				if (MapData[y][x] == OBJ_COIN)
 				{
 					float f_x = (float)x;
@@ -269,19 +270,21 @@ namespace Stage1_1
 			}
 		}
 		
+		// set all AI to active
 		for (size_t i = 0; i < c.size(); ++i)
 			c[i]->SetActive(true);
 
 		// Creation of player done in init so restarting the level will set the position
 		player = dynamic_cast<Dragon*>(Create_Basic_AI(DRAGON, startpos));
-		ui = new UI{ player };
+		ui = new UI{ player }; // construct the ui on the player
 
-		player->SetActive(true);
+		player->SetActive(true); // set player to active
 
 		// Reset player's Health and charge
 		player->Set_HP(5);
 		player->ResetCharge();
 
+		// set the first camera position instance
 		CamFollow(player->Transform_, 200, 120, player->GetFacing(), true);
 	}
 
@@ -292,7 +295,7 @@ namespace Stage1_1
 		b_m.SetTranslate(camX, camY);
 		b_m.Concat();
 
-		if (!pause_bool)
+		if (!pause_bool) // checks if pause is true
 		{			
 			// Fade In effect
 			if (FadeIn)
@@ -309,8 +312,6 @@ namespace Stage1_1
 				}
 			}
 
-
-			// audio is mute
 			if (Audio_Engine::MUTE_)
 			{
 				// mute all AI
@@ -318,6 +319,7 @@ namespace Stage1_1
 					elem->Mute();
 				
 				player->Mute();
+
 				// mute the background music
 				Audio->SetVolume(0, 0.0f);
 				Audio->SetPause(0, true);
@@ -329,20 +331,26 @@ namespace Stage1_1
 					elem->Unmute();
 
 				player->Unmute();
+
 				// unmute the background music
 				Audio->SetVolume(0, 1.0f);
 				Audio->SetPause(0, false);
 			}
 
+			// set audio to be unpaused
 			Audio->SetPause(0, false);
+			// update audio
 			Audio->Update();
+			// update pause
 			pause->Update(pause_bool, dt);
 
-			if (!FadeIn)
+			if (!FadeIn) // if fade in has not finished, do not allow player to move
 			{
-				player->Update(*player, dt);
+				if (player->GetUpdateFlag())
+					player->Update(*player, dt);
 			}
 
+			// Set locations for tutorial objects
 			s1->Update(*player, dt);
 			tut1->Transform_.SetTranslate(400.0f, -20.0f);
 			tut1->Transform_.Concat();
@@ -367,6 +375,7 @@ namespace Stage1_1
 			tut6->Transform_.SetTranslate(5200.0f, 160.0f);
 			tut6->Transform_.Concat();
 
+			// only updates AI if they are still active
 			for (size_t i = 0; i < c.size(); ++i)
 			{
 				if (c[i]->IsActive())
@@ -376,11 +385,14 @@ namespace Stage1_1
 				archerTower->Update(*(c[i]), dt);
 			}
 
+			// only update coin if the box is not active
 			if (!(box1->IsActive()))
 			{
 				coin1->Update(*player, dt);
 			}
 
+			// Updates all game objects for player and AI
+			// platforms
 			for (Platform& elem : platforms)
 			{
 				// added collision for AI
@@ -390,6 +402,8 @@ namespace Stage1_1
 				}
 				elem.Update(*player, dt);
 			}
+
+			// blocks
 			for (Block& elem : blocks)
 			{
 				for (size_t i = 0; i < c.size(); ++i)
@@ -398,29 +412,32 @@ namespace Stage1_1
 				}
 				elem.Update(*player, dt);
 			}
+
+			// barriers
 			for (Barrier& elem : barriers)
 			{
 				elem.Update(*player, dt);
 				elem.Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 			}
+
+			// pickups
 			for (PickUp& elem : PU)
 			{
 				elem.Update(*player, dt);
 			}
 
-			archerTower->Update(*player, dt);
-			box1->Update(*player, dt);
+			archerTower->Update(*player, dt); // update tower with player
+			box1->Update(*player, dt); // update box with player
 
-			CamFollow(player->Transform_, 200, 120, player->GetFacing());
-			next->Update(*player, dt, black, FadeOut);
-			ui->UI_Update(player, dt);
+			CamFollow(player->Transform_, 200, 120, player->GetFacing()); // update the camera
+			next->Update(*player, dt, black, FadeOut); // update the level change platform
+			ui->UI_Update(player, dt); // update the ui
 		}
 		else
 		{
-			Audio->SetPause(0, true);//pausing BG music
-			pause->Update(pause_bool, dt);
+			Audio->SetPause(0, true); // pausing BG music
+			pause->Update(pause_bool, dt); // update the pause screen
 		}
-		//std::cout << (int)player->PosX << ", " << (int)player->PosY << std::endl;
 	}
 
 	void Draw(void)
@@ -461,10 +478,13 @@ namespace Stage1_1
 			tut6->Render();
 		}
 
+		// Render the coin when box is destroyed
 		if (!(box1->IsActive()))
 		{
 			coin1->Render();
 		}
+
+		// Render all game objects
 		archerTower->Render();
 		for (Platform& elem : platforms)
 		{
@@ -496,6 +516,7 @@ namespace Stage1_1
 		// Particle Effects
 		PickUp::coin_particles->Render();
 		
+		// Render fade out effects
 		if (FadeIn)
 			black.Render_Object(b_m);
 		if (FadeOut)
@@ -505,11 +526,13 @@ namespace Stage1_1
 			black.Render_Object(b_m2);
 		}
 
+		// Render pause menu when player pauses
 		if (pause_bool) pause->Render();
 	}
 
 	void Free(void)
 	{
+		// Reset fade effect variables
 		timer = 3.0f;
 		vis = 1.0f;
 		FadeIn = true;
@@ -519,6 +542,7 @@ namespace Stage1_1
 		delete player;
 		delete ui;
 
+		// Delete unique objects
 		delete box1;
 		delete archerTower;
 		delete coin1;
@@ -548,6 +572,7 @@ namespace Stage1_1
 		barriers.clear();
 
 		// Delete Sprites
+		// Tutorial messages
 		delete TUT1_SPRITE;
 		delete TUT2_SPRITE;
 		delete TUT3_SPRITE;
@@ -555,13 +580,15 @@ namespace Stage1_1
 		delete TUT5_SPRITE;
 		delete TUT6_SPRITE;
 
-		delete COIN_SPRITE;//pickups
+		// pickups
+		delete COIN_SPRITE;
 		delete HP_SPRITE;
 		delete DMG_SPRITE;
 		delete SPD_SPRITE;
 		delete INVUL_SPRITE;
 
-		delete BARRIER_SPRITE;//objs
+		// objects
+		delete BARRIER_SPRITE;
 		delete WALL_SPRITE;
 		delete PLAT_SPRITE;
 		delete LCPLAT_SPRITE;
@@ -569,13 +596,16 @@ namespace Stage1_1
 		delete TOWER_SPRITE;
 		delete SIGN_SPRITE;
 
+		// background
 		delete BG;
 		delete M_BG;
 		delete BG2;
 		delete M_BG2;
+
+		// audio
 		delete Audio;
 
-		// Tutorial sprites
+		// Tutorial sprites and game objects
 		delete s1;
 		delete s2;
 		delete s3;
@@ -588,9 +618,9 @@ namespace Stage1_1
 		delete tut4;
 		delete tut5;
 		delete tut6;
-
 		delete next;
 
+		// pause menu objects
 		delete pause;
 	}
 }

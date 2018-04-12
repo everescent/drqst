@@ -1,3 +1,15 @@
+/* Start Header ************************************************************************/
+/*!
+\file	 Stage3_1.h
+\project Dragon Attack
+\author  Andrew Chong
+\email   c.jiahaoandrew@digipen.edu
+\brief
+Declarations for the stage 3-1 game state.
+
+All content © 2018 DigiPen (SINGAPORE) Corporation, all rights reserved.
+*/
+/* End Header **************************************************************************/
 #pragma once
 #include "AEEngine.h"
 #include "Sprite.h"
