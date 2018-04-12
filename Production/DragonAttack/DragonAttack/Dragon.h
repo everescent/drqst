@@ -99,15 +99,15 @@ public:
   state: 
     Whether or not to activate invulnerability. 
   **************************************************************************************/
-  void SetInvul(const bool state)        { Invul_FLAG = state                          ; }
+  void SetInvul(const bool state)        { Invul_FLAG  = state                         ; }
 
   /**************************************************************************************
   Description:
-    This tells if I can update the dragon or not
+    This tells the object whether of not to update.
   state:
-    Whether dragon can be updated or not
+    Whether or not dragon can be updated. 
   **************************************************************************************/
-  void SetUpdateFlag(const bool state) { Update_Flag  = state; }
+  void SetUpdateFlag(const bool state)   { Update_Flag = state                         ; }
 
   /**************************************************************************************
   Description:
@@ -197,9 +197,9 @@ public:
 
   /**************************************************************************************
   Description:
-  Update_Flag check
+    Update_Flag check
   **************************************************************************************/
-  bool GetUpdateFlag() { return Update_Flag; }
+  bool GetUpdateFlag()                   { return Update_Flag                          ; }
 
   /**************************************************************************************
   Description:
