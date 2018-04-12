@@ -361,7 +361,8 @@ namespace Main_Menu
 			}
 		}
 
-		if (AEInputCheckTriggered(AEVK_ESCAPE)) Confirm_Shown = true;
+		if ( !Options_Shown && !Confirm_Shown && !Instructions_Shown &&
+			AEInputCheckTriggered(AEVK_ESCAPE)) Confirm_Shown = true;
 
 			//******Allowing Intro screen to be bypassed with a single mouse-click
 		if (!After_Load) 
@@ -392,6 +393,19 @@ namespace Main_Menu
 				{
 					Options_Shown = Options_Shown ? false : true;
 				}
+				if (Fullscreen_Button->Collision_.St_Rect_Point((float)Mouse_X, (float)Mouse_Y))
+				{
+					FULLSCREEN_SPRITE->SetRGB(1.0f, 1.0f, 1.0f);
+				}
+				else if (Mute_Button->Collision_.St_Rect_Point((float)Mouse_X, (float)Mouse_Y))
+				{
+					MUTE_SPRITE->SetRGB(1.0f, 1.0f, 1.0f);
+				}
+				else
+				{
+					FULLSCREEN_SPRITE->SetRGB(1.5f, 1.5f, 1.5f);
+					MUTE_SPRITE->SetRGB(1.5f, 1.5, 1.5f);
+				}
 			}
 
 			else if (Instructions_Shown)
@@ -414,6 +428,7 @@ namespace Main_Menu
 				Quit_Button->SetActive(false);
 				Credits_Button->SetActive(false);
 				Options_Button->SetActive(false);
+				if (AEInputCheckTriggered(AEVK_ESCAPE)) Confirm_Shown = Confirm_Shown ? false : true;
 			}
 
 			else if (!Options_Shown && !Instructions_Shown)
@@ -475,14 +490,7 @@ namespace Main_Menu
 				OPTIONS_SPRITE->SetRGB(1.0f, 1.0f, 1.0f);
 			}
 
-			else if (Fullscreen_Button->Collision_.St_Rect_Point((float)Mouse_X, (float)Mouse_Y))
-			{
-				FULLSCREEN_SPRITE->SetRGB(1.0f, 1.0f, 1.0f);
-			}
-			else if (Mute_Button->Collision_.St_Rect_Point((float)Mouse_X, (float)Mouse_Y))
-			{
-				MUTE_SPRITE->SetRGB(1.0f, 1.0f, 1.0f);
-			}
+			
 
 			else if (Yes_Button->Collision_.St_Rect_Point((float)Mouse_X, (float)Mouse_Y))
 			{
@@ -500,8 +508,7 @@ namespace Main_Menu
 				QUIT_SPRITE->				SetRGB(1.5f, 1.5f, 1.5f);
 				CREDITS_SPRITE->			SetRGB(1.5f, 1.5, 1.5f);
 				OPTIONS_SPRITE->			SetRGB(1.5f, 1.5f, 1.5f);
-				FULLSCREEN_SPRITE->			SetRGB(1.5f, 1.5f, 1.5f);
-				MUTE_SPRITE->				SetRGB(1.5f, 1.5, 1.5f);
+				
 
 				YES_SPRITE->				SetRGB(1.0f, 1.0f, 1.0f);
 				NO_SPRITE->					SetRGB(1.0f, 1.0f, 1.0f);

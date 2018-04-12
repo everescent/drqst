@@ -396,6 +396,12 @@ Pause::~Pause()
 	delete Mute_s;
 	delete FS_s;
 
+	delete Howtoplay_s;
+	delete Instructions_s;
+	delete Yes_s;
+	delete No_s;
+	delete Confirm_s;
+
 	delete Cursor;
 	for (auto& elem : Buttons)
 	{
@@ -406,6 +412,11 @@ Pause::~Pause()
 	{
 		delete elem;
 	}
+
+	delete Howtoplay;
+	delete Yes;
+	delete No;
+	delete Confirm;
 }// End of Pause::~Pause
 
 
