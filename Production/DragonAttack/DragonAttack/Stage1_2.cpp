@@ -19,6 +19,8 @@ namespace
 	Dragon       *player;
 	Sprite       *BG;
 	Transform    *M_BG;
+	Sprite       *BG2;
+	Transform    *M_BG2;
 	UI           *ui;
 	Audio_Engine *Audio;
 	Pause        *pause;
@@ -89,6 +91,11 @@ namespace Stage1_2
 		// Texture and transform matrix for BG
 		BG   = new Sprite{ CreateBG(22.0f, 2.0f, ".//Textures/BG_Stage1.png", 1.0f, 15.0f) };
 		M_BG = new Transform{};
+
+		BG2 = new Sprite{ CreateBG(22.0f, 2.0f, ".//Textures/BG_Stage1_Ground.png", 1.0f, 15.0f) };
+		M_BG2 = new Transform{};
+		M_BG2->SetTranslate(0.0f, -1440.0f);
+		M_BG2->Concat();
 
 		// Audio and UI
 		Audio = new Audio_Engine{ 1, [](std::vector <std::string> &playlist)->void {playlist.push_back(".//Audio/Stage_1_BGM.mp3"); } };
@@ -331,6 +338,7 @@ namespace Stage1_2
 	void Draw(void)
 	{
 		BG->Render_Object(*M_BG);
+		BG2->Render_Object(*M_BG2);
 
 		for (Platform& elem : platforms)
 		{
@@ -377,6 +385,8 @@ namespace Stage1_2
 	{
 		timer = 3.0f;
 		vis = 1.0f;
+		FadeIn = true;
+		FadeOut = false;
 		// Delete player and UI
 		delete player;
 		delete ui;
@@ -422,6 +432,8 @@ namespace Stage1_2
 
 		delete BG;
 		delete M_BG;
+		delete BG2;
+		delete M_BG2;
 		delete Audio;
 		delete next;
 

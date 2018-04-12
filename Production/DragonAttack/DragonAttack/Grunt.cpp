@@ -47,6 +47,8 @@ Grunt::Grunt(Sprite *p_Sprite, const float posX, const float posY)
 	PosY = posY;
 	SetVelocity(AEVec2{ 160.0f, 0.0f });
 	Reset_Idle_Time(1.0f);
+	Transform_.SetTranslate(PosX, PosY);
+	Transform_.Concat();
 }
 
 /* Idle state for grunt */

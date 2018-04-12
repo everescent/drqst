@@ -350,6 +350,8 @@ namespace Stage3_3
     {
         timer = 3.0f;
         vis = 1.0f;
+		FadeIn = true;
+		FadeOut = false;
         player->ResetCharge();
         
         last_boss->Dead();
