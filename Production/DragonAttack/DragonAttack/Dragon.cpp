@@ -101,6 +101,14 @@ void Dragon::HitInvul(const float dt)
   }
 }
 
+void Dragon::FaceRight()
+{
+  Dir.R = true;
+  Set_Direction(RIGHT);
+  Facing = 1.0f;
+  Transform_.SetScale(Facing, 1.0f);
+}
+
 //This function receives the player input
 void Dragon::Input()
 {
@@ -196,14 +204,12 @@ void Dragon::Update(Dragon& dummy, const float dt)
   {
     PosX  -= GetVelocity().x * dt    ;
     Facing = -1.0f                   ;
-    Set_Direction(LEFT)              ;
     Transform_.SetScale(Facing, 1.0f);
   }
   else if (Dir.R && Get_Direction() == RIGHT)
   {
     PosX  += GetVelocity().x * dt    ;
     Facing = 1.0f                    ;
-    Set_Direction(RIGHT)             ;
     Transform_.SetScale(Facing, 1.0f);
   }
   if (Dir.UP)
