@@ -37,7 +37,7 @@ Particle_System* Pause::pause_cursor_ps = nullptr;
 		Resume_s	{	new Sprite { S_CreateRectangle (Button_W, Button_H, "Textures/Resume_Button_PM.png" )		}	},
 		Options_s	{	new Sprite { S_CreateRectangle (Button_W, Button_H, "Textures/Options_Button_PM.png")		}	},
 		Restart_s 	{	new Sprite { S_CreateRectangle (Button_W, Button_H, "Textures/Restart_Button_PM.png")			}	},
-		Quit_s	 	{	new Sprite { S_CreateRectangle (Button_W, Button_H, "Textures/Quit_Button.png")			}	},
+		//Quit_s	 	{	new Sprite { S_CreateRectangle (Button_W, Button_H, "Textures/Quit_Button.png")			}	},
 		Quit_MM_s	{	new Sprite { S_CreateRectangle (Button_W, Button_H, "Textures/QuitMainMenu_Button_PM.png")		}	},
 		Mute_s		{	new Sprite{ S_CreateRectangle(Button_W, Button_H, ".//Textures/Mute_Button_PM.png")		}	},
 		FS_s		{	new Sprite{ S_CreateRectangle(Button_W , Button_H, ".//Textures/Fullscreen_Button_PM.png")		}	},
@@ -45,7 +45,7 @@ Particle_System* Pause::pause_cursor_ps = nullptr;
 		Resume		{	new GameObject {	Resume_s  ,	Col_Comp(0.0f, 0.0f, 0.0f, 0.0f, Rect)					}	},			
 		Options		{	new GameObject {	Options_s ,	Col_Comp(0.0f, 0.0f, 0.0f, 0.0f, Rect)					}	},			
 		Restart		{	new GameObject {	Restart_s ,	Col_Comp(0.0f, 0.0f, 0.0f, 0.0f, Rect)					}	},			
-		Quit		{	new GameObject {	Quit_s	  ,	Col_Comp(0.0f, 0.0f, 0.0f, 0.0f, Rect)					}	},			
+		//Quit		{	new GameObject {	Quit_s	  ,	Col_Comp(0.0f, 0.0f, 0.0f, 0.0f, Rect)					}	},			
 		Quit_MM		{	new GameObject {	Quit_MM_s ,	Col_Comp(0.0f, 0.0f, 0.0f, 0.0f, Rect)					}	},
 		Mute		{	new GameObject {	Mute_s	  ,	Col_Comp(0.0f, 0.0f, 0.0f, 0.0f, Rect)					}	},
 		Fullscreen	{	new GameObject{		FS_s	  ,	Col_Comp(0.0f, 0.0f, 0.0f, 0.0f, Rect)					}	}
@@ -208,10 +208,10 @@ void Pause::Update(bool &pause_bool,const float dt)
 				SM::Set_Next(SS_RESTART);
 			}
 
-			if (Quit->Collision_.St_Rect_Point(Cursor_Pos.x, Cursor_Pos.y))
+			/*if (Quit->Collision_.St_Rect_Point(Cursor_Pos.x, Cursor_Pos.y))
 			{
 				GSM::next = GS_QUIT;
-			}
+			}*/
 
 			if (Quit_MM->Collision_.St_Rect_Point(Cursor_Pos.x, Cursor_Pos.y))
 			{
@@ -306,7 +306,7 @@ Pause::~Pause()
 	delete Resume_s;
 	delete Options_s;
 	delete Restart_s;
-	delete Quit_s;
+	//delete Quit_s;
 	delete Quit_MM_s;
 	delete Mute_s;
 	delete FS_s;
