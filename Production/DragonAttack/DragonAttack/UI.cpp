@@ -52,6 +52,7 @@ UI::UI(Dragon* dragon)
 
 UI::~UI()
 	{
+	//delete all the Sprites and Transforms
 	delete HP_Sprite;
 	delete Charge_Sprite;
 	delete HP_Trans;
@@ -67,10 +68,10 @@ UI::~UI()
 		if (timer_UI < 0.0f) 
 		{
 			timer_UI = 2.0f; visual_effect = 0.0f;
-		}
+		}//Reset the variables 
 
 		Dragon_hp = dragon->Get_HP();
-		if (Dragon_hp <= 0 || (AEInputCheckTriggered(AEVK_R)))
+		if (Dragon_hp <= 0 ) //If the player loses
 		{
 			if (timer_UI >= 0.0f && timer_UI <= 2.0f)
 			{
@@ -137,12 +138,6 @@ UI::~UI()
 
 	void UI::Render()
 	{
-			/*hp_icon1.Render();
-			hp_icon1.Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
-			hp_icon2.Render();
-			hp_icon2.Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
-			hp_icon3.Render();
-			hp_icon3.Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);*/
 		int iterations;
 		//Starting displacement to print the Left corner HP Sprite
 		if (Dragon_hp <= 0)

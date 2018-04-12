@@ -195,55 +195,6 @@ void Pause::Update(bool &pause_bool,const float dt)
 
 		}
 	
-
-	 else if (curr_Screen == Confirmation_Screen)
-	{
-		//Translate Concat Confirmation message 
-		Confirm->Transform_.SetTranslate(cameraX, cameraY);
-		Confirm->Transform_.Concat();
-		Confirm_s->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
-
-		//T and C Yes and No buttons
-		Yes->Transform_.SetTranslate(cameraX - 100.0f, cameraY -100.0f); // Same Coordinates as main menu 
-		Yes->Transform_.Concat();
-		Yes_s->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
-		No->Transform_.SetTranslate(cameraX + 100.0f, cameraY - 100.0f);// Same Coordinates as main menu 
-		No->Transform_.Concat();
-		No_s->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
-
-		if (Yes->Collision_.St_Rect_Point(Cursor_Pos.x, Cursor_Pos.y))
-		{
-			Yes_s->SetRGB(0.7f, 0.7f, 0.7f);
-		}
-		else if (No->Collision_.St_Rect_Point(Cursor_Pos.x, Cursor_Pos.y))
-		{
-			No_s->SetRGB(0.7f, 0.7f, 0.7f);
-		}
-		else
-		{
-			Yes_s->SetRGB(1.0f, 1.0f, 1.0f);
-			No_s->SetRGB(1.0f, 1.0f, 1.0f);
-		}
-
-		//If the mouse is clicked 
-		if (AEInputCheckTriggered(AEVK_LBUTTON))
-		{
-			if (Yes->Collision_.St_Rect_Point(Cursor_Pos.x, Cursor_Pos.y))
-			{
-				GSM::next = GS_QUIT;
-			}
-
-			if (No->Collision_.St_Rect_Point(Cursor_Pos.x, Cursor_Pos.y))
-			{
-				curr_Screen = Pause_Screen;
-				Toggle_Button_Display(Pause_Screen);
-			}
-		}
-
-	}
-
-
-
 	// only do all these checks if the game is paused 
 	//AND only if the buttons are displaying 
 	else if ( curr_Screen == Pause_Screen )
@@ -292,11 +243,68 @@ void Pause::Update(bool &pause_bool,const float dt)
 
 			if (Quit_MM->Collision_.St_Rect_Point(Cursor_Pos.x, Cursor_Pos.y))
 			{
-				pause_bool = pause_bool == true ? false : true;
-                SM::Set_Next(SS_QUIT); // Quit the stage 
-				GSM::next = GS_MAIN; // Go back to the Main Menu's gamestate 
+				menu_click = menu_click ? false : true;
+				curr_Screen = Confirmation_Screen;
+				Toggle_Button_Display(Confirmation_Screen);
+				
+				
 			}
 		}
+	}
+
+	else if (curr_Screen == Confirmation_Screen)
+	{
+		//Translate Concat Confirmation message 
+		Confirm->Transform_.SetTranslate(cameraX, cameraY);
+		Confirm->Transform_.Concat();
+		Confirm_s->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+
+		//T and C Yes and No buttons
+		Yes->Transform_.SetTranslate(cameraX - 100.0f, cameraY - 100.0f); // Same Coordinates as main menu 
+		Yes->Transform_.Concat();
+		Yes_s->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+		No->Transform_.SetTranslate(cameraX + 100.0f, cameraY - 100.0f);// Same Coordinates as main menu 
+		No->Transform_.Concat();
+		No_s->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
+
+		if (Yes->Collision_.St_Rect_Point(Cursor_Pos.x, Cursor_Pos.y))
+		{
+			Yes_s->SetRGB(0.7f, 0.7f, 0.7f);
+		}
+		else if (No->Collision_.St_Rect_Point(Cursor_Pos.x, Cursor_Pos.y))
+		{
+			No_s->SetRGB(0.7f, 0.7f, 0.7f);
+		}
+		else
+		{
+			Yes_s->SetRGB(1.0f, 1.0f, 1.0f);
+			No_s->SetRGB(1.0f, 1.0f, 1.0f);
+		}
+
+		//If the mouse is clicked 
+		if (AEInputCheckTriggered(AEVK_LBUTTON))
+		{
+			if (Yes->Collision_.St_Rect_Point(Cursor_Pos.x, Cursor_Pos.y))
+			{
+				if (menu_click)
+				{
+					pause_bool = pause_bool == true ? false : true;
+					menu_click = menu_click ? false : true; //reset variable
+					SM::Set_Next(SS_QUIT); // Quit the stage 
+					GSM::next = GS_MAIN; // Go back to the Main Menu's gamestate 
+				}
+
+				else
+					GSM::next = GS_QUIT;
+			}
+
+			if (No->Collision_.St_Rect_Point(Cursor_Pos.x, Cursor_Pos.y))
+			{
+				curr_Screen = Pause_Screen;
+				Toggle_Button_Display(Pause_Screen);
+			}
+		}
+
 	}
 
 	else if (curr_Screen == Howtoplay_Screen)

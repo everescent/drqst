@@ -1,15 +1,13 @@
 /* Start Header ************************************************************************/
 /*!
-\file       Collision.h
-\author     Javon Lee Xiong Wei
+\file       Collision.cpp
+\project    Dragon Attack
+\author     Javon Lee
 \par email: xiongweijavon.lee\@digipen.edu
 \brief
-Collision component class declared here
+This file contains the Col_Comp (Collision Componenet) class declaration
 
-Copyright (C) 20xx DigiPen Institute of Technology.
-Reproduction or disclosure of this file or its contents
-without the prior written consent of DigiPen Institute of
-Technology is prohibited.
+All content © 2018 DigiPen (SINGAPORE) Corporation, all rights reserved.
 */
 /* End Header **************************************************************************/
 #pragma once
@@ -38,20 +36,12 @@ namespace
 		Collided,
 		Not_Collided
 	};
-
-
-
-	//enum Obj_T //an enumeration that includes all object types for easy comparison between object to object collision. 
-	//{
-	//	Obj_Dragon,
-	//	Obj_Fireball,
-	//	Obj_Megafireball,
-	//	Obj_Enemy,
-	//	Obj_KA,
-	//};
-	
 }
 
+/****************************************************************************************
+Description:
+This is a class that contains the collision componenet for the Game Objects
+****************************************************************************************/
 class Col_Comp
 {
 public:
@@ -62,62 +52,111 @@ public:
 			shape = NoShape;
 	}
 
-	Col_Comp(f32 min_x, f32 min_y, f32 max_x, f32 max_y, Shape shape) // constructor for rectangles/squares 
+	Col_Comp(f32 min_x, f32 min_y, f32 max_x, f32 max_y, Shape shape)
 		: min{ min_x , min_y }, max{ max_x, max_y }, shape{ shape } 
 	{
 		if (shape != Rect)
 			shape = NoShape;
 	} //empty body constructor
-
+/****************************************************************************************
+Description:
+This is a constructor for Circle shapes 
+****************************************************************************************/
 	Col_Comp(f32 mid_x, f32 mid_y, int radius, Shape shape) // constructor for circles 
 		: mid{ mid_x, mid_y }, radius{ radius }, shape{ shape }
 	{
 		if (shape != Circle)
 			shape = NoShape;
 	}
-  //Jacob Suggested Edit START//////////////////////////////////////////////////////////////////////////
+/****************************************************************************************
+Description:
+This is a copy constructor that allows a Col_Comp to be constructed with a R-value Col_Comp
+Example:
+	//Col_Comp test{Col_Comp{1.0f,1.0f,10,Circle}};
+	//OR
+	//Col_Comp test{Col_Comp{0.0f,0.0f,5.0f5.0f,Rectangle}};
+****************************************************************************************/
   Col_Comp(Col_Comp&& t_Col)
     :min{ t_Col.min.x, t_Col.min.y }, max{ t_Col.max.x, t_Col.max.y }, mid{ t_Col.mid.x, t_Col.mid.y },
     radius{ t_Col.radius }, shape{ t_Col.shape }, colflag{ t_Col.colflag }
-  {
-    //This allows me to construct Col_Comp by doing this:
-    //Col_Comp test{Col_Comp{1.0f,1.0f,10,Circle}};
-    //OR
-    //Col_Comp test{Col_Comp{0.0f,0.0f,5.0f5.0f,Rectangle}};
-    //Both will achieve the combined effect of all three constructors
-    //This ALSO means that the classes inheriting your class or using it won't have
-    //to dedicate 3 different types of constructors to cater to your 3 constructors
-    //ON TOP of the constructers that they may need
-  }
-  //Jacob Suggested Edit END////////////////////////////////////////////////////////////////////////////
+  {}//Empty constructor body
+  
 
+/****************************************************************************************
+Description:
+This is a copy constructor that allows a Col_Comp to be constructed with a R-value Col_Comp
+Example:
+//Col_Comp test{Col_Comp{1.0f,1.0f,10,Circle}};
+//OR
+//Col_Comp test{Col_Comp{0.0f,0.0f,5.0f5.0f,Rectangle}};
+****************************************************************************************/
 	Col_Comp() {} // call this constructor for non-collidable objects
-
+/****************************************************************************************
+Description:
+This is a destructor for the Collision Component class
+****************************************************************************************/
 	~Col_Comp() {}; //default dstor
-
+/****************************************************************************************
+Description:
+This function is used to update the collision position of objects when it is moving 
+****************************************************************************************/
 	void Update_Col_Pos(f32 min_x, f32 min_y, f32 max_x, f32 max_y); // update for rectangle objects 
-
+/****************************************************************************************
+Description:
+This function is used to update the collision position of objects when it is moving
+****************************************************************************************/
 	void Update_Col_Pos(f32 mid_x, f32 mid_y); //update for Circle objects 
-
-	bool St_Rect_Rect( const Col_Comp &aabb_obj2); //static collision for Rectangle to Rectangle
-
+/****************************************************************************************
+Description:
+This function checks for static collision for Rectangle to Rectangle
+****************************************************************************************/
+	bool St_Rect_Rect( const Col_Comp &aabb_obj2);
+/****************************************************************************************
+Description:
+This function checks for static collision for Circle to Circle
+****************************************************************************************/
 	bool St_Circle_Circle( const Col_Comp &aabb_obj2); //static collision for Circle to Circle
-
+/****************************************************************************************
+Description:
+This function checks for static collision for Rectangle to a point
+****************************************************************************************/
 	bool St_Rect_Point(float point_x, float point_y);
-
+/****************************************************************************************
+Description:
+This function checks for dynamic collision for Rectangle to Rectangle
+****************************************************************************************/
 	bool Dy_Rect_Rect(const Col_Comp &B, const AEVec2 &velocity_A, const AEVec2 &velocity_B, float dt);
-
+/****************************************************************************************
+Description:
+This function is to get the shape of an Object
+****************************************************************************************/
 	Shape GetShape(); 
-
-	//William Edit START//////////////////////////////////////////////////////////////////////////
+/****************************************************************************************
+Description:
+This function checks for dynamic collision between a line and a point 
+****************************************************************************************/
 	bool Line_Point(Col_Comp &A, Col_Comp &B, AEVec2 & A_Pos, HalfPlane);
-
+/****************************************************************************************
+Description:
+This function checks for static collision for Point to Rectangle
+****************************************************************************************/
 	bool Point_Rect(Col_Comp &A, Col_Comp &B);
-
+/****************************************************************************************
+Description:
+This function Gets the point of an object
+****************************************************************************************/
 	AEVec2 Get_Point(void) const;
+/****************************************************************************************
+Description:
+This function gets the maximum point of a bounding box
+****************************************************************************************/
     AEVec2 Get_MaxPoint(void) const;
+/****************************************************************************************
+Description:
+This function gets the minimum point of a bounding box
+****************************************************************************************/
     AEVec2 Get_MinPoint(void) const;
-	//William Edit END////////////////////////////////////////////////////////////////////////////
+	
 private:
 
 	AEVec2 min = { 0, 0 }; //represents btm left of a rect/sq

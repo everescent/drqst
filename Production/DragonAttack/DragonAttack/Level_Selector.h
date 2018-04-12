@@ -1,16 +1,13 @@
 /* Start Header ************************************************************************/
 /*!
-\file       Level_Selector.h
-\author     Javon Lee
-\par email: xiongweijavon.lee\@digipen.edu
+\file    Level_Selector.h
+\project Dragon Attack
+\author  Javon Lee
+\email   xiongweijavon.lee@digipen.edu
 \brief
-The Level Selector (gamestate) function declarations are done here, as well as the
-libraries and header files necessary to be included.
+This is a game state that allows the player to select different levels to go too.
 
-Copyright (C) 20xx DigiPen Institute of Technology.
-Reproduction or disclosure of this file or its contents
-without the prior written consent of DigiPen Institute of
-Technology is prohibited.
+All content © 2018 DigiPen (SINGAPORE) Corporation, all rights reserved.
 */
 /* End Header **************************************************************************/
 #pragma once

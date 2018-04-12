@@ -1,16 +1,13 @@
 /* Start Header ************************************************************************/
 /*!
-\file       Level_Import.cpp
-\author     Javon Lee
-\par email: xiongweijavon.lee\@digipen.edu
+\file    Level_Import.cpp
+\project Dragon Attack
+\author  Javon Lee
+\email   xiongweijavon.lee@digipen.edu
 \brief
+The Level Import functions are forward declared here
 
-This file contains the functions to import 
-
-Copyright (C) 2018 DigiPen Institute of Technology.
-Reproduction or disclosure of this file or its contents
-without the prior written consent of DigiPen Institute of
-Technology is prohibited.
+All content © 2018 DigiPen (SINGAPORE) Corporation, all rights reserved.
 */
 /* End Header **************************************************************************/
 
@@ -97,7 +94,11 @@ float Convert_X(float& x)
 	 
 	 return global_y;
  }
-
+ /****************************************************************************************
+ Description:
+ This functionis an example provided on how to initialize the Game World to construct the
+ different game Objects 
+ ****************************************************************************************/
  //void Construct_ALL() // call in Init
  //{
 	// 

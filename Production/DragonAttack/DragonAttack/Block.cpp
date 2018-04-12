@@ -1,3 +1,15 @@
+/* Start Header ************************************************************************/
+/*!
+\file    Block.cpp
+\project Dragon Attack
+\author  Javon Lee
+\email   xiongweijavon.lee@digipen.edu
+\brief
+Block class functions are defined here.
+
+All content © 2018 DigiPen (SINGAPORE) Corporation, all rights reserved.
+*/
+/* End Header **************************************************************************/
 #define USE_BLOCK_MACRO
 #include "Block.h"
 #include <iostream>
@@ -21,8 +33,6 @@ Block::Block(Sprite* const p_Sprite, float x, float y)
 	SetActive(true);
 	PosX = x;
 	PosY = y;
-
-	//std::cout << "Position of BLOCK:" << PosX << "," << PosY << std::endl;
 }
 
 

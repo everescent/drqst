@@ -1,6 +1,6 @@
 /* Start Header ************************************************************************/
 /*!
-\file    Pause.cpp
+\file    Pause.h
 \project Dragon Attack
 \author  Javon Lee
 \email   xiongweijavon.lee@digipen.edu
@@ -33,18 +33,35 @@ namespace pause_ns
 	
 }
 #endif
-
+/****************************************************************************************
+Description:
+This is a Pause class that contains all the necessary GameObjects in a Pause screen 
+****************************************************************************************/
 class Pause
 {
 public:
+/****************************************************************************************
+Description:
+This is a Pause default constructor, no aruguments is needed to construct it
+****************************************************************************************/
 	Pause();
-	
-	//This function checks if the pause button is triggered, if it is it changes the boolian to true
+/****************************************************************************************
+Description:
+This function checks if the pause button is triggered, if it is it changes the boolian to true
+****************************************************************************************/
 	void Update(bool &pause_bool, const float dt);
+/****************************************************************************************
+Description:
+This function renders the pause screen and all related objects 
+****************************************************************************************/
+	void Render();
+/****************************************************************************************
+Description:
+A non-default destructor to prevent memory leak 
+****************************************************************************************/
+	~Pause();
 
-	void Render();//This function renders the pause screen and all related objects 
-	
-	~Pause();//A non-default destructor to prevent memory leak 
+	//An enumeration to differentiate which screen is being shown right now.
 	enum Screen
 	{
 		Pause_Screen,
@@ -55,8 +72,6 @@ public:
 	
 private:
 	f32 cameraX, cameraY; //float variables to store the camera position
-	//u32 fontID;
-	//char* buttons[pause_ns::NUM_BUTTONS ] = { "Resume [ESC]",	" Turn Audio On/Off", "Quit [Q]", "Fullscreen [F]" }; // array count from 0
 	Transform* M_BG; // Transform class to store the transformation matrix for the Background 
 	Sprite* Pause_BG_Sprite; //A black background sprite to create a 'shaded' effect 
 	bool Options_screen = false; // a bool to check if it's on the pause screen or not 
@@ -95,22 +110,26 @@ private:
 	GameObject* Fullscreen;
 	bool fullscreen = true; 
 	bool muting = false;
+	bool menu_click = false;
 	Screen curr_Screen;
 	//Particle system for cursor
 	static Particle_System* pause_cursor_ps;
-
+	//Using GameObjects to instantiate the How To Play button and message pop-ups
 	GameObject* Howtoplay;
 	GameObject* Instructions;
 	GameObject* Yes;
 	GameObject* No;
 	GameObject* Confirm;
 
-
-
+	//Using STL vector containers to control the buttons
 	std::vector<GameObject*> Buttons;
 	std::vector <GameObject*> Option_Buttons;
-
-	void Toggle_Button_Display(Screen screen); //This function toggles the display of all the buttons. 
+/****************************************************************************************
+Description:
+	This function toggles the display of all the buttons. It's a private function as this
+	should only be done within the pause screen 
+****************************************************************************************/
+	void Toggle_Button_Display(Screen screen); 
 
 };
 
