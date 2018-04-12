@@ -48,10 +48,12 @@ private:
 	int Dragon_hp;
 	int Fireball_charge;
 	static Particle_System* flame_particles;
-	AEVec2 CamPos{ 0.0f , 0.0f };
+	AEVec2 CamPos{ 0.0f , 0.0f }; 
+	Sprite black;
+	Transform black_trans;
+	static float visual_effect;
+	static float timer_UI;
 
-	//***A function that updates how many HP sprite to print according to the Dragon's HP
-	void update_HP();
 
 	//AEVec2 offset1;
 };

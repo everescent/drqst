@@ -14,8 +14,11 @@ Technology is prohibited.
 /* End Header **************************************************************************/
 #include "UI.h"
 #include <iostream>
+
 // have to initialise static members in global namespace
 Particle_System* UI::flame_particles = nullptr;
+float UI::visual_effect = 0.0f;
+float UI::timer_UI = 2.0f;
 
 UI::UI(Dragon* dragon)
 	:HP_Sprite{ new Sprite {S_CreateSquare(20.0f, "Textures/hp.png") } },
@@ -23,7 +26,8 @@ UI::UI(Dragon* dragon)
 	icon_w{ 20.0f },
 	HP_Trans{ new Transform {} },
 	charge_icon { new GameObject{ Charge_Sprite, Col_Comp() } },
-	Dragon_hp{ dragon->Get_HP() }, Fireball_charge{ dragon->Get_Charge() }
+	Dragon_hp{ dragon->Get_HP() }, Fireball_charge{ dragon->Get_Charge() },
+	black{ CreateBG(1.5f, 1.5f, ".//Textures/Black_BG.png") }
 	{
 	
 	// put icons at {AEGfxWinMinX() + offsetX, AEGfxWinMaxY() - offsetY}
@@ -54,59 +58,33 @@ UI::~UI()
 	delete charge_icon;
 	}
 
-	void UI::update_HP()
-	{
-		//int iterations;
-		////Starting displacement to print the Left corner HP Sprite
-
-		//AEVec2 displacement{ -550.0f , 300.0f };
-		//for (iterations = 0; iterations < Dragon_hp ; ++iterations )
-		//{
-		//	HP_Trans->SetTranslate( CamPos.x + displacement.x,
-		//							CamPos.y + displacement.y);
-		//	HP_Trans->Concat();
-		//	
-		//	HP_Sprite->Render_Object(*HP_Trans);
-		//	//Update the displacement to print next image,
-		//	displacement.x += 50.0f;
-		//}
-
-	}
-
 	void UI::UI_Update(Dragon* dragon, const float dt)
 	{
 		UNREFERENCED_PARAMETER (dt);
 
 		AEGfxGetCamPosition(&(CamPos.x), &(CamPos.y));
 		
+		if (timer_UI < 0.0f) 
+		{
+			timer_UI = 2.0f; visual_effect = 0.0f;
+		}
+
 		Dragon_hp = dragon->Get_HP();
-		if (Dragon_hp <= 0 || (AEInputCheckTriggered(AEVK_R)) ) SM::Set_Next(SS_RESTART);
+		if (Dragon_hp <= 0 || (AEInputCheckTriggered(AEVK_R)))
+		{
+			if (timer_UI >= 0.0f && timer_UI <= 2.0f)
+			{
+				black.SetAlphaTransBM(1.0f, visual_effect, AE_GFX_BM_BLEND);
+				visual_effect += 0.008f;
+				timer_UI -= dt;
+			}
+			if (timer_UI <= 0.0f)
+			SM::Set_Next(SS_RESTART);
+		}
+		
 		Fireball_charge = dragon->Get_Charge();
-		/*hp_icon1.SetActive(true);
-		hp_icon2.SetActive(true);
-		hp_icon3.SetActive(true);*/
 		
 		charge_icon->SetActive(false);
-
-		/*std::cout << "Dragon's HP:" << dragon->Get_HP() << std::endl;
-		
-		*/ //std::cout << "Dragon's HP:" << Dragon_hp << std::endl;
-		
-		/*if (Dragon_hp == 2)
-		{
-			hp_icon3.SetActive(false);
-		}
-		else if (Dragon_hp == 1)
-		{
-			hp_icon3.SetActive(false);
-			hp_icon2.SetActive(false);
-		}
-		else if ( Dragon_hp < 1)
-		{
-			hp_icon3.SetActive(false);
-			hp_icon2.SetActive(false);
-			hp_icon1.SetActive(false);
-		}*/
 
 		if (Fireball_charge == Max_Charge)
 		{
@@ -114,19 +92,6 @@ UI::~UI()
 		}
 		else 
 			charge_icon->SetActive(false);
-		
-		//std::cout << testX << " " << testY << std::endl;
-		//update the icons to follow the camera , Translate it first
-
-		/*hp_icon1.Transform_.SetTranslate(testX - 550 , testY + 300);
-		hp_icon2.Transform_.SetTranslate(testX - 500, testY + 300);
-		hp_icon3.Transform_.SetTranslate(testX - 450, testY + 300);*/
-
-		//Concat the matrix for the icons
-		/*hp_icon1.Transform_.Concat();
-		hp_icon2.Transform_.Concat();
-		hp_icon3.Transform_.Concat();*/
-
 
 		if ( dragon->Get_Direction() == RIGHT )
 		charge_icon->Transform_.SetTranslate(dragon->PosX -60 , dragon->PosY + 30 );
@@ -168,14 +133,6 @@ UI::~UI()
 			flame_particles->Update(dt);
 		}
 
-		///////////////////////////////////////////////////// MMUST REEEMMOOOVVVEEE FOR LEVEL TESTING /////////////////////////////////////////////
-		/*if (AEInputCheckTriggered(AEVK_RSHIFT))
-		{
-			dragon->Set_HP(8);
-		}*/
-		///////////////////////////////////////////////////// MMUST REEEMMOOOVVVEEE FOR LEVEL TESTING /////////////////////////////////////////////
-
-
 	}
 
 	void UI::Render()
@@ -188,6 +145,13 @@ UI::~UI()
 			hp_icon3.Sprite_->SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);*/
 		int iterations;
 		//Starting displacement to print the Left corner HP Sprite
+		if (Dragon_hp <= 0)
+		{
+			black_trans.SetTranslate(CamPos.x, CamPos.y);
+			black_trans.Concat();
+			black.Render_Object(black_trans);
+		}
+		
 
 		AEVec2 displacement{ -550.0f , 300.0f };
 		for (iterations = 0; iterations < Dragon_hp; ++iterations)
