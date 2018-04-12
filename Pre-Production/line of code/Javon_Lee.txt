@@ -3,22 +3,25 @@ Role: Tech Lead
 Main contributions: Collision, Tools, UI 
 
 List:
-Block.cpp
-Block.h
-Collision.cpp
-Collision.h
-Level_Import.h
-Level_Import.cpp
-Level_Selector.h
-Level_Selector.cpp
-Main_Menu.cpp
-Main_Menu.h
-Pause.cpp
-Pause.h
-UI.cpp
-UI.h
+main.cpp		50
+Block.h			27
+Block.cpp		72
+Main_Menu.h		22
+Main_Menu.cpp		468
+Pause.h			78
+Pause.cpp		371
+Collision.h		71
+Collision.cpp		156
+UI.h			33
+UI.cpp			120
+Level_Import.h		30
+Level_Import.cpp	63
+Level_Selector.h	23
+Level_Selector.cpp	336
 
-Total LOC:
+
+
+Total LOC:		1920
 
 What I liked: 
 	I'm quite satisfied that the Level importer was able to work as it allows my level designer to work with a script
