@@ -2,42 +2,43 @@ Name: Andrew Chong Jiahao
 Role: Lead Designer
 Main Contributions: Level design and environmental objects
 List:
-  Grunt.cpp		
-  Grunt.h		
-  Barrier.cpp	
-  Barrier.h		
-  Physics.cpp	
-  Physics.h		
-  Floor.cpp 	
-  Floor.h 		
-  LevelChangePlatform.cpp
-  LevelChangePlatform.h	
-  Platform.cpp	
-  Platform.h	
-  Sign.cpp		
-  Sign.h		
-  Tower.cpp		
-  Tower.h		
-  Wall.cpp 		
-  Wall.h 		
-  Stage1_1.cpp	
-  Stage1_1.h	
-  Stage1_2.cpp	
-  Stage1_2.h	
-  Stage1_3.cpp	
-  Stage1_3.h	
-  Stage2_1.cpp	
-  Stage2_1.h	
-  Stage2_2.cpp	
-  Stage2_2.h	
-  Stage2_3.cpp	
-  Stage2_3.h	
-  Stage3_1.cpp	
-  Stage3_1.h	
-  Stage3_2.cpp	
-  Stage3_2.h	
-  
-Total LOC: 4109
+	Stage1_1.cpp			 476
+	Stage2_1.cpp			 377
+	Stage3_2.cpp			 355
+	Stage2_2.cpp			 355
+	Stage3_1.cpp			 350
+	Stage1_2.cpp			 344
+	Stage2_3.cpp			 230
+	Stage1_3.cpp			 195
+	Grunt.cpp				 178
+	Tower.cpp				 64
+	Floor.cpp				 60
+	Platform.cpp			 41
+	Stage1_2.h				 34
+	Stage1_1.h				 34
+	Stage2_1.h				 33
+	Stage2_2.h				 33
+	Barrier.cpp				 33
+	Stage3_2.h				 33
+	Stage1_3.h				 33
+	Stage3_1.h				 33
+	Stage2_3.h				 33
+	Physics.cpp				 30
+	Sign.cpp				 29
+	Wall.cpp				 29
+	Grunt.h					 21
+	LevelChangePlatform.h	 13
+	Tower.h					 12
+	Platform.h				 12
+	Floor.h					 12
+	Sign.h					 12
+	Wall.h					 11
+	Barrier.h				 11
+	Physics.h				 5
+	LevelChangePlatform.cpp	 80
+	EngineProof.h			 10  
+	
+Total LOC: 3611
 
 What I liked: 
 I liked being able to design my own levels with our level reader and how to 
@@ -57,3 +58,30 @@ I learnt a lot about general coding methods and structures from my group mates
 as they were more experienced programmers than me. Implementing their code in 
 my levels taught me that there will not always be a solution for evey problem, 
 and that modifications to pre-existing functions and classes were sometimes needed.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
