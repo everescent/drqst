@@ -153,6 +153,7 @@ void Archer::Colision_Check(Dragon &player, const float dt)
         //Damage the player
         player.Decrease_HP()  ;
         player.PlayHit()      ;
+        player.SetInvul(true) ;
         Arrow.ResetDist()     ;
         Arrow.SetActive(false);
       }
