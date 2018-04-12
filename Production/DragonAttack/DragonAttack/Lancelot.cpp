@@ -98,8 +98,9 @@ Lancelot::Lancelot(Sprite* texture)
     SetActive(true);                                             // spawn lancelot
     Set_Direction(LEFT);                                         // face left
     SetVelocity({ 200.0f, 0.0f });                               // velocity for lancelot
-    Reset_Idle_Time(idle_time);		                             // reset the idle duration of lancelot			                 
+    Reset_Idle_Time(idle_time);                                  // reset the idle duration of lancelot
     Init();                                                      // initialize the attacks lancelot have
+    Sprite_->SetAlphaTransBM(1.f, 1.f, AE_GFX_BM_BLEND);         // set lancelot to be opaque
 }
 
 /**************************************************************************************
@@ -276,7 +277,7 @@ void Lancelot::Update(Dragon &d, float dt)
     }
 
     // checks if lancelot is alive
-    if (IsActive())
+    if ( IsActive() && Get_Vulnerable() )
     {
         // check if fireball hit lancelot
         for (char i = 0; i < Bullet_Buffer; ++i)
@@ -667,8 +668,8 @@ void Lancelot::Mad_Enhancement(const float dt)
     if (M_E) // mad enhancement is activated
     {
         this->SetVelocity(AEVec2 { 200.0f, 0.0f }); // return to original velocity
-        idle_time = 1.0f;							// set the idle time back
-        M_E = false;								// turn mad enhancement off
+        idle_time = 1.0f;                           // set the idle time back
+        M_E = false;                                // turn mad enhancement off
     }
     else
     {
@@ -676,7 +677,7 @@ void Lancelot::Mad_Enhancement(const float dt)
         lancelot[MAD_ENHANCEMENT].cooldown_timer = 20.0f;        // start cooldown
         lancelot[MAD_ENHANCEMENT].cooldown = true;               // cooldown duration
         idle_time = 0.0f;                                        // no idle interval
-        M_E = true;												 // mad enhancement flag
+        M_E = true;                                              // mad enhancement flag
         lancelot[MAD_ENHANCEMENT].ongoing_attack = false;        // mad enhancement is no longer ongoing
         current_action = MOVING;                                 // change current action
         Sprite_->SetAlphaTransBM(1.f, 1.f, AE_GFX_BM_BLEND);     // set lancelot to be opaque

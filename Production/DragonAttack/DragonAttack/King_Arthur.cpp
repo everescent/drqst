@@ -25,25 +25,25 @@ All content © 2018 DigiPen (SINGAPORE) Corporation, all rights reserved.
 
 namespace 
 {
-	// enumeration for platform locations during phase2
-	enum
-	{
-		TOP_LEFT,
-		TOP_RIGHT,
-		MIDDLE
-	};
+  // enumeration for platform locations during phase2
+  enum
+  {
+    TOP_LEFT,
+    TOP_RIGHT,
+    MIDDLE
+  };
 
-	struct LOCATION
-	{
-		AEVec2 min;
-		AEVec2 max;
-	};
+  struct LOCATION
+  {
+    AEVec2 min;
+    AEVec2 max;
+  };
 
-	//------------------------------------------------------------------
-	//
-	//  CONST VARIABLES
-	//
-	//------------------------------------------------------------------
+  //------------------------------------------------------------------
+  //
+  //  CONST VARIABLES
+  //
+  //------------------------------------------------------------------
     const int HEALTH                          = 800;       // initial hp for king arthur
     const int PHASE2_HP                       = 500;       // phase 2 trigger
     const int PHASE3_HP                       = 300;       // phase 3 trigger
@@ -53,7 +53,7 @@ namespace
     const float START_POINT_Y                 = -220.0f;   // spawn point of king arthur
     const float SLASH_SCALE                   = 30.0f;     // scale of slash
     const char limit                          = 5;         // num of king arthur attacks
-		
+    
     //------------------------------------------------------------------
     //
     //  GLOBAL VARIABLES
@@ -61,14 +61,14 @@ namespace
     //------------------------------------------------------------------
     float left_boundary                       = -400;      // boundaries of charge attack
     float right_boundary                      = 400;       // boundaries of charge attack
-	Sprite attack_sprite;                                  // texture for slash
-	Sprite sword_sprite;                                   // texture for sword
-	std::vector <Boss_Attack> arthur;                      // an array of boss attacks
-	LOCATION teleport_location[3];                         // teleport locations of king arthur
-	AEVec2 sword_pos[NUM_OF_SWORD]            = {};        // rotating sword postitions for phase 3
-	AEVec2 ai_spawn_pos[NUM_OF_MOBS];                      // mob ai spawning location
+  Sprite attack_sprite;                                  // texture for slash
+  Sprite sword_sprite;                                   // texture for sword
+  std::vector <Boss_Attack> arthur;                      // an array of boss attacks
+  LOCATION teleport_location[3];                         // teleport locations of king arthur
+  AEVec2 sword_pos[NUM_OF_SWORD]            = {};        // rotating sword postitions for phase 3
+  AEVec2 ai_spawn_pos[NUM_OF_MOBS];                      // mob ai spawning location
 
-	// function declarations
+  // function declarations
     bool Move_KA(const float dt, King_Arthur &ka, const Dragon &d); // move king arthur towards player
     void Set_Attack_Dir(King_Arthur &ka);                           // set the attack directions
 
@@ -97,18 +97,20 @@ King_Arthur::King_Arthur(Sprite* texture)
         ka_phase{ PHASE_1 }, currAttk{ SINGLE_SLASH }      , current_action{ IDLE }                        , timer{ 2.f }, mob_timer{ 1.f },
         behavior_swap{ 0 } , healing {false}               , active_mobs{ 0 }                              , spawn_mob{ false }
 {
-    PosX = START_POINT_X;                 // change king arthur coordinates to the location set
-    PosY = START_POINT_Y;                 // change king arthur coordinates to the location set
-    SetActive(true);                      // show him on screen
-    Set_Direction(LEFT);                  // set king arthur to face left at the start
-    SetVelocity({ 120, 0 });              // velocity for king arthur
-    Transform_.SetTranslate(PosX, PosY);  // translate king arthur to its spawning location
-    Transform_.SetScale(-1.0f, 1.0f);     // set king arthur to face right at the start
-    Transform_.Concat();                  // spawn king arthur at the location set
-    Reset_Idle_Time(1.0f);                // duration king arthur will idle
-    Init_KA_Attacks();	                  // call initializer for king arthur move set
-    Init_MobArray();                      // call initializer for mob array
-    Init_Particle();                      // initializes the particle effects for KA
+    PosX = START_POINT_X;                                 // change king arthur coordinates to the location set
+    PosY = START_POINT_Y;                                 // change king arthur coordinates to the location set
+    SetActive(true);                                      // show him on screen
+    Set_Direction(LEFT);                                  // set king arthur to face left at the start
+    SetVelocity({ 120, 0 });                              // velocity for king arthur
+    Transform_.SetTranslate(PosX, PosY);                  // translate king arthur to its spawning location
+    Transform_.SetScale(-1.0f, 1.0f);                     // set king arthur to face right at the start
+    Transform_.Concat();                                  // spawn king arthur at the location set
+    Reset_Idle_Time(1.0f);                                // duration king arthur will idle
+    Init_KA_Attacks();                                    // call initializer for king arthur move set
+    Init_MobArray();                                      // call initializer for mob array
+    Init_Particle();                                      // initializes the particle effects for KA
+    Sprite_->SetAlphaTransBM(1.f, 1.f, AE_GFX_BM_BLEND);  // set lancelot to be opaque
+
 
 }
 /**************************************************************************************
@@ -119,17 +121,17 @@ King_Arthur::King_Arthur(Sprite* texture)
 void King_Arthur::Init_KA_Attacks(void)
 {
     // stores the path to the texture
-	const char* slash_tex = ".//Textures/KA_Slash.png";
+  const char* slash_tex = ".//Textures/KA_Slash.png";
 
-	// initializing the sprites to with the attack textures
+  // initializing the sprites to with the attack textures
     attack_sprite = S_CreateSquare(SLASH_SCALE, slash_tex);
     attack_sprite.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
     sword_sprite = S_CreateSquare(SLASH_SCALE, ".//Textures/Excalibur.png");
     sword_sprite.SetAlphaTransBM(1.0f, 1.0f, AE_GFX_BM_BLEND);
 
-	arthur.reserve(limit); // reserve the amount of memory for king arthur attacks
+  arthur.reserve(limit); // reserve the amount of memory for king arthur attacks
 
-	// add the single slash and triple slash
+  // add the single slash and triple slash
     for(char i = 0; i < limit-1; ++i) 
         arthur.emplace_back(&attack_sprite,
                          Col_Comp(START_POINT_X - SLASH_SCALE, START_POINT_Y - SLASH_SCALE,
@@ -139,15 +141,15 @@ void King_Arthur::Init_KA_Attacks(void)
     arthur.emplace_back(Boss_Attack()); // for dash attack since it does not need textures
     arthur.emplace_back(Boss_Attack()); // add the healing move, no textures needed
 
-	// adds the 4 swords for the 3rd unique mechanic
+  // adds the 4 swords for the 3rd unique mechanic
     for (char i = 0; i < NUM_OF_SWORD; ++i)
     {
-		// spin sword
-		arthur.emplace_back(Boss_Attack(&sword_sprite, { 0.f, 0.f, Point })); 
+    // spin sword
+    arthur.emplace_back(Boss_Attack(&sword_sprite, { 0.f, 0.f, Point })); 
         sword_pos[i].y = 200.f;
     }
 
-	// initializing other variables in slash attacks
+  // initializing other variables in slash attacks
     for (char i = 0; i < limit - 1; ++i) 
     {
         arthur[i].SetVelocity(AEVec2{ 350.0f, 0.0f });                       // velocity for slash
@@ -156,7 +158,7 @@ void King_Arthur::Init_KA_Attacks(void)
         arthur[i].Transform_.Concat();                                       // apply transformation
     }
 
-	// position of the 4 swords in 3rd mechanic
+  // position of the 4 swords in 3rd mechanic
     sword_pos[0].x = -200.f;
     sword_pos[1].x =  200.f;
     sword_pos[2].x =  300.f;
@@ -333,7 +335,7 @@ void King_Arthur::Update(Dragon &d, const float dt)
         }
     }
 
-    if (IsActive())
+    if ( IsActive() && Get_Vulnerable() )
     {
         // fireball hit KA
         for (char i = 0; i < Bullet_Buffer; ++i)
