@@ -1,20 +1,17 @@
 /* Start Header ************************************************************************/
 /*!
 \file      Boss_States.cpp
+\project    Dragon Attack
 \author     William Yoong
 \par email: william.yoong\@digipen.edu
 \brief
-This file has the ai behaviour enums and a struct for their attacks
+Cpp file for Boss_States
 
-Copyright (C) 2018 DigiPen Institute of Technology.
-Reproduction or disclosure of this file or its contents
-without the prior written consent of DigiPen Institute of
-Technology is prohibited.
+All content © 2018 DigiPen (SINGAPORE) Corporation, all rights reserved.
 */
 /* End Header **************************************************************************/
-#include "Boss_States.h"
-#include <cstdlib>
-#include <ctime>
+#include "Boss_States.h" // header file
+#include <cstdlib>       // rand
 
 /**************************************************************************************
 //
