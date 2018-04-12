@@ -61,9 +61,9 @@ enum STAGE_LIST
 
   // don't touch the bottom area, add from top
   SS_SCORE,
+  SS_LOAD,
   SS_QUIT,
-  SS_RESTART,
-  SS_LOAD
+  SS_RESTART
 };
 
 // defining a pointer to a void funtion that takes in void
