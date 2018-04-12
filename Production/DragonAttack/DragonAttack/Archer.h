@@ -24,7 +24,7 @@ namespace ArcherMacros {
   const int   Archer_HP      { 50      }; //Archer HP
   const float Archer_Scale   { 70.0f   }; //Scale of Archer mesh
   const float Archer_Speed   { 120.0f  }; //Scale of Archer mesh
-  const float Arrow_Scale    { 20.0f   }; //Scale of arrow mesh
+  const float Arrow_Scale    { 40.0f   }; //Scale of arrow mesh
   const float Arrow_Death    { 800.0f  }; //Scale of arrow mesh
   const float Archer_LOS     { 600.0f  }; //Line Of Sight
   const float Archer_CD_Time { 2.0f    }; //Attack Interval
